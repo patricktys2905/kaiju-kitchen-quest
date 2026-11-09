@@ -120,6 +120,21 @@ describe('skill: combo routes', () => {
   });
 });
 
+describe('Bluebeary Berry Mines', () => {
+  it('lobs three blueberries that land as mines (or burst on a monster)', () => {
+    const w = new World(flat, derive(prof(10, 10)), 1);
+    w.hero.x = 400; w.hero.face = 1;
+    const mines = skillsOf(10).actives.findIndex(s => s.id === 'mines');
+    tap(w, { [(['skill1', 'skill2', 'skill3'] as const)[mines]]: true });
+    expect(w.shots.filter(s => s.kind === 'berry').length).toBe(3);
+    run(w, {}, 90);
+    expect(w.shots.filter(s => s.kind === 'berry').length).toBe(0);
+    expect(w.mines.length).toBe(3);
+    const xs = w.mines.map(m => m.x).sort((a, b) => a - b);
+    expect(xs[2] - xs[0]).toBeGreaterThan(100); // spread near / middle / far
+  });
+});
+
 describe('new monsters', () => {
   it('a mimic sits disguised as a loot box until you come close', () => {
     const w = mk(); w.hero.x = 300;

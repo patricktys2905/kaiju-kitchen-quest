@@ -20,6 +20,8 @@ export interface SkillDef {
   buff?: { atk?: number; def?: number; speed?: number; armor?: boolean; t: number };
   /** heal: fraction of max HP restored at skill level 1 */
   heal?: number;
+  /** mines: thrown in an arc as projectiles (burst on a monster, become a mine where they land) */
+  toss?: boolean;
 }
 
 export interface PassiveDef {
@@ -47,7 +49,7 @@ export const SKILLS: Record<number, { actives: SkillDef[]; passive: PassiveDef }
   10: { // Bluebeary
     actives: [
       S({ id: 'quake', name: 'Muffin Quake', kind: 'slam', desc: 'Belly-flops for a shockwave', cd: 4, dur: 0.6, dmg: 3, reach: 190, h: 70, kx: 200, ky: -520 }),
-      S({ id: 'mines', name: 'Berry Mines', kind: 'mines', desc: 'Drops blueberry mines that pop on enemies', unlock: 4, cd: 7, dur: 0.4, dmg: 2.6, reach: 50, h: 60, kx: 260, ky: -460, n: 3 }),
+      S({ id: 'mines', name: 'Berry Mines', kind: 'mines', desc: 'Lobs three blueberries: they burst on enemies, or lie in wait as mines', unlock: 4, cd: 7, dur: 0.4, dmg: 2.6, reach: 50, h: 60, kx: 260, ky: -460, n: 3, toss: true }),
       S({ id: 'frost', name: 'Frosting Shield', kind: 'buff', desc: 'Hardens: -40% damage taken, no flinching, +20% attack', unlock: 8, cd: 16, dur: 0.5, dmg: 0, buff: { def: 0.4, atk: 0.2, armor: true, t: 8 } }),
     ],
     passive: { id: 'thick', name: 'Thick Frosting', desc: '+6% max HP per level', unlock: PASSIVE_UNLOCK, per: { hpPct: 0.06 } },

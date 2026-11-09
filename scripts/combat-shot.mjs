@@ -69,7 +69,15 @@ await kq(() => { const w = window.__kkq.world(), h = w.hero, b = w.boss; h.inv =
 await wait(2600);
 await p.screenshot({ path: 'shots/combat-enrage.png' });
 
-// 5) camp map with the Spicy chillies
+// 5) Bluebeary lobbing Berry Mines (second skill, key I)
+await kq(() => { const s = window.__kkq.save; s.selected = 10; s.heroes[10].level = 8; s.heroes[10].skills.mines = 2; s.spicy = []; window.__kkq.play('1-1'); });
+await wait(1800);
+await p.keyboard.press('KeyI'); await wait(260);
+await p.screenshot({ path: 'shots/combat-berries.png' });
+await wait(700);
+await p.screenshot({ path: 'shots/combat-berries2.png' });
+
+// 6) camp map with the Spicy chillies
 await kq(() => window.__kkq.play(''));
 await kq(() => { window.__kkq.scene.scene.restart({}); });
 await wait(1200);

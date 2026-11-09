@@ -424,6 +424,11 @@ export class World {
         }
         break;
       case 'mines':
+        if (sk.toss) { // a spread of berries lobbed near, middle and far
+          const n = sk.n ?? 3;
+          for (let i = 0; i < n; i++) this.shots.push({ id: nextId++, x: h.x + h.face * 24, y: h.y - 56, vx: h.face * (190 + i * (300 / Math.max(1, n - 1))), vy: -430, t: 0, dmg: atk * sk.dmg, hit: new Set(), from: 'hero', kx: sk.kx, ky: sk.ky, pierce: false, g: 1500, kind: 'berry' });
+          break;
+        }
         for (let i = 0; i < (sk.n ?? 3); i++) this.mines.push({ id: nextId++, x: h.x + h.face * (40 + i * 45), y: this.stage.groundY, t: 0, dmg: atk * sk.dmg, kx: sk.kx, ky: sk.ky });
         // mines land on the floor below each spot
         for (const m of this.mines.slice(-(sk.n ?? 3))) { const f = this.floorBelow(m.x, h.y - 2, h.y + 2000, false); if (f) m.y = f.y; }
@@ -920,17 +925,24 @@ export class World {
         if (Math.abs(h.x - s.x) < 22 && s.y > h.y - 70 && s.y < h.y + 4 && (h.inv <= 0 || this.canPerfect())) { this.hurtHero(s.dmg, Math.sign(s.vx)); s.t = 99; }
         continue;
       }
+      if (s.g) { // lobbed: falls, and turns into a mine where it lands
+        const prevY = s.y - s.vy * sdt;
+        s.vy += s.g * sdt;
+        const f = s.vy > 0 ? this.floorBelow(s.x, prevY, s.y, false) : null;
+        if (f) { this.mines.push({ id: nextId++, x: s.x, y: f.y, t: 0.2, dmg: s.dmg, kx: s.kx, ky: s.ky }); s.t = 99; continue; }
+      }
       for (const m of this.mobs) {
         if (m.state === 'dead' || m.under || s.hit.has(m.id)) continue;
         const def = MOBS[m.kind];
         if (Math.abs(m.x - s.x) < def.w / 2 + 14 && s.y < m.y + 10 && s.y > m.y - def.h - 10) {
           s.hit.add(m.id);
           this.damageMob(m, s.dmg, Math.sign(s.vx), { kx: s.kx, ky: s.ky, stun: 0.6 }, true);
+          if (s.kind === 'berry') this.events.push({ t: 'boom', x: s.x, y: s.y });
           if (!s.pierce) { s.t = 99; break; }
         }
       }
     }
-    this.shots = this.shots.filter(s => s.t < (s.from === 'mob' ? 2.5 : 0.9) && s.x > 0 && s.x < this.stage.width && s.y < this.stage.groundY + 20);
+    this.shots = this.shots.filter(s => s.t < (s.from === 'mob' || s.g ? 2.5 : 0.9) && s.x > 0 && s.x < this.stage.width && s.y < this.stage.groundY + 20);
   }
 
   private stepHazards(dt: number): void {
