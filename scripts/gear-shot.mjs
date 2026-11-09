@@ -11,6 +11,7 @@ const p = await (await b.newContext({ viewport: { width: 844, height: 390 }, dev
 const errs = []; p.on('pageerror', e => errs.push(e.message));
 await p.goto(`http://localhost:${PORT}/?touch`);
 for (let i = 0; i < 60; i++) { if (await p.evaluate(() => !!window.__kkq).catch(() => false)) break; await wait(250); }
+await p.evaluate(() => document.querySelector('#title .play')?.click()); await wait(700); // dismiss the title screen
 const OWN = { 0: ['w-gob2', 'w-gob3', 'a-gob'], 10: ['w-blue2', 'w-blue3', 'a-blue'], 11: ['w-pizza2', 'w-pizza3', 'a-pizza'], 4: ['w-moth2', 'w-moth3', 'a-moth'], 1: ['w-squid2', 'w-squid3', 'a-squid'], 2: ['w-crab2', 'w-crab3', 'a-crab'], 5: ['w-toast2', 'w-toast3', 'a-toast'], 6: ['w-dump2', 'w-dump3', 'a-dump'] };
 const setsFor = sp => [{ weapon: [OWN[sp][0], 3], armor: [OWN[sp][2], 3] }, { weapon: [OWN[sp][1], 5], charm: ['bell', 2] }, { weapon: [OWN[sp][1], 2] }];
 const tiles = [];

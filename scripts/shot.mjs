@@ -16,6 +16,8 @@ await p.goto(url);
 await p.evaluate(() => localStorage.clear());
 await p.reload();
 for (let i = 0; i < 60; i++) { if (await p.evaluate(() => !!window.__kkq).catch(() => false)) break; await wait(250); }
+await wait(1500); await p.screenshot({ path: 'shots/title.png' });
+await p.evaluate(() => document.querySelector('#title .play')?.click()); await wait(700); // dismiss the title screen
 await wait(1200);
 await p.screenshot({ path: 'shots/camp.png' });
 const kq = (fn, arg) => p.evaluate(fn, arg);

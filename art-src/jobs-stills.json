@@ -1,0 +1,330 @@
+[
+ {
+  "name": "still-0-intro",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-0.png",
+   "art-src/ref-bg.png"
+  ],
+  "prompt": "Generate an image. The first reference is my character, a little strawberry kaiju dinosaur (Gobzilla Jr.); the second shows the painted background style. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines). Cinematic composition, wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. NO text, no letters, no writing on any labels or jars, no speech bubbles, no UI, no border, no signature. Scene: Gobzilla Jr. stands proudly on a big wooden kitchen countertop at dawn, chest puffed out, its tiny shadow cast huge on the wall behind it like a giant monster. Around it the kitchen is quiet and empty; the Head Chef's apron hangs on a hook and wisps of sickly green fuzz creep in from the corners."
+ },
+ {
+  "name": "still-0-cliff",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-0.png",
+   "art-src/ref-bg.png"
+  ],
+  "prompt": "Generate an image. The first reference is my character, a little strawberry kaiju dinosaur (Gobzilla Jr.); the second shows the painted background style. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines). Cinematic composition, wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. NO text, no letters, no writing on any labels or jars, no speech bubbles, no UI, no border, no signature. Scene: Gobzilla Jr. stands on the dark rim of a huge steel kitchen sink at night, looking down into the deep shadowy basin. Far below, the drain glows sickly green and a fuzzy crown-shaped silhouette of green mould rises out of it. The little strawberry clenches its fists, brave but small. Moody, dramatic, a cliffhanger."
+ },
+ {
+  "name": "still-1-intro",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-1.png",
+   "art-src/ref-bg.png"
+  ],
+  "prompt": "Generate an image. The first reference is my character, a blue jelly octopus scientist wearing a metal colander as a helmet (Squidgeon); the second shows the painted background style. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines). Cinematic composition, wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. NO text, no letters, no writing on any labels or jars, no speech bubbles, no UI, no border, no signature. Scene: Squidgeon works at a little kitchen-counter laboratory: test tubes made from spice jars, a measuring-cup beaker bubbling, a petri dish of fuzzy green mould under a magnifying glass. It wears its colander helmet and scribbles notes with a tentacle."
+ },
+ {
+  "name": "still-1-cliff",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-1.png",
+   "art-src/ref-bg.png"
+  ],
+  "prompt": "Generate an image. The first reference is my character, a blue jelly octopus scientist wearing a metal colander as a helmet (Squidgeon); the second shows the painted background style. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines). Cinematic composition, wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. NO text, no letters, no writing on any labels or jars, no speech bubbles, no UI, no border, no signature. Scene: Squidgeon stands at the edge of a giant kitchen sink at night holding up a glowing bottle of bright antidote. Down in the drain a sickly green glow and a fuzzy crown silhouette of mould rise. Its colander helmet gleams. Moody, dramatic, a cliffhanger."
+ },
+ {
+  "name": "still-2-intro",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-2.png",
+   "art-src/ref-bg.png"
+  ],
+  "prompt": "Generate an image. The first reference is my character, a grumpy cheese crab with a cabbage-leaf shell (Crabbage); the second shows the painted background style. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines). Cinematic composition, wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. NO text, no letters, no writing on any labels or jars, no speech bubbles, no UI, no border, no signature. Scene: Crabbage stands in a tiny cabbage garden next to a kitchen sink drain, glaring at fuzzy green mould creeping over its cabbages. Its claws are raised, furious. Little garden tools lie nearby."
+ },
+ {
+  "name": "still-2-cliff",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-2.png",
+   "art-src/ref-bg.png"
+  ],
+  "prompt": "Generate an image. The first reference is my character, a grumpy cheese crab with a cabbage-leaf shell (Crabbage); the second shows the painted background style. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines). Cinematic composition, wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. NO text, no letters, no writing on any labels or jars, no speech bubbles, no UI, no border, no signature. Scene: Crabbage stands at the dark rim of the giant kitchen sink at night, beside its little garden, with a crowd of friendly kitchen creatures behind it carrying seed packets. Down in the drain a sickly green glow and a fuzzy crown silhouette of mould rise. Crabbage snaps its claws. Moody, dramatic, a cliffhanger."
+ },
+ {
+  "name": "still-4-intro",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-4.png",
+   "art-src/ref-bg.png"
+  ],
+  "prompt": "Generate an image. The first reference is my character, a fluffy marshmallow moth (Mothball); the second shows the painted background style. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines). Cinematic composition, wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. NO text, no letters, no writing on any labels or jars, no speech bubbles, no UI, no border, no signature. Scene: Mothball flutters by a kitchen window at night. Outside, the round moon has gone dark, only a faint ghostly outline left. The moth gazes at it longingly, its soft glow the only light on the windowsill."
+ },
+ {
+  "name": "still-4-cliff",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-4.png",
+   "art-src/ref-bg.png"
+  ],
+  "prompt": "Generate an image. The first reference is my character, a fluffy marshmallow moth (Mothball); the second shows the painted background style. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines). Cinematic composition, wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. NO text, no letters, no writing on any labels or jars, no speech bubbles, no UI, no border, no signature. Scene: Mothball hovers over a giant dark kitchen sink at night, carrying a small glowing ball of moonlight in its arms. Down in the black drain a sickly green glow and a fuzzy crown silhouette of mould rise. The moth's light is tiny but bright against the darkness. Moody, dramatic, a cliffhanger."
+ },
+ {
+  "name": "still-5-intro",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-5.png",
+   "art-src/ref-bg.png"
+  ],
+  "prompt": "Generate an image. The first reference is my character, a little loaf-bread bat with toast-slice wings and a butter pat on its head (Toastbat); the second shows the painted background style. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines). Cinematic composition, wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. NO text, no letters, no writing on any labels or jars, no speech bubbles, no UI, no border, no signature. Scene: Toastbat hangs upside down from a kitchen cabinet handle at night, a sly grin, eyeing a locked butter dish high on a shelf that glows golden from inside. Moonlit shadows, a thief's mood."
+ },
+ {
+  "name": "still-5-cliff",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-5.png",
+   "art-src/ref-bg.png"
+  ],
+  "prompt": "Generate an image. The first reference is my character, a little loaf-bread bat with toast-slice wings and a butter pat on its head (Toastbat); the second shows the painted background style. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines). Cinematic composition, wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. NO text, no letters, no writing on any labels or jars, no speech bubbles, no UI, no border, no signature. Scene: Toastbat hovers above a giant dark kitchen sink at night, holding a glowing pat of golden butter whose warm light melts the green fuzz around it. Down in the drain a sickly green glow and a fuzzy crown silhouette of mould rise. Moody, dramatic, a cliffhanger."
+ },
+ {
+  "name": "still-6-intro",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-6.png",
+   "art-src/ref-bg.png"
+  ],
+  "prompt": "Generate an image. The first reference is my character, a plump steamed dumpling lord with a little steam curl on top (Dumplord); the second shows the painted background style. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines). Cinematic composition, wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. NO text, no letters, no writing on any labels or jars, no speech bubbles, no UI, no border, no signature. Scene: Dumplord stands on an upturned bowl like a throne on the kitchen counter, wearing a tiny crown made of dough, arms raised to proclaim to an empty kitchen. Nobody is listening; one crumb rolls past."
+ },
+ {
+  "name": "still-6-cliff",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-6.png",
+   "art-src/ref-bg.png"
+  ],
+  "prompt": "Generate an image. The first reference is my character, a plump steamed dumpling lord with a little steam curl on top (Dumplord); the second shows the painted background style. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines). Cinematic composition, wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. NO text, no letters, no writing on any labels or jars, no speech bubbles, no UI, no border, no signature. Scene: Dumplord stands at the dark rim of a giant kitchen sink at night, its little dough crown on its head, a crowd of friendly kitchen creatures behind it. Down in the drain a sickly green glow and a much bigger fuzzy crown silhouette of mould rise. Dumplord points defiantly. Moody, dramatic, a cliffhanger."
+ },
+ {
+  "name": "still-7-intro",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-7.png",
+   "art-src/ref-bg.png"
+  ],
+  "prompt": "Generate an image. The first reference is my character, a teal sushi-roll dragon with pink spikes and a salmon belly (Norigon); the second shows the painted background style. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines). Cinematic composition, wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. NO text, no letters, no writing on any labels or jars, no speech bubbles, no UI, no border, no signature. Scene: Norigon sits in quiet meditation on a bamboo sushi mat on the kitchen counter, a single faint green flame flickering weakly in front of its mouth. Ancient, serious mood, steam drifting like mountain mist."
+ },
+ {
+  "name": "still-7-cliff",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-7.png",
+   "art-src/ref-bg.png"
+  ],
+  "prompt": "Generate an image. The first reference is my character, a teal sushi-roll dragon with pink spikes and a salmon belly (Norigon); the second shows the painted background style. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines). Cinematic composition, wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. NO text, no letters, no writing on any labels or jars, no speech bubbles, no UI, no border, no signature. Scene: Norigon stands at the edge of a giant kitchen sink at night breathing a bright green wasabi flame that lights up the dark. Down in the drain a sickly green glow and a fuzzy crown silhouette of mould rise. Calm and fearless. Moody, dramatic, a cliffhanger."
+ },
+ {
+  "name": "still-8-intro",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-8.png",
+   "art-src/ref-bg.png"
+  ],
+  "prompt": "Generate an image. The first reference is my character, a chocolate-bar golem made of chocolate blocks (Chocomunch); the second shows the painted background style. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines). Cinematic composition, wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. NO text, no letters, no writing on any labels or jars, no speech bubbles, no UI, no border, no signature. Scene: Chocomunch stands in front of a kitchen oven holding a small paper note in its big blocky hands, nervously staring at the oven's warm orange glow, a drop of melted chocolate sweat on its brow."
+ },
+ {
+  "name": "still-8-cliff",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-8.png",
+   "art-src/ref-bg.png"
+  ],
+  "prompt": "Generate an image. The first reference is my character, a chocolate-bar golem made of chocolate blocks (Chocomunch); the second shows the painted background style. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines). Cinematic composition, wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. NO text, no letters, no writing on any labels or jars, no speech bubbles, no UI, no border, no signature. Scene: Chocomunch stands at the dark rim of a giant kitchen sink at night, scared but determined, holding a note from the Chef. Hot steam curls out of the sink, and deep in the drain a sickly green glow and a fuzzy crown silhouette of mould rise. Moody, dramatic, a cliffhanger."
+ },
+ {
+  "name": "still-10-intro",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-10.png",
+   "art-src/ref-bg.png"
+  ],
+  "prompt": "Generate an image. The first reference is my character, a gruff blueberry-muffin bear (Bluebeary); the second shows the painted background style. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines). Cinematic composition, wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. NO text, no letters, no writing on any labels or jars, no speech bubbles, no UI, no border, no signature. Scene: Bluebeary stands beside a tipped-over muffin tin on a kitchen counter, empty paper cups scattered around. It peers out over the vast countertop with a gruff, worried frown, one paw shading its eyes, looking for the tiny lost muffin crumb-babies."
+ },
+ {
+  "name": "still-10-cliff",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-10.png",
+   "art-src/ref-bg.png"
+  ],
+  "prompt": "Generate an image. The first reference is my character, a gruff blueberry-muffin bear (Bluebeary); the second shows the painted background style. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines). Cinematic composition, wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. NO text, no letters, no writing on any labels or jars, no speech bubbles, no UI, no border, no signature. Scene: Bluebeary stands at the dark edge of a giant kitchen sink at night with six tiny happy muffin crumb-babies huddled safely behind it. Down in the drain a sickly green glow and a fuzzy crown silhouette of mould rise. Bluebeary spreads its arms protectively. Moody, dramatic, a cliffhanger."
+ },
+ {
+  "name": "still-11-intro",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-11.png",
+   "art-src/ref-bg.png"
+  ],
+  "prompt": "Generate an image. The first reference is my character, a pizza raptor dinosaur made of melty cheesy pizza with pepperoni (Pizzaraptor); the second shows the painted background style. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines). Cinematic composition, wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. NO text, no letters, no writing on any labels or jars, no speech bubbles, no UI, no border, no signature. Scene: Pizzaraptor sprints across a kitchen countertop balancing a steaming pizza delivery box on its back, a kitchen timer ticking beside it, dust clouds behind it. Determined grin. The kitchen is eerily empty, the Head Chef's chair abandoned."
+ },
+ {
+  "name": "still-11-cliff",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-11.png",
+   "art-src/ref-bg.png"
+  ],
+  "prompt": "Generate an image. The first reference is my character, a pizza raptor dinosaur made of melty cheesy pizza with pepperoni (Pizzaraptor); the second shows the painted background style. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines). Cinematic composition, wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. NO text, no letters, no writing on any labels or jars, no speech bubbles, no UI, no border, no signature. Scene: Pizzaraptor stands at the dark rim of a giant steel kitchen sink at night, the pizza box on its back still faintly steaming. Down in the drain a sickly green glow and a fuzzy crown silhouette of mould rise. It grips the Chef's white hat and a folded note. Moody, dramatic, a cliffhanger."
+ },
+ {
+  "name": "still-15-intro",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-15.png",
+   "art-src/ref-bg.png"
+  ],
+  "prompt": "Generate an image. The first reference is my character, a shy hedgehog sitting in a hot-dog bun with mustard and ketchup on its spikes (Hotchog); the second shows the painted background style. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines). Cinematic composition, wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. NO text, no letters, no writing on any labels or jars, no speech bubbles, no UI, no border, no signature. Scene: Hotchog peeks shyly from behind a cold, unused little barbecue grill on the kitchen counter. Faded cookout bunting hangs above; a blank trophy stands on a shelf. Nobody else is there."
+ },
+ {
+  "name": "still-15-cliff",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-15.png",
+   "art-src/ref-bg.png"
+  ],
+  "prompt": "Generate an image. The first reference is my character, a shy hedgehog sitting in a hot-dog bun with mustard and ketchup on its spikes (Hotchog); the second shows the painted background style. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines). Cinematic composition, wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. NO text, no letters, no writing on any labels or jars, no speech bubbles, no UI, no border, no signature. Scene: Hotchog, wearing a small champion's sash, stands at the dark rim of a giant kitchen sink at night holding a grill spatula like a sword. Behind it a cosy cookout party glows; ahead, down in the drain, a sickly green glow and a fuzzy crown silhouette of mould rise. Moody, dramatic, a cliffhanger."
+ },
+ {
+  "name": "still-17-intro",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-17.png",
+   "art-src/ref-bg.png"
+  ],
+  "prompt": "Generate an image. The first reference is my character, a cookies-and-cream penguin with a cherry on its head (Pengwhip); the second shows the painted background style. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines). Cinematic composition, wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. NO text, no letters, no writing on any labels or jars, no speech bubbles, no UI, no border, no signature. Scene: Pengwhip slides on its belly out of an open freezer door across a kitchen floor, frosty mist billowing behind it, a surprised look on its face, the freezer far behind getting smaller."
+ },
+ {
+  "name": "still-17-cliff",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-17.png",
+   "art-src/ref-bg.png"
+  ],
+  "prompt": "Generate an image. The first reference is my character, a cookies-and-cream penguin with a cherry on its head (Pengwhip); the second shows the painted background style. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines). Cinematic composition, wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. NO text, no letters, no writing on any labels or jars, no speech bubbles, no UI, no border, no signature. Scene: Pengwhip stands at the edge of a giant kitchen sink full of dark water at night, flippers raised, ready to dive. Down in the drain a sickly green glow and a fuzzy crown silhouette of mould rise. It looks excited, not scared. Moody, dramatic, a cliffhanger."
+ },
+ {
+  "name": "still-w1-open",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-bg.png"
+  ],
+  "prompt": "Generate an image. The reference shows the painted background style. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines). Cinematic composition, wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. NO text, no letters, no writing on any labels or jars, no speech bubbles, no UI, no border, no signature. Scene: an establishing wide vista with no characters. The Countertop: a huge sunny wooden kitchen countertop seen as a vast landscape, spice-jar mountains, a cutting-board plain, a toaster on the far horizon, faint green mould patches on the crumbs."
+ },
+ {
+  "name": "still-w1-boss",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/boss-toast.png",
+   "art-src/ref-bg.png"
+  ],
+  "prompt": "Generate an image. The first reference is my boss monster, the Burnt Toast King, a giant angry burnt slice of toast; the second shows the painted background style. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines). Cinematic composition, wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. NO text, no letters, no writing on any labels or jars, no speech bubbles, no UI, no border, no signature. Scene: a dramatic low-angle boss reveal: on top of a hot stovetop, the Burnt Toast King towers over the burners, crowned with fuzzy green mould, smoke curling around it, glaring down menacingly. Menacing but still cute, no other characters."
+ },
+ {
+  "name": "still-w1-cure",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/boss-toast.png",
+   "art-src/ref-bg.png"
+  ],
+  "prompt": "Generate an image. The first reference is my boss monster, the Burnt Toast King, a giant angry burnt slice of toast; the second shows the painted background style. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines). Cinematic composition, wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. NO text, no letters, no writing on any labels or jars, no speech bubbles, no UI, no border, no signature. Scene: after the battle, the same monster sits dazed and friendly, smiling sheepishly, as the last wisps of fuzzy green mould lift off it and drift away into the air. Soft hopeful light, no other characters."
+ },
+ {
+  "name": "still-w2-open",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-bg.png"
+  ],
+  "prompt": "Generate an image. The reference shows the painted background style. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines). Cinematic composition, wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. NO text, no letters, no writing on any labels or jars, no speech bubbles, no UI, no border, no signature. Scene: an establishing wide vista with no characters. The Fridge: inside a giant open refrigerator seen as a frozen landscape, shelves like icy cliffs, jars and milk cartons like towers, blue cold light and frost mist."
+ },
+ {
+  "name": "still-w2-boss",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/boss-golem.png",
+   "art-src/ref-bg.png"
+  ],
+  "prompt": "Generate an image. The first reference is my boss monster, the Freezer Golem, a hulking golem of ice cubes; the second shows the painted background style. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines). Cinematic composition, wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. NO text, no letters, no writing on any labels or jars, no speech bubbles, no UI, no border, no signature. Scene: a dramatic low-angle boss reveal: inside a frosty freezer cave, the Freezer Golem rises from the ice, fuzzy green mould growing between its ice cubes, snow swirling. Menacing but still cute, no other characters."
+ },
+ {
+  "name": "still-w2-cure",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/boss-golem.png",
+   "art-src/ref-bg.png"
+  ],
+  "prompt": "Generate an image. The first reference is my boss monster, the Freezer Golem, a hulking golem of ice cubes; the second shows the painted background style. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines). Cinematic composition, wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. NO text, no letters, no writing on any labels or jars, no speech bubbles, no UI, no border, no signature. Scene: after the battle, the same monster sits dazed and friendly, smiling sheepishly, as the last wisps of fuzzy green mould lift off it and drift away into the air. Soft hopeful light, no other characters."
+ },
+ {
+  "name": "still-w3-open",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-bg.png"
+  ],
+  "prompt": "Generate an image. The reference shows the painted background style. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines). Cinematic composition, wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. NO text, no letters, no writing on any labels or jars, no speech bubbles, no UI, no border, no signature. Scene: an establishing wide vista with no characters. The Oven: inside a giant glowing oven seen as a volcanic landscape, wire racks like bridges, baking trays like cliffs, orange heat haze and glowing coils."
+ },
+ {
+  "name": "still-w3-boss",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/boss-dragon.png",
+   "art-src/ref-bg.png"
+  ],
+  "prompt": "Generate an image. The first reference is my boss monster, the Grease Dragon, a dragon made of sizzling grease and fat; the second shows the painted background style. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines). Cinematic composition, wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. NO text, no letters, no writing on any labels or jars, no speech bubbles, no UI, no border, no signature. Scene: a dramatic low-angle boss reveal: at the peak of a broiler inside an oven, the Grease Dragon rears up with fuzzy green mould on its head, glowing fire in its throat, hot sparks flying. Menacing but still cute, no other characters."
+ },
+ {
+  "name": "still-w3-cure",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/boss-dragon.png",
+   "art-src/ref-bg.png"
+  ],
+  "prompt": "Generate an image. The first reference is my boss monster, the Grease Dragon, a dragon made of sizzling grease and fat; the second shows the painted background style. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines). Cinematic composition, wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. NO text, no letters, no writing on any labels or jars, no speech bubbles, no UI, no border, no signature. Scene: after the battle, the same monster sits dazed and friendly, smiling sheepishly, as the last wisps of fuzzy green mould lift off it and drift away into the air. Soft hopeful light, no other characters."
+ },
+ {
+  "name": "still-w4-open",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-bg.png"
+  ],
+  "prompt": "Generate an image. The reference shows the painted background style. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines). Cinematic composition, wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. NO text, no letters, no writing on any labels or jars, no speech bubbles, no UI, no border, no signature. Scene: an establishing wide vista with no characters. The Pantry: tall dusty pantry shelves seen as a canyon landscape, cereal boxes like buildings, cans like towers, flour drifting like fog in shafts of light."
+ },
+ {
+  "name": "still-w4-boss",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/boss-jar.png",
+   "art-src/ref-bg.png"
+  ],
+  "prompt": "Generate an image. The first reference is my boss monster, the Cookie Jar, a huge living cookie jar monster; the second shows the painted background style. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines). Cinematic composition, wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. NO text, no letters, no writing on any labels or jars, no speech bubbles, no UI, no border, no signature. Scene: a dramatic low-angle boss reveal: on a high pantry shelf, the Cookie Jar monster looms, its lid crusted with fuzzy green mould, cookies swirling around it, a white chef's hat visible inside the glass. Menacing but still cute, no other characters."
+ },
+ {
+  "name": "still-w4-cure",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/boss-jar.png",
+   "art-src/ref-bg.png"
+  ],
+  "prompt": "Generate an image. The first reference is my boss monster, the Cookie Jar, a huge living cookie jar monster; the second shows the painted background style. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines). Cinematic composition, wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. NO text, no letters, no writing on any labels or jars, no speech bubbles, no UI, no border, no signature. Scene: after the battle, the same monster sits dazed and friendly, smiling sheepishly, as the last wisps of fuzzy green mould lift off it and drift away into the air. Soft hopeful light, no other characters."
+ },
+ {
+  "name": "title-key",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-bg.png"
+  ],
+  "prompt": "Generate an image. The reference shows the painted background style. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines). Cinematic composition, wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. NO text, no letters, no writing on any labels or jars, no speech bubbles, no UI, no border, no signature. Scene: the title-screen key art of the game, with NO characters or creatures at all. A whole giant kitchen seen as an epic fantasy landscape from the top of a big wooden countertop: spice-jar mountains, a glowing oven like a volcano, a frosty fridge like an ice fortress, pantry shelves like cliffs, and far away in the middle a dark kitchen sink with an eerie green glow rising from the drain. Golden morning light through a big window on the LEFT. The near countertop in the lower RIGHT half is an empty open wooden stage (heroes will be placed there later). Keep the LEFT third calm (window, sky, soft light) so a logo can sit there."
+ }
+]

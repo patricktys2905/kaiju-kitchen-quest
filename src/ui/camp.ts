@@ -1,5 +1,6 @@
 // Camp (hub) menus as an HTML overlay: world MAP, HERO (stats + equipment), SKILLS, BAG (gear tabs + compare,
 // consumables + quick bag), MARKET, BOXES (gacha). Also the stage result panel. Reads/writes src/save.ts.
+import type { Spicy } from '../sim/types';
 import { CLASSES, type Stat } from '../sim/classes';
 import { CONSUMABLES, type ConsumableId, QUICK_SLOTS } from '../sim/consumables';
 import { BASES, SETS, UNIQUES, canWear, ownerOf, GRADES, GRADE_CSS, GRADE_MUL, type Item, MAX_PLUS, RARITY_CSS, RARITY_NAMES, type Slot, fortChance, fortCost, fortMul, fortRisky, gradeOf, itemLines, itemName, lineText, salvageValue } from '../sim/items';
@@ -18,6 +19,7 @@ import { UI_CSS } from './style';
 import { ACHIEVEMENTS, DAILY_BONUS, achievements, checkUnlocks, claimAch, claimBonus, claimKaijuQuest, claimQuest, claimable, dailyQuests, kaijuQuestState, rewardText, track, unlockProgress } from '../quests';
 import { STORIES, VARIANT_INFO, beatBefore } from '../story/stories';
 import { playStory } from './story';
+import { fsButton } from './title';
 import { isMuted, sfx, toggleMute } from '../audio';
 
 type Tab = 'map' | 'hero' | 'skills' | 'bag' | 'market' | 'boxes' | 'quests';
@@ -98,7 +100,7 @@ function render(): void {
   el.innerHTML = `
     <div class="side">${CLASSES.map(c => { const h = save.heroes[c.species], open = save.unlocked.includes(c.species); return `<button class="hp ${c.species === save.selected ? 'on' : ''} ${open && h.statPts + h.skillPts ? 'pts' : ''} ${open ? '' : 'lockd'}" data-hero="${c.species}" title="${c.name}" style="background-image:url(art/kaiju-${c.species}.webp)"><i></i>${open ? `<b>${h.level}</b>` : '<u>🔒</u>'}</button>`; }).join('')}</div>
     <div class="main">
-      <div class="top"><h1>Kaiju Kitchen Quest</h1><span class="chip"><img src="art/icon-crumb.webp"> ${save.crumbs}</span><span class="chip">🎁 ${save.boxes.length}</span><button class="chip" data-act="mute">${isMuted() ? '🔇' : '🔊'}</button></div>
+      <div class="top"><h1>Kaiju Kitchen Quest</h1><span class="chip"><img src="art/icon-crumb.webp"> ${save.crumbs}</span><span class="chip">🎁 ${save.boxes.length}</span><button class="chip" data-act="mute">${isMuted() ? '🔇' : '🔊'}</button>${fsButton()}</div>
       <div class="tabs">${tabs.map(([k, n, c]) => `<button class="${tab === k ? 'on' : ''}" data-tab="${k}">${n}${c ? `<em>${c}</em>` : ''}</button>`).join('')}</div>
       <div class="page ${tab === 'map' ? 'mappage' : ''}">${page()}</div>
     </div>
@@ -162,11 +164,19 @@ function mapPage(): string {
       <div class="lv">📖 ${STORIES[p.species]?.title ?? ''}${beatBefore(sel.id, sel.id === '1-1').some(b => p.seen.includes(b)) || (sel.boss && p.seen.includes(`w${sel.world}-after`)) ? ` <button class="pill" data-replay="${sel.id}" style="font-size:1.6vmin;padding:0.3vmin 1vmin">REPLAY</button>` : ''}</div>
       ${rank ? `<div class="lv">Best: <b style="color:${RANK_CSS[rank]}">${rank}</b></div>` : ''}
       <button class="pill go big" data-play="${sel.id}" ${stageUnlocked(sel) ? '' : 'disabled'}>${stageUnlocked(sel) ? '▶ PLAY' : '🔒 LOCKED'}</button>
+      <div class="spicy">🌶 SPICY ${SPICY_LIST.map(([k, ic, nm, ds]) => `<button class="chili ${(save.spicy ?? []).includes(k) ? 'on' : ''}" data-spicy="${k}" title="${ds}">${ic} ${nm}</button>`).join('')}
+        <small>${(save.spicy ?? []).length ? `+${(save.spicy ?? []).length} bonus box${(save.spicy ?? []).length > 1 ? 'es' : ''}, +${25 * (save.spicy ?? []).length}% crumbs` : 'extra loot for extra pain'}</small></div>
       <label class="hard ${hardOk ? '' : 'off'}"><input type="checkbox" data-act="hard" ${save.hard ? 'checked' : ''} ${hardOk ? '' : 'disabled'}> HARD MODE ${hardOk ? `(+${HARD_LV} monster levels, better boxes)` : '— beat this world\'s boss'}</label>
     </div>
   </div>
   <p class="hint">Tip: double-tap ← or → to <b>dodge roll</b> through attacks. Beat every monster, then walk to the EXIT. Stage 5 has an elite, stage 10 the world boss.</p>`;
 }
+
+const SPICY_LIST: [Spicy, string, string, string][] = [
+  ['nopots', '🚫', 'No potions', 'The quick bag is locked for this stage'],
+  ['glass', '💥', 'Glass jaw', 'You take double damage'],
+  ['clock', '⏱', 'Beat the clock', 'Clear it within the par time or you lose'],
+];
 
 // ---------- hero ----------
 function heroPage(): string {
@@ -356,6 +366,7 @@ function onClick(e: MouseEvent): void {
   else if (ds.replay) { const [id, sp] = [ds.replay, save.selected]; playStory(sp, [...beatBefore(id, id === '1-1'), ...(id.endsWith('-10') ? [`w${id.split('-')[0]}-after`] : [])].filter(b => hero().seen.includes(b)), () => render()); return; }
   else if (ds.claimk) { const r = claimKaijuQuest(save.selected, ds.claimk); if (r) { flash = 'Quest reward: ' + r; sfx('reveal3'); } }
   else if (ds.stat) spendStat(sp, ds.stat as Stat);
+  else if (ds.spicy) { const k = ds.spicy as Spicy, cur = save.spicy ?? []; save.spicy = cur.includes(k) ? cur.filter(x => x !== k) : [...cur, k]; persist(); }
   else if (ds.sugar) { if (useSugar(sp, ds.sugar as Stat)) flash = `Golden Sugar Cube: +1 ${ds.sugar.toUpperCase()} forever!`; }
   else if (ds.skill) levelSkill(sp, ds.skill);
   else if (ds.branch) { const [id, b] = ds.branch.split(':'); if (chooseBranch(sp, id, b as 'a' | 'b')) flash = 'Upgrade chosen! (A Recipe Scroll resets it)'; }
@@ -506,6 +517,10 @@ const CAMP_CSS = `
 .kq .map .info .lv { font-size: 2vmin; color: #d8c8d8; }
 .kq .rw img { width: 3.4vmin; height: 3.4vmin; object-fit: contain; vertical-align: middle; }
 .kq .pill.big { font-size: 3.4vmin; padding: 1.6vmin; margin-top: 0.6vmin; }
+.kq .spicy { font-size: 1.7vmin; color: #ffb38a; display: flex; flex-wrap: wrap; gap: 0.6vmin; align-items: center; margin: 0.6vmin 0; }
+.kq .spicy .chili { font: inherit; font-weight: 800; padding: 0.4vmin 1vmin; border-radius: 1.2vmin; border: 2px solid #ff7a4a66; background: #2a1a20; color: #d8b0a0; cursor: pointer; }
+.kq .spicy .chili.on { background: #c8401a; color: #fff4e4; border-color: #ffb347; box-shadow: 0 0 1.2vmin #ff6a2a; }
+.kq .spicy small { width: 100%; color: #b89888; }
 .kq .hard { font-size: 1.8vmin; color: #ff9a8a; display: flex; gap: 0.6vmin; align-items: center; }
 .kq .hard.off { color: #8a7a8a; }
 .kq .hard input { width: 3vmin; height: 3vmin; }

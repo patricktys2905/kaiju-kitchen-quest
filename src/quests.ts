@@ -7,7 +7,7 @@ import { BASES, rollItem } from './sim/items';
 import { UNLOCKS, kaijuQuests } from './story/kaijuQuests';
 
 export type StatKey = 'kills' | 'bossKills' | 'eliteKills' | 'clears' | 'rankA' | 'rankS' | 'boxes' | 'fortifies' | 'dodges' | 'potions' | 'ults'
-  | 'legendaries' | 'maxPlus' | 'crumbs' | 'heroClear';
+  | 'legendaries' | 'maxPlus' | 'crumbs' | 'heroClear' | 'perfects' | 'interrupts' | 'spicy';
 
 export interface Reward { crumbs?: number; items?: Partial<Record<ConsumableId, number>>; box?: BoxTier }
 
@@ -19,6 +19,9 @@ const QUEST_POOL: QuestDef[] = [
   { id: 'box', stat: 'boxes', goal: 5, text: 'Open 5 loot boxes', reward: { crumbs: 100, items: { gstone: 1 } } },
   { id: 'fort', stat: 'fortifies', goal: 2, text: 'Try to fortify gear twice', reward: { items: { fstone: 3 } } },
   { id: 'dodge', stat: 'dodges', goal: 15, text: 'Dodge-roll 15 times', reward: { crumbs: 100, items: { jam: 3 } } },
+  { id: 'perfect', stat: 'perfects', goal: 5, text: 'Land 5 perfect dodges', reward: { crumbs: 150, items: { bean: 1 } } },
+  { id: 'interrupt', stat: 'interrupts', goal: 8, text: 'Interrupt 8 monster attacks', reward: { crumbs: 120, items: { fstone: 2 } } },
+  { id: 'spicy', stat: 'spicy', goal: 1, text: 'Clear a stage with a Spicy chilli on', reward: { crumbs: 150, box: 3 } },
   { id: 'pot', stat: 'potions', goal: 3, text: 'Use 3 quick-bag items', reward: { crumbs: 80, items: { bigjam: 1 } } },
   { id: 'elite', stat: 'eliteKills', goal: 1, text: 'Defeat an elite or a boss', reward: { crumbs: 150, box: 3 } },
   { id: 'hero', stat: 'heroClear', goal: 1, text: 'Clear a stage with', reward: { crumbs: 150, items: { fstone: 2 } }, hero: true },
@@ -35,6 +38,8 @@ export const ACHIEVEMENTS: AchDef[] = [
   { id: 'smith', stat: 'maxPlus', name: 'Master Smith', tiers: [5, 10, 13, 15], reward: t => ({ items: { fstone: 5 + t * 5, safety: 1 + t } }) },
   { id: 'opener', stat: 'boxes', name: 'Box Fiend', tiers: [20, 100, 300], reward: t => ({ crumbs: 300 * (t + 1), box: Math.min(5, 3 + t) as BoxTier }) },
   { id: 'nimble', stat: 'dodges', name: 'Nimble Kaiju', tiers: [50, 300, 1000], reward: t => ({ items: { bean: 2 + t * 2, revive: t } }) },
+  { id: 'justmissed', stat: 'perfects', name: 'Just Missed', tiers: [20, 150, 600], reward: t => ({ crumbs: 300 * (t + 1), items: { revive: t } }) },
+  { id: 'chilli', stat: 'spicy', name: 'Chilli Head', tiers: [5, 30, 100], reward: t => ({ box: Math.min(5, 3 + t) as BoxTier, items: { gstone: 1 + t } }) },
   { id: 'ult', stat: 'ults', name: 'Ultimate Chef', tiers: [1, 25, 100], reward: t => ({ crumbs: 400 * (t + 1) }) },
 ];
 

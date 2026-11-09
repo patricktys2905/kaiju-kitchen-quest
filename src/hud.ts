@@ -1,4 +1,5 @@
 // In-stage HTML HUD: hero card (HP/XP), stage + monsters left, combo counter, boss bar, loot found, toasts, pause.
+import { styleRank } from './sim/world';
 import { toggleMute } from './audio';
 import { CONSUMABLES, QUICK_CD } from './sim/consumables';
 import { TIER_NAMES } from './sim/loot';
@@ -6,6 +7,7 @@ import { MOBS } from './sim/mobs';
 import { xpFor, type HeroProfile } from './sim/stats';
 import type { BoxTier, StageDef } from './sim/types';
 import type { World } from './sim/world';
+import { canFullscreen, isFullscreen } from './ui/title';
 
 const CSS = `
 #hud { position: fixed; inset: 0; pointer-events: none; z-index: 9; font-family: Nunito, Arial, sans-serif; font-weight: 900; color: #fff; display: none; }
@@ -34,6 +36,12 @@ const CSS = `
 #hud .loot { display: flex; align-items: center; gap: 0.5vmin; background: #24142ad0; border: 2px solid #ffd27a; border-radius: 2vmin; padding: 0.5vmin 1.2vmin; font-size: 2.4vmin; }
 #hud .loot img { width: 4.6vmin; height: 4.6vmin; object-fit: contain; }
 #hud .menu { pointer-events: auto; width: 7vmin; height: 7vmin; border-radius: 1.6vmin; background: #24142ad0; border: 2px solid #ffd27a; color: #ffd27a; font-size: 3.6vmin; display: flex; align-items: center; justify-content: center; }
+#hud .style { position: absolute; left: calc(2vmin + env(safe-area-inset-left)); top: 19vmin; display: flex; align-items: center; gap: 1vmin; font-family: 'Luckiest Guy', sans-serif; font-weight: 400; opacity: 0.25; transition: opacity 0.3s; }
+#hud .style.on { opacity: 1; }
+#hud .style b { font-size: 5vmin; color: var(--sc, #c8b8c8); text-shadow: 0 0.4vmin 0 #2a1030; min-width: 4vmin; text-align: center; }
+#hud .style .sbar { width: 12vmin; height: 1.2vmin; background: #0008; border-radius: 1vmin; overflow: hidden; }
+#hud .style .sbar i { display: block; height: 100%; background: var(--sc, #c8b8c8); transform-origin: left; }
+#hud .style span { font-size: 1.6vmin; color: #d8c8d8; }
 #hud .combo { position: absolute; right: calc(6vmin + env(safe-area-inset-right)); top: 22vmin; text-align: right; font-family: 'Luckiest Guy', sans-serif; font-weight: 400; color: #ffe27a; text-shadow: 0 0.5vmin 0 #a03010; opacity: 0; transition: opacity 0.3s; }
 #hud .combo.on { opacity: 1; }
 #hud .combo b { font-size: 7vmin; font-weight: 400; display: block; line-height: 1; }
@@ -82,6 +90,7 @@ export function initHud(onMenu: () => void, onResume: () => void, onLeave: () =>
     <div class="boss"><div class="t"></div><div class="bar"><i></i><u></u></div></div>
     <div class="right"><div class="loot"><img src="art/box-3.webp"><span>0</span></div><button class="menu">☰</button></div>
     <div class="combo"><b>0</b><span>HITS</span></div>
+    <div class="style"><b>D</b><div class="sbar"><i></i></div><span>STYLE</span></div>
     <div class="quick">${[0, 1, 2, 3].map(i => `<div class="q" data-q="${i}"><i>${i + 1}</i><b></b><u></u></div>`).join('')}</div>
     <div class="toasts"></div>
     <div class="help">← → move · ↑ ↓ climb · SPACE jump · J attack ×3 combo · L / I / O skills · U ultimate · ↓+SPACE drop · ESC menu</div>`;
@@ -95,7 +104,7 @@ export function initHud(onMenu: () => void, onResume: () => void, onLeave: () =>
   });
   const p = document.createElement('div');
   p.id = 'pause'; p.className = 'kq';
-  p.innerHTML = `<h2>PAUSED</h2><button class="pill go" data-a="resume">▶ RESUME</button><button class="pill" data-a="mute">🔊 SOUND ON / OFF</button><button class="pill" data-a="leave">⟵ RETREAT TO CAMP</button>`;
+  p.innerHTML = `<h2>PAUSED</h2><button class="pill go" data-a="resume">▶ RESUME</button><button class="pill" data-a="mute">🔊 SOUND ON / OFF</button>${canFullscreen() ? `<button class="pill" data-fs="long">${isFullscreen() ? '🗗 EXIT FULL SCREEN' : '⛶ FULL SCREEN'}</button>` : ''}<button class="pill" data-a="leave">⟵ RETREAT TO CAMP</button>`;
   document.body.appendChild(p);
   p.querySelector('[data-a=resume]')!.addEventListener('click', onResume);
   p.querySelector('[data-a=leave]')!.addEventListener('click', onLeave);
@@ -129,8 +138,12 @@ export function updateHud(w: World, p: HeroProfile, st: StageDef): void {
     el.querySelector('b')!.textContent = it ? String(it.n) : '';
     (el.querySelector('u') as HTMLElement).style.setProperty('--cd', `${Math.round(h.quickCd / QUICK_CD * 360)}deg`);
   });
-  q('.stage .t').textContent = `${st.num} ${st.name}`;
-  q('.stage .s').textContent = w.portal ? '➜ Exit is open! Head right' : `Monsters left: ${w.alive}`;
+  q('.stage .t').textContent = `${st.num} ${st.name}${w.spicy.length ? ' ' + '🌶'.repeat(w.spicy.length) : ''}`;
+  const clock = w.spicy.includes('clock') && !w.portal ? ` · ⏱ ${Math.max(0, Math.ceil(st.par - w.run.time))}s` : '';
+  q('.stage .s').textContent = (w.portal ? '➜ Exit is open! Head right' : `Monsters left: ${w.alive}`) + clock;
+  const letter = styleRank(w.style), sc = { S: '#ffd23c', A: '#9fe8ff', B: '#a8f0a8', C: '#ffb38a', D: '#c8b8c8' }[letter];
+  const sEl = q('.style'); sEl.classList.toggle('on', w.style > 2); sEl.style.setProperty('--sc', sc!);
+  q('.style b').textContent = letter; q<HTMLElement>('.style .sbar i').style.transform = `scaleX(${w.style / 100})`;
   const boss = w.boss;
   const bb = q('.boss');
   bb.classList.toggle('on', !!boss && boss.state !== 'dead');

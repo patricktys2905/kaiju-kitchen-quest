@@ -318,7 +318,7 @@ describe('world 2 monsters', () => {
   it('elites have much more HP and drop two boxes', () => {
     const w = mk(0, 10, 2);
     const e = w.spawnMob('egg', 300, 6, undefined, true), n = w.spawnMob('egg', 600, 6);
-    expect(e.maxHp).toBeGreaterThan(n.maxHp * 4);
+    expect(e.maxHp).toBeGreaterThan(n.maxHp * 3.5); // 4x (every elite also rolls a modifier)
     e.hp = 1; w.hero.x = 260;
     const evs = run(w, { attack: true }, 30);
     expect(evs.filter(x => x.t === 'drop').length).toBe(2);
@@ -398,10 +398,11 @@ describe('art', () => {
     const have = new Set<string>(JSON.parse(fs.readFileSync('public/art/manifest.json', 'utf8')));
     const { CONSUMABLES } = await import('../src/sim/consumables');
     const { RIGS } = await import('../src/render/rigs');
+    const { allStills } = await import('../src/story/stories');
     const need = [
       ...Object.values(BASES).map(b => b.icon), ...Object.values(MOBS).map(m => m.art), ...Object.values(CONSUMABLES).map(c => c.icon),
       ...STAGES.flatMap(s => [s.bg, s.tile, ...(s.mid ? [s.mid] : [])]), ...CLASSES.map(c => `kaiju-${c.species}`),
-      ...Object.entries(RIGS).flatMap(([sp, r]) => r.parts.map(p => `parts-${sp}-${p.piece}`)), 'map-world', 'map-oven', 'map-pantry',
+      ...Object.entries(RIGS).flatMap(([sp, r]) => r.parts.map(p => `parts-${sp}-${p.piece}`)), 'map-world', 'map-oven', 'map-pantry', 'title-key', ...allStills(),
     ];
     expect(need.filter(k => !have.has(k))).toEqual([]);
   });

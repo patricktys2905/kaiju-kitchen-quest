@@ -10,6 +10,7 @@ const b = await chromium.launch({ executablePath: 'C:/Program Files (x86)/Micros
 const p = await (await b.newContext({ viewport: { width: 844, height: 390 }, deviceScaleFactor: 3 })).newPage();
 await p.goto(`http://localhost:${PORT}/`);
 for (let i = 0; i < 60; i++) { if (await p.evaluate(() => !!window.__kkq).catch(() => false)) break; await wait(250); }
+await p.evaluate(() => document.querySelector('#title .play')?.click()); await wait(700); // dismiss the title screen
 await p.evaluate(sp => { window.__kkq.save.selected = sp; for (const h of Object.values(window.__kkq.save.heroes)) h.equip = {}; window.__kkq.play('1-1'); }, sp);
 await wait(1200);
 const poses = [['move', 0.3], ['run', 0.1], ['run', 0.5], ['air', 0.1], ['attack', 0.25], ['attack', 2.5], ['hurt', 0.1]];

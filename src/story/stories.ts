@@ -314,3 +314,28 @@ export function beatAfter(stageId: string): string[] {
   const [w, n] = stageId.split('-').map(Number);
   return n === 10 ? [`w${w}-after`] : [];
 }
+
+/** Painted still behind a story line (art name in public/art), or null for the plain background + portraits.
+ *  Per kaiju: the intro and the World 4 cliffhanger (from the Mold's first line on). Shared, since bosses are the
+ *  same for everyone: each world's opening vista, boss reveal and the cured boss afterwards. Elite beats have none. */
+export function stillFor(species: number, beat: string, lineIndex: number): string | null {
+  if (beat === 'intro') return `still-${species}-intro`;
+  const m = /^w(\d)-(open|boss|after)$/.exec(beat);
+  if (!m) return null;
+  const w = Number(m[1]);
+  if (m[2] !== 'after') return `still-w${w}-${m[2]}`;
+  if (w === 4) {
+    const lines = STORIES[species]?.beats[beat] ?? [];
+    const firstMold = lines.findIndex(([who]) => who === 'mold');
+    return firstMold >= 0 && lineIndex >= firstMold ? `still-${species}-cliff` : 'still-w4-cure';
+  }
+  return `still-w${w}-cure`;
+}
+
+/** Every still the stories can show (the art test checks they all exist). */
+export function allStills(): string[] {
+  const out = new Set<string>();
+  for (const [sp, s] of Object.entries(STORIES))
+    for (const [beat, lines] of Object.entries(s.beats)) lines.forEach((_, i) => { const k = stillFor(Number(sp), beat, i); if (k) out.add(k); });
+  return [...out].sort();
+}

@@ -14,7 +14,7 @@ import sharp from 'sharp';
 const RAW = path.resolve('art-src/raw');
 const OUT = path.resolve('public/art');
 const SPRITES = [[/^mob-/, 384], [/^box-/, 256], [/^ob-/, 768], [/^eq-/, 192], [/^w-/, 192], [/^a-/, 192], [/^k-/, 160], [/^c-/, 160], [/^boss-/, 640], [/^plat-/, 768], [/^fx-/, 256], [/^icon-/, 192]];
-const BACKGROUNDS = [[/^bg-far/, [1920, 1080]], [/^tile-/, [512, 512]], [/^bg-town/, [1920, 1080]], [/^map-/, [1920, 1080]]];
+const BACKGROUNDS = [[/^bg-far/, [1920, 1080]], [/^tile-/, [512, 512]], [/^bg-town/, [1920, 1080]], [/^map-/, [1920, 1080]], [/^title-/, [1920, 1080]], [/^still-/, [1280, 720]]];
 const LAYERS = [[/^bg-mid/, [1920, 1080]]];
 const PARTS_SCALE = 0.5; // parts sheets are 1024px; pieces end up ~150-250px
 
@@ -90,7 +90,7 @@ for (const file of files) {
   const bg = BACKGROUNDS.find(([re]) => re.test(name));
   if (bg) {
     const [w, h] = bg[1];
-    await sharp(src).resize({ width: w, height: h, fit: 'cover' }).webp({ quality: 84 }).toFile(path.join(OUT, `${name}.webp`));
+    await sharp(src).resize({ width: w, height: h, fit: 'cover' }).webp({ quality: name.startsWith('still-') ? 78 : 84 }).toFile(path.join(OUT, `${name}.webp`));
     console.log(`OK ${name}.webp (background ${w}x${h})`);
     continue;
   }

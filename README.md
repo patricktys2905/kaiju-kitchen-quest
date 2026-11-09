@@ -34,3 +34,26 @@ Keys: arrows/WASD (double-tap ←/→ = dodge), Space/K jump, J attack (×3 comb
 - src/audio.ts — synthesised SFX + original chiptune tracks (no audio files).
 - src/ui/camp.ts — world map, hero, skills, bag (tabs, ▲▼ compare, lock, equip best, salvage worse, quick bag),
   market (daily gear), boxes (gacha), result screen.
+
+## Story
+- src/story/stories.ts — a unique story per kaiju (beats intro, w{N}-open/elite/boss/after); src/ui/story.ts plays them as comic dialogue.
+- Painted stills (`stillFor`): per kaiju `still-<sp>-intro` and `still-<sp>-cliff` (the Sink cliffhanger, from the Mold's first line);
+  shared `still-w<N>-open|boss|cure` (bosses are the same for everyone). Elite beats use the plain background + portraits.
+- Generate: `node scripts/stills-jobs.mjs` → `node scripts/gem-gen.mjs art-src/jobs-stills.json` → `npm run art`.
+  Preview: `node scripts/story-shot.mjs 2 <species> intro w1-open ...` → `shots/story-*.png`. The art test fails if a still is missing.
+
+## Combat depth (src/sim/world.ts)
+- **Perfect dodge**: get hit in the first 0.2 s of a roll → slow motion, 1.6 s of guaranteed crits (+30%), ult gauge.
+- **Interrupts**: hitting a wind-up cancels it (armoured monsters need a heavy hit). **Red wind-ups** (boss charge/leap,
+  elite slams, charger rushes) can't be interrupted — dodge them. Elites leave a 1.4 s opening after each attack.
+- **Combo routes**: UP+attack = launcher, air attacks keep you aloft (juggles), DOWN+attack = Guard Break (breaks shields,
+  armour, adds boss stagger), dodge-cancel out of attacks/skills. **Style meter** (D–S): varied moves raise it, hits halve
+  it; its average, perfect dodges and interrupts feed the stage rank.
+- **Boss phase 2** at 50% HP: faster, and the arena's hazards switch on (same for every kaiju).
+- **Hazards** per world from stage 2: burners (Countertop), ice (Fridge), steam vents (Oven), falling cans (Pantry).
+- **Elite modifiers** (mobs.ts ELITE_MODS): Spiky, Hasty, Vampiric, Shielded, Moldy, Splitting — one per elite, two on Hard.
+- **Spicy chillies** (stage card): No potions / Glass jaw / Beat the clock — each +1 bonus box and +25% crumbs.
+- **New monsters** (3 per world): healer (Garlic Cleric, Marshmallow Medic), burrower (Sugar Ant, Noodle Lurker),
+  charger (Milk Carton, Sausage Ram), sniper with a laser line (Carrot, Raisin), turret (Kettle, ground only, one per stage),
+  summoner (Jelly Mother), loot-box mimics (Lunchbox, Cereal Box) in stages 3/7/9. Specialists are capped at 2 per stage.
+- Preview: `node scripts/combat-shot.mjs 2` → shots/combat-*.png. Title screen: src/ui/title.ts (⛶ fullscreen also in camp + pause).

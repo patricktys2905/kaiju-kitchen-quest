@@ -30,7 +30,7 @@ async function busy() {
   return page.evaluate(() => !!document.querySelector('button[aria-label*="Stop" i], .stop-icon, [data-test-id="stop-button"]'));
 }
 
-for (const job of jobs.slice(start, start + count)) {
+async function runJob(job) {
   if (job.newChat) {
     await page.goto('https://gemini.google.com/app', { waitUntil: 'domcontentloaded' });
   }
@@ -59,11 +59,14 @@ for (const job of jobs.slice(start, start + count)) {
     await page.waitForTimeout(2500);
     srcs = await genImages();
     if (srcs.length > before && !(await busy())) break;
+    // Gemini sometimes answers with an error instead of an image: give up on this job straight away
+    const err = await page.evaluate(() => /something went wrong|try your request again/i.test([...document.querySelectorAll('model-response')].pop()?.innerText ?? ''));
+    if (err) break;
   }
   if (srcs.length <= before) {
     const text = await page.evaluate(() => [...document.querySelectorAll('model-response')].pop()?.innerText?.slice(0, 500));
     console.log(`✗ ${job.name}: no image after ${(Date.now() - t0) / 1000}s. Reply: ${JSON.stringify(text)}`);
-    continue;
+    return;
   }
   await page.waitForTimeout(1500);
   // Copy the newest generated image out of the page via a canvas (it's a same-origin blob).
@@ -92,4 +95,12 @@ for (const job of jobs.slice(start, start + count)) {
     console.log(`~ ${job.name}.png saved from screenshot (download blocked)`);
   }
 }
+// Hard watchdog: a job that hangs (stuck page call) is abandoned; the next job opens a fresh chat.
+for (const job of jobs.slice(start, start + count)) {
+  let timer;
+  const r = await Promise.race([runJob(job).then(() => 'ok', e => 'error: ' + e.message), new Promise(res => { timer = setTimeout(() => res('hung'), 330000); })]);
+  clearTimeout(timer);
+  if (r !== 'ok') console.log(`✗ ${job.name}: ${r}`);
+}
 await b.close().catch(() => {});
+process.exit(0);

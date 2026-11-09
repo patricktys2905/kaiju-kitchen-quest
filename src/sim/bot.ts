@@ -42,11 +42,13 @@ export class Bot {
       if (!this.seen.has(m.id)) this.seen.set(m.id, w.time + this.o.reaction);
       const at = this.seen.get(m.id)!;
       if (w.time >= at && w.time < at + 0.05 && h.dodgeCd <= 0 && h.state !== 'skill') {
-        if (this.r() < this.o.dodgeSkill) { this.tapDir = m.x > h.x ? -1 : 1; this.tap = 3; const k = this.tapDir > 0 ? 'right' : 'left'; inp[k] = true; return inp; }
+        // red (danger) attacks are hard to miss: players learn to always dodge those
+        if (this.r() < (w.isDanger(m) ? Math.min(0.9, this.o.dodgeSkill + 0.25) : this.o.dodgeSkill)) { this.tapDir = m.x > h.x ? -1 : 1; this.tap = 3; const k = this.tapDir > 0 ? 'right' : 'left'; inp[k] = true; return inp; }
         this.seen.set(m.id, 1e9); // missed it
       }
     }
     if (!alive.length) { // go to the exit
+      if (h.state === 'climb') { inp.down = true; return inp; } // finished the last monster mid-ladder: climb down first
       if (Math.abs(h.y - w.stage.groundY) > 2 && h.ground) { inp.down = true; inp.jump = (w.time * 10 | 0) % 2 === 0; return inp; }
       inp[w.exitX > h.x ? 'right' : 'left'] = true;
       return inp;

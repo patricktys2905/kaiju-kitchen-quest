@@ -15,6 +15,12 @@ export const NO_INPUT: Input = { left: false, right: false, up: false, down: fal
 export interface Platform { x: number; y: number; w: number; solid?: boolean }
 export interface Ladder { x: number; top: number; bottom: number }
 export interface MobSpawn { kind: MobKind; x: number; y?: number; lv: number; elite?: boolean }
+/** Stage hazard on the ground floor. burner = flame pillar, vent = steam launch, drop = falling can, ice = slippery.
+ *  Timed hazards cycle: on for `on` s, off, then glow a warning for the last 0.9 s before the next burst. */
+export type HazardKind = 'burner' | 'vent' | 'drop' | 'ice';
+export interface Hazard { kind: HazardKind; x: number; w: number; period: number; on: number; offset: number; /** boss arenas: only after the boss enrages */ phase2?: boolean }
+/** Optional "Spicy" challenges chosen before a stage (each adds loot). */
+export type Spicy = 'nopots' | 'glass' | 'clock';
 
 export interface StageDef {
   id: string;
@@ -30,6 +36,7 @@ export interface StageDef {
   platforms: Platform[];
   ladders: Ladder[];
   mobs: MobSpawn[];
+  hazards?: Hazard[];
   /** monster level shown on the map */
   lv: [number, number];
   boss?: boolean;
@@ -41,7 +48,8 @@ export interface StageDef {
 
 export type MobKind = 'bun' | 'worm' | 'pepper' | 'egg' | 'toast' | 'pea' | 'yogurt' | 'icebat' | 'pickle' | 'golem'
   | 'popcorn' | 'imp' | 'bacon' | 'meatball' | 'dragon'
-  | 'can' | 'cheerio' | 'minicheerio' | 'soda' | 'flour' | 'jar';
+  | 'can' | 'cheerio' | 'minicheerio' | 'soda' | 'flour' | 'jar'
+  | 'garlic' | 'ant' | 'mimic' | 'carrot' | 'milk' | 'jelly' | 'jellybit' | 'kettle' | 'sausage' | 'marsh' | 'noodle' | 'raisin' | 'cereal';
 
 export type BoxTier = 1 | 2 | 3 | 4 | 5;
 export interface LootBox { tier: BoxTier; ilvl: number }
@@ -70,4 +78,17 @@ export type SimEvent =
   | { t: 'crumbs'; n: number; x: number; y: number }
   | { t: 'stone'; n: number; x: number; y: number }
   | { t: 'ult'; name: string }
-  | { t: 'block'; x: number; y: number };
+  | { t: 'block'; x: number; y: number }
+  /** dodged through an attack at the last moment: slow-mo + a guaranteed crit counter */
+  | { t: 'perfect'; x: number; y: number }
+  /** hit a monster during its wind-up: its attack is cancelled */
+  | { t: 'interrupt'; x: number; y: number }
+  /** a guard-break smash broke a shield / armour */
+  | { t: 'guardBreak'; x: number; y: number }
+  /** a boss reached its second phase */
+  | { t: 'enrage'; name: string }
+  | { t: 'heal'; x: number; y: number; n: number }
+  | { t: 'burrow'; x: number; y: number; up: boolean }
+  | { t: 'mimic'; id: number }
+  | { t: 'style'; rank: string }
+  | { t: 'hazard'; i: number; on: boolean };

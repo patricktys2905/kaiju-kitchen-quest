@@ -6,12 +6,12 @@ import { initHud, showHud, showPause, toast, updateHud } from '../hud';
 import { readInput, takeTaps } from '../input';
 import { TIER_COLORS, TIER_NAMES } from '../sim/loot';
 import { CONSUMABLES } from '../sim/consumables';
-import { ELITE, MOBS } from '../sim/mobs';
+import { ELITE, ELITE_MODS, MOBS } from '../sim/mobs';
 import { ULT_LV, applyBranch, skillsOf, skillScale } from '../sim/skills';
 import { STAGES, stageById, worldOf } from '../sim/stages';
 import { derive } from '../sim/stats';
 import type { SimEvent, StageDef } from '../sim/types';
-import { DT, HARD_LV, type Mob, World, rankOf } from '../sim/world';
+import { DT, HARD_LV, type Mob, World, guardBreakOf, launcherOf, rankOf } from '../sim/world';
 import { type GearLook, HeroView } from '../render/rig';
 import { BASES } from '../sim/items';
 import type { HeroProfile } from '../sim/stats';
@@ -44,7 +44,7 @@ const MID = 0.16;
 let manifest: string[] = [];
 let uiReady = false;
 
-interface MobView { img: Phaser.GameObjects.Image; plate: Phaser.GameObjects.Text; bar: Phaser.GameObjects.Rectangle; barBg: Phaser.GameObjects.Rectangle; shadow: Phaser.GameObjects.Ellipse; s: number }
+interface MobView { img: Phaser.GameObjects.Image; plate: Phaser.GameObjects.Text; bar: Phaser.GameObjects.Rectangle; barBg: Phaser.GameObjects.Rectangle; shadow: Phaser.GameObjects.Ellipse; s: number; warn: Phaser.GameObjects.Text }
 
 export class GameScene extends Phaser.Scene {
   private world: World | null = null;
@@ -68,6 +68,10 @@ export class GameScene extends Phaser.Scene {
   private levels = 0;
   private done = false;
   private hard = false;
+  /** hazard visuals (one container per hazard) + one graphics layer for lasers / mould puddles / burrow mounds */
+  private hazardViews: Phaser.GameObjects.Container[] = [];
+  private overlay?: Phaser.GameObjects.Graphics;
+  private slowTint?: Phaser.GameObjects.Rectangle;
   /** Hard mode is open for a world once its boss is beaten. */
   private hardOk(): boolean { return !!hero().cleared[`${this.stage.world}-10`]; }
 
@@ -114,7 +118,7 @@ export class GameScene extends Phaser.Scene {
   private buildStage(): void {
     const st = this.stage, p = hero();
     this.hard = save.hard && this.hardOk();
-    this.world = new World(st, derive(p), (Date.now() & 0xffff) + 1, quickBag(), save.items.revive ?? 0, this.hard, STORIES[p.species]?.variants[st.id]);
+    this.world = new World(st, derive(p), (Date.now() & 0xffff) + 1, quickBag(), save.items.revive ?? 0, this.hard, STORIES[p.species]?.variants[st.id], [...(save.spicy ?? [])]);
     const cam = this.cameras.main.setZoom(ZOOM).setBackgroundColor('#f6dcb4');
     const bg = this.has(st.bg) ? st.bg : 'bg-far';
     this.far = this.has(bg) ? this.add.image(SX, SY, bg).setOrigin(0, 0).setScrollFactor(0).setDepth(-100) : undefined;
@@ -140,6 +144,9 @@ export class GameScene extends Phaser.Scene {
     this.exit = this.add.container(w.exitX, st.groundY, [glow, plate, label]).setDepth(-3).setVisible(false);
     this.tweens.add({ targets: glow, scaleX: 1.2, scaleY: 1.1, alpha: 0.2, yoyo: true, repeat: -1, duration: 700 });
 
+    this.hazardViews = w.hazards.map(z => this.buildHazard(z.kind, z.x, z.w, st.groundY));
+    this.overlay = this.add.graphics().setDepth(2);
+    this.slowTint = this.add.rectangle(SX, SY, VW * 2, VH * 2, 0x6a8aff, 0).setOrigin(0, 0).setScrollFactor(0).setDepth(16);
     this.heroShadow = this.add.ellipse(0, 0, 54, 12, 0x000000, 0.22).setDepth(-2);
     this.aura = this.add.ellipse(0, 0, 80, 100, 0x9fe0ff, 0.25).setDepth(4).setBlendMode(Phaser.BlendModes.ADD).setVisible(false);
     this.hero = new HeroView(this, p.species, k => this.has(k), 84, lookOf(p));
@@ -151,7 +158,7 @@ export class GameScene extends Phaser.Scene {
     playMusic(st.boss ? 'boss' : st.world === 2 ? 'world2' : st.world === 3 ? 'world3' : st.world === 4 ? 'world2' : 'world1');
     if (st.boss) this.time.delayedCall(900, () => sfx('boss'));
     if (w.variant) this.time.delayedCall(900, () => toast(`${{ swarm: '🐜 SWARM', ambush: '⚔️ AMBUSH', night: '🌙 NIGHT' }[w.variant!]}!`, { color: '#c8a8ff' }));
-    toast(`${st.num} ${st.name}${this.hard ? ' · HARD' : ''}`, { big: true, color: this.hard ? '#ff7a6a' : undefined });
+    toast(`${st.num} ${st.name}${this.hard ? ' · HARD' : ''}${w.spicy.length ? ' · ' + '🌶'.repeat(w.spicy.length) : ''}`, { big: true, color: this.hard ? '#ff7a6a' : undefined });
     if (st.boss) this.time.delayedCall(1200, () => toast(`The ${MOBS[st.mobs[0].kind].name} awaits!`, { color: '#ff9a6a' }));
   }
 
@@ -225,7 +232,7 @@ export class GameScene extends Phaser.Scene {
           if (e.boss) track('bossKills');
           if (e.boss || e.elite) track('eliteKills');
           this.burst(e.x, e.y - 24, e.boss ? 0xffb347 : 0xc8f0a0, e.boss ? 40 : 14);
-          if (e.boss) { this.shake = 14; this.hitStop = 0.4; toast('THE TOAST KING FALLS!', { big: true, color: '#ffb347' }); }
+          if (e.boss) { this.shake = 14; this.hitStop = 0.4; toast(`THE ${MOBS[e.kind].name.toUpperCase()} FALLS!`, { big: true, color: '#ffb347' }); }
           break;
         case 'xp': {
           this.xpGained += e.n;
@@ -243,7 +250,22 @@ export class GameScene extends Phaser.Scene {
         }
         case 'pickup': sfx('pickup'); break;
         case 'drop': sfx('drop'); toast(`${TIER_NAMES[e.tier]} dropped!`, { tier: e.tier }); break;
-        case 'summon': toast('The King calls for help!', { color: '#ff9a6a' }); break;
+        case 'summon': toast(w.boss ? `The ${MOBS[w.boss.kind].name} calls for help!` : 'More little ones!', { color: '#ff9a6a' }); break;
+        case 'perfect': {
+          sfx('crit'); track('perfects');
+          this.callout(e.x, e.y - 20, 'PERFECT!', '#9fe8ff', 22);
+          this.ring(e.x, e.y + 20, 90, 0x9fe8ff); this.burst(e.x, e.y, 0x9fe8ff, 18);
+          this.cameras.main.flash(120, 160, 220, 255);
+          break;
+        }
+        case 'interrupt': track('interrupts'); sfx('stagger'); this.callout(e.x, e.y, 'INTERRUPT!', '#ffe27a', 15); this.burst(e.x, e.y + 10, 0xffe27a, 10); break;
+        case 'guardBreak': sfx('boom'); this.callout(e.x, e.y - 10, 'GUARD BREAK!', '#ffb36a', 16); this.ring(e.x, e.y + 20, 60, 0xffb36a); this.shake = Math.max(this.shake, 6); break;
+        case 'enrage': sfx('boss'); this.shake = 14; this.cameras.main.flash(250, 255, 80, 60); toast(`${e.name.toUpperCase()} IS ENRAGED!`, { big: true, color: '#ff6a5a' }); break;
+        case 'heal': this.callout(e.x, e.y, '+' + e.n, '#7ae87a', 13); this.burst(e.x, e.y + 20, 0x7ae87a, 8); break;
+        case 'burrow': this.burst(e.x, e.y - 6, 0x8a6a4a, e.up ? 16 : 10); if (e.up) { sfx('boom'); this.shake = Math.max(this.shake, 4); } break;
+        case 'mimic': sfx('boss'); toast('It\'s a MIMIC!', { color: '#ff9a6a' }); break;
+        case 'style': if (e.rank === 'S' || e.rank === 'A') toast(`STYLE ${e.rank}!`, { color: e.rank === 'S' ? '#ffd23c' : '#9fe8ff' }); break;
+        case 'hazard': if (e.on && w.hazards[e.i]?.kind === 'drop') { sfx('boom'); } break;
         case 'stagger': sfx('stagger'); toast('STAGGERED!', { color: '#ffe27a' }); this.shake = 8; break;
         case 'dodge': {
           sfx('dodge');
@@ -301,16 +323,19 @@ export class GameScene extends Phaser.Scene {
     sfx(failed ? 'fail' : 'clear');
     playMusic(null);
     syncQuickBag(w.hero.bag, w.hero.revives);
+    const chillies = w.spicy.length;
+    if (!failed && chillies) w.run.crumbs = Math.round(w.run.crumbs * (1 + 0.25 * chillies));
     save.crumbs += w.run.crumbs;
     save.items.fstone = (save.items.fstone ?? 0) + w.run.stones;
     if (w.run.crumbs) track('crumbs', w.run.crumbs);
-    const res = failed ? null : finishStage(st.id, rankOf(w.run, st.par).rank, w.loot, st.lv[1] + (this.hard ? HARD_LV : 0), !!st.boss, this.hard);
+    const res = failed ? null : finishStage(st.id, rankOf(w.run, st.par).rank, w.loot, st.lv[1] + (this.hard ? HARD_LV : 0), !!st.boss, this.hard, chillies);
     const sp = hero().species;
     trackHero(sp, 'combo', w.run.maxCombo, true);
     if (res) {
       trackHero(sp, `clear:${st.id}`, ['D', 'C', 'B', 'A', 'S'].indexOf(res.rank) + 1, true);
       if (w.run.hitsTaken === 0) trackHero(sp, 'nohit');
       if (this.hard) trackHero(sp, 'hard');
+      if (chillies) track('spicy');
       track('clears'); track('heroClear', 1, hero().species);
       if (res.rank === 'S' || res.rank === 'A') track('rankA');
       if (res.rank === 'S') track('rankS');
@@ -329,6 +354,40 @@ export class GameScene extends Phaser.Scene {
   }
 
   // ---------- effects ----------
+  private callout(x: number, y: number, text: string, color: string, size: number): void {
+    const t = this.add.text(x, y, text, { fontFamily: 'Luckiest Guy', fontSize: size + 'px', color, stroke: '#2a1030', strokeThickness: 5 }).setOrigin(0.5).setDepth(31).setResolution(3).setScale(0.5);
+    this.tweens.add({ targets: t, scale: 1, duration: 140, ease: 'Back.easeOut' });
+    this.tweens.add({ targets: t, y: y - 34, alpha: 0, delay: 450, duration: 450, onComplete: () => t.destroy() });
+  }
+
+  /** Hazard look: burner ring / steam grate / shelf shadow / ice sheet (no art needed). */
+  private buildHazard(kind: string, x: number, w: number, gy: number): Phaser.GameObjects.Container {
+    const parts: Phaser.GameObjects.GameObject[] = [];
+    if (kind === 'ice') {
+      parts.push(this.add.ellipse(0, -2, w + 30, 16, 0xbfe8ff, 0.55).setStrokeStyle(2, 0xffffff, 0.8));
+      for (let i = 0; i < 4; i++) parts.push(this.add.rectangle(-w / 2 + 20 + i * (w - 40) / 3, -4, 18, 2, 0xffffff, 0.8).setAngle(-12));
+    } else if (kind === 'burner') {
+      parts.push(this.add.ellipse(0, -2, w, 14, 0x2a2a30).setStrokeStyle(3, 0x5a5a66));
+      const flame = this.add.container(0, -2, [
+        this.add.ellipse(0, -55, w * 0.75, 120, 0xff4a10, 0.55),
+        this.add.ellipse(-w * 0.18, -40, w * 0.35, 85, 0xff8a20, 0.7),
+        this.add.ellipse(w * 0.2, -45, w * 0.3, 95, 0xff8a20, 0.7),
+        this.add.ellipse(0, -30, w * 0.38, 60, 0xffe080, 0.85),
+      ]).setName('fx').setBlendMode(Phaser.BlendModes.ADD);
+      parts.push(flame);
+      parts.push(this.add.ellipse(0, -4, w * 0.8, 10, 0xffb347, 0.9).setName('glow'));
+    } else if (kind === 'vent') {
+      parts.push(this.add.rectangle(0, -3, w, 8, 0x4a3a30).setStrokeStyle(2, 0x8a6a50));
+      parts.push(this.add.rectangle(0, -4, w * 0.8, 150, 0xf0f0ff, 0.6).setOrigin(0.5, 1).setName('fx'));
+      parts.push(this.add.ellipse(0, -6, w * 0.8, 8, 0xffffff, 0.8).setName('glow'));
+    } else { // drop: a shadow that grows, then a can falls
+      parts.push(this.add.ellipse(0, -2, w, 12, 0x000000, 0.35).setName('glow'));
+      const can = this.has('mob-can') ? this.add.image(0, -200, 'mob-can').setOrigin(0.5, 1) : this.add.rectangle(0, -200, 40, 50, 0x9aa0a8).setOrigin(0.5, 1);
+      if (can instanceof Phaser.GameObjects.Image) can.setScale(56 / can.height).setTint(0xb0b0b8);
+      parts.push(can.setName('fx'));
+    }
+    return this.add.container(x, gy, parts).setDepth(kind === 'ice' ? -8 : 6);
+  }
   private burst(x: number, y: number, color: number, n: number): void {
     for (let i = 0; i < n; i++) {
       const a = Math.random() * Math.PI * 2, d = 18 + Math.random() * 26;
@@ -344,11 +403,11 @@ export class GameScene extends Phaser.Scene {
 
   private slash(step: number): void {
     const h = this.world!.hero;
-    const atk = step < 0 ? h.d.cls.air : h.d.cls.combo[step];
+    const atk = step === -2 ? guardBreakOf(h.d.cls.combo) : step === -3 ? launcherOf(h.d.cls.combo) : step < 0 ? h.d.cls.air : h.d.cls.combo[step];
     const g = this.add.graphics().setDepth(6);
     const r = atk.reach * 0.8;
-    const [a0, a1] = step === 2 ? [100, -80] : step === 1 ? [-60, 60] : step < 0 ? [-80, 90] : [60, -60];
-    const col = step === 2 ? 0xffe27a : 0xffffff;
+    const [a0, a1] = step === 2 || step === -2 ? [100, -80] : step === 1 ? [-60, 60] : step === -3 ? [80, -110] : step < 0 ? [-80, 90] : [60, -60];
+    const col = step === -2 ? 0xffb36a : step === -3 ? 0x9fe8ff : step === 2 ? 0xffe27a : 0xffffff;
     let t = 0;
     const draw = () => {
       g.clear();
@@ -432,12 +491,41 @@ export class GameScene extends Phaser.Scene {
     const lift = Math.min(1, (fy - h.y) / 200);
     this.heroShadow.setPosition(h.x, fy - 1).setScale(1 - lift * 0.5).setAlpha(h.state === 'climb' ? 0 : 1);
     this.hero.flash(h.state === 'hurt' && h.t < 0.08);
-    this.aura.setVisible(!!h.buff).setPosition(h.x, h.y - 40).setScale(1 + Math.sin(t * 6) * 0.06).setAlpha(0.18 + Math.sin(t * 6) * 0.06);
+    this.aura.setFillStyle(h.counter > 0 ? 0xffd23c : 0x9fe0ff, 0.25).setVisible(!!h.buff || h.counter > 0).setPosition(h.x, h.y - 40).setScale(1 + Math.sin(t * 6) * 0.06).setAlpha(0.18 + Math.sin(t * 6) * 0.06);
+
+    // hazards
+    w.hazards.forEach((z, i) => {
+      const c = this.hazardViews[i]; if (!c) return;
+      const fxo = c.getByName('fx') as Phaser.GameObjects.Rectangle | Phaser.GameObjects.Image | Phaser.GameObjects.Container | null, glow = c.getByName('glow') as Phaser.GameObjects.Ellipse | null;
+      const cyc = ((w.time + z.offset) % z.period);
+      if (z.kind === 'ice') { c.setAlpha(z.state === 'on' ? 1 : 0); return; }
+      if (z.kind === 'drop') {
+        glow?.setScale(z.state === 'warn' ? 0.4 + 0.6 * (cyc - (z.period - 0.9)) / 0.9 : z.state === 'on' ? 1 : 0.2).setAlpha(z.state === 'off' ? 0.12 : 0.4);
+        fxo?.setVisible(z.state !== 'off').setY(z.state === 'warn' ? -260 + 120 * (cyc - (z.period - 0.9)) / 0.9 : 0);
+        return;
+      }
+      c.setAlpha(z.phase2 && z.state === 'off' && !w.boss?.enraged ? 0.35 : 1);
+      fxo?.setVisible(z.state === 'on').setScale(1 + Math.sin(t * 30) * 0.08, 1 + Math.sin(t * 17) * 0.1);
+      glow?.setAlpha(z.state === 'warn' ? 0.5 + Math.sin(t * 25) * 0.5 : z.state === 'on' ? 1 : 0.25);
+    });
+    // lasers, mould puddles, burrow mounds
+    const g = this.overlay!;
+    g.clear();
+    for (const p of w.puddles) { g.fillStyle(0x6ac04a, Math.min(0.55, p.t / 2)); g.fillEllipse(p.x, p.y - 1, 70, 10); }
+    for (const s of w.shots) if (s.kind === 'steam' && s.tx !== undefined && s.ty !== undefined) { g.lineStyle(2, 0xff6a4a, 0.8); g.strokeEllipse(s.tx, s.ty - 2, 50, 12); }
+    for (const m of w.mobs) {
+      if (m.state === 'windup' && m.move === 'snipe') {
+        const sy = m.y - MOBS[m.kind].h * 0.7, lock = m.t > 0.6;
+        g.lineStyle(lock ? 2.5 : 1.2, 0xff2a2a, lock ? 0.9 : 0.5); g.lineBetween(m.x + m.face * 22, sy, m.aimX, m.aimY);
+      }
+      if (m.under && m.state !== 'dead') { g.fillStyle(0x7a5a3a, 0.9); g.fillEllipse(m.x, m.y - 3, 46, m.state === 'windup' ? 16 + Math.sin(t * 40) * 4 : 12); }
+    }
+    this.slowTint?.setFillStyle(0x6a8aff, w.slowmo > 0 ? 0.16 : 0);
 
     // monsters
     const seen = new Set<number>();
     for (const m of w.mobs) { seen.add(m.id); this.drawMob(m, t); }
-    for (const [id, v] of this.mobViews) if (!seen.has(id)) { v.img.destroy(); v.plate.destroy(); v.bar.destroy(); v.barBg.destroy(); v.shadow.destroy(); this.mobViews.delete(id); }
+    for (const [id, v] of this.mobViews) if (!seen.has(id)) { v.img.destroy(); v.plate.destroy(); v.bar.destroy(); v.barBg.destroy(); v.shadow.destroy(); v.warn.destroy(); this.mobViews.delete(id); }
 
     // boxes
     const seenB = new Set<number>();
@@ -471,11 +559,14 @@ export class GameScene extends Phaser.Scene {
           : s.kind === 'icicle' && worldOf(this.stage).id === 4 ? this.add.circle(0, 0, 11, 0xc8904a).setStrokeStyle(3, 0x6a3a10)
           : s.kind === 'icicle' && worldOf(this.stage).id === 3 ? this.add.circle(0, 0, 8, 0xff6a2a).setStrokeStyle(2, 0xffd27a).setBlendMode(Phaser.BlendModes.ADD)
           : s.kind === 'icicle' ? this.add.ellipse(0, 0, 10, 26, 0xc8f0ff).setStrokeStyle(2, 0x6ab8ff)
+          : s.kind === 'laser' ? this.add.ellipse(0, 0, 26, 5, 0xff4a4a).setStrokeStyle(1.5, 0xffe0e0).setBlendMode(Phaser.BlendModes.ADD)
+          : s.kind === 'steam' ? this.add.circle(0, 0, 10, 0xf4f4ff, 0.85).setStrokeStyle(2, 0xc8d0e0)
           : s.kind === 'fire' ? this.add.circle(0, 0, 9, 0xff8a2a).setStrokeStyle(3, 0xffe27a).setBlendMode(Phaser.BlendModes.ADD)
           : this.add.circle(0, 0, 7, worldOf(this.stage).id === 2 ? 0x6ac86a : worldOf(this.stage).id === 3 ? 0xd0301a : 0x2a2020).setStrokeStyle(2, 0x8a7060);
         c.setDepth(8); this.shotImgs.set(s.id, c);
       }
       c.setPosition(s.x, s.y).setScale(1 + Math.sin(t * 30) * 0.12);
+      if (s.kind === 'laser') c.setRotation(Math.atan2(s.vy, s.vx));
       if (s.from === 'hero' && Math.random() < 0.5) { const p = this.add.circle(s.x, s.y + (Math.random() - 0.5) * 12, 3, 0xffd8ff).setDepth(7); this.tweens.add({ targets: p, alpha: 0, duration: 250, onComplete: () => p.destroy() }); }
     }
     for (const [id, c] of this.shotImgs) if (!seenS.has(id)) { c.destroy(); this.shotImgs.delete(id); }
@@ -503,17 +594,29 @@ export class GameScene extends Phaser.Scene {
     let v = this.mobViews.get(m.id);
     if (!v) {
       const img = this.add.image(0, 0, this.has(def.art) ? def.art : '__WHITE').setOrigin(0.5, 0.96).setDepth(def.brain === 'boss' ? 4 : 3);
-      const plate = this.add.text(0, 0, `Lv${m.lv} ${m.elite ? 'Elite ' : ''}${def.name}`, { fontFamily: 'Nunito', fontStyle: '900', fontSize: '10px', color: '#ffffff', backgroundColor: '#1a1020b0', padding: { x: 4, y: 1 } })
+      const plate = this.add.text(0, 0, `Lv${m.lv} ${m.elite ? 'Elite ' : ''}${this.world!.mobName(m)}`, { fontFamily: 'Nunito', fontStyle: '900', fontSize: '10px', color: '#ffffff', backgroundColor: '#1a1020b0', padding: { x: 4, y: 1 } })
         .setOrigin(0.5, 0).setDepth(9).setResolution(3);
       const barBg = this.add.rectangle(0, 0, 40, 5, 0x000000, 0.6).setDepth(9);
       const bar = this.add.rectangle(0, 0, 40, 5, 0xff4a5a).setOrigin(0, 0.5).setDepth(9);
       const shadow = this.add.ellipse(0, 0, def.w * 1.1, 10, 0x000000, 0.2).setDepth(1);
-      v = { img, plate, bar, barBg, shadow, s: (def.h + (def.brain === 'boss' ? 20 : 12)) / img.height * (m.elite ? ELITE.scale : 1) };
+      const warn = this.add.text(0, 0, '!', { fontFamily: 'Luckiest Guy', fontSize: '30px', color: '#ff2a2a', stroke: '#ffffff', strokeThickness: 5 }).setOrigin(0.5, 1).setDepth(10).setResolution(3).setVisible(false);
+      v = { warn, img, plate, bar, barBg, shadow, s: (def.h + (def.brain === 'boss' ? 20 : 12)) / img.height * (m.elite ? ELITE.scale : 1) };
       if (m.elite) plate.setColor('#ffb347');
+      if (m.mods.length) plate.setColor(ELITE_MODS[m.mods[0]].color);
       if (def.brain === 'boss') plate.setVisible(false);
       this.mobViews.set(m.id, v);
     }
     const flyer = def.brain === 'flyer';
+    // a mimic looks exactly like a dropped loot box until it bites
+    const boxKey = m.kind === 'cereal' ? 'box-3' : 'box-2';
+    if (m.disguised) {
+      if (v.img.texture.key !== boxKey && this.has(boxKey)) { v.img.setTexture(boxKey).setOrigin(0.5, 1); v.s = 32 / v.img.height; }
+      v.img.setPosition(m.x, m.y + Math.sin(t * 3 + m.id) * 2 - 2).setScale(v.s).setRotation(0).setFlipX(false).clearTint();
+      v.plate.setVisible(false); v.shadow.setVisible(false); v.bar.setVisible(false); v.barBg.setVisible(false);
+      return;
+    }
+    if (v.img.texture.key === boxKey && def.brain === 'mimic' && this.has(def.art)) { v.img.setTexture(def.art).setOrigin(0.5, 0.96); v.s = (def.h + 12) / v.img.height * (m.elite ? ELITE.scale : 1); v.plate.setVisible(true); v.shadow.setVisible(true); }
+    v.img.setVisible(!m.under); v.plate.setVisible(!m.under && def.brain !== 'boss'); v.shadow.setVisible(!m.under);
     const wob = flyer ? Math.sin(t * 22 + m.id) * 0.6 : m.state === 'walk' && Math.abs(m.vx) > 5 ? Math.sin(t * 14 + m.id) : 0;
     let sx = 1 + wob * 0.04, sy = 1 - wob * 0.05, rot = wob * 0.05;
     if (m.state === 'windup') { const k = Math.min(1, m.t / 0.4); sx = 1 + 0.12 * k; sy = 1 - 0.12 * k; rot = -0.12 * m.face * k; if (def.brain === 'bomber') { sx = sy = 1 + Math.sin(t * 40) * 0.1 + m.t * 0.3; } }
@@ -524,10 +627,14 @@ export class GameScene extends Phaser.Scene {
     // art faces left: flip when facing right
     v.img.setPosition(m.x, m.y).setScale(v.s * sx, v.s * sy).setRotation(rot).setFlipX(m.face > 0);
     if (m.flash > 0) v.img.setTint(0xffffff).setTintMode(Phaser.TintModes.FILL);
-    else if (m.state === 'windup' && Math.floor(t * 12) % 2 === 0) v.img.setTint(0xff7070).setTintMode(Phaser.TintModes.MULTIPLY);
+    else if (this.world!.isDanger(m)) v.img.setTint(Math.floor(t * 14) % 2 ? 0xff3030 : 0xff8080).setTintMode(Phaser.TintModes.MULTIPLY); // red: can't interrupt, dodge it!
+    else if (m.state === 'windup' && Math.floor(t * 12) % 2 === 0) v.img.setTint(0xffc070).setTintMode(Phaser.TintModes.MULTIPLY);
+    else if (m.enraged && Math.floor(t * 4) % 2 === 0) v.img.setTint(0xff9a8a).setTintMode(Phaser.TintModes.MULTIPLY);
     else if (m.state === 'stagger') v.img.setTint(0xfff0a0).setTintMode(Phaser.TintModes.MULTIPLY);
     else v.img.clearTint().setTintMode(Phaser.TintModes.MULTIPLY);
     const top = m.y - def.h * (m.elite ? ELITE.scale : 1) - 18;
+    const danger = this.world!.isDanger(m);
+    v.warn.setVisible(danger).setPosition(m.x, top - 4).setScale(danger ? 1 + Math.sin(t * 24) * 0.15 : 1);
     const fl = this.world!.floorBelow(m.x, m.y, m.y + 2000, false);
     v.shadow.setPosition(m.x, (fl ? fl.y : m.y) - 1).setAlpha(m.state === 'dead' ? 0 : 1);
     v.plate.setPosition(m.x, flyer ? m.y + 6 : m.y + 4).setAlpha(m.state === 'dead' ? 0 : 0.9);

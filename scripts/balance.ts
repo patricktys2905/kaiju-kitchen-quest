@@ -49,7 +49,7 @@ for (const st of STAGES.filter(s => s.id.startsWith(filter))) {
       total++;
       if (w.cleared) { clears++; hc++; hpSum += w.hero.hp / w.hero.d.maxHp; tSum += w.run.time; }
       potions += 3 - (w.hero.bag[0]?.n ?? 0);
-      if (!w.cleared && !w.failed) per.push(`${c.name}:TIMEOUT(${w.alive} left${w.boss ? `, boss ${Math.round(w.boss.hp / w.boss.maxHp * 100)}%` : ''})`);
+      if (!w.cleared && !w.failed) per.push(`${c.name}:TIMEOUT(${w.alive} left${w.boss ? `, boss ${Math.round(w.boss.hp / w.boss.maxHp * 100)}%` : ''} hero ${Math.round(w.hero.x)},${Math.round(w.hero.y)} ${w.hero.state}${w.alive ? '' : ` exit ${w.exitX}`})`);
     }
     per.push(`${c.name.split(' ')[0]} ${hc}/${RUNS}`);
   }

@@ -4,10 +4,12 @@ import { initInput } from './input';
 import { CANVAS, GameScene } from './scenes/GameScene';
 import { initTouch } from './touch';
 import { initCamp } from './ui/camp';
+import { showTitle } from './ui/title';
 
 initInput(unlockAudio);
 addEventListener('pointerdown', unlockAudio);
 initTouch();
+showTitle();
 let game: Phaser.Game;
 initCamp(stageId => game.scene.getScene('game').scene.restart({ stage: stageId }));
 

@@ -2,7 +2,7 @@
 import { CLASSES } from '../sim/classes';
 import { MOBS } from '../sim/mobs';
 import { WORLDS } from '../sim/stages';
-import { STORIES, type StoryLine } from '../story/stories';
+import { STORIES, stillFor, type StoryLine } from '../story/stories';
 import { sfx } from '../audio';
 
 const CSS = `
@@ -25,6 +25,14 @@ const CSS = `
 #story .box.mold { border-color: #6ad04a; color: #c8f0a8; } #story .box.mold .who { background: #6ad04a; }
 #story .next { position: absolute; right: 2.4vmin; bottom: 1.2vmin; font-size: 2vmin; color: #ffd27a; animation: nb 0.8s infinite alternate; }
 @keyframes nb { to { transform: translateY(-0.5vmin); } }
+#story .still { position: absolute; inset: 0; overflow: hidden; }
+#story .still i { position: absolute; inset: 0; background: center/cover no-repeat; animation: stin 0.7s ease-out both, kb 18s ease-out both; }
+#story .still i.out { animation: stout 0.7s ease-in both; }
+#story .still:has(i)::after { content: ''; position: absolute; inset: 0; background: linear-gradient(#120a1870, transparent 20%, transparent 58%, #120a18e8 94%); }
+@keyframes stin { from { opacity: 0; } } @keyframes stout { to { opacity: 0; } }
+@keyframes kb { from { transform: scale(1.02); } to { transform: scale(1.1) translate(-1.5%, -1%); } }
+#story .cnt { position: absolute; inset: 0; }
+#story .who img { height: 4.8vmin; width: 4.8vmin; object-fit: contain; vertical-align: middle; margin: -1.4vmin 0.8vmin -1.2vmin -0.8vmin; background: #fff4e4; border-radius: 50%; border: 2px solid #3a1408; }
 #story .skip { position: absolute; right: calc(2vmin + env(safe-area-inset-right)); top: calc(2vmin + env(safe-area-inset-top)); z-index: 2; font-family: 'Luckiest Guy', sans-serif; font-size: 2.4vmin; padding: 1vmin 2vmin; border-radius: 1.4vmin; background: #2a1a30d0; color: #ffd27a; border: 2px solid #ffd27a88; }
 `;
 
@@ -33,6 +41,7 @@ function ensure(): HTMLElement {
   if (el) return el;
   const st = document.createElement('style'); st.textContent = CSS; document.head.appendChild(st);
   el = document.createElement('div'); el.id = 'story';
+  el.innerHTML = '<div class="still"></div><div class="cnt"></div>';
   document.body.appendChild(el);
   return el;
 }
@@ -40,36 +49,51 @@ function ensure(): HTMLElement {
 /** Plays beats (e.g. ['intro', 'w1-open']) of a kaiju's story, then calls done. */
 export function playStory(species: number, beats: string[], done: () => void): void {
   const story = STORIES[species];
-  const lines: { line: StoryLine; world: number }[] = [];
-  for (const b of beats) { const w = Number(/^w(\d)/.exec(b)?.[1] ?? 1); for (const line of story?.beats[b] ?? []) lines.push({ line, world: w }); }
+  const lines: { line: StoryLine; world: number; still: string | null }[] = [];
+  for (const b of beats) {
+    const w = Number(/^w(\d)/.exec(b)?.[1] ?? 1);
+    (story?.beats[b] ?? []).forEach((line, k) => lines.push({ line, world: w, still: stillFor(species, b, k) }));
+  }
   if (!story || !lines.length) { done(); return; }
+  for (const k of new Set(lines.map(l => l.still))) if (k) new Image().src = `art/${k}.webp`; // preload the paintings
   const root = ensure();
+  const stillEl = root.querySelector<HTMLElement>('.still')!, cnt = root.querySelector<HTMLElement>('.cnt')!;
+  stillEl.innerHTML = '';
   const me = CLASSES.find(c => c.species === species)!;
-  let i = 0, typing: number | null = null, full = '';
-  const finish = () => { if (typing !== null) clearInterval(typing); root.classList.remove('on'); root.innerHTML = ''; done(); };
+  let i = 0, typing: number | null = null, full = '', curStill: string | null = null;
+  const finish = () => { if (typing !== null) clearInterval(typing); root.classList.remove('on'); cnt.innerHTML = ''; stillEl.innerHTML = ''; done(); };
   const show = () => {
     if (i >= lines.length) { finish(); return; }
-    const { line: [who, text], world } = lines[i];
+    const { line: [who, text], world, still } = lines[i];
     const w = WORLDS.find(x => x.id === world) ?? WORLDS[0];
     const boss = MOBS[w.boss];
     const isMe = who === 'me', other = typeof who === 'number' ? who : null;
     const name = who === 'me' ? me.name : who === 'boss' ? boss.name : who === 'mold' ? '???' : other !== null ? CLASSES.find(c => c.species === other)?.name ?? '' : '';
     const rightArt = who === 'boss' ? `art/${boss.art}.webp` : other !== null ? `art/kaiju-${other}.webp` : '';
     root.style.backgroundImage = `url(art/${w.bg}.webp)`;
-    root.innerHTML = `<div class="ttl">${story.title}<small>${me.name} · World ${w.id}: ${w.name}</small></div>
-      <div class="por l ${isMe ? '' : 'dim'}" style="background-image:url(art/kaiju-${species}.webp)"></div>
-      ${who === 'mold' ? '<div class="por r mold"></div>' : rightArt ? `<div class="por r" style="background-image:url(${rightArt})"></div>` : ''}
-      <div class="box ${who === 'n' ? 'n' : who === 'mold' ? 'mold' : ''}"><span class="who">${name}</span><span class="tx"></span><span class="next">▼ tap</span></div>
+    if (still !== curStill) {
+      // crossfade: the old painting fades out on top while the new one fades in and slowly zooms
+      for (const old of stillEl.querySelectorAll('i')) { old.classList.add('out'); setTimeout(() => old.remove(), 700); }
+      if (still) { const img = document.createElement('i'); img.style.backgroundImage = `url(art/${still}.webp)`; stillEl.prepend(img); }
+      curStill = still;
+    }
+    // over a painting the big portraits would double up the characters: show a small face in the name tag instead
+    const face = who === 'me' ? `art/kaiju-${species}.webp` : rightArt;
+    const chip = still && face ? `<img src="${face}" alt="">` : '';
+    cnt.innerHTML = `<div class="ttl">${story.title}<small>${me.name} · World ${w.id}: ${w.name}</small></div>
+      ${still ? '' : `<div class="por l ${isMe ? '' : 'dim'}" style="background-image:url(art/kaiju-${species}.webp)"></div>
+      ${who === 'mold' ? '<div class="por r mold"></div>' : rightArt ? `<div class="por r" style="background-image:url(${rightArt})"></div>` : ''}`}
+      <div class="box ${who === 'n' ? 'n' : who === 'mold' ? 'mold' : ''}"><span class="who">${chip}${name}</span><span class="tx"></span><span class="next">▼ tap</span></div>
       <button class="skip">SKIP ▶▶</button>`;
-    root.querySelector('.skip')!.addEventListener('click', e => { e.stopPropagation(); finish(); });
-    const tx = root.querySelector('.tx')!;
+    cnt.querySelector('.skip')!.addEventListener('click', e => { e.stopPropagation(); finish(); });
+    const tx = cnt.querySelector('.tx')!;
     full = text; let k = 0;
     if (typing !== null) clearInterval(typing);
     typing = window.setInterval(() => { k += 2; tx.textContent = full.slice(0, k); if (k >= full.length && typing !== null) { clearInterval(typing); typing = null; } }, 22);
     sfx('click');
   };
   root.onclick = () => {
-    if (typing !== null) { clearInterval(typing); typing = null; root.querySelector('.tx')!.textContent = full; return; }
+    if (typing !== null) { clearInterval(typing); typing = null; cnt.querySelector('.tx')!.textContent = full; return; }
     i++; show();
   };
   root.classList.add('on');

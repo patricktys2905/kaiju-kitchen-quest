@@ -1,4 +1,5 @@
 // Save data (localStorage 'kkq-save-v1'): every hero's progress, the shared bag, unopened boxes, crumbs, stage ranks.
+import type { Spicy } from './sim/types';
 import { CLASSES, type Stat } from './sim/classes';
 import { CONSUMABLES, type ConsumableId } from './sim/consumables';
 import { type Item, MAX_PLUS, type Slot, BASES, canWear, fortChance, fortCost, fortRisky, gradeOf, rollGrade, rollItem, salvageValue } from './sim/items';
@@ -30,6 +31,8 @@ export interface Save {
   shop: { day: string; stock: Item[] };
   /** kaiju you can play (others are unlocked by challenges) */
   unlocked: number[];
+  /** Spicy challenges switched on for the next stages */
+  spicy?: Spicy[];
 }
 
 // v2: per-kaiju progress, 4 starters, story (older v1 saves are not carried over)
@@ -189,10 +192,10 @@ export function openBox(i: number): { item: Item; crumbs: number; box: LootBox; 
   return { item, crumbs, box, extra };
 }
 
-export interface ClearResult { rank: Rank; boxes: LootBox[]; upgraded: number; firstClear: boolean }
+export interface ClearResult { rank: Rank; boxes: LootBox[]; upgraded: number; firstClear: boolean; spicy: number }
 
 /** Stage finished: rank upgrades some boxes, adds the clear reward, records the best rank. */
-export function finishStage(stageId: string, rank: Rank, found: LootBox[], stageLv: number, boss: boolean, hard = false): ClearResult {
+export function finishStage(stageId: string, rank: Rank, found: LootBox[], stageLv: number, boss: boolean, hard = false, spicy = 0): ClearResult {
   const up = { S: 0.5, A: 0.3, B: 0.15, C: 0, D: 0 }[rank];
   let upgraded = 0;
   const boxes = found.map(b => {
@@ -203,13 +206,15 @@ export function finishStage(stageId: string, rank: Rank, found: LootBox[], stage
   const table = hard ? hp.hardCleared : hp.cleared;
   const firstClear = !table[stageId];
   for (const tier of clearRewards(stageLv, rank, boss, firstClear, Math.random)) boxes.push({ tier, ilvl: stageLv });
+  // each Spicy chilli adds a bonus box (better with more chillies)
+  for (let i = 0; i < spicy; i++) boxes.push({ tier: Math.min(5, 2 + spicy) as BoxTier, ilvl: stageLv });
   const prev = table[stageId];
   if (!prev || RANK_ORDER.indexOf(rank) > RANK_ORDER.indexOf(prev)) table[stageId] = rank;
   // boss first clears drop a Golden Sugar Cube (permanent stat point)
   if (boss && firstClear) { save.items.sugar = (save.items.sugar ?? 0) + 1; save.items.ggstone = (save.items.ggstone ?? 0) + 1; }
   save.boxes.push(...boxes);
   persist();
-  return { rank, boxes, upgraded, firstClear };
+  return { rank, boxes, upgraded, firstClear, spicy };
 }
 
 // ---------- consumables ----------
