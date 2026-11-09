@@ -1,5 +1,6 @@
 // Procedural animation poses (Phaser-free, so tests can check them).
 import type { Hero } from '../sim/world';
+import { POSE_OF } from '../sim/skills';
 import type { RigDef, Role } from './rigs';
 
 export interface Pose {
@@ -80,7 +81,7 @@ export function poseFor(h: Hero, time: number, walkPhase: number, rig: RigDef | 
     case 'skill': {
       p.snap = true;
       const sk = h.skill!, q = h.t / sk.dur;
-      switch (sk.kind) {
+      switch (POSE_OF[sk.kind] ?? sk.kind) {
         case 'cone': {
           const k = q < 0.2 ? -ease(q / 0.2) : Math.sin(Math.min(1, (q - 0.2) / 0.5) * Math.PI);
           p.lean = k * 0.2; p.sx = 1 + Math.max(0, k) * 0.1; p.sy = 1 - Math.max(0, k) * 0.05;

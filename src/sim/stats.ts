@@ -78,6 +78,8 @@ export interface Derived {
   /** set name → pieces worn */
   sets: Record<string, number>;
   ultGain: number; ultDmg: number;
+  /** passives: HP regen per second (fraction), damage reflected to attackers, finisher/Guard Break bonus, dodge bonus */
+  regen: number; thorns: number; heavyDmg: number; dodge: number;
 }
 
 export function derive(p: HeroProfile): Derived {
@@ -115,13 +117,14 @@ export function derive(p: HeroProfile): Derived {
     maxHp: Math.round((cls.hp + prim.vit * 9 + p.level * 8 + (eq.hp ?? 0)) * (1 + per('hpPct') + sb.hpPct)),
     atk: Math.round((cls.atk + prim.str * 1.2 + p.level + (eq.atk ?? 0)) * (1 + per('atkPct') + sb.atkPct)),
     def: Math.round(def),
-    dr: 1 - (1 - def / (def + 80)) * (1 - sb.dr),
+    dr: 1 - (1 - def / (def + 80)) * (1 - sb.dr) * (1 - per('dr')),
     crit: Math.min(75, 5 + prim.dex * 0.5 + (eq.crit ?? 0) + per('crit')),
-    critDmg: 1.5 + (eq.critDmg ?? 0) + sb.critDmg,
+    critDmg: 1.5 + (eq.critDmg ?? 0) + sb.critDmg + per('critDmg'),
     skillDmg: 1 + prim.int * 0.025 + (eq.skillDmg ?? 0) + per('skillDmg') + sb.skillDmg,
     cdr: Math.min(0.5, prim.int * 0.004 + (eq.cdr ?? 0) + per('cdr') + sb.cdr),
     speed: 1 + Math.min(0.35, prim.dex * 0.004 + (eq.speed ?? 0) + sb.speed),
-    uniques, sets, ultGain: 1 + sb.ultGain, ultDmg: 1 + sb.ultDmg,
+    uniques, sets, ultGain: 1 + sb.ultGain + per('ultGain'), ultDmg: 1 + sb.ultDmg,
+    regen: per('regen'), thorns: per('thorns'), heavyDmg: per('heavyDmg'), dodge: per('dodge'),
     lifeOnKill: per('lifeOnKill'),
     skillLv,
     branch: { ...(p.branch ?? {}) },

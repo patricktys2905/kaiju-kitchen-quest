@@ -50,8 +50,9 @@ const CSS = `
 @keyframes tkb { from { transform: scale(1.02); } to { transform: scale(1.1) translate(1.5%, -1%); } }
 #title::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, #120a18c0, #120a1840 38%, transparent 60%), linear-gradient(transparent 70%, #120a18a0); pointer-events: none; }
 #title .heroes { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
-#title .heroes img { position: absolute; bottom: 14vh; height: var(--h); filter: drop-shadow(0 1.4vmin 1.2vmin #0009); transform-origin: 50% 100%; animation: thop 1.6s ease-in-out infinite alternate; animation-delay: var(--d); }
-#title .heroes img.fly { bottom: auto; top: 14vh; animation: tfly 2.4s ease-in-out infinite alternate; }
+#title .heroes .row { position: absolute; right: calc(4vw + env(safe-area-inset-right)); bottom: 13vh; display: flex; align-items: flex-end; gap: min(4vh, 2vw); }
+#title .heroes img { height: var(--h); filter: drop-shadow(0 1.4vmin 1.2vmin #0009); transform-origin: 50% 100%; animation: thop 1.6s ease-in-out infinite alternate; animation-delay: var(--d); }
+#title .heroes img.fly { position: absolute; right: calc(18vw + env(safe-area-inset-right)); top: 9vh; animation: tfly 2.4s ease-in-out infinite alternate; }
 @keyframes thop { to { transform: translateY(-1.2vh) scaleY(1.03); } }
 @keyframes tfly { to { transform: translateY(-3vh) rotate(-4deg); } }
 #title .logo { position: absolute; z-index: 1; left: calc(5vw + env(safe-area-inset-left)); top: 9vh; width: min(46vw, 90vmin); text-align: center; }
@@ -76,10 +77,12 @@ export function showTitle(onStart: () => void = () => {}): void {
   const el = document.createElement('div'); el.id = 'title';
   const ios = /iPhone|iPod/.test(navigator.userAgent);
   const hint = !canFullscreen() && ios && !standalone() ? '<div class="hint">For full screen: Share ⇪ → Add to Home Screen</div>' : '';
-  // the four starter kaiju, from the game's own art so they always match
-  const heroes = [[11, 'right:3vw', '36vh', '0.5s'], [10, 'right:20vw', '46vh', '0s'], [0, 'right:37vw', '32vh', '0.9s']]
-    .map(([sp, pos, h, d]) => `<img src="art/kaiju-${sp}.webp" alt="" style="${pos};--h:${h};--d:${d}">`).join('')
-    + '<img class="fly" src="art/kaiju-4.webp" alt="" style="right:10vw;--h:26vh;height:26vh">';
+  // the four starter kaiju, from the game's own art, scaled to the same visual size (equal area, ~30vh square)
+  const ART: Record<number, [number, number]> = { 0: [291, 320], 10: [256, 320], 11: [320, 272], 4: [320, 298] };
+  const hgt = (sp: number, box: number) => { const [w, h] = ART[sp]; return `calc(${(1 / Math.sqrt(w / h)).toFixed(3)} * min(${box}vh, ${(box / 2).toFixed(1)}vw))`; }; // narrow screens: width-limited too
+  const heroes = '<div class="row">' + ([[0, '0.9s'], [10, '0s'], [11, '0.5s']] as [number, string][])
+    .map(([sp, d]) => `<img src="art/kaiju-${sp}.webp" alt="" style="--h:${hgt(sp, 30)};--d:${d}">`).join('') + '</div>'
+    + `<img class="fly" src="art/kaiju-4.webp" alt="" style="--h:${hgt(4, 26)}">`;
   el.innerHTML = `<div class="art"></div><div class="heroes">${heroes}</div>
     <div class="logo"><h1><span>Kaiju</span>Kitchen<em>Quest</em></h1><div class="tag">The Head Chef is missing. The Mold Crown is rising.</div></div>
     <div class="btns"><button class="play">▶ PLAY</button>${canFullscreen() ? `<button class="fsb" data-fs="long">${isFullscreen() ? '🗗 EXIT FULL SCREEN' : '⛶ FULL SCREEN'}</button>` : ''}${hint}</div>

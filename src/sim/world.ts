@@ -30,7 +30,7 @@ export const styleRank = (v: number) => STYLE_RANKS.find(([t]) => v >= t)![1];
 
 export type HeroState = 'move' | 'attack' | 'air' | 'skill' | 'climb' | 'hurt' | 'down' | 'dodge';
 
-export interface Buff { atk: number; def: number; speed: number; armor: boolean; t: number }
+export interface Buff { atk: number; def: number; speed: number; armor: boolean; t: number; reflect?: boolean; leech?: number }
 
 export interface Hero {
   d: Derived;
@@ -70,6 +70,11 @@ export interface Hero {
   counter: number;
   perfectDone: boolean;
   spikyT: number;
+  /** Rice Ball Ring: orbs circling the hero */
+  orbs: { t: number; n: number; dmg: number; cd: Map<number, number> } | null;
+  /** multi-step skills: facing at the start, queued targets */
+  skillFace: 1 | -1;
+  targets: number[];
 }
 
 export interface Mob {
@@ -106,10 +111,12 @@ export interface Mob {
   dropT: number;
   /** burrower: seconds above ground */
   surfT: number;
+  /** status from skills: burning (damage every 0.5 s), frozen solid (no action, +30% damage taken) */
+  burn: number; burnT: number; burnDmg: number; frozen: number;
 }
 
 export interface Box { id: number; tier: BoxTier; ilvl: number; x: number; y: number; vy: number; ground: boolean; t: number }
-export interface Shot { id: number; x: number; y: number; vx: number; vy: number; t: number; dmg: number; hit: Set<number>; from: 'hero' | 'mob'; kx: number; ky: number; pierce: boolean; g?: number; kind?: string; /** lobbed shots: where it will land (drawn as a warning) */ tx?: number; ty?: number }
+export interface Shot { id: number; x: number; y: number; vx: number; vy: number; t: number; dmg: number; hit: Set<number>; from: 'hero' | 'mob'; kx: number; ky: number; pierce: boolean; g?: number; kind?: string; /** hit radius (default 14) */ r?: number; back?: boolean; /** lobbed shots: where it will land (drawn as a warning) */ tx?: number; ty?: number }
 export interface Mine { id: number; x: number; y: number; t: number; dmg: number; kx: number; ky: number }
 
 export interface RunStats { time: number; hitsTaken: number; dmgTaken: number; maxCombo: number; kills: number; crumbs: number; revived: number; stones: number; perfects: number; interrupts: number; styleSum: number; styleTime: number; stylePeak: number }
@@ -135,6 +142,8 @@ export class World {
   slowmo = 0;
   hazards: (Hazard & { state: 'off' | 'warn' | 'on'; hit: Set<number> })[] = [];
   puddles: { x: number; y: number; t: number }[] = [];
+  /** lingering skill areas: steam / mustard goo / ice trail / fire floor / snow */
+  zones: { id: number; x: number; y: number; w: number; t: number; tick: number; next: number; dmg: number; kind: 'steam' | 'goo' | 'ice' | 'fire' | 'snow' }[] = [];
   spicy: Spicy[];
   hard: boolean;
   portal = false;
@@ -158,7 +167,7 @@ export class World {
       hitIds: new Set(), hp: d.maxHp, inv: 0, cds: [0, 0, 0], skill: null, skillMul: 1, ticks: 0,
       coyote: 0, jumpBuf: 0, atkBuf: 0, dropT: 0, prev: { ...NO_INPUT }, gliding: false, buff: null,
       boosts: {}, bag: bag.map(b => b && { ...b }), revives, quickCd: 0, lastTap: { dir: 0, t: -9 }, dodgeCd: 0, ult: 0, phoenixUsed: false,
-      counter: 0, perfectDone: false, spikyT: 0,
+      counter: 0, perfectDone: false, spikyT: 0, orbs: null, skillFace: 1, targets: [],
     };
     // Hard mode: every monster +HARD_LV levels
     this.variant = stage.boss ? undefined : variant; // bosses are never changed by the story
@@ -210,7 +219,7 @@ export class World {
       id: nextId++, kind, lv, x, y: y ?? this.stage.groundY, vx: 0, vy: 0, face: -1, hp, maxHp: hp, atk: Math.round(mobAtk(kind, lv) * (elite ? ELITE.atk : 1) * pow),
       state: 'walk', move: '', t: this.rand() * 2, ground: true, on: y === undefined ? -1 : null, home: x, deadT: 0, flash: 0,
       hurtShown: 0, stagger: 0, summoned: 0, hitDone: false, elite, homeY: y ?? this.stage.groundY, slow: 0,
-      mods: [], under: MOBS[kind].brain === 'burrower', disguised: MOBS[kind].brain === 'mimic', aimX: 0, aimY: 0, enraged: false, parent: 0, dropT: 0, surfT: 0,
+      mods: [], under: MOBS[kind].brain === 'burrower', disguised: MOBS[kind].brain === 'mimic', aimX: 0, aimY: 0, enraged: false, parent: 0, dropT: 0, surfT: 0, burn: 0, burnT: 0, burnDmg: 0, frozen: 0,
     };
     if (y !== undefined) { m.on = this.platformAt(x, y); m.ground = m.on !== null; }
     this.mobs.push(m);
@@ -237,6 +246,9 @@ export class World {
     this.stepHero(inp, dt);
     for (const m of this.mobs) this.stepMob(m, mdt);
     this.stepHazards(dt);
+    this.stepZones(dt);
+    this.stepOrbs(dt);
+    if (this.hero.d.regen > 0 && this.hero.state !== 'down') this.hero.hp = Math.min(this.hero.d.maxHp, this.hero.hp + this.hero.d.maxHp * this.hero.d.regen * dt);
     this.stepShots(dt, mdt);
     // Spicy 'clock': beat the par time or the stage is lost
     if (this.spicy.includes('clock') && !this.failed && !this.portal && this.run.time > this.stage.par && this.hero.state !== 'down') {
@@ -288,7 +300,7 @@ export class World {
       if (canDodge && h.lastTap.dir === tapDir && this.time - h.lastTap.t < DOUBLE_TAP) {
         h.face = tapDir as 1 | -1;
         this.enter(h, 'dodge'); h.perfectDone = false;
-        h.inv = Math.max(h.inv, DODGE_INV); h.dodgeCd = DODGE_CD; h.lastTap = { dir: 0, t: -9 };
+        h.inv = Math.max(h.inv, DODGE_INV); h.dodgeCd = DODGE_CD * (1 - h.d.dodge); h.lastTap = { dir: 0, t: -9 };
         this.events.push({ t: 'dodge' });
       } else h.lastTap = { dir: tapDir, t: this.time };
     }
@@ -434,12 +446,134 @@ export class World {
         for (const m of this.mines.slice(-(sk.n ?? 3))) { const f = this.floorBelow(m.x, h.y - 2, h.y + 2000, false); if (f) m.y = f.y; }
         break;
       case 'buff':
-        h.buff = { atk: sk.buff?.atk ?? 0, def: sk.buff?.def ?? 0, speed: sk.buff?.speed ?? 0, armor: !!sk.buff?.armor, t: sk.buff?.t ?? 5 };
+        h.buff = { atk: sk.buff?.atk ?? 0, def: sk.buff?.def ?? 0, speed: sk.buff?.speed ?? 0, armor: !!sk.buff?.armor, t: sk.buff?.t ?? 5, reflect: sk.buff?.reflect, leech: sk.buff?.leech };
         break;
       case 'uppercut':
         if (h.ground) { h.vy = -760; h.ground = false; h.on = null; }
         break;
       case 'heal': break;
+      case 'boomerang':
+        for (let i = 0; i < (sk.n ?? 1); i++) this.shots.push({ id: nextId++, x: h.x + h.face * 30, y: h.y - 44 - i * 26, vx: h.face * 640, vy: 0, t: -0.1 * i, dmg: atk * sk.dmg, hit: new Set(), from: 'hero', kx: sk.kx, ky: sk.ky, pierce: true, kind: 'boomerang', r: 22 });
+        break;
+      case 'pull': // yank everything in reach to you, stunned
+        for (const m of this.targetsNear(h.x, h.y, sk.reach, sk.h)) {
+          const d = MOBS[m.kind];
+          if (d.brain !== 'boss') { m.x = clamp(h.x + Math.sign(m.x - h.x || h.face) * (d.w / 2 + 26), 20, this.stage.width - 20); m.vx = 0; }
+          this.damageMob(m, atk * sk.dmg, Math.sign(m.x - h.x) || h.face, { kx: 0, ky: sk.ky, stun: 1.0 }, true);
+        }
+        this.events.push({ t: 'shock', x: h.x, y: h.y, r: sk.reach });
+        break;
+      case 'geyser': // eruptions under the nearest monsters
+        for (const m of this.targetsNear(h.x, h.y, sk.reach, 400).slice(0, sk.n ?? 4)) {
+          this.events.push({ t: 'shock', x: m.x, y: m.y, r: 60 });
+          this.damageMob(m, atk * sk.dmg, Math.sign(m.x - h.x) || h.face, { kx: sk.kx, ky: sk.ky, stun: 0.9 }, true);
+        }
+        break;
+      case 'blink': { // reappear behind the nearest monster: guaranteed crit
+        const m = this.targetsNear(h.x, h.y, sk.reach, 160)[0];
+        if (m) {
+          const d = MOBS[m.kind];
+          h.x = clamp(m.x - m.face * (d.w / 2 + 22), 20, this.stage.width - 20); h.y = Math.min(h.y, m.y); h.face = m.x > h.x ? 1 : -1;
+          h.counter = Math.max(h.counter, 0.05);
+          this.damageMob(m, atk * sk.dmg, h.face, { kx: sk.kx, ky: sk.ky, stun: 0.8 }, true);
+        } else h.x = clamp(h.x + h.face * 120, 20, this.stage.width - 20);
+        break;
+      }
+      case 'rain': case 'meteor': { // drops from the sky over the area ahead
+        const n = sk.n ?? 8, big = sk.kind === 'meteor';
+        for (let i = 0; i < n; i++) {
+          const x = clamp(h.x + h.face * (60 + (i + 0.5) * sk.reach / n) + (this.rand() - 0.5) * 30, 20, this.stage.width - 20);
+          this.shots.push({ id: nextId++, x, y: h.y - 320 - this.rand() * 80, vx: 0, vy: 150, t: -i * (big ? 0.09 : 0.05), dmg: atk * sk.dmg, hit: new Set(), from: 'hero', kx: sk.kx, ky: sk.ky, pierce: big, g: 1400, kind: big ? 'meteor' : 'toast', r: big ? 30 : 16 });
+        }
+        break;
+      }
+      case 'zone':
+        this.zones.push({ id: nextId++, x: h.x + h.face * sk.reach / 2, y: h.y, w: sk.reach, t: 3, tick: 0.4, next: 0, dmg: atk * sk.dmg, kind: 'steam' });
+        break;
+      case 'orbit':
+        h.orbs = { t: 6, n: sk.n ?? 3, dmg: atk * sk.dmg, cd: new Map() };
+        break;
+      case 'twister':
+        this.shots.push({ id: nextId++, x: h.x + h.face * 40, y: h.y - 30, vx: h.face * 150, vy: 0, t: 0, dmg: atk * sk.dmg, hit: new Set(), from: 'hero', kx: sk.kx, ky: sk.ky, pierce: true, kind: 'twister', r: sk.reach * 0.7 });
+        break;
+      case 'throw': { // grab the monster in front and slam it behind you
+        const m = this.targetsNear(h.x + h.face * sk.reach / 2, h.y, sk.reach, 70)[0];
+        if (m) {
+          const d = MOBS[m.kind];
+          if (d.brain !== 'boss') { m.x = clamp(h.x - h.face * (d.w / 2 + 34), 20, this.stage.width - 20); m.vy = -120; }
+          this.damageMob(m, atk * sk.dmg, -h.face, { kx: sk.kx, ky: sk.ky, stun: 1.1 }, true);
+          this.events.push({ t: 'shock', x: m.x, y: h.y, r: 80 });
+          for (const o of this.targetsNear(m.x, h.y, 80, 70)) if (o !== m) this.damageMob(o, atk * sk.dmg * 0.5, Math.sign(o.x - m.x) || 1, { kx: 220, ky: -240, stun: 0.6 }, true);
+        }
+        break;
+      }
+      case 'goo':
+        for (let i = 0; i < (sk.n ?? 3); i++) this.shots.push({ id: nextId++, x: h.x + h.face * 24, y: h.y - 50, vx: h.face * (70 + i * 100), vy: -380, t: 0, dmg: atk * sk.dmg, hit: new Set(), from: 'hero', kx: 0, ky: 0, pierce: false, g: 1500, kind: 'goo' });
+        break;
+      case 'radial':
+        for (let i = 0; i < (sk.n ?? 10); i++) { const a = (i / (sk.n ?? 10)) * Math.PI * 2; this.shots.push({ id: nextId++, x: h.x, y: h.y - 40, vx: Math.cos(a) * 520, vy: Math.sin(a) * 520, t: 0, dmg: atk * sk.dmg, hit: new Set(), from: 'hero', kx: sk.kx, ky: sk.ky, pierce: false, kind: 'quill' }); }
+        break;
+      case 'slide': // the icy trail it leaves behind
+        this.zones.push({ id: nextId++, x: h.x + h.face * 140, y: h.y, w: 300, t: 4, tick: 0.3, next: 0, dmg: 0, kind: 'ice' });
+        break;
+      case 'snowball':
+        this.shots.push({ id: nextId++, x: h.x + h.face * 40, y: h.y - 18, vx: h.face * 380, vy: 0, t: 0, dmg: atk * sk.dmg, hit: new Set(), from: 'hero', kx: sk.kx, ky: sk.ky, pierce: true, kind: 'snowball', r: sk.reach * 0.4 });
+        break;
+      case 'homing':
+        for (let i = 0; i < (sk.n ?? 10); i++) { const a = -Math.PI / 2 + (i / ((sk.n ?? 10) - 1) - 0.5) * 2.2; this.shots.push({ id: nextId++, x: h.x, y: h.y - 50, vx: Math.cos(a) * 380 + h.face * 80, vy: Math.sin(a) * 380, t: -i * 0.04, dmg: atk * sk.dmg, hit: new Set(), from: 'hero', kx: sk.kx, ky: sk.ky, pierce: false, kind: 'homing' }); }
+        break;
+      case 'wave':
+        this.shots.push({ id: nextId++, x: h.x + h.face * 50, y: h.y - 16, vx: h.face * 540, vy: 0, t: 0, dmg: atk * sk.dmg, hit: new Set(), from: 'hero', kx: sk.kx, ky: sk.ky, pierce: true, kind: 'wave', r: 60 });
+        break;
+      case 'firefloor':
+        for (const m of this.targetsNear(h.x, h.y, sk.reach, 300)) this.zones.push({ id: nextId++, x: m.x, y: m.y, w: 120, t: 3, tick: 0.4, next: 0, dmg: atk * sk.dmg, kind: 'fire' });
+        break;
+      case 'blizzard':
+        this.zones.push({ id: nextId++, x: h.x, y: h.y, w: sk.reach * 2, t: 3, tick: 0.5, next: 0, dmg: atk * sk.dmg, kind: 'snow' });
+        break;
+      case 'slashall':
+        h.targets = this.targetsNear(h.x, h.y, sk.reach, 400).slice(0, sk.n ?? 8).map(m => m.id);
+        break;
+    }
+    h.skillFace = h.face;
+  }
+
+  /** Living, hittable monsters within dx/dy of a point, nearest first. */
+  private targetsNear(x: number, y: number, dx: number, dy: number): Mob[] {
+    return this.mobs.filter(m => m.state !== 'dead' && !m.under && Math.abs(m.x - x) < dx && Math.abs(m.y - y) < dy)
+      .sort((a, b) => Math.abs(a.x - x) - Math.abs(b.x - x));
+  }
+
+  /** Lingering skill zones: tick damage, slow, burn. */
+  private stepZones(dt: number): void {
+    for (const z of this.zones) {
+      z.t -= dt; z.next -= dt;
+      if (z.next > 0) continue;
+      z.next = z.tick;
+      for (const m of this.mobs) {
+        if (m.state === 'dead' || m.under || m.disguised || Math.abs(m.x - z.x) > z.w / 2 + MOBS[m.kind].w / 2 || Math.abs(m.y - z.y) > (z.kind === 'snow' ? 400 : 70)) continue;
+        if (z.kind === 'ice' || z.kind === 'goo' || z.kind === 'snow') m.slow = Math.max(m.slow, 1);
+        if (z.kind === 'fire') { m.burn = Math.max(m.burn, 1); m.burnDmg = Math.max(m.burnDmg, z.dmg * 0.5); }
+        if (z.dmg > 0) this.damageMob(m, z.dmg, Math.sign(m.x - z.x) || 1, { kx: 30, ky: 0, stun: 0.15 }, true);
+      }
+    }
+    this.zones = this.zones.filter(z => z.t > 0);
+  }
+
+  /** Rice balls circling the hero. */
+  private stepOrbs(dt: number): void {
+    const h = this.hero, o = h.orbs;
+    if (!o) return;
+    o.t -= dt;
+    if (o.t <= 0 || h.state === 'down') { h.orbs = null; return; }
+    for (const [id, c] of o.cd) o.cd.set(id, c - dt);
+    for (let i = 0; i < o.n; i++) {
+      const a = this.time * 4 + (i / o.n) * Math.PI * 2, ox = h.x + Math.cos(a) * 64, oy = h.y - 40 + Math.sin(a) * 34;
+      for (const m of this.mobs) {
+        if (m.state === 'dead' || m.under || (o.cd.get(m.id) ?? 0) > 0) continue;
+        const d = MOBS[m.kind];
+        if (Math.abs(m.x - ox) < d.w / 2 + 14 && oy < m.y + 6 && oy > m.y - d.h - 6) { o.cd.set(m.id, 0.5); this.damageMob(m, o.dmg, Math.sign(m.x - h.x) || 1, { kx: 200, ky: -200, stun: 0.5 }, true); }
+      }
     }
   }
 
@@ -477,10 +611,119 @@ export class World {
         h.vx = 0; if (!h.ground) h.vy = Math.min(h.vy, 60);
         if (q > 0.55 && !h.ticks) { h.ticks = 1; this.events.push({ t: 'shock', x: h.x, y: h.y - 40, r: sk.reach }); mk(h.x, sk.reach * 2, sk.h, h.y + sk.h / 3); }
         break;
+      case 'vortex': { // spin + suck monsters in
+        h.vx = approach(h.vx, dir * speed * 0.6, 1800 * dt);
+        const tick = Math.floor(h.t * (sk.n ?? 6) / sk.dur);
+        if (tick > h.ticks) { h.ticks = tick; h.hitIds = new Set(); }
+        mk(h.x, sk.reach * 2, sk.h);
+        for (const m of this.targetsNear(h.x, h.y, sk.reach * 1.8, 90)) if (MOBS[m.kind].brain !== 'boss') m.x += Math.sign(h.x - m.x) * 140 * dt;
+        break;
+      }
+      case 'whip': { // quick lashes at fixed moments
+        h.vx = approach(h.vx, 0, 2400 * dt);
+        const n = sk.n ?? 2, tick = Math.min(n, Math.floor(q * (n + 1)));
+        if (tick > h.ticks) { h.ticks = tick; h.hitIds = new Set(); mk(h.x + h.face * sk.reach / 2, sk.reach, sk.h, h.y - 20); }
+        break;
+      }
+      case 'counter': { // stance: hurtHero answers a hit (ticks = 1); otherwise a small snap at the end
+        h.vx = approach(h.vx, 0, 2400 * dt);
+        if (q > 0.92 && !h.ticks) { h.ticks = 2; this.hitBox(h.x + h.face * sk.reach / 2, h.y, sk.reach, sk.h, sk.dmg * h.skillMul * 0.4, true, { kx: sk.kx * 0.5, ky: -150, stun: 0.6 }, h.hitIds); }
+        break;
+      }
+      case 'pounce': {
+        if (!h.ticks && h.t < 0.05) {
+          const m = this.targetsNear(h.x, h.y, 340, 160)[0];
+          const tx = m ? m.x : h.x + h.face * 160;
+          h.face = tx >= h.x ? 1 : -1; h.vx = (tx - h.x) / 0.5; h.vy = -560; h.ground = false; h.on = null; h.ticks = -1;
+        }
+        if (h.ground && h.t > 0.15 && h.ticks === -1) { h.ticks = 1; h.vx = 0; this.events.push({ t: 'shock', x: h.x, y: h.y, r: sk.reach }); mk(h.x, sk.reach * 2, sk.h); }
+        break;
+      }
+      case 'swoop': // arc up, then dive through
+        h.vx = h.face * 560; h.vy = q < 0.35 ? -380 : 620; h.ground = false; h.on = null;
+        mk(h.x + h.face * 20, sk.reach, sk.h);
+        break;
+      case 'breath': { // a stream: ticks through the duration
+        h.vx = approach(h.vx, 0, 2400 * dt);
+        const tick = Math.floor(q * (sk.n ?? 6));
+        if (tick > h.ticks || h.t < dt * 1.5) { h.ticks = tick; h.hitIds = new Set(); mk(h.x + h.face * sk.reach / 2, sk.reach, sk.h); }
+        break;
+      }
+      case 'drain':
+        h.vx = 0;
+        if (q > 0.5 && !h.ticks) {
+          h.ticks = 1; this.events.push({ t: 'shock', x: h.x, y: h.y - 30, r: sk.reach });
+          const before = this.dealt; mk(h.x, sk.reach * 2, sk.h, h.y + sk.h / 3);
+          const heal = (this.dealt - before) * (sk.leech ?? 0.3); h.hp = Math.min(h.d.maxHp, h.hp + heal);
+        }
+        break;
+      case 'freeze':
+        h.vx = 0;
+        if (q > 0.5 && !h.ticks) {
+          h.ticks = 1; this.events.push({ t: 'shock', x: h.x, y: h.y - 30, r: sk.reach });
+          for (const m of this.targetsNear(h.x, h.y, sk.reach, sk.h)) {
+            this.damageMob(m, h.d.atk * sk.dmg * h.skillMul, Math.sign(m.x - h.x) || 1, { kx: 0, ky: 0, stun: 0.2 }, true);
+            if (m.state !== 'dead') { if (MOBS[m.kind].brain === 'boss') m.slow = 3; else { m.frozen = 2.5; m.vx = 0; } }
+          }
+        }
+        break;
+      case 'bulldoze': // carry monsters along, crush at the end
+        if (q < 0.8) {
+          h.vx = h.face * 620;
+          for (const m of this.targetsNear(h.x + h.face * 40, h.y, 70, 60)) if (MOBS[m.kind].brain !== 'boss') { m.x = clamp(h.x + h.face * (40 + MOBS[m.kind].w / 2), 20, this.stage.width - 20); m.vx = h.vx; }
+        } else {
+          h.vx = approach(h.vx, 0, 3000 * dt);
+          if (!h.ticks) { h.ticks = 1; this.events.push({ t: 'shock', x: h.x + h.face * 60, y: h.y, r: 90 }); mk(h.x + h.face * 60, 170, sk.h); }
+        }
+        break;
+      case 'roll': { // bounce back and forth through the crowd
+        const leg = Math.floor(q * 3);
+        h.face = (leg % 2 === 0 ? h.skillFace : -h.skillFace) as 1 | -1;
+        if (h.x <= 40 || h.x >= this.stage.width - 40) h.skillFace = (h.x <= 40 ? (leg % 2 === 0 ? 1 : -1) : (leg % 2 === 0 ? -1 : 1)) as 1 | -1;
+        h.vx = h.face * 520;
+        const tick = Math.floor(h.t / 0.25);
+        if (tick > h.ticks) { h.ticks = tick; h.hitIds = new Set(); }
+        mk(h.x, sk.reach, sk.h);
+        break;
+      }
+      case 'slide':
+        h.vx = q < 0.8 ? h.face * 640 : approach(h.vx, 0, 3000 * dt);
+        if (q < 0.8) mk(h.x + h.face * 20, sk.reach, sk.h);
+        break;
+      case 'rampage': { // ult: charge back and forth
+        const n = sk.n ?? 3, leg = Math.min(n - 1, Math.floor(q * n));
+        h.face = (leg % 2 === 0 ? h.skillFace : -h.skillFace) as 1 | -1;
+        if (leg !== h.ticks) { h.ticks = leg; h.hitIds = new Set(); }
+        h.vx = h.face * 720;
+        mk(h.x + h.face * 20, sk.reach, sk.h);
+        break;
+      }
+      case 'slashall': { // ult: blink from monster to monster
+        h.vx = 0;
+        const i = Math.floor(h.t / 0.13);
+        if (i >= h.ticks && h.ticks < h.targets.length) {
+          const m = this.mobs.find(x => x.id === h.targets[h.ticks]);
+          h.ticks++;
+          if (m && m.state !== 'dead') { h.x = clamp(m.x - h.face * (MOBS[m.kind].w / 2 + 20), 20, this.stage.width - 20); this.damageMob(m, h.d.atk * sk.dmg * h.skillMul, h.face, { kx: sk.kx, ky: sk.ky, stun: 0.8 }, true); this.events.push({ t: 'shock', x: m.x, y: m.y - 40, r: 40 }); }
+        }
+        break;
+      }
+      case 'beam': { // ult: pulses of a long piercing beam
+        h.vx = 0; if (!h.ground) h.vy = Math.min(h.vy, 40);
+        const tick = Math.floor(q * (sk.n ?? 4));
+        if (tick > h.ticks || h.t < dt * 1.5) { h.ticks = tick; h.hitIds = new Set(); mk(h.x + h.face * sk.reach / 2, sk.reach, sk.h, h.y + 10); }
+        break;
+      }
+      case 'tremor': { // ult: three growing shockwaves
+        h.vx = 0;
+        const n = sk.n ?? 3, i = Math.floor(q * n);
+        if (i >= h.ticks && h.ticks < n) { const r = sk.reach * (0.5 + 0.5 * (h.ticks + 1) / n); h.ticks++; h.hitIds = new Set(); this.events.push({ t: 'shock', x: h.x, y: h.y, r }); mk(h.x, r * 2, sk.h); }
+        break;
+      }
       default:
         h.vx = approach(h.vx, 0, 2400 * dt);
     }
-    if (h.t >= sk.dur && (sk.kind !== 'slam' || h.ground)) this.enter(h, h.ground ? 'move' : 'air');
+    if (h.t >= sk.dur && (!(sk.kind === 'slam' || sk.kind === 'pounce') || h.ground)) this.enter(h, h.ground ? 'move' : 'air');
   }
 
   /** Quick-bag item: heal or boost (shared cooldown). */
@@ -522,6 +765,9 @@ export class World {
     }
   }
 
+  /** total damage dealt to monsters (drain measures a skill's damage with it) */
+  dealt = 0;
+
   private damageMob(m: Mob, raw: number, dir: number, k: { kx: number; ky: number; stun: number }, heavy: boolean): void {
     // (k may be replaced below: an interrupt lengthens the stun)
     const def = MOBS[m.kind], h = this.hero;
@@ -541,13 +787,17 @@ export class World {
       h.spikyT = 0.5; const p = Math.max(1, Math.round(h.d.maxHp * 0.03)); h.hp = Math.max(1, h.hp - p);
       this.events.push({ t: 'hit', x: h.x, y: h.y - 60, dmg: p, crit: false, target: 'hero' });
     }
+    if (m.frozen > 0) raw *= 1.3;
+    if (guardBreak || (h.state === 'attack' && h.step === 2)) raw *= 1 + h.d.heavyDmg;
     const counter = h.counter > 0;
     const crit = counter || this.rand() * 100 < h.d.crit;
     const gap = m.lv - h.d.level; // fighting above your level hurts
     const lvMul = gap > 2 ? Math.max(0.4, 1 - 0.07 * (gap - 2)) : 1;
     const buff = 1 + (h.buff?.atk ?? 0) + (h.boosts.atk?.[0] ?? 0);
     const dmg = Math.max(1, Math.round(raw * buff * lvMul * (crit ? h.d.critDmg : 1) * (counter ? 1.3 : 1) * (m.state === 'stagger' && def.brain === 'charger' ? 1.5 : 1) * (0.9 + this.rand() * 0.2)));
-    m.hp -= dmg; m.flash = 0.12; m.hurtShown = 3;
+    m.hp -= dmg; m.flash = 0.12; m.hurtShown = 3; this.dealt += dmg;
+    if (h.state === 'skill' && h.skill?.burn && heavy) { m.burn = Math.max(m.burn, h.skill.burn); m.burnDmg = Math.max(m.burnDmg, h.d.atk * 0.35 * h.skillMul); }
+    if (h.buff?.leech) h.hp = Math.min(h.d.maxHp, h.hp + dmg * h.buff.leech);
     if (h.d.uniques.includes('frostfish')) m.slow = 2;
     if (crit && !heavy && h.d.uniques.includes('excalifork')) this.shots.push({ id: nextId++, x: h.x + h.face * 30, y: h.y - 40, vx: h.face * 600, vy: 0, t: 0, dmg: h.d.atk * 0.8, hit: new Set([m.id]), from: 'hero', kx: 120, ky: -100, pierce: false });
     if (h.state !== 'skill' || h.skill?.id.startsWith('ult') === false) h.ult = Math.min(100, h.ult + (MOBS[m.kind].brain === 'boss' ? 1.6 : 1.1) * h.d.ultGain);
@@ -575,7 +825,7 @@ export class World {
       m.stagger += dmg;
       if (m.stagger > m.maxHp * 0.12) { m.stagger = 0; m.state = 'stagger'; m.t = 0; m.vx = 0; this.events.push({ t: 'stagger' }); }
     }
-    if (flinch && m.hp > 0) {
+    if (flinch && m.hp > 0 && m.frozen <= 0) {
       m.vx = dir * k.kx * def.knock;
       if (k.ky < 0 || !m.ground) { m.vy = Math.min(m.vy, k.ky < 0 ? k.ky * def.knock : -220); m.ground = false; m.on = null; }
       if (m.state !== 'stagger') { m.state = 'hurt'; m.t = -k.stun + 0.35; }
@@ -615,6 +865,19 @@ export class World {
     const def = MOBS[m.kind], h = this.hero;
     m.t += dt; m.flash = Math.max(0, m.flash - dt); m.hurtShown = Math.max(0, m.hurtShown - dt); m.slow = Math.max(0, m.slow - dt);
     if (m.state === 'dead') { m.deadT += dt; m.vx *= 0.96; this.physics(m, dt, MAX_FALL, false); return; }
+    if (m.burn > 0) {
+      m.burn -= dt; m.burnT -= dt;
+      if (m.burnT <= 0) {
+        m.burnT = 0.5; const d = Math.max(1, Math.round(m.burnDmg)); m.hp -= d; m.flash = 0.06; this.dealt += d;
+        this.events.push({ t: 'hit', x: m.x, y: m.y - def.h * 0.6, dmg: d, crit: false, target: 'mob' });
+        if (m.hp <= 0) { this.killMob(m); return; }
+      }
+    }
+    if (m.frozen > 0) { // frozen solid: no thinking, no moving
+      m.frozen -= dt; m.vx = 0;
+      if (def.brain !== 'flyer') this.physics(m, dt, MAX_FALL, false);
+      return;
+    }
     if (def.brain === 'flyer') { this.stepFlyer(m, dt); return; }
     const fast = (m.mods.includes('hasty') ? 1.35 : 1) * (m.enraged ? 1.15 : 1);
     if (m.mods.includes('moldy') && m.ground && m.state === 'walk' && (m.dropT -= dt) <= 0 && this.puddles.length < 30) { m.dropT = 1.3; this.puddles.push({ x: m.x, y: m.y, t: 6 }); }
@@ -876,7 +1139,7 @@ export class World {
   private endAttack(m: Mob): void { m.state = 'walk'; m.t = 0; m.move = ''; }
 
 /** A hit arriving early in a dodge roll counts as a perfect dodge (once per roll). */
-  canPerfect(): boolean { const h = this.hero; return h.state === 'dodge' && !h.perfectDone && h.t < PERFECT_WIN; }
+  canPerfect(): boolean { const h = this.hero; return h.state === 'dodge' && !h.perfectDone && h.t < PERFECT_WIN + Math.min(0.08, h.d.dodge * 0.25); }
 
   private perfect(): void {
     const h = this.hero;
@@ -891,11 +1154,20 @@ export class World {
     const h = this.hero;
     if (this.canPerfect()) { this.perfect(); return; }
     if (h.inv > 0 || h.state === 'down') return;
+    // Claw Counter stance: block it and snap back
+    if (h.state === 'skill' && h.skill?.kind === 'counter' && !h.ticks) {
+      h.ticks = 1; h.inv = 0.5;
+      this.events.push({ t: 'block', x: h.x + h.face * 20, y: h.y - 50 });
+      this.events.push({ t: 'shock', x: h.x + h.face * 50, y: h.y, r: h.skill.reach });
+      this.hitBox(h.x + h.face * h.skill.reach / 2, h.y, h.skill.reach * 1.3, h.skill.h, h.skill.dmg * h.skillMul, true, { kx: h.skill.kx, ky: h.skill.ky, stun: 1 }, h.hitIds);
+      return;
+    }
     const dr = fixed ? 0 : 1 - (1 - h.d.dr) * (1 - (h.buff?.def ?? 0)) * (1 - (h.boosts.def?.[0] ?? 0));
     const dmg = Math.max(1, Math.round(raw * (1 - dr) * (fixed ? 1 : 0.9 + this.rand() * 0.2) * (this.spicy.includes('glass') ? 2 : 1)));
     h.hp -= dmg; h.inv = 0.9;
     this.style *= 0.5;
     if (from && from.mods.includes('vampiric') && from.state !== 'dead') { from.hp = Math.min(from.maxHp, from.hp + dmg * 3); this.events.push({ t: 'heal', x: from.x, y: from.y - MOBS[from.kind].h, n: dmg * 3 }); }
+    if (from && from.state !== 'dead' && h.d.thorns > 0) { from.hp -= Math.max(1, Math.round(dmg * h.d.thorns)); from.flash = 0.1; if (from.hp <= 0) this.killMob(from); }
     if (from && from.state !== 'dead' && h.d.uniques.includes('thornlid')) { from.hp -= Math.max(1, Math.round(dmg * 0.3)); from.flash = 0.1; if (from.hp <= 0) this.killMob(from); }
     if (h.hp <= 0 && !h.phoenixUsed && h.d.uniques.includes('phoenix')) { h.phoenixUsed = true; h.hp = 1; h.inv = 2.5; this.events.push({ t: 'revive' }); return; }
     h.ult = Math.min(100, h.ult + 4);
@@ -922,19 +1194,43 @@ export class World {
       s.x += s.vx * sdt; s.y += s.vy * sdt;
       if (s.from === 'mob') {
         s.vy += (s.g ?? 300) * sdt;
-        if (Math.abs(h.x - s.x) < 22 && s.y > h.y - 70 && s.y < h.y + 4 && (h.inv <= 0 || this.canPerfect())) { this.hurtHero(s.dmg, Math.sign(s.vx)); s.t = 99; }
+        if (Math.abs(h.x - s.x) < 22 && s.y > h.y - 70 && s.y < h.y + 4) {
+          if (h.buff?.reflect) { // Leaf Shell: it bounces back as yours
+            s.from = 'hero'; s.vx = -s.vx || h.face * 400; s.vy = -Math.abs(s.vy) * 0.3; s.g = undefined; s.t = 0; s.hit = new Set(); s.dmg = h.d.atk * 1.5; s.kind = 'reflect';
+            this.events.push({ t: 'block', x: s.x, y: s.y });
+            continue;
+          }
+          if (h.inv <= 0 || this.canPerfect()) { this.hurtHero(s.dmg, Math.sign(s.vx)); s.t = 99; }
+        }
         continue;
       }
-      if (s.g) { // lobbed: falls, and turns into a mine where it lands
+      if (s.kind === 'boomerang' && !s.back && s.t > 0.42) { s.back = true; s.hit = new Set(); } // comes back: hits again
+      if (s.back) { s.vx = approach(s.vx, Math.sign(h.x - s.x) * 700, 2600 * sdt); if (Math.abs(h.x - s.x) < 30 && Math.abs(h.y - 44 - s.y) < 60) { s.t = 99; continue; } }
+      if (s.kind === 'homing') {
+        const tgt = this.targetsNear(s.x, s.y, 700, 500)[0];
+        if (tgt) { const tx = tgt.x - s.x, ty = tgt.y - MOBS[tgt.kind].h / 2 - s.y, d = Math.hypot(tx, ty) || 1; s.vx = approach(s.vx, tx / d * 560, 1800 * sdt); s.vy = approach(s.vy, ty / d * 560, 1800 * sdt); }
+      }
+      if (s.kind === 'twister') { // drags monsters into it, re-hits every 0.25 s
+        if (Math.floor(s.t / 0.25) !== Math.floor((s.t - sdt) / 0.25)) s.hit = new Set();
+        for (const m of this.targetsNear(s.x, s.y + 30, 140, 90)) if (MOBS[m.kind].brain !== 'boss') m.x += Math.sign(s.x - m.x) * 160 * sdt;
+      }
+      if (s.kind === 'snowball') { s.r = (s.r ?? 14) + 22 * sdt; s.dmg *= 1 + 0.5 * sdt; }
+      if (s.g) { // lobbed: falls; berries become mines, mustard becomes goo, meteors burst
         const prevY = s.y - s.vy * sdt;
         s.vy += s.g * sdt;
         const f = s.vy > 0 ? this.floorBelow(s.x, prevY, s.y, false) : null;
-        if (f) { this.mines.push({ id: nextId++, x: s.x, y: f.y, t: 0.2, dmg: s.dmg, kx: s.kx, ky: s.ky }); s.t = 99; continue; }
+        if (f) {
+          if (s.kind === 'berry') this.mines.push({ id: nextId++, x: s.x, y: f.y, t: 0.2, dmg: s.dmg, kx: s.kx, ky: s.ky });
+          else if (s.kind === 'goo') this.zones.push({ id: nextId++, x: s.x, y: f.y, w: 80, t: 4, tick: 0.5, next: 0, dmg: s.dmg, kind: 'goo' });
+          else if (s.kind === 'meteor') { this.events.push({ t: 'shock', x: s.x, y: f.y, r: 70 }); for (const m of this.targetsNear(s.x, f.y, 70, 60)) if (!s.hit.has(m.id)) this.damageMob(m, s.dmg, Math.sign(m.x - s.x) || 1, { kx: s.kx, ky: s.ky, stun: 0.6 }, true); }
+          s.t = 99; continue;
+        }
       }
+      const rad = s.r ?? 14;
       for (const m of this.mobs) {
         if (m.state === 'dead' || m.under || s.hit.has(m.id)) continue;
         const def = MOBS[m.kind];
-        if (Math.abs(m.x - s.x) < def.w / 2 + 14 && s.y < m.y + 10 && s.y > m.y - def.h - 10) {
+        if (Math.abs(m.x - s.x) < def.w / 2 + rad && s.y < m.y + 10 + rad - 14 && s.y > m.y - def.h - 10 - (rad - 14)) {
           s.hit.add(m.id);
           this.damageMob(m, s.dmg, Math.sign(s.vx), { kx: s.kx, ky: s.ky, stun: 0.6 }, true);
           if (s.kind === 'berry') this.events.push({ t: 'boom', x: s.x, y: s.y });
@@ -942,7 +1238,7 @@ export class World {
         }
       }
     }
-    this.shots = this.shots.filter(s => s.t < (s.from === 'mob' || s.g ? 2.5 : 0.9) && s.x > 0 && s.x < this.stage.width && s.y < this.stage.groundY + 20);
+    this.shots = this.shots.filter(s => s.t < (s.from === 'mob' || s.g || LONG_SHOTS.has(s.kind ?? '') ? 2.5 : 0.9) && s.x > 0 && s.x < this.stage.width && s.y < this.stage.groundY + 20);
   }
 
   private stepHazards(dt: number): void {
@@ -1075,6 +1371,8 @@ export function rankOf(run: RunStats, par: number): { rank: 'S' | 'A' | 'B' | 'C
   return { rank, score };
 }
 
+/** hero projectiles that live longer than a bolt */
+const LONG_SHOTS = new Set(['boomerang', 'homing', 'twister', 'snowball', 'wave', 'reflect']);
 const NEW_BRAINS = new Set(['healer', 'summoner', 'charger', 'sniper', 'turret', 'burrower', 'mimic']);
 
 const gbCache = new WeakMap<AttackDef[], AttackDef>(), lnCache = new WeakMap<AttackDef[], AttackDef>();

@@ -57,3 +57,9 @@ Keys: arrows/WASD (double-tap ←/→ = dodge), Space/K jump, J attack (×3 comb
   charger (Milk Carton, Sausage Ram), sniper with a laser line (Carrot, Raisin), turret (Kettle, ground only, one per stage),
   summoner (Jelly Mother), loot-box mimics (Lunchbox, Cereal Box) in stages 3/7/9. Specialists are capped at 2 per stage.
 - Preview: `node scripts/combat-shot.mjs 2` → shots/combat-*.png. Title screen: src/ui/title.ts (⛶ fullscreen also in camp + pause).
+
+## Skills (src/sim/skills.ts)
+Every kaiju's 3 actives, ultimate and passive are its own: tests/skills.test.ts fails if two kaiju share a skill mechanic,
+an ultimate kind, a passive stat or a skill name. Skill ids never change (saves store levels/branches by id).
+New mechanics live in world.ts startSkill/stepSkill (+ zones, orbs, burn/freeze status, special projectiles);
+POSE_OF maps them to existing animations. Preview: `node scripts/skill-shot.mjs [species...]` → shots/skills-sheet.png.

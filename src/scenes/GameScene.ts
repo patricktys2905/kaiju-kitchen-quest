@@ -439,7 +439,7 @@ export class GameScene extends Phaser.Scene {
           this.tweens.add({ targets: seed, delay: 80 + i * 8, x: seed.x + h.face * Math.cos(a) * sk.reach, y: seed.y + Math.sin(a) * sk.reach + 20, angle: 360, alpha: 0, duration: 380, onComplete: () => seed.destroy() });
         }
         break;
-      case 'dash':
+      case 'dash': case 'swoop': case 'slide': case 'bulldoze': case 'rampage': case 'slashall':
         for (let i = 0; i < 6; i++) this.time.delayedCall(i * 40, () => {
           const ghost = this.add.ellipse(h.x, h.y - 40, 70, 60, 0xff7a3c, 0.35).setDepth(4);
           this.tweens.add({ targets: ghost, alpha: 0, scaleX: 1.4, duration: 260, onComplete: () => ghost.destroy() });
@@ -450,11 +450,25 @@ export class GameScene extends Phaser.Scene {
         this.tweens.add({ targets: arc, y: h.y - 140, alpha: 0, duration: 400, onComplete: () => arc.destroy() });
         break;
       }
-      case 'spin': {
+      case 'spin': case 'vortex': case 'roll': {
         const col = h.d.cls.species === 0 ? 0xff3a6a : 0xffb347;
         const sw = this.add.ellipse(h.x, h.y - 40, sk.reach * 2, 60).setStrokeStyle(6, col, 0.7).setDepth(6);
         this.tweens.add({ targets: sw, angle: 720, duration: sk.dur * 1000, onUpdate: () => { const hh = this.world?.hero; if (hh) sw.setPosition(hh.x, hh.y - 40); }, onComplete: () => sw.destroy() });
         this.tweens.add({ targets: sw, alpha: 0.2, yoyo: true, repeat: 3, duration: sk.dur * 125 });
+        break;
+      }
+      case 'blink': this.burst(h.x, h.y - 40, 0x6a3a8a, 18); this.ring(h.x, h.y - 30, 50, 0xb08aff); break;
+      case 'counter': this.ring(h.x, h.y - 40, 60, 0xffffff); this.callout(h.x, h.y - 100, 'COUNTER STANCE', '#ffe8a0', 11); break;
+      case 'orbit': this.ring(h.x, h.y - 40, 64, 0xf4f0e0); break;
+      case 'drain': this.ring(h.x, h.y - 30, sk.reach, 0x8ae07a); break;
+      case 'freeze': this.ring(h.x, h.y - 30, sk.reach, 0xbfe8ff); this.burst(h.x, h.y - 40, 0xe0f4ff, 24); break;
+      case 'whip': case 'breath': case 'beam': {
+        const col = kind === 'breath' ? 0x7ad04a : kind === 'beam' ? 0xf0f0ff : 0x6a9aff;
+        const len = sk.reach, hgt = kind === 'whip' ? 10 : kind === 'beam' ? 46 : 60;
+        const bar = this.add.ellipse(h.x + h.face * len / 2, h.y - (kind === 'whip' ? 40 : 45), len, hgt, col, 0.55).setDepth(7).setBlendMode(Phaser.BlendModes.ADD);
+        bar.scaleX = 0.1;
+        this.tweens.add({ targets: bar, scaleX: 1, duration: 90 });
+        this.tweens.add({ targets: bar, alpha: 0, delay: Math.max(60, sk.dur * 1000 - 200), duration: 200, onComplete: () => bar.destroy() });
         break;
       }
       case 'buff': this.ring(h.x, h.y - 40, 70, 0x9fe0ff); this.burst(h.x, h.y - 40, 0x9fe0ff, 16); toast(`${sk.name}!`, { color: '#9fe0ff' }); break;
@@ -512,6 +526,18 @@ export class GameScene extends Phaser.Scene {
     const g = this.overlay!;
     g.clear();
     for (const p of w.puddles) { g.fillStyle(0x6ac04a, Math.min(0.55, p.t / 2)); g.fillEllipse(p.x, p.y - 1, 70, 10); }
+    for (const z of w.zones) {
+      const a = Math.min(1, z.t);
+      if (z.kind === 'steam') { g.fillStyle(0xf4f4ff, 0.3 * a); g.fillEllipse(z.x, z.y - 45, z.w, 90 + Math.sin(t * 6) * 6); }
+      else if (z.kind === 'goo') { g.fillStyle(0xf0c820, 0.7 * a); g.fillEllipse(z.x, z.y - 2, z.w, 12); }
+      else if (z.kind === 'ice') { g.fillStyle(0xcfeeff, 0.55 * a); g.fillEllipse(z.x, z.y - 2, z.w, 10); }
+      else if (z.kind === 'fire') { g.fillStyle(0xff7a2a, (0.4 + Math.sin(t * 20 + z.id) * 0.15) * a); g.fillEllipse(z.x, z.y - 20, z.w, 44); }
+      else { g.fillStyle(0xffffff, 0.75 * a); for (let i = 0; i < 40; i++) { const sx = z.x - z.w / 2 + ((i * 97 + t * 160) % z.w), sy = z.y - 300 + ((i * 53 + t * 220) % 320); g.fillCircle(sx, sy, 2.5); } }
+    }
+    if (h.orbs) for (let i = 0; i < h.orbs.n; i++) {
+      const a = w.time * 4 + (i / h.orbs.n) * Math.PI * 2, ox = h.x + Math.cos(a) * 64, oy = h.y - 40 + Math.sin(a) * 34;
+      g.fillStyle(0xfafaf2, 1); g.fillCircle(ox, oy, 10); g.fillStyle(0x1a3a2a, 1); g.fillRect(ox - 10, oy + 1, 20, 7);
+    }
     for (const s of w.shots) if (s.kind === 'steam' && s.tx !== undefined && s.ty !== undefined) { g.lineStyle(2, 0xff6a4a, 0.8); g.strokeEllipse(s.tx, s.ty - 2, 50, 12); }
     for (const m of w.mobs) {
       if (m.state === 'windup' && m.move === 'snipe') {
@@ -555,6 +581,16 @@ export class GameScene extends Phaser.Scene {
       let c = this.shotImgs.get(s.id);
       if (!c) {
         c = s.kind === 'berry' ? this.add.circle(0, 0, 8, 0x3a4aa0).setStrokeStyle(2, 0x9ab0ff)
+          : s.kind === 'boomerang' ? this.add.circle(0, 0, 13, 0xd8d8e0).setStrokeStyle(4, 0xe8a040)
+          : s.kind === 'homing' ? this.add.rectangle(0, 0, 18, 14, 0xc88a40).setStrokeStyle(3, 0xff7a2a)
+          : s.kind === 'toast' ? this.add.rectangle(0, 0, 18, 16, 0xd8a050).setStrokeStyle(2, 0x7a4a20)
+          : s.kind === 'meteor' ? this.add.circle(0, 0, 18, 0x3a4aa0).setStrokeStyle(3, 0x9ab0ff)
+          : s.kind === 'twister' ? this.add.ellipse(0, -20, 46, 110, 0x4a2a1a, 0.6).setStrokeStyle(3, 0x8a5a3a)
+          : s.kind === 'snowball' ? this.add.circle(0, 0, 14, 0xf8faff).setStrokeStyle(2, 0xa8c8e8)
+          : s.kind === 'wave' ? this.add.ellipse(0, 0, 130, 46, 0x6a3a1a, 0.9).setStrokeStyle(3, 0x3a1a08)
+          : s.kind === 'quill' ? this.add.ellipse(0, 0, 18, 5, 0x6a4a2a).setStrokeStyle(1, 0xffe0a0)
+          : s.kind === 'goo' ? this.add.circle(0, 0, 9, 0xf0c820).setStrokeStyle(2, 0xa07a10)
+          : s.kind === 'reflect' ? this.add.circle(0, 0, 9, 0x8ae07a).setStrokeStyle(2, 0xffffff)
           : s.from === 'hero'
           ? this.add.circle(0, 0, 9, 0xe8c8ff).setStrokeStyle(3, 0xffffff).setBlendMode(Phaser.BlendModes.ADD)
           : s.kind === 'icicle' && worldOf(this.stage).id === 4 ? this.add.circle(0, 0, 11, 0xc8904a).setStrokeStyle(3, 0x6a3a10)
@@ -567,7 +603,10 @@ export class GameScene extends Phaser.Scene {
         c.setDepth(8); this.shotImgs.set(s.id, c);
       }
       c.setPosition(s.x, s.y).setScale(1 + Math.sin(t * 30) * 0.12);
-      if (s.kind === 'laser') c.setRotation(Math.atan2(s.vy, s.vx));
+      if (s.kind === 'laser' || s.kind === 'quill') c.setRotation(Math.atan2(s.vy, s.vx));
+      if (s.kind === 'boomerang' || s.kind === 'snowball') c.setRotation(t * 20 * Math.sign(s.vx || 1));
+      if (s.kind === 'snowball') c.setScale((s.r ?? 14) / 14);
+      if (s.kind === 'twister') c.setScale(1 + Math.sin(t * 30) * 0.08, 1);
       if (s.from === 'hero' && s.kind !== 'berry' && Math.random() < 0.5) { const p = this.add.circle(s.x, s.y + (Math.random() - 0.5) * 12, 3, 0xffd8ff).setDepth(7); this.tweens.add({ targets: p, alpha: 0, duration: 250, onComplete: () => p.destroy() }); }
     }
     for (const [id, c] of this.shotImgs) if (!seenS.has(id)) { c.destroy(); this.shotImgs.delete(id); }
@@ -628,6 +667,8 @@ export class GameScene extends Phaser.Scene {
     // art faces left: flip when facing right
     v.img.setPosition(m.x, m.y).setScale(v.s * sx, v.s * sy).setRotation(rot).setFlipX(m.face > 0);
     if (m.flash > 0) v.img.setTint(0xffffff).setTintMode(Phaser.TintModes.FILL);
+    else if (m.frozen > 0) v.img.setTint(0x9fd8ff).setTintMode(Phaser.TintModes.MULTIPLY);
+    else if (m.burn > 0 && Math.floor(t * 10) % 2 === 0) v.img.setTint(0xffa060).setTintMode(Phaser.TintModes.MULTIPLY);
     else if (this.world!.isDanger(m)) v.img.setTint(Math.floor(t * 14) % 2 ? 0xff3030 : 0xff8080).setTintMode(Phaser.TintModes.MULTIPLY); // red: can't interrupt, dodge it!
     else if (m.state === 'windup' && Math.floor(t * 12) % 2 === 0) v.img.setTint(0xffc070).setTintMode(Phaser.TintModes.MULTIPLY);
     else if (m.enraged && Math.floor(t * 4) % 2 === 0) v.img.setTint(0xff9a8a).setTintMode(Phaser.TintModes.MULTIPLY);

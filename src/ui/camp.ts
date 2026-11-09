@@ -26,7 +26,9 @@ type Tab = 'map' | 'hero' | 'skills' | 'bag' | 'market' | 'boxes' | 'quests';
 type BagTab = Slot | 'items';
 const RANK_CSS: Record<Rank, string> = { S: '#ffd23c', A: '#7ee87e', B: '#7ac0ff', C: '#d8c8d8', D: '#a89898' };
 const TIER_CSS: Record<BoxTier, string> = { 1: '#e0c09a', 2: '#7ee87e', 3: '#7ac0ff', 4: '#ffd23c', 5: '#ff8af4' };
-export const SKILL_ICON: Record<SkillKind, string> = { cone: '💥', slam: '🌋', dash: '⚡', bolt: '✨', spin: '🌀', uppercut: '⤴️', mines: '🫐', buff: '🛡️', nova: '🌟', fan: '🎐', heal: '🥟' };
+export const SKILL_ICON: Record<SkillKind, string> = { cone: '💥', slam: '🌋', dash: '⚡', bolt: '✨', spin: '🌀', uppercut: '⤴️', mines: '🫐', buff: '🛡️', nova: '🌟', fan: '🎐', heal: '🥟',
+  vortex: '🌪️', boomerang: '🍕', whip: '🦑', pull: '🪝', geyser: '⚗️', counter: '🦀', pounce: '🧀', swoop: '🦇', blink: '👤', rain: '🍞', zone: '♨️', drain: '🍜', breath: '🔥', orbit: '🍙', twister: '🌀', throw: '🤼', bulldoze: '🐂', roll: '🦔', goo: '🌭', radial: '📍', slide: '🐧', snowball: '⛄', freeze: '🧊',
+  rampage: '🍓', meteor: '☄️', slashall: '🔪', beam: '🌙', tremor: '🌋', homing: '🎯', wave: '🍫', firefloor: '♨️', blizzard: '🌨️' };
 const SLOT_NAMES: Record<Slot, string> = { weapon: 'Weapon', armor: 'Armor', charm: 'Charm' };
 const SKILL_NAME: Record<string, string> = Object.fromEntries(Object.values(SKILLS).flatMap(s => [...s.actives, s.passive].map(a => [a.id, a.name])));
 

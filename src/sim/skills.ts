@@ -1,7 +1,37 @@
 // Skills: every kaiju has 3 actives (unlocking with hero level) and 1 passive. Skill levels 1..MAX_SKILL
 // (gear can push past the max). Damage grows +20% per level, cooldown shrinks 4% per level.
+// Every skill has its OWN behaviour (no two kaiju share a mechanic) — tests/skills.test.ts checks it.
+// Skill ids never change (saves store levels and branches by id); kinds, names and numbers may.
 
-export type SkillKind = 'cone' | 'slam' | 'dash' | 'bolt' | 'spin' | 'uppercut' | 'mines' | 'buff' | 'nova' | 'fan' | 'heal';
+export type SkillKind =
+  // the originals, each now used by one kaiju only
+  | 'cone' | 'slam' | 'dash' | 'bolt' | 'spin' | 'uppercut' | 'mines' | 'buff' | 'nova' | 'fan' | 'heal'
+  // one-of-a-kind mechanics
+  | 'vortex'    // spin that sucks monsters in
+  | 'boomerang' // projectile that flies out and comes back
+  | 'whip'      // long thin lash, two hits
+  | 'pull'      // yanks everything in reach to you, stunned
+  | 'geyser'    // eruptions under the nearest monsters
+  | 'counter'   // guard stance: blocks the next hit and strikes back
+  | 'pounce'    // leaps onto the nearest monster
+  | 'swoop'     // arcing dive that sets monsters burning
+  | 'blink'     // teleports behind the nearest monster: guaranteed crit
+  | 'rain'      // projectiles fall from above ahead of you
+  | 'zone'      // lingering cloud that hurts over time
+  | 'drain'     // area hit that heals you for part of the damage
+  | 'breath'    // sustained stream that burns
+  | 'orbit'     // orbs circle you for a while
+  | 'twister'   // slow travelling whirlwind that pulls
+  | 'throw'     // grab the monster in front and slam it behind you
+  | 'bulldoze'  // charge that carries monsters along, crushing them at the end
+  | 'roll'      // bouncing ball back and forth through a crowd
+  | 'goo'       // lobbed blobs that leave slowing puddles
+  | 'radial'    // spikes in every direction
+  | 'slide'     // dash that leaves a chilling ice trail
+  | 'snowball'  // ground projectile that grows as it rolls
+  | 'freeze'    // freezes monsters solid (no knockback)
+  // ultimates
+  | 'rampage' | 'meteor' | 'slashall' | 'beam' | 'tremor' | 'homing' | 'wave' | 'firefloor' | 'blizzard';
 
 export interface SkillDef {
   id: string;
@@ -11,15 +41,19 @@ export interface SkillDef {
   unlock: number;  // hero level needed
   cd: number;      // seconds
   dur: number;     // seconds the hero is busy
-  dmg: number;     // × attack
+  dmg: number;     // × attack (per hit / per tick for multi-hit kinds)
   reach: number; h: number;
   kx: number; ky: number;
-  /** spin: hits per second; mines/fan: count */
+  /** count: spin hits per second, mines / fan / rain / orbs / targets / ticks */
   n?: number;
-  /** buff: what it boosts while active */
-  buff?: { atk?: number; def?: number; speed?: number; armor?: boolean; t: number };
+  /** buff: what it boosts while active (reflect = shots bounce back, leech = heal that share of damage dealt) */
+  buff?: { atk?: number; def?: number; speed?: number; armor?: boolean; reflect?: boolean; leech?: number; t: number };
   /** heal: fraction of max HP restored at skill level 1 */
   heal?: number;
+  /** drain: share of the damage dealt that heals you */
+  leech?: number;
+  /** seconds of burning on monsters it hits */
+  burn?: number;
   /** mines: thrown in an arc as projectiles (burst on a monster, become a mine where they land) */
   toss?: boolean;
 }
@@ -27,8 +61,9 @@ export interface SkillDef {
 export interface PassiveDef {
   id: string; name: string; desc: string; unlock: number;
   /** per skill level */
-  per: Partial<{ hpPct: number; crit: number; skillDmg: number; cdr: number; lifeOnKill: number; atkPct: number }>;
+  per: Partial<Record<PassiveStat, number>>;
 }
+export type PassiveStat = 'hpPct' | 'crit' | 'skillDmg' | 'cdr' | 'lifeOnKill' | 'atkPct' | 'dr' | 'critDmg' | 'regen' | 'ultGain' | 'thorns' | 'heavyDmg' | 'dodge';
 
 export const MAX_SKILL = 5;
 export const SKILL_UNLOCKS = [1, 4, 8];
@@ -38,15 +73,15 @@ const S = (o: Partial<SkillDef> & Pick<SkillDef, 'id' | 'name' | 'kind' | 'desc'
   ({ unlock: 1, cd: 3, dur: 0.45, dmg: 2, reach: 120, h: 80, kx: 300, ky: -200, ...o });
 
 export const SKILLS: Record<number, { actives: SkillDef[]; passive: PassiveDef }> = {
-  0: { // Gobzilla Jr.
+  0: { // Gobzilla Jr. — brawler
     actives: [
       S({ id: 'seed', name: 'Seed Spray', kind: 'cone', desc: 'Spits a cone of strawberry seeds', cd: 3, dmg: 2.4, reach: 210, h: 90, kx: 380 }),
       S({ id: 'upper', name: 'Berry Uppercut', kind: 'uppercut', desc: 'Leaps up with a launching uppercut', unlock: 4, cd: 5, dur: 0.55, dmg: 3.2, reach: 80, h: 150, kx: 120, ky: -720 }),
-      S({ id: 'jamspin', name: 'Jam Tornado', kind: 'spin', desc: 'Spins in a sticky jam whirl, hitting all around', unlock: 8, cd: 9, dur: 1.6, dmg: 0.9, reach: 150, h: 100, kx: 160, ky: -160, n: 7 }),
+      S({ id: 'jamspin', name: 'Jam Tornado', kind: 'vortex', desc: 'A sticky jam whirl that sucks monsters in while it spins', unlock: 8, cd: 9, dur: 1.6, dmg: 0.9, reach: 150, h: 100, kx: 160, ky: -160, n: 7 }),
     ],
     passive: { id: 'sweet', name: 'Sweet Tooth', desc: 'Heals 2% max HP per level on each kill', unlock: PASSIVE_UNLOCK, per: { lifeOnKill: 0.02 } },
   },
-  10: { // Bluebeary
+  10: { // Bluebeary — tank
     actives: [
       S({ id: 'quake', name: 'Muffin Quake', kind: 'slam', desc: 'Belly-flops for a shockwave', cd: 4, dur: 0.6, dmg: 3, reach: 190, h: 70, kx: 200, ky: -520 }),
       S({ id: 'mines', name: 'Berry Mines', kind: 'mines', desc: 'Lobs three blueberries: they burst on enemies, or lie in wait as mines', unlock: 4, cd: 7, dur: 0.4, dmg: 2.6, reach: 50, h: 60, kx: 260, ky: -460, n: 3, toss: true }),
@@ -54,15 +89,15 @@ export const SKILLS: Record<number, { actives: SkillDef[]; passive: PassiveDef }
     ],
     passive: { id: 'thick', name: 'Thick Frosting', desc: '+6% max HP per level', unlock: PASSIVE_UNLOCK, per: { hpPct: 0.06 } },
   },
-  11: { // Pizzaraptor
+  11: { // Pizzaraptor — slasher
     actives: [
       S({ id: 'slice', name: 'Slice Dash', kind: 'dash', desc: 'Dashes through enemies', cd: 2.5, dur: 0.32, dmg: 2.2, reach: 60, h: 70, kx: 260, ky: -260 }),
-      S({ id: 'pspin', name: 'Pepperoni Spin', kind: 'spin', desc: 'Whirls its crust tail, hitting all around', unlock: 4, cd: 6, dur: 1.0, dmg: 0.8, reach: 110, h: 80, kx: 200, ky: -120, n: 9 }),
+      S({ id: 'pspin', name: 'Pizza Cutter Toss', kind: 'boomerang', desc: 'Hurls a spinning pizza cutter that flies out and comes back, hitting twice', unlock: 4, cd: 5, dur: 0.35, dmg: 1.8, reach: 50, h: 50, kx: 200, ky: -160 }),
       S({ id: 'frenzy', name: 'Extra Cheese', kind: 'buff', desc: 'Frenzy: +35% attack and +25% speed', unlock: 8, cd: 15, dur: 0.4, dmg: 0, buff: { atk: 0.35, speed: 0.25, t: 7 } }),
     ],
     passive: { id: 'hot', name: 'Hot Slice', desc: '+3% critical chance per level', unlock: PASSIVE_UNLOCK, per: { crit: 3 } },
   },
-  4: { // Mothball
+  4: { // Mothball — caster
     actives: [
       S({ id: 'bolt', name: 'Dust Bolt', kind: 'bolt', desc: 'Fires a piercing bolt of sugar dust', cd: 2, dur: 0.35, dmg: 2.6, reach: 40, h: 40, kx: 300, ky: -220 }),
       S({ id: 'fan', name: 'Sugar Fan', kind: 'fan', desc: 'Throws a fan of five glittering bolts', unlock: 4, cd: 6, dur: 0.45, dmg: 1.6, reach: 40, h: 40, kx: 220, ky: -160, n: 5 }),
@@ -70,69 +105,69 @@ export const SKILLS: Record<number, { actives: SkillDef[]; passive: PassiveDef }
     ],
     passive: { id: 'soft', name: 'Moonlit Wings', desc: '+5% skill damage and -3% cooldowns per level', unlock: PASSIVE_UNLOCK, per: { skillDmg: 0.05, cdr: 0.03 } },
   },
-  1: { // Squidgeon
+  1: { // Squidgeon — lasher
     actives: [
-      S({ id: 'ink', name: 'Ink Splash', kind: 'cone', desc: 'Sprays a wave of berry ink', cd: 3, dmg: 2.2, reach: 200, h: 90, kx: 300 }),
-      S({ id: 'whirl', name: 'Tentacle Whirl', kind: 'spin', desc: 'Spins all eight arms, hitting everything around', unlock: 4, cd: 7, dur: 1.2, dmg: 0.75, reach: 130, h: 90, kx: 180, ky: -140, n: 10 }),
-      S({ id: 'wave', name: 'Jelly Wave', kind: 'nova', desc: 'A wobbling jelly shockwave all around', unlock: 8, cd: 11, dur: 0.7, dmg: 4.4, reach: 240, h: 160, kx: 380, ky: -380 }),
+      S({ id: 'ink', name: 'Tentacle Lash', kind: 'whip', desc: 'A long, lightning-fast tentacle lash that hits twice', cd: 2.5, dur: 0.4, dmg: 1.4, reach: 290, h: 50, kx: 260, ky: -160, n: 2 }),
+      S({ id: 'whirl', name: 'Tentacle Grab', kind: 'pull', desc: 'Grabs every monster in reach and yanks it in, stunned', unlock: 4, cd: 7, dur: 0.5, dmg: 1.8, reach: 300, h: 120, kx: 0, ky: -120 }),
+      S({ id: 'wave', name: 'Bubbling Flasks', kind: 'geyser', desc: 'Chemical geysers erupt under up to 4 monsters', unlock: 8, cd: 10, dur: 0.6, dmg: 3.6, reach: 420, h: 200, kx: 80, ky: -700, n: 4 }),
     ],
     passive: { id: 'eight', name: 'Eight Arms', desc: '+4% attack per level', unlock: PASSIVE_UNLOCK, per: { atkPct: 0.04 } },
   },
-  2: { // Crabbage
+  2: { // Crabbage — guardian
     actives: [
-      S({ id: 'snap', name: 'Claw Snap', kind: 'dash', desc: 'Scuttles sideways and snaps everything in the way', cd: 3, dur: 0.3, dmg: 2.3, reach: 70, h: 70, kx: 300, ky: -200 }),
-      S({ id: 'shell', name: 'Leaf Shell', kind: 'buff', desc: 'Hides in cabbage: -50% damage taken, no flinching', unlock: 4, cd: 15, dur: 0.4, dmg: 0, buff: { def: 0.5, armor: true, t: 7 } }),
-      S({ id: 'crash', name: 'Cheddar Crash', kind: 'slam', desc: 'Leaps and crashes down like a falling cheese wheel', unlock: 8, cd: 8, dur: 0.65, dmg: 4, reach: 210, h: 80, kx: 260, ky: -560 }),
+      S({ id: 'snap', name: 'Claw Counter', kind: 'counter', desc: 'Raises its claws: blocks the next hit and snaps back hard (a small snap if nothing comes)', cd: 4, dur: 0.8, dmg: 4, reach: 110, h: 90, kx: 380, ky: -300 }),
+      S({ id: 'shell', name: 'Leaf Shell', kind: 'buff', desc: 'Hides in cabbage: -35% damage, no flinching, and shots bounce back', unlock: 4, cd: 15, dur: 0.4, dmg: 0, buff: { def: 0.35, armor: true, reflect: true, t: 7 } }),
+      S({ id: 'crash', name: 'Cheddar Pounce', kind: 'pounce', desc: 'Leaps onto the nearest monster and crashes down like a cheese wheel', unlock: 8, cd: 7, dur: 0.7, dmg: 3.8, reach: 160, h: 80, kx: 260, ky: -560 }),
     ],
-    passive: { id: 'rind', name: 'Thick Rind', desc: '+5% max HP per level', unlock: PASSIVE_UNLOCK, per: { hpPct: 0.05 } },
+    passive: { id: 'rind', name: 'Hard Rind', desc: '-3% damage taken per level', unlock: PASSIVE_UNLOCK, per: { dr: 0.03 } },
   },
-  5: { // Toastbat
+  5: { // Toastbat — assassin
     actives: [
-      S({ id: 'dive', name: 'Crumb Dive', kind: 'dash', desc: 'Swoops through enemies in a crumb trail', cd: 2.2, dur: 0.3, dmg: 2.2, reach: 60, h: 80, kx: 240, ky: -320 }),
-      S({ id: 'butter', name: 'Butter Bolt', kind: 'bolt', desc: 'Flings a sizzling pat of butter that pierces', unlock: 4, cd: 3, dur: 0.3, dmg: 2.8, reach: 40, h: 40, kx: 280, ky: -220 }),
-      S({ id: 'toastado', name: 'Toast Tornado', kind: 'spin', desc: 'Becomes a whirling slice of toast', unlock: 8, cd: 9, dur: 1.3, dmg: 0.85, reach: 120, h: 100, kx: 200, ky: -220, n: 11 }),
+      S({ id: 'dive', name: 'Crumb Dive', kind: 'swoop', desc: 'Swoops up and dives through monsters, leaving them burning', cd: 2.6, dur: 0.5, dmg: 2, reach: 70, h: 90, kx: 220, ky: -300, burn: 2.5 }),
+      S({ id: 'butter', name: 'Shadow Toast', kind: 'blink', desc: 'Vanishes and strikes the nearest monster from behind: always a critical hit', unlock: 4, cd: 4, dur: 0.35, dmg: 2.6, reach: 360, h: 90, kx: 260, ky: -260 }),
+      S({ id: 'toastado', name: 'Toast Rain', kind: 'rain', desc: 'Slices of hot toast rain down on the area ahead', unlock: 8, cd: 9, dur: 0.6, dmg: 1.5, reach: 300, h: 60, kx: 160, ky: -260, n: 8 }),
     ],
-    passive: { id: 'crispy', name: 'Extra Crispy', desc: '+3% critical chance per level', unlock: PASSIVE_UNLOCK, per: { crit: 3 } },
+    passive: { id: 'crispy', name: 'Extra Crispy', desc: '+10% critical damage per level', unlock: PASSIVE_UNLOCK, per: { critDmg: 0.1 } },
   },
-  6: { // Dumplord
+  6: { // Dumplord — healer
     actives: [
-      S({ id: 'steam', name: 'Steam Puff', kind: 'cone', desc: 'Puffs out a cloud of scalding steam', cd: 3, dmg: 2.2, reach: 190, h: 100, kx: 280 }),
+      S({ id: 'steam', name: 'Steam Cloud', kind: 'zone', desc: 'Leaves a scalding steam cloud that hurts monsters for 3 s', cd: 4, dur: 0.4, dmg: 0.7, reach: 180, h: 110, kx: 60, ky: -80 }),
       S({ id: 'feast', name: 'Dumpling Feast', kind: 'heal', desc: 'Eats a snack: heals 25% HP (+5% per level)', unlock: 4, cd: 14, dur: 0.6, dmg: 0, heal: 0.25 }),
-      S({ id: 'soup', name: 'Soup Splash', kind: 'nova', desc: 'A huge splash of hot soup all around', unlock: 8, cd: 11, dur: 0.75, dmg: 4.6, reach: 250, h: 170, kx: 400, ky: -380 }),
+      S({ id: 'soup', name: 'Soup Slurp', kind: 'drain', desc: 'Slurps the life out of everything nearby: heals 30% of the damage', unlock: 8, cd: 11, dur: 0.7, dmg: 3.6, reach: 230, h: 160, kx: 120, ky: -200, leech: 0.3 }),
     ],
-    passive: { id: 'aura', name: 'Steamy Aura', desc: 'Heals 3% max HP per level on each kill', unlock: PASSIVE_UNLOCK, per: { lifeOnKill: 0.03 } },
+    passive: { id: 'aura', name: 'Steamy Aura', desc: 'Regenerates 0.4% max HP per second per level', unlock: PASSIVE_UNLOCK, per: { regen: 0.004 } },
   },
-  7: { // Norigon
+  7: { // Norigon — dragon mage
     actives: [
-      S({ id: 'wasabi', name: 'Wasabi Breath', kind: 'cone', desc: 'Breathes a long blast of green fire', cd: 3, dmg: 2.5, reach: 230, h: 90, kx: 320 }),
-      S({ id: 'roll', name: 'Sushi Roll', kind: 'dash', desc: 'Curls up and rolls through enemies', unlock: 4, cd: 4, dur: 0.4, dmg: 2.6, reach: 70, h: 70, kx: 300, ky: -260 }),
-      S({ id: 'soystorm', name: 'Soy Storm', kind: 'nova', desc: 'A swirling storm of soy sauce all around', unlock: 8, cd: 11, dur: 0.75, dmg: 4.8, reach: 250, h: 170, kx: 400, ky: -400 }),
+      S({ id: 'wasabi', name: 'Wasabi Breath', kind: 'breath', desc: 'Breathes a stream of green fire that keeps burning', cd: 3.5, dur: 0.9, dmg: 0.55, reach: 220, h: 90, kx: 80, ky: -60, n: 6, burn: 2 }),
+      S({ id: 'roll', name: 'Rice Ball Ring', kind: 'orbit', desc: 'Three rice balls circle Norigon for 6 s, bonking anything close', unlock: 4, cd: 10, dur: 0.4, dmg: 1.0, reach: 70, h: 60, kx: 200, ky: -200, n: 3 }),
+      S({ id: 'soystorm', name: 'Soy Twister', kind: 'twister', desc: 'A slow soy-sauce twister drifts forward, sucking monsters in', unlock: 8, cd: 11, dur: 0.5, dmg: 0.6, reach: 60, h: 140, kx: 60, ky: -160 }),
     ],
-    passive: { id: 'umami', name: 'Umami', desc: '+5% skill damage per level', unlock: PASSIVE_UNLOCK, per: { skillDmg: 0.05 } },
+    passive: { id: 'umami', name: 'Dragon Heart', desc: '+12% ultimate gauge gain per level', unlock: PASSIVE_UNLOCK, per: { ultGain: 0.12 } },
   },
-  8: { // Chocomunch
+  8: { // Chocomunch — bruiser
     actives: [
-      S({ id: 'chocoslam', name: 'Choco Slam', kind: 'slam', desc: 'Smashes the ground with both fists', cd: 3.5, dur: 0.55, dmg: 3, reach: 180, h: 70, kx: 220, ky: -520 }),
-      S({ id: 'melt', name: 'Melt Charge', kind: 'dash', desc: 'A melting shoulder-charge', unlock: 4, cd: 4, dur: 0.36, dmg: 2.6, reach: 80, h: 80, kx: 420, ky: -220 }),
-      S({ id: 'sugarrush', name: 'Sugar Rush', kind: 'buff', desc: '+30% attack, +20% speed and no flinching', unlock: 8, cd: 15, dur: 0.4, dmg: 0, buff: { atk: 0.3, speed: 0.2, armor: true, t: 7 } }),
+      S({ id: 'chocoslam', name: 'Choco Suplex', kind: 'throw', desc: 'Grabs the monster in front and slams it down behind', cd: 4, dur: 0.6, dmg: 3.6, reach: 100, h: 100, kx: 120, ky: -300 }),
+      S({ id: 'melt', name: 'Melt Charge', kind: 'bulldoze', desc: 'A shoulder-charge that carries monsters along and crushes them at the end', unlock: 4, cd: 5, dur: 0.6, dmg: 3, reach: 80, h: 90, kx: 460, ky: -320 }),
+      S({ id: 'sugarrush', name: 'Sugar Rush', kind: 'buff', desc: '+20% attack, no flinching, and heals 15% of the damage dealt', unlock: 8, cd: 15, dur: 0.4, dmg: 0, buff: { atk: 0.2, armor: true, leech: 0.15, t: 7 } }),
     ],
-    passive: { id: 'cocoa', name: 'Cocoa Armor', desc: '+5% max HP per level', unlock: PASSIVE_UNLOCK, per: { hpPct: 0.05 } },
+    passive: { id: 'cocoa', name: 'Heavy Fists', desc: '+8% finisher and Guard Break damage per level', unlock: PASSIVE_UNLOCK, per: { heavyDmg: 0.08 } },
   },
-  15: { // Hotchog
+  15: { // Hotchog — spiky roller
     actives: [
-      S({ id: 'spikeroll', name: 'Spike Roll', kind: 'dash', desc: 'Rolls into a spiky ball and bowls through', cd: 2.6, dur: 0.38, dmg: 2.3, reach: 70, h: 70, kx: 300, ky: -280 }),
-      S({ id: 'mustard', name: 'Mustard Mines', kind: 'mines', desc: 'Squirts sticky mustard blobs that burst', unlock: 4, cd: 7, dur: 0.4, dmg: 2.6, reach: 50, h: 60, kx: 260, ky: -420, n: 3 }),
-      S({ id: 'grillspin', name: 'Grill Spin', kind: 'spin', desc: 'Spins on the grill, spikes out', unlock: 8, cd: 8, dur: 1.2, dmg: 0.85, reach: 120, h: 90, kx: 200, ky: -160, n: 10 }),
+      S({ id: 'spikeroll', name: 'Spike Roll', kind: 'roll', desc: 'Becomes a spiky ball that bounces back and forth through crowds', cd: 4, dur: 1.2, dmg: 1.0, reach: 70, h: 70, kx: 260, ky: -240 }),
+      S({ id: 'mustard', name: 'Mustard Squirt', kind: 'goo', desc: 'Squirts sticky mustard: monsters in it are slowed and stung', unlock: 4, cd: 7, dur: 0.4, dmg: 0.5, reach: 60, h: 60, kx: 0, ky: 0, n: 3 }),
+      S({ id: 'grillspin', name: 'Quill Burst', kind: 'radial', desc: 'Shoots spikes in every direction', unlock: 8, cd: 7, dur: 0.4, dmg: 1.6, reach: 40, h: 40, kx: 200, ky: -200, n: 10 }),
     ],
-    passive: { id: 'spiky', name: 'Extra Spiky', desc: '+4% attack per level', unlock: PASSIVE_UNLOCK, per: { atkPct: 0.04 } },
+    passive: { id: 'spiky', name: 'Extra Spiky', desc: 'Monsters that hurt you take 12% of it back per level', unlock: PASSIVE_UNLOCK, per: { thorns: 0.12 } },
   },
-  17: { // Pengwhip
+  17: { // Pengwhip — ice skater
     actives: [
-      S({ id: 'slide', name: 'Belly Slide', kind: 'dash', desc: 'Slides across the floor on its belly', cd: 2.2, dur: 0.36, dmg: 2.1, reach: 66, h: 60, kx: 280, ky: -240 }),
-      S({ id: 'snowball', name: 'Snowball Fan', kind: 'fan', desc: 'Throws a spread of cookie snowballs', unlock: 4, cd: 5, dur: 0.4, dmg: 1.6, reach: 40, h: 40, kx: 220, ky: -160, n: 5 }),
-      S({ id: 'freeze', name: 'Deep Freeze', kind: 'nova', desc: 'Freezes the air all around', unlock: 8, cd: 11, dur: 0.75, dmg: 4.5, reach: 240, h: 160, kx: 380, ky: -380 }),
+      S({ id: 'slide', name: 'Belly Slide', kind: 'slide', desc: 'Slides on its belly, leaving an icy trail that chills monsters', cd: 2.6, dur: 0.45, dmg: 2, reach: 66, h: 60, kx: 280, ky: -240 }),
+      S({ id: 'snowball', name: 'Rolling Snowball', kind: 'snowball', desc: 'Rolls a snowball that grows as it goes and plows through monsters', unlock: 4, cd: 6, dur: 0.4, dmg: 2.4, reach: 40, h: 40, kx: 300, ky: -260 }),
+      S({ id: 'freeze', name: 'Deep Freeze', kind: 'freeze', desc: 'Freezes monsters nearby solid for 2.5 s; frozen ones take +30% damage', unlock: 8, cd: 12, dur: 0.7, dmg: 2.4, reach: 240, h: 160, kx: 0, ky: 0 }),
     ],
-    passive: { id: 'coldsnap', name: 'Cold Snap', desc: '+3% critical chance per level', unlock: PASSIVE_UNLOCK, per: { crit: 3 } },
+    passive: { id: 'coldsnap', name: 'Slippery', desc: '-6% dodge cooldown and a longer perfect-dodge window per level', unlock: PASSIVE_UNLOCK, per: { dodge: 0.06 } },
   },
 };
 
@@ -142,18 +177,26 @@ export function skillsOf(species: number) { return SKILLS[species] ?? SKILLS[0];
 export const ULT_LV = 15;
 /** Each kaiju's ultimate: fills a gauge by landing hits (and taking them); invincible while it plays. */
 export const ULTS: Record<number, SkillDef> = {
-  0: S({ id: 'ult0', name: 'Strawberry Stampede', kind: 'spin', desc: 'A huge, long berry whirlwind', cd: 0, dur: 2.2, dmg: 1.5, reach: 210, h: 140, kx: 260, ky: -260, n: 18 }),
-  10: S({ id: 'ult10', name: 'Blueberry Meteor', kind: 'slam', desc: 'Leaps sky-high and crashes down', cd: 0, dur: 0.9, dmg: 10, reach: 330, h: 120, kx: 300, ky: -700 }),
-  11: S({ id: 'ult11', name: 'Pizza Cutter Rush', kind: 'dash', desc: 'Rolls through everything like a pizza wheel', cd: 0, dur: 0.75, dmg: 8, reach: 90, h: 100, kx: 360, ky: -360 }),
-  4: S({ id: 'ult4', name: 'Moonbeam Nova', kind: 'nova', desc: 'A blinding burst of moon dust', cd: 0, dur: 0.9, dmg: 11, reach: 380, h: 260, kx: 460, ky: -460 }),
+  0: S({ id: 'ult0', name: 'Strawberry Stampede', kind: 'rampage', desc: 'Charges back and forth across the screen three times', cd: 0, dur: 1.5, dmg: 4, reach: 90, h: 110, kx: 360, ky: -360, n: 3 }),
+  10: S({ id: 'ult10', name: 'Blueberry Meteor', kind: 'meteor', desc: 'Calls down a shower of giant blueberries ahead', cd: 0, dur: 1.0, dmg: 3.6, reach: 420, h: 60, kx: 260, ky: -500, n: 9 }),
+  11: S({ id: 'ult11', name: 'Pizza Party', kind: 'slashall', desc: 'Blinks to every monster on screen, slicing each one', cd: 0, dur: 1.2, dmg: 6, reach: 650, h: 100, kx: 300, ky: -300, n: 8 }),
+  4: S({ id: 'ult4', name: 'Moonbeam', kind: 'beam', desc: 'A screen-long beam of moonlight that pierces everything', cd: 0, dur: 1.0, dmg: 3.2, reach: 700, h: 90, kx: 300, ky: -200, n: 4 }),
   1: S({ id: 'ult1', name: 'Kraken Whirl', kind: 'spin', desc: 'Every tentacle at once, for ages', cd: 0, dur: 2, dmg: 1.4, reach: 230, h: 140, kx: 240, ky: -200, n: 20 }),
-  2: S({ id: 'ult2', name: 'Cheddar Quake', kind: 'slam', desc: 'A cheese-wheel crash that shakes the kitchen', cd: 0, dur: 0.9, dmg: 10, reach: 350, h: 120, kx: 280, ky: -680 }),
-  5: S({ id: 'ult5', name: 'Toast Storm', kind: 'fan', desc: 'Twelve flaming toast slices', cd: 0, dur: 0.6, dmg: 3.2, reach: 40, h: 40, kx: 260, ky: -220, n: 12 }),
+  2: S({ id: 'ult2', name: 'Cheddar Quake', kind: 'tremor', desc: 'Three growing tremors shake the whole floor', cd: 0, dur: 1.3, dmg: 4, reach: 380, h: 90, kx: 220, ky: -600, n: 3 }),
+  5: S({ id: 'ult5', name: 'Toast Storm', kind: 'homing', desc: 'Ten flaming toast bats that hunt monsters down', cd: 0, dur: 0.6, dmg: 2.6, reach: 40, h: 40, kx: 240, ky: -220, n: 10 }),
   7: S({ id: 'ult7', name: 'Dragon Roll Inferno', kind: 'cone', desc: 'A colossal wasabi fire breath', cd: 0, dur: 0.9, dmg: 9, reach: 400, h: 200, kx: 420, ky: -300 }),
-  8: S({ id: 'ult8', name: 'Fondue Fall', kind: 'slam', desc: 'Leaps up and lands as a wave of molten chocolate', cd: 0, dur: 0.9, dmg: 11, reach: 340, h: 120, kx: 300, ky: -700 }),
-  15: S({ id: 'ult15', name: 'Spin Dog', kind: 'spin', desc: 'A long, wild spiky spin', cd: 0, dur: 2.2, dmg: 1.5, reach: 200, h: 120, kx: 260, ky: -220, n: 18 }),
-  17: S({ id: 'ult17', name: 'Blizzard', kind: 'fan', desc: 'Fourteen icy cookie shards', cd: 0, dur: 0.6, dmg: 3, reach: 40, h: 40, kx: 240, ky: -200, n: 14 }),
+  8: S({ id: 'ult8', name: 'Fondue Flood', kind: 'wave', desc: 'A wave of molten chocolate rolls across the whole floor', cd: 0, dur: 0.8, dmg: 8, reach: 120, h: 90, kx: 420, ky: -400 }),
+  15: S({ id: 'ult15', name: 'Grand Grill', kind: 'firefloor', desc: 'Lights the floor under every monster on screen', cd: 0, dur: 0.8, dmg: 1.0, reach: 600, h: 80, kx: 60, ky: -120 }),
+  17: S({ id: 'ult17', name: 'Blizzard', kind: 'blizzard', desc: 'A screen-wide blizzard that hits and chills every monster for 3 s', cd: 0, dur: 0.8, dmg: 1.6, reach: 600, h: 200, kx: 40, ky: -60 }),
   6: S({ id: 'ult6', name: 'Steamer Feast', kind: 'nova', desc: 'A giant steam blast that also heals 40%', cd: 0, dur: 0.9, dmg: 8, reach: 340, h: 240, kx: 420, ky: -420, heal: 0.4 }),
+};
+
+/** Which existing animation each skill kind borrows (pose.ts). */
+export const POSE_OF: Partial<Record<SkillKind, SkillKind>> = {
+  vortex: 'spin', roll: 'spin', boomerang: 'cone', whip: 'cone', pull: 'cone', breath: 'cone', zone: 'cone', beam: 'cone',
+  geyser: 'nova', drain: 'nova', freeze: 'nova', radial: 'nova', firefloor: 'nova', blizzard: 'nova', orbit: 'buff', counter: 'buff',
+  pounce: 'slam', tremor: 'slam', wave: 'slam', meteor: 'slam', swoop: 'dash', blink: 'dash', bulldoze: 'dash', slide: 'dash', rampage: 'dash', slashall: 'dash',
+  throw: 'uppercut',
 };
 
 // ---------- branches ----------
@@ -165,20 +208,37 @@ export function branchesFor(s: SkillDef): [Branch, Branch] {
   const power: Branch = s.kind === 'buff' || s.kind === 'heal'
     ? { id: 'a', name: 'Quick Recharge', desc: '-30% cooldown', mods: { cd: 0.7 } }
     : { id: 'a', name: 'Power', desc: '+35% damage', mods: { dmg: 1.35 } };
-  const B: Record<SkillKind, Branch> = {
+  const wide: Branch = { id: 'b', name: 'Wider', desc: '+35% reach', mods: { reach: 1.35 } };
+  const quick: Branch = { id: 'b', name: 'Quick Step', desc: '-35% cooldown', mods: { cd: 0.65 } };
+  const B: Partial<Record<SkillKind, Branch>> = {
     cone: { id: 'b', name: 'Wide Spray', desc: '+40% reach and height', mods: { reach: 1.4 } },
     slam: { id: 'b', name: 'Big Shockwave', desc: '+40% radius', mods: { reach: 1.4 } },
-    dash: { id: 'b', name: 'Quick Step', desc: '-35% cooldown', mods: { cd: 0.65 } },
+    dash: quick, swoop: quick, blink: quick, slide: quick, counter: quick, throw: quick,
     bolt: { id: 'b', name: 'Twin Bolt', desc: 'Fires two bolts', mods: { n: 1 } },
     fan: { id: 'b', name: 'Wide Fan', desc: '+2 bolts', mods: { n: 2 } },
-    spin: { id: 'b', name: 'Long Spin', desc: '+40% duration and hits', mods: { dur: 1.4, n: 0.4 } },
+    vortex: { id: 'b', name: 'Long Spin', desc: '+40% duration and hits', mods: { dur: 1.4, n: 0.4 } },
+    roll: { id: 'b', name: 'Long Roll', desc: '+40% duration', mods: { dur: 1.4 } },
     uppercut: { id: 'b', name: 'Quick Upper', desc: '-30% cooldown', mods: { cd: 0.7 } },
     mines: { id: 'b', name: 'More Mines', desc: '+2 mines', mods: { n: 2 } },
+    goo: { id: 'b', name: 'More Mustard', desc: '+2 blobs', mods: { n: 2 } },
+    rain: { id: 'b', name: 'Downpour', desc: '+4 slices', mods: { n: 4 } },
+    radial: { id: 'b', name: 'More Quills', desc: '+4 spikes', mods: { n: 4 } },
+    orbit: { id: 'b', name: 'Bigger Ring', desc: '+2 rice balls', mods: { n: 2 } },
+    geyser: { id: 'b', name: 'More Flasks', desc: '+2 geysers', mods: { n: 2 } },
+    whip: { id: 'b', name: 'Triple Lash', desc: 'Hits three times', mods: { n: 1 } },
+    breath: { id: 'b', name: 'Long Breath', desc: '+40% duration', mods: { dur: 1.4, n: 2 } },
     buff: { id: 'b', name: 'Lasting', desc: '+50% duration', mods: { buffT: 1.5 } },
     nova: { id: 'b', name: 'Big Nova', desc: '+35% radius', mods: { reach: 1.35 } },
     heal: { id: 'b', name: 'Big Feast', desc: '+50% healing', mods: { heal: 1.5 } },
+    drain: { id: 'b', name: 'Big Slurp', desc: '+35% radius', mods: { reach: 1.35 } },
+    zone: { id: 'b', name: 'Thick Steam', desc: '+35% size', mods: { reach: 1.35 } },
+    freeze: { id: 'b', name: 'Big Chill', desc: '+35% radius', mods: { reach: 1.35 } },
+    pull: wide, pounce: wide, bulldoze: { id: 'b', name: 'Long Charge', desc: '+35% distance', mods: { dur: 1.35 } },
+    boomerang: { id: 'b', name: 'Twin Cutters', desc: 'Throws two', mods: { n: 1 } },
+    twister: { id: 'b', name: 'Big Twister', desc: '+40% size', mods: { reach: 1.4 } },
+    snowball: { id: 'b', name: 'Snowman', desc: '+40% size', mods: { reach: 1.4 } },
   };
-  return [power, B[s.kind]];
+  return [power, B[s.kind] ?? wide];
 }
 
 /** A skill with its branch applied (skills are shared constants, so this returns a copy). */
@@ -190,7 +250,7 @@ export function applyBranch(s: SkillDef, b: BranchId | undefined): SkillDef {
   if (m.reach) { out.reach *= m.reach; out.h *= Math.sqrt(m.reach); }
   if (m.cd) out.cd *= m.cd;
   if (m.dur) out.dur *= m.dur;
-  if (m.n) out.n = s.kind === 'spin' ? Math.round((s.n ?? 6) * (1 + m.n)) : (s.n ?? 1) + m.n;
+  if (m.n) out.n = s.kind === 'spin' || s.kind === 'vortex' ? Math.round((s.n ?? 6) * (1 + m.n)) : (s.n ?? 1) + m.n;
   if (m.heal && s.heal) out.heal = s.heal * m.heal;
   if (m.buffT && s.buff) out.buff = { ...s.buff, t: s.buff.t * m.buffT };
   return out;
