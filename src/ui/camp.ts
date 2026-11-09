@@ -2,7 +2,7 @@
 // Also the stage result panel. Everything reads/writes the save (src/save.ts).
 import { CLASSES, type Stat } from '../sim/classes';
 import { BASES, type Item, LINE_NAMES, MAX_PLUS, RARITY_CSS, RARITY_NAMES, type Slot, enhanceCost, itemLines, itemName, lineText, salvageValue } from '../sim/items';
-import { TIER_NAMES } from '../sim/loot';
+import { TIER_NAMES, clearCount, likelyTier } from '../sim/loot';
 import { SKILLS, MAX_SKILL, type SkillKind, skillsOf } from '../sim/skills';
 import { STAGES, WORLDS } from '../sim/stages';
 import { STAT_INFO, STATS, derive, xpFor } from '../sim/stats';
@@ -87,9 +87,17 @@ function stagesPage(): string {
         ${s.boss ? '<span class="boss">BOSS</span>' : ''}
         ${rank ? `<span class="rank" style="color:${RANK_CSS[rank]}">${rank}</span>` : ''}
         <div class="tx"><div class="num">${s.num}</div><div class="nm">${s.name}</div>
-        <div class="lv">Monsters Lv ${s.lv[0]}${s.lv[1] !== s.lv[0] ? '–' + s.lv[1] : ''} · <span style="color:${low ? '#ff8a8a' : '#a8f0a8'}">Rec. Lv ${s.rec}</span></div></div>
+        <div class="lv">Monsters Lv ${s.lv[0]}${s.lv[1] !== s.lv[0] ? '–' + s.lv[1] : ''} · <span style="color:${low ? '#ff8a8a' : '#a8f0a8'}">Rec. Lv ${s.rec}</span></div>
+        ${rewardLine(s)}</div>
       </button>`;
-    }).join('')}</div>`).join('') + `<p style="color:#b8a8b8;font-size:2vmin;margin-top:2vmin">Beat every monster, then walk to the exit on the right. Your rank (time, hits taken, best combo) can upgrade the boxes you found.</p>`;
+    }).join('')}</div>`).join('') + `<p style="color:#b8a8b8;font-size:2vmin;margin-top:2vmin">Beat every monster, then walk to the exit on the right. Higher stages give more and better clear boxes. Your rank (time, hits taken, best combo) improves them and can upgrade the boxes you found.</p>`;
+}
+
+/** "Clear: [box][box] Lunchbox ×2": the usual clear reward at rank A (more and better on higher stages). */
+function rewardLine(s: StageDef): string {
+  const tier = likelyTier(s.lv[1], 'A', !!s.boss), n = clearCount(s.lv[1]);
+  const img = `<img src="art/box-${tier}.webp" style="width:3.4vmin;height:3.4vmin;object-fit:contain">`;
+  return `<div class="lv" style="display:flex;align-items:center;gap:0.4vmin">Clear: ${img.repeat(n)} <span>${TIER_NAMES[tier]}${n > 1 ? ` ×${n}` : ''}</span></div>`;
 }
 
 function heroPage(): string {
@@ -110,7 +118,7 @@ function heroPage(): string {
         <div><span>Crit</span><b>${d.crit.toFixed(1)}% × ${d.critDmg.toFixed(2)}</b></div>
         <div><span>Skill damage</span><b>${pct(d.skillDmg)}</b></div><div><span>Cooldowns</span><b>-${pct(d.cdr)}</b></div><div><span>Move speed</span><b>${pct(d.speed)}</b></div>
       </div></div>
-    <div><div class="h3">Equipment</div><div class="slots">${(['weapon', 'armor', 'charm'] as Slot[]).map(s => {
+    <div><div class="h3">Equipment <small style="color:#b8a8b8;font-family:Nunito;font-size:1.7vmin">Your kaiju wears it in stages!</small></div><div class="slots">${(['weapon', 'armor', 'charm'] as Slot[]).map(s => {
       const it = p.equip[s];
       return `<button class="slot" data-eqslot="${s}">${iconHtml(it)}<div class="t">${it ? `<span style="color:${RARITY_CSS[it.rarity]};display:inline;font-size:2.1vmin">${esc(itemName(it))}</span><span>${itemLines(it).map(lineText).join(' · ')}${it.skill ? ` · ⭐ ${skillText(it)}` : ''}</span>` : `${SLOT_NAMES[s]}<span>Empty — equip from the Bag</span>`}</div></button>`;
     }).join('')}</div>

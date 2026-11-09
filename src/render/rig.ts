@@ -124,6 +124,21 @@ export function poseFor(h: Hero, time: number, walkPhase: number, rig: RigDef | 
   return p;
 }
 
+/** What the hero is wearing (icons from the item bases), for the paper-doll look. */
+export interface GearLook {
+  weapon?: { icon: string; base: string; rarity: number };
+  armor?: { icon: string; base: string; rarity: number };
+  charm?: { icon: string; rarity: number };
+}
+type Anchor = 'hand' | 'chest' | 'neck' | 'back';
+interface Attach { img: Phaser.GameObjects.Image; glow?: Phaser.GameObjects.Image; anchor: Anchor; rot: number; swing: boolean; a: number; v: number }
+const RARITY_GLOW = [0, 0, 0, 0x6ab8ff, 0xc88aff, 0xffb02e];
+/** Where each weapon icon's handle is (0..1 in the icon). All icons point their head to the top-left (~-133°). */
+const GRIP: Record<string, [number, number]> = { spoon: [0.76, 0.8], fork: [0.8, 0.82], whisk: [0.63, 0.76], pin: [0.84, 0.84] };
+const ICON_ANGLE = -2.33;
+/** Weapon direction at rest relative to the arm: forward and a little up. */
+const HOLD_ANGLE = -0.55;
+
 interface Built { def: PartDef; img: Phaser.GameObjects.Image; x: number; y: number; a: number; v: number }
 
 export class HeroView {
@@ -139,23 +154,47 @@ export class HeroView {
   private lastFace = 1;
   private wasGround = true;
   private lean = 0;
+  private gear: Attach[] = [];
+  private arm: Built | null = null;
 
-  constructor(scene: Phaser.Scene, species: number, has: (k: string) => boolean, height = 84) {
+  constructor(scene: Phaser.Scene, species: number, has: (k: string) => boolean, height = 84, look: GearLook = {}) {
     this.root = scene.add.container(0, 0);
     const rig = RIGS[species];
     this.rig = rig && has(`parts-${species}-0`) ? rig : null;
     if (this.rig) {
       const r = this.rig;
       this.scale = r.scale;
-      for (const def of [...r.parts].sort((a, b) => a.depth - b.depth)) {
+      const order: { d: number; o: Phaser.GameObjects.GameObject }[] = [];
+      for (const def of r.parts) {
         const img = scene.add.image(0, 0, `parts-${species}-${def.piece}`).setOrigin(def.pivot[0], def.pivot[1]).setScale(r.scale);
         if (def.flip) img.setFlipX(true);
         if (def.tint) img.setTint(def.tint);
         const b: Built = { def, img, x: (def.joint[0] - r.root[0]) * r.scale, y: (def.joint[1] - r.root[1]) * r.scale, a: 0, v: 0 };
         this.parts.push(b);
         if (def.role === 'body') this.body = b;
-        this.root.add(img);
+        order.push({ d: def.depth, o: img });
       }
+      this.arm = this.parts.find(b => b.def.role === 'arm') ?? null;
+      // gear: weapon in the paw, apron on the belly / mitt on the paw / pot lid on the back, charm at the neck
+      const armD = this.arm?.def.depth ?? 1;
+      const add = (key: string, anchor: Anchor, px: number, origin: [number, number], depth: number, rot = 0, rarity = 0, swing = false) => {
+        if (!has(key) || (anchor === 'hand' && !this.arm)) return;
+        const img = scene.add.image(0, 0, key).setOrigin(origin[0], origin[1]);
+        img.setScale(px * r.gear.size / img.height);
+        let glow: Phaser.GameObjects.Image | undefined;
+        if (RARITY_GLOW[rarity]) {
+          glow = scene.add.image(0, 0, key).setOrigin(origin[0], origin[1]).setScale(img.scaleX * 1.25).setTint(RARITY_GLOW[rarity]).setTintMode(Phaser.TintModes.FILL).setAlpha(0.5).setBlendMode(Phaser.BlendModes.ADD);
+          order.push({ d: depth - 0.01, o: glow });
+        }
+        order.push({ d: depth, o: img });
+        this.gear.push({ img, glow, anchor, rot, swing, a: 0, v: 0 });
+      };
+      if (look.armor?.base === 'lid') add(look.armor.icon, 'back', 32, [0.5, 0.5], -3.6, -0.35);
+      if (look.armor?.base === 'apron') add(look.armor.icon, 'chest', 30, [0.5, 0.2], 0.3);
+      if (look.weapon) add(look.weapon.icon, 'hand', 38, GRIP[look.weapon.base] ?? [0.8, 0.8], armD + 0.5, HOLD_ANGLE - ICON_ANGLE, look.weapon.rarity);
+      if (look.armor?.base === 'mitt') add(look.armor.icon, 'hand', 18, [0.5, 0.45], armD + 0.7, 0.2);
+      if (look.charm) add(look.charm.icon, 'neck', 13, [0.5, 0.05], 0.4, 0, 0, true);
+      for (const e of order.sort((a, b) => a.d - b.d)) this.root.add(e.o);
     } else {
       this.single = scene.add.image(0, 0, `kaiju-${species}`).setOrigin(0.5, 1);
       this.scale = height / this.single.height;
@@ -212,11 +251,36 @@ export class HeroView {
       const dx = (b.x - body.x) * p.sx, dy = (b.y - body.y) * p.sy;
       b.img.setPosition(body.x + dx * cos - dy * sin, body.y + p.y + dx * sin + dy * cos).setRotation(b.a + p.lean);
     }
+    this.placeGear(p, dt, cos, sin);
+  }
+
+  private placeGear(p: Pose, dt: number, cos: number, sin: number): void {
+    if (!this.gear.length || !this.rig || !this.body) return;
+    const r = this.rig, body = this.body;
+    for (const g of this.gear) {
+      let x: number, y: number, rot: number;
+      if (g.anchor === 'hand') {
+        const a = this.arm!, img = a.img;
+        const hx = (r.gear.hand[0] - a.def.pivot[0]) * img.width * r.scale, hy = (r.gear.hand[1] - a.def.pivot[1]) * img.height * r.scale;
+        const ar = img.rotation, c = Math.cos(ar), s = Math.sin(ar);
+        x = img.x + hx * c - hy * s; y = img.y + hx * s + hy * c; rot = ar + g.rot;
+      } else {
+        const pt = r.gear[g.anchor];
+        const bx = (pt[0] - r.root[0]) * r.scale, by = (pt[1] - r.root[1]) * r.scale;
+        const dx = (bx - body.x) * p.sx, dy = (by - body.y) * p.sy;
+        x = body.x + dx * cos - dy * sin; y = body.y + p.y + dx * sin + dy * cos; rot = p.lean + g.rot;
+      }
+      if (g.swing) { // charms dangle: a little pendulum that lags behind body motion
+        g.v += ((-p.lean * 1.5 - g.a) * 60 - g.v * 4) * dt; g.a += g.v * dt; rot += g.a;
+      }
+      g.img.setPosition(x, y).setRotation(rot);
+      g.glow?.setPosition(x, y).setRotation(rot).setAlpha(0.35 + Math.sin(performance.now() / 260) * 0.15);
+    }
   }
 
   /** Flash solid white (hit) or back to normal. */
   flash(on: boolean): void {
-    const all = this.single ? [{ img: this.single, tint: undefined as number | undefined }] : this.parts.map(b => ({ img: b.img, tint: b.def.tint }));
+    const all = this.single ? [{ img: this.single, tint: undefined as number | undefined }] : [...this.parts.map(b => ({ img: b.img, tint: b.def.tint })), ...this.gear.map(g => ({ img: g.img, tint: undefined as number | undefined }))];
     for (const { img, tint } of all) {
       if (on) img.setTint(0xffffff).setTintMode(Phaser.TintModes.FILL);
       else { img.setTintMode(Phaser.TintModes.MULTIPLY); if (tint) img.setTint(tint); else img.clearTint(); }

@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { CLASSES } from '../src/sim/classes';
 import { BASES, rollItem } from '../src/sim/items';
-import { rollTier } from '../src/sim/loot';
+import { clearCount, clearRewards, rollTier } from '../src/sim/loot';
 import { MOBS } from '../src/sim/mobs';
 import { SKILLS, skillsOf } from '../src/sim/skills';
 import { STAGES } from '../src/sim/stages';
@@ -239,6 +239,17 @@ describe('progression', () => {
     expect(avg(5)).toBeGreaterThan(avg(1) + 2);
     const tavg = (lvl: number) => { let t = 0; for (let i = 0; i < 4000; i++) t += rollTier(lvl, rand); return t / 4000; };
     expect(tavg(3)).toBeGreaterThan(tavg(1) + 0.2);
+  });
+
+  it('clear boxes scale with stage level, rank and boss', () => {
+    let s = 11;
+    const rand = () => { s = (s * 16807) % 2147483647; return s / 2147483647; };
+    const avg = (lv: number, rank: 'S' | 'A' | 'D', boss = false) => { let tot = 0, n = 0; for (let i = 0; i < 1500; i++) for (const b of clearRewards(lv, rank, boss, false, rand)) { tot += b; n++; } return tot / n; };
+    expect(avg(7, 'A')).toBeGreaterThan(avg(1, 'A') + 0.25);
+    expect(avg(4, 'S')).toBeGreaterThan(avg(4, 'D') + 0.3);
+    expect(avg(10, 'A', true)).toBeGreaterThan(avg(10, 'A'));
+    expect(clearCount(10)).toBeGreaterThan(clearCount(2));
+    expect(clearRewards(2, 'A', false, true, rand).length).toBe(clearCount(2) + 1); // first clear bonus
   });
 
   it('item lines scale with rarity and item level', () => {

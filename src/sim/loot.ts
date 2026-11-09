@@ -19,3 +19,32 @@ export function rollTier(level: number, rand: () => number): BoxTier {
   for (let i = 0; i < w.length; i++) { r -= w[i]; if (r < 0) return (i + 1) as BoxTier; }
   return 1;
 }
+
+export type RankLetter = 'S' | 'A' | 'B' | 'C' | 'D';
+const RANK_BONUS: Record<RankLetter, number> = { S: 1, A: 0.5, B: 0, C: -0.5, D: -1 };
+
+/** Odds level for a stage's clear boxes: the stage's monster level, your rank, and +1.5 on boss stages. */
+export function clearLevel(stageLv: number, rank: RankLetter, boss: boolean): number {
+  // tuned so the usual (rank A) reward climbs: Lv2 → Lunchbox, Lv7 → Bento, boss Lv10 → Golden Cloche
+  return Math.max(1, 3.5 + (stageLv - 1) * 0.55 + RANK_BONUS[rank] + (boss ? 1.5 : 0));
+}
+
+/** How many boxes clearing a stage gives: more on higher-level stages. */
+export function clearCount(stageLv: number): number { return 1 + Math.floor((stageLv - 1) / 3); }
+
+/** Boxes for clearing a stage (higher stage level / better rank / boss → more and better boxes). */
+export function clearRewards(stageLv: number, rank: RankLetter, boss: boolean, firstClear: boolean, rand: () => number): BoxTier[] {
+  const lvl = clearLevel(stageLv, rank, boss);
+  const min = boss ? 3 : rank === 'S' ? 2 : 1;
+  const out: BoxTier[] = [];
+  for (let i = 0; i < clearCount(stageLv); i++) out.push(Math.max(min, rollTier(lvl, rand)) as BoxTier);
+  if (firstClear) out.push(Math.min(5, 2 + Math.floor(stageLv / 4) + (boss ? 1 : 0)) as BoxTier);
+  return out;
+}
+
+/** The tier you'd most often get (for the stage map). */
+export function likelyTier(stageLv: number, rank: RankLetter, boss: boolean): BoxTier {
+  const w = tierWeights(clearLevel(stageLv, rank, boss));
+  const t = (w.indexOf(Math.max(...w)) + 1) as BoxTier;
+  return (boss ? Math.max(3, t) : t) as BoxTier;
+}

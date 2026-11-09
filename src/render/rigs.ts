@@ -22,6 +22,9 @@ export interface RigDef {
   /** swing = walking legs; shuffle = little feet slide; dangle = hovering (Mothball); none = legless, hops along (Bluebeary) */
   legs?: 'swing' | 'shuffle' | 'dangle' | 'none';
   hover?: boolean;
+  /** Gear attachment points. hand = where the front arm's paw is, as a 0..1 point in the arm piece image;
+   *  chest (apron), neck (charm) and back (pot lid) are parts-sheet coords on the body. */
+  gear: { hand: [number, number]; chest: [number, number]; neck: [number, number]; back: [number, number]; size: number };
   root: [number, number];
   /** World pixels per sheet pixel. */
   scale: number;
@@ -31,6 +34,7 @@ export interface RigDef {
 export const RIGS: Record<number, RigDef> = {
   // Gobzilla Jr.: body 227x281@169,52; tail @39,281; legs @306,326 / @199,340; arm @399,230
   0: {
+    gear: { hand: [0.8, 0.75], chest: [318, 268], neck: [330, 212], back: [205, 222], size: 1 },
     root: [282, 392],
     legs: 'swing',
     scale: 0.26,
@@ -45,6 +49,7 @@ export const RIGS: Record<number, RigDef> = {
   },
   // Pizzaraptor: body 312x300@185,56; tail @16,125; legs @329,321 / @180,329; arms @224,61 / @142,122
   11: {
+    gear: { hand: [0.85, 0.85], chest: [430, 262], neck: [455, 195], back: [300, 140], size: 1 },
     root: [335, 480],
     scale: 0.205,
     parts: [
@@ -58,6 +63,7 @@ export const RIGS: Record<number, RigDef> = {
   },
   // Bluebeary (side profile, legless: hops on its muffin cup): body 264x310@201,51; arms 69x97 @40,263 / @138,263
   10: {
+    gear: { hand: [0.5, 0.88], chest: [358, 262], neck: [392, 222], back: [240, 200], size: 1 },
     root: [323, 361],
     scale: 0.27,
     legs: 'none',
@@ -70,6 +76,7 @@ export const RIGS: Record<number, RigDef> = {
   // Mothball (side profile): body 179x342@266,46; wing 203x222@71,70 (root on its right edge, reused twice);
   // leg 51x82@157,366 (reused twice); arm 51x79@59,286
   4: {
+    gear: { hand: [0.5, 0.88], chest: [378, 300], neck: [395, 232], back: [296, 262], size: 0.9 },
     root: [352, 452],
     scale: 0.22,
     legs: 'dangle',

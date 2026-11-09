@@ -10,10 +10,22 @@ import { STAGES, stageById } from '../sim/stages';
 import { derive } from '../sim/stats';
 import type { SimEvent, StageDef } from '../sim/types';
 import { DT, type Mob, World, rankOf } from '../sim/world';
-import { HeroView } from '../render/rig';
+import { type GearLook, HeroView } from '../render/rig';
+import { BASES } from '../sim/items';
+import type { HeroProfile } from '../sim/stats';
 import { addXp, finishStage, hero, save } from '../save';
 import { setSkillUi, setTouchVisible } from '../touch';
 import { hideCamp, runGacha, showCamp, showResult, stageUnlocked } from '../ui/camp';
+
+/** Equipped items → what to draw on the kaiju. */
+export function lookOf(p: HeroProfile): GearLook {
+  const e = p.equip, ic = (b: string) => BASES[b].icon;
+  return {
+    weapon: e.weapon && { icon: ic(e.weapon.base), base: e.weapon.base, rarity: e.weapon.rarity },
+    armor: e.armor && { icon: ic(e.armor.base), base: e.armor.base, rarity: e.armor.rarity },
+    charm: e.charm && { icon: ic(e.charm.base), rarity: e.charm.rarity },
+  };
+}
 
 export const CANVAS = { w: 1920, h: 1080 };
 const ZOOM = 3;
@@ -118,7 +130,7 @@ export class GameScene extends Phaser.Scene {
 
     this.heroShadow = this.add.ellipse(0, 0, 54, 12, 0x000000, 0.22).setDepth(-2);
     this.aura = this.add.ellipse(0, 0, 80, 100, 0x9fe0ff, 0.25).setDepth(4).setBlendMode(Phaser.BlendModes.ADD).setVisible(false);
-    this.hero = new HeroView(this, p.species, k => this.has(k));
+    this.hero = new HeroView(this, p.species, k => this.has(k), 84, lookOf(p));
     this.hero.root.setDepth(5);
     this.cx = w.hero.x; this.cy = st.groundY - 100;
     cam.centerOn(this.cx, this.cy);

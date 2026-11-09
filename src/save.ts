@@ -1,6 +1,7 @@
 // Save data (localStorage 'kkq-save-v1'): every hero's progress, the shared bag, unopened boxes, crumbs, stage ranks.
 import { CLASSES, type Stat } from './sim/classes';
 import { type Item, MAX_PLUS, type Slot, BASES, enhanceCost, rollItem, salvageValue } from './sim/items';
+import { clearRewards } from './sim/loot';
 import { SKILLS } from './sim/skills';
 import { type HeroProfile, canLevelSkill, gainXp, newProfile } from './sim/stats';
 import type { BoxTier, LootBox } from './sim/types';
@@ -140,10 +141,8 @@ export function finishStage(stageId: string, rank: Rank, found: LootBox[], stage
     if (b.tier < 5 && Math.random() < up) { upgraded++; return { tier: (b.tier + 1) as BoxTier, ilvl: b.ilvl }; }
     return { ...b };
   });
-  const clearTier = ({ S: 3, A: 3, B: 2, C: 2, D: 1 }[rank] + (boss ? 1 : 0) + (rank === 'S' && Math.random() < 0.25 ? 1 : 0)) as BoxTier;
-  boxes.push({ tier: Math.min(5, clearTier) as BoxTier, ilvl: stageLv });
   const firstClear = !save.cleared[stageId];
-  if (firstClear) boxes.push({ tier: (boss ? 4 : 2) as BoxTier, ilvl: stageLv });
+  for (const tier of clearRewards(stageLv, rank, boss, firstClear, Math.random)) boxes.push({ tier, ilvl: stageLv });
   const prev = save.cleared[stageId];
   if (!prev || RANK_ORDER.indexOf(rank) > RANK_ORDER.indexOf(prev)) save.cleared[stageId] = rank;
   save.boxes.push(...boxes);
