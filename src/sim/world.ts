@@ -113,6 +113,8 @@ export interface Mob {
   surfT: number;
   /** status from skills: burning (damage every 0.5 s), frozen solid (no action, +30% damage taken) */
   burn: number; burnT: number; burnDmg: number; frozen: number;
+  /** stuck in mustard: can't move or act (can still be hit) */
+  glued: number;
 }
 
 export interface Box { id: number; tier: BoxTier; ilvl: number; x: number; y: number; vy: number; ground: boolean; t: number }
@@ -143,7 +145,7 @@ export class World {
   hazards: (Hazard & { state: 'off' | 'warn' | 'on'; hit: Set<number> })[] = [];
   puddles: { x: number; y: number; t: number }[] = [];
   /** lingering skill areas: steam / mustard goo / ice trail / fire floor / snow */
-  zones: { id: number; x: number; y: number; w: number; t: number; tick: number; next: number; dmg: number; kind: 'steam' | 'goo' | 'ice' | 'fire' | 'snow' }[] = [];
+  zones: { id: number; x: number; y: number; w: number; t: number; tick: number; next: number; dmg: number; kind: 'steam' | 'goo' | 'ice' | 'fire' | 'snow'; hit?: Set<number> }[] = [];
   spicy: Spicy[];
   hard: boolean;
   portal = false;
@@ -219,7 +221,7 @@ export class World {
       id: nextId++, kind, lv, x, y: y ?? this.stage.groundY, vx: 0, vy: 0, face: -1, hp, maxHp: hp, atk: Math.round(mobAtk(kind, lv) * (elite ? ELITE.atk : 1) * pow),
       state: 'walk', move: '', t: this.rand() * 2, ground: true, on: y === undefined ? -1 : null, home: x, deadT: 0, flash: 0,
       hurtShown: 0, stagger: 0, summoned: 0, hitDone: false, elite, homeY: y ?? this.stage.groundY, slow: 0,
-      mods: [], under: MOBS[kind].brain === 'burrower', disguised: MOBS[kind].brain === 'mimic', aimX: 0, aimY: 0, enraged: false, parent: 0, dropT: 0, surfT: 0, burn: 0, burnT: 0, burnDmg: 0, frozen: 0,
+      mods: [], under: MOBS[kind].brain === 'burrower', disguised: MOBS[kind].brain === 'mimic', aimX: 0, aimY: 0, enraged: false, parent: 0, dropT: 0, surfT: 0, burn: 0, burnT: 0, burnDmg: 0, frozen: 0, glued: 0,
     };
     if (y !== undefined) { m.on = this.platformAt(x, y); m.ground = m.on !== null; }
     this.mobs.push(m);
@@ -544,7 +546,15 @@ export class World {
       .sort((a, b) => Math.abs(a.x - x) - Math.abs(b.x - x));
   }
 
-  /** Lingering skill zones: tick damage, slow, burn. */
+  /** Mustard Glue: stuck for 2.5 s (bosses are only slowed). */
+  private glue(m: Mob): void {
+    if (m.state === 'dead') return;
+    if (MOBS[m.kind].brain === 'boss') { m.slow = Math.max(m.slow, 2.5); return; }
+    if (m.glued <= 0) this.events.push({ t: 'block', x: m.x, y: m.y - MOBS[m.kind].h - 6 });
+    m.glued = 2.5; m.vx = 0; if (m.state === 'windup' || m.state === 'attack') { m.state = 'walk'; m.t = 0; m.move = ''; }
+  }
+
+  /** Lingering skill zones: tick damage, slow, burn, glue. */
   private stepZones(dt: number): void {
     for (const z of this.zones) {
       z.t -= dt; z.next -= dt;
@@ -552,7 +562,8 @@ export class World {
       z.next = z.tick;
       for (const m of this.mobs) {
         if (m.state === 'dead' || m.under || m.disguised || Math.abs(m.x - z.x) > z.w / 2 + MOBS[m.kind].w / 2 || Math.abs(m.y - z.y) > (z.kind === 'snow' ? 400 : 70)) continue;
-        if (z.kind === 'ice' || z.kind === 'goo' || z.kind === 'snow') m.slow = Math.max(m.slow, 1);
+        if (z.kind === 'ice' || z.kind === 'snow') m.slow = Math.max(m.slow, 1);
+        if (z.kind === 'goo') { if (z.hit?.has(m.id)) continue; z.hit?.add(m.id); this.glue(m); }
         if (z.kind === 'fire') { m.burn = Math.max(m.burn, 1); m.burnDmg = Math.max(m.burnDmg, z.dmg * 0.5); }
         if (z.dmg > 0) this.damageMob(m, z.dmg, Math.sign(m.x - z.x) || 1, { kx: 30, ky: 0, stun: 0.15 }, true);
       }
@@ -788,6 +799,7 @@ export class World {
       this.events.push({ t: 'hit', x: h.x, y: h.y - 60, dmg: p, crit: false, target: 'hero' });
     }
     if (m.frozen > 0) raw *= 1.3;
+    if (m.glued > 0 && h.state === 'skill' && h.skill?.kind === 'roll') raw *= 2; // Mustard Glue + Spike Roll combo
     if (guardBreak || (h.state === 'attack' && h.step === 2)) raw *= 1 + h.d.heavyDmg;
     const counter = h.counter > 0;
     const crit = counter || this.rand() * 100 < h.d.crit;
@@ -873,6 +885,7 @@ export class World {
         if (m.hp <= 0) { this.killMob(m); return; }
       }
     }
+    if (m.glued > 0) { m.glued -= dt; m.vx = 0; if (def.brain !== 'flyer') this.physics(m, dt, MAX_FALL, false); return; } // stuck in mustard
     if (m.frozen > 0) { // frozen solid: no thinking, no moving
       m.frozen -= dt; m.vx = 0;
       if (def.brain !== 'flyer') this.physics(m, dt, MAX_FALL, false);
@@ -1221,7 +1234,7 @@ export class World {
         const f = s.vy > 0 ? this.floorBelow(s.x, prevY, s.y, false) : null;
         if (f) {
           if (s.kind === 'berry') this.mines.push({ id: nextId++, x: s.x, y: f.y, t: 0.2, dmg: s.dmg, kx: s.kx, ky: s.ky });
-          else if (s.kind === 'goo') this.zones.push({ id: nextId++, x: s.x, y: f.y, w: 80, t: 4, tick: 0.5, next: 0, dmg: s.dmg, kind: 'goo' });
+          else if (s.kind === 'goo') this.zones.push({ id: nextId++, x: s.x, y: f.y, w: 80, t: 4, tick: 0.1, next: 0, dmg: s.dmg, kind: 'goo', hit: new Set() });
           else if (s.kind === 'meteor') { this.events.push({ t: 'shock', x: s.x, y: f.y, r: 70 }); for (const m of this.targetsNear(s.x, f.y, 70, 60)) if (!s.hit.has(m.id)) this.damageMob(m, s.dmg, Math.sign(m.x - s.x) || 1, { kx: s.kx, ky: s.ky, stun: 0.6 }, true); }
           s.t = 99; continue;
         }
@@ -1234,6 +1247,7 @@ export class World {
           s.hit.add(m.id);
           this.damageMob(m, s.dmg, Math.sign(s.vx), { kx: s.kx, ky: s.ky, stun: 0.6 }, true);
           if (s.kind === 'berry') this.events.push({ t: 'boom', x: s.x, y: s.y });
+          if (s.kind === 'goo') this.glue(m);
           if (!s.pierce) { s.t = 99; break; }
         }
       }

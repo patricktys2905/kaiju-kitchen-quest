@@ -25,7 +25,7 @@ export type SkillKind =
   | 'throw'     // grab the monster in front and slam it behind you
   | 'bulldoze'  // charge that carries monsters along, crushing them at the end
   | 'roll'      // bouncing ball back and forth through a crowd
-  | 'goo'       // lobbed blobs that leave slowing puddles
+  | 'goo'       // lobbed blobs that glue monsters in place
   | 'radial'    // spikes in every direction
   | 'slide'     // dash that leaves a chilling ice trail
   | 'snowball'  // ground projectile that grows as it rolls
@@ -156,7 +156,7 @@ export const SKILLS: Record<number, { actives: SkillDef[]; passive: PassiveDef }
   15: { // Hotchog — spiky roller
     actives: [
       S({ id: 'spikeroll', name: 'Spike Roll', kind: 'roll', desc: 'Becomes a spiky ball that bounces back and forth through crowds', cd: 4, dur: 1.2, dmg: 1.0, reach: 70, h: 70, kx: 260, ky: -240 }),
-      S({ id: 'mustard', name: 'Mustard Squirt', kind: 'goo', desc: 'Squirts sticky mustard: monsters in it are slowed and stung', unlock: 4, cd: 7, dur: 0.4, dmg: 0.5, reach: 60, h: 60, kx: 0, ky: 0, n: 3 }),
+      S({ id: 'mustard', name: 'Mustard Glue', kind: 'goo', desc: 'Sticky mustard blobs glue monsters in place for 2.5 s; Spike Roll does double damage to glued monsters', unlock: 4, cd: 7, dur: 0.4, dmg: 0.6, reach: 60, h: 60, kx: 0, ky: 0, n: 3 }),
       S({ id: 'grillspin', name: 'Quill Burst', kind: 'radial', desc: 'Shoots spikes in every direction', unlock: 8, cd: 7, dur: 0.4, dmg: 1.6, reach: 40, h: 40, kx: 200, ky: -200, n: 10 }),
     ],
     passive: { id: 'spiky', name: 'Extra Spiky', desc: 'Monsters that hurt you take 12% of it back per level', unlock: PASSIVE_UNLOCK, per: { thorns: 0.12 } },

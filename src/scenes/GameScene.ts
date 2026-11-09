@@ -668,6 +668,7 @@ export class GameScene extends Phaser.Scene {
     v.img.setPosition(m.x, m.y).setScale(v.s * sx, v.s * sy).setRotation(rot).setFlipX(m.face > 0);
     if (m.flash > 0) v.img.setTint(0xffffff).setTintMode(Phaser.TintModes.FILL);
     else if (m.frozen > 0) v.img.setTint(0x9fd8ff).setTintMode(Phaser.TintModes.MULTIPLY);
+    else if (m.glued > 0) v.img.setTint(0xf8e060).setTintMode(Phaser.TintModes.MULTIPLY);
     else if (m.burn > 0 && Math.floor(t * 10) % 2 === 0) v.img.setTint(0xffa060).setTintMode(Phaser.TintModes.MULTIPLY);
     else if (this.world!.isDanger(m)) v.img.setTint(Math.floor(t * 14) % 2 ? 0xff3030 : 0xff8080).setTintMode(Phaser.TintModes.MULTIPLY); // red: can't interrupt, dodge it!
     else if (m.state === 'windup' && Math.floor(t * 12) % 2 === 0) v.img.setTint(0xffc070).setTintMode(Phaser.TintModes.MULTIPLY);

@@ -108,6 +108,26 @@ describe('new skill mechanics', () => {
     run(w, {}, 20);
     expect(w.mobs.find(m => m.id === id)!.burn).toBeGreaterThan(0);
   });
+  it('Mustard Glue sticks monsters in place, and Spike Roll hits glued ones twice as hard', () => {
+    let id = 0;
+    const w = cast(15, 'mustard', w => { id = w.spawnMob('bun', 590, 1).id; });
+    const m = () => w.mobs.find(x => x.id === id)!;
+    let glued = false;
+    for (let i = 0; i < 60 && !glued; i++) { w.step(NO_INPUT); glued = m().glued > 0; }
+    expect(glued).toBe(true);
+    const x = m().x;
+    run(w, {}, 30);
+    expect(m().x).toBe(x);
+    // the combo: damage from a roll vs a glued and an unglued monster
+    const hitWith = (glue: boolean) => {
+      const v = new World(flat, derive(prof(15)), 3);
+      v.hero.x = 500; v.hero.face = 1;
+      const t = v.spawnMob('egg', 560, 1); if (glue) t.glued = 5;
+      const evs = [...run(v, { skill1: true }, 1), ...run(v, {}, 20)];
+      return Math.max(...evs.map(e => e.t === 'hit' && e.target === 'mob' ? e.dmg : 0)); // biggest single hit
+    };
+    expect(hitWith(true)).toBeGreaterThan(hitWith(false) * 1.5);
+  });
   it('Leaf Shell bounces shots back', () => {
     const w = new World(flat, derive(prof(2)), 1);
     w.hero.x = 500;
