@@ -2,11 +2,14 @@ import * as Phaser from 'phaser';
 import { initInput } from './input';
 import { CANVAS, GameScene } from './scenes/GameScene';
 import { initTouch } from './touch';
+import { initCamp } from './ui/camp';
 
 initInput(() => {});
 initTouch();
+let game: Phaser.Game;
+initCamp(stageId => game.scene.getScene('game').scene.restart({ stage: stageId }));
 
-const game = new Phaser.Game({
+game = new Phaser.Game({
   type: Phaser.AUTO,
   parent: 'app',
   backgroundColor: '#1a1020',

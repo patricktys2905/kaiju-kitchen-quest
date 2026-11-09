@@ -1,0 +1,10 @@
+[
+ {
+  "name": "eq-fork",
+  "prompt": "Generate an image. This is a hero from my cute 2D action RPG. I need an EQUIPMENT ICON in exactly the same art style (clean dark outlines, saturated colours, glossy cel shading), shown diagonally like an RPG inventory icon, centred, filling 80% of the frame: a WEAPON, a big silver dinner FORK used as a trident spear, with a red ribbon tied on the handle. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1 image.",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-0.png"
+  ]
+ }
+]

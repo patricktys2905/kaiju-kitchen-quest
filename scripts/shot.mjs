@@ -1,5 +1,5 @@
-// Phone screenshots (844x390 @ DPR) of the stage, plus a pose sheet per hero.
-// Usage: node scripts/shot.mjs [dpr]   (uses the dev server on a spare port; installed Edge)
+// Phone screenshots (844x390) of camp, a stage, combat, the boss, gacha, plus a pose sheet per hero.
+// Usage: node scripts/shot.mjs [dpr]   (dev server on a spare port; installed Edge; fresh save each run)
 import { spawn } from 'node:child_process';
 import { chromium } from 'playwright-core';
 const PORT = 5311, url = `http://localhost:${PORT}/?touch`;
@@ -13,30 +13,61 @@ const errs = [];
 p.on('pageerror', e => errs.push(e.message));
 p.on('console', m => { if (m.type() === 'error') errs.push(m.text()); });
 await p.goto(url);
+await p.evaluate(() => localStorage.clear());
+await p.reload();
 for (let i = 0; i < 60; i++) { if (await p.evaluate(() => !!window.__kkq).catch(() => false)) break; await wait(250); }
+await wait(1200);
+await p.screenshot({ path: 'shots/camp.png' });
+const kq = (fn, arg) => p.evaluate(fn, arg);
+
+// a levelled-up save so skills/gear show
+await kq(() => { const s = window.__kkq.save; for (const h of Object.values(s.heroes)) { h.level = 9; h.statPts = 6; h.skillPts = 2; for (const id of Object.keys({})) void id; } s.boxes.push({ tier: 4, ilvl: 6 }, { tier: 3, ilvl: 4 }, { tier: 5, ilvl: 8 }); });
+await kq(() => { const sk = { 0: ['seed', 'upper', 'jamspin', 'sweet'], 10: ['quake', 'mines', 'frost', 'thick'], 11: ['slice', 'pspin', 'frenzy', 'hot'], 4: ['bolt', 'fan', 'nova', 'soft'] }; for (const [sp, ids] of Object.entries(sk)) for (const id of ids) window.__kkq.save.heroes[sp].skills[id] = 2; });
+await p.locator('[data-tab=skills]').click(); await wait(300);
+await p.screenshot({ path: 'shots/camp-skills.png' });
+await p.locator('[data-tab=hero]').click(); await wait(300);
+await p.screenshot({ path: 'shots/camp-hero.png' });
+await p.locator('[data-tab=boxes]').click(); await wait(300);
+await p.locator('[data-box="5"]').click(); await wait(400);
+await p.screenshot({ path: 'shots/gacha-shake.png' });
+await wait(1600);
+await p.screenshot({ path: 'shots/gacha-reveal.png' });
+await p.locator('[data-g=next]').click(); await wait(300);
+await p.locator('[data-tab=bag]').click(); await wait(300);
+await p.screenshot({ path: 'shots/camp-bag.png' });
+await p.locator('[data-tab=stages]').click(); await wait(300);
+await p.screenshot({ path: 'shots/camp-stages.png' });
+
+// stage 1-2 combat
+await kq(() => window.__kkq.play('1-2'));
 await wait(1500);
-await p.screenshot({ path: 'shots/stage.png' });
-// walk right and attack a bit
-await p.evaluate(() => { const w = window.__kkq.world(); const m = w.mobs.find(m => m.on === -1); w.hero.x = m.x - 55; w.hero.face = 1; m.state = 'hurt'; });
- await wait(400);
-for (let i = 0; i < 6; i++) { await p.keyboard.press('KeyJ'); await wait(110); }
-await wait(80);
+await kq(() => { const w = window.__kkq.world(); const m = w.mobs.find(m => m.on === -1); w.hero.x = m.x - 55; w.hero.face = 1; });
+await wait(300);
+for (let i = 0; i < 2; i++) { await p.keyboard.press('KeyJ'); await wait(120); }
+await p.keyboard.press('KeyJ'); await wait(170);
 await p.screenshot({ path: 'shots/combat.png' });
-await p.keyboard.press('KeyL'); await wait(250);
+await p.keyboard.press('KeyO'); await wait(500);
 await p.screenshot({ path: 'shots/skill.png' });
+
+// boss
+await kq(() => window.__kkq.play('1-4'));
+await wait(2500);
+await kq(() => { const w = window.__kkq.world(); w.hero.x = w.boss.x - 160; });
+await wait(1200);
+await p.screenshot({ path: 'shots/boss.png' });
+
 // pose sheet: each hero in each pose
-const poses = [['move', 0.3], ['run', 0.2], ['air', 0.1], ['attack', 0.25], ['attack', 1.6], ['attack', 2.5], ['skill', 0.2], ['hurt', 0.1]];
-for (const [i, sp] of [0, 10, 11, 4].entries()) {
-  await p.keyboard.press(`Digit${i + 1}`); await wait(300);
+const poses = [['move', 0.3], ['run', 0.2], ['run', 0.6], ['air', 0.1], ['attack', 0.25], ['attack', 1.6], ['attack', 2.5], ['skill', 0.4], ['hurt', 0.1]];
+for (const sp of [0, 10, 11, 4]) {
+  await kq(sp => { window.__kkq.save.selected = sp; window.__kkq.play('1-1'); }, sp);
+  await wait(900);
   for (const [j, [st, t]] of poses.entries()) {
-    await p.evaluate(([st, t]) => window.__kkq.setPose(st, t), [st, t]);
-    await wait(60);
-    const pos = await p.evaluate(() => { const s = window.__kkq.scene, h = window.__kkq.world().hero, cam = s.cameras.main; const m = cam.getWorldPoint(0, 0); return { x: (h.x - m.x) * cam.zoom, y: (h.y - m.y) * cam.zoom }; });
-    const k = 844 / 1920; // canvas → css px (FIT, landscape fills width)
-    const off = (390 - 1080 * k) / 2;
-    await p.screenshot({ path: `shots/pose-${sp}-${j}.png`, clip: { x: Math.max(0, pos.x * k - 70), y: Math.max(0, pos.y * k + off - 120), width: 140, height: 135 } });
+    await kq(([st, t]) => window.__kkq.setPose(st, t), [st, t]);
+    await wait(80);
+    const pos = await kq(() => { const s = window.__kkq.scene, h = window.__kkq.world().hero, cam = s.cameras.main; const m = cam.getWorldPoint(0, 0); return { x: (h.x - m.x) * cam.zoom, y: (h.y - m.y) * cam.zoom }; });
+    const k = 390 / 1080;
+    await p.screenshot({ path: `shots/pose-${sp}-${j}.png`, clip: { x: Math.max(0, pos.x * k - 70), y: Math.max(0, pos.y * k - 120), width: 140, height: 135 } });
   }
-  await p.evaluate(() => { window.__kkq.scene.paused = false; });
 }
 console.log(errs.length ? 'ERRORS:\n' + errs.join('\n') : 'no page errors');
 await b.close(); server.kill();

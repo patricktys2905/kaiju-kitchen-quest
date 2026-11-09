@@ -16,8 +16,14 @@ Heroes are puppets: a Gemini "parts sheet" per kaiju (`art-src/raw/parts-N.png`)
 `src/render/rig.ts` animates them procedurally from the hero state (`poseFor`).
 
 ## Controls
-Phone: left thumb anywhere on the left = stick (run, ↑↓ climb, ↓+JUMP drop down); ATTACK, JUMP, SKILL.
-Keys: arrows/WASD, Space/K jump, J attack (tap 3× for a combo), L skill, 1-4 switch hero.
+Phone: left thumb anywhere on the left = stick (run, ↑↓ climb, ↓+JUMP drop down); ATTACK, JUMP, 3 SKILL buttons.
+Keys: arrows/WASD, Space/K jump, J attack (tap 3× for a combo), L / I / O skills, Esc pause.
 
-## Box tiers
-Paper Bag → Lunchbox → Bento → Golden Cloche → Rainbow Cake Box (`src/sim/loot.ts`).
+## Systems (src/sim)
+- stats.ts — level/XP curve, STR/DEX/INT/VIT (+3 points per level), derived combat numbers.
+- skills.ts — 3 actives (unlock Lv 1/4/8) + 1 passive (Lv 6) per kaiju, skill levels 1-5 (+gear bonus).
+- items.ts — gear slots (weapon/armor/charm), rarities, random lines, skill boosts, salvage + enhance costs.
+- loot.ts — box tiers Paper Bag → Lunchbox → Bento → Golden Cloche → Rainbow Cake Box.
+- mobs.ts — monsters (walker/hopper/ranged/brute/boss) scaled by level; stages.ts — World 1 (1-1 … 1-4 boss).
+- src/save.ts — save (localStorage kkq-save-v1), box opening, stage results (rank upgrades boxes).
+- src/ui/camp.ts — camp menus + gacha reveal + result screen.

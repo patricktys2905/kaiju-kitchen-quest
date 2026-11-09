@@ -1,0 +1,44 @@
+[
+  {
+    "name": "parts-10",
+    "newChat": true,
+    "refs": ["art-src/ref-kaiju-10.png"],
+    "prompt": "Generate an image. This is a character from my 2D side-scrolling game (a blueberry muffin bear). I need it as a CUTOUT PUPPET PARTS SHEET so I can animate it. Draw the exact same character, same colours, outlines and shading style, but in a STRICT SIDE PROFILE facing RIGHT, like a 2D platformer character: we see the side of the head with the snout and nose pointing right, only one eye visible, one ear, the muffin top and paper cup seen from the side. Split it into SEPARATE parts laid out apart from each other with big empty gaps (no part touching another): 1) the BODY (head, ear, face in profile, frosted muffin top and paper muffin cup) WITHOUT arms or feet, 2) the near ARM (a round stubby bear arm with paw, seen from the side), 3) the far ARM, 4) the near FOOT (small round bear foot), 5) the far FOOT. Joint ends rounded and complete. Solid flat magenta (#FF00FF) background, no shadows, no labels, no text. Square 1:1 image."
+  },
+  {
+    "name": "parts-4",
+    "newChat": true,
+    "refs": ["art-src/ref-kaiju-4.png"],
+    "prompt": "Generate an image. This is a character from my 2D side-scrolling game (a fluffy marshmallow moth). I need it as a CUTOUT PUPPET PARTS SHEET so I can animate it. Draw the exact same character, same colours, outlines and shading style, but in a STRICT SIDE PROFILE facing RIGHT, like a 2D platformer character: the round fluffy body seen from the side, the face looking right with one eye visible, feathery antennae swept back. Split it into SEPARATE parts laid out apart from each other with big empty gaps (no part touching another): 1) the BODY with head, face, fluffy collar and antennae, WITHOUT wings, arms or legs, 2) the near WING (both lobes of one wing as one piece, seen from the side), 3) the far WING, 4) one small fluffy ARM, 5) one small fluffy LEG, 6) a second LEG. Joint ends rounded and complete. Solid flat magenta (#FF00FF) background, no shadows, no labels, no text. Square 1:1 image."
+  },
+  {
+    "name": "mob-worm",
+    "newChat": true,
+    "refs": ["art-src/ref-kaiju-0.png"],
+    "prompt": "Generate an image. This is a hero from my cute 2D side-scrolling action RPG set in a giant kitchen. I need an ENEMY in exactly the same art style (clean dark outlines, saturated colours, glossy cel shading): a mischievous SOUR GUMMY WORM, striped neon green, yellow and pink, covered in sugar crystals, coiled ready to spring, cheeky angry eyes. Side view facing LEFT, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1 image."
+  },
+  { "name": "mob-pepper", "prompt": "Same style, another ENEMY: a grumpy little PEPPER SHAKER soldier with a silver dented cap, tiny legs, and a little wooden spoon like a club, black pepper visible inside its glass body, mean eyebrows. Side view facing LEFT, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1 image." },
+  { "name": "mob-egg", "prompt": "Same style, another ENEMY: a big heavy ROTTEN EGG brute with a cracked greenish shell, tiny stink lines, chunky little arms and legs, a scowling face. Side view facing LEFT, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1 image." },
+  { "name": "boss-toast", "prompt": "Same style, now the BOSS of the first world: the BURNT TOAST KING, a huge thick slice of burnt toast standing on stubby legs, charred black crust, smoking edges, a melting butter-pat crown on top, a jam-dripping butter-knife sceptre in one hand, furious glowing orange eyes. Imposing but still in the cute game style. Side view facing LEFT, whole body visible, centred, filling about 90% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1 image." },
+  {
+    "name": "bg-far-stove",
+    "newChat": true,
+    "refs": ["art-src/ref-kaiju-0.png"],
+    "prompt": "Generate an image. This is a character from my cute 2D side-scrolling action RPG where tiny food monsters adventure through a giant kitchen. I need the FAR BACKGROUND for the BOSS ARENA, 'Stovetop Throne', in a bright, painted fantasy MMORPG side-scroller style (soft painterly shading, rich saturated colours, dreamy depth): straight-on side view of a giant kitchen stove at dusk: huge glowing orange burner rings in the distance, a giant toaster like a castle with warm light in its slots, rising steam and floating embers, copper pots like towers, a deep purple-orange evening window. Dramatic but cheerful. The bottom quarter calm and darker. No characters, no text, no UI. Wide 16:9 landscape image."
+  },
+  {
+    "name": "eq-spoon",
+    "newChat": true,
+    "refs": ["art-src/ref-kaiju-0.png"],
+    "prompt": "Generate an image. This is a hero from my cute 2D action RPG. I need EQUIPMENT ICONS in exactly the same art style (clean dark outlines, saturated colours, glossy cel shading), one item per image, shown diagonally like an RPG inventory icon, centred, filling 80% of the frame, on a solid flat magenta (#FF00FF) background, no shadow, no text. First: a WEAPON, a sturdy WOODEN SPOON battle club with a leather-wrapped handle. Square 1:1 image."
+  },
+  { "name": "eq-fork", "prompt": "Same style and framing: a WEAPON, a silver FORK trident with a red ribbon on the handle. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1." },
+  { "name": "eq-whisk", "prompt": "Same style and framing: a WEAPON, a magical WHISK wand with a glowing blue gem in the handle. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1." },
+  { "name": "eq-pin", "prompt": "Same style and framing: a WEAPON, a heavy wooden ROLLING PIN hammer with metal bands. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1." },
+  { "name": "eq-apron", "prompt": "Same style and framing: ARMOR, a small red-checkered cooking APRON with a pocket, shown flat. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1." },
+  { "name": "eq-mitt", "prompt": "Same style and framing: ARMOR, a padded quilted OVEN MITT like a gauntlet, orange with a flame pattern. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1." },
+  { "name": "eq-lid", "prompt": "Same style and framing: ARMOR, a round shiny POT LID used as a shield, with a knob handle and a little star emblem. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1." },
+  { "name": "eq-cookie", "prompt": "Same style and framing: a CHARM accessory, a lucky fortune COOKIE on a gold chain. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1." },
+  { "name": "eq-bell", "prompt": "Same style and framing: a CHARM accessory, a small golden kitchen TIMER BELL on a ribbon, glowing softly. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1." },
+  { "name": "eq-salt", "prompt": "Same style and framing: a CHARM accessory, a tiny magic SALT crystal pendant, pink and glowing, on a silver chain. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1." }
+]

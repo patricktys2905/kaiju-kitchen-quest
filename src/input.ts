@@ -1,5 +1,5 @@
 // Keyboard + on-screen touch, merged into one sim Input.
-// Keys: arrows/WASD move & climb, Space/K jump, J attack, L skill, Down+Jump drops through a platform.
+// Keys: arrows/WASD move & climb, Space/K jump, J attack, L / I / O skills 1-3, Down+Jump drops through a platform.
 import { readTouch } from './touch';
 import type { Input } from './sim/types';
 
@@ -34,7 +34,9 @@ export function readInput(): Input {
     down: any('ArrowDown', 'KeyS') || t.y > 0,
     jump: any('Space', 'KeyK') || t.jump,
     attack: any('KeyJ', 'KeyZ') || t.attack,
-    skill: any('KeyL', 'KeyX') || t.skill,
+    skill1: any('KeyL', 'KeyX') || t.skill[0],
+    skill2: any('KeyI', 'KeyC') || t.skill[1],
+    skill3: any('KeyO', 'KeyV') || t.skill[2],
   };
   latched.clear();
   return out;
