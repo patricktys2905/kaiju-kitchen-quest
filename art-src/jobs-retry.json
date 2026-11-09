@@ -1,10 +1,10 @@
 [
  {
-  "name": "bg-mid-oven",
-  "prompt": "Generate an image. This is the background of my cute painted 2D side-scrolling action RPG (tiny food monsters in a giant kitchen). I need a MIDDLE PARALLAX LAYER for the oven world in the same painted style, warm orange and charcoal colours: a row of giant oven objects along the bottom of the image, seen from the side: a casserole dish, a muffin tin, a stack of cookies on a tray, a roasting pan, a pizza stone, an oven mitt, with gaps between them. They fill only the bottom 60 percent. Everything else (the whole upper area and the gaps) must be solid flat magenta (#FF00FF). No shadows on the magenta, no characters, no text. Wide 16:9 landscape image.",
+  "name": "w-squid2",
+  "prompt": "Generate an image. This is an item icon from my cute 2D action RPG. I need an EQUIPMENT ICON in exactly the same art style (clean dark outlines, saturated colours, glossy cel shading). A WEAPON themed for my hero Squidgeon (a blue jelly octopus): a BUBBLE WAND with soap-bubble jelly bubbles. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT, centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image.",
   "newChat": true,
   "refs": [
-   "art-src/ref-bg.png"
+   "art-src/ref-eq.png"
   ]
  }
 ]

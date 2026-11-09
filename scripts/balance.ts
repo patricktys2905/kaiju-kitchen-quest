@@ -26,7 +26,7 @@ function heroAt(species: number, level: number, seed: number): HeroProfile {
   let s = seed * 7919 + species;
   const rand = () => { s = (s * 16807) % 2147483647; return s / 2147483647; };
   for (const slot of ['weapon', 'armor', 'charm'] as Slot[]) {
-    let it; do { it = rollItem(1, rand() < 0.5 ? 2 : 3, level, rand, []); } while (BASES[it.base].slot !== slot);
+    let it; do { it = rollItem(1, rand() < 0.5 ? 2 : 3, level, rand, [], species); } while (BASES[it.base].slot !== slot || (BASES[it.base].for !== undefined && BASES[it.base].for !== species));
     it.rarity = Math.min(it.rarity, 3) as 1 | 2 | 3; p.equip[slot] = it;
   }
   return p;

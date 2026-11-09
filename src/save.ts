@@ -1,7 +1,7 @@
 // Save data (localStorage 'kkq-save-v1'): every hero's progress, the shared bag, unopened boxes, crumbs, stage ranks.
 import { CLASSES, type Stat } from './sim/classes';
 import { CONSUMABLES, type ConsumableId } from './sim/consumables';
-import { type Item, MAX_PLUS, type Slot, BASES, fortChance, fortCost, fortRisky, gradeOf, rollGrade, rollItem, salvageValue } from './sim/items';
+import { type Item, MAX_PLUS, type Slot, BASES, canWear, fortChance, fortCost, fortRisky, gradeOf, rollGrade, rollItem, salvageValue } from './sim/items';
 import { clearRewards } from './sim/loot';
 import { SKILLS } from './sim/skills';
 import { type Derived, type HeroProfile, canLevelSkill, derive, gainXp, newProfile } from './sim/stats';
@@ -105,6 +105,7 @@ export function equip(species: number, itemId: number): void {
   const i = save.bag.findIndex(x => x.id === itemId);
   if (i < 0) return;
   const it = save.bag[i];
+  if (!canWear(it, species)) return;
   const slot: Slot = BASES[it.base].slot;
   const p = save.heroes[species];
   save.bag.splice(i, 1);
@@ -168,7 +169,7 @@ export function openBox(i: number): { item: Item; crumbs: number; box: LootBox; 
   const box = save.boxes[i];
   if (!box) return null;
   save.boxes.splice(i, 1);
-  const item = rollItem(save.nextId++, box.tier, box.ilvl, Math.random, ALL_SKILLS);
+  const item = rollItem(save.nextId++, box.tier, box.ilvl, Math.random, ALL_SKILLS, save.selected);
   const crumbs = Math.round((3 + box.ilvl) * box.tier * (0.8 + Math.random() * 0.4));
   save.bag.push(item);
   save.crumbs += crumbs;
@@ -261,6 +262,7 @@ export interface Diff { k: string; v: number; pct?: boolean }
 /** How equipping item it on a hero changes its numbers (pct > 0 = stronger overall). */
 export function compare(species: number, it: Item): { pct: number; diff: Diff[] } {
   const p = save.heroes[species];
+  if (!canWear(it, species)) return { pct: -Infinity, diff: [] };
   const slot = BASES[it.base].slot;
   const cur = p.equip[slot];
   if (cur?.id === it.id) return { pct: 0, diff: [] };
@@ -292,7 +294,8 @@ export function salvageWorse(): { n: number; crumbs: number } {
   let n = 0, crumbs = 0;
   for (const it of [...save.bag]) {
     if (isLocked(it.id)) continue;
-    if (CLASSES.every(c => compare(c.species, it).pct < 0)) { crumbs += salvage(it.id); n++; }
+    const wearers = CLASSES.filter(c => canWear(it, c.species));
+    if (wearers.every(c => compare(c.species, it).pct < 0)) { crumbs += salvage(it.id); n++; }
   }
   return { n, crumbs };
 }
@@ -316,7 +319,8 @@ export function shopStock(): Item[] {
     const rand = () => { seed ^= seed << 13; seed ^= seed >>> 17; seed ^= seed << 5; return ((seed >>> 0) % 100000) / 100000; };
     const lv = progressLv();
     const ids = Object.values(SKILLS).flatMap(x => x.actives.map(a => a.id));
-    const stock = [rollItem(save.nextId++, 4, lv, rand, ids), rollItem(save.nextId++, 3, lv, rand, ids), rollItem(save.nextId++, 3, lv, rand, ids)];
+    // the market leans toward the hero you're playing (re-rolls each day)
+    const stock = [rollItem(save.nextId++, 4, lv, rand, ids, save.selected), rollItem(save.nextId++, 3, lv, rand, ids, save.selected), rollItem(save.nextId++, 3, lv, rand, ids)];
     if (stock[0].rarity < 3) stock[0].rarity = 3;
     save.shop = { day: today(), stock };
     persist();

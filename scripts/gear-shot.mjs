@@ -11,13 +11,10 @@ const p = await (await b.newContext({ viewport: { width: 844, height: 390 }, dev
 const errs = []; p.on('pageerror', e => errs.push(e.message));
 await p.goto(`http://localhost:${PORT}/?touch`);
 for (let i = 0; i < 60; i++) { if (await p.evaluate(() => !!window.__kkq).catch(() => false)) break; await wait(250); }
-const sets = [
-  { weapon: ['spoon', 1], armor: ['apron', 1], charm: ['cookie', 1] },
-  { weapon: ['whisk', 5], armor: ['lid', 3], charm: ['bell', 2] },
-  { weapon: ['fork', 4], armor: ['mitt', 2], charm: ['salt', 4] },
-];
+const OWN = { 0: ['w-gob2', 'w-gob3', 'a-gob'], 10: ['w-blue2', 'w-blue3', 'a-blue'], 11: ['w-pizza2', 'w-pizza3', 'a-pizza'], 4: ['w-moth2', 'w-moth3', 'a-moth'], 1: ['w-squid2', 'w-squid3', 'a-squid'], 2: ['w-crab2', 'w-crab3', 'a-crab'], 5: ['w-toast2', 'w-toast3', 'a-toast'], 6: ['w-dump2', 'w-dump3', 'a-dump'] };
+const setsFor = sp => [{ weapon: [OWN[sp][0], 3], armor: [OWN[sp][2], 3] }, { weapon: [OWN[sp][1], 5], charm: ['bell', 2] }, { weapon: [OWN[sp][1], 2] }];
 const tiles = [];
-for (const [r, sp] of (process.argv[2] ? process.argv[2].split(',').map(Number) : [0, 10, 11, 4]).entries()) for (const [si, set] of sets.entries()) for (const [fi, [st, t]] of [['move', 0.3], ['attack', 0.12]].entries()) {
+for (const [r, sp] of (process.argv[2] ? process.argv[2].split(',').map(Number) : [0, 10, 11, 4]).entries()) for (const [si, set] of setsFor(sp).entries()) for (const [fi, [st, t]] of [['move', 0.3], ['attack', 0.12]].entries()) {
   await p.evaluate(([sp, set]) => {
     const s = window.__kkq.save; s.selected = sp; let id = 9000;
     const eq = {}; for (const [slot, [base, rarity]] of Object.entries(set)) eq[slot] = { id: id++, base, rarity, ilvl: 1, plus: 0, lines: [] };

@@ -2,7 +2,7 @@
 // consumables + quick bag), MARKET, BOXES (gacha). Also the stage result panel. Reads/writes src/save.ts.
 import { CLASSES, type Stat } from '../sim/classes';
 import { CONSUMABLES, type ConsumableId, QUICK_SLOTS } from '../sim/consumables';
-import { BASES, SETS, UNIQUES, GRADES, GRADE_CSS, GRADE_MUL, type Item, MAX_PLUS, RARITY_CSS, RARITY_NAMES, type Slot, fortChance, fortCost, fortMul, fortRisky, gradeOf, itemLines, itemName, lineText, salvageValue } from '../sim/items';
+import { BASES, SETS, UNIQUES, canWear, ownerOf, GRADES, GRADE_CSS, GRADE_MUL, type Item, MAX_PLUS, RARITY_CSS, RARITY_NAMES, type Slot, fortChance, fortCost, fortMul, fortRisky, gradeOf, itemLines, itemName, lineText, salvageValue } from '../sim/items';
 import { TIER_NAMES, clearCount, likelyTier } from '../sim/loot';
 import { BRANCH_LV, SKILLS, MAX_SKILL, type SkillDef, type SkillKind, ULTS, ULT_LV, branchesFor, skillsOf } from '../sim/skills';
 import { STAGES, WORLDS } from '../sim/stages';
@@ -45,6 +45,7 @@ let selConsumable: ConsumableId | null = null;
 let onPlay: (stageId: string) => void = () => {};
 let flash = '';
 let useSafety = true;
+let bagMine = true;
 
 export function initCamp(play: (stageId: string) => void): void {
   onPlay = play;
@@ -73,10 +74,13 @@ const iconHtml = (it: Item | undefined, extra = '', badge = '') => it
   : `<div class="icon" ${extra}></div>`;
 /** ▲ / ▼ versus what the current hero wears. */
 function badgeFor(it: Item): string {
+  const o = ownerOf(it);
+  if (o !== undefined && o !== save.selected) return `<img class="own" src="art/kaiju-${o}.webp" title="For ${CLASSES.find(c => c.species === o)?.name}">`;
   const c = compare(save.selected, it).pct;
   if (Math.abs(c) < 0.5) return '<span class="cmp eq">=</span>';
   return c > 0 ? '<span class="cmp up">▲</span>' : '<span class="cmp dn">▼</span>';
 }
+const ownerName = (it: Item) => { const o = ownerOf(it); return o === undefined ? '' : CLASSES.find(c => c.species === o)?.name ?? ''; };
 const cIcon = (id: ConsumableId) => `art/${CONSUMABLES[id].icon}.webp`;
 
 export function stageUnlocked(s: StageDef): boolean {
@@ -225,13 +229,14 @@ function skillsPage(): string {
 
 // ---------- bag ----------
 function sortedBag(slot: Slot): Item[] {
-  return save.bag.filter(i => BASES[i.base].slot === slot).sort((a, b) => b.rarity - a.rarity || b.ilvl - a.ilvl || b.plus - a.plus || b.id - a.id);
+  return save.bag.filter(i => BASES[i.base].slot === slot && (!bagMine || canWear(i, save.selected))).sort((a, b) => b.rarity - a.rarity || b.ilvl - a.ilvl || b.plus - a.plus || b.id - a.id);
 }
 
 function bagPage(): string {
   const counts: Record<BagTab, number> = { weapon: 0, armor: 0, charm: 0, items: Object.values(save.items).reduce((a, b) => a + (b ?? 0), 0) };
   for (const it of save.bag) counts[BASES[it.base].slot]++;
   const sub = `<div class="subtabs">${(['weapon', 'armor', 'charm', 'items'] as BagTab[]).map(t => `<button class="${bagTab === t ? 'on' : ''}" data-bag="${t}">${t === 'items' ? 'Items' : SLOT_NAMES[t as Slot] + 's'} <small>${counts[t]}</small></button>`).join('')}
+    <label class="mine"><input type="checkbox" data-act="mine" ${bagMine ? 'checked' : ''}> Only ${CLASSES.find(c => c.species === save.selected)!.name}'s gear</label>
     <span style="flex:1"></span><button class="pill" data-act="best">⚡ EQUIP BEST</button><button class="pill" data-act="salvage-worse">🍪 SALVAGE WORSE</button></div>`;
   if (bagTab === 'items') return sub + itemsTab();
   const bag = sortedBag(bagTab);
@@ -256,12 +261,12 @@ function detail(it: Item, equipped: boolean): string {
   const cur = p.equip[slot];
   const fc = fortCost(it), chance = Math.round(fortChance(it.plus) * 100);
   const cmp = equipped ? null : compare(save.selected, it);
-  return `<div class="detail"><div style="display:flex;gap:1.2vmin;align-items:center">${iconHtml(it)}<div><h3 style="color:${RARITY_CSS[it.rarity]}">${esc(itemName(it))}</h3>${RARITY_NAMES[it.rarity]} ${SLOT_NAMES[slot]} · iLv ${it.ilvl} · Grade <b style="color:${GRADE_CSS[gradeOf(it)]}">${GRADES[gradeOf(it)]}</b> <small>(×${GRADE_MUL[gradeOf(it)]})</small></div></div>
+  return `<div class="detail"><div style="display:flex;gap:1.2vmin;align-items:center">${iconHtml(it)}<div><h3 style="color:${RARITY_CSS[it.rarity]}">${esc(itemName(it))}</h3>${RARITY_NAMES[it.rarity]} ${SLOT_NAMES[slot]}${ownerOf(it) !== undefined ? ` · <b class="for">For ${ownerName(it)}</b>` : ' · any kaiju'} · iLv ${it.ilvl} · Grade <b style="color:${GRADE_CSS[gradeOf(it)]}">${GRADES[gradeOf(it)]}</b> <small>(×${GRADE_MUL[gradeOf(it)]})</small></div></div>
     <div style="margin-top:1vmin">${itemLines(it).map(l => `<div class="ln">${lineText(l)}</div>`).join('')}${it.skill ? `<div class="skl">⭐ ${skillText(it)}</div>` : ''}${specialHtml(it)}</div>
-    ${cmp ? `<div class="cmpbox"><div class="${cmp.pct >= 0 ? 'up' : 'dn'}">${cmp.pct >= 0.5 ? '▲' : cmp.pct <= -0.5 ? '▼' : '='} ${cmp.pct >= 0 ? '+' : ''}${cmp.pct.toFixed(1)}% overall vs ${cur ? esc(itemName(cur)) : 'nothing'}</div>
+    ${cmp && cmp.pct !== -Infinity ? `<div class="cmpbox"><div class="${cmp.pct >= 0 ? 'up' : 'dn'}">${cmp.pct >= 0.5 ? '▲' : cmp.pct <= -0.5 ? '▼' : '='} ${cmp.pct >= 0 ? '+' : ''}${cmp.pct.toFixed(1)}% overall vs ${cur ? esc(itemName(cur)) : 'nothing'}</div>
       ${cmp.diff.map(d => `<span class="${d.v > 0 ? 'up' : 'dn'}">${d.k.replace(/^(\w+) Lv$/, (_, id) => (SKILL_NAME[id] ?? id) + ' Lv')} ${d.v > 0 ? '+' : ''}${d.v}${d.pct ? '%' : ''}</span>`).join('')}</div>` : ''}
     <div class="btns">
-      ${equipped ? `<button class="pill" data-act="unequip" data-slot="${slot}">UNEQUIP</button>` : `<button class="pill go" data-act="equip" data-id="${it.id}">EQUIP</button>`}
+      ${equipped ? `<button class="pill" data-act="unequip" data-slot="${slot}">UNEQUIP</button>` : (canWear(it, save.selected) ? `<button class="pill go" data-act="equip" data-id="${it.id}">EQUIP</button>` : `<button class="pill" disabled>ONLY ${ownerName(it).toUpperCase()}</button>`)}
       ${equipped ? '' : `<button class="pill" data-act="lock" data-id="${it.id}">${isLocked(it.id) ? '🔓 UNLOCK' : '🔒 LOCK'}</button><button class="pill" data-act="salvage" data-id="${it.id}" ${isLocked(it.id) ? 'disabled' : ''}>SALVAGE +🍪${salvageValue(it)}</button>`}
     </div>
     <div class="forge">
@@ -284,7 +289,7 @@ function marketPage(): string {
       <div class="clist">${SHOP_ITEMS.map(id => { const c = CONSUMABLES[id]; return `<div class="citem"><img src="${cIcon(id)}"><div><b>${c.name}</b> <small>(own ${save.items[id] ?? 0})</small><span>${c.desc}</span></div><button class="pill ${save.crumbs >= c.price ? 'go' : ''}" data-buy="${id}" ${save.crumbs >= c.price ? '' : 'disabled'}>🍪 ${c.price}</button></div>`; }).join('')}
       ${SHOP_BOXES.map((b, i) => `<div class="citem"><img src="art/box-${b.tier}.webp"><div><b>${TIER_NAMES[b.tier]}</b><span>Loot box (gear at your progress level)</span></div><button class="pill ${save.crumbs >= b.price ? 'go' : ''}" data-buybox="${i}" ${save.crumbs >= b.price ? '' : 'disabled'}>🍪 ${b.price}</button></div>`).join('')}</div></div>
     <div><div class="h3">Today's gear</div>
-      ${stock.length ? stock.map(it => { const c = compare(save.selected, it); const price = gearPrice(it); return `<div class="gearoffer">${iconHtml(it, '', badgeFor(it))}<div class="t"><b style="color:${RARITY_CSS[it.rarity]}">${esc(itemName(it))}</b><span>${RARITY_NAMES[it.rarity]} ${SLOT_NAMES[BASES[it.base].slot]} · iLv ${it.ilvl}</span><span class="ln">${itemLines(it).map(lineText).join(' · ')}${it.skill ? ` · ⭐ ${skillText(it)}` : ''}</span><span class="${c.pct >= 0 ? 'up' : 'dn'}">${c.pct >= 0 ? '+' : ''}${c.pct.toFixed(1)}% for ${CLASSES.find(x => x.species === save.selected)!.name}</span></div><button class="pill ${save.crumbs >= price ? 'go' : ''}" data-buygear="${it.id}" ${save.crumbs >= price ? '' : 'disabled'}>🍪 ${price}</button></div>`; }).join('') : '<div class="empty">Sold out! Come back tomorrow.</div>'}
+      ${stock.length ? stock.map(it => { const c = compare(save.selected, it); const price = gearPrice(it); return `<div class="gearoffer">${iconHtml(it, '', badgeFor(it))}<div class="t"><b style="color:${RARITY_CSS[it.rarity]}">${esc(itemName(it))}</b><span>${RARITY_NAMES[it.rarity]} ${SLOT_NAMES[BASES[it.base].slot]} · iLv ${it.ilvl}</span><span class="ln">${itemLines(it).map(lineText).join(' · ')}${it.skill ? ` · ⭐ ${skillText(it)}` : ''}</span>${c.pct === -Infinity ? `<span class="for">For ${ownerName(it)}</span>` : `<span class="${c.pct >= 0 ? 'up' : 'dn'}">${c.pct >= 0 ? '+' : ''}${c.pct.toFixed(1)}% for ${CLASSES.find(x => x.species === save.selected)!.name}</span>`}</div><button class="pill ${save.crumbs >= price ? 'go' : ''}" data-buygear="${it.id}" ${save.crumbs >= price ? '' : 'disabled'}>🍪 ${price}</button></div>`; }).join('') : '<div class="empty">Sold out! Come back tomorrow.</div>'}
     </div></div>`;
 }
 
@@ -368,6 +373,7 @@ function onClick(e: MouseEvent): void {
       case 'best': { const n = equipBest(sp); flash = n ? `Equipped ${n} better item${n > 1 ? 's' : ''}` : 'Already wearing the best gear in your bag'; break; }
       case 'scroll': if (useScroll(sp)) flash = 'Skill points refunded!'; break;
       case 'hard': save.hard = !save.hard; persist(); break;
+      case 'mine': bagMine = !bagMine; selItem = null; break;
       case 'bonus': { const r = claimBonus(); if (r) { flash = 'Daily bonus: ' + r; sfx('reveal5'); } break; }
       case 'mute': toggleMute(); break;
       case 'open-all': runGacha(save.boxes.map((_, i) => i)); return;
@@ -399,8 +405,8 @@ export function runGacha(indices: number[]): void {
       <div class="card"><div class="icon" style="--rc:${rc};background-image:url(art/${BASES[it.base].icon}.webp)"></div>
         <div class="rar">${RARITY_NAMES[it.rarity].toUpperCase()} · GRADE <span style="color:${GRADE_CSS[gradeOf(it)]}">${GRADES[gradeOf(it)]}</span></div><h3>${esc(itemName(it))}</h3>
         ${itemLines(it).map(l => `<div class="ln">${lineText(l)}</div>`).join('')}${it.skill ? `<div class="skl">⭐ ${skillText(it)}</div>` : ''}${specialHtml(it)}
-        <div class="cr">iLv ${it.ilvl} ${SLOT_NAMES[BASES[it.base].slot]} · +🍪${res.crumbs} crumbs${res.extra.length ? ' · ' + res.extra.join(' · ') : ''}</div>
-        <div class="cr" style="color:${cmp.pct >= 0 ? '#a8f0a8' : '#ff9a9a'}">${cmp.pct >= 0.5 ? '▲' : cmp.pct <= -0.5 ? '▼' : '='} ${cmp.pct >= 0 ? '+' : ''}${cmp.pct.toFixed(1)}% for ${CLASSES.find(c => c.species === save.selected)!.name}</div></div>
+        <div class="cr">${ownerOf(it) !== undefined ? `<b style="color:#ffd27a">For ${ownerName(it)}</b> · ` : ''}iLv ${it.ilvl} ${SLOT_NAMES[BASES[it.base].slot]} · +🍪${res.crumbs} crumbs${res.extra.length ? ' · ' + res.extra.join(' · ') : ''}</div>
+        ${cmp.pct === -Infinity ? '' : `<div class="cr" style="color:${cmp.pct >= 0 ? '#a8f0a8' : '#ff9a9a'}">${cmp.pct >= 0.5 ? '▲' : cmp.pct <= -0.5 ? '▼' : '='} ${cmp.pct >= 0 ? '+' : ''}${cmp.pct.toFixed(1)}% for ${CLASSES.find(c => c.species === save.selected)!.name}</div>`}</div>
       <div class="flash"></div><div class="btns"></div>`;
     const bx = g.querySelector('.bx')!;
     const shakeMs = 500 + it.rarity * 160;
@@ -412,9 +418,9 @@ export function runGacha(indices: number[]): void {
       setTimeout(() => {
         g.classList.add('burst', 'reveal');
         const btns = g.querySelector('.btns')!;
-        btns.innerHTML = `<button class="pill go" data-g="next">${left ? 'NEXT BOX ▶' : 'DONE'}</button><button class="pill" data-g="equip">EQUIP ON ${CLASSES.find(c => c.species === save.selected)!.name.toUpperCase()}</button>${left > 1 ? '<button class="pill" data-g="skip">SKIP ALL</button>' : ''}`;
+        btns.innerHTML = `<button class="pill go" data-g="next">${left ? 'NEXT BOX ▶' : 'DONE'}</button>${canWear(it, save.selected) ? `<button class="pill" data-g="equip">EQUIP ON ${CLASSES.find(c => c.species === save.selected)!.name.toUpperCase()}</button>` : ''}${left > 1 ? '<button class="pill" data-g="skip">SKIP ALL</button>' : ''}`;
         btns.querySelector('[data-g=next]')!.addEventListener('click', next);
-        btns.querySelector('[data-g=equip]')!.addEventListener('click', () => { equip(save.selected, it.id); next(); });
+        btns.querySelector('[data-g=equip]')?.addEventListener('click', () => { equip(save.selected, it.id); next(); });
         btns.querySelector('[data-g=skip]')?.addEventListener('click', () => { while (left > 0 && save.boxes.length) { left--; openBox(0); } g.className = 'kq'; tab = 'bag'; render(); });
       }, 220);
     }, shakeMs);
@@ -543,6 +549,9 @@ const CAMP_CSS = `
 .kq .quest.claimed { opacity: 0.5; }
 .kq .quest.bonus { border-color: #ffd27a88; }
 .kq .quest .pill { font-size: 2vmin; padding: 0.8vmin 1.4vmin; }
+.kq .icon .own { position: absolute; left: -0.6vmin; bottom: -0.6vmin; width: 4.6vmin; height: 4.6vmin; object-fit: contain; filter: drop-shadow(0 0 2px #000); }
+.kq .for { color: #ffd27a; }
+.kq .mine { font-size: 1.8vmin; display: flex; gap: 0.5vmin; align-items: center; color: #d8c8d8; }
 #camp .flashmsg { position: absolute; left: 50%; bottom: 3vmin; transform: translateX(-50%); background: #3a2448f0; border: 2px solid #ffd27a; border-radius: 2vmin; padding: 1vmin 2.4vmin; font-size: 2.4vmin; animation: tst 2.4s forwards; pointer-events: none; z-index: 5; }
 @keyframes tst { 0% { opacity: 0; transform: translate(-50%, 1vmin); } 10%, 80% { opacity: 1; transform: translate(-50%, 0); } 100% { opacity: 0; } }
 `;

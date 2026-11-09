@@ -140,6 +140,10 @@ const RARITY_GLOW = [0, 0, 0, 0x6ab8ff, 0xc88aff, 0xffb02e];
 /** Where each weapon icon's handle is (0..1 in the icon). All icons point their head to the top-left (~-133°). */
 const GRIP: Record<string, [number, number]> = { spoon: [0.76, 0.8], fork: [0.8, 0.82], whisk: [0.63, 0.76], pin: [0.84, 0.84], icepick: [0.82, 0.82], fish: [0.84, 0.84], spatula: [0.85, 0.86], skewer: [0.86, 0.86] };
 const ICON_ANGLE = -2.33;
+const ARMOR_SPOT: Record<string, 'chest' | 'back'> = {
+  apron: 'chest', cozy: 'chest', foil: 'chest', lid: 'back',
+  'a-gob': 'back', 'a-blue': 'chest', 'a-pizza': 'chest', 'a-moth': 'chest', 'a-squid': 'chest', 'a-crab': 'back', 'a-toast': 'back', 'a-dump': 'chest',
+};
 /** Weapon direction at rest relative to the arm: forward and a little up. */
 const HOLD_ANGLE = -0.55;
 
@@ -204,8 +208,10 @@ export class HeroView {
         }
         this.gear.push({ img, glow, outline, strong: !!glowColor, anchor, rot, swing, a: 0, v: 0 });
       };
-      if (look.armor?.base === 'lid') add(look.armor.icon, 'back', 32, [0.5, 0.5], -3.6, -0.35);
-      if (look.armor?.base === 'apron') add(look.armor.icon, 'chest', 30, [0.5, 0.2], 0.3);
+      // armor: where each piece sits (back = behind the body, chest = over the belly)
+      const spot = look.armor && ARMOR_SPOT[look.armor.base];
+      if (look.armor && spot === 'back') add(look.armor.icon, 'back', look.armor.base === 'lid' ? 32 : 40, [0.5, 0.5], -3.6, look.armor.base === 'lid' ? -0.35 : -0.15);
+      if (look.armor && spot === 'chest') add(look.armor.icon, 'chest', 30, [0.5, 0.2], 0.3);
       // fortified weapons glow: +7 blue, +10 purple, +13 gold (stronger than the rarity glow)
       const fp = look.weapon?.plus ?? 0;
       const fortGlow = fp >= 13 ? 0xffc83c : fp >= 10 ? 0xc070ff : fp >= 7 ? 0x5ab0ff : 0;

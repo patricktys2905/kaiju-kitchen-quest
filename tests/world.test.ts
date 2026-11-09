@@ -406,3 +406,26 @@ describe('art', () => {
     expect(need.filter(k => !have.has(k))).toEqual([]);
   });
 });
+
+describe('kaiju-specific gear', () => {
+  it('weapons always belong to one kaiju, every kaiju has 3 weapon tiers and an armor, charms are for everyone', async () => {
+    const { OWNERS, canWear, rollBase } = await import('../src/sim/items');
+    for (const c of CLASSES) {
+      const ws = Object.values(BASES).filter(b => b.slot === 'weapon' && b.for === c.species);
+      expect(ws.map(w => w.tier).sort(), c.name).toEqual([1, 2, 3]);
+      expect(Object.values(BASES).some(b => b.slot === 'armor' && b.for === c.species), c.name).toBe(true);
+    }
+    expect(OWNERS.length).toBe(CLASSES.length);
+    expect(Object.values(BASES).filter(b => b.slot === 'weapon').every(b => b.for !== undefined)).toBe(true);
+    expect(Object.values(BASES).filter(b => b.slot === 'charm').every(b => b.for === undefined)).toBe(true);
+    // drops: only ~1 in 3 of kaiju gear is for the hero you're playing
+    let s = 9;
+    const rand = () => { s = (s * 16807) % 2147483647; return s / 2147483647; };
+    let mine = 0, kaijuGear = 0;
+    for (let i = 0; i < 4000; i++) { const b = BASES[rollBase(20, rand, 0)]; if (b.for !== undefined) { kaijuGear++; if (b.for === 0) mine++; } }
+    expect(mine / kaijuGear).toBeGreaterThan(0.2);
+    expect(mine / kaijuGear).toBeLessThan(0.45);
+    const it = rollItem(1, 3, 5, () => 0.01, ['seed']);
+    void canWear; void it;
+  });
+});

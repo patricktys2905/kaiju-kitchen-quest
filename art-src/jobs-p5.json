@@ -1,0 +1,106 @@
+[
+ {
+  "name": "w-gob2",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-eq.png"
+  ],
+  "prompt": "Generate an image. This is an item icon from my cute 2D action RPG. I need EQUIPMENT ICONS in exactly the same art style (clean dark outlines, saturated colours, glossy cel shading). A WEAPON themed for my hero Gobzilla Jr. (a strawberry dinosaur): a THORNY VINE WHIP made of a strawberry vine with leaves and a berry tip. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT, centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "w-gob3",
+  "prompt": "Same style. A WEAPON themed for my hero Gobzilla Jr. (a strawberry dinosaur): a giant STRAWBERRY-TOPPED BATTLE CLUB with a leaf wrap grip, glowing red. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT, centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "a-gob",
+  "prompt": "Same style. ARMOR themed for my hero Gobzilla Jr. (a strawberry dinosaur): a LEAFY STRAWBERRY-TOP CAPE armor made of big green strawberry leaves, shown flat and centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "w-squid2",
+  "prompt": "Same style. A WEAPON themed for my hero Squidgeon (a blue jelly octopus): a BUBBLE WAND with soap-bubble jelly bubbles. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT, centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "w-squid3",
+  "prompt": "Same style. A WEAPON themed for my hero Squidgeon (a blue jelly octopus): an INK QUILL TRIDENT dripping blue ink, glowing. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT, centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "a-squid",
+  "prompt": "Same style. ARMOR themed for my hero Squidgeon (a blue jelly octopus): a SEAWEED WRAP armor made of wavy green seaweed with a shell clasp, shown flat and centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "w-crab2",
+  "prompt": "Same style. A WEAPON themed for my hero Crabbage (a cheese crab with a cabbage shell): a NUTCRACKER PINCER weapon made of silver nutcrackers. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT, centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "w-crab3",
+  "prompt": "Same style. A WEAPON themed for my hero Crabbage (a cheese crab with a cabbage shell): a CHEESE CLEAVER with a wedge-of-cheese blade, glowing yellow. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT, centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "a-crab",
+  "prompt": "Same style. ARMOR themed for my hero Crabbage (a cheese crab with a cabbage shell): a CABBAGE LEAF PLATE armor made of layered crisp cabbage leaves, shown flat and centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "w-moth2",
+  "prompt": "Same style. A WEAPON themed for my hero Mothball (a fluffy marshmallow moth): a CANDY FLOSS STAFF with a pink cotton-candy cloud on top. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT, centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "w-moth3",
+  "prompt": "Same style. A WEAPON themed for my hero Mothball (a fluffy marshmallow moth): a MOONLIGHT MARSHMALLOW WAND with a glowing crescent moon and toasted marshmallow, sparkling. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT, centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "a-moth",
+  "prompt": "Same style. ARMOR themed for my hero Mothball (a fluffy marshmallow moth): a SILK COCOON ROBE armor, soft lavender woven silk, shown flat and centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "w-toast2",
+  "prompt": "Generate an image. This is an item icon from my cute 2D action RPG. I need EQUIPMENT ICONS in exactly the same art style (clean dark outlines, saturated colours, glossy cel shading). A WEAPON themed for my hero Toastbat (a toast bat with toast wings): a BUTTER KNIFE DAGGER with a pat of butter on the blade. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT, centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image.",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-eq.png"
+  ]
+ },
+ {
+  "name": "w-toast3",
+  "prompt": "Same style. A WEAPON themed for my hero Toastbat (a toast bat with toast wings): a TOASTER-FORK SCYTHE made from a long bread fork with a toast-slice blade, glowing orange. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT, centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "a-toast",
+  "prompt": "Same style. ARMOR themed for my hero Toastbat (a toast bat with toast wings): a CRUST CLOAK armor made of golden bread crust, shown flat and centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "w-dump2",
+  "prompt": "Same style. A WEAPON themed for my hero Dumplord (a steamed dumpling): a pair of lacquered CHOPSTICKS as a staff weapon. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT, centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "w-dump3",
+  "prompt": "Same style. A WEAPON themed for my hero Dumplord (a steamed dumpling): a giant RICE PADDLE war-club glowing with steam. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT, centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "a-dump",
+  "prompt": "Same style. ARMOR themed for my hero Dumplord (a steamed dumpling): a BAMBOO STEAMER ARMOR chestplate made from a woven bamboo steamer basket, shown flat and centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "w-blue2",
+  "prompt": "Same style. A WEAPON themed for my hero Bluebeary (a blueberry muffin bear): a HONEY DIPPER MACE dripping golden honey. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT, centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "w-blue3",
+  "prompt": "Same style. A WEAPON themed for my hero Bluebeary (a blueberry muffin bear): a giant BLUEBERRY HAMMER with a frosted muffin head, glowing blue. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT, centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "a-blue",
+  "prompt": "Same style. ARMOR themed for my hero Bluebeary (a blueberry muffin bear): a MUFFIN TIN ARMOR chestplate made from a baking tin with blueberry studs, shown flat and centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "w-pizza2",
+  "prompt": "Same style. A WEAPON themed for my hero Pizzaraptor (a pizza dinosaur): a PIZZA CUTTER WHEEL BLADE on a long handle. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT, centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "w-pizza3",
+  "prompt": "Same style. A WEAPON themed for my hero Pizzaraptor (a pizza dinosaur): a pair of CHEESE GRATER CLAWS as a weapon, glowing orange. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT, centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "a-pizza",
+  "prompt": "Same style. ARMOR themed for my hero Pizzaraptor (a pizza dinosaur): a PIZZA BOX ARMOR chestplate made of folded cardboard pizza box with a pepperoni emblem, shown flat and centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ }
+]
