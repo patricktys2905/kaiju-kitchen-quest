@@ -1,0 +1,20 @@
+[
+  {
+    "name": "parts-11",
+    "newChat": true,
+    "refs": ["art-src/ref-kaiju-11.png"],
+    "prompt": "Generate an image. This is a character from my 2D game. I need it as a CUTOUT PUPPET PARTS SHEET so I can animate it: draw the exact same character, same colours, same outlines and shading style, facing right in side view, but split into SEPARATE body parts laid out apart from each other with big empty gaps between them (no part touching another): 1) the BODY with the head, jaws and the pizza-slice shell on its back, but WITHOUT arms, legs or tail, 2) one small clawed ARM, 3) a second small clawed ARM, 4) one strong raptor LEG with clawed foot, 5) a second LEG, 6) the long crust TAIL. Draw the joint ends of each limb rounded and complete (no cut stumps). Solid flat magenta (#FF00FF) background, no shadows, no labels, no text, no numbers. Square 1:1 image."
+  },
+  {
+    "name": "parts-10",
+    "newChat": true,
+    "refs": ["art-src/ref-kaiju-10.png"],
+    "prompt": "Generate an image. This is a character from my 2D game. I need it as a CUTOUT PUPPET PARTS SHEET so I can animate it: draw the exact same character (a blueberry muffin bear), same colours, outlines and shading style, facing right in a three-quarter side view, but split into SEPARATE parts laid out apart from each other with big empty gaps between them (no part touching another): 1) the BODY: the bear head, ears, face and frosted muffin top sitting in its paper muffin cup, but WITHOUT arms, 2) one round stubby bear ARM with a paw, 3) a second ARM with a paw, 4) one small round bear FOOT, 5) a second FOOT. Draw the joint ends of each limb rounded and complete (no cut stumps). Solid flat magenta (#FF00FF) background, no shadows, no labels, no text, no numbers. Square 1:1 image."
+  },
+  {
+    "name": "parts-4",
+    "newChat": true,
+    "refs": ["art-src/ref-kaiju-4.png"],
+    "prompt": "Generate an image. This is a character from my 2D game. I need it as a CUTOUT PUPPET PARTS SHEET so I can animate it: draw the exact same character (a fluffy marshmallow moth), same colours, outlines and shading style, facing right in a three-quarter side view, but split into SEPARATE parts laid out apart from each other with big empty gaps between them (no part touching another): 1) the BODY with the head, face, fluffy collar and feathery antennae, but WITHOUT wings, arms or legs, 2) the near WING (both wing lobes of one side as one piece), 3) the far WING, 4) one small fluffy ARM, 5) one small fluffy LEG, 6) a second small LEG. Draw the joint ends of each piece rounded and complete (no cut stumps). Solid flat magenta (#FF00FF) background, no shadows, no labels, no text, no numbers. Square 1:1 image."
+  }
+]

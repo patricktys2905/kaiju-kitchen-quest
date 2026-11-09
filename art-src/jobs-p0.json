@@ -1,0 +1,46 @@
+[
+  {
+    "name": "parts-0",
+    "newChat": true,
+    "refs": ["art-src/ref-kaiju-0.png"],
+    "prompt": "Generate an image. This is a character from my 2D game. I need it as a CUTOUT PUPPET PARTS SHEET so I can animate it: draw the exact same character, same colours, same outlines and shading style, facing right in side view, but split into SEPARATE body parts laid out apart from each other with big empty gaps between them (no part touching another): 1) the BODY with the head, face and leaf crown, but WITHOUT arms, legs or tail, 2) the near ARM (one small stubby arm), 3) the far ARM, 4) the near LEG (one stubby leg with foot), 5) the far LEG, 6) the TAIL with its leafy tip. Draw the joint ends of each limb rounded and complete (no cut stumps). Solid flat magenta (#FF00FF) background, no shadows, no labels, no text, no numbers. Square 1:1 image."
+  },
+  {
+    "name": "bg-far",
+    "newChat": true,
+    "refs": ["art-src/ref-kaiju-0.png"],
+    "prompt": "Generate an image. This is a character from my cute 2D side-scrolling action RPG where tiny food monsters adventure through a giant kitchen. I need the FAR BACKGROUND for the first area, 'Countertop Meadow', in a bright, cheerful, painted fantasy MMORPG side-scroller style: soft painterly shading, rich saturated colours, dreamy depth. Straight-on side view looking across a GIANT kitchen as if it were a landscape: a huge sunny window with blue sky and fluffy clouds in the distance, giant jars and bottles like distant towers, hanging copper pans like hills, soft warm light and haze. The bottom quarter should be calm and darker (it will be hidden by the ground). No characters, no text, no UI. Wide 16:9 landscape image."
+  },
+  {
+    "name": "bg-mid",
+    "prompt": "Now the MIDDLE PARALLAX LAYER in the exact same style and colours: a row of giant kitchen objects standing along the bottom of the image, seen from the side: a big toaster, a stack of cookbooks, a tall pepper mill, a glass jar of cookies, a tipped-over teacup, a potted herb plant, with gaps between them. They fill only the bottom 60 percent. Everything else (the whole sky area and the gaps) must be solid flat magenta (#FF00FF). No shadows on the magenta, no characters, no text. Wide 16:9 landscape image."
+  },
+  {
+    "name": "tile-ground",
+    "prompt": "Now a GROUND TILE in the same style for the walkable floor of the side-scroller: straight-on side view of a thick slab of a wooden butcher-block kitchen counter: a light top surface edge with a soft highlight along the top, then the warm wood front face with end-grain blocks below, getting darker towards the bottom. It must tile SEAMLESSLY left-to-right. Fill the whole square, no background, no objects, no text. Square 1:1 image."
+  },
+  {
+    "name": "plat-board",
+    "prompt": "Now a FLOATING PLATFORM sprite in the same style: a wooden cutting board seen exactly from the side as a long horizontal platform you can stand on (flat top, rounded ends, a little handle hole at one end, a few crumbs on top), about 5 times wider than tall, floating, centred. Solid flat magenta (#FF00FF) background, no shadow, no text. Wide 16:9 image."
+  },
+  {
+    "name": "ob-ladder",
+    "prompt": "Now a CLIMBABLE LADDER sprite in the same style: a tall vertical ladder made of two long wooden chopsticks as the rails, tied with rungs of thick noodles, seen straight-on, centred and filling the height of the image. Solid flat magenta (#FF00FF) background, no shadow, no text. Tall 9:16 portrait image."
+  },
+  {
+    "name": "mob-bun",
+    "newChat": true,
+    "refs": ["art-src/ref-kaiju-0.png"],
+    "prompt": "Generate an image. This is a hero from my cute 2D side-scrolling action RPG. I need the first, weakest ENEMY in exactly the same art style (clean dark outlines, saturated colours, glossy cel shading): a grumpy little stale bread bun gremlin with fuzzy green-blue mould patches, tiny stubby legs, small angry eyes, a crumbly crust. Side view facing LEFT, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1 image."
+  },
+  {
+    "name": "box-1",
+    "newChat": true,
+    "refs": ["art-src/ref-kaiju-0.png"],
+    "prompt": "Generate an image. This is a hero from my cute 2D action RPG. I need LOOT BOX icons in exactly the same art style (clean dark outlines, saturated colours, glossy cel shading), seen from a slight 3/4 front angle, centred, filling 80% of the frame, on a solid flat magenta (#FF00FF) background, no shadow, no text. Tier 1 (common): a crumpled brown PAPER LUNCH BAG folded shut. Square 1:1 image."
+  },
+  { "name": "box-2", "prompt": "Same style and framing, tier 2 (uncommon): a green plastic LUNCHBOX with a white handle and latch, a little shine. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1." },
+  { "name": "box-3", "prompt": "Same style and framing, tier 3 (rare): a fancy lacquered BLUE and red BENTO BOX tied with a silk ribbon, small sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1." },
+  { "name": "box-4", "prompt": "Same style and framing, tier 4 (epic): a shining GOLDEN CLOCHE (silver-service dome on a plate) with a glowing light leaking from under the rim and sparkles. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1." },
+  { "name": "box-5", "prompt": "Same style and framing, tier 5 (legendary): a magical RAINBOW CAKE BOX: a cake box with rainbow stripes, a big glowing star bow on top, radiant light and sparkles bursting out. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1." }
+]
