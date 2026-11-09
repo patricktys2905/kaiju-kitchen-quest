@@ -1,19 +1,21 @@
 // The playable stage: parallax kitchen, platforms + ladders, the rigged hero, monsters (with level plates),
 // the boss, loot boxes, skill effects, the exit. Started from the camp; reports results back to the save.
 import * as Phaser from 'phaser';
+import { playMusic, sfx, toggleMute } from '../audio';
 import { initHud, showHud, showPause, toast, updateHud } from '../hud';
 import { readInput, takeTaps } from '../input';
 import { TIER_COLORS, TIER_NAMES } from '../sim/loot';
-import { MOBS } from '../sim/mobs';
+import { CONSUMABLES } from '../sim/consumables';
+import { ELITE, MOBS } from '../sim/mobs';
 import { skillsOf, skillScale } from '../sim/skills';
-import { STAGES, stageById } from '../sim/stages';
+import { STAGES, stageById, worldOf } from '../sim/stages';
 import { derive } from '../sim/stats';
 import type { SimEvent, StageDef } from '../sim/types';
-import { DT, type Mob, World, rankOf } from '../sim/world';
+import { DT, HARD_LV, type Mob, World, rankOf } from '../sim/world';
 import { type GearLook, HeroView } from '../render/rig';
 import { BASES } from '../sim/items';
 import type { HeroProfile } from '../sim/stats';
-import { addXp, finishStage, hero, save } from '../save';
+import { addXp, finishStage, hero, quickBag, save, syncQuickBag } from '../save';
 import { setSkillUi, setTouchVisible } from '../touch';
 import { hideCamp, runGacha, showCamp, showResult, stageUnlocked } from '../ui/camp';
 
@@ -50,7 +52,7 @@ export class GameScene extends Phaser.Scene {
   private mid?: Phaser.GameObjects.TileSprite;
   private mobViews = new Map<number, MobView>();
   private boxImgs = new Map<number, { img: Phaser.GameObjects.Image; glow: Phaser.GameObjects.Arc }>();
-  private shotImgs = new Map<number, Phaser.GameObjects.Arc>();
+  private shotImgs = new Map<number, Phaser.GameObjects.Shape>();
   private mineImgs = new Map<number, Phaser.GameObjects.Arc>();
   private heroShadow!: Phaser.GameObjects.Ellipse;
   private aura!: Phaser.GameObjects.Ellipse;
@@ -61,6 +63,9 @@ export class GameScene extends Phaser.Scene {
   private xpGained = 0;
   private levels = 0;
   private done = false;
+  private hard = false;
+  /** Hard mode is open for a world once its boss is beaten. */
+  private hardOk(): boolean { return !!save.cleared[`${this.stage.world}-10`]; }
 
   constructor() { super('game'); }
 
@@ -94,6 +99,7 @@ export class GameScene extends Phaser.Scene {
       setTouchVisible(false); showHud(false);
       this.cameras.main.setBackgroundColor('#1a1020');
       showCamp();
+      playMusic('camp');
       return;
     }
     hideCamp();
@@ -103,14 +109,16 @@ export class GameScene extends Phaser.Scene {
 
   private buildStage(): void {
     const st = this.stage, p = hero();
-    this.world = new World(st, derive(p), (Date.now() & 0xffff) + 1);
+    this.hard = save.hard && this.hardOk();
+    this.world = new World(st, derive(p), (Date.now() & 0xffff) + 1, quickBag(), save.items.revive ?? 0, this.hard);
     const cam = this.cameras.main.setZoom(ZOOM).setBackgroundColor('#f6dcb4');
     const bg = this.has(st.bg) ? st.bg : 'bg-far';
     this.far = this.has(bg) ? this.add.image(SX, SY, bg).setOrigin(0, 0).setScrollFactor(0).setDepth(-100) : undefined;
     this.mid = undefined;
-    if (this.has('bg-mid') && !st.boss) this.mid = this.add.tileSprite(SX, SY + VH, VW, 1080 * MID, 'bg-mid').setOrigin(0, 1).setScrollFactor(0).setDepth(-90).setTileScale(MID, MID).setTint(0xe8dcd8);
+    if (st.mid && this.has(st.mid)) this.mid = this.add.tileSprite(SX, SY + VH, VW, 1080 * MID, st.mid).setOrigin(0, 1).setScrollFactor(0).setDepth(-90).setTileScale(MID, MID).setTint(0xe8dcd8);
     const gh = 200;
-    if (this.has('tile-ground')) this.add.tileSprite(0, st.groundY - 8, st.width, gh, 'tile-ground').setOrigin(0, 0).setTileScale(0.24, 0.24).setDepth(-10).setTint(st.boss ? 0x9a8078 : 0xffffff);
+    const tile = this.has(st.tile) ? st.tile : 'tile-ground';
+    if (this.has(tile)) this.add.tileSprite(0, st.groundY - 8, st.width, gh, tile).setOrigin(0, 0).setTileScale(0.24, 0.24).setDepth(-10).setTint(st.boss && tile === 'tile-ground' ? 0x9a8078 : 0xffffff);
     else this.add.rectangle(0, st.groundY, st.width, gh, 0x9a6a3a).setOrigin(0, 0);
     this.add.rectangle(0, st.groundY - 8, st.width, 4, 0x000000, 0.12).setOrigin(0, 0).setDepth(-9);
     for (const l of st.ladders) {
@@ -118,7 +126,7 @@ export class GameScene extends Phaser.Scene {
     }
     for (const pl of st.platforms) {
       this.add.ellipse(pl.x + pl.w / 2, st.groundY - 4, pl.w * 0.8, 10, 0x000000, 0.1).setDepth(-9);
-      if (this.has('plat-board')) this.add.image(pl.x + pl.w / 2, pl.y - 6, 'plat-board').setOrigin(0.5, 0.08).setDisplaySize(pl.w + 28, 38).setDepth(-5);
+      if (this.has('plat-board')) this.add.image(pl.x + pl.w / 2, pl.y - 6, 'plat-board').setOrigin(0.5, 0.08).setDisplaySize(pl.w + 28, 38).setDepth(-5).setTint(st.platTint);
     }
     // exit: a glowing golden plate that appears once the stage is cleared
     const w = this.world;
@@ -135,8 +143,10 @@ export class GameScene extends Phaser.Scene {
     this.cx = w.hero.x; this.cy = st.groundY - 100;
     cam.centerOn(this.cx, this.cy);
     setTouchVisible(true); showHud(true);
-    toast(`${st.num} ${st.name}`, { big: true });
-    if (st.boss) this.time.delayedCall(1200, () => toast('The Burnt Toast King awaits!', { color: '#ff9a6a' }));
+    playMusic(st.boss ? 'boss' : st.world === 2 ? 'world2' : 'world1');
+    if (st.boss) this.time.delayedCall(900, () => sfx('boss'));
+    toast(`${st.num} ${st.name}${this.hard ? ' · HARD' : ''}`, { big: true, color: this.hard ? '#ff7a6a' : undefined });
+    if (st.boss) this.time.delayedCall(1200, () => toast(`The ${MOBS[st.mobs[0].kind].name} awaits!`, { color: '#ff9a6a' }));
   }
 
   /** Debug/screenshot helper: freeze the hero in a state at time t. */
@@ -160,7 +170,10 @@ export class GameScene extends Phaser.Scene {
   private leave(): void { showPause(false); this.scene.restart({}); }
 
   update(_time: number, deltaMs: number): void {
-    for (const k of takeTaps()) if (k === 'Escape' && this.world && !this.done) this.pause(!this.paused);
+    for (const k of takeTaps()) {
+      if (k === 'Escape' && this.world && !this.done) this.pause(!this.paused);
+      if (k === 'KeyM') toast(toggleMute() ? 'Sound off' : 'Sound on');
+    }
     const w = this.world;
     if (!w || this.paused) return;
     const dt = Math.min(0.05, deltaMs / 1000);
@@ -186,6 +199,7 @@ export class GameScene extends Phaser.Scene {
           }).setOrigin(0.5).setDepth(30).setResolution(3);
           this.tweens.add({ targets: txt, y: e.y - 46, duration: 700, ease: 'Cubic.easeOut' });
           this.tweens.add({ targets: txt, alpha: 0, delay: 450, duration: 300, onComplete: () => txt.destroy() });
+          sfx(e.target === 'hero' ? 'hurt' : e.crit ? 'crit' : 'hit');
           if (e.target === 'mob') {
             this.burst(e.x, e.y, e.crit ? 0xffd23c : 0xffffff, e.crit ? 10 : 6);
             this.hitStop = Math.max(this.hitStop, e.crit ? 0.06 : 0.035);
@@ -193,11 +207,13 @@ export class GameScene extends Phaser.Scene {
           } else this.shake = 6;
           break;
         }
-        case 'swing': this.slash(e.step); break;
-        case 'skill': this.skillFx(e.kind); break;
-        case 'shock': this.ring(e.x, e.y, e.r, 0xffe0a0); this.shake = Math.max(this.shake, 7); break;
-        case 'boom': this.burst(e.x, e.y - 10, 0x4a6cff, 14); this.ring(e.x, e.y, 70, 0x7a9aff); break;
+        case 'swing': this.slash(e.step); sfx('swing'); break;
+        case 'jump': sfx('jump'); break;
+        case 'skill': this.skillFx(e.kind); sfx(e.kind === 'heal' ? 'heal' : 'skill'); break;
+        case 'shock': sfx('boom'); this.ring(e.x, e.y, e.r, 0xffe0a0); this.shake = Math.max(this.shake, 7); break;
+        case 'boom': sfx('boom'); this.burst(e.x, e.y - 10, 0x4a6cff, 14); this.ring(e.x, e.y, 70, 0x7a9aff); break;
         case 'mobDie':
+          sfx('kill');
           this.burst(e.x, e.y - 24, e.boss ? 0xffb347 : 0xc8f0a0, e.boss ? 40 : 14);
           if (e.boss) { this.shake = 14; this.hitStop = 0.4; toast('THE TOAST KING FALLS!', { big: true, color: '#ffb347' }); }
           break;
@@ -205,6 +221,7 @@ export class GameScene extends Phaser.Scene {
           this.xpGained += e.n;
           const ups = addXp(hero().species, e.n);
           if (ups) {
+            sfx('levelup');
             this.levels += ups;
             w.setDerived(derive(hero()));
             w.hero.hp = w.hero.d.maxHp;
@@ -214,10 +231,32 @@ export class GameScene extends Phaser.Scene {
           }
           break;
         }
-        case 'drop': toast(`${TIER_NAMES[e.tier]} dropped!`, { tier: e.tier }); break;
+        case 'pickup': sfx('pickup'); break;
+        case 'drop': sfx('drop'); toast(`${TIER_NAMES[e.tier]} dropped!`, { tier: e.tier }); break;
         case 'summon': toast('The King calls for help!', { color: '#ff9a6a' }); break;
-        case 'stagger': toast('STAGGERED!', { color: '#ffe27a' }); this.shake = 8; break;
-        case 'portal': this.exit.setVisible(true); toast('All clear! Head to the EXIT ➜', { color: '#a8f0a8' }); break;
+        case 'stagger': sfx('stagger'); toast('STAGGERED!', { color: '#ffe27a' }); this.shake = 8; break;
+        case 'dodge': {
+          sfx('dodge');
+          const h = w.hero;
+          for (let i = 0; i < 4; i++) this.time.delayedCall(i * 50, () => { const g = this.add.ellipse(h.x, h.y - 40, 60, 70, 0xffffff, 0.3).setDepth(4); this.tweens.add({ targets: g, alpha: 0, scaleX: 1.3, duration: 220, onComplete: () => g.destroy() }); });
+          break;
+        }
+        case 'use': {
+          const def = CONSUMABLES[e.id];
+          sfx('potion');
+          toast(def.name, { color: def.heal ? '#ff8a9a' : '#ffd27a' });
+          this.burst(w.hero.x, w.hero.y - 40, def.heal ? 0xff6a8a : 0xffd27a, 14);
+          this.ring(w.hero.x, w.hero.y - 30, 50, def.heal ? 0xff8aa0 : 0xffe27a);
+          break;
+        }
+        case 'revive': sfx('levelup'); toast('SECOND HELPING! Revived!', { big: true, color: '#ffe27a' }); this.burst(w.hero.x, w.hero.y - 40, 0xffe27a, 30); this.ring(w.hero.x, w.hero.y - 30, 90, 0xffe27a); break;
+        case 'crumbs': {
+          sfx('coin');
+          const t = this.add.text(e.x, e.y - 10, '+' + e.n + ' 🍪', { fontFamily: 'Nunito', fontStyle: '900', fontSize: '11px', color: '#ffe27a', stroke: '#3a2008', strokeThickness: 3 }).setOrigin(0.5).setDepth(29).setResolution(3);
+          this.tweens.add({ targets: t, y: e.y - 40, alpha: 0, duration: 900, delay: 200, onComplete: () => t.destroy() });
+          break;
+        }
+        case 'portal': sfx('portal'); this.exit.setVisible(true); toast('All clear! Head to the EXIT ➜', { color: '#a8f0a8' }); break;
         case 'clear': this.finish(false); break;
         case 'down': this.finish(true); break;
       }
@@ -229,9 +268,13 @@ export class GameScene extends Phaser.Scene {
     this.done = true;
     const w = this.world!, st = this.stage;
     setTouchVisible(false);
-    const res = failed ? null : finishStage(st.id, rankOf(w.run, st.par).rank, w.loot, st.lv[1], !!st.boss);
+    sfx(failed ? 'fail' : 'clear');
+    playMusic(null);
+    syncQuickBag(w.hero.bag, w.hero.revives);
+    save.crumbs += w.run.crumbs;
+    const res = failed ? null : finishStage(st.id, rankOf(w.run, st.par).rank, w.loot, st.lv[1] + (this.hard ? HARD_LV : 0), !!st.boss, this.hard);
     this.time.delayedCall(failed ? 600 : 300, () => showResult(
-      { stage: st, res, time: w.run.time, hits: w.run.hitsTaken, combo: w.run.maxCombo, xp: this.xpGained, levels: this.levels, failed },
+      { stage: st, res, time: w.run.time, hits: w.run.hitsTaken, combo: w.run.maxCombo, xp: this.xpGained, levels: this.levels, failed, crumbs: w.run.crumbs, hard: this.hard },
       a => {
         if (a === 'retry') this.scene.restart({ stage: st.id });
         else if (a === 'next') { const n = STAGES[STAGES.indexOf(st) + 1]; this.scene.restart(n && stageUnlocked(n) ? { stage: n.id } : {}); }
@@ -380,7 +423,8 @@ export class GameScene extends Phaser.Scene {
       if (!c) {
         c = s.from === 'hero'
           ? this.add.circle(0, 0, 9, 0xe8c8ff).setStrokeStyle(3, 0xffffff).setBlendMode(Phaser.BlendModes.ADD)
-          : this.add.circle(0, 0, 7, 0x2a2020).setStrokeStyle(2, 0x8a7060);
+          : s.kind === 'icicle' ? this.add.ellipse(0, 0, 10, 26, 0xc8f0ff).setStrokeStyle(2, 0x6ab8ff)
+          : this.add.circle(0, 0, 7, worldOf(this.stage).id === 2 ? 0x6ac86a : 0x2a2020).setStrokeStyle(2, 0x8a7060);
         c.setDepth(8); this.shotImgs.set(s.id, c);
       }
       c.setPosition(s.x, s.y).setScale(1 + Math.sin(t * 30) * 0.12);
@@ -410,16 +454,18 @@ export class GameScene extends Phaser.Scene {
     let v = this.mobViews.get(m.id);
     if (!v) {
       const img = this.add.image(0, 0, this.has(def.art) ? def.art : '__WHITE').setOrigin(0.5, 0.96).setDepth(def.brain === 'boss' ? 4 : 3);
-      const plate = this.add.text(0, 0, `Lv${m.lv} ${def.name}`, { fontFamily: 'Nunito', fontStyle: '900', fontSize: '10px', color: '#ffffff', backgroundColor: '#1a1020b0', padding: { x: 4, y: 1 } })
+      const plate = this.add.text(0, 0, `Lv${m.lv} ${m.elite ? 'Elite ' : ''}${def.name}`, { fontFamily: 'Nunito', fontStyle: '900', fontSize: '10px', color: '#ffffff', backgroundColor: '#1a1020b0', padding: { x: 4, y: 1 } })
         .setOrigin(0.5, 0).setDepth(9).setResolution(3);
       const barBg = this.add.rectangle(0, 0, 40, 5, 0x000000, 0.6).setDepth(9);
       const bar = this.add.rectangle(0, 0, 40, 5, 0xff4a5a).setOrigin(0, 0.5).setDepth(9);
       const shadow = this.add.ellipse(0, 0, def.w * 1.1, 10, 0x000000, 0.2).setDepth(1);
-      v = { img, plate, bar, barBg, shadow, s: (def.h + (def.brain === 'boss' ? 20 : 12)) / img.height };
+      v = { img, plate, bar, barBg, shadow, s: (def.h + (def.brain === 'boss' ? 20 : 12)) / img.height * (m.elite ? ELITE.scale : 1) };
+      if (m.elite) plate.setColor('#ffb347');
       if (def.brain === 'boss') plate.setVisible(false);
       this.mobViews.set(m.id, v);
     }
-    const wob = m.state === 'walk' && Math.abs(m.vx) > 5 ? Math.sin(t * 14 + m.id) : 0;
+    const flyer = def.brain === 'flyer';
+    const wob = flyer ? Math.sin(t * 22 + m.id) * 0.6 : m.state === 'walk' && Math.abs(m.vx) > 5 ? Math.sin(t * 14 + m.id) : 0;
     let sx = 1 + wob * 0.04, sy = 1 - wob * 0.05, rot = wob * 0.05;
     if (m.state === 'windup') { const k = Math.min(1, m.t / 0.4); sx = 1 + 0.12 * k; sy = 1 - 0.12 * k; rot = -0.12 * m.face * k; }
     if (m.state === 'attack') { sx = 0.92; sy = 1.1; rot = 0.16 * m.face; if (m.move === 'charge') rot = 0.25 * m.face; }
@@ -432,10 +478,11 @@ export class GameScene extends Phaser.Scene {
     else if (m.state === 'windup' && Math.floor(t * 12) % 2 === 0) v.img.setTint(0xff7070).setTintMode(Phaser.TintModes.MULTIPLY);
     else if (m.state === 'stagger') v.img.setTint(0xfff0a0).setTintMode(Phaser.TintModes.MULTIPLY);
     else v.img.clearTint().setTintMode(Phaser.TintModes.MULTIPLY);
-    const top = m.y - def.h - 18;
+    const top = m.y - def.h * (m.elite ? ELITE.scale : 1) - 18;
     const fl = this.world!.floorBelow(m.x, m.y, m.y + 2000, false);
     v.shadow.setPosition(m.x, (fl ? fl.y : m.y) - 1).setAlpha(m.state === 'dead' ? 0 : 1);
-    v.plate.setPosition(m.x, m.y + 4).setAlpha(m.state === 'dead' ? 0 : 0.9);
+    v.plate.setPosition(m.x, flyer ? m.y + 6 : m.y + 4).setAlpha(m.state === 'dead' ? 0 : 0.9);
+    if (flyer) v.shadow.setScale(Math.max(0.3, 1 - ((fl ? fl.y : m.y) - m.y) / 200));
     const showBar = m.hurtShown > 0 && m.state !== 'dead' && def.brain !== 'boss';
     v.barBg.setVisible(showBar).setPosition(m.x, top);
     v.bar.setVisible(showBar).setPosition(m.x - 20, top).setScale(Math.max(0, m.hp / m.maxHp), 1);

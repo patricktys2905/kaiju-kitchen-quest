@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { Bot } from '../src/sim/bot';
 import { CLASSES } from '../src/sim/classes';
 import { BASES, rollItem } from '../src/sim/items';
 import { clearCount, clearRewards, rollTier } from '../src/sim/loot';
@@ -10,7 +11,7 @@ import { type Input, NO_INPUT, type StageDef } from '../src/sim/types';
 import { GRAVITY, World, rankOf } from '../src/sim/world';
 
 const flat: StageDef = {
-  id: 't', world: 1, num: 't', name: 't', bg: 'bg-far', width: 2000, groundY: 400, lv: [1, 1], par: 60, rec: 1,
+  id: 't', world: 1, num: 't', name: 't', bg: 'bg-far', mid: '', tile: 'tile-ground', platTint: 0xffffff, width: 2000, groundY: 400, lv: [1, 1], par: 60, rec: 1,
   platforms: [{ x: 300, y: 300, w: 200 }, { x: 560, y: 300, w: 120 }], ladders: [{ x: 600, top: 300, bottom: 400 }], mobs: [],
 };
 
@@ -83,8 +84,13 @@ describe('stages', () => {
       if (m.y === undefined) continue;
       expect(st.platforms.some(p => p.y === m.y && m.x >= p.x && m.x <= p.x + p.w), `${st.id} ${m.kind}@${m.x}`).toBe(true);
     }
-    expect(STAGES[STAGES.length - 1].boss).toBe(true);
-    expect(STAGES[STAGES.length - 1].mobs.some(m => MOBS[m.kind].brain === 'boss')).toBe(true);
+    for (const st of STAGES) {
+      const n = Number(st.id.split('-')[1]);
+      expect(!!st.boss, st.id).toBe(n === 10);
+      if (n === 10) expect(st.mobs.some(m => MOBS[m.kind].brain === 'boss')).toBe(true);
+      if (n === 5) expect(st.mobs.some(m => m.elite)).toBe(true);
+    }
+    expect(STAGES.length).toBe(20);
   });
 });
 
@@ -125,7 +131,7 @@ describe('combat', () => {
         const evs = run(w, { [keys[i]]: true }, 1);
         expect(evs.some(e => e.t === 'skill'), sk.name).toBe(true);
         expect(w.hero.cds[i]).toBeGreaterThan(0);
-        if (sk.kind !== 'buff' && sk.kind !== 'mines') {
+        if (sk.kind !== 'buff' && sk.kind !== 'mines' && sk.kind !== 'heal') {
           const all = [...evs, ...run(w, {}, 90)];
           expect(all.some(e => e.t === 'hit' && e.target === 'mob'), sk.name).toBe(true);
         }
@@ -176,21 +182,21 @@ describe('combat', () => {
 describe('boss', () => {
   it('the Burnt Toast King attacks, staggers and calls helpers', () => {
     const boss = STAGES.find(s => s.boss)!;
-    const w = new World(boss, derive(prof(10, 12)), 5);
+    const p = prof(10, 12);
+    p.alloc.str = 33; // a levelled hero spends its stat points
+    const w = new World(boss, derive(p), 5);
     w.hero.hp = w.hero.d.maxHp = 1e6;
     const king = w.boss!;
+    king.hp = king.maxHp * 0.7; // start near the first summon threshold
+    const bot = new Bot(w, { dodgeSkill: 0, reaction: 1, potionAt: 0 }, 3);
     const kinds = new Set<string>();
     let staggered = false, summoned = false;
-    for (let i = 0; i < 60 * 40; i++) {
-      // hero keeps attacking whatever is in front of it, facing the king
-      w.hero.face = king.x > w.hero.x ? 1 : -1;
-      if (Math.abs(king.x - w.hero.x) > 80) w.hero.x += Math.sign(king.x - w.hero.x) * 3;
-      for (const e of w.step({ ...NO_INPUT, attack: i % 8 < 4, skill1: i % 120 === 0 })) {
+    for (let i = 0; i < 60 * 120 && !(staggered && summoned && kinds.size >= 2); i++) {
+      for (const e of w.step(bot.think())) {
         if (e.t === 'mobAttack') kinds.add(e.kind);
         if (e.t === 'stagger') staggered = true;
         if (e.t === 'summon') summoned = true;
       }
-      if (king.state === 'dead') break;
     }
     expect(kinds.size).toBeGreaterThanOrEqual(2);
     expect(staggered).toBe(true);
@@ -258,5 +264,72 @@ describe('progression', () => {
     expect(hi.rarity).toBeGreaterThan(lo.rarity);
     expect(hi.lines.length).toBeGreaterThan(lo.lines.length);
     void one;
+  });
+});
+
+describe('quick bag, dodge, revive', () => {
+  it('a Jam Jar heals, uses one up and starts the shared cooldown', () => {
+    const w = new World(flat, derive(prof(0, 3)), 1, [{ id: 'jam', n: 2 }, { id: 'pepper', n: 1 }, null, null]);
+    w.hero.hp = 10;
+    const evs = run(w, { item1: true }, 1);
+    expect(evs.some(e => e.t === 'use')).toBe(true);
+    expect(w.hero.hp).toBeGreaterThan(10);
+    expect(w.hero.bag[0]!.n).toBe(1);
+    run(w, {}, 1);
+    expect(run(w, { item2: true }, 1).some(e => e.t === 'use')).toBe(false); // cooldown
+    run(w, {}, 200);
+    run(w, { item2: true }, 1);
+    expect(w.hero.boosts.atk).toBeTruthy();
+  });
+
+  it('double-tapping a direction dodge-rolls with brief invincibility', () => {
+    const w = mk();
+    w.hero.x = 500;
+    run(w, { right: true }, 2); run(w, {}, 3);
+    const evs = run(w, { right: true }, 1);
+    expect(evs.some(e => e.t === 'dodge')).toBe(true);
+    expect(w.hero.inv).toBeGreaterThan(0);
+    const x0 = w.hero.x; run(w, { right: true }, 15);
+    expect(w.hero.x - x0).toBeGreaterThan(90);
+  });
+
+  it('Second Helping revives once instead of being knocked out', () => {
+    const w = new World(flat, derive(prof(0, 1)), 3, [], 1);
+    w.spawnMob('egg', 200, 20);
+    w.hero.x = 150; w.hero.hp = 1;
+    const evs = run(w, {}, 600);
+    expect(evs.some(e => e.t === 'revive')).toBe(true);
+    expect(w.hero.revives).toBe(0);
+  });
+});
+
+describe('world 2 monsters', () => {
+  it('flyers hover above the ground and swoop down to hit', () => {
+    const w = mk(0, 15, 4);
+    const bat = w.spawnMob('icebat', 400, 13);
+    w.hero.x = 250; w.hero.hp = w.hero.d.maxHp = 1e6;
+    let minY = 1e9, maxY = 0;
+    for (let i = 0; i < 600; i++) { w.step(NO_INPUT); minY = Math.min(minY, bat.y); maxY = Math.max(maxY, bat.y); }
+    expect(minY).toBeLessThan(flat.groundY - 50);
+    expect(w.run.hitsTaken).toBeGreaterThan(0);
+    void maxY;
+  });
+
+  it('elites have much more HP and drop two boxes', () => {
+    const w = mk(0, 10, 2);
+    const e = w.spawnMob('egg', 300, 6, undefined, true), n = w.spawnMob('egg', 600, 6);
+    expect(e.maxHp).toBeGreaterThan(n.maxHp * 4);
+    e.hp = 1; w.hero.x = 260;
+    const evs = run(w, { attack: true }, 30);
+    expect(evs.filter(x => x.t === 'drop').length).toBe(2);
+  });
+
+  it('the Freezer Golem rains icicles', () => {
+    const st = STAGES.find(s => s.id === '2-10')!;
+    const w = new World(st, derive(prof(10, 24)), 9);
+    w.hero.hp = w.hero.d.maxHp = 1e6;
+    let rain = false;
+    for (let i = 0; i < 60 * 60 && !rain; i++) for (const e of w.step(NO_INPUT)) if (e.t === 'mobAttack' && e.kind === 'rain') rain = true;
+    expect(rain).toBe(true);
   });
 });

@@ -19,7 +19,7 @@ export interface Item {
   skill?: { id: string; n: number };
 }
 
-export interface BaseDef { slot: Slot; name: string; icon: string; main: Line[] }
+export interface BaseDef { slot: Slot; name: string; icon: string; main: Line[]; minLv?: number }
 /** main = guaranteed stat at ilvl 1 (scaled by ilvl and rarity) */
 export const BASES: Record<string, BaseDef> = {
   spoon: { slot: 'weapon', name: 'Wooden Spoon', icon: 'eq-spoon', main: [{ k: 'atk', v: 4 }] },
@@ -32,6 +32,11 @@ export const BASES: Record<string, BaseDef> = {
   cookie: { slot: 'charm', name: 'Fortune Cookie', icon: 'eq-cookie', main: [{ k: 'crit', v: 3 }] },
   bell: { slot: 'charm', name: 'Timer Bell', icon: 'eq-bell', main: [{ k: 'cdr', v: 0.04 }] },
   salt: { slot: 'charm', name: 'Salt Crystal', icon: 'eq-salt', main: [{ k: 'skillDmg', v: 0.06 }] },
+  // World 2 gear (only drops from item level 12 up)
+  icepick: { slot: 'weapon', name: 'Ice Pick', icon: 'eq-icepick', main: [{ k: 'atk', v: 4 }, { k: 'crit', v: 3 }], minLv: 12 },
+  fish: { slot: 'weapon', name: 'Frozen Fish', icon: 'eq-fish', main: [{ k: 'atk', v: 6 }], minLv: 12 },
+  cozy: { slot: 'armor', name: 'Tea Cozy Vest', icon: 'eq-cozy', main: [{ k: 'hp', v: 30 }, { k: 'def', v: 3 }], minLv: 12 },
+  snow: { slot: 'charm', name: 'Snowflake Charm', icon: 'eq-snow', main: [{ k: 'cdr', v: 0.05 }, { k: 'crit', v: 2 }], minLv: 12 },
 };
 
 export const RARITY_NAMES: Record<Rarity, string> = { 1: 'Common', 2: 'Uncommon', 3: 'Rare', 4: 'Epic', 5: 'Legendary' };
@@ -86,7 +91,7 @@ const scaleV = (k: LineKind, v: number) => PCT.includes(k) ? Math.round(v * 100)
 /** Roll a piece of equipment. skillIds = every skill id in the game (for skill-boost lines). */
 export function rollItem(id: number, tier: BoxTier, ilvl: number, rand: () => number, skillIds: string[]): Item {
   const rarity = rarityFor(tier, rand);
-  const base = pick(Object.keys(BASES), rand);
+  const base = pick(Object.keys(BASES).filter(k => (BASES[k].minLv ?? 0) <= ilvl), rand);
   const lvlMul = 1 + 0.15 * (ilvl - 1);
   const rarMul = [1, 1.25, 1.55, 1.9, 2.4][rarity - 1];
   const lines: Line[] = BASES[base].main.map(l => ({ k: l.k, v: scaleV(l.k, l.v * (PCT.includes(l.k) || l.k === 'crit' ? rarMul : lvlMul * rarMul)) }));

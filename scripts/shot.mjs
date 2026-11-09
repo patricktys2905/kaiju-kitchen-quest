@@ -35,11 +35,16 @@ await p.screenshot({ path: 'shots/gacha-reveal.png' });
 await p.locator('[data-g=next]').click(); await wait(300);
 await p.locator('[data-tab=bag]').click(); await wait(300);
 await p.screenshot({ path: 'shots/camp-bag.png' });
-await p.locator('[data-tab=stages]').click(); await wait(300);
-await p.screenshot({ path: 'shots/camp-stages.png' });
+await p.locator('[data-bag=items]').click(); await wait(300);
+await p.screenshot({ path: 'shots/camp-items.png' });
+await kq(() => { window.__kkq.save.crumbs = 2000; window.__kkq.save.cleared['1-1'] = 'A'; window.__kkq.save.cleared['1-2'] = 'S'; });
+await p.locator('[data-tab=market]').click(); await wait(300);
+await p.screenshot({ path: 'shots/camp-market.png' });
+await p.locator('[data-tab=map]').click(); await wait(500);
+await p.screenshot({ path: 'shots/camp-map.png' });
 
 // stage 1-2 combat
-await kq(() => window.__kkq.play('1-2'));
+await kq(() => window.__kkq.play('1-3'));
 await wait(1500);
 await kq(() => { const w = window.__kkq.world(); const m = w.mobs.find(m => m.on === -1); w.hero.x = m.x - 55; w.hero.face = 1; });
 await wait(300);
@@ -50,7 +55,10 @@ await p.keyboard.press('KeyO'); await wait(500);
 await p.screenshot({ path: 'shots/skill.png' });
 
 // boss
-await kq(() => window.__kkq.play('1-4'));
+await kq(() => window.__kkq.play('2-3'));
+await wait(1800);
+await p.screenshot({ path: 'shots/world2.png' });
+await kq(() => window.__kkq.play('1-10'));
 await wait(2500);
 await kq(() => { const w = window.__kkq.world(); w.hero.x = w.boss.x - 160; });
 await wait(1200);

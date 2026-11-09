@@ -1,59 +1,103 @@
-// Stage layouts. Coordinates: x right, y down; a platform's y is its walkable top.
-// Reach: the lowest jumper (Bluebeary) rises ~105 px, so platform steps are ≤ 90 px apart; ladders for more.
-import type { MobKind, MobSpawn, StageDef } from './types';
+// Stages: 10 per world, built by a seeded generator from layout pieces (steps, stairs, ladder towers,
+// open ground). Stage 5 has an elite mini-boss; stage 10 is the world boss in its own arena.
+// Reach: the lowest jumper (Bluebeary) rises ~105 px, so tiers are 90 px apart; the top tier needs a ladder
+// or a lower platform beside it (tests/world.test.ts checks every platform is reachable).
+import type { MobKind, MobSpawn, Platform, Ladder, StageDef } from './types';
 
-const G = 470; // ground line for every stage
-const m = (kind: MobKind, x: number, lv: number, y?: number): MobSpawn => ({ kind, x, lv, y });
+const G = 470;
+const TIER = [380, 290, 200];
 
-export const WORLDS = [{ id: 1, name: 'The Countertop', blurb: 'Where the leftovers went bad.' }];
+export interface WorldDef {
+  id: number; name: string; blurb: string;
+  bg: string; mid: string; tile: string; platTint: number; bossBg: string;
+  /** monster level of stage 1; each stage adds ~1 */
+  baseLv: number;
+  /** monster HP/attack multiplier for this world (heroes arrive stronger than the level alone suggests) */
+  power: number;
+  /** monster kinds unlocked by stage number */
+  pool: [number, MobKind][];
+  elite: MobKind; boss: MobKind;
+  names: string[];
+}
 
-export const STAGES: StageDef[] = [
+export const WORLDS: WorldDef[] = [
   {
-    id: '1-1', world: 1, num: '1-1', name: 'Countertop Meadow', bg: 'bg-far', width: 2400, groundY: G, lv: [1, 2], par: 55, rec: 1,
-    platforms: [
-      { x: 360, y: 380, w: 260 }, { x: 700, y: 290, w: 300 }, { x: 1150, y: 380, w: 260 },
-      { x: 1500, y: 290, w: 340 }, { x: 1950, y: 380, w: 280 },
-    ],
-    ladders: [{ x: 780, top: 290, bottom: G }, { x: 1600, top: 290, bottom: G }],
-    mobs: [
-      m('bun', 600, 1), m('bun', 900, 1), m('bun', 820, 1, 290), m('bun', 1300, 2),
-      m('bun', 1700, 2, 290), m('bun', 1750, 1), m('bun', 2100, 2), m('bun', 2050, 2, 380),
-    ],
+    id: 1, name: 'The Countertop', blurb: 'Where the leftovers went bad.', bg: 'bg-far', mid: 'bg-mid', tile: 'tile-ground', platTint: 0xffffff, bossBg: 'bg-far-stove',
+    baseLv: 1, power: 1, pool: [[1, 'bun'], [3, 'worm'], [6, 'pepper'], [7, 'egg']], elite: 'egg', boss: 'toast',
+    names: ['Countertop Meadow', 'Crumb Trail', 'Gummy Gully', 'Toaster Hills', 'Rotten Ridge', 'Spice Shelf', 'Pepper Pass', 'Cutting Board Bluffs', 'Burner Approach', 'Stovetop Throne'],
   },
   {
-    id: '1-2', world: 1, num: '1-2', name: 'Gummy Gully', bg: 'bg-far', width: 2800, groundY: G, lv: [3, 4], par: 75, rec: 3,
-    platforms: [
-      { x: 300, y: 380, w: 220 }, { x: 560, y: 300, w: 220 }, { x: 820, y: 220, w: 300 },
-      { x: 1250, y: 380, w: 320 }, { x: 1650, y: 300, w: 260 }, { x: 1980, y: 380, w: 220 },
-      { x: 2250, y: 290, w: 330 },
-    ],
-    ladders: [{ x: 900, top: 220, bottom: G }, { x: 2350, top: 290, bottom: G }],
-    mobs: [
-      m('bun', 500, 3), m('worm', 760, 3), m('worm', 950, 3, 220), m('bun', 1100, 3),
-      m('worm', 1400, 4, 380), m('bun', 1500, 4), m('worm', 1750, 4, 300), m('worm', 1900, 4),
-      m('bun', 2150, 4), m('worm', 2400, 4, 290), m('worm', 2550, 4),
-    ],
-  },
-  {
-    id: '1-3', world: 1, num: '1-3', name: 'Spice Shelf', bg: 'bg-far', width: 3000, groundY: G, lv: [5, 7], par: 100, rec: 5,
-    platforms: [
-      { x: 250, y: 380, w: 260 }, { x: 550, y: 290, w: 260 }, { x: 850, y: 200, w: 380 },
-      { x: 1300, y: 380, w: 300 }, { x: 1700, y: 290, w: 400 }, { x: 2200, y: 380, w: 260 },
-      { x: 2500, y: 290, w: 380 },
-    ],
-    ladders: [{ x: 950, top: 200, bottom: G }, { x: 1800, top: 290, bottom: G }],
-    mobs: [
-      m('worm', 600, 5), m('pepper', 680, 5, 290), m('worm', 900, 5), m('pepper', 1000, 6, 200),
-      m('egg', 1250, 6), m('pepper', 1450, 6, 380), m('worm', 1600, 6), m('pepper', 1900, 6, 290),
-      m('worm', 2050, 6), m('egg', 2350, 7), m('pepper', 2650, 7, 290), m('worm', 2700, 7), m('egg', 2850, 7),
-    ],
-  },
-  {
-    id: '1-4', world: 1, num: '1-4', name: 'Stovetop Throne', bg: 'bg-far-stove', width: 1500, groundY: G, lv: [10, 10], par: 120, rec: 8, boss: true,
-    platforms: [{ x: 180, y: 382, w: 240 }, { x: 1080, y: 382, w: 240 }, { x: 520, y: 294, w: 460 }],
-    ladders: [],
-    mobs: [m('toast', 1150, 10)],
+    id: 2, name: 'The Fridge', blurb: 'Cold, crisp and full of grudges.', bg: 'bg-far-fridge', mid: 'bg-mid-fridge', tile: 'tile-fridge', platTint: 0xc8e4ff, bossBg: 'bg-far-freezer',
+    baseLv: 13, power: 1.3, pool: [[1, 'pea'], [1, 'yogurt'], [3, 'icebat'], [6, 'pickle']], elite: 'pickle', boss: 'golem',
+    names: ['Crisper Drawer', 'Dairy Lane', 'Frosty Shelf', 'Pickle Jar Pier', 'Knight of the Brine', 'Egg Carton Cliffs', 'Butter Bridge', 'Ketchup Canyon', 'Ice Tray Steps', 'Freezer Throne'],
   },
 ];
 
+/** Small seeded RNG so a stage is always laid out the same way. */
+function rng(seed: number): () => number {
+  let s = seed >>> 0 || 1;
+  return () => { s ^= s << 13; s ^= s >>> 17; s ^= s << 5; return ((s >>> 0) % 100000) / 100000; };
+}
+
+function genStage(w: WorldDef, n: number): StageDef {
+  const id = `${w.id}-${n}`;
+  const lvLo = w.baseLv + n - 1, lvHi = lvLo + 1;
+  if (n === 10) {
+    return {
+      id, world: w.id, num: id, name: w.names[9], bg: w.bossBg, mid: '', tile: w.tile, platTint: w.platTint, width: 1500, groundY: G,
+      lv: [lvLo + 2, lvLo + 2], par: 130, rec: lvLo, boss: true,
+      platforms: [{ x: 180, y: 382, w: 240 }, { x: 1080, y: 382, w: 240 }, { x: 520, y: 294, w: 460 }],
+      ladders: [], mobs: [{ kind: w.boss, x: 1150, lv: lvLo + 2 }],
+    };
+  }
+  const r = rng(w.id * 1000 + n * 37 + 11);
+  const width = 2200 + n * 140;
+  const platforms: Platform[] = [];
+  const ladders: Ladder[] = [];
+  let x = 320;
+  while (x < width - 420) {
+    const k = r();
+    if (k < 0.18) { x += 220 + r() * 120; continue; } // open ground
+    if (k < 0.45) { // single step
+      const pw = 220 + Math.round(r() * 120);
+      platforms.push({ x, y: TIER[0], w: pw }); x += pw + 140 + r() * 80;
+    } else if (k < 0.75) { // stairs up
+      const pw = 200 + Math.round(r() * 60);
+      platforms.push({ x, y: TIER[0], w: pw }, { x: x + pw - 60, y: TIER[1], w: pw + 40 });
+      if (r() < 0.4) platforms.push({ x: x + pw * 2 - 100, y: TIER[2], w: pw }); // a top step off the middle one
+      x += pw * 2 + 220;
+    } else { // ladder tower
+      const pw = 280 + Math.round(r() * 100);
+      const top = r() < 0.5 ? TIER[2] : TIER[1];
+      platforms.push({ x, y: top, w: pw });
+      ladders.push({ x: x + 40 + Math.round(r() * (pw - 80)), top, bottom: G });
+      if (top === TIER[2] && r() < 0.6) platforms.push({ x: x + pw + 60, y: TIER[0], w: 200 });
+      x += pw + 280;
+    }
+  }
+  const kinds = w.pool.filter(([from]) => n >= from).map(([, k]) => k);
+  const count = 7 + Math.floor(n * 0.8);
+  const mobs: MobSpawn[] = [];
+  for (let i = 0; i < count; i++) {
+    const kind = kinds[Math.floor(r() * kinds.length)];
+    const lv = r() < 0.5 ? lvLo : lvHi;
+    // flyers always start at ground level (from a high platform they would hover out of reach)
+    if (kind !== 'icebat' && r() < 0.35 && platforms.length > 0) {
+      const p = platforms[Math.floor(r() * platforms.length)];
+      mobs.push({ kind, lv, x: Math.round(p.x + 30 + r() * (p.w - 60)), y: p.y });
+    } else {
+      mobs.push({ kind, lv, x: Math.round(520 + (i / count) * (width - 900) + r() * 120) });
+    }
+  }
+  if (n === 5) mobs.push({ kind: w.elite, lv: lvHi + 1, x: width - 520, elite: true });
+  return {
+    id, world: w.id, num: id, name: w.names[n - 1], bg: w.bg, mid: w.mid, tile: w.tile, platTint: w.platTint, width, groundY: G,
+    lv: [lvLo, n === 5 ? lvHi + 1 : lvHi], par: Math.round(25 + count * 5 + width / 70), rec: lvLo,
+    platforms, ladders, mobs,
+  };
+}
+
+export const STAGES: StageDef[] = WORLDS.flatMap(w => Array.from({ length: 10 }, (_, i) => genStage(w, i + 1)));
+
 export function stageById(id: string): StageDef { return STAGES.find(s => s.id === id) ?? STAGES[0]; }
+export function worldOf(s: StageDef): WorldDef { return WORLDS.find(w => w.id === s.world) ?? WORLDS[0]; }

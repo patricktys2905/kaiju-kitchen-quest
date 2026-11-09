@@ -5,6 +5,7 @@ const PATCHES = {
   // dest ellipse (centre, radii, rotation°) and the source offset to copy texture from
   0: [{ cx: 512, cy: 516, rx: 74, ry: 98, rot: -12, dx: 118, dy: 4 }, { cx: 448, cy: 512, rx: 26, ry: 66, rot: -8, dx: 190, dy: 0 }],
   11: [{ cx: 682, cy: 522, rx: 84, ry: 86, rot: 0, dx: 0, dy: -175 }],
+  6: [{ cx: 487, cy: 484, rx: 70, ry: 100, rot: 0, dx: 128, dy: 0 }],
 };
 for (const [n, list] of Object.entries(PATCHES)) {
   let img = sharp(`art-src/old/parts-${n}-v1.png`);

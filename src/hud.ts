@@ -1,4 +1,6 @@
 // In-stage HTML HUD: hero card (HP/XP), stage + monsters left, combo counter, boss bar, loot found, toasts, pause.
+import { toggleMute } from './audio';
+import { CONSUMABLES, QUICK_CD } from './sim/consumables';
 import { TIER_NAMES } from './sim/loot';
 import { xpFor, type HeroProfile } from './sim/stats';
 import type { BoxTier, StageDef } from './sim/types';
@@ -44,6 +46,16 @@ const CSS = `
 @keyframes tst { 0% { transform: scale(0.6); opacity: 0 } 10% { transform: scale(1.08); opacity: 1 } 18% { transform: scale(1) } 80% { opacity: 1 } 100% { opacity: 0; transform: translateY(-3vmin) } }
 #hud .help { position: absolute; left: 50%; bottom: 1.5vmin; transform: translateX(-50%); font-size: 1.8vmin; opacity: 0.75; text-shadow: 0 1px 2px #000; white-space: nowrap; }
 body.touch #hud .help { display: none; }
+#hud .quick { position: absolute; left: 50%; transform: translateX(-50%); bottom: calc(1.5vmin + env(safe-area-inset-bottom)); display: flex; gap: 1vmin; pointer-events: auto; }
+body.touch #hud .quick { left: 55%; }
+#hud .quick .q { position: relative; width: 9vmin; height: 9vmin; border-radius: 1.8vmin; background: #24142ad0 center/72% no-repeat; border: 2px solid #ffd27a88; touch-action: none; }
+#hud .quick .q.empty { opacity: 0.35; }
+#hud .quick .q b { position: absolute; right: 0.4vmin; bottom: 0; font-size: 2vmin; text-shadow: 0 1px 2px #000; }
+#hud .quick .q i { position: absolute; left: 0.5vmin; top: 0.2vmin; font-size: 1.6vmin; font-style: normal; opacity: 0.7; }
+#hud .quick .q u { position: absolute; inset: 0; border-radius: 1.6vmin; background: conic-gradient(#000a var(--cd, 0deg), transparent 0); text-decoration: none; }
+#hud .quick .q.down { transform: scale(0.92); }
+#hud .boosts { font-size: 1.6vmin; color: #ffd27a; }
+body.touch #hud .help { display: none; }
 #pause { position: fixed; inset: 0; z-index: 35; background: #120a18c8; display: none; align-items: center; justify-content: center; flex-direction: column; gap: 2vmin; }
 #pause.on { display: flex; }
 #pause h2 { font-size: 6vmin; color: #ffb347; }
@@ -63,22 +75,29 @@ export function initHud(onMenu: () => void, onResume: () => void, onLeave: () =>
   root.id = 'hud';
   root.innerHTML = `
     <div class="card"><div class="face"></div><div><div><span class="nm"></span><span class="lv"></span></div>
-      <div class="bar hp"><i></i><b></b></div><div class="bar xp"><i></i></div><div class="buff"></div></div></div>
+      <div class="bar hp"><i></i><b></b></div><div class="bar xp"><i></i></div><div class="buff"></div><div class="boosts"></div></div></div>
     <div class="stage"><div class="t"></div><div class="s"></div></div>
     <div class="boss"><div class="t"></div><div class="bar"><i></i><u></u></div></div>
     <div class="right"><div class="loot"><img src="art/box-3.webp"><span>0</span></div><button class="menu">☰</button></div>
     <div class="combo"><b>0</b><span>HITS</span></div>
+    <div class="quick">${[0, 1, 2, 3].map(i => `<div class="q" data-q="${i}"><i>${i + 1}</i><b></b><u></u></div>`).join('')}</div>
     <div class="toasts"></div>
     <div class="help">← → move · ↑ ↓ climb · SPACE jump · J attack ×3 combo · L / I / O skills · ↓+SPACE drop · ESC menu</div>`;
   document.body.appendChild(root);
   q = <T extends HTMLElement>(s: string) => root.querySelector<T>(s)!;
   q('.menu').addEventListener('pointerdown', e => { e.preventDefault(); onMenu(); });
+  root.querySelectorAll<HTMLElement>('.quick .q').forEach(el => {
+    el.addEventListener('pointerdown', e => { e.preventDefault(); quickLatch[Number(el.dataset.q)] = true; el.classList.add('down'); });
+    const up = () => el.classList.remove('down');
+    el.addEventListener('pointerup', up); el.addEventListener('pointercancel', up); el.addEventListener('pointerleave', up);
+  });
   const p = document.createElement('div');
   p.id = 'pause'; p.className = 'kq';
-  p.innerHTML = `<h2>PAUSED</h2><button class="pill go" data-a="resume">▶ RESUME</button><button class="pill" data-a="leave">⟵ RETREAT TO CAMP</button>`;
+  p.innerHTML = `<h2>PAUSED</h2><button class="pill go" data-a="resume">▶ RESUME</button><button class="pill" data-a="mute">🔊 SOUND ON / OFF</button><button class="pill" data-a="leave">⟵ RETREAT TO CAMP</button>`;
   document.body.appendChild(p);
   p.querySelector('[data-a=resume]')!.addEventListener('click', onResume);
   p.querySelector('[data-a=leave]')!.addEventListener('click', onLeave);
+  p.querySelector('[data-a=mute]')!.addEventListener('click', () => { toggleMute(); });
 }
 
 export function showHud(v: boolean): void { root?.classList.toggle('on', v); }
@@ -96,6 +115,16 @@ export function updateHud(w: World, p: HeroProfile, st: StageDef): void {
   q('.hp b').textContent = `${Math.ceil(h.hp)} / ${h.d.maxHp}`;
   q('.xp i').style.transform = `scaleX(${Math.min(1, p.xp / xpFor(p.level))})`;
   q('.buff').textContent = h.buff ? `✦ BUFF ${Math.ceil(h.buff.t)}s` : '';
+  const BOOST_NAMES = { atk: '🌶 ATK', def: '🧊 DEF', speed: '☕ SPD', cdr: 'CDR' } as const;
+  q('.boosts').textContent = (Object.entries(h.boosts) as [keyof typeof BOOST_NAMES, [number, number]][]).map(([k, [, t]]) => `${BOOST_NAMES[k]} ${Math.ceil(t)}s`).join('  ');
+  root.querySelectorAll<HTMLElement>('.quick .q').forEach((el, i) => {
+    const it = h.bag[i];
+    const icon = it ? `url(art/${CONSUMABLES[it.id].icon}.webp)` : '';
+    if (el.style.backgroundImage !== icon) el.style.backgroundImage = icon;
+    el.classList.toggle('empty', !it || it.n <= 0);
+    el.querySelector('b')!.textContent = it ? String(it.n) : '';
+    (el.querySelector('u') as HTMLElement).style.setProperty('--cd', `${Math.round(h.quickCd / QUICK_CD * 360)}deg`);
+  });
   q('.stage .t').textContent = `${st.num} ${st.name}`;
   q('.stage .s').textContent = w.portal ? '➜ Exit is open! Head right' : `Monsters left: ${w.alive}`;
   const boss = w.boss;
@@ -126,3 +155,11 @@ export function toast(text: string, opts: { color?: string; tier?: BoxTier; big?
 }
 
 export { TIER_NAMES };
+
+const quickLatch = [false, false, false, false];
+/** Quick-bag taps since the last read (one sim step sees each tap). */
+export function readQuick(): boolean[] {
+  const out = [...quickLatch];
+  quickLatch.fill(false);
+  return out;
+}

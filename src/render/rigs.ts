@@ -25,6 +25,8 @@ export interface RigDef {
   /** Gear attachment points. hand = where the front arm's paw is, as a 0..1 point in the arm piece image;
    *  chest (apron), neck (charm) and back (pot lid) are parts-sheet coords on the body. */
   gear: { hand: [number, number]; chest: [number, number]; neck: [number, number]; back: [number, number]; size: number };
+  /** which part holds the weapon (default 'arm') */
+  holder?: Role;
   root: [number, number];
   /** World pixels per sheet pixel. */
   scale: number;
@@ -88,6 +90,62 @@ export const RIGS: Record<number, RigDef> = {
       { piece: 2, role: 'legA', joint: [372, 372], pivot: [0.5, 0.12], depth: -1 },
       { piece: 0, role: 'body', joint: [355, 388], pivot: [0.5, 1], depth: 0 },
       { piece: 3, role: 'arm', joint: [398, 272], pivot: [0.5, 0.12], depth: 1 },
+    ],
+  },
+  // Squidgeon: body 198x225@40,15; tentacles @372,205 / @307,355 / @205,240 / @59,262 (the front pair walk, the others are arms)
+  1: {
+    gear: { hand: [0.5, 0.9], chest: [170, 178], neck: [182, 150], back: [72, 120], size: 1 },
+    root: [139, 352],
+    scale: 0.25,
+    legs: 'swing',
+    parts: [
+      { piece: 2, role: 'armBack', joint: [118, 222], pivot: [0.5, 0.06], depth: -3, tint: 0xb8d8f0, rest: 0.2 },
+      { piece: 4, role: 'legB', joint: [102, 226], pivot: [0.5, 0.06], depth: -2, tint: 0xc8e0f0 },
+      { piece: 3, role: 'legA', joint: [160, 228], pivot: [0.5, 0.06], depth: -1 },
+      { piece: 0, role: 'body', joint: [139, 238], pivot: [0.5, 0.98], depth: 0 },
+      { piece: 1, role: 'arm', joint: [190, 214], pivot: [0.5, 0.06], depth: 1, rest: -0.2 },
+    ],
+  },
+  // Crabbage: body 235x219@17,10; claws 178x113@163,265 / 202x93@285,138 (pincers to the right); leg sets @353,347 / @23,339
+  2: {
+    gear: { hand: [0.82, 0.5], chest: [205, 190], neck: [215, 150], back: [95, 80], size: 1 },
+    root: [148, 330],
+    scale: 0.25,
+    legs: 'swing',
+    parts: [
+      { piece: 1, role: 'armBack', joint: [196, 188], pivot: [0.06, 0.5], depth: -3, tint: 0xd8c890, rest: -0.25 },
+      { piece: 4, role: 'legB', joint: [118, 214], pivot: [0.5, 0.1], depth: -2, tint: 0xd8c890 },
+      { piece: 3, role: 'legA', joint: [182, 214], pivot: [0.5, 0.1], depth: -1 },
+      { piece: 0, role: 'body', joint: [148, 226], pivot: [0.56, 0.98], depth: 0 },
+      { piece: 2, role: 'arm', joint: [212, 178], pivot: [0.05, 0.55], depth: 1, rest: -0.3 },
+    ],
+  },
+  // Toastbat: body 288x248@143,113; toast wings @44,66 / @176,51; tiny feet @329,399 / @160,403. Holds its weapon in a foot.
+  5: {
+    gear: { hand: [0.5, 0.75], chest: [372, 292], neck: [385, 240], back: [235, 185], size: 0.9 },
+    holder: 'legA',
+    root: [287, 394],
+    scale: 0.23,
+    legs: 'dangle',
+    hover: true,
+    parts: [
+      { piece: 3, role: 'wingBack', joint: [262, 150], pivot: [0.6, 0.92], depth: -4, tint: 0xd0b890, rest: 0.25 },
+      { piece: 1, role: 'wing', joint: [238, 158], pivot: [0.65, 0.92], depth: -3, rest: -0.2 },
+      { piece: 5, role: 'legB', joint: [232, 352], pivot: [0.5, 0.1], depth: -2, tint: 0xd8c0a0 },
+      { piece: 4, role: 'legA', joint: [330, 352], pivot: [0.5, 0.1], depth: 1 },
+      { piece: 0, role: 'body', joint: [287, 361], pivot: [0.5, 1], depth: 0 },
+    ],
+  },
+  // Dumplord: body 193x266@158,67 (its feet are part of the body, so it hops); arms 63x96 @66,284 / @384,284
+  6: {
+    gear: { hand: [0.5, 0.88], chest: [292, 252], neck: [300, 200], back: [190, 205], size: 1 },
+    root: [255, 333],
+    scale: 0.3,
+    legs: 'none',
+    parts: [
+      { piece: 1, role: 'armBack', joint: [238, 222], pivot: [0.5, 0.12], depth: -3, tint: 0xd8c8b0, rest: 0.15 },
+      { piece: 0, role: 'body', joint: [255, 333], pivot: [0.5, 1], depth: 0 },
+      { piece: 2, role: 'arm', joint: [300, 228], pivot: [0.5, 0.12], depth: 1, rest: -0.1 },
     ],
   },
 };

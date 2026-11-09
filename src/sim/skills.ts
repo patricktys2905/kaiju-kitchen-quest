@@ -1,7 +1,7 @@
 // Skills: every kaiju has 3 actives (unlocking with hero level) and 1 passive. Skill levels 1..MAX_SKILL
 // (gear can push past the max). Damage grows +20% per level, cooldown shrinks 4% per level.
 
-export type SkillKind = 'cone' | 'slam' | 'dash' | 'bolt' | 'spin' | 'uppercut' | 'mines' | 'buff' | 'nova' | 'fan';
+export type SkillKind = 'cone' | 'slam' | 'dash' | 'bolt' | 'spin' | 'uppercut' | 'mines' | 'buff' | 'nova' | 'fan' | 'heal';
 
 export interface SkillDef {
   id: string;
@@ -18,6 +18,8 @@ export interface SkillDef {
   n?: number;
   /** buff: what it boosts while active */
   buff?: { atk?: number; def?: number; speed?: number; armor?: boolean; t: number };
+  /** heal: fraction of max HP restored at skill level 1 */
+  heal?: number;
 }
 
 export interface PassiveDef {
@@ -65,6 +67,38 @@ export const SKILLS: Record<number, { actives: SkillDef[]; passive: PassiveDef }
       S({ id: 'nova', name: 'Marshmallow Nova', kind: 'nova', desc: 'A huge fluffy burst all around after a short charge', unlock: 8, cd: 12, dur: 0.8, dmg: 5, reach: 260, h: 200, kx: 420, ky: -420 }),
     ],
     passive: { id: 'soft', name: 'Moonlit Wings', desc: '+5% skill damage and -3% cooldowns per level', unlock: PASSIVE_UNLOCK, per: { skillDmg: 0.05, cdr: 0.03 } },
+  },
+  1: { // Squidgeon
+    actives: [
+      S({ id: 'ink', name: 'Ink Splash', kind: 'cone', desc: 'Sprays a wave of berry ink', cd: 3, dmg: 2.2, reach: 200, h: 90, kx: 300 }),
+      S({ id: 'whirl', name: 'Tentacle Whirl', kind: 'spin', desc: 'Spins all eight arms, hitting everything around', unlock: 4, cd: 7, dur: 1.2, dmg: 0.75, reach: 130, h: 90, kx: 180, ky: -140, n: 10 }),
+      S({ id: 'wave', name: 'Jelly Wave', kind: 'nova', desc: 'A wobbling jelly shockwave all around', unlock: 8, cd: 11, dur: 0.7, dmg: 4.4, reach: 240, h: 160, kx: 380, ky: -380 }),
+    ],
+    passive: { id: 'eight', name: 'Eight Arms', desc: '+4% attack per level', unlock: PASSIVE_UNLOCK, per: { atkPct: 0.04 } },
+  },
+  2: { // Crabbage
+    actives: [
+      S({ id: 'snap', name: 'Claw Snap', kind: 'dash', desc: 'Scuttles sideways and snaps everything in the way', cd: 3, dur: 0.3, dmg: 2.3, reach: 70, h: 70, kx: 300, ky: -200 }),
+      S({ id: 'shell', name: 'Leaf Shell', kind: 'buff', desc: 'Hides in cabbage: -50% damage taken, no flinching', unlock: 4, cd: 15, dur: 0.4, dmg: 0, buff: { def: 0.5, armor: true, t: 7 } }),
+      S({ id: 'crash', name: 'Cheddar Crash', kind: 'slam', desc: 'Leaps and crashes down like a falling cheese wheel', unlock: 8, cd: 8, dur: 0.65, dmg: 4, reach: 210, h: 80, kx: 260, ky: -560 }),
+    ],
+    passive: { id: 'rind', name: 'Thick Rind', desc: '+5% max HP per level', unlock: PASSIVE_UNLOCK, per: { hpPct: 0.05 } },
+  },
+  5: { // Toastbat
+    actives: [
+      S({ id: 'dive', name: 'Crumb Dive', kind: 'dash', desc: 'Swoops through enemies in a crumb trail', cd: 2.2, dur: 0.3, dmg: 2.2, reach: 60, h: 80, kx: 240, ky: -320 }),
+      S({ id: 'butter', name: 'Butter Bolt', kind: 'bolt', desc: 'Flings a sizzling pat of butter that pierces', unlock: 4, cd: 3, dur: 0.3, dmg: 2.8, reach: 40, h: 40, kx: 280, ky: -220 }),
+      S({ id: 'toastado', name: 'Toast Tornado', kind: 'spin', desc: 'Becomes a whirling slice of toast', unlock: 8, cd: 9, dur: 1.3, dmg: 0.85, reach: 120, h: 100, kx: 200, ky: -220, n: 11 }),
+    ],
+    passive: { id: 'crispy', name: 'Extra Crispy', desc: '+3% critical chance per level', unlock: PASSIVE_UNLOCK, per: { crit: 3 } },
+  },
+  6: { // Dumplord
+    actives: [
+      S({ id: 'steam', name: 'Steam Puff', kind: 'cone', desc: 'Puffs out a cloud of scalding steam', cd: 3, dmg: 2.2, reach: 190, h: 100, kx: 280 }),
+      S({ id: 'feast', name: 'Dumpling Feast', kind: 'heal', desc: 'Eats a snack: heals 25% HP (+5% per level)', unlock: 4, cd: 14, dur: 0.6, dmg: 0, heal: 0.25 }),
+      S({ id: 'soup', name: 'Soup Splash', kind: 'nova', desc: 'A huge splash of hot soup all around', unlock: 8, cd: 11, dur: 0.75, dmg: 4.6, reach: 250, h: 170, kx: 400, ky: -380 }),
+    ],
+    passive: { id: 'aura', name: 'Steamy Aura', desc: 'Heals 3% max HP per level on each kill', unlock: PASSIVE_UNLOCK, per: { lifeOnKill: 0.03 } },
   },
 };
 

@@ -134,7 +134,7 @@ type Anchor = 'hand' | 'chest' | 'neck' | 'back';
 interface Attach { img: Phaser.GameObjects.Image; glow?: Phaser.GameObjects.Image; anchor: Anchor; rot: number; swing: boolean; a: number; v: number }
 const RARITY_GLOW = [0, 0, 0, 0x6ab8ff, 0xc88aff, 0xffb02e];
 /** Where each weapon icon's handle is (0..1 in the icon). All icons point their head to the top-left (~-133°). */
-const GRIP: Record<string, [number, number]> = { spoon: [0.76, 0.8], fork: [0.8, 0.82], whisk: [0.63, 0.76], pin: [0.84, 0.84] };
+const GRIP: Record<string, [number, number]> = { spoon: [0.76, 0.8], fork: [0.8, 0.82], whisk: [0.63, 0.76], pin: [0.84, 0.84], icepick: [0.82, 0.82], fish: [0.84, 0.84] };
 const ICON_ANGLE = -2.33;
 /** Weapon direction at rest relative to the arm: forward and a little up. */
 const HOLD_ANGLE = -0.55;
@@ -174,7 +174,7 @@ export class HeroView {
         if (def.role === 'body') this.body = b;
         order.push({ d: def.depth, o: img });
       }
-      this.arm = this.parts.find(b => b.def.role === 'arm') ?? null;
+      this.arm = this.parts.find(b => b.def.role === (r.holder ?? 'arm')) ?? null;
       // gear: weapon in the paw, apron on the belly / mitt on the paw / pot lid on the back, charm at the neck
       const armD = this.arm?.def.depth ?? 1;
       const add = (key: string, anchor: Anchor, px: number, origin: [number, number], depth: number, rot = 0, rarity = 0, swing = false) => {

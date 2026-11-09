@@ -17,7 +17,7 @@ const sets = [
   { weapon: ['fork', 4], armor: ['mitt', 2], charm: ['salt', 4] },
 ];
 const tiles = [];
-for (const [r, sp] of [0, 10, 11, 4].entries()) for (const [si, set] of sets.entries()) for (const [fi, [st, t]] of [['move', 0.3], ['attack', 0.12]].entries()) {
+for (const [r, sp] of (process.argv[2] ? process.argv[2].split(',').map(Number) : [0, 10, 11, 4]).entries()) for (const [si, set] of sets.entries()) for (const [fi, [st, t]] of [['move', 0.3], ['attack', 0.12]].entries()) {
   await p.evaluate(([sp, set]) => {
     const s = window.__kkq.save; s.selected = sp; let id = 9000;
     const eq = {}; for (const [slot, [base, rarity]] of Object.entries(set)) eq[slot] = { id: id++, base, rarity, ilvl: 1, plus: 0, lines: [] };

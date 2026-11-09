@@ -5,13 +5,15 @@ export interface Input {
   jump: boolean;   // held
   attack: boolean; // held
   skill1: boolean; skill2: boolean; skill3: boolean; // held
+  /** quick-bag slots 1-4 (held) */
+  item1: boolean; item2: boolean; item3: boolean; item4: boolean;
 }
-export const NO_INPUT: Input = { left: false, right: false, up: false, down: false, jump: false, attack: false, skill1: false, skill2: false, skill3: false };
+export const NO_INPUT: Input = { left: false, right: false, up: false, down: false, jump: false, attack: false, skill1: false, skill2: false, skill3: false, item1: false, item2: false, item3: false, item4: false };
 
 /** One-way platform: you can jump up through it and drop down with DOWN + JUMP. */
 export interface Platform { x: number; y: number; w: number; solid?: boolean }
 export interface Ladder { x: number; top: number; bottom: number }
-export interface MobSpawn { kind: MobKind; x: number; y?: number; lv: number }
+export interface MobSpawn { kind: MobKind; x: number; y?: number; lv: number; elite?: boolean }
 
 export interface StageDef {
   id: string;
@@ -19,6 +21,9 @@ export interface StageDef {
   num: string;       // "1-1"
   name: string;
   bg: string;        // far background key
+  mid: string;       // mid parallax layer key ('' = none)
+  tile: string;      // ground tile key
+  platTint: number;  // tint for the platform boards
   width: number;
   groundY: number;   // top of the ground slab
   platforms: Platform[];
@@ -33,7 +38,7 @@ export interface StageDef {
   rec: number;
 }
 
-export type MobKind = 'bun' | 'worm' | 'pepper' | 'egg' | 'toast';
+export type MobKind = 'bun' | 'worm' | 'pepper' | 'egg' | 'toast' | 'pea' | 'yogurt' | 'icebat' | 'pickle' | 'golem';
 
 export type BoxTier = 1 | 2 | 3 | 4 | 5;
 export interface LootBox { tier: BoxTier; ilvl: number }
@@ -55,4 +60,8 @@ export type SimEvent =
   | { t: 'stagger' }
   | { t: 'portal' }
   | { t: 'clear' }
-  | { t: 'down' };
+  | { t: 'down' }
+  | { t: 'dodge' }
+  | { t: 'use'; slot: number; id: import('./consumables').ConsumableId }
+  | { t: 'revive' }
+  | { t: 'crumbs'; n: number; x: number; y: number };

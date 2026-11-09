@@ -1,0 +1,69 @@
+[
+  {
+    "name": "parts-1",
+    "newChat": true,
+    "refs": ["art-src/ref-kaiju-1.png"],
+    "prompt": "Generate an image. This is a character from my 2D side-scrolling game (a blue jelly octopus wearing a colander hat). I need it as a CUTOUT PUPPET PARTS SHEET so I can animate it. Draw the exact same character, same colours, outlines and shading style, but in a STRICT SIDE PROFILE facing RIGHT like a 2D platformer character (one eye visible, face looking right). Split it into SEPARATE parts laid out apart from each other with big empty gaps (no part touching another): 1) the BODY: the jelly head and bell with the colander hat and the berries inside, with NO tentacles at all, 2) a curly TENTACLE, 3) a second TENTACLE, 4) a third TENTACLE, 5) a fourth TENTACLE. The body piece must have no tentacles or arms drawn on it. Each tentacle has a rounded complete top end. Solid flat magenta (#FF00FF) background, no shadows, no labels, no text. Square 1:1 image."
+  },
+  {
+    "name": "parts-2",
+    "newChat": true,
+    "refs": ["art-src/ref-kaiju-2.png"],
+    "prompt": "Generate an image. This is a character from my 2D side-scrolling game (a cheese crab with a cabbage-leaf shell). I need it as a CUTOUT PUPPET PARTS SHEET so I can animate it. Draw the exact same character, same colours, outlines and shading style, but in a STRICT SIDE PROFILE facing RIGHT like a 2D platformer character (eye stalks looking right). Split it into SEPARATE parts laid out apart from each other with big empty gaps (no part touching another): 1) the BODY: the round cheese crab body with eye stalks and the cabbage leaves on its back, with NO claws and NO legs drawn on it, 2) the big front CLAW on its arm, 3) a second CLAW on its arm, 4) a set of three walking LEGS joined at the top as one piece, 5) a second set of three walking LEGS. Rounded complete joint ends. Solid flat magenta (#FF00FF) background, no shadows, no labels, no text. Square 1:1 image."
+  },
+  {
+    "name": "parts-5",
+    "newChat": true,
+    "refs": ["art-src/ref-kaiju-5.png"],
+    "prompt": "Generate an image. This is a character from my 2D side-scrolling game (a toast bat: a little loaf-bread bat with toast-slice wings and a butter pat on its head). I need it as a CUTOUT PUPPET PARTS SHEET so I can animate it. Draw the exact same character, same colours, outlines and shading style, but in a STRICT SIDE PROFILE facing RIGHT like a 2D platformer character (one eye visible, face looking right). Split it into SEPARATE parts laid out apart from each other with big empty gaps (no part touching another): 1) the BODY: the round bread-loaf body with the head, ears, face and butter pat, with NO wings drawn on it, 2) a toast-slice WING, 3) a second toast-slice WING, 4) one tiny bat FOOT, 5) a second tiny FOOT. Rounded complete joint ends. Solid flat magenta (#FF00FF) background, no shadows, no labels, no text. Square 1:1 image."
+  },
+  {
+    "name": "parts-6",
+    "newChat": true,
+    "refs": ["art-src/ref-kaiju-6.png"],
+    "prompt": "Generate an image. This is a character from my 2D side-scrolling game (a dumpling lord: a plump steamed dumpling with a little steam curl on top). I need it as a CUTOUT PUPPET PARTS SHEET so I can animate it. Draw the exact same character, same colours, outlines and shading style, but in a STRICT SIDE PROFILE facing RIGHT like a 2D platformer character (face looking right, one eye visible). Split it into SEPARATE parts laid out apart from each other with big empty gaps (no part touching another): 1) the BODY: the dumpling body with face, pleats and steam curl, with NO arms and NO feet drawn on it, 2) a small round ARM, 3) a second ARM, 4) one small round FOOT, 5) a second FOOT. Rounded complete joint ends. Solid flat magenta (#FF00FF) background, no shadows, no labels, no text. Square 1:1 image."
+  },
+  {
+    "name": "mob-pea",
+    "newChat": true,
+    "refs": ["art-src/ref-kaiju-0.png"],
+    "prompt": "Generate an image. This is a hero from my cute 2D side-scrolling action RPG set in a giant kitchen. I need an ENEMY for the frozen FRIDGE world in exactly the same art style (clean dark outlines, saturated colours, glossy cel shading): a FROST PEA POD soldier, a frozen green pea pod with frost on it, three angry little peas peeking out like gunners, tiny legs. Side view facing LEFT, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1 image."
+  },
+  { "name": "mob-yogurt", "prompt": "Same style, another FRIDGE ENEMY: a wobbly strawberry YOGURT SLIME blob oozing out of a cracked yogurt cup, pink and white, goofy-angry face. Side view facing LEFT, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1 image." },
+  { "name": "mob-pickle", "prompt": "Same style, another FRIDGE ENEMY: a PICKLE KNIGHT, a tall bumpy green pickle wearing a bottle-cap helmet and holding a toothpick sword and a cracker shield, stern face. Side view facing LEFT, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1 image." },
+  { "name": "mob-icebat", "prompt": "Same style, another FRIDGE ENEMY that FLIES: a BRAIN-FREEZE BAT, a little ice-cream scoop bat with wafer wings, sprinkles, frosty breath, mischievous face, wings spread. Side view facing LEFT, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1 image." },
+  { "name": "boss-golem", "prompt": "Same style, now the BOSS of the fridge world: the FREEZER GOLEM, a huge hulking golem built from stacked ice cubes with frozen peas and berries trapped inside, glowing icy-blue eyes, frosty mist, massive fists. Imposing but still in the cute game style. Side view facing LEFT, whole body visible, centred, filling about 90% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1 image." },
+  {
+    "name": "bg-far-fridge",
+    "newChat": true,
+    "refs": ["art-src/ref-bg.png"],
+    "prompt": "Generate an image. This is the background of the first area of my cute 2D side-scrolling action RPG (tiny food monsters in a giant kitchen). I need the FAR BACKGROUND for the second world, 'The Fridge', in exactly the same painted fantasy MMORPG side-scroller style: straight-on side view INSIDE a giant open refrigerator: cool blue-white light, frosted glass shelves far away holding giant milk cartons, jars of jam, a carton of eggs and cheese wheels like distant buildings, soft frost on the walls, gentle cold mist. Cheerful and magical, not scary. The bottom quarter calm and darker. No characters, no text, no UI. Wide 16:9 landscape image."
+  },
+  { "name": "bg-mid-fridge", "prompt": "Now the MIDDLE PARALLAX LAYER in the exact same fridge style and colours: a row of giant fridge objects standing along the bottom of the image, seen from the side: a milk carton, a jar of pickles, a wedge of cheese, a stack of yoghurt cups, a butter dish, a bottle of ketchup, with gaps between them. They fill only the bottom 60 percent. Everything else (the whole upper area and the gaps) must be solid flat magenta (#FF00FF). No shadows on the magenta, no characters, no text. Wide 16:9 landscape image." },
+  { "name": "tile-fridge", "prompt": "Now a GROUND TILE in the same style for the walkable floor in the fridge: straight-on side view of a thick slab of frosted white fridge shelf: a bright frosty top edge with a soft icy highlight, then a cool blue-white glassy front face with a little frost pattern, darker towards the bottom. It must tile SEAMLESSLY left-to-right. Fill the whole square, no background, no objects, no text. Square 1:1 image." },
+  { "name": "bg-far-freezer", "prompt": "Now the FAR BACKGROUND for the fridge world's BOSS ARENA, 'Freezer Throne', same painted style: straight-on side view inside a giant freezer: walls of glittering ice, huge frozen peas and ice cube towers, icicles hanging from above, an eerie but cheerful blue-violet glow, snow sparkles drifting. The bottom quarter calm and darker. No characters, no text, no UI. Wide 16:9 landscape image." },
+  {
+    "name": "map-world",
+    "newChat": true,
+    "refs": ["art-src/ref-bg.png"],
+    "prompt": "Generate an image. This is a background from my cute painted fantasy 2D action RPG where tiny food monsters adventure through a giant kitchen. I need the WORLD MAP in the same painted style: a whimsical illustrated fantasy adventure map of a GIANT KITCHEN seen from a high three-quarter angle, like a storybook RPG map. On the LEFT half: a warm sunny wooden countertop region with jars, a cutting board, a toaster and a stovetop with glowing burners at its far end. On the RIGHT half: a giant open refrigerator with icy blue shelves and a freezer at the top. A winding dotted path runs from the bottom-left of the countertop, across it, to the stove, then over a bridge of spoons into the fridge and up to the freezer. Plenty of open space around the path. No characters, no text, no labels, no numbers, no UI. Wide 16:9 landscape image."
+  },
+  {
+    "name": "c-jam",
+    "newChat": true,
+    "refs": ["art-src/ref-eq.png"],
+    "prompt": "Generate an image. This is an item icon from my cute 2D action RPG. I need CONSUMABLE ITEM ICONS in exactly the same art style (clean dark outlines, saturated colours, glossy cel shading), one item per image, centred, filling 80% of the frame, on a solid flat magenta (#FF00FF) background, no shadow, no text. First: a small HEALING POTION: a little glass jar of red strawberry jam with a cloth lid and a heart-shaped label. Square 1:1 image."
+  },
+  { "name": "c-bigjam", "prompt": "Same style and framing: a BIG HEALING POTION: a large round glass jar of glowing ruby-red jam with a golden lid and a big heart label, sparkles. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1." },
+  { "name": "c-pepper", "prompt": "Same style and framing: an ATTACK BOOST item: a fiery red chili pepper with little flames around it. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1." },
+  { "name": "c-ice", "prompt": "Same style and framing: a DEFENCE BOOST item: a shiny blue ice cube with a shield emblem frozen inside it. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1." },
+  { "name": "c-bean", "prompt": "Same style and framing: a SPEED BOOST item: a glossy brown espresso coffee bean with little lightning sparks around it. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1." },
+  { "name": "c-revive", "prompt": "Same style and framing: a REVIVE item called Second Helping: a small golden plate with a glowing heart-shaped dumpling on it and angelic sparkles. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1." },
+  { "name": "c-sugar", "prompt": "Same style and framing: a rare PERMANENT STAT item: a glowing golden sugar cube with a star sparkle. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1." },
+  { "name": "c-scroll", "prompt": "Same style and framing: a SKILL RESET item: a rolled-up old recipe scroll tied with a red ribbon, with a whisk drawn on it. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1." },
+  { "name": "icon-crumb", "prompt": "Same style and framing: a CURRENCY icon: a small golden cookie crumb coin, like a round cookie with chocolate chips and a shiny gold rim. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1." },
+  { "name": "eq-icepick", "prompt": "Same style, an EQUIPMENT ICON shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT: a WEAPON, a frosty ICE PICK axe with a blue crystal blade. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1." },
+  { "name": "eq-fish", "prompt": "Same style, an EQUIPMENT ICON shown diagonally with the HEAD at the TOP-LEFT and the HANDLE (tail) at the BOTTOM-RIGHT: a WEAPON, a FROZEN FISH club, a silver fish frozen stiff with ice crystals, held by its tail. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1." },
+  { "name": "eq-cozy", "prompt": "Same style and framing: ARMOR, a knitted woolly TEA COZY vest in red and white stripes with a pom-pom, shown flat. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1." },
+  { "name": "eq-snow", "prompt": "Same style and framing: a CHARM accessory, a sparkling SNOWFLAKE sprinkle pendant made of sugar crystals on a silver chain. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1." }
+]

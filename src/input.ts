@@ -1,6 +1,8 @@
 // Keyboard + on-screen touch, merged into one sim Input.
-// Keys: arrows/WASD move & climb, Space/K jump, J attack, L / I / O skills 1-3, Down+Jump drops through a platform.
+// Keys: arrows/WASD move & climb (double-tap ←/→ = dodge roll), Space/K jump, J attack, L / I / O skills 1-3,
+// 1-4 quick-bag items, Down+Jump drops through a platform.
 import { readTouch } from './touch';
+import { readQuick } from './hud';
 import type { Input } from './sim/types';
 
 const down = new Set<string>();
@@ -27,6 +29,7 @@ const any = (...codes: string[]) => codes.some(c => down.has(c) || latched.has(c
 
 export function readInput(): Input {
   const t = readTouch();
+  const q = readQuick();
   const out: Input = {
     left: any('ArrowLeft', 'KeyA') || t.x < 0,
     right: any('ArrowRight', 'KeyD') || t.x > 0,
@@ -37,6 +40,7 @@ export function readInput(): Input {
     skill1: any('KeyL', 'KeyX') || t.skill[0],
     skill2: any('KeyI', 'KeyC') || t.skill[1],
     skill3: any('KeyO', 'KeyV') || t.skill[2],
+    item1: any('Digit1') || q[0], item2: any('Digit2') || q[1], item3: any('Digit3') || q[2], item4: any('Digit4') || q[3],
   };
   latched.clear();
   return out;

@@ -3,8 +3,10 @@
 // Fixed timestep (call step(input) at DT).
 import type { AttackDef } from './classes';
 import { rollTier } from './loot';
-import { MOBS, dropLevel, mobAtk, mobHp, mobXp } from './mobs';
+import { type BoostKind, CONSUMABLES, type ConsumableId, QUICK_CD } from './consumables';
+import { ELITE, MOBS, TUNE, dropLevel, mobAtk, mobCrumbs, mobHp, mobXp } from './mobs';
 import { type SkillDef, skillScale, skillsOf } from './skills';
+import { WORLDS } from './stages';
 import type { Derived } from './stats';
 import { type BoxTier, type Input, type LootBox, type MobKind, NO_INPUT, type SimEvent, type StageDef } from './types';
 
@@ -16,8 +18,11 @@ const COYOTE = 0.08;
 const BUFFER = 0.12;   // jump / attack input buffer
 const HERO_W = 34;
 const COMBO_WINDOW = 1.6;
+export const HARD_LV = 6; // Hard mode: monsters this many levels higher
+const DOUBLE_TAP = 0.28;  // seconds between two taps of a direction for a dodge roll
+const DODGE_T = 0.32, DODGE_INV = 0.3, DODGE_CD = 0.55;
 
-export type HeroState = 'move' | 'attack' | 'air' | 'skill' | 'climb' | 'hurt' | 'down';
+export type HeroState = 'move' | 'attack' | 'air' | 'skill' | 'climb' | 'hurt' | 'down' | 'dodge';
 
 export interface Buff { atk: number; def: number; speed: number; armor: boolean; t: number }
 
@@ -44,6 +49,14 @@ export interface Hero {
   prev: Input;
   gliding: boolean;
   buff: Buff | null;
+  /** consumable boosts: kind → [value, seconds left] */
+  boosts: Partial<Record<BoostKind, [number, number]>>;
+  /** quick bag: 4 slots of { id, count } (the stage keeps its own copy; the scene writes it back) */
+  bag: ({ id: ConsumableId; n: number } | null)[];
+  revives: number;
+  quickCd: number;
+  lastTap: { dir: number; t: number };
+  dodgeCd: number;
 }
 
 export interface Mob {
@@ -63,13 +76,15 @@ export interface Mob {
   stagger: number;     // boss stagger meter
   summoned: number;
   hitDone: boolean;
+  elite: boolean;
+  homeY: number;       // flyers hover above this floor
 }
 
 export interface Box { id: number; tier: BoxTier; ilvl: number; x: number; y: number; vy: number; ground: boolean; t: number }
-export interface Shot { id: number; x: number; y: number; vx: number; vy: number; t: number; dmg: number; hit: Set<number>; from: 'hero' | 'mob'; kx: number; ky: number; pierce: boolean }
+export interface Shot { id: number; x: number; y: number; vx: number; vy: number; t: number; dmg: number; hit: Set<number>; from: 'hero' | 'mob'; kx: number; ky: number; pierce: boolean; g?: number; kind?: string }
 export interface Mine { id: number; x: number; y: number; t: number; dmg: number; kx: number; ky: number }
 
-export interface RunStats { time: number; hitsTaken: number; dmgTaken: number; maxCombo: number; kills: number }
+export interface RunStats { time: number; hitsTaken: number; dmgTaken: number; maxCombo: number; kills: number; crumbs: number; revived: number }
 
 let nextId = 1;
 
@@ -83,7 +98,7 @@ export class World {
   events: SimEvent[] = [];
   time = 0;
   combo = 0; comboT = 0;
-  run: RunStats = { time: 0, hitsTaken: 0, dmgTaken: 0, maxCombo: 0, kills: 0 };
+  run: RunStats = { time: 0, hitsTaken: 0, dmgTaken: 0, maxCombo: 0, kills: 0, crumbs: 0, revived: 0 };
   portal = false;
   cleared = false;
   failed = false;
@@ -91,7 +106,7 @@ export class World {
   exitX: number;
   rand: () => number;
 
-  constructor(public stage: StageDef, d: Derived, seed = 1) {
+  constructor(public stage: StageDef, d: Derived, seed = 1, bag: Hero['bag'] = [], revives = 0, hard = false) {
     let s = seed >>> 0 || 1;
     this.rand = () => { s ^= s << 13; s ^= s >>> 17; s ^= s << 5; return ((s >>> 0) % 100000) / 100000; };
     this.exitX = stage.width - 90;
@@ -99,8 +114,10 @@ export class World {
       d, x: 100, y: stage.groundY, vx: 0, vy: 0, face: 1, ground: true, on: -1, state: 'move', t: 0, step: 0, queued: false,
       hitIds: new Set(), hp: d.maxHp, inv: 0, cds: [0, 0, 0], skill: null, skillMul: 1, ticks: 0,
       coyote: 0, jumpBuf: 0, atkBuf: 0, dropT: 0, prev: { ...NO_INPUT }, gliding: false, buff: null,
+      boosts: {}, bag: bag.map(b => b && { ...b }), revives, quickCd: 0, lastTap: { dir: 0, t: -9 }, dodgeCd: 0,
     };
-    for (const m of stage.mobs) this.spawnMob(m.kind, m.x, m.lv, m.y);
+    // Hard mode: every monster +HARD_LV levels
+    for (const m of stage.mobs) this.spawnMob(m.kind, m.x, m.lv + (hard ? HARD_LV : 0), m.y, m.elite);
   }
 
   /** New stats (level up mid-stage, or a different hero). Keeps the HP fraction. */
@@ -110,12 +127,13 @@ export class World {
     this.hero.hp = Math.max(1, Math.round(d.maxHp * f));
   }
 
-  spawnMob(kind: MobKind, x: number, lv: number, y?: number): Mob {
-    const hp = mobHp(kind, lv);
+  spawnMob(kind: MobKind, x: number, lv: number, y?: number, elite = false): Mob {
+    const pow = WORLDS.find(x => x.id === this.stage.world)?.power ?? 1;
+    const hp = Math.round(mobHp(kind, lv) * (elite ? ELITE.hp : 1) * pow);
     const m: Mob = {
-      id: nextId++, kind, lv, x, y: y ?? this.stage.groundY, vx: 0, vy: 0, face: -1, hp, maxHp: hp, atk: mobAtk(kind, lv),
+      id: nextId++, kind, lv, x, y: y ?? this.stage.groundY, vx: 0, vy: 0, face: -1, hp, maxHp: hp, atk: Math.round(mobAtk(kind, lv) * (elite ? ELITE.atk : 1) * pow),
       state: 'walk', move: '', t: this.rand() * 2, ground: true, on: y === undefined ? -1 : null, home: x, deadT: 0, flash: 0,
-      hurtShown: 0, stagger: 0, summoned: 0, hitDone: false,
+      hurtShown: 0, stagger: 0, summoned: 0, hitDone: false, elite, homeY: y ?? this.stage.groundY,
     };
     if (y !== undefined) { m.on = this.platformAt(x, y); m.ground = m.on !== null; }
     this.mobs.push(m);
@@ -157,12 +175,29 @@ export class World {
     if (pressed('attack')) h.atkBuf = BUFFER;
     h.jumpBuf -= dt; h.atkBuf -= dt;
     h.inv = Math.max(0, h.inv - dt);
-    for (let i = 0; i < 3; i++) h.cds[i] = Math.max(0, h.cds[i] - dt);
+    const cdRate = 1 + (h.boosts.speed ? 0.25 : 0);
+    for (let i = 0; i < 3; i++) h.cds[i] = Math.max(0, h.cds[i] - dt * cdRate);
+    for (const k of Object.keys(h.boosts) as BoostKind[]) { const b = h.boosts[k]!; if ((b[1] -= dt) <= 0) delete h.boosts[k]; }
+    h.quickCd = Math.max(0, h.quickCd - dt);
+    h.dodgeCd = Math.max(0, h.dodgeCd - dt);
+    const items = ['item1', 'item2', 'item3', 'item4'] as const;
+    for (let i = 0; i < 4; i++) if (pressed(items[i])) this.useItem(i);
     h.dropT = Math.max(0, h.dropT - dt);
     if (h.buff && (h.buff.t -= dt) <= 0) h.buff = null;
     h.t += dt;
     const dir = (inp.right ? 1 : 0) - (inp.left ? 1 : 0);
-    const speed = c.speed * h.d.speed * (1 + (h.buff?.speed ?? 0));
+    const speed = c.speed * h.d.speed * (1 + (h.buff?.speed ?? 0) + (h.boosts.speed?.[0] ?? 0));
+    // dodge roll: tap the same direction twice quickly
+    const tapDir = pressed('left') ? -1 : pressed('right') ? 1 : 0;
+    if (tapDir) {
+      const canDodge = h.dodgeCd <= 0 && (h.state === 'move' || h.state === 'air' || (h.state === 'attack' && h.t > this.atkDef(h).hit[1]));
+      if (canDodge && h.lastTap.dir === tapDir && this.time - h.lastTap.t < DOUBLE_TAP) {
+        h.face = tapDir as 1 | -1;
+        this.enter(h, 'dodge');
+        h.inv = Math.max(h.inv, DODGE_INV); h.dodgeCd = DODGE_CD; h.lastTap = { dir: 0, t: -9 };
+        this.events.push({ t: 'dodge' });
+      } else h.lastTap = { dir: tapDir, t: this.time };
+    }
 
     // skills (ground or air; can cancel the end of an attack)
     const free = h.state === 'move' || h.state === 'air' || (h.state === 'attack' && h.t > this.atkDef(h).hit[1]);
@@ -234,6 +269,10 @@ export class World {
         break;
       }
       case 'skill': this.stepSkill(h, dir, speed, dt); break;
+      case 'dodge':
+        h.vx = h.face * 560 * (1 - h.t / DODGE_T * 0.6);
+        if (h.t >= DODGE_T) this.enter(h, h.ground ? 'move' : 'air');
+        break;
       case 'climb': {
         const lad = this.ladderAt(h.x, h.y + 1);
         const vdir = (inp.down ? 1 : 0) - (inp.up ? 1 : 0);
@@ -283,6 +322,11 @@ export class World {
       case 'uppercut':
         if (h.ground) { h.vy = -760; h.ground = false; h.on = null; }
         break;
+      case 'heal': {
+        const lv = h.d.skillLv[sk.id] ?? 1;
+        h.hp = Math.min(h.d.maxHp, h.hp + h.d.maxHp * (sk.heal ?? 0.2) * (1 + 0.2 * (lv - 1)));
+        break;
+      }
     }
   }
 
@@ -326,6 +370,20 @@ export class World {
     if (h.t >= sk.dur && (sk.kind !== 'slam' || h.ground)) this.enter(h, h.ground ? 'move' : 'air');
   }
 
+  /** Quick-bag item: heal or boost (shared cooldown). */
+  useItem(slot: number): boolean {
+    const h = this.hero, it = h.bag[slot];
+    if (!it || it.n <= 0 || h.quickCd > 0 || h.state === 'down' || this.cleared) return false;
+    const def = CONSUMABLES[it.id];
+    if (!def.quick) return false;
+    if (def.heal && h.hp >= h.d.maxHp) return false;
+    if (def.heal) h.hp = Math.min(h.d.maxHp, h.hp + h.d.maxHp * def.heal);
+    if (def.boost) h.boosts[def.boost.kind] = [def.boost.v, def.boost.t];
+    it.n--; h.quickCd = QUICK_CD;
+    this.events.push({ t: 'use', slot, id: it.id });
+    return true;
+  }
+
   private atkDef(h: Hero): AttackDef { return h.step < 0 ? h.d.cls.air : h.d.cls.combo[h.step]; }
 
   private enter(h: Hero, s: HeroState): void { h.state = s; h.t = 0; if (s !== 'attack') h.queued = false; }
@@ -348,13 +406,13 @@ export class World {
     const crit = this.rand() * 100 < h.d.crit;
     const gap = m.lv - h.d.level; // fighting above your level hurts
     const lvMul = gap > 2 ? Math.max(0.4, 1 - 0.07 * (gap - 2)) : 1;
-    const buff = 1 + (h.buff?.atk ?? 0);
+    const buff = 1 + (h.buff?.atk ?? 0) + (h.boosts.atk?.[0] ?? 0);
     const dmg = Math.max(1, Math.round(raw * buff * lvMul * (crit ? h.d.critDmg : 1) * (0.9 + this.rand() * 0.2)));
     m.hp -= dmg; m.flash = 0.12; m.hurtShown = 3;
     this.combo++; this.comboT = COMBO_WINDOW; this.run.maxCombo = Math.max(this.run.maxCombo, this.combo);
     this.events.push({ t: 'hit', x: m.x, y: m.y - def.h * 0.6, dmg, crit, target: 'mob' });
 
-    const flinch = !def.armor || (def.brain !== 'boss' && (heavy || k.stun >= 0.6)) || m.state === 'stagger';
+    const flinch = !(def.armor || m.elite) || (def.brain !== 'boss' && (heavy || k.stun >= 0.6)) || m.state === 'stagger';
     if (def.brain === 'boss' && m.state !== 'stagger' && m.hp > 0) {
       m.stagger += dmg;
       if (m.stagger > m.maxHp * 0.12) { m.stagger = 0; m.state = 'stagger'; m.t = 0; m.vx = 0; this.events.push({ t: 'stagger' }); }
@@ -373,11 +431,15 @@ export class World {
     m.hp = 0; m.state = 'dead'; m.deadT = 0; m.vy = Math.min(m.vy, -300); m.ground = false; m.on = null;
     this.run.kills++;
     this.events.push({ t: 'mobDie', x: m.x, y: m.y, boss: def.brain === 'boss' });
-    this.events.push({ t: 'xp', n: mobXp(m.kind, m.lv) });
+    this.events.push({ t: 'xp', n: Math.round(mobXp(m.kind, m.lv) * (m.elite ? ELITE.xp : 1)) });
+    const cr = Math.round(mobCrumbs(m.lv, def.brain) * (m.elite ? 4 : 1) * (0.8 + this.rand() * 0.4));
+    this.run.crumbs += cr;
+    this.events.push({ t: 'crumbs', n: cr, x: m.x, y: m.y - def.h });
     if (h.d.lifeOnKill > 0) h.hp = Math.min(h.d.maxHp, h.hp + h.d.maxHp * h.d.lifeOnKill);
-    const drops = def.brain === 'boss' ? 3 : this.rand() < def.dropChance ? 1 : 0;
+    const drops = def.brain === 'boss' ? 3 : m.elite ? 2 : this.rand() < def.dropChance ? 1 : 0;
     for (let i = 0; i < drops; i++) {
-      const tier = Math.max(def.brain === 'boss' ? 3 : 1, rollTier(dropLevel(m.lv) + (def.brain === 'boss' ? 2 : 0), this.rand)) as BoxTier;
+      const big = def.brain === 'boss' || m.elite;
+      const tier = Math.max(def.brain === 'boss' ? 3 : m.elite ? 2 : 1, rollTier(dropLevel(m.lv) + (big ? 2 : 0), this.rand)) as BoxTier;
       const b: Box = { id: nextId++, tier, ilvl: m.lv, x: m.x + (i - (drops - 1) / 2) * 50, y: m.y - 20, vy: -420 - i * 60, ground: false, t: 0 };
       this.boxes.push(b);
       this.events.push({ t: 'drop', id: b.id, tier, x: b.x, y: b.y });
@@ -389,6 +451,7 @@ export class World {
     const def = MOBS[m.kind], h = this.hero;
     m.t += dt; m.flash = Math.max(0, m.flash - dt); m.hurtShown = Math.max(0, m.hurtShown - dt);
     if (m.state === 'dead') { m.deadT += dt; m.vx *= 0.96; this.physics(m, dt, MAX_FALL, false); return; }
+    if (def.brain === 'flyer') { this.stepFlyer(m, dt); return; }
     const dx = h.x - m.x;
     const sameLevel = Math.abs(h.y - m.y) < (def.brain === 'ranged' ? 70 : 40);
     const heroOk = h.state !== 'down';
@@ -425,7 +488,7 @@ export class World {
       }
       case 'windup': {
         m.vx = approach(m.vx, 0, 1200 * dt);
-        const wind = m.move === 'charge' ? 0.8 : m.move === 'leap' ? 0.55 : def.windup;
+        const wind = (m.move === 'charge' ? 0.8 : m.move === 'leap' ? 0.55 : m.move === 'rain' ? 0.8 : def.windup) * TUNE.windup;
         if (m.t > wind) { m.state = 'attack'; m.t = 0; m.hitDone = false; this.beginAttack(m); }
         break;
       }
@@ -443,9 +506,49 @@ export class World {
     m.x = clamp(m.x, 20, this.stage.width - 20);
   }
 
+/** Flyers hover ~80px above their floor, drift near the hero, then swoop at it and float back up. */
+  private stepFlyer(m: Mob, dt: number): void {
+    const def = MOBS[m.kind], h = this.hero;
+    const hoverY = m.homeY - 80 + Math.sin(this.time * 2 + m.id) * 8;
+    const dx = h.x - m.x;
+    const chase = h.state !== 'down' && Math.abs(dx) < def.aggro && Math.abs(h.y - m.homeY) < 170;
+    switch (m.state) {
+      case 'walk': {
+        const tx = chase ? h.x - Math.sign(dx || 1) * 110 : m.home + Math.sin(m.t * 0.6 + m.id) * def.patrol;
+        m.vx = approach(m.vx, clamp((tx - m.x) * 2, -def.speed, def.speed), 600 * dt);
+        m.vy = approach(m.vy, (hoverY - m.y) * 3, 900 * dt);
+        if (chase) m.face = dx > 0 ? 1 : -1; else if (Math.abs(m.vx) > 5) m.face = m.vx > 0 ? 1 : -1;
+        if (chase && m.t > 1.3 && Math.abs(dx) < def.range) { m.state = 'windup'; m.t = 0; m.move = 'swoop'; }
+        break;
+      }
+      case 'windup':
+        m.vx = approach(m.vx, 0, 800 * dt); m.vy = approach(m.vy, -40, 400 * dt);
+        if (m.t > def.windup) {
+          m.state = 'attack'; m.t = 0; m.hitDone = false;
+          const tx = h.x, ty = h.y - 30, d = Math.hypot(tx - m.x, ty - m.y) || 1;
+          m.vx = (tx - m.x) / d * 430; m.vy = (ty - m.y) / d * 430;
+        }
+        break;
+      case 'attack':
+        if (!m.hitDone && Math.abs(h.x - m.x) < 32 && m.y > h.y - 80 && m.y < h.y + 10) { m.hitDone = true; this.hurtHero(m.atk, Math.sign(m.vx) || 1); }
+        if (m.t > 0.75) { m.state = 'walk'; m.t = 0; }
+        break;
+      default:
+        m.vx = approach(m.vx, 0, 600 * dt); m.vy = approach(m.vy, 0, 900 * dt);
+        if (m.t > 0.4) { m.state = 'walk'; m.t = 0; }
+    }
+    m.x = clamp(m.x + m.vx * dt, 20, this.stage.width - 20);
+    m.y = Math.min(m.y + m.vy * dt, m.homeY - 16);
+    m.ground = false; m.on = null;
+  }
+
   private bossThink(m: Mob, dx: number): void {
     const r = this.rand();
-    const move = Math.abs(dx) < 150 ? (r < 0.6 ? 'slash' : 'leap') : r < 0.45 ? 'charge' : r < 0.85 ? 'leap' : 'slash';
+    const moves = MOBS[m.kind].moves ?? ['slash'];
+    const close = Math.abs(dx) < 150;
+    let move = close ? (r < 0.6 ? 'slash' : 'leap') : r < 0.45 ? 'charge' : r < 0.85 ? 'leap' : 'slash';
+    if (moves.includes('rain') && this.rand() < (m.hp < m.maxHp / 2 ? 0.4 : 0.25)) move = 'rain';
+    if (!moves.includes(move)) move = moves[Math.floor(this.rand() * moves.length)];
     if (move === 'slash' && Math.abs(dx) > 170) return; // walk closer first
     m.state = 'windup'; m.t = 0; m.vx = 0; m.move = move;
     m.face = dx > 0 ? 1 : -1;
@@ -465,6 +568,12 @@ export class World {
       case 'charge': m.vx = m.face * 560; break;
       case 'leap': m.vx = clamp((h.x - m.x) * 1.4, -520, 520); m.vy = -760; m.ground = false; m.on = null; break;
       case 'slash': break;
+      case 'rain': // icicles fall over the hero
+        for (let i = 0; i < 5; i++) {
+          const x = clamp(h.x + (i - 2) * 90 + (this.rand() - 0.5) * 40, 30, this.stage.width - 30);
+          this.shots.push({ id: nextId++, x, y: h.y - 330 - i * 30, vx: 0, vy: 120, t: 0, dmg: m.atk, hit: new Set(), from: 'mob', kx: 120, ky: -160, pierce: false, g: 900, kind: 'icicle' });
+        }
+        break;
     }
   }
 
@@ -500,6 +609,9 @@ export class World {
         }
         if (m.hitDone && m.t > 0.9) this.endAttack(m);
         break;
+      case 'rain':
+        if (m.t > 0.9) this.endAttack(m);
+        break;
       case 'slash':
         if (!m.hitDone && m.t > 0.08) { m.hitDone = true; if (touch(def.range + 20, 120)) this.hurtHero(Math.round(m.atk * 1.1), m.face); }
         if (m.t > 0.7) this.endAttack(m);
@@ -512,11 +624,17 @@ export class World {
   private hurtHero(raw: number, dir: number): void {
     const h = this.hero;
     if (h.inv > 0 || h.state === 'down') return;
-    const dr = 1 - (1 - h.d.dr) * (1 - (h.buff?.def ?? 0));
+    const dr = 1 - (1 - h.d.dr) * (1 - (h.buff?.def ?? 0)) * (1 - (h.boosts.def?.[0] ?? 0));
     const dmg = Math.max(1, Math.round(raw * (1 - dr) * (0.9 + this.rand() * 0.2)));
     h.hp -= dmg; h.inv = 0.9;
     this.run.hitsTaken++; this.run.dmgTaken += dmg;
     this.events.push({ t: 'hit', x: h.x, y: h.y - 60, dmg, crit: false, target: 'hero' });
+    if (h.hp <= 0 && h.revives > 0) { // Second Helping
+      h.revives--; this.run.revived++;
+      h.hp = Math.round(h.d.maxHp * 0.5); h.inv = 2.5;
+      this.events.push({ t: 'revive' });
+      return;
+    }
     if (h.hp <= 0) { h.hp = 0; this.enter(h, 'down'); h.buff = null; return; }
     if (h.state === 'skill' || h.buff?.armor) return; // super armour
     this.enter(h, 'hurt');
@@ -528,7 +646,7 @@ export class World {
     for (const s of this.shots) {
       s.t += dt; s.x += s.vx * dt; s.y += s.vy * dt;
       if (s.from === 'mob') {
-        s.vy += 300 * dt;
+        s.vy += (s.g ?? 300) * dt;
         if (Math.abs(h.x - s.x) < 22 && s.y > h.y - 70 && s.y < h.y + 4 && h.inv <= 0) { this.hurtHero(s.dmg, Math.sign(s.vx)); s.t = 99; }
         continue;
       }
@@ -542,7 +660,7 @@ export class World {
         }
       }
     }
-    this.shots = this.shots.filter(s => s.t < (s.from === 'mob' ? 2 : 0.9) && s.x > 0 && s.x < this.stage.width && s.y < this.stage.groundY + 20);
+    this.shots = this.shots.filter(s => s.t < (s.from === 'mob' ? 2.5 : 0.9) && s.x > 0 && s.x < this.stage.width && s.y < this.stage.groundY + 20);
   }
 
   private stepMines(dt: number): void {

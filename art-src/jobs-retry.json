@@ -1,10 +1,10 @@
 [
  {
-  "name": "eq-fork",
-  "prompt": "Generate an image. This is a hero from my cute 2D action RPG. I need an EQUIPMENT ICON in exactly the same art style (clean dark outlines, saturated colours, glossy cel shading), shown diagonally like an RPG inventory icon, centred, filling 80% of the frame: a WEAPON, a big silver dinner FORK used as a trident spear, with a red ribbon tied on the handle. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1 image.",
+  "name": "bg-far-freezer",
+  "prompt": "Generate an image. This is the background of the first area of my cute 2D side-scrolling action RPG. I need the FAR BACKGROUND for the fridge world's BOSS ARENA, 'Freezer Throne', same painted style: straight-on side view inside a giant freezer: walls of glittering ice, huge frozen peas and ice cube towers, icicles hanging from above, an eerie but cheerful blue-violet glow, snow sparkles drifting. The bottom quarter calm and darker. No characters, no text, no UI. Wide 16:9 landscape image.",
   "newChat": true,
   "refs": [
-   "art-src/ref-kaiju-0.png"
+   "art-src/ref-bg.png"
   ]
  }
 ]

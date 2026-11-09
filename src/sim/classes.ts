@@ -33,7 +33,7 @@ const A = (o: Partial<AttackDef>): AttackDef => ({ dur: 0.32, hit: [0.08, 0.18],
 export const CLASSES: HeroClass[] = [
   {
     species: 0, name: 'Gobzilla Jr.', role: 'Brawler: balanced all-rounder',
-    hp: 120, atk: 10, speed: 230, jump: 700,
+    hp: 132, atk: 10, speed: 230, jump: 700,
     base: { str: 6, dex: 5, int: 4, vit: 5 }, grow: { str: 2, dex: 1, int: 1, vit: 1 },
     combo: [A({}), A({ dmg: 1.1 }), A({ dur: 0.45, hit: [0.14, 0.26], reach: 76, dmg: 1.8, kx: 320, ky: -420, stun: 0.6, lunge: 140 })],
     air: A({ dur: 0.3, reach: 60, h: 70, dmg: 0.9, kx: 120, ky: -120 }),
@@ -47,17 +47,45 @@ export const CLASSES: HeroClass[] = [
   },
   {
     species: 11, name: 'Pizzaraptor', role: 'Slasher: fast, long combos',
-    hp: 100, atk: 8, speed: 280, jump: 740,
+    hp: 118, atk: 8, speed: 280, jump: 740,
     base: { str: 5, dex: 8, int: 3, vit: 4 }, grow: { str: 1, dex: 3, int: 0, vit: 1 },
     combo: [A({ dur: 0.24, hit: [0.05, 0.13] }), A({ dur: 0.24, hit: [0.05, 0.13], dmg: 1 }), A({ dur: 0.38, hit: [0.1, 0.22], reach: 84, dmg: 1.7, kx: 360, ky: -380, lunge: 220, stun: 0.55 })],
     air: A({ dur: 0.26, reach: 66, dmg: 1, kx: 100, ky: -160 }),
   },
   {
     species: 4, name: 'Mothball', role: 'Caster: ranged bolts, glides',
-    hp: 90, atk: 11, speed: 220, jump: 680, glide: true,
+    hp: 108, atk: 11, speed: 220, jump: 680, glide: true,
     base: { str: 3, dex: 4, int: 9, vit: 4 }, grow: { str: 0, dex: 1, int: 3, vit: 1 },
     combo: [A({ reach: 100, dmg: 0.9, lunge: 0 }), A({ reach: 110, dmg: 1, lunge: 0 }), A({ dur: 0.45, hit: [0.15, 0.27], reach: 140, h: 80, dmg: 1.6, kx: 300, ky: -300, lunge: 0, stun: 0.6 })],
     air: A({ dur: 0.3, reach: 100, h: 80, dmg: 0.9, lunge: 0 }),
+  },
+  {
+    species: 1, name: 'Squidgeon', role: 'Lasher: long tentacle reach, multi-hits',
+    hp: 105, atk: 9, speed: 215, jump: 690,
+    base: { str: 5, dex: 6, int: 6, vit: 4 }, grow: { str: 1, dex: 1, int: 2, vit: 1 },
+    combo: [A({ reach: 90, dmg: 0.9 }), A({ reach: 96, dmg: 1 }), A({ dur: 0.46, hit: [0.14, 0.28], reach: 120, h: 80, dmg: 1.7, kx: 300, ky: -360, stun: 0.6, lunge: 60 })],
+    air: A({ dur: 0.3, reach: 90, h: 80, dmg: 0.9, ky: -140 }),
+  },
+  {
+    species: 2, name: 'Crabbage', role: 'Guardian: armoured claws, shields up',
+    hp: 175, atk: 11, speed: 185, jump: 655,
+    base: { str: 6, dex: 3, int: 2, vit: 8 }, grow: { str: 1, dex: 0, int: 1, vit: 3 },
+    combo: [A({ dur: 0.36, hit: [0.1, 0.2], reach: 74, dmg: 1.1 }), A({ dur: 0.36, hit: [0.1, 0.2], reach: 74, dmg: 1.2 }), A({ dur: 0.55, hit: [0.2, 0.32], reach: 92, h: 70, dmg: 2.3, kx: 440, ky: -280, stun: 0.8, lunge: 50 })],
+    air: A({ dur: 0.34, reach: 70, h: 70, dmg: 1.1, kx: 160, ky: 220 }),
+  },
+  {
+    species: 5, name: 'Toastbat', role: 'Assassin: flies, air combos, crits',
+    hp: 115, atk: 10, speed: 265, jump: 760, glide: true,
+    base: { str: 5, dex: 8, int: 3, vit: 3 }, grow: { str: 1, dex: 3, int: 0, vit: 1 },
+    combo: [A({ dur: 0.24, hit: [0.05, 0.13] }), A({ dur: 0.24, hit: [0.05, 0.13] }), A({ dur: 0.36, hit: [0.1, 0.2], reach: 80, dmg: 1.6, kx: 300, ky: -420, lunge: 200, stun: 0.55 })],
+    air: A({ dur: 0.22, hit: [0.04, 0.14], reach: 70, h: 80, dmg: 1.15, kx: 90, ky: -200 }),
+  },
+  {
+    species: 6, name: 'Dumplord', role: 'Healer: steam magic, heals itself',
+    hp: 140, atk: 9, speed: 200, jump: 665,
+    base: { str: 4, dex: 3, int: 8, vit: 6 }, grow: { str: 0, dex: 1, int: 3, vit: 2 },
+    combo: [A({ reach: 80, dmg: 0.95 }), A({ reach: 84, dmg: 1 }), A({ dur: 0.48, hit: [0.16, 0.28], reach: 110, h: 80, dmg: 1.6, kx: 320, ky: -300, stun: 0.6, lunge: 30 })],
+    air: A({ dur: 0.3, reach: 80, h: 80, dmg: 0.9 }),
   },
 ];
 

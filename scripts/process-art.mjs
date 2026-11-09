@@ -13,8 +13,8 @@ import sharp from 'sharp';
 
 const RAW = path.resolve('art-src/raw');
 const OUT = path.resolve('public/art');
-const SPRITES = [[/^mob-/, 384], [/^box-/, 256], [/^ob-/, 768], [/^eq-/, 192], [/^boss-/, 640], [/^plat-/, 768], [/^fx-/, 256], [/^icon-/, 192]];
-const BACKGROUNDS = [[/^bg-far/, [1920, 1080]], [/^tile-/, [512, 512]], [/^bg-town/, [1920, 1080]]];
+const SPRITES = [[/^mob-/, 384], [/^box-/, 256], [/^ob-/, 768], [/^eq-/, 192], [/^c-/, 160], [/^boss-/, 640], [/^plat-/, 768], [/^fx-/, 256], [/^icon-/, 192]];
+const BACKGROUNDS = [[/^bg-far/, [1920, 1080]], [/^tile-/, [512, 512]], [/^bg-town/, [1920, 1080]], [/^map-/, [1920, 1080]]];
 const LAYERS = [[/^bg-mid/, [1920, 1080]]];
 const PARTS_SCALE = 0.5; // parts sheets are 1024px; pieces end up ~150-250px
 
