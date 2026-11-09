@@ -87,8 +87,8 @@ export const RIGS: Record<number, RigDef> = {
     hover: true,
     fly: true,
     parts: [
-      { piece: 1, role: 'wingBack', joint: [300, 205], pivot: [0.93, 0.55], depth: -4, tint: 0xc8b8d8, rest: 0.25 },
-      { piece: 1, role: 'wing', joint: [290, 215], pivot: [0.93, 0.55], depth: -3, rest: -0.05 },
+      { piece: 1, role: 'wingBack', joint: [314, 202], pivot: [0.93, 0.55], depth: -4, tint: 0xc8b8d8, rest: 0.25 },
+      { piece: 1, role: 'wing', joint: [308, 214], pivot: [0.93, 0.55], depth: -3, rest: -0.05 },
       { piece: 0, role: 'body', joint: [355, 346], pivot: [0.5, 1], depth: 0 },
       { piece: 3, role: 'arm', joint: [398, 272], pivot: [0.5, 0.12], depth: 1 },
     ],
@@ -130,8 +130,8 @@ export const RIGS: Record<number, RigDef> = {
     legs: 'dangle',
     hover: true,
     parts: [
-      { piece: 3, role: 'wingBack', joint: [262, 150], pivot: [0.6, 0.92], depth: -4, tint: 0xd0b890, rest: 0.25 },
-      { piece: 1, role: 'wing', joint: [238, 158], pivot: [0.65, 0.92], depth: -3, rest: -0.2 },
+      { piece: 3, role: 'wingBack', joint: [262, 203], pivot: [0.6, 0.92], depth: -4, tint: 0xd0b890, rest: 0.25 },
+      { piece: 1, role: 'wing', joint: [240, 208], pivot: [0.65, 0.92], depth: -3, rest: -0.2 },
       { piece: 5, role: 'legB', joint: [232, 352], pivot: [0.5, 0.1], depth: -2, tint: 0xd8c0a0 },
       { piece: 4, role: 'legA', joint: [330, 352], pivot: [0.5, 0.1], depth: 1 },
       { piece: 0, role: 'body', joint: [287, 361], pivot: [0.5, 1], depth: 0 },
