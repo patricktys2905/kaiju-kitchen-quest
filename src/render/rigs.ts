@@ -19,8 +19,8 @@ export interface PartDef {
 }
 
 export interface RigDef {
-  /** swing = walking legs; shuffle = little feet slide (Bluebeary); dangle = hovering (Mothball) */
-  legs?: 'swing' | 'shuffle' | 'dangle';
+  /** swing = walking legs; shuffle = little feet slide; dangle = hovering (Mothball); none = legless, hops along (Bluebeary) */
+  legs?: 'swing' | 'shuffle' | 'dangle' | 'none';
   hover?: boolean;
   root: [number, number];
   /** World pixels per sheet pixel. */
@@ -36,6 +36,7 @@ export const RIGS: Record<number, RigDef> = {
     scale: 0.26,
     parts: [
       { piece: 1, role: 'tail', joint: [205, 318], pivot: [0.9, 0.45], depth: -3, rest: -0.15 },
+      { piece: 4, role: 'armBack', joint: [318, 250], pivot: [0.2, 0.3], depth: -2.5, tint: 0xc89aa0, rest: 0.3 },
       { piece: 3, role: 'legB', joint: [248, 328], pivot: [0.5, 0.2], depth: -2, tint: 0xd8c0c4 },
       { piece: 2, role: 'legA', joint: [318, 328], pivot: [0.5, 0.2], depth: -1 },
       { piece: 0, role: 'body', joint: [282, 335], pivot: [0.5, 1], depth: 0 },
@@ -55,15 +56,13 @@ export const RIGS: Record<number, RigDef> = {
       { piece: 4, role: 'arm', joint: [440, 245], pivot: [0.12, 0.3], depth: 1 },
     ],
   },
-  // Bluebeary (side profile): body 264x310@201,51; arms 69x97 @40,263 / @138,263; feet @142,409 / @279,411
+  // Bluebeary (side profile, legless: hops on its muffin cup): body 264x310@201,51; arms 69x97 @40,263 / @138,263
   10: {
-    root: [323, 400],
-    scale: 0.245,
-    legs: 'shuffle',
+    root: [323, 361],
+    scale: 0.27,
+    legs: 'none',
     parts: [
       { piece: 2, role: 'armBack', joint: [300, 232], pivot: [0.5, 0.12], depth: -3, tint: 0xb8c4e8, rest: 0.15 },
-      { piece: 3, role: 'legB', joint: [292, 356], pivot: [0.5, 0.25], depth: -2, tint: 0xb8c4e8 },
-      { piece: 4, role: 'legA', joint: [352, 356], pivot: [0.5, 0.25], depth: -1 },
       { piece: 0, role: 'body', joint: [323, 361], pivot: [0.46, 1], depth: 0 },
       { piece: 1, role: 'arm', joint: [352, 238], pivot: [0.5, 0.12], depth: 1, rest: -0.1 },
     ],

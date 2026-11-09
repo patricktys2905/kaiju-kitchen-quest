@@ -1,0 +1,14 @@
+[
+  {
+    "name": "parts-0",
+    "newChat": true,
+    "refs": ["art-src/old/parts-0-v1.png"],
+    "prompt": "Generate an image. Edit this cutout puppet parts sheet: on the BIG BODY piece (the strawberry body with the face), REMOVE the small arm that is painted on the belly, and fill that area with the same strawberry body texture, colour, seeds and shading, so the body has NO arm on it at all. Keep EVERYTHING else exactly the same: same pieces, same sizes, same positions, same separate arm, legs and tail, same flat magenta (#FF00FF) background. No text. Square 1:1 image."
+  },
+  {
+    "name": "parts-11",
+    "newChat": true,
+    "refs": ["art-src/old/parts-11-v1.png"],
+    "prompt": "Generate an image. Edit this cutout puppet parts sheet: on the BIG BODY piece (the dinosaur body with the head and pizza shell), REMOVE the small clawed arm that is painted on the chest/belly, and fill that area with the same red dinosaur skin and melted cheese, so the body has NO arm on it at all. Keep EVERYTHING else exactly the same: same pieces, same sizes, same positions, the two separate small arms, the legs and the tail, same flat magenta (#FF00FF) background. No text. Square 1:1 image."
+  }
+]

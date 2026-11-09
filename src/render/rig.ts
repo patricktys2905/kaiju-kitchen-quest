@@ -24,10 +24,19 @@ export function poseFor(h: Hero, time: number, walkPhase: number, rig: RigDef | 
   const cls = h.d.cls;
   const run = Math.min(1, Math.abs(h.vx) / cls.speed);
   const shuffle = rig?.legs === 'shuffle';
+  const hopper = rig?.legs === 'none';
   const flap = Math.sin(time * (rig?.hover ? 14 : 4));
   switch (h.state) {
     case 'move': {
-      if (run > 0.1) {
+      if (run > 0.1 && hopper) {
+        // legless: bounce along in little hops, squashing on each landing
+        const hp = Math.abs(Math.sin(walkPhase));
+        const contact = 1 - Math.min(1, hp / 0.3);
+        p.y = -hp * 13 * run;
+        p.sy = 1 + (hp * 0.06 - contact * 0.13) * run; p.sx = 1 + (contact * 0.1 - hp * 0.04) * run;
+        p.lean = (0.05 + Math.cos(walkPhase * 2) * 0.04) * run;
+        p.r = { arm: -0.3 - hp * 0.9 * run, armBack: -0.2 - hp * 0.7 * run, tail: hp * 0.2 };
+      } else if (run > 0.1) {
         const s = Math.sin(walkPhase), c = Math.cos(walkPhase);
         p.y = -Math.abs(c) * 4 * run;
         p.lean = 0.07 * run;
@@ -156,7 +165,7 @@ export class HeroView {
   }
 
   update(h: Hero, time: number, dt: number): void {
-    this.walk += Math.abs(h.vx) * dt * 0.05;
+    this.walk += Math.abs(h.vx) * dt * (this.rig?.legs === 'none' ? 0.042 : 0.05);
     const p = poseFor(h, time, this.walk, this.rig);
     if (h.ground && !this.wasGround) this.squash = 0.16;
     this.wasGround = h.ground;
