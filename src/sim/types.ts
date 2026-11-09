@@ -40,7 +40,8 @@ export interface StageDef {
 }
 
 export type MobKind = 'bun' | 'worm' | 'pepper' | 'egg' | 'toast' | 'pea' | 'yogurt' | 'icebat' | 'pickle' | 'golem'
-  | 'popcorn' | 'imp' | 'bacon' | 'meatball' | 'dragon';
+  | 'popcorn' | 'imp' | 'bacon' | 'meatball' | 'dragon'
+  | 'can' | 'cheerio' | 'minicheerio' | 'soda' | 'flour' | 'jar';
 
 export type BoxTier = 1 | 2 | 3 | 4 | 5;
 export interface LootBox { tier: BoxTier; ilvl: number }
@@ -51,7 +52,7 @@ export type SimEvent =
   | { t: 'skill'; slot: number; kind: string; id: string }
   | { t: 'jump' }
   | { t: 'land' }
-  | { t: 'mobDie'; x: number; y: number; boss: boolean; elite: boolean }
+  | { t: 'mobDie'; x: number; y: number; boss: boolean; elite: boolean; kind: MobKind }
   | { t: 'xp'; n: number }
   | { t: 'drop'; id: number; tier: BoxTier; x: number; y: number }
   | { t: 'pickup'; id: number; tier: BoxTier }
@@ -68,4 +69,5 @@ export type SimEvent =
   | { t: 'revive' }
   | { t: 'crumbs'; n: number; x: number; y: number }
   | { t: 'stone'; n: number; x: number; y: number }
-  | { t: 'ult'; name: string };
+  | { t: 'ult'; name: string }
+  | { t: 'block'; x: number; y: number };

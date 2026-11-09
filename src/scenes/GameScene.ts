@@ -16,7 +16,10 @@ import { type GearLook, HeroView } from '../render/rig';
 import { BASES } from '../sim/items';
 import type { HeroProfile } from '../sim/stats';
 import { addXp, finishStage, hero, quickBag, save, syncQuickBag } from '../save';
-import { track } from '../quests';
+import { checkUnlocks, track, trackHero, trackKey } from '../quests';
+import { STORIES, beatAfter } from '../story/stories';
+import { playStory } from '../ui/story';
+import { CLASSES } from '../sim/classes';
 import { setSkillUi, setTouchVisible, setUltUi } from '../touch';
 import { hideCamp, runGacha, showCamp, showResult, stageUnlocked } from '../ui/camp';
 
@@ -66,7 +69,7 @@ export class GameScene extends Phaser.Scene {
   private done = false;
   private hard = false;
   /** Hard mode is open for a world once its boss is beaten. */
-  private hardOk(): boolean { return !!save.cleared[`${this.stage.world}-10`]; }
+  private hardOk(): boolean { return !!hero().cleared[`${this.stage.world}-10`]; }
 
   constructor() { super('game'); }
 
@@ -111,7 +114,7 @@ export class GameScene extends Phaser.Scene {
   private buildStage(): void {
     const st = this.stage, p = hero();
     this.hard = save.hard && this.hardOk();
-    this.world = new World(st, derive(p), (Date.now() & 0xffff) + 1, quickBag(), save.items.revive ?? 0, this.hard);
+    this.world = new World(st, derive(p), (Date.now() & 0xffff) + 1, quickBag(), save.items.revive ?? 0, this.hard, STORIES[p.species]?.variants[st.id]);
     const cam = this.cameras.main.setZoom(ZOOM).setBackgroundColor('#f6dcb4');
     const bg = this.has(st.bg) ? st.bg : 'bg-far';
     this.far = this.has(bg) ? this.add.image(SX, SY, bg).setOrigin(0, 0).setScrollFactor(0).setDepth(-100) : undefined;
@@ -143,9 +146,11 @@ export class GameScene extends Phaser.Scene {
     this.hero.root.setDepth(5);
     this.cx = w.hero.x; this.cy = st.groundY - 100;
     cam.centerOn(this.cx, this.cy);
+    if (w.variant === 'night') { this.add.rectangle(SX, SY, VW * 2, VH * 2, 0x0a0a30, 0.42).setOrigin(0, 0).setScrollFactor(0).setDepth(15); }
     setTouchVisible(true); showHud(true);
-    playMusic(st.boss ? 'boss' : st.world === 2 ? 'world2' : st.world === 3 ? 'world3' : 'world1');
+    playMusic(st.boss ? 'boss' : st.world === 2 ? 'world2' : st.world === 3 ? 'world3' : st.world === 4 ? 'world2' : 'world1');
     if (st.boss) this.time.delayedCall(900, () => sfx('boss'));
+    if (w.variant) this.time.delayedCall(900, () => toast(`${{ swarm: '🐜 SWARM', ambush: '⚔️ AMBUSH', night: '🌙 NIGHT' }[w.variant!]}!`, { color: '#c8a8ff' }));
     toast(`${st.num} ${st.name}${this.hard ? ' · HARD' : ''}`, { big: true, color: this.hard ? '#ff7a6a' : undefined });
     if (st.boss) this.time.delayedCall(1200, () => toast(`The ${MOBS[st.mobs[0].kind].name} awaits!`, { color: '#ff9a6a' }));
   }
@@ -210,12 +215,13 @@ export class GameScene extends Phaser.Scene {
         }
         case 'swing': this.slash(e.step); sfx('swing'); break;
         case 'jump': sfx('jump'); break;
-        case 'skill': this.skillFx(e.kind); sfx(e.kind === 'heal' ? 'heal' : 'skill'); break;
+        case 'skill': trackHero(hero().species, `skill:${e.id}`); this.skillFx(e.kind); sfx(e.kind === 'heal' ? 'heal' : 'skill'); break;
         case 'shock': sfx('boom'); this.ring(e.x, e.y, e.r, 0xffe0a0); this.shake = Math.max(this.shake, 7); break;
         case 'boom': sfx('boom'); this.burst(e.x, e.y - 10, 0x4a6cff, 14); this.ring(e.x, e.y, 70, 0x7a9aff); break;
         case 'mobDie':
           sfx('kill');
           track('kills');
+          trackKey(`kill:${e.kind}`); trackHero(hero().species, `kill:${e.kind}`); trackHero(hero().species, 'kills');
           if (e.boss) track('bossKills');
           if (e.boss || e.elite) track('eliteKills');
           this.burst(e.x, e.y - 24, e.boss ? 0xffb347 : 0xc8f0a0, e.boss ? 40 : 14);
@@ -255,8 +261,14 @@ export class GameScene extends Phaser.Scene {
           this.ring(w.hero.x, w.hero.y - 30, 50, def.heal ? 0xff8aa0 : 0xffe27a);
           break;
         }
+        case 'block': {
+          const t = this.add.text(e.x, e.y, 'BLOCK', { fontFamily: 'Luckiest Guy', fontSize: '14px', color: '#c8d8e8', stroke: '#203040', strokeThickness: 4 }).setOrigin(0.5).setDepth(30).setResolution(3);
+          this.tweens.add({ targets: t, y: e.y - 30, alpha: 0, duration: 500, onComplete: () => t.destroy() });
+          sfx('click');
+          break;
+        }
         case 'ult': {
-          track('ults');
+          track('ults'); trackHero(hero().species, 'ult');
           sfx('reveal5'); this.shake = 12; this.hitStop = 0.25;
           const cam = this.cameras.main; cam.flash(200, 255, 230, 160);
           showUltBanner(hero().species, e.name);
@@ -293,19 +305,27 @@ export class GameScene extends Phaser.Scene {
     save.items.fstone = (save.items.fstone ?? 0) + w.run.stones;
     if (w.run.crumbs) track('crumbs', w.run.crumbs);
     const res = failed ? null : finishStage(st.id, rankOf(w.run, st.par).rank, w.loot, st.lv[1] + (this.hard ? HARD_LV : 0), !!st.boss, this.hard);
+    const sp = hero().species;
+    trackHero(sp, 'combo', w.run.maxCombo, true);
     if (res) {
+      trackHero(sp, `clear:${st.id}`, ['D', 'C', 'B', 'A', 'S'].indexOf(res.rank) + 1, true);
+      if (w.run.hitsTaken === 0) trackHero(sp, 'nohit');
+      if (this.hard) trackHero(sp, 'hard');
       track('clears'); track('heroClear', 1, hero().species);
       if (res.rank === 'S' || res.rank === 'A') track('rankA');
       if (res.rank === 'S') track('rankS');
     }
-    this.time.delayedCall(failed ? 600 : 300, () => showResult(
-      { stage: st, res, time: w.run.time, hits: w.run.hitsTaken, combo: w.run.maxCombo, xp: this.xpGained, levels: this.levels, failed, crumbs: w.run.crumbs, hard: this.hard },
+    const newKaiju = checkUnlocks();
+    const after = res ? beatAfter(st.id).filter(b => !hero().seen.includes(b)) : [];
+    for (const b of after) hero().seen.push(b);
+    this.time.delayedCall(failed ? 600 : 300, () => playStory(sp, after, () => showResult(
+      { stage: st, res, time: w.run.time, hits: w.run.hitsTaken, combo: w.run.maxCombo, xp: this.xpGained, levels: this.levels, failed, crumbs: w.run.crumbs, hard: this.hard, unlocked: newKaiju.map(s => CLASSES.find(c => c.species === s)!.name) },
       a => {
         if (a === 'retry') this.scene.restart({ stage: st.id });
         else if (a === 'next') { const n = STAGES[STAGES.indexOf(st) + 1]; this.scene.restart(n && stageUnlocked(n) ? { stage: n.id } : {}); }
         else if (a === 'boxes') { this.scene.restart({}); setTimeout(() => { showCamp('boxes'); runGacha(save.boxes.map((_, i) => i)); }, 50); }
         else this.scene.restart({});
-      }));
+      })));
   }
 
   // ---------- effects ----------
@@ -448,6 +468,8 @@ export class GameScene extends Phaser.Scene {
       if (!c) {
         c = s.from === 'hero'
           ? this.add.circle(0, 0, 9, 0xe8c8ff).setStrokeStyle(3, 0xffffff).setBlendMode(Phaser.BlendModes.ADD)
+          : s.kind === 'icicle' && worldOf(this.stage).id === 4 ? this.add.circle(0, 0, 11, 0xc8904a).setStrokeStyle(3, 0x6a3a10)
+          : s.kind === 'icicle' && worldOf(this.stage).id === 3 ? this.add.circle(0, 0, 8, 0xff6a2a).setStrokeStyle(2, 0xffd27a).setBlendMode(Phaser.BlendModes.ADD)
           : s.kind === 'icicle' ? this.add.ellipse(0, 0, 10, 26, 0xc8f0ff).setStrokeStyle(2, 0x6ab8ff)
           : s.kind === 'fire' ? this.add.circle(0, 0, 9, 0xff8a2a).setStrokeStyle(3, 0xffe27a).setBlendMode(Phaser.BlendModes.ADD)
           : this.add.circle(0, 0, 7, worldOf(this.stage).id === 2 ? 0x6ac86a : worldOf(this.stage).id === 3 ? 0xd0301a : 0x2a2020).setStrokeStyle(2, 0x8a7060);
@@ -494,7 +516,7 @@ export class GameScene extends Phaser.Scene {
     const flyer = def.brain === 'flyer';
     const wob = flyer ? Math.sin(t * 22 + m.id) * 0.6 : m.state === 'walk' && Math.abs(m.vx) > 5 ? Math.sin(t * 14 + m.id) : 0;
     let sx = 1 + wob * 0.04, sy = 1 - wob * 0.05, rot = wob * 0.05;
-    if (m.state === 'windup') { const k = Math.min(1, m.t / 0.4); sx = 1 + 0.12 * k; sy = 1 - 0.12 * k; rot = -0.12 * m.face * k; }
+    if (m.state === 'windup') { const k = Math.min(1, m.t / 0.4); sx = 1 + 0.12 * k; sy = 1 - 0.12 * k; rot = -0.12 * m.face * k; if (def.brain === 'bomber') { sx = sy = 1 + Math.sin(t * 40) * 0.1 + m.t * 0.3; } }
     if (m.state === 'attack') { sx = 0.92; sy = 1.1; rot = 0.16 * m.face; if (m.move === 'charge') rot = 0.25 * m.face; }
     if (m.state === 'hurt') rot = -0.22 * m.face;
     if (m.state === 'stagger') rot = Math.sin(t * 20) * 0.1;

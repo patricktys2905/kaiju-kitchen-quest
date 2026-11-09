@@ -110,7 +110,10 @@ export class World {
   exitX: number;
   rand: () => number;
 
-  constructor(public stage: StageDef, d: Derived, seed = 1, bag: Hero['bag'] = [], revives = 0, hard = false) {
+  /** story twist on this stage */
+  variant: 'swarm' | 'ambush' | 'night' | undefined;
+
+  constructor(public stage: StageDef, d: Derived, seed = 1, bag: Hero['bag'] = [], revives = 0, hard = false, variant?: 'swarm' | 'ambush' | 'night') {
     let s = seed >>> 0 || 1;
     this.rand = () => { s ^= s << 13; s ^= s >>> 17; s ^= s << 5; return ((s >>> 0) % 100000) / 100000; };
     this.exitX = stage.width - 90;
@@ -121,7 +124,17 @@ export class World {
       boosts: {}, bag: bag.map(b => b && { ...b }), revives, quickCd: 0, lastTap: { dir: 0, t: -9 }, dodgeCd: 0, ult: 0, phoenixUsed: false,
     };
     // Hard mode: every monster +HARD_LV levels
-    for (const m of stage.mobs) this.spawnMob(m.kind, m.x, m.lv + (hard ? HARD_LV : 0), m.y, m.elite);
+    this.variant = stage.boss ? undefined : variant; // bosses are never changed by the story
+    const night = this.variant === 'night' ? 1 : 0;
+    for (const m of stage.mobs) this.spawnMob(m.kind, m.x, m.lv + (hard ? HARD_LV : 0) + night, m.y, m.elite);
+    if (this.variant === 'swarm') {
+      for (const m of stage.mobs.filter((_, i) => i % 2 === 0)) this.spawnMob(m.kind, Math.min(stage.width - 200, m.x + 70), m.lv + (hard ? HARD_LV : 0), m.y, m.elite);
+      for (const m of this.mobs) if (!m.elite) { m.hp = m.maxHp = Math.round(m.maxHp * 0.65); }
+    }
+    if (this.variant === 'ambush') {
+      const w = WORLDS.find(x => x.id === stage.world) ?? WORLDS[0];
+      this.spawnMob(w.elite, Math.round(stage.width * 0.55), stage.lv[1] + 1 + (hard ? HARD_LV : 0), undefined, true);
+    }
   }
 
   /** New stats (level up mid-stage, or a different hero). Keeps the HP fraction. */
@@ -227,7 +240,7 @@ export class World {
     if (free && pressed('ult') && ultDef && h.d.level >= ULT_LV && h.ult >= 100) {
       if (dir) h.face = dir > 0 ? 1 : -1;
       h.ult = 0;
-      h.skill = ultDef; h.skillMul = h.d.skillDmg * (1 + 0.04 * (h.d.level - ULT_LV)); h.ticks = 0;
+      h.skill = ultDef; h.skillMul = h.d.skillDmg * (1 + 0.04 * (h.d.level - ULT_LV)) * h.d.ultDmg; h.ticks = 0;
       this.enter(h, 'skill');
       h.hitIds = new Set();
       h.inv = Math.max(h.inv, ultDef.dur + 0.4);
@@ -420,6 +433,10 @@ export class World {
 
   private damageMob(m: Mob, raw: number, dir: number, k: { kx: number; ky: number; stun: number }, heavy: boolean): void {
     const def = MOBS[m.kind], h = this.hero;
+    // shielders: front hits barely hurt unless it's a skill or a finisher (which also breaks the guard)
+    if (def.shield && m.state !== 'hurt' && m.state !== 'stagger' && Math.sign(h.x - m.x) === m.face) {
+      if (!heavy && k.stun < 0.6) { raw *= 0.25; this.events.push({ t: 'block', x: m.x + m.face * 20, y: m.y - def.h * 0.6 }); }
+    }
     const crit = this.rand() * 100 < h.d.crit;
     const gap = m.lv - h.d.level; // fighting above your level hurts
     const lvMul = gap > 2 ? Math.max(0.4, 1 - 0.07 * (gap - 2)) : 1;
@@ -428,7 +445,7 @@ export class World {
     m.hp -= dmg; m.flash = 0.12; m.hurtShown = 3;
     if (h.d.uniques.includes('frostfish')) m.slow = 2;
     if (crit && !heavy && h.d.uniques.includes('excalifork')) this.shots.push({ id: nextId++, x: h.x + h.face * 30, y: h.y - 40, vx: h.face * 600, vy: 0, t: 0, dmg: h.d.atk * 0.8, hit: new Set([m.id]), from: 'hero', kx: 120, ky: -100, pierce: false });
-    if (h.state !== 'skill' || h.skill?.id.startsWith('ult') === false) h.ult = Math.min(100, h.ult + (MOBS[m.kind].brain === 'boss' ? 1.6 : 1.1));
+    if (h.state !== 'skill' || h.skill?.id.startsWith('ult') === false) h.ult = Math.min(100, h.ult + (MOBS[m.kind].brain === 'boss' ? 1.6 : 1.1) * h.d.ultGain);
     this.combo++; this.comboT = COMBO_WINDOW; this.run.maxCombo = Math.max(this.run.maxCombo, this.combo);
     this.events.push({ t: 'hit', x: m.x, y: m.y - def.h * 0.6, dmg, crit, target: 'mob' });
 
@@ -450,7 +467,8 @@ export class World {
     const def = MOBS[m.kind], h = this.hero;
     m.hp = 0; m.state = 'dead'; m.deadT = 0; m.vy = Math.min(m.vy, -300); m.ground = false; m.on = null;
     this.run.kills++;
-    this.events.push({ t: 'mobDie', x: m.x, y: m.y, boss: def.brain === 'boss', elite: m.elite });
+    if (def.split) for (const off of [-30, 30]) { const c = this.spawnMob(def.split, clamp(m.x + off, 30, this.stage.width - 30), Math.max(1, m.lv - 2), m.on !== null && m.on >= 0 ? m.y : undefined); c.vy = -380; c.vx = off * 6; c.ground = false; c.on = null; c.state = 'hurt'; c.t = 0; }
+    this.events.push({ t: 'mobDie', x: m.x, y: m.y, boss: def.brain === 'boss', elite: m.elite, kind: m.kind });
     this.events.push({ t: 'xp', n: Math.round(mobXp(m.kind, m.lv) * (m.elite ? ELITE.xp : 1)) });
     const cr = Math.round(mobCrumbs(m.lv, def.brain) * (m.elite ? 4 : 1) * (0.8 + this.rand() * 0.4) * (h.d.uniques.includes('lucky') ? 1.5 : 1));
     if (h.d.uniques.includes('hourglass')) for (let i = 0; i < 3; i++) h.cds[i] = Math.max(0, h.cds[i] - 1);
@@ -459,7 +477,7 @@ export class World {
     const st = def.brain === 'boss' ? 3 : m.elite ? 2 : this.rand() < 0.07 ? 1 : 0;
     if (st) { this.run.stones += st; this.events.push({ t: 'stone', n: st, x: m.x, y: m.y - def.h - 14 }); }
     if (h.d.lifeOnKill > 0) h.hp = Math.min(h.d.maxHp, h.hp + h.d.maxHp * h.d.lifeOnKill);
-    const drops = def.brain === 'boss' ? 3 : m.elite ? 2 : this.rand() < def.dropChance ? 1 : 0;
+    const drops = def.brain === 'boss' ? 3 : m.elite ? 2 : this.rand() < def.dropChance * (this.variant === 'night' ? 1.4 : 1) ? 1 : 0;
     for (let i = 0; i < drops; i++) {
       const big = def.brain === 'boss' || m.elite;
       const tier = Math.max(def.brain === 'boss' ? 3 : m.elite ? 2 : 1, rollTier(dropLevel(m.lv) + (big ? 2 : 0), this.rand)) as BoxTier;
@@ -494,12 +512,12 @@ export class World {
           const p = this.stage.platforms[m.on];
           if ((dir < 0 && m.x - 20 < p.x) || (dir > 0 && m.x + 20 > p.x + p.w)) dir = 0;
         }
-        m.vx = approach(m.vx, dir * (chase ? def.speed * 1.4 : def.speed) * (m.slow > 0 ? 0.6 : 1), 800 * dt);
+        m.vx = approach(m.vx, dir * (chase ? def.speed * (def.brain === 'bomber' ? 1.6 : 1.4) : def.speed) * (m.slow > 0 ? 0.6 : 1), 800 * dt);
         if (chase) m.face = dx > 0 ? 1 : -1; else if (dir) m.face = dir > 0 ? 1 : -1;
         if (chase && m.ground && m.t > 0.4) {
           const near = Math.abs(dx) < def.range;
           if (def.brain === 'boss') this.bossThink(m, dx);
-          else if (near && (def.brain !== 'ranged' || Math.abs(dx) > 90 || m.t > 2)) { m.state = 'windup'; m.t = 0; m.vx = 0; m.move = def.brain; }
+          else if (near && (def.brain !== 'ranged' || Math.abs(dx) > 90 || m.t > 2)) { m.state = 'windup'; m.t = 0; m.vx = def.brain === 'bomber' ? m.vx * 0.3 : 0; m.move = def.brain; }
         }
         // the boss calls helpers at 66% and 33% HP
         if (def.brain === 'boss' && m.summoned < 2 && m.hp < m.maxHp * (m.summoned ? 0.33 : 0.66)) {
@@ -622,6 +640,15 @@ export class World {
         break;
       case 'ranged':
         if (m.t > 0.5) this.endAttack(m);
+        break;
+      case 'bomber':
+        if (!m.hitDone) {
+          m.hitDone = true;
+          this.events.push({ t: 'boom', x: m.x, y: m.y });
+          this.events.push({ t: 'shock', x: m.x, y: m.y, r: 95 });
+          if (Math.abs(h.x - m.x) < 95 && Math.abs(h.y - m.y) < 80) this.hurtHero(m.atk, Math.sign(h.x - m.x) || 1, m);
+          this.killMob(m);
+        }
         break;
       case 'brute':
         if (!m.hitDone && m.t > 0.1) { m.hitDone = true; this.events.push({ t: 'shock', x: m.x + m.face * 50, y: m.y, r: 70 }); if (touch(110, 80)) this.hurtHero(m.atk, m.face, m); }

@@ -3,7 +3,7 @@ import { type HeroClass, type Stat, type Stats, classOf } from './classes';
 import { type Item, SETS, type Slot, itemLines } from './items';
 import { MAX_SKILL, PASSIVE_UNLOCK, skillScale, skillsOf } from './skills';
 
-export const MAX_LEVEL = 40;
+export const MAX_LEVEL = 60;
 export const STAT_PTS_PER_LEVEL = 3;
 export const STATS: Stat[] = ['str', 'dex', 'int', 'vit'];
 export const STAT_INFO: Record<Stat, string> = {
@@ -25,11 +25,21 @@ export interface HeroProfile {
   equip: Partial<Record<Slot, Item>>;
   /** skill id → chosen branch (from skill level 3) */
   branch?: Record<string, 'a' | 'b'>;
+  /** this kaiju's own stage progress (best rank per stage), normal and Hard */
+  cleared: Record<string, 'S' | 'A' | 'B' | 'C' | 'D'>;
+  hardCleared: Record<string, 'S' | 'A' | 'B' | 'C' | 'D'>;
+  /** this kaiju's counters (kills per monster, skill uses, no-hit clears, best combo...) for its quests */
+  stats: Record<string, number>;
+  /** claimed kaiju-quest ids */
+  kq: string[];
+  /** story beats already seen */
+  seen: string[];
 }
 
 export function newProfile(species: number): HeroProfile {
   const sk = skillsOf(species);
-  return { species, level: 1, xp: 0, statPts: 0, alloc: { str: 0, dex: 0, int: 0, vit: 0 }, skillPts: 0, skills: { [sk.actives[0].id]: 1 }, equip: {} };
+  return { species, level: 1, xp: 0, statPts: 0, alloc: { str: 0, dex: 0, int: 0, vit: 0 }, skillPts: 0, skills: { [sk.actives[0].id]: 1 }, equip: {},
+    cleared: {}, hardCleared: {}, stats: {}, kq: [], seen: [] };
 }
 
 export function xpFor(level: number): number { return Math.round(25 * Math.pow(level, 1.35)); }
@@ -67,6 +77,7 @@ export interface Derived {
   uniques: string[];
   /** set name → pieces worn */
   sets: Record<string, number>;
+  ultGain: number; ultDmg: number;
 }
 
 export function derive(p: HeroProfile): Derived {
@@ -94,7 +105,7 @@ export function derive(p: HeroProfile): Derived {
   const sets: Record<string, number> = {};
   const uniques: string[] = [];
   for (const it of Object.values(p.equip)) { if (it?.set) sets[it.set] = (sets[it.set] ?? 0) + 1; if (it?.unique) uniques.push(it.unique); }
-  const sb = { atkPct: 0, hpPct: 0, critDmg: 0, speed: 0, skillDmg: 0, cdr: 0, dr: 0 };
+  const sb = { atkPct: 0, hpPct: 0, critDmg: 0, speed: 0, skillDmg: 0, cdr: 0, dr: 0, ultGain: 0, ultDmg: 0 };
   for (const [k, n] of Object.entries(sets)) for (const b of [n >= 2 ? SETS[k].b2 : null, n >= 3 ? SETS[k].b3 : null]) if (b) for (const [bk, bv] of Object.entries(b)) sb[bk as keyof typeof sb] += bv;
   const per = (k: keyof typeof pas.per) => (pas.per[k] ?? 0) * pl;
 
@@ -110,7 +121,7 @@ export function derive(p: HeroProfile): Derived {
     skillDmg: 1 + prim.int * 0.025 + (eq.skillDmg ?? 0) + per('skillDmg') + sb.skillDmg,
     cdr: Math.min(0.5, prim.int * 0.004 + (eq.cdr ?? 0) + per('cdr') + sb.cdr),
     speed: 1 + Math.min(0.35, prim.dex * 0.004 + (eq.speed ?? 0) + sb.speed),
-    uniques, sets,
+    uniques, sets, ultGain: 1 + sb.ultGain, ultDmg: 1 + sb.ultDmg,
     lifeOnKill: per('lifeOnKill'),
     skillLv,
     branch: { ...(p.branch ?? {}) },

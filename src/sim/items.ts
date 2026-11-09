@@ -27,10 +27,11 @@ export interface Item {
   unique?: string;
 }
 
-export interface BaseDef { slot: Slot; name: string; icon: string; main: Line[]; minLv?: number; /** only this kaiju can wear it */ for?: number; tier?: number; /** no longer drops */ retired?: boolean }
+export interface BaseDef { slot: Slot; name: string; icon: string; main: Line[]; minLv?: number; /** only this kaiju can wear it */ for?: number; tier?: number; /** no longer drops */ retired?: boolean; /** always part of this set */ set?: string }
 /** main = guaranteed stat at ilvl 1 (scaled by ilvl and rarity) */
-const W = (name: string, icon: string, owner: number, tier: number, main: Line[]): BaseDef => ({ slot: 'weapon', name, icon, main, for: owner, minLv: [0, 12, 24][tier - 1], tier });
-const AR = (name: string, icon: string, owner: number, main: Line[]): BaseDef => ({ slot: 'armor', name, icon, main, for: owner });
+const W = (name: string, icon: string, owner: number, tier: number, main: Line[]): BaseDef => ({ slot: 'weapon', name, icon, main, for: owner, minLv: [0, 12, 24][tier - 1], tier, set: tier === 3 ? `sig${owner}` : undefined });
+const AR = (name: string, icon: string, owner: number, main: Line[], tier = 1): BaseDef => ({ slot: 'armor', name, icon, main, for: owner, minLv: [0, 12, 24][tier - 1], tier, set: tier === 3 ? `sig${owner}` : undefined });
+const CH = (name: string, icon: string, owner: number, main: Line[]): BaseDef => ({ slot: 'charm', name, icon, main, for: owner, minLv: 12, set: `sig${owner}` });
 export const BASES: Record<string, BaseDef> = {
   // ----- kaiju weapons: 3 tiers each (tier 2 from item level 12, tier 3 from 24) -----
   spoon: W('Wooden Spoon', 'eq-spoon', 0, 1, [{ k: 'atk', v: 4 }]),
@@ -66,6 +67,24 @@ export const BASES: Record<string, BaseDef> = {
   'a-crab': AR('Cabbage Leaf Plate', 'a-crab', 2, [{ k: 'def', v: 5 }, { k: 'hp', v: 20 }]),
   'a-toast': AR('Crust Cloak', 'a-toast', 5, [{ k: 'def', v: 2 }, { k: 'hp', v: 15 }, { k: 'dex', v: 1 }]),
   'a-dump': AR('Steamer Armor', 'a-dump', 6, [{ k: 'def', v: 3 }, { k: 'hp', v: 22 }]),
+  // armor tiers 2 / 3 and signature charms for the first 8
+  'a-gob2': AR('Thorny Bark Plate', 'a-gob2', 0, [{ k: 'def', v: 4 }, { k: 'hp', v: 24 }, { k: 'str', v: 1 }], 2), 'a-gob3': AR('Royal Berry Armor', 'a-gob3', 0, [{ k: 'def', v: 5 }, { k: 'hp', v: 30 }, { k: 'str', v: 2 }], 3), 'k-gob': CH('Strawberry Seed', 'k-gob', 0, [{ k: 'critDmg', v: 0.1 }]),
+  'a-blue2': AR('Honeycomb Armor', 'a-blue2', 10, [{ k: 'def', v: 5 }, { k: 'hp', v: 32 }], 2), 'a-blue3': AR('Frosted Muffin Mail', 'a-blue3', 10, [{ k: 'def', v: 6 }, { k: 'hp', v: 40 }, { k: 'vit', v: 2 }], 3), 'k-blue': CH('Blueberry Locket', 'k-blue', 10, [{ k: 'hp', v: 30 }]),
+  'a-pizza2': AR('Crust Scale Mail', 'a-pizza2', 11, [{ k: 'def', v: 4 }, { k: 'hp', v: 20 }, { k: 'dex', v: 1 }], 2), 'a-pizza3': AR('Molten Cheese Armor', 'a-pizza3', 11, [{ k: 'def', v: 5 }, { k: 'hp', v: 26 }, { k: 'dex', v: 2 }], 3), 'k-pizza': CH('Pepperoni Medallion', 'k-pizza', 11, [{ k: 'crit', v: 4 }]),
+  'a-moth2': AR('Moonlit Shawl', 'a-moth2', 4, [{ k: 'def', v: 3 }, { k: 'hp', v: 20 }, { k: 'int', v: 1 }], 2), 'a-moth3': AR('Stardust Gown', 'a-moth3', 4, [{ k: 'def', v: 4 }, { k: 'hp', v: 26 }, { k: 'int', v: 2 }], 3), 'k-moth': CH('Little Lantern', 'k-moth', 4, [{ k: 'skillDmg', v: 0.08 }]),
+  'a-squid2': AR('Coral Plate', 'a-squid2', 1, [{ k: 'def', v: 4 }, { k: 'hp', v: 22 }, { k: 'int', v: 1 }], 2), 'a-squid3': AR('Pearl Shell Armor', 'a-squid3', 1, [{ k: 'def', v: 5 }, { k: 'hp', v: 28 }, { k: 'int', v: 2 }], 3), 'k-squid': CH('Lucky Pearl', 'k-squid', 1, [{ k: 'cdr', v: 0.05 }]),
+  'a-crab2': AR('Cheese Rind Shell', 'a-crab2', 2, [{ k: 'def', v: 6 }, { k: 'hp', v: 26 }], 2), 'a-crab3': AR('Golden Gouda Plate', 'a-crab3', 2, [{ k: 'def', v: 7 }, { k: 'hp', v: 34 }, { k: 'vit', v: 2 }], 3), 'k-crab': CH('Claw Charm', 'k-crab', 2, [{ k: 'def', v: 4 }]),
+  'a-toast2': AR('Toasted Crust Mail', 'a-toast2', 5, [{ k: 'def', v: 3 }, { k: 'hp', v: 20 }, { k: 'dex', v: 1 }], 2), 'a-toast3': AR('Golden Brioche Armor', 'a-toast3', 5, [{ k: 'def', v: 4 }, { k: 'hp', v: 26 }, { k: 'dex', v: 2 }], 3), 'k-toast': CH('Butter Pat', 'k-toast', 5, [{ k: 'speed', v: 0.04 }]),
+  'a-dump2': AR('Bamboo Lattice Armor', 'a-dump2', 6, [{ k: 'def', v: 4 }, { k: 'hp', v: 28 }], 2), 'a-dump3': AR('Jade Steamer Plate', 'a-dump3', 6, [{ k: 'def', v: 5 }, { k: 'hp', v: 36 }, { k: 'int', v: 2 }], 3), 'k-dump': CH('Soy Dish', 'k-dump', 6, [{ k: 'skillDmg', v: 0.07 }]),
+  // the new kaiju: 3 weapons, 3 armors, a charm each
+  'w-nori1': W('Chopstick Spear', 'w-nori1', 7, 1, [{ k: 'atk', v: 3 }, { k: 'skillDmg', v: 0.05 }]), 'w-nori2': W('Wasabi Flame Staff', 'w-nori2', 7, 2, [{ k: 'atk', v: 4 }, { k: 'skillDmg', v: 0.07 }]), 'w-nori3': W('Dragon Roll Blade', 'w-nori3', 7, 3, [{ k: 'atk', v: 5 }, { k: 'int', v: 2 }, { k: 'skillDmg', v: 0.09 }]),
+  'a-nori1': AR('Nori Wrap', 'a-nori1', 7, [{ k: 'def', v: 3 }, { k: 'hp', v: 18 }], 1), 'a-nori2': AR('Rice Scale Mail', 'a-nori2', 7, [{ k: 'def', v: 4 }, { k: 'hp', v: 24 }, { k: 'int', v: 1 }], 2), 'a-nori3': AR('Salmon Scale Armor', 'a-nori3', 7, [{ k: 'def', v: 5 }, { k: 'hp', v: 30 }, { k: 'int', v: 2 }], 3), 'k-nori': CH('Soy Fish', 'k-nori', 7, [{ k: 'skillDmg', v: 0.08 }]),
+  'w-choco1': W('Chocolate Mallet', 'w-choco1', 8, 1, [{ k: 'atk', v: 5 }]), 'w-choco2': W('Candy Cane Club', 'w-choco2', 8, 2, [{ k: 'atk', v: 6 }, { k: 'critDmg', v: 0.08 }]), 'w-choco3': W('Fudge Crusher', 'w-choco3', 8, 3, [{ k: 'atk', v: 7 }, { k: 'str', v: 2 }, { k: 'critDmg', v: 0.1 }]),
+  'a-choco1': AR('Wafer Plate', 'a-choco1', 8, [{ k: 'def', v: 4 }, { k: 'hp', v: 22 }], 1), 'a-choco2': AR('Truffle Armor', 'a-choco2', 8, [{ k: 'def', v: 5 }, { k: 'hp', v: 30 }], 2), 'a-choco3': AR('Golden Foil Armor', 'a-choco3', 8, [{ k: 'def', v: 6 }, { k: 'hp', v: 36 }, { k: 'str', v: 2 }], 3), 'k-choco': CH('Golden Ticket', 'k-choco', 8, [{ k: 'atk', v: 4 }]),
+  'w-hog1': W('Mustard Blaster', 'w-hog1', 15, 1, [{ k: 'atk', v: 4 }, { k: 'hp', v: 8 }]), 'w-hog2': W('Ketchup Lance', 'w-hog2', 15, 2, [{ k: 'atk', v: 5 }, { k: 'crit', v: 2 }]), 'w-hog3': W('Grill Tongs', 'w-hog3', 15, 3, [{ k: 'atk', v: 6 }, { k: 'vit', v: 2 }, { k: 'crit', v: 3 }]),
+  'a-hog1': AR('Napkin Bib', 'a-hog1', 15, [{ k: 'def', v: 3 }, { k: 'hp', v: 22 }], 1), 'a-hog2': AR('Bun Shell', 'a-hog2', 15, [{ k: 'def', v: 5 }, { k: 'hp', v: 28 }], 2), 'a-hog3': AR('Grill Plate Armor', 'a-hog3', 15, [{ k: 'def', v: 6 }, { k: 'hp', v: 34 }, { k: 'vit', v: 2 }], 3), 'k-hog': CH('Relish Charm', 'k-hog', 15, [{ k: 'def', v: 3 }, { k: 'atk', v: 2 }]),
+  'w-peng1': W('Ice Cream Scoop', 'w-peng1', 17, 1, [{ k: 'atk', v: 3 }, { k: 'crit', v: 3 }]), 'w-peng2': W('Wafer Ice Sword', 'w-peng2', 17, 2, [{ k: 'atk', v: 4 }, { k: 'crit', v: 3 }, { k: 'speed', v: 0.02 }]), 'w-peng3': W('Frozen Cream Trident', 'w-peng3', 17, 3, [{ k: 'atk', v: 5 }, { k: 'dex', v: 2 }, { k: 'crit', v: 4 }]),
+  'a-peng1': AR('Cookie Crumb Vest', 'a-peng1', 17, [{ k: 'def', v: 2 }, { k: 'hp', v: 16 }, { k: 'dex', v: 1 }], 1), 'a-peng2': AR('Cream Puff Coat', 'a-peng2', 17, [{ k: 'def', v: 3 }, { k: 'hp', v: 22 }, { k: 'dex', v: 1 }], 2), 'a-peng3': AR('Ice Crystal Armor', 'a-peng3', 17, [{ k: 'def', v: 4 }, { k: 'hp', v: 28 }, { k: 'dex', v: 2 }], 3), 'k-peng': CH('Cherry Charm', 'k-peng', 17, [{ k: 'crit', v: 4 }]),
   // ----- generic armor (one per world + the lid) -----
   apron: { slot: 'armor', name: 'Checkered Apron', icon: 'eq-apron', main: [{ k: 'hp', v: 20 }, { k: 'def', v: 2 }] },
   lid: { slot: 'armor', name: 'Pot Lid', icon: 'eq-lid', main: [{ k: 'def', v: 4 }] },
@@ -149,9 +168,15 @@ export function rollBase(ilvl: number, rand: () => number, prefer = -1): string 
     const best = Math.max(...pool.map(k => BASES[k].tier ?? 1));
     if (rand() < 0.6) pool = pool.filter(k => (BASES[k].tier ?? 1) === best); // the newest tier is the usual drop
   } else if (r < 0.75) {
-    const o = rand() < 0.55 ? owner() : undefined;
+    const o = rand() < 0.6 ? owner() : undefined;
     pool = Object.keys(BASES).filter(k => ok(k) && BASES[k].slot === 'armor' && BASES[k].for === o);
-  } else pool = Object.keys(BASES).filter(k => ok(k) && BASES[k].slot === 'charm');
+    const best = Math.max(...pool.map(k => BASES[k].tier ?? 1));
+    if (o !== undefined && rand() < 0.6) pool = pool.filter(k => (BASES[k].tier ?? 1) === best);
+  } else {
+    const o = rand() < 0.35 ? owner() : undefined;
+    pool = Object.keys(BASES).filter(k => ok(k) && BASES[k].slot === 'charm' && BASES[k].for === o);
+    if (!pool.length) pool = Object.keys(BASES).filter(k => ok(k) && BASES[k].slot === 'charm' && BASES[k].for === undefined);
+  }
   return pick(pool, rand);
 }
 
@@ -178,7 +203,8 @@ export function rollItem(id: number, tier: BoxTier, ilvl: number, rand: () => nu
   if (rarity === 5 && rand() < 0.3) it.skill = { id: 'all', n: 1 };
   else if (rarity >= 4 && rand() < 0.6) it.skill = { id: pick(skillIds, rand), n: rarity === 5 ? 2 : 1 };
   // set pieces (Rare+), from the set of the world this item level belongs to
-  if (rarity >= 3 && rand() < 0.25) it.set = setForLevel(ilvl);
+  if (BASES[base].set) it.set = BASES[base].set;
+  else if (rarity >= 3 && rand() < 0.25) it.set = setForLevel(ilvl);
   // named legendaries
   if (rarity === 5 && rand() < 0.35) {
     const u = Object.keys(UNIQUES).filter(k => UNIQUES[k].slot === BASES[base].slot);
@@ -234,13 +260,17 @@ export function enhanceCost(it: Item): number { return fortCost(it).crumbs; }
 
 // ---------- sets ----------
 export interface SetDef { name: string; world: number; two: string; three: string; b2: SetBonus; b3: SetBonus }
-export interface SetBonus { atkPct?: number; hpPct?: number; critDmg?: number; speed?: number; skillDmg?: number; cdr?: number; dr?: number }
+export interface SetBonus { atkPct?: number; hpPct?: number; critDmg?: number; speed?: number; skillDmg?: number; cdr?: number; dr?: number; ultGain?: number; ultDmg?: number }
 export const SETS: Record<string, SetDef> = {
   champ: { name: 'Countertop Champion', world: 1, two: '+8% attack', three: '+25% crit damage, +8% speed', b2: { atkPct: 0.08 }, b3: { critDmg: 0.25, speed: 0.08 } },
   frost: { name: 'Frostbite Guard', world: 2, two: '+12% max HP', three: '-15% damage taken, +10% skill damage', b2: { hpPct: 0.12 }, b3: { dr: 0.15, skillDmg: 0.1 } },
+  pantry: { name: 'Pantry Raider', world: 4, two: '+12% attack', three: '+15% max HP, -10% cooldowns', b2: { atkPct: 0.12 }, b3: { hpPct: 0.15, cdr: 0.1 } },
+  ...Object.fromEntries(([[0, 'Gobzilla'], [10, 'Bluebeary'], [11, 'Pizzaraptor'], [4, 'Mothball'], [1, 'Squidgeon'], [2, 'Crabbage'], [5, 'Toastbat'], [6, 'Dumplord'], [7, 'Norigon'], [8, 'Chocomunch'], [15, 'Hotchog'], [17, 'Pengwhip']] as [number, string][]).map(([sp, n]) => [`sig${sp}`, {
+    name: `${n}'s Regalia`, world: 0, two: '+15% skill damage', three: 'Ultimate charges 50% faster and hits 25% harder',
+    b2: { skillDmg: 0.15 }, b3: { ultGain: 0.5, ultDmg: 0.25 } } as SetDef])),
   inferno: { name: 'Inferno Chef', world: 3, two: '+10% skill damage', three: '-12% cooldowns, +12% attack', b2: { skillDmg: 0.1 }, b3: { cdr: 0.12, atkPct: 0.12 } },
 };
-export function setForLevel(ilvl: number): string { return ilvl >= 25 ? 'inferno' : ilvl >= 13 ? 'frost' : 'champ'; }
+export function setForLevel(ilvl: number): string { return ilvl >= 37 ? 'pantry' : ilvl >= 25 ? 'inferno' : ilvl >= 13 ? 'frost' : 'champ'; }
 
 // ---------- named legendaries ----------
 export interface UniqueDef { name: string; slot: Slot; effect: string }

@@ -15,7 +15,9 @@ import {
   unequip, useScroll, useSugar,
 } from '../save';
 import { UI_CSS } from './style';
-import { ACHIEVEMENTS, DAILY_BONUS, achievements, claimAch, claimBonus, claimQuest, claimable, dailyQuests, rewardText, track } from '../quests';
+import { ACHIEVEMENTS, DAILY_BONUS, achievements, checkUnlocks, claimAch, claimBonus, claimKaijuQuest, claimQuest, claimable, dailyQuests, kaijuQuestState, rewardText, track, unlockProgress } from '../quests';
+import { STORIES, VARIANT_INFO, beatBefore } from '../story/stories';
+import { playStory } from './story';
 import { isMuted, sfx, toggleMute } from '../audio';
 
 type Tab = 'map' | 'hero' | 'skills' | 'bag' | 'market' | 'boxes' | 'quests';
@@ -30,11 +32,12 @@ const SKILL_NAME: Record<string, string> = Object.fromEntries(Object.values(SKIL
 const MAP_POS: Record<string, [number, number]> = {
   '1-1': [4, 88], '1-2': [12.5, 82], '1-3': [15.5, 70], '1-4': [19.5, 57], '1-5': [21, 45], '1-6': [27, 33], '1-7': [36.5, 30], '1-8': [43, 23], '1-9': [46, 15], '1-10': [49, 9],
   '3-1': [27, 87], '3-2': [36, 77], '3-3': [46, 68], '3-4': [60, 62], '3-5': [45, 52], '3-6': [55, 42], '3-7': [73, 48], '3-8': [46, 20], '3-9': [62, 32], '3-10': [77, 23],
+  '4-1': [21, 83], '4-2': [27, 74], '4-3': [31, 63], '4-4': [36, 60], '4-5': [39, 50], '4-6': [44, 40], '4-7': [52, 43], '4-8': [61, 43], '4-9': [68, 37], '4-10': [76, 22],
   '2-1': [52, 77], '2-2': [61, 67], '2-3': [69, 61], '2-4': [75, 54], '2-5': [79, 46], '2-6': [77, 38], '2-7': [81, 30], '2-8': [79, 22], '2-9': [83, 15], '2-10': [85, 7],
 };
 
 /** Map pages: which painted map shows which worlds. */
-const MAPS = [{ img: 'map-world', name: 'Kitchen', worlds: [1, 2] }, { img: 'map-oven', name: 'Oven', worlds: [3] }];
+const MAPS = [{ img: 'map-world', name: 'Kitchen', worlds: [1, 2] }, { img: 'map-oven', name: 'Oven', worlds: [3] }, { img: 'map-pantry', name: 'Pantry', worlds: [4] }];
 
 let el: HTMLElement;
 let tab: Tab = 'map';
@@ -85,15 +88,15 @@ const cIcon = (id: ConsumableId) => `art/${CONSUMABLES[id].icon}.webp`;
 
 export function stageUnlocked(s: StageDef): boolean {
   const i = STAGES.indexOf(s);
-  return i === 0 || !!save.cleared[STAGES[i - 1].id];
+  return i === 0 || !!hero().cleared[STAGES[i - 1].id];
 }
-export function hardUnlocked(world: number): boolean { return !!save.cleared[`${world}-10`]; }
+export function hardUnlocked(world: number): boolean { return !!hero().cleared[`${world}-10`]; }
 
 function render(): void {
   const p = hero();
   const tabs: [Tab, string, number][] = [['map', 'Map', 0], ['hero', 'Hero', p.statPts], ['skills', 'Skills', p.skillPts], ['bag', 'Bag', 0], ['market', 'Market', 0], ['boxes', 'Boxes', save.boxes.length], ['quests', 'Quests', claimable()]];
   el.innerHTML = `
-    <div class="side">${CLASSES.map(c => { const h = save.heroes[c.species]; return `<button class="hp ${c.species === save.selected ? 'on' : ''} ${h.statPts + h.skillPts ? 'pts' : ''}" data-hero="${c.species}" title="${c.name}" style="background-image:url(art/kaiju-${c.species}.webp)"><i></i><b>${h.level}</b></button>`; }).join('')}</div>
+    <div class="side">${CLASSES.map(c => { const h = save.heroes[c.species], open = save.unlocked.includes(c.species); return `<button class="hp ${c.species === save.selected ? 'on' : ''} ${open && h.statPts + h.skillPts ? 'pts' : ''} ${open ? '' : 'lockd'}" data-hero="${c.species}" title="${c.name}" style="background-image:url(art/kaiju-${c.species}.webp)"><i></i>${open ? `<b>${h.level}</b>` : '<u>🔒</u>'}</button>`; }).join('')}</div>
     <div class="main">
       <div class="top"><h1>Kaiju Kitchen Quest</h1><span class="chip"><img src="art/icon-crumb.webp"> ${save.crumbs}</span><span class="chip">🎁 ${save.boxes.length}</span><button class="chip" data-act="mute">${isMuted() ? '🔇' : '🔊'}</button></div>
       <div class="tabs">${tabs.map(([k, n, c]) => `<button class="${tab === k ? 'on' : ''}" data-tab="${k}">${n}${c ? `<em>${c}</em>` : ''}</button>`).join('')}</div>
@@ -129,10 +132,10 @@ function mapPage(): string {
   const sel = STAGES.find(s => s.id === selStage)!;
   const mp = MAPS.find(m => m.worlds.includes(sel.world)) ?? MAPS[0];
   const pts = (w: number) => STAGES.filter(s => s.world === w).map(s => MAP_POS[s.id]).map(([x, y]) => `${x},${y}`).join(' ');
-  const done = (w: number) => STAGES.filter(s => s.world === w && save.cleared[s.id]).map(s => MAP_POS[s.id]);
+  const done = (w: number) => STAGES.filter(s => s.world === w && hero().cleared[s.id]).map(s => MAP_POS[s.id]);
   const hardOk = hardUnlocked(sel.world);
   if (save.hard && !hardOk) { save.hard = false; persist(); }
-  const rank = (save.hard ? save.hardCleared : save.cleared)[sel.id] as Rank | undefined;
+  const rank = (save.hard ? hero().hardCleared : hero().cleared)[sel.id] as Rank | undefined;
   const lv = (n: number) => n + (save.hard ? HARD_LV : 0);
   const low = p.level < lv(sel.rec) - 1;
   return `<div class="mappages">${MAPS.map((m, i) => { const open = m.worlds.some(w => stageUnlocked(STAGES.find(s => s.id === `${w}-1`)!)); return `<button class="${m === mp ? 'on' : ''}" data-mappage="${i}" ${open ? '' : 'disabled'}>${open ? '' : '🔒 '}${m.name}</button>`; }).join('')}</div>
@@ -144,9 +147,9 @@ function mapPage(): string {
       ${WORLDS.filter(w => mp.worlds.includes(w.id)).map(w => { const [x, y] = MAP_POS[`${w.id}-1`]; return `<div class="wlabel" style="left:${x}%;top:${y + 7}%">World ${w.id}: ${w.name}</div>`; }).join('')}
       ${STAGES.filter(s => mp.worlds.includes(s.world)).map(s => {
         const [x, y] = MAP_POS[s.id];
-        const open = stageUnlocked(s), r = (save.hard ? save.hardCleared : save.cleared)[s.id] as Rank | undefined;
-        return `<button class="node ${open ? '' : 'locked'} ${s.boss ? 'boss' : ''} ${s.id === selStage ? 'sel' : ''} ${save.cleared[s.id] ? 'done' : ''}" data-node="${s.id}" style="left:${x}%;top:${y}%">
-          ${s.boss ? '👑' : s.id.split('-')[1]}${r ? `<i style="color:${RANK_CSS[r]}">${r}</i>` : ''}${s.id === selStage ? `<img class="me" src="art/kaiju-${p.species}.webp">` : ''}</button>`;
+        const open = stageUnlocked(s), r = (save.hard ? hero().hardCleared : hero().cleared)[s.id] as Rank | undefined;
+        return `<button class="node ${open ? '' : 'locked'} ${s.boss ? 'boss' : ''} ${s.id === selStage ? 'sel' : ''} ${hero().cleared[s.id] ? 'done' : ''}" data-node="${s.id}" style="left:${x}%;top:${y}%">
+          ${s.boss ? '👑' : s.id.split('-')[1]}${r ? `<i style="color:${RANK_CSS[r]}">${r}</i>` : ''}${STORIES[p.species]?.variants[s.id] ? `<em class="vt">${VARIANT_INFO[STORIES[p.species].variants[s.id]].icon}</em>` : ''}${s.id === selStage ? `<img class="me" src="art/kaiju-${p.species}.webp">` : ''}</button>`;
       }).join('')}
     </div>
     <div class="info">
@@ -155,6 +158,8 @@ function mapPage(): string {
       <div class="lv">Monsters Lv ${lv(sel.lv[0])}${sel.lv[1] !== sel.lv[0] ? '–' + lv(sel.lv[1]) : ''}</div>
       <div class="lv" style="color:${low ? '#ff8a8a' : '#a8f0a8'}">Recommended Lv ${lv(sel.rec)} (you: ${p.level})</div>
       <div class="lv">Clear: ${rewardLine(sel)}</div>
+      ${STORIES[p.species]?.variants[sel.id] ? (() => { const v = VARIANT_INFO[STORIES[p.species].variants[sel.id]]; return `<div class="lv vtx">${v.icon} Story twist: <b>${v.name}</b> — ${v.desc}</div>`; })() : ''}
+      <div class="lv">📖 ${STORIES[p.species]?.title ?? ''}${beatBefore(sel.id, sel.id === '1-1').some(b => p.seen.includes(b)) || (sel.boss && p.seen.includes(`w${sel.world}-after`)) ? ` <button class="pill" data-replay="${sel.id}" style="font-size:1.6vmin;padding:0.3vmin 1vmin">REPLAY</button>` : ''}</div>
       ${rank ? `<div class="lv">Best: <b style="color:${RANK_CSS[rank]}">${rank}</b></div>` : ''}
       <button class="pill go big" data-play="${sel.id}" ${stageUnlocked(sel) ? '' : 'disabled'}>${stageUnlocked(sel) ? '▶ PLAY' : '🔒 LOCKED'}</button>
       <label class="hard ${hardOk ? '' : 'off'}"><input type="checkbox" data-act="hard" ${save.hard ? 'checked' : ''} ${hardOk ? '' : 'disabled'}> HARD MODE ${hardOk ? `(+${HARD_LV} monster levels, better boxes)` : '— beat this world\'s boss'}</label>
@@ -297,11 +302,19 @@ const C_NAMES: Record<string, string> = Object.fromEntries(Object.entries(CONSUM
 function questsPage(): string {
   const qs = dailyQuests();
   const allDone = qs.every(q => q.claimed);
-  return `<div class="quests"><div><div class="h3">Daily quests <small>new ones every day</small></div>
+  const me = CLASSES.find(c => c.species === save.selected)!;
+  const kq = kaijuQuestState(save.selected);
+  checkUnlocks();
+  return `<div class="quests"><div><div class="h3">${me.name}'s quests <small>${STORIES[me.species]?.tagline ?? ''}</small></div>
+    ${kq.map(q => { const done = q.prog >= q.goal; return `<div class="quest ${q.claimed ? 'claimed' : ''}"><div class="t"><b>${q.title}</b> <span>${q.text}</span><div class="bar"><i style="width:${q.prog / q.goal * 100}%"></i></div><span>${q.prog} / ${q.goal} · ${q.reward.sigCharm ? '⭐ Signature charm + ' : ''}${rewardText({ crumbs: q.reward.crumbs, box: q.reward.box, items: { fstone: q.reward.fstone ?? 0, gstone: q.reward.gstone ?? 0, ggstone: q.reward.ggstone ?? 0 } }, C_NAMES)}</span></div>
+      <button class="pill ${done && !q.claimed ? 'go' : ''}" data-claimk="${q.id}" ${done && !q.claimed ? '' : 'disabled'}>${q.claimed ? '✓' : 'CLAIM'}</button></div>`; }).join('')}
+    <div class="h3" style="margin-top:1.6vmin">Daily quests <small>new ones every day</small></div>
     ${qs.map((q, i) => { const done = q.prog >= q.def.goal; return `<div class="quest ${q.claimed ? 'claimed' : ''}"><div class="t"><b>${q.text}</b><div class="bar"><i style="width:${q.prog / q.def.goal * 100}%"></i></div><span>${q.prog} / ${q.def.goal} · ${rewardText(q.def.reward, C_NAMES)}</span></div>
       <button class="pill ${done && !q.claimed ? 'go' : ''}" data-claimq="${i}" ${done && !q.claimed ? '' : 'disabled'}>${q.claimed ? '✓' : 'CLAIM'}</button></div>`; }).join('')}
     <div class="quest bonus"><div class="t"><b>⭐ Finish all 3</b><span>${rewardText(DAILY_BONUS, C_NAMES)}</span></div><button class="pill ${allDone ? 'go' : ''}" data-act="bonus" ${allDone ? '' : 'disabled'}>CLAIM</button></div></div>
-    <div><div class="h3">Achievements</div>${achievements().map(x => `<div class="quest ${x.maxed ? 'claimed' : ''}"><div class="t"><b>${x.a.name} ${'★'.repeat(x.claimed)}${'☆'.repeat(x.a.tiers.length - x.claimed)}</b>
+    <div><div class="h3">Recruit kaiju <small>finish a challenge to unlock a new kaiju (starts at 1-1)</small></div>
+    ${unlockProgress().map(u => `<div class="quest ${u.done ? 'claimed' : ''}"><img class="rq" src="art/kaiju-${u.species}.webp"><div class="t"><b>${CLASSES.find(c => c.species === u.species)!.name}</b> <span>${u.text}</span><div class="bar"><i style="width:${u.prog / u.goal * 100}%"></i></div><span>${u.done ? 'Unlocked!' : `${u.prog} / ${u.goal}`}</span></div></div>`).join('')}
+    <div class="h3" style="margin-top:1.6vmin">Achievements</div>${achievements().map(x => `<div class="quest ${x.maxed ? 'claimed' : ''}"><div class="t"><b>${x.a.name} ${'★'.repeat(x.claimed)}${'☆'.repeat(x.a.tiers.length - x.claimed)}</b>
       ${x.maxed ? '<span>Complete!</span>' : `<div class="bar"><i style="width:${Math.min(100, x.prog / x.goal * 100)}%"></i></div><span>${Math.min(x.prog, x.goal)} / ${x.goal} · ${rewardText(x.a.reward(x.claimed), C_NAMES)}</span>`}</div>
       <button class="pill ${x.done ? 'go' : ''}" data-claima="${x.a.id}" ${x.done ? '' : 'disabled'}>${x.maxed ? '✓' : 'CLAIM'}</button></div>`).join('')}</div></div>`;
 }
@@ -316,18 +329,32 @@ function boxesPage(): string {
 }
 
 function onClick(e: MouseEvent): void {
-  const t = (e.target as HTMLElement).closest<HTMLElement>('[data-tab],[data-hero],[data-node],[data-play],[data-stat],[data-sugar],[data-skill],[data-item],[data-act],[data-box],[data-eqslot],[data-bag],[data-cons],[data-qslot],[data-buy],[data-buybox],[data-buygear],[data-branch],[data-mappage],[data-claimq],[data-claima]');
+  const t = (e.target as HTMLElement).closest<HTMLElement>('[data-tab],[data-hero],[data-node],[data-play],[data-stat],[data-sugar],[data-skill],[data-item],[data-act],[data-box],[data-eqslot],[data-bag],[data-cons],[data-qslot],[data-buy],[data-buybox],[data-buygear],[data-branch],[data-mappage],[data-claimq],[data-claima],[data-replay],[data-claimk]');
   if (!t || (t as HTMLButtonElement).disabled) return;
   sfx('click');
   const sp = save.selected;
   const ds = t.dataset;
   if (ds.tab) { tab = ds.tab as Tab; selItem = null; }
-  else if (ds.hero) { save.selected = Number(ds.hero); persist(); }
+  else if (ds.hero) {
+    const sp = Number(ds.hero);
+    if (save.unlocked.includes(sp)) { save.selected = sp; selStage = null; persist(); }
+    else { const u = unlockProgress().find(x => x.species === sp); flash = `🔒 ${CLASSES.find(c => c.species === sp)!.name}: ${u?.text} (${u?.prog}/${u?.goal})`; }
+  }
   else if (ds.claimq) { const r = claimQuest(Number(ds.claimq)); if (r) { flash = 'Quest reward: ' + r; sfx('levelup'); } }
   else if (ds.claima) { const r = claimAch(ds.claima); if (r) { flash = 'Achievement reward: ' + r; sfx('reveal3'); } }
   else if (ds.node) selStage = ds.node;
   else if (ds.mappage) { const m = MAPS[Number(ds.mappage)]; selStage = [...STAGES].reverse().find(x => m.worlds.includes(x.world) && stageUnlocked(x))?.id ?? `${m.worlds[0]}-1`; }
-  else if (ds.play) { const s = STAGES.find(x => x.id === ds.play)!; if (stageUnlocked(s)) { hideCamp(); onPlay(s.id); } return; }
+  else if (ds.play) {
+    const s = STAGES.find(x => x.id === ds.play)!;
+    if (!stageUnlocked(s)) return;
+    const p = hero();
+    const beats = beatBefore(s.id, !p.seen.includes('intro')).filter(b => !p.seen.includes(b));
+    p.seen.push(...beats); persist();
+    playStory(p.species, beats, () => { hideCamp(); onPlay(s.id); });
+    return;
+  }
+  else if (ds.replay) { const [id, sp] = [ds.replay, save.selected]; playStory(sp, [...beatBefore(id, id === '1-1'), ...(id.endsWith('-10') ? [`w${id.split('-')[0]}-after`] : [])].filter(b => hero().seen.includes(b)), () => render()); return; }
+  else if (ds.claimk) { const r = claimKaijuQuest(save.selected, ds.claimk); if (r) { flash = 'Quest reward: ' + r; sfx('reveal3'); } }
   else if (ds.stat) spendStat(sp, ds.stat as Stat);
   else if (ds.sugar) { if (useSugar(sp, ds.sugar as Stat)) flash = `Golden Sugar Cube: +1 ${ds.sugar.toUpperCase()} forever!`; }
   else if (ds.skill) levelSkill(sp, ds.skill);
@@ -429,7 +456,7 @@ export function runGacha(indices: number[]): void {
 }
 
 // ---------- stage result ----------
-export function showResult(o: { stage: StageDef; res: ClearResult | null; time: number; hits: number; combo: number; xp: number; levels: number; failed: boolean; crumbs: number; hard: boolean },
+export function showResult(o: { stage: StageDef; res: ClearResult | null; time: number; hits: number; combo: number; xp: number; levels: number; failed: boolean; crumbs: number; hard: boolean; unlocked?: string[] },
   act: (a: 'boxes' | 'next' | 'camp' | 'retry') => void): void {
   const r = document.getElementById('result')!;
   const nextStage = STAGES[STAGES.indexOf(o.stage) + 1];
@@ -439,6 +466,7 @@ export function showResult(o: { stage: StageDef; res: ClearResult | null; time: 
     <h2>${o.failed ? 'KNOCKED OUT!' : o.stage.boss ? 'BOSS DEFEATED!' : 'STAGE CLEAR!'}${o.hard ? ' <span style="color:#ff7a6a">(HARD)</span>' : ''}</h2>
     ${res ? `<div class="rk" style="color:${RANK_CSS[res.rank]}">${res.rank}</div>` : '<div style="font-size:9vmin;margin:1vmin">😵</div>'}
     <div class="st"><div>Time<b>${Math.floor(o.time / 60)}:${String(Math.floor(o.time % 60)).padStart(2, '0')}</b></div><div>Hits taken<b>${o.hits}</b></div><div>Best combo<b>${o.combo}</b></div><div>XP<b>+${o.xp}</b></div><div>Crumbs<b>+${o.crumbs}</b></div></div>
+    ${o.unlocked?.length ? `<div class="note" style="color:#7ee8c8">🎉 NEW KAIJU UNLOCKED: ${o.unlocked.join(', ')}! (starts at 1-1)</div>` : ''}
     ${o.levels ? `<div class="note">LEVEL UP ×${o.levels}! Spend your new stat and skill points at camp.</div>` : '<div class="note"></div>'}
     ${res ? `<div class="gots">${res.boxes.map((b: LootBox, i) => `<img src="art/box-${b.tier}.webp" title="${TIER_NAMES[b.tier]}" class="${i < res.upgraded ? 'up' : ''}">`).join('')}</div>
     <div class="note">${res.upgraded ? `Rank ${res.rank} upgraded ${res.upgraded} box${res.upgraded > 1 ? 'es' : ''}! ` : ''}${res.firstClear ? 'First clear bonus box!' : ''}${res.firstClear && o.stage.boss ? ' +1 Golden Sugar Cube!' : ''}</div>` : '<div class="note">Boxes you found are lost (crumbs are kept). Level up, gear up, bring Jam Jars and try again!</div>'}
@@ -552,6 +580,11 @@ const CAMP_CSS = `
 .kq .icon .own { position: absolute; left: -0.6vmin; bottom: -0.6vmin; width: 4.6vmin; height: 4.6vmin; object-fit: contain; filter: drop-shadow(0 0 2px #000); }
 .kq .for { color: #ffd27a; }
 .kq .mine { font-size: 1.8vmin; display: flex; gap: 0.5vmin; align-items: center; color: #d8c8d8; }
+#camp .side .hp.lockd { filter: grayscale(1) brightness(0.45); }
+#camp .side .hp u { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 3.6vmin; text-decoration: none; filter: none; }
+.kq .node .vt { position: absolute; left: -1.4vmin; top: -1.6vmin; font-style: normal; font-size: 2.2vmin; }
+.kq .vtx { color: #c8a8ff !important; }
+.kq .quest .rq { width: 7vmin; height: 7vmin; object-fit: contain; }
 #camp .flashmsg { position: absolute; left: 50%; bottom: 3vmin; transform: translateX(-50%); background: #3a2448f0; border: 2px solid #ffd27a; border-radius: 2vmin; padding: 1vmin 2.4vmin; font-size: 2.4vmin; animation: tst 2.4s forwards; pointer-events: none; z-index: 5; }
 @keyframes tst { 0% { opacity: 0; transform: translate(-50%, 1vmin); } 10%, 80% { opacity: 1; transform: translate(-50%, 0); } 100% { opacity: 0; } }
 `;

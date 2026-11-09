@@ -1,10 +1,26 @@
 [
  {
-  "name": "w-squid2",
-  "prompt": "Generate an image. This is an item icon from my cute 2D action RPG. I need an EQUIPMENT ICON in exactly the same art style (clean dark outlines, saturated colours, glossy cel shading). A WEAPON themed for my hero Squidgeon (a blue jelly octopus): a BUBBLE WAND with soap-bubble jelly bubbles. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT, centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image.",
+  "name": "w-peng1",
   "newChat": true,
   "refs": [
    "art-src/ref-eq.png"
+  ],
+  "prompt": "Generate an image. This is an item icon from my cute 2D action RPG. I need EQUIPMENT ICONS in exactly the same art style (clean dark outlines, saturated colours, glossy cel shading). Generate an image. This is an item icon from my cute 2D action RPG. I need EQUIPMENT ICONS in exactly the same art style (clean dark outlines, saturated colours, glossy cel shading). A WEAPON themed for my hero Pengwhip (a cookies-and-cream penguin): an ICE CREAM SCOOP mace. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT, centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "k-toast",
+  "prompt": "Same style. A CHARM accessory themed for my hero Toastbat (a toast bat): a BUTTER PAT charm, shown centred, filling 75% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "k-dump",
+  "prompt": "Same style. A CHARM accessory themed for my hero Dumplord (a steamed dumpling): a little SOY DISH charm, shown centred, filling 75% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "boss-jar",
+  "prompt": "Generate an image. This is a hero from my cute 2D side-scrolling action RPG set in a giant kitchen. I need the BOSS of the pantry world in exactly the same art style (clean dark outlines, saturated colours, glossy cel shading): the COOKIE JAR MIMIC, a huge glass cookie jar monster with jagged cookie teeth, a long cookie-dough tongue, a lid like a crown, stubby legs, cookies swirling inside. Imposing but still in the cute game style. Side view facing LEFT, whole body visible, centred, filling about 90% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1 image.",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-0.png"
   ]
  }
 ]

@@ -3,7 +3,7 @@
 // as written to parts-N.json). `root` is the point between the feet; everything is relative to it.
 // Tune with: npm run rig-shot (writes shots/rig-*.png showing every pose).
 
-export type Role = 'body' | 'arm' | 'armBack' | 'legA' | 'legB' | 'tail' | 'wing' | 'wingBack';
+export type Role = 'body' | 'arm' | 'armBack' | 'legA' | 'legB' | 'tail' | 'wing' | 'wingBack' | 'head';
 
 export interface PartDef {
   piece: number;
@@ -147,6 +147,63 @@ export const RIGS: Record<number, RigDef> = {
       { piece: 1, role: 'armBack', joint: [238, 222], pivot: [0.5, 0.12], depth: -3, tint: 0xd8c8b0, rest: 0.15 },
       { piece: 0, role: 'body', joint: [255, 333], pivot: [0.5, 1], depth: 0 },
       { piece: 2, role: 'arm', joint: [300, 228], pivot: [0.5, 0.12], depth: 1, rest: -0.1 },
+    ],
+  },
+  // Norigon: body 219x258@145,50; head 135x116@338,57 (separate: it bobs); tail @43,94; legs @145,331 / @280,336; arms 51x85@379,212 / 50x67@431,209
+  7: {
+    gear: { hand: [0.5, 0.88], chest: [300, 230], neck: [345, 160], back: [190, 150], size: 1 },
+    root: [255, 418],
+    scale: 0.23,
+    legs: 'swing',
+    parts: [
+      { piece: 2, role: 'tail', joint: [168, 238], pivot: [0.9, 0.78], depth: -4, rest: 0 },
+      { piece: 6, role: 'armBack', joint: [282, 192], pivot: [0.5, 0.12], depth: -3, tint: 0xa8c8c0, rest: 0.2 },
+      { piece: 3, role: 'legB', joint: [205, 290], pivot: [0.5, 0.1], depth: -2, tint: 0xb8d0c8 },
+      { piece: 4, role: 'legA', joint: [300, 292], pivot: [0.5, 0.1], depth: -1 },
+      { piece: 0, role: 'body', joint: [255, 305], pivot: [0.5, 0.98], depth: 0 },
+      { piece: 1, role: 'head', joint: [326, 112], pivot: [0.04, 0.6], depth: 0.5 },
+      { piece: 5, role: 'arm', joint: [272, 196], pivot: [0.5, 0.12], depth: 1, rest: -0.15 },
+    ],
+  },
+  // Chocomunch: body 176x247@170,39; arm 129x221@21,84 (used for both arms); legs 96x173@126,310 / 100x172@290,308
+  8: {
+    gear: { hand: [0.5, 0.92], chest: [258, 200], neck: [258, 110], back: [200, 150], size: 1.1 },
+    root: [258, 452],
+    scale: 0.205,
+    legs: 'swing',
+    parts: [
+      { piece: 1, role: 'armBack', joint: [196, 112], pivot: [0.62, 0.08], depth: -3, tint: 0xb89880, rest: 0.1 },
+      { piece: 2, role: 'legB', joint: [218, 278], pivot: [0.5, 0.06], depth: -2, tint: 0xc0a090 },
+      { piece: 3, role: 'legA', joint: [300, 278], pivot: [0.5, 0.06], depth: -1 },
+      { piece: 0, role: 'body', joint: [258, 286], pivot: [0.5, 1], depth: 0 },
+      { piece: 1, role: 'arm', joint: [318, 112], pivot: [0.62, 0.08], depth: 1, rest: -0.1 },
+    ],
+  },
+  // Hotchog: body (bun + hedgehog) 361x286@78,22; tiny feet 62x89@123,351 / @296,351. Holds its weapon in a foot.
+  15: {
+    gear: { hand: [0.5, 0.8], chest: [330, 230], neck: [360, 190], back: [220, 90], size: 1 },
+    holder: 'legA',
+    root: [258, 372],
+    scale: 0.22,
+    legs: 'swing',
+    parts: [
+      { piece: 1, role: 'legB', joint: [200, 292], pivot: [0.5, 0.1], depth: -2, tint: 0xd8c0a8 },
+      { piece: 0, role: 'body', joint: [258, 306], pivot: [0.5, 0.98], depth: 0 },
+      { piece: 2, role: 'legA', joint: [320, 292], pivot: [0.5, 0.1], depth: 1 },
+    ],
+  },
+  // Pengwhip: body 217x323@227,26; flippers 144x87@47,282 / 147x75@47,161 (shoulder at their right end); feet 94x59@339,402 / 62x81@234,385
+  17: {
+    gear: { hand: [0.06, 0.5], chest: [330, 260], neck: [345, 150], back: [262, 200], size: 1 },
+    root: [335, 410],
+    scale: 0.22,
+    legs: 'swing',
+    parts: [
+      { piece: 2, role: 'armBack', joint: [292, 176], pivot: [0.93, 0.5], depth: -3, tint: 0xa898a8, rest: -1.35 },
+      { piece: 4, role: 'legB', joint: [305, 342], pivot: [0.45, 0.12], depth: -2, tint: 0xd8b8a0 },
+      { piece: 3, role: 'legA', joint: [362, 344], pivot: [0.25, 0.15], depth: -1 },
+      { piece: 0, role: 'body', joint: [335, 349], pivot: [0.5, 1], depth: 0 },
+      { piece: 1, role: 'arm', joint: [318, 182], pivot: [0.93, 0.5], depth: 1, rest: -1.4 },
     ],
   },
 };

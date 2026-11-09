@@ -100,6 +100,38 @@ export const SKILLS: Record<number, { actives: SkillDef[]; passive: PassiveDef }
     ],
     passive: { id: 'aura', name: 'Steamy Aura', desc: 'Heals 3% max HP per level on each kill', unlock: PASSIVE_UNLOCK, per: { lifeOnKill: 0.03 } },
   },
+  7: { // Norigon
+    actives: [
+      S({ id: 'wasabi', name: 'Wasabi Breath', kind: 'cone', desc: 'Breathes a long blast of green fire', cd: 3, dmg: 2.5, reach: 230, h: 90, kx: 320 }),
+      S({ id: 'roll', name: 'Sushi Roll', kind: 'dash', desc: 'Curls up and rolls through enemies', unlock: 4, cd: 4, dur: 0.4, dmg: 2.6, reach: 70, h: 70, kx: 300, ky: -260 }),
+      S({ id: 'soystorm', name: 'Soy Storm', kind: 'nova', desc: 'A swirling storm of soy sauce all around', unlock: 8, cd: 11, dur: 0.75, dmg: 4.8, reach: 250, h: 170, kx: 400, ky: -400 }),
+    ],
+    passive: { id: 'umami', name: 'Umami', desc: '+5% skill damage per level', unlock: PASSIVE_UNLOCK, per: { skillDmg: 0.05 } },
+  },
+  8: { // Chocomunch
+    actives: [
+      S({ id: 'chocoslam', name: 'Choco Slam', kind: 'slam', desc: 'Smashes the ground with both fists', cd: 3.5, dur: 0.55, dmg: 3, reach: 180, h: 70, kx: 220, ky: -520 }),
+      S({ id: 'melt', name: 'Melt Charge', kind: 'dash', desc: 'A melting shoulder-charge', unlock: 4, cd: 4, dur: 0.36, dmg: 2.6, reach: 80, h: 80, kx: 420, ky: -220 }),
+      S({ id: 'sugarrush', name: 'Sugar Rush', kind: 'buff', desc: '+30% attack, +20% speed and no flinching', unlock: 8, cd: 15, dur: 0.4, dmg: 0, buff: { atk: 0.3, speed: 0.2, armor: true, t: 7 } }),
+    ],
+    passive: { id: 'cocoa', name: 'Cocoa Armor', desc: '+5% max HP per level', unlock: PASSIVE_UNLOCK, per: { hpPct: 0.05 } },
+  },
+  15: { // Hotchog
+    actives: [
+      S({ id: 'spikeroll', name: 'Spike Roll', kind: 'dash', desc: 'Rolls into a spiky ball and bowls through', cd: 2.6, dur: 0.38, dmg: 2.3, reach: 70, h: 70, kx: 300, ky: -280 }),
+      S({ id: 'mustard', name: 'Mustard Mines', kind: 'mines', desc: 'Squirts sticky mustard blobs that burst', unlock: 4, cd: 7, dur: 0.4, dmg: 2.6, reach: 50, h: 60, kx: 260, ky: -420, n: 3 }),
+      S({ id: 'grillspin', name: 'Grill Spin', kind: 'spin', desc: 'Spins on the grill, spikes out', unlock: 8, cd: 8, dur: 1.2, dmg: 0.85, reach: 120, h: 90, kx: 200, ky: -160, n: 10 }),
+    ],
+    passive: { id: 'spiky', name: 'Extra Spiky', desc: '+4% attack per level', unlock: PASSIVE_UNLOCK, per: { atkPct: 0.04 } },
+  },
+  17: { // Pengwhip
+    actives: [
+      S({ id: 'slide', name: 'Belly Slide', kind: 'dash', desc: 'Slides across the floor on its belly', cd: 2.2, dur: 0.36, dmg: 2.1, reach: 66, h: 60, kx: 280, ky: -240 }),
+      S({ id: 'snowball', name: 'Snowball Fan', kind: 'fan', desc: 'Throws a spread of cookie snowballs', unlock: 4, cd: 5, dur: 0.4, dmg: 1.6, reach: 40, h: 40, kx: 220, ky: -160, n: 5 }),
+      S({ id: 'freeze', name: 'Deep Freeze', kind: 'nova', desc: 'Freezes the air all around', unlock: 8, cd: 11, dur: 0.75, dmg: 4.5, reach: 240, h: 160, kx: 380, ky: -380 }),
+    ],
+    passive: { id: 'coldsnap', name: 'Cold Snap', desc: '+3% critical chance per level', unlock: PASSIVE_UNLOCK, per: { crit: 3 } },
+  },
 };
 
 export function skillsOf(species: number) { return SKILLS[species] ?? SKILLS[0]; }
@@ -115,6 +147,10 @@ export const ULTS: Record<number, SkillDef> = {
   1: S({ id: 'ult1', name: 'Kraken Whirl', kind: 'spin', desc: 'Every tentacle at once, for ages', cd: 0, dur: 2, dmg: 1.4, reach: 230, h: 140, kx: 240, ky: -200, n: 20 }),
   2: S({ id: 'ult2', name: 'Cheddar Quake', kind: 'slam', desc: 'A cheese-wheel crash that shakes the kitchen', cd: 0, dur: 0.9, dmg: 10, reach: 350, h: 120, kx: 280, ky: -680 }),
   5: S({ id: 'ult5', name: 'Toast Storm', kind: 'fan', desc: 'Twelve flaming toast slices', cd: 0, dur: 0.6, dmg: 3.2, reach: 40, h: 40, kx: 260, ky: -220, n: 12 }),
+  7: S({ id: 'ult7', name: 'Dragon Roll Inferno', kind: 'cone', desc: 'A colossal wasabi fire breath', cd: 0, dur: 0.9, dmg: 9, reach: 400, h: 200, kx: 420, ky: -300 }),
+  8: S({ id: 'ult8', name: 'Fondue Fall', kind: 'slam', desc: 'Leaps up and lands as a wave of molten chocolate', cd: 0, dur: 0.9, dmg: 11, reach: 340, h: 120, kx: 300, ky: -700 }),
+  15: S({ id: 'ult15', name: 'Spin Dog', kind: 'spin', desc: 'A long, wild spiky spin', cd: 0, dur: 2.2, dmg: 1.5, reach: 200, h: 120, kx: 260, ky: -220, n: 18 }),
+  17: S({ id: 'ult17', name: 'Blizzard', kind: 'fan', desc: 'Fourteen icy cookie shards', cd: 0, dur: 0.6, dmg: 3, reach: 40, h: 40, kx: 240, ky: -200, n: 14 }),
   6: S({ id: 'ult6', name: 'Steamer Feast', kind: 'nova', desc: 'A giant steam blast that also heals 40%', cd: 0, dur: 0.9, dmg: 8, reach: 340, h: 240, kx: 420, ky: -420, heal: 0.4 }),
 };
 

@@ -1,0 +1,326 @@
+[
+ {
+  "name": "parts-7",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-7.png"
+  ],
+  "prompt": "Generate an image. This is a character from my 2D side-scrolling game (a teal sushi-roll dragon with pink spikes and a salmon belly). I need it as a CUTOUT PUPPET PARTS SHEET so I can animate it. Draw the exact same character, same colours, outlines and shading style, but in a STRICT SIDE PROFILE facing RIGHT like a 2D platformer character (face looking right, one eye visible). Split it into SEPARATE parts laid out apart from each other with big empty gaps (no part touching another): 1) the BODY with the head, face, spikes and salmon belly but no arms, legs or tail, 2) one small ARM, 3) a second ARM, 4) one LEG with foot, 5) a second LEG, 6) the sushi-roll TAIL. IMPORTANT: the body piece must have NO arms, legs, feet or tail drawn on it. Each limb has a rounded complete joint end. Solid flat magenta (#FF00FF) background, no shadows, no labels, no text. Square 1:1 image."
+ },
+ {
+  "name": "parts-8",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-8.png"
+  ],
+  "prompt": "Generate an image. This is a character from my 2D side-scrolling game (a chocolate-bar golem made of chocolate blocks). I need it as a CUTOUT PUPPET PARTS SHEET so I can animate it. Draw the exact same character, same colours, outlines and shading style, but in a STRICT SIDE PROFILE facing RIGHT like a 2D platformer character (face looking right, one eye visible). Split it into SEPARATE parts laid out apart from each other with big empty gaps (no part touching another): 1) the BODY: the chocolate-bar torso with the face, no arms or legs, 2) one big blocky chocolate ARM with a fist, 3) a second ARM, 4) one blocky LEG, 5) a second LEG. IMPORTANT: the body piece must have NO arms, legs, feet or tail drawn on it. Each limb has a rounded complete joint end. Solid flat magenta (#FF00FF) background, no shadows, no labels, no text. Square 1:1 image."
+ },
+ {
+  "name": "parts-15",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-15.png"
+  ],
+  "prompt": "Generate an image. This is a character from my 2D side-scrolling game (a hedgehog sitting in a hot-dog bun with mustard and ketchup on its spikes). I need it as a CUTOUT PUPPET PARTS SHEET so I can animate it. Draw the exact same character, same colours, outlines and shading style, but in a STRICT SIDE PROFILE facing RIGHT like a 2D platformer character (face looking right, one eye visible). Split it into SEPARATE parts laid out apart from each other with big empty gaps (no part touching another): 1) the BODY: the bun and the hedgehog head, face and spiky back, with NO feet, 2) one small hedgehog FOOT, 3) a second FOOT. IMPORTANT: the body piece must have NO arms, legs, feet or tail drawn on it. Each limb has a rounded complete joint end. Solid flat magenta (#FF00FF) background, no shadows, no labels, no text. Square 1:1 image."
+ },
+ {
+  "name": "parts-17",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-17.png"
+  ],
+  "prompt": "Generate an image. This is a character from my 2D side-scrolling game (a cookies-and-cream penguin with a cherry on its head). I need it as a CUTOUT PUPPET PARTS SHEET so I can animate it. Draw the exact same character, same colours, outlines and shading style, but in a STRICT SIDE PROFILE facing RIGHT like a 2D platformer character (face looking right, one eye visible). Split it into SEPARATE parts laid out apart from each other with big empty gaps (no part touching another): 1) the BODY with head, beak, cherry and cookie-cream belly but no flippers or feet, 2) one FLIPPER wing, 3) a second FLIPPER, 4) one orange FOOT, 5) a second FOOT. IMPORTANT: the body piece must have NO arms, legs, feet or tail drawn on it. Each limb has a rounded complete joint end. Solid flat magenta (#FF00FF) background, no shadows, no labels, no text. Square 1:1 image."
+ },
+ {
+  "name": "w-nori1",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-eq.png"
+  ],
+  "prompt": "Generate an image. This is an item icon from my cute 2D action RPG. I need EQUIPMENT ICONS in exactly the same art style (clean dark outlines, saturated colours, glossy cel shading). A WEAPON themed for my hero Norigon (a teal sushi-roll dragon): a pair of lacquered CHOPSTICKS as a spear. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT, centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "w-nori2",
+  "prompt": "Same style. A WEAPON themed for my hero Norigon (a teal sushi-roll dragon): a WASABI FLAME STAFF with a glowing green wasabi orb. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT, centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "w-nori3",
+  "prompt": "Same style. A WEAPON themed for my hero Norigon (a teal sushi-roll dragon): a DRAGON ROLL BLADE, a sword made of a sushi roll with a salmon edge, glowing. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT, centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "a-nori1",
+  "prompt": "Same style. ARMOR themed for my hero Norigon (a teal sushi-roll dragon): a NORI SEAWEED WRAP vest, shown flat and centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "a-nori2",
+  "prompt": "Same style. ARMOR themed for my hero Norigon (a teal sushi-roll dragon): RICE-GRAIN SCALE MAIL armor, shown flat and centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "a-nori3",
+  "prompt": "Same style. ARMOR themed for my hero Norigon (a teal sushi-roll dragon): glowing SALMON-SCALE ARMOR, shown flat and centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "k-nori",
+  "prompt": "Same style. A CHARM accessory themed for my hero Norigon (a teal sushi-roll dragon): a tiny fish-shaped SOY SAUCE BOTTLE charm, shown centred, filling 75% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "w-choco1",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-eq.png"
+  ],
+  "prompt": "Generate an image. This is an item icon from my cute 2D action RPG. I need EQUIPMENT ICONS in exactly the same art style (clean dark outlines, saturated colours, glossy cel shading). A WEAPON themed for my hero Chocomunch (a chocolate-bar golem): a CHOCOLATE BAR MALLET. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT, centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "w-choco2",
+  "prompt": "Same style. A WEAPON themed for my hero Chocomunch (a chocolate-bar golem): a striped CANDY CANE CLUB. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT, centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "w-choco3",
+  "prompt": "Same style. A WEAPON themed for my hero Chocomunch (a chocolate-bar golem): a FUDGE CRUSHER GAUNTLET weapon, glowing. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT, centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "a-choco1",
+  "prompt": "Same style. ARMOR themed for my hero Chocomunch (a chocolate-bar golem): a crispy WAFER PLATE armor, shown flat and centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "a-choco2",
+  "prompt": "Same style. ARMOR themed for my hero Chocomunch (a chocolate-bar golem): a TRUFFLE ARMOR chestplate dusted with cocoa, shown flat and centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "a-choco3",
+  "prompt": "Same style. ARMOR themed for my hero Chocomunch (a chocolate-bar golem): a GOLDEN-FOIL CHOCOLATE ARMOR, shining, shown flat and centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "k-choco",
+  "prompt": "Same style. A CHARM accessory themed for my hero Chocomunch (a chocolate-bar golem): a shiny GOLDEN TICKET charm, shown centred, filling 75% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "w-hog1",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-eq.png"
+  ],
+  "prompt": "Generate an image. This is an item icon from my cute 2D action RPG. I need EQUIPMENT ICONS in exactly the same art style (clean dark outlines, saturated colours, glossy cel shading). A WEAPON themed for my hero Hotchog (a hedgehog in a hot-dog bun): a MUSTARD SQUEEZE BOTTLE blaster. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT, centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "w-hog2",
+  "prompt": "Same style. A WEAPON themed for my hero Hotchog (a hedgehog in a hot-dog bun): a KETCHUP SPRAYER lance. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT, centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "w-hog3",
+  "prompt": "Same style. A WEAPON themed for my hero Hotchog (a hedgehog in a hot-dog bun): flaming GRILL TONGS, glowing. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT, centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "a-hog1",
+  "prompt": "Same style. ARMOR themed for my hero Hotchog (a hedgehog in a hot-dog bun): a paper NAPKIN BIB armor, shown flat and centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "a-hog2",
+  "prompt": "Same style. ARMOR themed for my hero Hotchog (a hedgehog in a hot-dog bun): a toasted BUN SHELL armor, shown flat and centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "a-hog3",
+  "prompt": "Same style. ARMOR themed for my hero Hotchog (a hedgehog in a hot-dog bun): a GRILL PLATE ARMOR with glowing grill lines, shown flat and centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "k-hog",
+  "prompt": "Same style. A CHARM accessory themed for my hero Hotchog (a hedgehog in a hot-dog bun): a little PICKLE RELISH charm, shown centred, filling 75% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "w-peng1",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-eq.png"
+  ],
+  "prompt": "Generate an image. This is an item icon from my cute 2D action RPG. I need EQUIPMENT ICONS in exactly the same art style (clean dark outlines, saturated colours, glossy cel shading). A WEAPON themed for my hero Pengwhip (a cookies-and-cream penguin): an ICE CREAM SCOOP mace. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT, centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "w-peng2",
+  "prompt": "Same style. A WEAPON themed for my hero Pengwhip (a cookies-and-cream penguin): a WAFER ICE SWORD. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT, centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "w-peng3",
+  "prompt": "Same style. A WEAPON themed for my hero Pengwhip (a cookies-and-cream penguin): a FROZEN CREAM TRIDENT, glowing icy. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT, centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "a-peng1",
+  "prompt": "Same style. ARMOR themed for my hero Pengwhip (a cookies-and-cream penguin): a COOKIE CRUMB VEST, shown flat and centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "a-peng2",
+  "prompt": "Same style. ARMOR themed for my hero Pengwhip (a cookies-and-cream penguin): a fluffy CREAM PUFF COAT, shown flat and centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "a-peng3",
+  "prompt": "Same style. ARMOR themed for my hero Pengwhip (a cookies-and-cream penguin): an ICE CRYSTAL ARMOR, sparkling, shown flat and centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "k-peng",
+  "prompt": "Same style. A CHARM accessory themed for my hero Pengwhip (a cookies-and-cream penguin): a shiny CHERRY charm, shown centred, filling 75% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "a-gob2",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-eq.png"
+  ],
+  "prompt": "Generate an image. This is an item icon from my cute 2D action RPG. I need EQUIPMENT ICONS in exactly the same art style (clean dark outlines, saturated colours, glossy cel shading). ARMOR themed for my hero Gobzilla Jr. (a strawberry dinosaur): a THORNY BARK PLATE armor with strawberry vines, shown flat and centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "a-gob3",
+  "prompt": "Same style. ARMOR themed for my hero Gobzilla Jr. (a strawberry dinosaur): a ROYAL BERRY ARMOR, red and gold, glowing, shown flat and centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "k-gob",
+  "prompt": "Same style. A CHARM accessory themed for my hero Gobzilla Jr. (a strawberry dinosaur): a STRAWBERRY SEED charm, shown centred, filling 75% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "a-blue2",
+  "prompt": "Same style. ARMOR themed for my hero Bluebeary (a blueberry muffin bear): a HONEYCOMB ARMOR, shown flat and centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "a-blue3",
+  "prompt": "Same style. ARMOR themed for my hero Bluebeary (a blueberry muffin bear): a FROSTED BLUE MUFFIN MAIL, glowing, shown flat and centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "k-blue",
+  "prompt": "Same style. A CHARM accessory themed for my hero Bluebeary (a blueberry muffin bear): a BLUEBERRY LOCKET charm, shown centred, filling 75% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "a-pizza2",
+  "prompt": "Same style. ARMOR themed for my hero Pizzaraptor (a pizza dinosaur): a CRUST SCALE MAIL armor, shown flat and centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "a-pizza3",
+  "prompt": "Same style. ARMOR themed for my hero Pizzaraptor (a pizza dinosaur): a MOLTEN CHEESE ARMOR, glowing, shown flat and centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "k-pizza",
+  "prompt": "Same style. A CHARM accessory themed for my hero Pizzaraptor (a pizza dinosaur): a PEPPERONI MEDALLION charm, shown centred, filling 75% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "a-moth2",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-eq.png"
+  ],
+  "prompt": "Generate an image. This is an item icon from my cute 2D action RPG. I need EQUIPMENT ICONS in exactly the same art style (clean dark outlines, saturated colours, glossy cel shading). ARMOR themed for my hero Mothball (a fluffy marshmallow moth): a MOONLIT SHAWL armor, shown flat and centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "a-moth3",
+  "prompt": "Same style. ARMOR themed for my hero Mothball (a fluffy marshmallow moth): a STARDUST GOWN armor, glowing, shown flat and centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "k-moth",
+  "prompt": "Same style. A CHARM accessory themed for my hero Mothball (a fluffy marshmallow moth): a tiny LANTERN charm, shown centred, filling 75% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "a-squid2",
+  "prompt": "Same style. ARMOR themed for my hero Squidgeon (a blue jelly octopus): a CORAL PLATE armor, shown flat and centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "a-squid3",
+  "prompt": "Same style. ARMOR themed for my hero Squidgeon (a blue jelly octopus): a PEARL SHELL ARMOR, glowing, shown flat and centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "k-squid",
+  "prompt": "Same style. A CHARM accessory themed for my hero Squidgeon (a blue jelly octopus): a PEARL charm, shown centred, filling 75% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "a-crab2",
+  "prompt": "Same style. ARMOR themed for my hero Crabbage (a cheese crab with a cabbage shell): a CHEESE RIND SHELL armor, shown flat and centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "a-crab3",
+  "prompt": "Same style. ARMOR themed for my hero Crabbage (a cheese crab with a cabbage shell): a GOLDEN GOUDA PLATE armor, glowing, shown flat and centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "k-crab",
+  "prompt": "Same style. A CHARM accessory themed for my hero Crabbage (a cheese crab with a cabbage shell): a little CLAW charm, shown centred, filling 75% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "a-toast2",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-eq.png"
+  ],
+  "prompt": "Generate an image. This is an item icon from my cute 2D action RPG. I need EQUIPMENT ICONS in exactly the same art style (clean dark outlines, saturated colours, glossy cel shading). ARMOR themed for my hero Toastbat (a toast bat): a TOASTED CRUST MAIL armor, shown flat and centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "a-toast3",
+  "prompt": "Same style. ARMOR themed for my hero Toastbat (a toast bat): a GOLDEN BRIOCHE ARMOR, glowing, shown flat and centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "k-toast",
+  "prompt": "Same style. A CHARM accessory themed for my hero Toastbat (a toast bat): a BUTTER PAT charm, shown centred, filling 75% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "a-dump2",
+  "prompt": "Same style. ARMOR themed for my hero Dumplord (a steamed dumpling): a BAMBOO LATTICE ARMOR, shown flat and centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "a-dump3",
+  "prompt": "Same style. ARMOR themed for my hero Dumplord (a steamed dumpling): a JADE STEAMER PLATE armor, glowing, shown flat and centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "k-dump",
+  "prompt": "Same style. A CHARM accessory themed for my hero Dumplord (a steamed dumpling): a little SOY DISH charm, shown centred, filling 75% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "mob-can",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-0.png"
+  ],
+  "prompt": "Generate an image. This is a hero from my cute 2D side-scrolling action RPG set in a giant kitchen. I need an ENEMY for the dusty PANTRY world in exactly the same art style (clean dark outlines, saturated colours, glossy cel shading): a CAN CRUSHER, a dented tin-can soldier with stubby legs holding its round lid up in front like a big shield, a stern face. Side view facing LEFT, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1 image."
+ },
+ {
+  "name": "mob-cheerio",
+  "prompt": "Same style, another PANTRY ENEMY: a CHEERIO BLOB, a big golden cereal-ring creature made of many little cereal rings stuck together, goofy angry face. Side view facing LEFT, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1 image."
+ },
+ {
+  "name": "mob-soda",
+  "prompt": "Same style, another PANTRY ENEMY: a BAKING SODA BOMB, a small orange baking-soda box creature with a fizzing fuse on top, crazy excited eyes, tiny legs. Side view facing LEFT, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1 image."
+ },
+ {
+  "name": "mob-flour",
+  "prompt": "Same style, another PANTRY ENEMY that FLOATS: a FLOUR GHOST, a spooky-cute floating flour sack ghost trailing white flour dust, hollow eyes. Side view facing LEFT, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1 image."
+ },
+ {
+  "name": "boss-jar",
+  "prompt": "Same style, now the BOSS of the pantry world: the COOKIE JAR MIMIC, a huge glass cookie jar monster with jagged cookie teeth, a long cookie-dough tongue, a lid like a crown, stubby legs, cookies swirling inside. Imposing but still in the cute game style. Side view facing LEFT, whole body visible, centred, filling about 90% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1 image."
+ },
+ {
+  "name": "bg-far-pantry",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-bg.png"
+  ],
+  "prompt": "Generate an image. This is the background of the first area of my cute 2D side-scrolling action RPG (tiny food monsters in a giant kitchen). I need the FAR BACKGROUND for the fourth world, The Pantry, in exactly the same painted fantasy MMORPG side-scroller style: straight-on side view inside a giant dim wooden pantry: towering shelves of cans, cereal boxes and flour sacks like distant cliffs and towers, warm lantern light, dust motes in sunbeams from a crack in the door, cobwebs in the corners. Cosy, mysterious and cheerful. The bottom quarter calm and darker. No characters, no text, no UI. Wide 16:9 landscape image."
+ },
+ {
+  "name": "bg-mid-pantry",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-bg.png"
+  ],
+  "prompt": "Generate an image. This is the background of the first area of my cute 2D side-scrolling action RPG (tiny food monsters in a giant kitchen). I need a MIDDLE PARALLAX LAYER for the pantry world in the same painted style, warm wood and lantern colours: a row of giant pantry objects standing along the bottom of the image, seen from the side: a stack of tin cans, a cereal box, a flour sack, a jar of pasta, a bag of rice, a honey jar, with gaps between them. They fill only the bottom 60 percent. Everything else (the whole upper area and the gaps) must be solid flat magenta (#FF00FF). No shadows on the magenta, no characters, no text. Wide 16:9 landscape image."
+ },
+ {
+  "name": "tile-pantry",
+  "prompt": "Now a GROUND TILE in the same style for the walkable floor in the pantry: straight-on side view of a thick old wooden pantry shelf plank: a worn top edge with a little flour dust, then the warm dark wood front face with knots and nail heads, darker towards the bottom. It must tile SEAMLESSLY left-to-right. Fill the whole square, no background, no objects, no text. Square 1:1 image."
+ },
+ {
+  "name": "bg-far-jar",
+  "prompt": "Now the FAR BACKGROUND for the pantry BOSS ARENA, Cookie Vault, same painted style: straight-on side view of the top pantry shelf: a giant glowing glass cookie jar fortress, mountains of cookies and crumbs, golden light, sugar sparkles in the air. The bottom quarter calm and darker. No characters, no text, no UI. Wide 16:9 landscape image."
+ },
+ {
+  "name": "map-pantry",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-bg.png"
+  ],
+  "prompt": "Generate an image. This is a background from my cute painted fantasy 2D action RPG where tiny food monsters adventure through a giant kitchen. I need another WORLD MAP in the same painted style: a whimsical illustrated fantasy adventure map of a GIANT PANTRY CUPBOARD seen from the front with its doors wide open, like a storybook RPG map: four wooden shelves stacked full of cans, cereal boxes, flour sacks, jars and spice tins as terrain, a winding dotted path zig-zagging up from the bottom-left shelf to a big glowing cookie jar at the top-right. Plenty of open space around the path. No characters, no text, no labels, no numbers, no UI. Wide 16:9 landscape image."
+ }
+]

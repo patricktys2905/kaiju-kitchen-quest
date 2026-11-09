@@ -143,6 +143,10 @@ const ICON_ANGLE = -2.33;
 const ARMOR_SPOT: Record<string, 'chest' | 'back'> = {
   apron: 'chest', cozy: 'chest', foil: 'chest', lid: 'back',
   'a-gob': 'back', 'a-blue': 'chest', 'a-pizza': 'chest', 'a-moth': 'chest', 'a-squid': 'chest', 'a-crab': 'back', 'a-toast': 'back', 'a-dump': 'chest',
+  'a-gob2': 'chest', 'a-gob3': 'chest', 'a-blue2': 'chest', 'a-blue3': 'chest', 'a-pizza2': 'chest', 'a-pizza3': 'chest', 'a-moth2': 'back', 'a-moth3': 'chest',
+  'a-squid2': 'chest', 'a-squid3': 'chest', 'a-crab2': 'back', 'a-crab3': 'chest', 'a-toast2': 'chest', 'a-toast3': 'chest', 'a-dump2': 'chest', 'a-dump3': 'chest',
+  'a-nori1': 'chest', 'a-nori2': 'chest', 'a-nori3': 'chest', 'a-choco1': 'chest', 'a-choco2': 'chest', 'a-choco3': 'chest',
+  'a-hog1': 'chest', 'a-hog2': 'back', 'a-hog3': 'chest', 'a-peng1': 'chest', 'a-peng2': 'chest', 'a-peng3': 'chest', pantry: 'chest',
 };
 /** Weapon direction at rest relative to the arm: forward and a little up. */
 const HOLD_ANGLE = -0.55;

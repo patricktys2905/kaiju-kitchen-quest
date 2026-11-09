@@ -90,7 +90,7 @@ describe('stages', () => {
       if (n === 10) expect(st.mobs.some(m => MOBS[m.kind].brain === 'boss')).toBe(true);
       if (n === 5) expect(st.mobs.some(m => m.elite)).toBe(true);
     }
-    expect(STAGES.length).toBe(30);
+    expect(STAGES.length).toBe(40);
   });
 });
 
@@ -401,7 +401,7 @@ describe('art', () => {
     const need = [
       ...Object.values(BASES).map(b => b.icon), ...Object.values(MOBS).map(m => m.art), ...Object.values(CONSUMABLES).map(c => c.icon),
       ...STAGES.flatMap(s => [s.bg, s.tile, ...(s.mid ? [s.mid] : [])]), ...CLASSES.map(c => `kaiju-${c.species}`),
-      ...Object.entries(RIGS).flatMap(([sp, r]) => r.parts.map(p => `parts-${sp}-${p.piece}`)), 'map-world', 'map-oven',
+      ...Object.entries(RIGS).flatMap(([sp, r]) => r.parts.map(p => `parts-${sp}-${p.piece}`)), 'map-world', 'map-oven', 'map-pantry',
     ];
     expect(need.filter(k => !have.has(k))).toEqual([]);
   });
@@ -417,7 +417,8 @@ describe('kaiju-specific gear', () => {
     }
     expect(OWNERS.length).toBe(CLASSES.length);
     expect(Object.values(BASES).filter(b => b.slot === 'weapon').every(b => b.for !== undefined)).toBe(true);
-    expect(Object.values(BASES).filter(b => b.slot === 'charm').every(b => b.for === undefined)).toBe(true);
+    expect(Object.values(BASES).filter(b => b.slot === 'charm').every(b => b.for === undefined || b.set === `sig${b.for}`)).toBe(true);
+    expect(Object.values(BASES).filter(b => b.slot === 'charm' && b.for === undefined).length).toBeGreaterThanOrEqual(5);
     // drops: only ~1 in 3 of kaiju gear is for the hero you're playing
     let s = 9;
     const rand = () => { s = (s * 16807) % 2147483647; return s / 2147483647; };
@@ -427,5 +428,41 @@ describe('kaiju-specific gear', () => {
     expect(mine / kaijuGear).toBeLessThan(0.45);
     const it = rollItem(1, 3, 5, () => 0.01, ['seed']);
     void canWear; void it;
+  });
+});
+
+describe('stories, recruits and kaiju quests', () => {
+  it('every kaiju has a full story; twists never touch boss stages', async () => {
+    const { STORIES } = await import('../src/story/stories');
+    const { WORLDS } = await import('../src/sim/stages');
+    for (const c of CLASSES) {
+      const st = STORIES[c.species];
+      expect(st, c.name).toBeTruthy();
+      expect(st.beats.intro?.length, c.name).toBeGreaterThan(0);
+      for (const w of WORLDS) for (const b of ['open', 'elite', 'boss', 'after']) expect(st.beats[`w${w.id}-${b}`]?.length, `${c.name} w${w.id}-${b}`).toBeGreaterThan(0);
+      for (const id of Object.keys(st.variants)) {
+        const s = STAGES.find(x => x.id === id);
+        expect(s, `${c.name} ${id}`).toBeTruthy();
+        expect(s!.boss, `${c.name} ${id}`).toBeFalsy();
+      }
+    }
+  });
+
+  it('boss stages are identical for every kaiju, and variants change normal stages', () => {
+    const boss = STAGES.find(s => s.id === '1-10')!;
+    const a = new World(boss, derive(prof(0, 10)), 1, [], 0, false, 'swarm');
+    const b = new World(boss, derive(prof(0, 10)), 1);
+    expect(a.mobs.length).toBe(b.mobs.length);
+    expect(a.variant).toBeUndefined();
+    const st = STAGES.find(s => s.id === '1-3')!;
+    expect(new World(st, derive(prof(0, 3)), 1, [], 0, false, 'swarm').mobs.length).toBeGreaterThan(new World(st, derive(prof(0, 3)), 1).mobs.length);
+    expect(new World(st, derive(prof(0, 3)), 1, [], 0, false, 'ambush').mobs.some(m => m.elite)).toBe(true);
+  });
+
+  it('every kaiju has a quest line and every locked kaiju has a recruit challenge', async () => {
+    const { UNLOCKS, kaijuQuests } = await import('../src/story/kaijuQuests');
+    for (const c of CLASSES) expect(kaijuQuests(c.species).length, c.name).toBe(8);
+    const starters = [0, 10, 11, 4];
+    for (const c of CLASSES) if (!starters.includes(c.species)) expect(UNLOCKS.some(u => u.species === c.species), c.name).toBe(true);
   });
 });

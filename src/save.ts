@@ -28,17 +28,23 @@ export interface Save {
   hardCleared: Record<string, Rank>;
   /** today's market stock */
   shop: { day: string; stock: Item[] };
+  /** kaiju you can play (others are unlocked by challenges) */
+  unlocked: number[];
 }
 
-const KEY = 'kkq-save-v1';
+// v2: per-kaiju progress, 4 starters, story (older v1 saves are not carried over)
+const KEY = 'kkq-save-v2';
 export const RANK_ORDER: Rank[] = ['D', 'C', 'B', 'A', 'S'];
 
 function fresh(): Save {
   const heroes: Record<number, HeroProfile> = {};
   for (const c of CLASSES) heroes[c.species] = newProfile(c.species);
   return { v: 1, heroes, bag: [], boxes: [{ tier: 2, ilvl: 1 }], crumbs: 0, cleared: {}, selected: 0, nextId: 1,
-    items: { jam: 3, pepper: 1, fstone: 3, gstone: 1 }, quick: ['jam', 'pepper', null, null], locked: [], hard: false, hardCleared: {}, shop: { day: '', stock: [] } };
+    items: { jam: 3, pepper: 1, fstone: 3, gstone: 1 }, quick: ['jam', 'pepper', null, null], locked: [], hard: false, hardCleared: {}, shop: { day: '', stock: [] }, unlocked: [...STARTERS] };
 }
+
+/** The four kaiju you start with. */
+export const STARTERS = [0, 10, 11, 4];
 
 export let save: Save = load();
 
@@ -49,9 +55,10 @@ function load(): Save {
       const s = JSON.parse(raw) as Save;
       const f = fresh();
       for (const c of CLASSES) if (!s.heroes[c.species]) s.heroes[c.species] = f.heroes[c.species];
-      // saves from before grading/fortification get a starter pack of stones
-      if (s.items && s.items.fstone === undefined) { s.items.fstone = 3; s.items.gstone = 1; }
-      return { ...f, ...s };
+      const out = { ...f, ...s };
+      for (const c of CLASSES) out.heroes[c.species] = { ...newProfile(c.species), ...out.heroes[c.species] };
+      if (!out.unlocked.includes(out.selected)) out.selected = STARTERS[0];
+      return out;
     }
   } catch { /* corrupted: start fresh */ }
   return fresh();
@@ -192,7 +199,8 @@ export function finishStage(stageId: string, rank: Rank, found: LootBox[], stage
     if (b.tier < 5 && Math.random() < up) { upgraded++; return { tier: (b.tier + 1) as BoxTier, ilvl: b.ilvl }; }
     return { ...b };
   });
-  const table = hard ? save.hardCleared : save.cleared;
+  const hp = save.heroes[save.selected];
+  const table = hard ? hp.hardCleared : hp.cleared;
   const firstClear = !table[stageId];
   for (const tier of clearRewards(stageLv, rank, boss, firstClear, Math.random)) boxes.push({ tier, ilvl: stageLv });
   const prev = table[stageId];
@@ -307,7 +315,7 @@ export function today(): string { const d = new Date(); return `${d.getFullYear(
 /** Furthest stage level cleared → item level of shop stock and bought boxes. */
 export function progressLv(): number {
   let lv = 1;
-  for (const id of Object.keys(save.cleared)) { const [w, n] = id.split('-').map(Number); lv = Math.max(lv, (w - 1) * 12 + n + 1); }
+  for (const h of Object.values(save.heroes)) for (const id of Object.keys(h.cleared ?? {})) { const [w, n] = id.split('-').map(Number); lv = Math.max(lv, (w - 1) * 12 + n + 1); }
   return lv;
 }
 export function gearPrice(it: Item): number { return Math.round((40 + it.ilvl * 12) * [1, 1.6, 3, 6, 12][it.rarity - 1]); }

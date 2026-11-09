@@ -3,6 +3,8 @@ import { CLASSES } from './sim/classes';
 import type { ConsumableId } from './sim/consumables';
 import type { BoxTier } from './sim/types';
 import { persist, save, today } from './save';
+import { BASES, rollItem } from './sim/items';
+import { UNLOCKS, kaijuQuests } from './story/kaijuQuests';
 
 export type StatKey = 'kills' | 'bossKills' | 'eliteKills' | 'clears' | 'rankA' | 'rankS' | 'boxes' | 'fortifies' | 'dodges' | 'potions' | 'ults'
   | 'legendaries' | 'maxPlus' | 'crumbs' | 'heroClear';
@@ -38,7 +40,7 @@ export const ACHIEVEMENTS: AchDef[] = [
 
 // ---------- state in the save ----------
 interface QState { id: string; prog: number; claimed: boolean; hero?: number }
-interface QSave { stats: Partial<Record<StatKey, number>>; daily: { day: string; q: QState[]; bonus: boolean }; ach: Record<string, number> }
+interface QSave { stats: Record<string, number>; daily: { day: string; q: QState[]; bonus: boolean }; ach: Record<string, number> }
 function qs(): QSave {
   const s = save as unknown as { quest?: QSave };
   if (!s.quest) s.quest = { stats: {}, daily: { day: '', q: [], bonus: false }, ach: {} };
@@ -78,7 +80,56 @@ export function track(stat: StatKey, n = 1, heroSpecies?: number): void {
   persist();
 }
 
-export function statOf(k: StatKey): number { return qs().stats[k] ?? 0; }
+export function statOf(k: StatKey | string): number { return qs().stats[k] ?? 0; }
+
+/** Any account-wide counter (e.g. 'kill:worm'). */
+export function trackKey(key: string, n = 1): void { const st = qs().stats; st[key] = (st[key] ?? 0) + n; persist(); }
+
+/** A kaiju's own counter; max = keep the best value instead of adding. */
+export function trackHero(species: number, key: string, n = 1, max = false): void {
+  const p = save.heroes[species];
+  p.stats[key] = max ? Math.max(p.stats[key] ?? 0, n) : (p.stats[key] ?? 0) + n;
+  persist();
+}
+
+// ---------- kaiju unlocks ----------
+export function unlockProgress() {
+  return UNLOCKS.map(u => ({ ...u, prog: Math.min(u.goal, statOf(u.key)), done: save.unlocked.includes(u.species) }));
+}
+/** Unlock every kaiju whose challenge is complete; returns the newly unlocked. */
+export function checkUnlocks(): number[] {
+  const got: number[] = [];
+  for (const u of UNLOCKS) if (!save.unlocked.includes(u.species) && statOf(u.key) >= u.goal) { save.unlocked.push(u.species); got.push(u.species); }
+  if (got.length) persist();
+  return got;
+}
+
+// ---------- each kaiju's quest line ----------
+export function kaijuQuestState(species: number) {
+  const p = save.heroes[species];
+  return kaijuQuests(species).map(q => ({ ...q, prog: Math.min(q.goal, p.stats[q.key] ?? 0), claimed: p.kq.includes(q.id) }));
+}
+export function claimKaijuQuest(species: number, id: string): string | null {
+  const q = kaijuQuestState(species).find(x => x.id === id);
+  if (!q || q.claimed || q.prog < q.goal) return null;
+  save.heroes[species].kq.push(id);
+  const r = q.reward, parts: string[] = [];
+  if (r.crumbs) { save.crumbs += r.crumbs; parts.push(`🍪${r.crumbs}`); }
+  for (const k of ['fstone', 'gstone', 'ggstone'] as const) if (r[k]) { save.items[k] = (save.items[k] ?? 0) + r[k]!; parts.push(`${r[k]}× ${k}`); }
+  if (r.box) { save.boxes.push({ tier: r.box, ilvl: save.heroes[species].level }); parts.push('a box'); }
+  if (r.sigCharm) {
+    // this kaiju's signature charm, Epic, at its level
+    const key = Object.keys(BASES).find(k => BASES[k].slot === 'charm' && BASES[k].for === species);
+    if (key) {
+      let it = rollItem(save.nextId++, 4, Math.max(12, save.heroes[species].level), Math.random, [], species);
+      it = { ...it, base: key, rarity: Math.max(4, it.rarity) as 4 | 5, set: BASES[key].set };
+      save.bag.push(it); parts.push(`${BASES[key].name} (signature charm)`);
+    }
+  }
+  persist();
+  return parts.join(', ');
+}
+export function kaijuQuestsClaimable(species: number): number { return kaijuQuestState(species).filter(q => !q.claimed && q.prog >= q.goal).length; }
 
 function give(r: Reward): string {
   const parts: string[] = [];
@@ -128,5 +179,5 @@ export function claimAch(id: string): string | null {
 export function claimable(): number {
   const d = dailyQuests().filter(q => !q.claimed && q.prog >= q.def.goal).length;
   const b = !qs().daily.bonus && qs().daily.q.every(q => q.claimed) ? 1 : 0;
-  return d + b + achievements().filter(a => a.done).length;
+  return d + b + achievements().filter(a => a.done).length + kaijuQuestsClaimable(save.selected);
 }

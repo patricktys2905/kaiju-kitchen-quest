@@ -2,6 +2,7 @@
 // open ground). Stage 5 has an elite mini-boss; stage 10 is the world boss in its own arena.
 // Reach: the lowest jumper (Bluebeary) rises ~105 px, so tiers are 90 px apart; the top tier needs a ladder
 // or a lower platform beside it (tests/world.test.ts checks every platform is reachable).
+import { MOBS } from './mobs';
 import type { MobKind, MobSpawn, Platform, Ladder, StageDef } from './types';
 
 const G = 470;
@@ -35,6 +36,11 @@ export const WORLDS: WorldDef[] = [
     id: 3, name: 'The Oven', blurb: 'Preheated to dangerous.', bg: 'bg-far-oven', mid: 'bg-mid-oven', tile: 'tile-oven', platTint: 0xffc8a0, bossBg: 'bg-far-dragon',
     baseLv: 25, power: 1.6, pool: [[1, 'bacon'], [1, 'popcorn'], [3, 'imp'], [6, 'meatball']], elite: 'meatball', boss: 'dragon',
     names: ['Oven Door Ramp', 'Bottom Rack', 'Muffin Tin Maze', 'Casserole Cliffs', 'Meatball Mountain', 'Cookie Sheet Plains', 'Roasting Pan Pass', 'Pizza Stone Steppe', 'Top Rack Ascent', 'Broiler Peak'],
+  },
+  {
+    id: 4, name: 'The Pantry', blurb: 'Dusty shelves, grumpy groceries.', bg: 'bg-far-pantry', mid: 'bg-mid-pantry', tile: 'tile-pantry', platTint: 0xe8d0b0, bossBg: 'bg-far-jar',
+    baseLv: 37, power: 2.5, pool: [[1, 'cheerio'], [1, 'flour'], [3, 'can'], [5, 'soda']], elite: 'can', boss: 'jar',
+    names: ['Cupboard Door', 'Cereal Canyon', 'Flour Drifts', 'Tin Can Alley', 'Shield Wall', 'Spice Rack Ridge', 'Pasta Jar Peaks', 'Honey Hollow', 'Top Shelf Climb', 'Cookie Vault'],
   },
 ];
 
@@ -87,7 +93,7 @@ function genStage(w: WorldDef, n: number): StageDef {
     const kind = kinds[Math.floor(r() * kinds.length)];
     const lv = r() < 0.5 ? lvLo : lvHi;
     // flyers always start at ground level (from a high platform they would hover out of reach)
-    if (kind !== 'icebat' && r() < 0.35 && platforms.length > 0) {
+    if (MOBS[kind].brain !== 'flyer' && r() < 0.35 && platforms.length > 0) {
       const p = platforms[Math.floor(r() * platforms.length)];
       mobs.push({ kind, lv, x: Math.round(p.x + 30 + r() * (p.w - 60)), y: p.y });
     } else {

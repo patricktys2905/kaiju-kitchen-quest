@@ -87,6 +87,34 @@ export const CLASSES: HeroClass[] = [
     combo: [A({ reach: 80, dmg: 0.95 }), A({ reach: 84, dmg: 1 }), A({ dur: 0.48, hit: [0.16, 0.28], reach: 110, h: 80, dmg: 1.6, kx: 320, ky: -300, stun: 0.6, lunge: 30 })],
     air: A({ dur: 0.3, reach: 80, h: 80, dmg: 0.9 }),
   },
+  {
+    species: 7, name: 'Norigon', role: 'Dragon mage: wasabi breath, big area skills',
+    hp: 115, atk: 10, speed: 220, jump: 690,
+    base: { str: 4, dex: 4, int: 8, vit: 5 }, grow: { str: 0, dex: 1, int: 3, vit: 1 },
+    combo: [A({ reach: 74, dmg: 0.95 }), A({ reach: 78, dmg: 1.05 }), A({ dur: 0.46, hit: [0.14, 0.28], reach: 110, h: 80, dmg: 1.7, kx: 320, ky: -340, stun: 0.6, lunge: 50 })],
+    air: A({ dur: 0.3, reach: 70, h: 70, dmg: 0.95 }),
+  },
+  {
+    species: 8, name: 'Chocomunch', role: 'Bruiser: huge fists, rushes in',
+    hp: 165, atk: 13, speed: 195, jump: 650,
+    base: { str: 8, dex: 3, int: 2, vit: 7 }, grow: { str: 2, dex: 0, int: 0, vit: 2 },
+    combo: [A({ dur: 0.38, hit: [0.12, 0.22], reach: 70, dmg: 1.2 }), A({ dur: 0.38, hit: [0.12, 0.22], reach: 72, dmg: 1.3 }), A({ dur: 0.58, hit: [0.22, 0.34], reach: 90, h: 80, dmg: 2.5, kx: 460, ky: -320, stun: 0.8, lunge: 90 })],
+    air: A({ dur: 0.36, reach: 72, h: 80, dmg: 1.2, kx: 160, ky: 240 }),
+  },
+  {
+    species: 15, name: 'Hotchog', role: 'Spiky roller: tanky, rolls through crowds',
+    hp: 150, atk: 11, speed: 240, jump: 680,
+    base: { str: 6, dex: 5, int: 2, vit: 7 }, grow: { str: 1, dex: 1, int: 0, vit: 2 },
+    combo: [A({ dur: 0.3, hit: [0.07, 0.16], reach: 64 }), A({ dur: 0.3, hit: [0.07, 0.16], reach: 64, dmg: 1.1 }), A({ dur: 0.45, hit: [0.12, 0.26], reach: 86, dmg: 1.9, kx: 380, ky: -300, lunge: 180, stun: 0.6 })],
+    air: A({ dur: 0.3, reach: 64, h: 70, dmg: 1, kx: 120, ky: 160 }),
+  },
+  {
+    species: 17, name: 'Pengwhip', role: 'Ice skater: fast slides, frosty ranged skills',
+    hp: 118, atk: 10, speed: 265, jump: 720,
+    base: { str: 4, dex: 7, int: 6, vit: 4 }, grow: { str: 1, dex: 2, int: 2, vit: 1 },
+    combo: [A({ dur: 0.26, hit: [0.06, 0.14], reach: 66 }), A({ dur: 0.26, hit: [0.06, 0.14], reach: 70 }), A({ dur: 0.4, hit: [0.1, 0.24], reach: 96, dmg: 1.7, kx: 340, ky: -320, lunge: 200, stun: 0.55 })],
+    air: A({ dur: 0.28, reach: 70, h: 70, dmg: 1 }),
+  },
 ];
 
 export function classOf(species: number): HeroClass {
