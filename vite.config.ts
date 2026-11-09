@@ -20,8 +20,8 @@ export default defineConfig({
   test: { exclude: [...configDefaults.exclude, '.claude/**'] },
   plugins: [
     VitePWA({
-      // 'prompt' so a new version never reloads mid-match; src/pwa.ts applies it from the menu.
-      registerType: 'prompt',
+      // autoUpdate: a new version installs itself and reloads (saves live in localStorage, so nothing is lost).
+      registerType: 'autoUpdate',
       includeAssets: ['favicon.png', 'icons/apple-touch-icon.png'],
       manifest: {
         id: './',
