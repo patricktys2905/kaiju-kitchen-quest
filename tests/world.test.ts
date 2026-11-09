@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { Bot } from '../src/sim/bot';
 import { CLASSES } from '../src/sim/classes';
-import { BASES, rollItem } from '../src/sim/items';
+import { BASES, GRADE_MUL, fortChance, fortMul, itemLines, rollGrade, rollItem } from '../src/sim/items';
 import { clearCount, clearRewards, rollTier } from '../src/sim/loot';
 import { MOBS } from '../src/sim/mobs';
 import { SKILLS, skillsOf } from '../src/sim/skills';
@@ -331,5 +331,26 @@ describe('world 2 monsters', () => {
     let rain = false;
     for (let i = 0; i < 60 * 60 && !rain; i++) for (const e of w.step(NO_INPUT)) if (e.t === 'mobAttack' && e.kind === 'rain') rain = true;
     expect(rain).toBe(true);
+  });
+});
+
+describe('grading and fortification', () => {
+  it('grade and fortify level scale an item\'s stats', () => {
+    const it = rollItem(1, 3, 10, () => 0.4, []);
+    const base = itemLines({ ...it, grade: 1, plus: 0 })[0].v;
+    expect(itemLines({ ...it, grade: 4, plus: 0 })[0].v).toBeGreaterThan(base * 1.3);
+    expect(itemLines({ ...it, grade: 1, plus: 10 })[0].v).toBeGreaterThan(base * 1.5);
+    expect(fortMul(15)).toBeCloseTo(2.1);
+    expect(GRADE_MUL[0]).toBeLessThan(1);
+  });
+
+  it('fortify chances fall with level; golden re-grades never go down', () => {
+    for (let p = 1; p < 15; p++) expect(fortChance(p)).toBeLessThanOrEqual(fortChance(p - 1));
+    expect(fortChance(15)).toBe(0);
+    let s = 3;
+    const rand = () => { s = (s * 16807) % 2147483647; return s / 2147483647; };
+    for (let i = 0; i < 300; i++) expect(rollGrade(rand, 2, 3)).toBeGreaterThanOrEqual(3);
+    const avg = (r: 1 | 5) => { let t = 0; for (let i = 0; i < 2000; i++) t += rollGrade(rand, r); return t / 2000; };
+    expect(avg(5)).toBeGreaterThan(avg(1));
   });
 });

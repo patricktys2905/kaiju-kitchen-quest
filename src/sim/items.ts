@@ -13,7 +13,9 @@ export interface Item {
   base: string;     // key into BASES
   rarity: Rarity;
   ilvl: number;     // item level (from the monsters / stage it came from)
-  plus: number;     // enhancement +0..+10
+  plus: number;     // fortification +0..+15
+  /** grade index into GRADES (D..S); missing on old saves = C */
+  grade?: number;
   lines: Line[];
   /** skill id → bonus levels; 'all' = every skill */
   skill?: { id: string; n: number };
@@ -105,7 +107,7 @@ export function rollItem(id: number, tier: BoxTier, ilvl: number, rand: () => nu
     const same = lines.find(l => l.k === e.k);
     if (same) same.v = scaleV(e.k, same.v + v); else lines.push({ k: e.k, v });
   }
-  const it: Item = { id, base, rarity, ilvl, plus: 0, lines };
+  const it: Item = { id, base, rarity, ilvl, plus: 0, lines, grade: rollGrade(rand, rarity) };
   if (rarity === 5 && rand() < 0.3) it.skill = { id: 'all', n: 1 };
   else if (rarity >= 4 && rand() < 0.6) it.skill = { id: pick(skillIds, rand), n: rarity === 5 ? 2 : 1 };
   return it;
@@ -116,13 +118,41 @@ export function itemName(it: Item): string {
   return `${pre} ${BASES[it.base].name}${it.plus ? ` +${it.plus}` : ''}`;
 }
 
-/** Lines including the enhancement bonus (+8% of every line per +1). */
+export function gradeOf(it: Item): number { return it.grade ?? 1; }
+
+/** Lines including grade and fortification. */
 export function itemLines(it: Item): Line[] {
-  const m = 1 + 0.08 * it.plus;
+  const m = fortMul(it.plus) * GRADE_MUL[gradeOf(it)];
   return it.lines.map(l => ({ k: l.k, v: scaleV(l.k, l.v * m) }));
 }
 
 /** Crumbs (currency) from salvaging an item, and the cost of the next enhancement. */
-export function salvageValue(it: Item): number { return Math.round((4 + it.ilvl) * [1, 2, 5, 12, 30][it.rarity - 1] * (1 + it.plus * 0.5)); }
-export function enhanceCost(it: Item): number { return Math.round((10 + it.ilvl * 2) * (1 + it.plus) * [1, 1.3, 1.7, 2.2, 3][it.rarity - 1]); }
-export const MAX_PLUS = 10;
+export function salvageValue(it: Item): number { return Math.round((4 + it.ilvl) * [1, 2, 5, 12, 30][it.rarity - 1] * (1 + it.plus * 0.5) * GRADE_MUL[gradeOf(it)]); }
+
+// ---------- grading ----------
+/** Grades scale every stat line of an item. */
+export const GRADES = ['D', 'C', 'B', 'A', 'S'];
+export const GRADE_MUL = [0.85, 1, 1.12, 1.25, 1.4];
+export const GRADE_CSS = ['#a89898', '#e0e0e0', '#7ee87e', '#7ac0ff', '#ffb02e'];
+/** Grade odds when an item is found or re-graded; rarer items lean higher. */
+export function gradeWeights(rarity: Rarity): number[] { return [30, 36, 22, 9, 3].map((w, i) => w * Math.pow(1 + 0.12 * (rarity - 1), i)); }
+export function rollGrade(rand: () => number, rarity: Rarity, floor = 0): number {
+  const w = gradeWeights(rarity).map((x, i) => (i < floor ? 0 : x));
+  let r = rand() * w.reduce((a, b) => a + b, 0);
+  for (let i = 0; i < w.length; i++) { r -= w[i]; if (r < 0) return i; }
+  return floor;
+}
+
+// ---------- fortification ----------
+export const MAX_PLUS = 15;
+/** Stat multiplier from fortification: +6% per level to +10, then +10% per level. */
+export function fortMul(plus: number): number { return 1 + 0.06 * Math.min(plus, 10) + 0.1 * Math.max(0, plus - 10); }
+/** Success chance of going from +plus to +plus+1. */
+export function fortChance(plus: number): number { return [1, 1, 1, 1, 1, 0.85, 0.75, 0.65, 0.55, 0.45, 0.35, 0.28, 0.22, 0.16, 0.1][plus] ?? 0; }
+/** Failing from +7 or higher drops one level (a Safety Charm prevents it). */
+export function fortRisky(plus: number): boolean { return plus >= 7; }
+export function fortCost(it: Item): { crumbs: number; stones: number } {
+  return { crumbs: Math.round((10 + it.ilvl * 2) * (1 + it.plus * 0.8) * [1, 1.3, 1.7, 2.2, 3][it.rarity - 1]), stones: 1 + Math.floor(it.plus / 5) };
+}
+/** kept for older callers */
+export function enhanceCost(it: Item): number { return fortCost(it).crumbs; }

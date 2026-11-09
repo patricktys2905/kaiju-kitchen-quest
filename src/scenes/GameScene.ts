@@ -23,7 +23,7 @@ import { hideCamp, runGacha, showCamp, showResult, stageUnlocked } from '../ui/c
 export function lookOf(p: HeroProfile): GearLook {
   const e = p.equip, ic = (b: string) => BASES[b].icon;
   return {
-    weapon: e.weapon && { icon: ic(e.weapon.base), base: e.weapon.base, rarity: e.weapon.rarity },
+    weapon: e.weapon && { icon: ic(e.weapon.base), base: e.weapon.base, rarity: e.weapon.rarity, plus: e.weapon.plus },
     armor: e.armor && { icon: ic(e.armor.base), base: e.armor.base, rarity: e.armor.rarity },
     charm: e.charm && { icon: ic(e.charm.base), rarity: e.charm.rarity },
   };
@@ -250,6 +250,11 @@ export class GameScene extends Phaser.Scene {
           break;
         }
         case 'revive': sfx('levelup'); toast('SECOND HELPING! Revived!', { big: true, color: '#ffe27a' }); this.burst(w.hero.x, w.hero.y - 40, 0xffe27a, 30); this.ring(w.hero.x, w.hero.y - 30, 90, 0xffe27a); break;
+        case 'stone': {
+          const t = this.add.text(e.x, e.y, '+' + e.n + ' Fortify Stone', { fontFamily: 'Nunito', fontStyle: '900', fontSize: '10px', color: '#ffb36a', stroke: '#3a1808', strokeThickness: 3 }).setOrigin(0.5).setDepth(29).setResolution(3);
+          this.tweens.add({ targets: t, y: e.y - 36, alpha: 0, duration: 1100, delay: 300, onComplete: () => t.destroy() });
+          break;
+        }
         case 'crumbs': {
           sfx('coin');
           const t = this.add.text(e.x, e.y - 10, '+' + e.n + ' 🍪', { fontFamily: 'Nunito', fontStyle: '900', fontSize: '11px', color: '#ffe27a', stroke: '#3a2008', strokeThickness: 3 }).setOrigin(0.5).setDepth(29).setResolution(3);
@@ -272,6 +277,7 @@ export class GameScene extends Phaser.Scene {
     playMusic(null);
     syncQuickBag(w.hero.bag, w.hero.revives);
     save.crumbs += w.run.crumbs;
+    save.items.fstone = (save.items.fstone ?? 0) + w.run.stones;
     const res = failed ? null : finishStage(st.id, rankOf(w.run, st.par).rank, w.loot, st.lv[1] + (this.hard ? HARD_LV : 0), !!st.boss, this.hard);
     this.time.delayedCall(failed ? 600 : 300, () => showResult(
       { stage: st, res, time: w.run.time, hits: w.run.hitsTaken, combo: w.run.maxCombo, xp: this.xpGained, levels: this.levels, failed, crumbs: w.run.crumbs, hard: this.hard },

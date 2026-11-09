@@ -1,7 +1,7 @@
 // Save data (localStorage 'kkq-save-v1'): every hero's progress, the shared bag, unopened boxes, crumbs, stage ranks.
 import { CLASSES, type Stat } from './sim/classes';
 import { CONSUMABLES, type ConsumableId } from './sim/consumables';
-import { type Item, MAX_PLUS, type Slot, BASES, enhanceCost, rollItem, salvageValue } from './sim/items';
+import { type Item, MAX_PLUS, type Slot, BASES, fortChance, fortCost, fortRisky, gradeOf, rollGrade, rollItem, salvageValue } from './sim/items';
 import { clearRewards } from './sim/loot';
 import { SKILLS } from './sim/skills';
 import { type Derived, type HeroProfile, canLevelSkill, derive, gainXp, newProfile } from './sim/stats';
@@ -37,7 +37,7 @@ function fresh(): Save {
   const heroes: Record<number, HeroProfile> = {};
   for (const c of CLASSES) heroes[c.species] = newProfile(c.species);
   return { v: 1, heroes, bag: [], boxes: [{ tier: 2, ilvl: 1 }], crumbs: 0, cleared: {}, selected: 0, nextId: 1,
-    items: { jam: 3, pepper: 1 }, quick: ['jam', 'pepper', null, null], locked: [], hard: false, hardCleared: {}, shop: { day: '', stock: [] } };
+    items: { jam: 3, pepper: 1, fstone: 3, gstone: 1 }, quick: ['jam', 'pepper', null, null], locked: [], hard: false, hardCleared: {}, shop: { day: '', stock: [] } };
 }
 
 export let save: Save = load();
@@ -49,6 +49,8 @@ function load(): Save {
       const s = JSON.parse(raw) as Save;
       const f = fresh();
       for (const c of CLASSES) if (!s.heroes[c.species]) s.heroes[c.species] = f.heroes[c.species];
+      // saves from before grading/fortification get a starter pack of stones
+      if (s.items && s.items.fstone === undefined) { s.items.fstone = 3; s.items.gstone = 1; }
       return { ...f, ...s };
     }
   } catch { /* corrupted: start fresh */ }
@@ -122,17 +124,41 @@ export function salvage(itemId: number): number {
   return v;
 }
 
-/** Enhance an item (bag or equipped) by +1 for crumbs. */
-export function enhance(it: Item): boolean {
-  const cost = enhanceCost(it);
-  if (it.plus >= MAX_PLUS || save.crumbs < cost) return false;
-  save.crumbs -= cost; it.plus++; persist(); return true;
+export type FortResult = { ok: boolean; from: number; to: number; saved: boolean } | null;
+/** Fortify an item (bag or equipped): costs crumbs + Fortify Stones; may fail. From +7 a failure drops a
+ *  level unless a Safety Charm is used (consumed only when it saves you). */
+export function fortify(it: Item, useSafety: boolean): FortResult {
+  const c = fortCost(it);
+  if (it.plus >= MAX_PLUS || save.crumbs < c.crumbs || (save.items.fstone ?? 0) < c.stones) return null;
+  save.crumbs -= c.crumbs; save.items.fstone = (save.items.fstone ?? 0) - c.stones;
+  const from = it.plus;
+  let saved = false;
+  if (Math.random() < fortChance(it.plus)) it.plus++;
+  else if (fortRisky(it.plus)) {
+    if (useSafety && (save.items.safety ?? 0) > 0) { save.items.safety!--; saved = true; } else it.plus--;
+  }
+  persist();
+  return { ok: it.plus > from, from, to: it.plus, saved };
 }
+export function canFortify(it: Item): boolean { const c = fortCost(it); return it.plus < MAX_PLUS && save.crumbs >= c.crumbs && (save.items.fstone ?? 0) >= c.stones; }
+
+/** Re-roll an item's grade with a Grading Stone (can go down) or a Golden one (never down). */
+export function regrade(it: Item, golden: boolean): { from: number; to: number } | null {
+  const key = golden ? 'ggstone' : 'gstone';
+  if ((save.items[key] ?? 0) <= 0) return null;
+  save.items[key]!--;
+  const from = gradeOf(it);
+  it.grade = rollGrade(Math.random, it.rarity, golden ? from : 0);
+  persist();
+  return { from, to: it.grade };
+}
+/** kept for old callers */
+export function enhance(it: Item): boolean { return !!fortify(it, false)?.ok; }
 
 const ALL_SKILLS = Object.values(SKILLS).flatMap(s => s.actives.map(a => a.id).concat(s.passive.id));
 
 /** Open the box at index i: one piece of gear + some crumbs. */
-export function openBox(i: number): { item: Item; crumbs: number; box: LootBox } | null {
+export function openBox(i: number): { item: Item; crumbs: number; box: LootBox; extra: string[] } | null {
   const box = save.boxes[i];
   if (!box) return null;
   save.boxes.splice(i, 1);
@@ -140,8 +166,13 @@ export function openBox(i: number): { item: Item; crumbs: number; box: LootBox }
   const crumbs = Math.round((3 + box.ilvl) * box.tier * (0.8 + Math.random() * 0.4));
   save.bag.push(item);
   save.crumbs += crumbs;
+  const extra: string[] = [];
+  const stones = Math.random() < 0.35 + box.tier * 0.1 ? 1 + Math.floor(Math.random() * box.tier) : 0;
+  if (stones) { save.items.fstone = (save.items.fstone ?? 0) + stones; extra.push(`+${stones} Fortify Stone${stones > 1 ? 's' : ''}`); }
+  if (Math.random() < 0.06 * box.tier) { save.items.gstone = (save.items.gstone ?? 0) + 1; extra.push('+1 Grading Stone'); }
+  if (box.tier >= 4 && Math.random() < 0.15) { save.items.ggstone = (save.items.ggstone ?? 0) + 1; extra.push('+1 Golden Grading Stone'); }
   persist();
-  return { item, crumbs, box };
+  return { item, crumbs, box, extra };
 }
 
 export interface ClearResult { rank: Rank; boxes: LootBox[]; upgraded: number; firstClear: boolean }
@@ -160,7 +191,7 @@ export function finishStage(stageId: string, rank: Rank, found: LootBox[], stage
   const prev = table[stageId];
   if (!prev || RANK_ORDER.indexOf(rank) > RANK_ORDER.indexOf(prev)) table[stageId] = rank;
   // boss first clears drop a Golden Sugar Cube (permanent stat point)
-  if (boss && firstClear) save.items.sugar = (save.items.sugar ?? 0) + 1;
+  if (boss && firstClear) { save.items.sugar = (save.items.sugar ?? 0) + 1; save.items.ggstone = (save.items.ggstone ?? 0) + 1; }
   save.boxes.push(...boxes);
   persist();
   return { rank, boxes, upgraded, firstClear };
@@ -260,7 +291,7 @@ export function salvageWorse(): { n: number; crumbs: number } {
 }
 
 // ---------- market ----------
-export const SHOP_ITEMS: ConsumableId[] = ['jam', 'bigjam', 'pepper', 'ice', 'bean', 'revive', 'scroll'];
+export const SHOP_ITEMS: ConsumableId[] = ['jam', 'bigjam', 'pepper', 'ice', 'bean', 'revive', 'fstone', 'gstone', 'safety', 'scroll'];
 export const SHOP_BOXES: { tier: BoxTier; price: number }[] = [{ tier: 2, price: 120 }, { tier: 3, price: 380 }];
 export function today(): string { const d = new Date(); return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`; }
 /** Furthest stage level cleared → item level of shop stock and bought boxes. */

@@ -2,7 +2,7 @@
 // consumables + quick bag), MARKET, BOXES (gacha). Also the stage result panel. Reads/writes src/save.ts.
 import { CLASSES, type Stat } from '../sim/classes';
 import { CONSUMABLES, type ConsumableId, QUICK_SLOTS } from '../sim/consumables';
-import { BASES, type Item, MAX_PLUS, RARITY_CSS, RARITY_NAMES, type Slot, enhanceCost, itemLines, itemName, lineText, salvageValue } from '../sim/items';
+import { BASES, GRADES, GRADE_CSS, GRADE_MUL, type Item, MAX_PLUS, RARITY_CSS, RARITY_NAMES, type Slot, fortChance, fortCost, fortMul, fortRisky, gradeOf, itemLines, itemName, lineText, salvageValue } from '../sim/items';
 import { TIER_NAMES, clearCount, likelyTier } from '../sim/loot';
 import { SKILLS, MAX_SKILL, type SkillKind, skillsOf } from '../sim/skills';
 import { STAGES, WORLDS } from '../sim/stages';
@@ -10,7 +10,7 @@ import { STAT_INFO, STATS, derive, xpFor } from '../sim/stats';
 import type { BoxTier, LootBox, StageDef } from '../sim/types';
 import { HARD_LV } from '../sim/world';
 import {
-  RANK_ORDER, type ClearResult, type Rank, SHOP_BOXES, SHOP_ITEMS, autoStats, buyBox, buyConsumable, buyGear, compare, enhance, equip, equipBest,
+  RANK_ORDER, type ClearResult, type Rank, SHOP_BOXES, SHOP_ITEMS, autoStats, buyBox, buyConsumable, buyGear, canFortify, compare, equip, equipBest, fortify, regrade,
   gearPrice, hero, isLocked, levelSkill, openBox, persist, resetStats, salvage, salvageWorse, save, setQuick, shopStock, spendStat, toggleLock,
   unequip, useScroll, useSugar,
 } from '../save';
@@ -39,6 +39,7 @@ let selStage: string | null = null;
 let selConsumable: ConsumableId | null = null;
 let onPlay: (stageId: string) => void = () => {};
 let flash = '';
+let useSafety = true;
 
 export function initCamp(play: (stageId: string) => void): void {
   onPlay = play;
@@ -63,7 +64,7 @@ export function hideCamp(): void { el.classList.remove('on'); }
 
 const esc = (s: string) => s.replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]!));
 const iconHtml = (it: Item | undefined, extra = '', badge = '') => it
-  ? `<div class="icon" style="--rc:${RARITY_CSS[it.rarity]};background-image:url(art/${BASES[it.base].icon}.webp)" ${extra}>${it.skill ? '<span class="sk">⭐</span>' : ''}${it.plus ? `<b>+${it.plus}</b>` : ''}${isLocked(it.id) ? '<span class="lk">🔒</span>' : ''}${badge}</div>`
+  ? `<div class="icon" style="--rc:${RARITY_CSS[it.rarity]};background-image:url(art/${BASES[it.base].icon}.webp)" ${extra}>${it.skill ? '<span class="sk">⭐</span>' : ''}${it.plus ? `<b>+${it.plus}</b>` : ''}${isLocked(it.id) ? '<span class="lk">🔒</span>' : ''}<span class="gr" style="color:${GRADE_CSS[gradeOf(it)]}">${GRADES[gradeOf(it)]}</span>${badge}</div>`
   : `<div class="icon" ${extra}></div>`;
 /** ▲ / ▼ versus what the current hero wears. */
 function badgeFor(it: Item): string {
@@ -229,16 +230,25 @@ function detail(it: Item, equipped: boolean): string {
   const p = hero();
   const slot = BASES[it.base].slot;
   const cur = p.equip[slot];
-  const cost = enhanceCost(it);
+  const fc = fortCost(it), chance = Math.round(fortChance(it.plus) * 100);
   const cmp = equipped ? null : compare(save.selected, it);
-  return `<div class="detail"><div style="display:flex;gap:1.2vmin;align-items:center">${iconHtml(it)}<div><h3 style="color:${RARITY_CSS[it.rarity]}">${esc(itemName(it))}</h3>${RARITY_NAMES[it.rarity]} ${SLOT_NAMES[slot]} · iLv ${it.ilvl}</div></div>
+  return `<div class="detail"><div style="display:flex;gap:1.2vmin;align-items:center">${iconHtml(it)}<div><h3 style="color:${RARITY_CSS[it.rarity]}">${esc(itemName(it))}</h3>${RARITY_NAMES[it.rarity]} ${SLOT_NAMES[slot]} · iLv ${it.ilvl} · Grade <b style="color:${GRADE_CSS[gradeOf(it)]}">${GRADES[gradeOf(it)]}</b> <small>(×${GRADE_MUL[gradeOf(it)]})</small></div></div>
     <div style="margin-top:1vmin">${itemLines(it).map(l => `<div class="ln">${lineText(l)}</div>`).join('')}${it.skill ? `<div class="skl">⭐ ${skillText(it)}</div>` : ''}</div>
     ${cmp ? `<div class="cmpbox"><div class="${cmp.pct >= 0 ? 'up' : 'dn'}">${cmp.pct >= 0.5 ? '▲' : cmp.pct <= -0.5 ? '▼' : '='} ${cmp.pct >= 0 ? '+' : ''}${cmp.pct.toFixed(1)}% overall vs ${cur ? esc(itemName(cur)) : 'nothing'}</div>
       ${cmp.diff.map(d => `<span class="${d.v > 0 ? 'up' : 'dn'}">${d.k.replace(/^(\w+) Lv$/, (_, id) => (SKILL_NAME[id] ?? id) + ' Lv')} ${d.v > 0 ? '+' : ''}${d.v}${d.pct ? '%' : ''}</span>`).join('')}</div>` : ''}
     <div class="btns">
       ${equipped ? `<button class="pill" data-act="unequip" data-slot="${slot}">UNEQUIP</button>` : `<button class="pill go" data-act="equip" data-id="${it.id}">EQUIP</button>`}
-      <button class="pill" data-act="enhance" data-id="${it.id}" ${it.plus >= MAX_PLUS || save.crumbs < cost ? 'disabled' : ''}>${it.plus >= MAX_PLUS ? 'MAX +10' : `ENHANCE 🍪${cost}`}</button>
       ${equipped ? '' : `<button class="pill" data-act="lock" data-id="${it.id}">${isLocked(it.id) ? '🔓 UNLOCK' : '🔒 LOCK'}</button><button class="pill" data-act="salvage" data-id="${it.id}" ${isLocked(it.id) ? 'disabled' : ''}>SALVAGE +🍪${salvageValue(it)}</button>`}
+    </div>
+    <div class="forge">
+      <div class="h3" style="font-size:2.2vmin;margin:0">⚒ Fortify <small>+${it.plus} → +${Math.min(MAX_PLUS, it.plus + 1)} · stats ×${fortMul(it.plus).toFixed(2)} → ×${fortMul(Math.min(MAX_PLUS, it.plus + 1)).toFixed(2)}</small></div>
+      ${it.plus >= MAX_PLUS ? '<div class="up">Maxed at +15!</div>' : `<div><b class="${chance >= 80 ? 'up' : chance >= 40 ? '' : 'dn'}">${chance}% success</b>${fortRisky(it.plus) ? ' · <span class="dn">fail = drop to +' + (it.plus - 1) + '</span>' : ' · fail = nothing lost but materials'}</div>
+      <div class="fbtns"><button class="pill ${canFortify(it) ? 'go' : ''}" data-act="fortify" data-id="${it.id}" ${canFortify(it) ? '' : 'disabled'}>FORTIFY 🍪${fc.crumbs} + 🪨${fc.stones}</button>
+      ${fortRisky(it.plus) ? `<label class="safe"><input type="checkbox" data-act="safety" ${useSafety ? 'checked' : ''} ${save.items.safety ? '' : 'disabled'}> Safety Charm (${save.items.safety ?? 0})</label>` : ''}</div>
+      <div class="have">You have 🪨 ${save.items.fstone ?? 0} Fortify Stones</div>`}
+      <div class="h3" style="font-size:2.2vmin;margin:1vmin 0 0">💎 Grade <small>D ×0.85 · C ×1 · B ×1.12 · A ×1.25 · S ×1.4</small></div>
+      <div class="fbtns"><button class="pill" data-act="regrade" data-id="${it.id}" ${save.items.gstone ? '' : 'disabled'}>RE-GRADE (${save.items.gstone ?? 0}) <small>can go down</small></button>
+      <button class="pill ${save.items.ggstone ? 'go' : ''}" data-act="regrade-gold" data-id="${it.id}" ${save.items.ggstone && gradeOf(it) < 4 ? '' : 'disabled'}>GOLDEN (${save.items.ggstone ?? 0}) <small>never down</small></button></div>
     </div></div>`;
 }
 
@@ -296,7 +306,19 @@ function onClick(e: MouseEvent): void {
       case 'reset': resetStats(sp); break;
       case 'equip': equip(sp, Number(ds.id)); break;
       case 'unequip': unequip(sp, ds.slot as Slot); break;
-      case 'enhance': { const it = find(Number(ds.id)); if (it) enhance(it); break; }
+      case 'fortify': {
+        const it = find(Number(ds.id));
+        const r = it && fortify(it, useSafety);
+        if (r) { flash = r.ok ? `⚒ SUCCESS! Now +${r.to}` : r.saved ? 'Failed... the Safety Charm kept your level' : r.to < r.from ? `💥 Failed! Dropped to +${r.to}` : 'Failed... (materials used)'; sfx(r.ok ? 'levelup' : 'fail'); }
+        break;
+      }
+      case 'safety': useSafety = !useSafety; break;
+      case 'regrade': case 'regrade-gold': {
+        const it = find(Number(ds.id));
+        const r = it && regrade(it, ds.act === 'regrade-gold');
+        if (r) { flash = r.to > r.from ? `💎 Grade up! ${GRADES[r.from]} → ${GRADES[r.to]}` : r.to < r.from ? `Grade down... ${GRADES[r.from]} → ${GRADES[r.to]}` : `Grade stayed ${GRADES[r.to]}`; sfx(r.to > r.from ? 'reveal3' : 'click'); }
+        break;
+      }
       case 'lock': toggleLock(Number(ds.id)); break;
       case 'salvage': salvage(Number(ds.id)); selItem = null; break;
       case 'salvage-worse': { const r = salvageWorse(); flash = r.n ? `Salvaged ${r.n} item${r.n > 1 ? 's' : ''} worse than every hero's gear: +🍪${r.crumbs}` : 'Nothing to salvage: every item beats someone\'s gear (or is locked)'; selItem = null; break; }
@@ -329,9 +351,9 @@ export function runGacha(indices: number[]): void {
     g.innerHTML = `<div class="rays"></div><div class="left">${left ? `${left} more` : ''}</div>
       <img class="bx shake" src="art/box-${tier}.webp">
       <div class="card"><div class="icon" style="--rc:${rc};background-image:url(art/${BASES[it.base].icon}.webp)"></div>
-        <div class="rar">${RARITY_NAMES[it.rarity].toUpperCase()}</div><h3>${esc(itemName(it))}</h3>
+        <div class="rar">${RARITY_NAMES[it.rarity].toUpperCase()} · GRADE <span style="color:${GRADE_CSS[gradeOf(it)]}">${GRADES[gradeOf(it)]}</span></div><h3>${esc(itemName(it))}</h3>
         ${itemLines(it).map(l => `<div class="ln">${lineText(l)}</div>`).join('')}${it.skill ? `<div class="skl">⭐ ${skillText(it)}</div>` : ''}
-        <div class="cr">iLv ${it.ilvl} ${SLOT_NAMES[BASES[it.base].slot]} · +🍪${res.crumbs} crumbs</div>
+        <div class="cr">iLv ${it.ilvl} ${SLOT_NAMES[BASES[it.base].slot]} · +🍪${res.crumbs} crumbs${res.extra.length ? ' · ' + res.extra.join(' · ') : ''}</div>
         <div class="cr" style="color:${cmp.pct >= 0 ? '#a8f0a8' : '#ff9a9a'}">${cmp.pct >= 0.5 ? '▲' : cmp.pct <= -0.5 ? '▼' : '='} ${cmp.pct >= 0 ? '+' : ''}${cmp.pct.toFixed(1)}% for ${CLASSES.find(c => c.species === save.selected)!.name}</div></div>
       <div class="flash"></div><div class="btns"></div>`;
     const bx = g.querySelector('.bx')!;
@@ -443,6 +465,14 @@ const CAMP_CSS = `
 .kq .gearoffer .t .ln { color: #a8f0a8; }
 .kq .gearoffer .pill { font-size: 2vmin; padding: 0.8vmin 1.4vmin; white-space: nowrap; }
 .kq .rows .plus.gold { background: #ffe27a; margin-right: 0.8vmin; font-size: 2.4vmin; }
+.kq .icon .gr { position: absolute; right: 0.3vmin; top: 0; font-family: 'Luckiest Guy', sans-serif; font-size: 1.9vmin; text-shadow: 0 1px 2px #000, 0 0 2px #000; }
+.kq .icon .lk { right: auto; left: 2.2vmin; }
+.kq .forge { margin-top: 1.2vmin; background: #0006; border-radius: 1.4vmin; padding: 1vmin 1.2vmin; font-size: 1.9vmin; }
+.kq .forge small { font-family: Nunito; font-size: 1.6vmin; color: #b8a8b8; }
+.kq .forge .fbtns { display: flex; gap: 1vmin; align-items: center; flex-wrap: wrap; margin-top: 0.6vmin; }
+.kq .forge .pill { font-size: 1.9vmin; padding: 0.8vmin 1.4vmin; }
+.kq .forge .safe { display: flex; gap: 0.5vmin; align-items: center; color: #a8f0a8; }
+.kq .forge .have { color: #b8a8b8; margin-top: 0.4vmin; }
 #camp .flashmsg { position: absolute; left: 50%; bottom: 3vmin; transform: translateX(-50%); background: #3a2448f0; border: 2px solid #ffd27a; border-radius: 2vmin; padding: 1vmin 2.4vmin; font-size: 2.4vmin; animation: tst 2.4s forwards; pointer-events: none; z-index: 5; }
 @keyframes tst { 0% { opacity: 0; transform: translate(-50%, 1vmin); } 10%, 80% { opacity: 1; transform: translate(-50%, 0); } 100% { opacity: 0; } }
 `;

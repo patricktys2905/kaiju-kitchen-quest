@@ -64,4 +64,5 @@ export type SimEvent =
   | { t: 'dodge' }
   | { t: 'use'; slot: number; id: import('./consumables').ConsumableId }
   | { t: 'revive' }
-  | { t: 'crumbs'; n: number; x: number; y: number };
+  | { t: 'crumbs'; n: number; x: number; y: number }
+  | { t: 'stone'; n: number; x: number; y: number };

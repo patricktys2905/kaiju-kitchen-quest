@@ -1,0 +1,11 @@
+[
+  {
+    "name": "c-fstone",
+    "newChat": true,
+    "refs": ["art-src/ref-eq.png"],
+    "prompt": "Generate an image. This is an item icon from my cute 2D action RPG. I need more ITEM ICONS in exactly the same art style (clean dark outlines, saturated colours, glossy cel shading), one item per image, centred, filling 80% of the frame, on a solid flat magenta (#FF00FF) background, no shadow, no text. First: a FORTIFY STONE: a chunky glowing orange whetstone crystal with a little hammer-and-anvil rune carved on it, sparks around. Square 1:1 image."
+  },
+  { "name": "c-gstone", "prompt": "Same style and framing: a GRADING STONE: a smooth round polished blue gem stone with a carved star and the shimmer of a magnifying lens. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1." },
+  { "name": "c-ggstone", "prompt": "Same style and framing: a GOLDEN GRADING STONE: the same smooth round gem stone but shining gold with a carved crown, radiant sparkles. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1." },
+  { "name": "c-safety", "prompt": "Same style and framing: a SAFETY CHARM: a cute little four-leaf clover amulet inside a silver ring with a small padlock, glowing softly green. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1." }
+]

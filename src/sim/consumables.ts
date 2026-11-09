@@ -1,7 +1,7 @@
 // Consumables: potions and boosts for the 4-slot quick bag, plus camp-only items (stat cube, skill reset).
 // Second Helping revives you automatically when you're knocked out (if you own one).
 
-export type ConsumableId = 'jam' | 'bigjam' | 'pepper' | 'ice' | 'bean' | 'revive' | 'sugar' | 'scroll';
+export type ConsumableId = 'jam' | 'bigjam' | 'pepper' | 'ice' | 'bean' | 'revive' | 'sugar' | 'scroll' | 'fstone' | 'gstone' | 'ggstone' | 'safety';
 export type BoostKind = 'atk' | 'def' | 'speed' | 'cdr';
 
 export interface ConsumableDef {
@@ -22,6 +22,10 @@ export const CONSUMABLES: Record<ConsumableId, ConsumableDef> = {
   revive: { id: 'revive', name: 'Second Helping', icon: 'c-revive', desc: 'Auto-revives you with 50% HP when knocked out', price: 250, quick: false },
   sugar: { id: 'sugar', name: 'Golden Sugar Cube', icon: 'c-sugar', desc: 'Use at camp: +1 permanent stat of your choice', price: 0, quick: false },
   scroll: { id: 'scroll', name: 'Recipe Scroll', icon: 'c-scroll', desc: 'Use at camp: refunds all skill points of a hero', price: 400, quick: false },
+  fstone: { id: 'fstone', name: 'Fortify Stone', icon: 'c-fstone', desc: 'Fortifies gear (+1 level, chance drops at high +)', price: 40, quick: false },
+  gstone: { id: 'gstone', name: 'Grading Stone', icon: 'c-gstone', desc: 'Re-rolls an item\'s grade (D-S). It can go down!', price: 90, quick: false },
+  ggstone: { id: 'ggstone', name: 'Golden Grading Stone', icon: 'c-ggstone', desc: 'Re-rolls a grade that never goes down', price: 0, quick: false },
+  safety: { id: 'safety', name: 'Safety Charm', icon: 'c-safety', desc: 'A failed fortify at +7 or higher keeps its level', price: 150, quick: false },
 };
 
 export const QUICK_CD = 3; // shared potion cooldown (s)

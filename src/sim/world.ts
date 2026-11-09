@@ -84,7 +84,7 @@ export interface Box { id: number; tier: BoxTier; ilvl: number; x: number; y: nu
 export interface Shot { id: number; x: number; y: number; vx: number; vy: number; t: number; dmg: number; hit: Set<number>; from: 'hero' | 'mob'; kx: number; ky: number; pierce: boolean; g?: number; kind?: string }
 export interface Mine { id: number; x: number; y: number; t: number; dmg: number; kx: number; ky: number }
 
-export interface RunStats { time: number; hitsTaken: number; dmgTaken: number; maxCombo: number; kills: number; crumbs: number; revived: number }
+export interface RunStats { time: number; hitsTaken: number; dmgTaken: number; maxCombo: number; kills: number; crumbs: number; revived: number; stones: number }
 
 let nextId = 1;
 
@@ -98,7 +98,7 @@ export class World {
   events: SimEvent[] = [];
   time = 0;
   combo = 0; comboT = 0;
-  run: RunStats = { time: 0, hitsTaken: 0, dmgTaken: 0, maxCombo: 0, kills: 0, crumbs: 0, revived: 0 };
+  run: RunStats = { time: 0, hitsTaken: 0, dmgTaken: 0, maxCombo: 0, kills: 0, crumbs: 0, revived: 0, stones: 0 };
   portal = false;
   cleared = false;
   failed = false;
@@ -435,6 +435,8 @@ export class World {
     const cr = Math.round(mobCrumbs(m.lv, def.brain) * (m.elite ? 4 : 1) * (0.8 + this.rand() * 0.4));
     this.run.crumbs += cr;
     this.events.push({ t: 'crumbs', n: cr, x: m.x, y: m.y - def.h });
+    const st = def.brain === 'boss' ? 3 : m.elite ? 2 : this.rand() < 0.07 ? 1 : 0;
+    if (st) { this.run.stones += st; this.events.push({ t: 'stone', n: st, x: m.x, y: m.y - def.h - 14 }); }
     if (h.d.lifeOnKill > 0) h.hp = Math.min(h.d.maxHp, h.hp + h.d.maxHp * h.d.lifeOnKill);
     const drops = def.brain === 'boss' ? 3 : m.elite ? 2 : this.rand() < def.dropChance ? 1 : 0;
     for (let i = 0; i < drops; i++) {

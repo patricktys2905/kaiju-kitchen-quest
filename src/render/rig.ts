@@ -120,18 +120,22 @@ export function poseFor(h: Hero, time: number, walkPhase: number, rig: RigDef | 
       p.r = { arm: -0.4, legA: 0.3, legB: 0.5 };
       break;
   }
-  if (rig?.hover && h.state !== 'down' && h.state !== 'climb') p.y += -6 + Math.sin(time * 3) * 3;
+  if (rig?.hover && h.state !== 'down' && h.state !== 'climb') p.y += rig.fly ? -16 + Math.sin(time * 3) * 4 : -6 + Math.sin(time * 3) * 3;
+  if (rig?.fly && h.state !== 'down') { // wings never stop
+    const f = Math.sin(time * 16);
+    p.r.wing = (p.r.wing ?? 0) * 0.5 - 0.25 + f * 0.45; p.r.wingBack = (p.r.wingBack ?? 0) * 0.5 - 0.15 + f * 0.35;
+  }
   return p;
 }
 
 /** What the hero is wearing (icons from the item bases), for the paper-doll look. */
 export interface GearLook {
-  weapon?: { icon: string; base: string; rarity: number };
+  weapon?: { icon: string; base: string; rarity: number; plus?: number };
   armor?: { icon: string; base: string; rarity: number };
   charm?: { icon: string; rarity: number };
 }
 type Anchor = 'hand' | 'chest' | 'neck' | 'back';
-interface Attach { img: Phaser.GameObjects.Image; glow?: Phaser.GameObjects.Image; anchor: Anchor; rot: number; swing: boolean; a: number; v: number }
+interface Attach { img: Phaser.GameObjects.Image; glow?: Phaser.GameObjects.Image; outline: Phaser.GameObjects.Image[]; strong: boolean; anchor: Anchor; rot: number; swing: boolean; a: number; v: number }
 const RARITY_GLOW = [0, 0, 0, 0x6ab8ff, 0xc88aff, 0xffb02e];
 /** Where each weapon icon's handle is (0..1 in the icon). All icons point their head to the top-left (~-133°). */
 const GRIP: Record<string, [number, number]> = { spoon: [0.76, 0.8], fork: [0.8, 0.82], whisk: [0.63, 0.76], pin: [0.84, 0.84], icepick: [0.82, 0.82], fish: [0.84, 0.84] };
@@ -177,21 +181,35 @@ export class HeroView {
       this.arm = this.parts.find(b => b.def.role === (r.holder ?? 'arm')) ?? null;
       // gear: weapon in the paw, apron on the belly / mitt on the paw / pot lid on the back, charm at the neck
       const armD = this.arm?.def.depth ?? 1;
-      const add = (key: string, anchor: Anchor, px: number, origin: [number, number], depth: number, rot = 0, rarity = 0, swing = false) => {
+      const add = (key: string, anchor: Anchor, px: number, origin: [number, number], depth: number, rot = 0, rarity = 0, swing = false, glowColor = 0) => {
         if (!has(key) || (anchor === 'hand' && !this.arm)) return;
         const img = scene.add.image(0, 0, key).setOrigin(origin[0], origin[1]);
         img.setScale(px * r.gear.size / img.height);
         let glow: Phaser.GameObjects.Image | undefined;
-        if (RARITY_GLOW[rarity]) {
-          glow = scene.add.image(0, 0, key).setOrigin(origin[0], origin[1]).setScale(img.scaleX * 1.25).setTint(RARITY_GLOW[rarity]).setTintMode(Phaser.TintModes.FILL).setAlpha(0.5).setBlendMode(Phaser.BlendModes.ADD);
+        const gc = glowColor || RARITY_GLOW[rarity];
+        if (gc) {
+          glow = scene.add.image(0, 0, key).setOrigin(origin[0], origin[1]).setScale(img.scaleX * (glowColor ? 1.5 : 1.25)).setTint(gc).setTintMode(Phaser.TintModes.FILL).setAlpha(0.5).setBlendMode(Phaser.BlendModes.ADD);
           order.push({ d: depth - 0.01, o: glow });
         }
         order.push({ d: depth, o: img });
-        this.gear.push({ img, glow, anchor, rot, swing, a: 0, v: 0 });
+        // fortify glow: an even coloured outline from 8 offset copies behind the item
+        const outline: Phaser.GameObjects.Image[] = [];
+        if (glowColor) {
+          if (glow) { const gi = order.findIndex(e => e.o === glow); if (gi >= 0) order.splice(gi, 1); glow.destroy(); glow = undefined; }
+          for (let k = 0; k < 8; k++) {
+            const o = scene.add.image(0, 0, key).setOrigin(origin[0], origin[1]).setScale(img.scaleX).setTint(glowColor).setTintMode(Phaser.TintModes.FILL);
+            o.setData('a', (k / 8) * Math.PI * 2);
+            outline.push(o); order.push({ d: depth - 0.02, o });
+          }
+        }
+        this.gear.push({ img, glow, outline, strong: !!glowColor, anchor, rot, swing, a: 0, v: 0 });
       };
       if (look.armor?.base === 'lid') add(look.armor.icon, 'back', 32, [0.5, 0.5], -3.6, -0.35);
       if (look.armor?.base === 'apron') add(look.armor.icon, 'chest', 30, [0.5, 0.2], 0.3);
-      if (look.weapon) add(look.weapon.icon, 'hand', 38, GRIP[look.weapon.base] ?? [0.8, 0.8], armD + 0.5, HOLD_ANGLE - ICON_ANGLE, look.weapon.rarity);
+      // fortified weapons glow: +7 blue, +10 purple, +13 gold (stronger than the rarity glow)
+      const fp = look.weapon?.plus ?? 0;
+      const fortGlow = fp >= 13 ? 0xffc83c : fp >= 10 ? 0xc070ff : fp >= 7 ? 0x5ab0ff : 0;
+      if (look.weapon) add(look.weapon.icon, 'hand', 38, GRIP[look.weapon.base] ?? [0.8, 0.8], armD + 0.5, HOLD_ANGLE - ICON_ANGLE, look.weapon.rarity, false, fortGlow);
       if (look.armor?.base === 'mitt') add(look.armor.icon, 'hand', 18, [0.5, 0.45], armD + 0.7, 0.2);
       if (look.charm) add(look.charm.icon, 'neck', 13, [0.5, 0.05], 0.4, 0, 0, true);
       for (const e of order.sort((a, b) => a.d - b.d)) this.root.add(e.o);
@@ -275,6 +293,10 @@ export class HeroView {
       }
       g.img.setPosition(x, y).setRotation(rot);
       g.glow?.setPosition(x, y).setRotation(rot).setAlpha(0.35 + Math.sin(performance.now() / 260) * 0.15);
+      if (g.outline.length) {
+        const pulse = 1.6 + Math.sin(performance.now() / 180) * 0.6;
+        for (const o of g.outline) { const a = o.getData('a') as number; o.setPosition(x + Math.cos(a) * pulse, y + Math.sin(a) * pulse).setRotation(rot).setAlpha(0.85); }
+      }
     }
   }
 
