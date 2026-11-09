@@ -6,16 +6,16 @@ export const isTouchDevice =
   new URLSearchParams(location.search).has('touch') || 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 
 const stick = { x: 0, y: 0 };
-const held = { jump: false, attack: false, s0: false, s1: false, s2: false };
-const latched = { jump: false, attack: false, s0: false, s1: false, s2: false };
+const held = { jump: false, attack: false, s0: false, s1: false, s2: false, ult: false };
+const latched = { jump: false, attack: false, s0: false, s1: false, s2: false, ult: false };
 type Btn = keyof typeof held;
 let enabled = false;
 
-export interface TouchRead { x: number; y: number; jump: boolean; attack: boolean; skill: [boolean, boolean, boolean] }
+export interface TouchRead { x: number; y: number; jump: boolean; attack: boolean; skill: [boolean, boolean, boolean]; ult: boolean }
 
 export function readTouch(): TouchRead {
   const on = (k: Btn) => held[k] || latched[k];
-  const out: TouchRead = { x: stick.x, y: stick.y, jump: on('jump'), attack: on('attack'), skill: [on('s0'), on('s1'), on('s2')] };
+  const out: TouchRead = { x: stick.x, y: stick.y, jump: on('jump'), attack: on('attack'), skill: [on('s0'), on('s1'), on('s2')], ult: on('ult') };
   for (const k of Object.keys(latched) as Btn[]) latched[k] = false;
   return out;
 }
@@ -47,6 +47,10 @@ body.touch #tc.on { display: block; }
 #tc #t-s0 { right: calc(31vmin + env(safe-area-inset-right)); bottom: 21vmin; }
 #tc #t-s1 { right: calc(19vmin + env(safe-area-inset-right)); bottom: 31vmin; }
 #tc #t-s2 { right: calc(4vmin + env(safe-area-inset-right)); bottom: 30vmin; }
+#tc #t-ult { width: 13vmin; height: 13vmin; right: calc(4vmin + env(safe-area-inset-right)); bottom: 47vmin; font-size: 2.4vmin; border-color: #ffd27a; background: conic-gradient(#ffb34799 var(--ult, 0deg), #0006 0); display: none; }
+#tc #t-ult.on { display: flex; }
+#tc #t-ult.ready { animation: ultp 0.6s ease-in-out infinite alternate; box-shadow: 0 0 3vmin #ffd27a; }
+@keyframes ultp { to { transform: scale(1.08); } }
 #tc-rotate { position: fixed; inset: 0; z-index: 60; background: #1a1020; color: #ffe9c7; display: none; align-items: center; justify-content: center;
   flex-direction: column; font-family: 'Luckiest Guy', 'Arial Black', Impact, sans-serif; letter-spacing: 0.04em; font-size: 6vw; text-align: center; gap: 4vw; }
 @media (orientation: portrait) { body.touch #tc-rotate { display: flex; } }
@@ -73,6 +77,7 @@ export function initTouch(): void {
     <div class="btn sk" id="t-s0"><div class="cd"><i></i></div><span></span></div>
     <div class="btn sk" id="t-s1"><div class="cd"><i></i></div><span></span></div>
     <div class="btn sk" id="t-s2"><div class="cd"><i></i></div><span></span></div>
+    <div class="btn" id="t-ult">ULT</div>
     <div class="btn" id="t-jump">JUMP</div>
     <div class="btn" id="t-attack">ATTACK</div>`;
   document.body.appendChild(root);
@@ -86,6 +91,7 @@ export function initTouch(): void {
   hold($('t-s0'), 's0');
   hold($('t-s1'), 's1');
   hold($('t-s2'), 's2');
+  hold($('t-ult'), 'ult');
 
   // floating stick: appears where the thumb lands
   const zone = $('t-zone');
@@ -139,4 +145,13 @@ export function setSkillUi(i: number, name: string | null, cdFrac: number, left:
   const txt = left > 0 ? String(Math.ceil(left)) : '';
   const it = cd.querySelector('i')!;
   if (it.textContent !== txt) it.textContent = txt;
+}
+
+/** Ultimate button: hidden until Lv 15; ring shows the gauge; pulses when full. */
+export function setUltUi(unlocked: boolean, gauge: number): void {
+  const b = document.getElementById('t-ult');
+  if (!b) return;
+  b.classList.toggle('on', unlocked);
+  b.classList.toggle('ready', gauge >= 100);
+  b.style.setProperty('--ult', `${Math.round(gauge * 3.6)}deg`);
 }

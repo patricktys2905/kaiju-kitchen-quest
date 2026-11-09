@@ -89,6 +89,12 @@ export function resetStats(species: number): void {
   persist();
 }
 
+export function chooseBranch(species: number, id: string, b: 'a' | 'b'): boolean {
+  const p = save.heroes[species];
+  if ((p.skills[id] ?? 0) < 3 || p.branch?.[id]) return false;
+  p.branch = { ...(p.branch ?? {}), [id]: b }; persist(); return true;
+}
+
 export function levelSkill(species: number, id: string): boolean {
   const p = save.heroes[species];
   if (!canLevelSkill(p, id)) return false;
@@ -231,6 +237,7 @@ export function useScroll(species: number): boolean {
   let refund = 0;
   for (const [id, lv] of Object.entries(p.skills)) refund += id === first ? lv - 1 : lv;
   p.skills = { [first]: 1 };
+  p.branch = {};
   p.skillPts += refund;
   save.items.scroll--; persist(); return true;
 }

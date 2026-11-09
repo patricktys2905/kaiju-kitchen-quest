@@ -5,7 +5,7 @@ import type { AttackDef } from './classes';
 import { rollTier } from './loot';
 import { type BoostKind, CONSUMABLES, type ConsumableId, QUICK_CD } from './consumables';
 import { ELITE, MOBS, TUNE, dropLevel, mobAtk, mobCrumbs, mobHp, mobXp } from './mobs';
-import { type SkillDef, skillScale, skillsOf } from './skills';
+import { type SkillDef, ULTS, ULT_LV, applyBranch, skillScale, skillsOf } from './skills';
 import { WORLDS } from './stages';
 import type { Derived } from './stats';
 import { type BoxTier, type Input, type LootBox, type MobKind, NO_INPUT, type SimEvent, type StageDef } from './types';
@@ -57,6 +57,9 @@ export interface Hero {
   quickCd: number;
   lastTap: { dir: number; t: number };
   dodgeCd: number;
+  /** ultimate gauge 0..100 */
+  ult: number;
+  phoenixUsed: boolean;
 }
 
 export interface Mob {
@@ -78,6 +81,7 @@ export interface Mob {
   hitDone: boolean;
   elite: boolean;
   homeY: number;       // flyers hover above this floor
+  slow: number;        // seconds of Brain-Freeze slow left
 }
 
 export interface Box { id: number; tier: BoxTier; ilvl: number; x: number; y: number; vy: number; ground: boolean; t: number }
@@ -114,7 +118,7 @@ export class World {
       d, x: 100, y: stage.groundY, vx: 0, vy: 0, face: 1, ground: true, on: -1, state: 'move', t: 0, step: 0, queued: false,
       hitIds: new Set(), hp: d.maxHp, inv: 0, cds: [0, 0, 0], skill: null, skillMul: 1, ticks: 0,
       coyote: 0, jumpBuf: 0, atkBuf: 0, dropT: 0, prev: { ...NO_INPUT }, gliding: false, buff: null,
-      boosts: {}, bag: bag.map(b => b && { ...b }), revives, quickCd: 0, lastTap: { dir: 0, t: -9 }, dodgeCd: 0,
+      boosts: {}, bag: bag.map(b => b && { ...b }), revives, quickCd: 0, lastTap: { dir: 0, t: -9 }, dodgeCd: 0, ult: 0, phoenixUsed: false,
     };
     // Hard mode: every monster +HARD_LV levels
     for (const m of stage.mobs) this.spawnMob(m.kind, m.x, m.lv + (hard ? HARD_LV : 0), m.y, m.elite);
@@ -133,7 +137,7 @@ export class World {
     const m: Mob = {
       id: nextId++, kind, lv, x, y: y ?? this.stage.groundY, vx: 0, vy: 0, face: -1, hp, maxHp: hp, atk: Math.round(mobAtk(kind, lv) * (elite ? ELITE.atk : 1) * pow),
       state: 'walk', move: '', t: this.rand() * 2, ground: true, on: y === undefined ? -1 : null, home: x, deadT: 0, flash: 0,
-      hurtShown: 0, stagger: 0, summoned: 0, hitDone: false, elite, homeY: y ?? this.stage.groundY,
+      hurtShown: 0, stagger: 0, summoned: 0, hitDone: false, elite, homeY: y ?? this.stage.groundY, slow: 0,
     };
     if (y !== undefined) { m.on = this.platformAt(x, y); m.ground = m.on !== null; }
     this.mobs.push(m);
@@ -204,8 +208,9 @@ export class World {
     const slots = ['skill1', 'skill2', 'skill3'] as const;
     for (let i = 0; i < 3 && free; i++) {
       if (!pressed(slots[i])) continue;
-      const sk = skillsOf(c.species).actives[i];
-      const lv = h.d.skillLv[sk.id] ?? 0;
+      const base = skillsOf(c.species).actives[i];
+      const lv = h.d.skillLv[base.id] ?? 0;
+      const sk = applyBranch(base, h.d.branch[base.id]);
       if (!lv || h.cds[i] > 0) continue;
       if (dir) h.face = dir > 0 ? 1 : -1;
       const sc = skillScale(lv);
@@ -216,6 +221,19 @@ export class World {
       this.events.push({ t: 'skill', slot: i, kind: sk.kind, id: sk.id });
       this.startSkill(h, sk);
       break;
+    }
+    // ultimate: full gauge, Lv 15+
+    const ultDef = ULTS[c.species];
+    if (free && pressed('ult') && ultDef && h.d.level >= ULT_LV && h.ult >= 100) {
+      if (dir) h.face = dir > 0 ? 1 : -1;
+      h.ult = 0;
+      h.skill = ultDef; h.skillMul = h.d.skillDmg * (1 + 0.04 * (h.d.level - ULT_LV)); h.ticks = 0;
+      this.enter(h, 'skill');
+      h.hitIds = new Set();
+      h.inv = Math.max(h.inv, ultDef.dur + 0.4);
+      this.events.push({ t: 'ult', name: ultDef.name });
+      this.events.push({ t: 'skill', slot: 3, kind: ultDef.kind, id: ultDef.id });
+      this.startSkill(h, ultDef);
     }
 
     switch (h.state) {
@@ -264,6 +282,7 @@ export class World {
             if (dir) h.face = dir > 0 ? 1 : -1;
             h.t = 0; h.hitIds = new Set();
             this.events.push({ t: 'swing', step: h.step });
+            if (h.step === 2 && h.d.uniques.includes('momspoon')) h.hp = Math.min(h.d.maxHp, h.hp + h.d.maxHp * 0.04);
           } else this.enter(h, h.ground ? 'move' : 'air');
         }
         break;
@@ -301,8 +320,10 @@ export class World {
 
   private startSkill(h: Hero, sk: SkillDef): void {
     const atk = h.d.atk * h.skillMul;
+    if (sk.heal) { const lv = h.d.skillLv[sk.id] ?? 1; h.hp = Math.min(h.d.maxHp, h.hp + h.d.maxHp * sk.heal * (1 + 0.2 * (lv - 1))); }
     switch (sk.kind) {
       case 'bolt':
+        for (let b = 1; b < (sk.n ?? 1); b++) this.shots.push({ id: nextId++, x: h.x + h.face * 30, y: h.y - 40 - b * 22, vx: h.face * 600, vy: 0, t: -0.06 * b, dmg: atk * sk.dmg, hit: new Set(), from: 'hero', kx: sk.kx, ky: sk.ky, pierce: true });
         this.shots.push({ id: nextId++, x: h.x + h.face * 40, y: h.y - 40, vx: h.face * 620, vy: 0, t: 0, dmg: atk * sk.dmg, hit: new Set(), from: 'hero', kx: sk.kx, ky: sk.ky, pierce: true });
         break;
       case 'fan':
@@ -322,11 +343,7 @@ export class World {
       case 'uppercut':
         if (h.ground) { h.vy = -760; h.ground = false; h.on = null; }
         break;
-      case 'heal': {
-        const lv = h.d.skillLv[sk.id] ?? 1;
-        h.hp = Math.min(h.d.maxHp, h.hp + h.d.maxHp * (sk.heal ?? 0.2) * (1 + 0.2 * (lv - 1)));
-        break;
-      }
+      case 'heal': break;
     }
   }
 
@@ -409,6 +426,9 @@ export class World {
     const buff = 1 + (h.buff?.atk ?? 0) + (h.boosts.atk?.[0] ?? 0);
     const dmg = Math.max(1, Math.round(raw * buff * lvMul * (crit ? h.d.critDmg : 1) * (0.9 + this.rand() * 0.2)));
     m.hp -= dmg; m.flash = 0.12; m.hurtShown = 3;
+    if (h.d.uniques.includes('frostfish')) m.slow = 2;
+    if (crit && !heavy && h.d.uniques.includes('excalifork')) this.shots.push({ id: nextId++, x: h.x + h.face * 30, y: h.y - 40, vx: h.face * 600, vy: 0, t: 0, dmg: h.d.atk * 0.8, hit: new Set([m.id]), from: 'hero', kx: 120, ky: -100, pierce: false });
+    if (h.state !== 'skill' || h.skill?.id.startsWith('ult') === false) h.ult = Math.min(100, h.ult + (MOBS[m.kind].brain === 'boss' ? 1.6 : 1.1));
     this.combo++; this.comboT = COMBO_WINDOW; this.run.maxCombo = Math.max(this.run.maxCombo, this.combo);
     this.events.push({ t: 'hit', x: m.x, y: m.y - def.h * 0.6, dmg, crit, target: 'mob' });
 
@@ -430,9 +450,10 @@ export class World {
     const def = MOBS[m.kind], h = this.hero;
     m.hp = 0; m.state = 'dead'; m.deadT = 0; m.vy = Math.min(m.vy, -300); m.ground = false; m.on = null;
     this.run.kills++;
-    this.events.push({ t: 'mobDie', x: m.x, y: m.y, boss: def.brain === 'boss' });
+    this.events.push({ t: 'mobDie', x: m.x, y: m.y, boss: def.brain === 'boss', elite: m.elite });
     this.events.push({ t: 'xp', n: Math.round(mobXp(m.kind, m.lv) * (m.elite ? ELITE.xp : 1)) });
-    const cr = Math.round(mobCrumbs(m.lv, def.brain) * (m.elite ? 4 : 1) * (0.8 + this.rand() * 0.4));
+    const cr = Math.round(mobCrumbs(m.lv, def.brain) * (m.elite ? 4 : 1) * (0.8 + this.rand() * 0.4) * (h.d.uniques.includes('lucky') ? 1.5 : 1));
+    if (h.d.uniques.includes('hourglass')) for (let i = 0; i < 3; i++) h.cds[i] = Math.max(0, h.cds[i] - 1);
     this.run.crumbs += cr;
     this.events.push({ t: 'crumbs', n: cr, x: m.x, y: m.y - def.h });
     const st = def.brain === 'boss' ? 3 : m.elite ? 2 : this.rand() < 0.07 ? 1 : 0;
@@ -451,7 +472,7 @@ export class World {
   // ---------- monsters ----------
   private stepMob(m: Mob, dt: number): void {
     const def = MOBS[m.kind], h = this.hero;
-    m.t += dt; m.flash = Math.max(0, m.flash - dt); m.hurtShown = Math.max(0, m.hurtShown - dt);
+    m.t += dt; m.flash = Math.max(0, m.flash - dt); m.hurtShown = Math.max(0, m.hurtShown - dt); m.slow = Math.max(0, m.slow - dt);
     if (m.state === 'dead') { m.deadT += dt; m.vx *= 0.96; this.physics(m, dt, MAX_FALL, false); return; }
     if (def.brain === 'flyer') { this.stepFlyer(m, dt); return; }
     const dx = h.x - m.x;
@@ -473,7 +494,7 @@ export class World {
           const p = this.stage.platforms[m.on];
           if ((dir < 0 && m.x - 20 < p.x) || (dir > 0 && m.x + 20 > p.x + p.w)) dir = 0;
         }
-        m.vx = approach(m.vx, dir * (chase ? def.speed * 1.4 : def.speed), 800 * dt);
+        m.vx = approach(m.vx, dir * (chase ? def.speed * 1.4 : def.speed) * (m.slow > 0 ? 0.6 : 1), 800 * dt);
         if (chase) m.face = dx > 0 ? 1 : -1; else if (dir) m.face = dir > 0 ? 1 : -1;
         if (chase && m.ground && m.t > 0.4) {
           const near = Math.abs(dx) < def.range;
@@ -490,7 +511,7 @@ export class World {
       }
       case 'windup': {
         m.vx = approach(m.vx, 0, 1200 * dt);
-        const wind = (m.move === 'charge' ? 0.8 : m.move === 'leap' ? 0.55 : m.move === 'rain' ? 0.8 : def.windup) * TUNE.windup;
+        const wind = (m.move === 'charge' ? 0.8 : m.move === 'leap' ? 0.55 : m.move === 'rain' || m.move === 'breath' ? 0.8 : def.windup) * TUNE.windup;
         if (m.t > wind) { m.state = 'attack'; m.t = 0; m.hitDone = false; this.beginAttack(m); }
         break;
       }
@@ -532,7 +553,7 @@ export class World {
         }
         break;
       case 'attack':
-        if (!m.hitDone && Math.abs(h.x - m.x) < 32 && m.y > h.y - 80 && m.y < h.y + 10) { m.hitDone = true; this.hurtHero(m.atk, Math.sign(m.vx) || 1); }
+        if (!m.hitDone && Math.abs(h.x - m.x) < 32 && m.y > h.y - 80 && m.y < h.y + 10) { m.hitDone = true; this.hurtHero(m.atk, Math.sign(m.vx) || 1, m); }
         if (m.t > 0.75) { m.state = 'walk'; m.t = 0; }
         break;
       default:
@@ -550,6 +571,7 @@ export class World {
     const close = Math.abs(dx) < 150;
     let move = close ? (r < 0.6 ? 'slash' : 'leap') : r < 0.45 ? 'charge' : r < 0.85 ? 'leap' : 'slash';
     if (moves.includes('rain') && this.rand() < (m.hp < m.maxHp / 2 ? 0.4 : 0.25)) move = 'rain';
+    else if (moves.includes('breath') && Math.abs(dx) < 380 && this.rand() < 0.35) move = 'breath';
     if (!moves.includes(move)) move = moves[Math.floor(this.rand() * moves.length)];
     if (move === 'slash' && Math.abs(dx) > 170) return; // walk closer first
     m.state = 'windup'; m.t = 0; m.vx = 0; m.move = move;
@@ -570,7 +592,13 @@ export class World {
       case 'charge': m.vx = m.face * 560; break;
       case 'leap': m.vx = clamp((h.x - m.x) * 1.4, -520, 520); m.vy = -760; m.ground = false; m.on = null; break;
       case 'slash': break;
-      case 'rain': // icicles fall over the hero
+      case 'breath': // a cone of fire from the mouth
+        for (let i = 0; i < 7; i++) {
+          const a = (i / 6 - 0.5) * 0.6, sp = 360 + this.rand() * 80;
+          this.shots.push({ id: nextId++, x: m.x + m.face * 60, y: m.y - 120, vx: m.face * sp * Math.cos(a), vy: sp * Math.sin(a) + 60, t: -i * 0.04, dmg: Math.round(m.atk * 0.8), hit: new Set(), from: 'mob', kx: 160, ky: -180, pierce: false, g: 120, kind: 'fire' });
+        }
+        break;
+      case 'rain': // icicles (or embers) fall over the hero
         for (let i = 0; i < 5; i++) {
           const x = clamp(h.x + (i - 2) * 90 + (this.rand() - 0.5) * 40, 30, this.stage.width - 30);
           this.shots.push({ id: nextId++, x, y: h.y - 330 - i * 30, vx: 0, vy: 120, t: 0, dmg: m.atk, hit: new Set(), from: 'mob', kx: 120, ky: -160, pierce: false, g: 900, kind: 'icicle' });
@@ -585,37 +613,37 @@ export class World {
     switch (m.move) {
       case 'walker':
         m.vx = approach(m.vx, 0, 900 * dt);
-        if (m.t < 0.2 && touch(56)) this.hurtHero(m.atk, m.face);
+        if (m.t < 0.2 && touch(56)) this.hurtHero(m.atk, m.face, m);
         if (m.t > 0.5) this.endAttack(m);
         break;
       case 'hopper':
-        if (!m.ground && touch(40)) this.hurtHero(m.atk, m.face);
+        if (!m.ground && touch(40)) this.hurtHero(m.atk, m.face, m);
         if (m.ground && m.t > 0.15) { m.vx = approach(m.vx, 0, 1600 * dt); if (m.t > 0.6) this.endAttack(m); }
         break;
       case 'ranged':
         if (m.t > 0.5) this.endAttack(m);
         break;
       case 'brute':
-        if (!m.hitDone && m.t > 0.1) { m.hitDone = true; this.events.push({ t: 'shock', x: m.x + m.face * 50, y: m.y, r: 70 }); if (touch(110, 80)) this.hurtHero(m.atk, m.face); }
+        if (!m.hitDone && m.t > 0.1) { m.hitDone = true; this.events.push({ t: 'shock', x: m.x + m.face * 50, y: m.y, r: 70 }); if (touch(110, 80)) this.hurtHero(m.atk, m.face, m); }
         if (m.t > 0.7) this.endAttack(m);
         break;
       case 'charge':
-        if (touch(def.w * 0.6, 100)) this.hurtHero(m.atk, m.face);
+        if (touch(def.w * 0.6, 100)) this.hurtHero(m.atk, m.face, m);
         if (m.t > 1.3 || m.x <= 40 || m.x >= this.stage.width - 40) { m.vx = approach(m.vx, 0, 2400 * dt); if (Math.abs(m.vx) < 5) this.endAttack(m); }
         break;
       case 'leap':
         if (m.ground && !m.hitDone && m.t > 0.1) {
           m.hitDone = true; m.vx = 0;
           this.events.push({ t: 'shock', x: m.x, y: m.y, r: 170 });
-          if (Math.abs(h.x - m.x) < 170 && h.ground) this.hurtHero(Math.round(m.atk * 1.2), Math.sign(h.x - m.x) || 1);
+          if (Math.abs(h.x - m.x) < 170 && h.ground) this.hurtHero(Math.round(m.atk * 1.2), Math.sign(h.x - m.x) || 1, m);
         }
         if (m.hitDone && m.t > 0.9) this.endAttack(m);
         break;
-      case 'rain':
+      case 'rain': case 'breath':
         if (m.t > 0.9) this.endAttack(m);
         break;
       case 'slash':
-        if (!m.hitDone && m.t > 0.08) { m.hitDone = true; if (touch(def.range + 20, 120)) this.hurtHero(Math.round(m.atk * 1.1), m.face); }
+        if (!m.hitDone && m.t > 0.08) { m.hitDone = true; if (touch(def.range + 20, 120)) this.hurtHero(Math.round(m.atk * 1.1), m.face, m); }
         if (m.t > 0.7) this.endAttack(m);
         break;
     }
@@ -623,12 +651,15 @@ export class World {
 
   private endAttack(m: Mob): void { m.state = 'walk'; m.t = 0; m.move = ''; }
 
-  private hurtHero(raw: number, dir: number): void {
+  private hurtHero(raw: number, dir: number, from?: Mob): void {
     const h = this.hero;
     if (h.inv > 0 || h.state === 'down') return;
     const dr = 1 - (1 - h.d.dr) * (1 - (h.buff?.def ?? 0)) * (1 - (h.boosts.def?.[0] ?? 0));
     const dmg = Math.max(1, Math.round(raw * (1 - dr) * (0.9 + this.rand() * 0.2)));
     h.hp -= dmg; h.inv = 0.9;
+    if (from && from.state !== 'dead' && h.d.uniques.includes('thornlid')) { from.hp -= Math.max(1, Math.round(dmg * 0.3)); from.flash = 0.1; if (from.hp <= 0) this.killMob(from); }
+    if (h.hp <= 0 && !h.phoenixUsed && h.d.uniques.includes('phoenix')) { h.phoenixUsed = true; h.hp = 1; h.inv = 2.5; this.events.push({ t: 'revive' }); return; }
+    h.ult = Math.min(100, h.ult + 4);
     this.run.hitsTaken++; this.run.dmgTaken += dmg;
     this.events.push({ t: 'hit', x: h.x, y: h.y - 60, dmg, crit: false, target: 'hero' });
     if (h.hp <= 0 && h.revives > 0) { // Second Helping
@@ -646,7 +677,9 @@ export class World {
   private stepShots(dt: number): void {
     const h = this.hero;
     for (const s of this.shots) {
-      s.t += dt; s.x += s.vx * dt; s.y += s.vy * dt;
+      s.t += dt;
+      if (s.t < 0) continue; // staggered (fire breath)
+      s.x += s.vx * dt; s.y += s.vy * dt;
       if (s.from === 'mob') {
         s.vy += (s.g ?? 300) * dt;
         if (Math.abs(h.x - s.x) < 22 && s.y > h.y - 70 && s.y < h.y + 4 && h.inv <= 0) { this.hurtHero(s.dmg, Math.sign(s.vx)); s.t = 99; }

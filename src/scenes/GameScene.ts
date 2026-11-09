@@ -7,7 +7,7 @@ import { readInput, takeTaps } from '../input';
 import { TIER_COLORS, TIER_NAMES } from '../sim/loot';
 import { CONSUMABLES } from '../sim/consumables';
 import { ELITE, MOBS } from '../sim/mobs';
-import { skillsOf, skillScale } from '../sim/skills';
+import { ULT_LV, applyBranch, skillsOf, skillScale } from '../sim/skills';
 import { STAGES, stageById, worldOf } from '../sim/stages';
 import { derive } from '../sim/stats';
 import type { SimEvent, StageDef } from '../sim/types';
@@ -16,12 +16,13 @@ import { type GearLook, HeroView } from '../render/rig';
 import { BASES } from '../sim/items';
 import type { HeroProfile } from '../sim/stats';
 import { addXp, finishStage, hero, quickBag, save, syncQuickBag } from '../save';
-import { setSkillUi, setTouchVisible } from '../touch';
+import { track } from '../quests';
+import { setSkillUi, setTouchVisible, setUltUi } from '../touch';
 import { hideCamp, runGacha, showCamp, showResult, stageUnlocked } from '../ui/camp';
 
 /** Equipped items → what to draw on the kaiju. */
 export function lookOf(p: HeroProfile): GearLook {
-  const e = p.equip, ic = (b: string) => BASES[b].icon;
+  const e = p.equip, ic = (b: string) => BASES[b]?.icon ?? '';
   return {
     weapon: e.weapon && { icon: ic(e.weapon.base), base: e.weapon.base, rarity: e.weapon.rarity, plus: e.weapon.plus },
     armor: e.armor && { icon: ic(e.armor.base), base: e.armor.base, rarity: e.armor.rarity },
@@ -143,7 +144,7 @@ export class GameScene extends Phaser.Scene {
     this.cx = w.hero.x; this.cy = st.groundY - 100;
     cam.centerOn(this.cx, this.cy);
     setTouchVisible(true); showHud(true);
-    playMusic(st.boss ? 'boss' : st.world === 2 ? 'world2' : 'world1');
+    playMusic(st.boss ? 'boss' : st.world === 2 ? 'world2' : st.world === 3 ? 'world3' : 'world1');
     if (st.boss) this.time.delayedCall(900, () => sfx('boss'));
     toast(`${st.num} ${st.name}${this.hard ? ' · HARD' : ''}`, { big: true, color: this.hard ? '#ff7a6a' : undefined });
     if (st.boss) this.time.delayedCall(1200, () => toast(`The ${MOBS[st.mobs[0].kind].name} awaits!`, { color: '#ff9a6a' }));
@@ -214,6 +215,9 @@ export class GameScene extends Phaser.Scene {
         case 'boom': sfx('boom'); this.burst(e.x, e.y - 10, 0x4a6cff, 14); this.ring(e.x, e.y, 70, 0x7a9aff); break;
         case 'mobDie':
           sfx('kill');
+          track('kills');
+          if (e.boss) track('bossKills');
+          if (e.boss || e.elite) track('eliteKills');
           this.burst(e.x, e.y - 24, e.boss ? 0xffb347 : 0xc8f0a0, e.boss ? 40 : 14);
           if (e.boss) { this.shake = 14; this.hitStop = 0.4; toast('THE TOAST KING FALLS!', { big: true, color: '#ffb347' }); }
           break;
@@ -237,6 +241,7 @@ export class GameScene extends Phaser.Scene {
         case 'stagger': sfx('stagger'); toast('STAGGERED!', { color: '#ffe27a' }); this.shake = 8; break;
         case 'dodge': {
           sfx('dodge');
+          track('dodges');
           const h = w.hero;
           for (let i = 0; i < 4; i++) this.time.delayedCall(i * 50, () => { const g = this.add.ellipse(h.x, h.y - 40, 60, 70, 0xffffff, 0.3).setDepth(4); this.tweens.add({ targets: g, alpha: 0, scaleX: 1.3, duration: 220, onComplete: () => g.destroy() }); });
           break;
@@ -244,9 +249,17 @@ export class GameScene extends Phaser.Scene {
         case 'use': {
           const def = CONSUMABLES[e.id];
           sfx('potion');
+          track('potions');
           toast(def.name, { color: def.heal ? '#ff8a9a' : '#ffd27a' });
           this.burst(w.hero.x, w.hero.y - 40, def.heal ? 0xff6a8a : 0xffd27a, 14);
           this.ring(w.hero.x, w.hero.y - 30, 50, def.heal ? 0xff8aa0 : 0xffe27a);
+          break;
+        }
+        case 'ult': {
+          track('ults');
+          sfx('reveal5'); this.shake = 12; this.hitStop = 0.25;
+          const cam = this.cameras.main; cam.flash(200, 255, 230, 160);
+          showUltBanner(hero().species, e.name);
           break;
         }
         case 'revive': sfx('levelup'); toast('SECOND HELPING! Revived!', { big: true, color: '#ffe27a' }); this.burst(w.hero.x, w.hero.y - 40, 0xffe27a, 30); this.ring(w.hero.x, w.hero.y - 30, 90, 0xffe27a); break;
@@ -278,7 +291,13 @@ export class GameScene extends Phaser.Scene {
     syncQuickBag(w.hero.bag, w.hero.revives);
     save.crumbs += w.run.crumbs;
     save.items.fstone = (save.items.fstone ?? 0) + w.run.stones;
+    if (w.run.crumbs) track('crumbs', w.run.crumbs);
     const res = failed ? null : finishStage(st.id, rankOf(w.run, st.par).rank, w.loot, st.lv[1] + (this.hard ? HARD_LV : 0), !!st.boss, this.hard);
+    if (res) {
+      track('clears'); track('heroClear', 1, hero().species);
+      if (res.rank === 'S' || res.rank === 'A') track('rankA');
+      if (res.rank === 'S') track('rankS');
+    }
     this.time.delayedCall(failed ? 600 : 300, () => showResult(
       { stage: st, res, time: w.run.time, hits: w.run.hitsTaken, combo: w.run.maxCombo, xp: this.xpGained, levels: this.levels, failed, crumbs: w.run.crumbs, hard: this.hard },
       a => {
@@ -430,7 +449,8 @@ export class GameScene extends Phaser.Scene {
         c = s.from === 'hero'
           ? this.add.circle(0, 0, 9, 0xe8c8ff).setStrokeStyle(3, 0xffffff).setBlendMode(Phaser.BlendModes.ADD)
           : s.kind === 'icicle' ? this.add.ellipse(0, 0, 10, 26, 0xc8f0ff).setStrokeStyle(2, 0x6ab8ff)
-          : this.add.circle(0, 0, 7, worldOf(this.stage).id === 2 ? 0x6ac86a : 0x2a2020).setStrokeStyle(2, 0x8a7060);
+          : s.kind === 'fire' ? this.add.circle(0, 0, 9, 0xff8a2a).setStrokeStyle(3, 0xffe27a).setBlendMode(Phaser.BlendModes.ADD)
+          : this.add.circle(0, 0, 7, worldOf(this.stage).id === 2 ? 0x6ac86a : worldOf(this.stage).id === 3 ? 0xd0301a : 0x2a2020).setStrokeStyle(2, 0x8a7060);
         c.setDepth(8); this.shotImgs.set(s.id, c);
       }
       c.setPosition(s.x, s.y).setScale(1 + Math.sin(t * 30) * 0.12);
@@ -447,10 +467,11 @@ export class GameScene extends Phaser.Scene {
     for (const [id, c] of this.mineImgs) if (!seenM.has(id)) { c.destroy(); this.mineImgs.delete(id); }
 
     updateHud(w, hero(), st);
+    setUltUi(h.d.level >= ULT_LV, h.ult);
     const sk = skillsOf(h.d.cls.species).actives;
     for (let i = 0; i < 3; i++) {
       const lv = h.d.skillLv[sk[i].id] ?? 0;
-      const full = sk[i].cd * skillScale(lv).cd * (1 - h.d.cdr);
+      const full = applyBranch(sk[i], h.d.branch[sk[i].id]).cd * skillScale(lv).cd * (1 - h.d.cdr);
       setSkillUi(i, lv ? sk[i].name : null, lv && full ? h.cds[i] / full : 0, h.cds[i]);
     }
   }
@@ -493,4 +514,23 @@ export class GameScene extends Phaser.Scene {
     v.barBg.setVisible(showBar).setPosition(m.x, top);
     v.bar.setVisible(showBar).setPosition(m.x - 20, top).setScale(Math.max(0, m.hp / m.maxHp), 1);
   }
+}
+
+/** Big cut-in banner for an ultimate (HTML, over the canvas). */
+function showUltBanner(species: number, name: string): void {
+  let el = document.getElementById('ultban');
+  if (!el) {
+    el = document.createElement('div'); el.id = 'ultban';
+    const st = document.createElement('style');
+    st.textContent = `#ultban { position: fixed; left: 0; right: 0; top: 30%; height: 22vmin; z-index: 25; pointer-events: none; display: none; align-items: center; justify-content: center; gap: 3vmin;
+      background: linear-gradient(90deg, transparent, #2a1030e8 15%, #2a1030e8 85%, transparent); border-top: 3px solid #ffd27a; border-bottom: 3px solid #ffd27a; }
+      #ultban.on { display: flex; animation: ultin 1.3s ease-out forwards; }
+      #ultban img { height: 26vmin; margin-top: -4vmin; filter: drop-shadow(0 1vmin 1vmin #000); animation: ultimg 1.3s ease-out; }
+      #ultban b { font-family: 'Luckiest Guy', sans-serif; font-weight: 400; font-size: 7vmin; color: #ffd27a; letter-spacing: 0.05em; text-shadow: 0 0.6vmin 0 #a03010; }
+      @keyframes ultin { 0% { transform: scaleY(0); opacity: 0; } 12% { transform: scaleY(1); opacity: 1; } 80% { opacity: 1; } 100% { opacity: 0; } }
+      @keyframes ultimg { from { transform: translateX(-40vw); } 25% { transform: none; } }`;
+    document.head.appendChild(st); document.body.appendChild(el);
+  }
+  el.innerHTML = `<img src="art/kaiju-${species}.webp"><b>${name}!</b>`;
+  el.classList.remove('on'); void el.offsetWidth; el.classList.add('on');
 }

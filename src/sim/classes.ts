@@ -47,7 +47,7 @@ export const CLASSES: HeroClass[] = [
   },
   {
     species: 11, name: 'Pizzaraptor', role: 'Slasher: fast, long combos',
-    hp: 118, atk: 8, speed: 280, jump: 740,
+    hp: 132, atk: 8, speed: 280, jump: 740,
     base: { str: 5, dex: 8, int: 3, vit: 4 }, grow: { str: 1, dex: 3, int: 0, vit: 1 },
     combo: [A({ dur: 0.24, hit: [0.05, 0.13] }), A({ dur: 0.24, hit: [0.05, 0.13], dmg: 1 }), A({ dur: 0.38, hit: [0.1, 0.22], reach: 84, dmg: 1.7, kx: 360, ky: -380, lunge: 220, stun: 0.55 })],
     air: A({ dur: 0.26, reach: 66, dmg: 1, kx: 100, ky: -160 }),

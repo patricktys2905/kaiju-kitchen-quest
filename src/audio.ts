@@ -83,7 +83,7 @@ export function sfx(s: Sfx): void {
 
 // ---------- music: original tunes, one note string per voice ----------
 // Notes: letter (+ # / b) + octave, '-' holds, '.' rests. One char-group per step (eighth notes).
-export type Track = 'camp' | 'world1' | 'world2' | 'boss';
+export type Track = 'camp' | 'world1' | 'world2' | 'world3' | 'boss';
 interface Song { bpm: number; lead: string; bass: string; drums: string; wave: OscillatorType }
 const SONGS: Record<Track, Song> = {
   camp: { bpm: 96, wave: 'triangle',
@@ -98,6 +98,10 @@ const SONGS: Record<Track, Song> = {
     lead: 'A5 . E5 . C6 - B5 A5 G5 . E5 . A5 - - . F5 . A5 . C6 . B5 G5 E5 . G5 . A5 - - . ',
     bass: 'A2 . . A2 E3 . . . F2 . . F2 C3 . . . D3 . . D3 A2 . . . E2 . . E2 G#2 . . . ',
     drums: 'k . h . s . h h k . h . s . h . ' },
+  world3: { bpm: 140, wave: 'square',
+    lead: 'D5 . F5 . A5 . G5 F5 E5 . C5 . D5 - - . D5 . F5 . A5 C6 A5 G5 F5 . E5 F5 D5 - - . ',
+    bass: 'D3 . D3 A2 D3 . D3 A2 A#2 . A#2 F2 C3 . C3 G2 D3 . D3 A2 D3 . D3 A2 A#2 . C3 . A2 . A2 . ',
+    drums: 'k . h s k k h s k . h s k . s s ' },
   boss: { bpm: 150, wave: 'sawtooth',
     lead: 'E5 E5 . G5 . E5 D5 . C5 . D5 E5 . B4 . . E5 E5 . G5 . A5 G5 . F#5 . G5 E5 - - . . ',
     bass: 'E2 E2 E3 E2 E2 E3 E2 E3 C2 C2 C3 C2 D2 D2 D3 D2 E2 E2 E3 E2 E2 E3 E2 E3 C2 C2 C3 C2 B1 B1 B2 B1 ',

@@ -2,6 +2,7 @@
 import { toggleMute } from './audio';
 import { CONSUMABLES, QUICK_CD } from './sim/consumables';
 import { TIER_NAMES } from './sim/loot';
+import { MOBS } from './sim/mobs';
 import { xpFor, type HeroProfile } from './sim/stats';
 import type { BoxTier, StageDef } from './sim/types';
 import type { World } from './sim/world';
@@ -18,6 +19,7 @@ const CSS = `
 #hud .bar i { position: absolute; inset: 0; width: 100%; background: linear-gradient(#ff7a8a, #e0304a); transform-origin: left; transition: transform 0.15s; }
 #hud .bar.xp { height: 1.1vmin; } #hud .bar.xp i { background: linear-gradient(#ffe27a, #e0a020); }
 #hud .bar b { position: absolute; inset: 0; font-size: 1.5vmin; line-height: 1.9vmin; text-align: center; text-shadow: 0 1px 0 #000; }
+#hud .bar.ult { height: 0.9vmin; display: none; } #hud .bar.ult.on { display: block; } #hud .bar.ult i { background: linear-gradient(90deg, #ffb347, #ff5af0); } #hud .bar.ult.full i { animation: ultf 0.5s infinite alternate; } @keyframes ultf { to { filter: brightness(1.6); } }
 #hud .buff { font-size: 1.6vmin; color: #9fe0ff; min-height: 1.8vmin; }
 #hud .stage { position: absolute; left: 50%; transform: translateX(-50%); top: 1.5vmin; text-align: center; text-shadow: 0 0.3vmin 0.6vmin #000; }
 #hud .stage .t { font-family: 'Luckiest Guy', sans-serif; font-weight: 400; letter-spacing: 0.05em; font-size: 2.6vmin; color: #ffe08a; }
@@ -75,14 +77,14 @@ export function initHud(onMenu: () => void, onResume: () => void, onLeave: () =>
   root.id = 'hud';
   root.innerHTML = `
     <div class="card"><div class="face"></div><div><div><span class="nm"></span><span class="lv"></span></div>
-      <div class="bar hp"><i></i><b></b></div><div class="bar xp"><i></i></div><div class="buff"></div><div class="boosts"></div></div></div>
+      <div class="bar hp"><i></i><b></b></div><div class="bar xp"><i></i></div><div class="bar ult"><i></i></div><div class="buff"></div><div class="boosts"></div></div></div>
     <div class="stage"><div class="t"></div><div class="s"></div></div>
     <div class="boss"><div class="t"></div><div class="bar"><i></i><u></u></div></div>
     <div class="right"><div class="loot"><img src="art/box-3.webp"><span>0</span></div><button class="menu">☰</button></div>
     <div class="combo"><b>0</b><span>HITS</span></div>
     <div class="quick">${[0, 1, 2, 3].map(i => `<div class="q" data-q="${i}"><i>${i + 1}</i><b></b><u></u></div>`).join('')}</div>
     <div class="toasts"></div>
-    <div class="help">← → move · ↑ ↓ climb · SPACE jump · J attack ×3 combo · L / I / O skills · ↓+SPACE drop · ESC menu</div>`;
+    <div class="help">← → move · ↑ ↓ climb · SPACE jump · J attack ×3 combo · L / I / O skills · U ultimate · ↓+SPACE drop · ESC menu</div>`;
   document.body.appendChild(root);
   q = <T extends HTMLElement>(s: string) => root.querySelector<T>(s)!;
   q('.menu').addEventListener('pointerdown', e => { e.preventDefault(); onMenu(); });
@@ -114,6 +116,8 @@ export function updateHud(w: World, p: HeroProfile, st: StageDef): void {
   q('.hp i').style.transform = `scaleX(${h.hp / h.d.maxHp})`;
   q('.hp b').textContent = `${Math.ceil(h.hp)} / ${h.d.maxHp}`;
   q('.xp i').style.transform = `scaleX(${Math.min(1, p.xp / xpFor(p.level))})`;
+  const ub = q('.bar.ult'); ub.classList.toggle('on', p.level >= 15); ub.classList.toggle('full', h.ult >= 100);
+  q('.bar.ult i').style.transform = `scaleX(${h.ult / 100})`;
   q('.buff').textContent = h.buff ? `✦ BUFF ${Math.ceil(h.buff.t)}s` : '';
   const BOOST_NAMES = { atk: '🌶 ATK', def: '🧊 DEF', speed: '☕ SPD', cdr: 'CDR' } as const;
   q('.boosts').textContent = (Object.entries(h.boosts) as [keyof typeof BOOST_NAMES, [number, number]][]).map(([k, [, t]]) => `${BOOST_NAMES[k]} ${Math.ceil(t)}s`).join('  ');
@@ -131,7 +135,7 @@ export function updateHud(w: World, p: HeroProfile, st: StageDef): void {
   const bb = q('.boss');
   bb.classList.toggle('on', !!boss && boss.state !== 'dead');
   if (boss) {
-    q('.boss .t').textContent = `Lv ${boss.lv} BURNT TOAST KING`;
+    q('.boss .t').textContent = `Lv ${boss.lv} ${MOBS[boss.kind].name.toUpperCase()}`;
     q('.boss .bar i').style.transform = `scaleX(${Math.max(0, boss.hp / boss.maxHp)})`;
     q<HTMLElement>('.boss .bar u').style.transform = `scaleX(${boss.state === 'stagger' ? 1 : boss.stagger / (boss.maxHp * 0.12)})`;
   }

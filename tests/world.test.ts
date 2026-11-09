@@ -4,7 +4,7 @@ import { CLASSES } from '../src/sim/classes';
 import { BASES, GRADE_MUL, fortChance, fortMul, itemLines, rollGrade, rollItem } from '../src/sim/items';
 import { clearCount, clearRewards, rollTier } from '../src/sim/loot';
 import { MOBS } from '../src/sim/mobs';
-import { SKILLS, skillsOf } from '../src/sim/skills';
+import { SKILLS, ULTS, applyBranch, branchesFor, skillsOf } from '../src/sim/skills';
 import { STAGES } from '../src/sim/stages';
 import { type HeroProfile, derive, gainXp, newProfile } from '../src/sim/stats';
 import { type Input, NO_INPUT, type StageDef } from '../src/sim/types';
@@ -90,7 +90,7 @@ describe('stages', () => {
       if (n === 10) expect(st.mobs.some(m => MOBS[m.kind].brain === 'boss')).toBe(true);
       if (n === 5) expect(st.mobs.some(m => m.elite)).toBe(true);
     }
-    expect(STAGES.length).toBe(20);
+    expect(STAGES.length).toBe(30);
   });
 });
 
@@ -352,5 +352,57 @@ describe('grading and fortification', () => {
     for (let i = 0; i < 300; i++) expect(rollGrade(rand, 2, 3)).toBeGreaterThanOrEqual(3);
     const avg = (r: 1 | 5) => { let t = 0; for (let i = 0; i < 2000; i++) t += rollGrade(rand, r); return t / 2000; };
     expect(avg(5)).toBeGreaterThan(avg(1));
+  });
+});
+
+describe('ultimates, branches, sets, named legendaries', () => {
+  it('the ultimate needs Lv 15 and a full gauge, then fires and makes you invincible', () => {
+    const w = mk(0, 20);
+    w.spawnMob('bun', w.hero.x + 80, 1);
+    expect(run(w, { ult: true }, 1).some(e => e.t === 'ult')).toBe(false); // gauge empty
+    run(w, {}, 1);
+    w.hero.ult = 100;
+    const evs = run(w, { ult: true }, 1);
+    expect(evs.some(e => e.t === 'ult')).toBe(true);
+    expect(w.hero.inv).toBeGreaterThan(1);
+    expect(Object.keys(ULTS).length).toBe(CLASSES.length);
+  });
+
+  it('every active skill has two branches that change it', () => {
+    for (const c of CLASSES) for (const sk of skillsOf(c.species).actives) {
+      const [a, b] = branchesFor(sk);
+      expect(JSON.stringify(applyBranch(sk, 'a')), sk.name + ' ' + a.name).not.toBe(JSON.stringify(sk));
+      expect(JSON.stringify(applyBranch(sk, 'b')), sk.name + ' ' + b.name).not.toBe(JSON.stringify(sk));
+    }
+  });
+
+  it('a 2-piece set raises stats and the Phoenix Apron survives one knockout', () => {
+    const p = prof(0, 10);
+    const base = derive(p).atk;
+    p.equip.weapon = { id: 1, base: 'spoon', rarity: 3, ilvl: 5, plus: 0, lines: [], set: 'champ' };
+    p.equip.charm = { id: 2, base: 'cookie', rarity: 3, ilvl: 5, plus: 0, lines: [], set: 'champ' };
+    expect(derive(p).atk).toBeGreaterThan(base);
+    p.equip.armor = { id: 3, base: 'apron', rarity: 5, ilvl: 5, plus: 0, lines: [], unique: 'phoenix' };
+    const w = new World(flat, derive(p), 2);
+    w.spawnMob('egg', 200, 30);
+    w.hero.x = 150; w.hero.hp = 1;
+    const evs = run(w, {}, 300);
+    expect(evs.some(e => e.t === 'revive')).toBe(true);
+  });
+});
+
+describe('art', () => {
+  it('every item, monster, consumable, stage background and rig has its art', async () => {
+    // @ts-ignore node types aren't in this project's tsconfig (tests run in Node)
+    const fs = await import('node:fs');
+    const have = new Set<string>(JSON.parse(fs.readFileSync('public/art/manifest.json', 'utf8')));
+    const { CONSUMABLES } = await import('../src/sim/consumables');
+    const { RIGS } = await import('../src/render/rigs');
+    const need = [
+      ...Object.values(BASES).map(b => b.icon), ...Object.values(MOBS).map(m => m.art), ...Object.values(CONSUMABLES).map(c => c.icon),
+      ...STAGES.flatMap(s => [s.bg, s.tile, ...(s.mid ? [s.mid] : [])]), ...CLASSES.map(c => `kaiju-${c.species}`),
+      ...Object.entries(RIGS).flatMap(([sp, r]) => r.parts.map(p => `parts-${sp}-${p.piece}`)), 'map-world', 'map-oven',
+    ];
+    expect(need.filter(k => !have.has(k))).toEqual([]);
   });
 });

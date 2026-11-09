@@ -7,8 +7,9 @@ export interface Input {
   skill1: boolean; skill2: boolean; skill3: boolean; // held
   /** quick-bag slots 1-4 (held) */
   item1: boolean; item2: boolean; item3: boolean; item4: boolean;
+  ult: boolean;
 }
-export const NO_INPUT: Input = { left: false, right: false, up: false, down: false, jump: false, attack: false, skill1: false, skill2: false, skill3: false, item1: false, item2: false, item3: false, item4: false };
+export const NO_INPUT: Input = { left: false, right: false, up: false, down: false, jump: false, attack: false, skill1: false, skill2: false, skill3: false, item1: false, item2: false, item3: false, item4: false, ult: false };
 
 /** One-way platform: you can jump up through it and drop down with DOWN + JUMP. */
 export interface Platform { x: number; y: number; w: number; solid?: boolean }
@@ -38,7 +39,8 @@ export interface StageDef {
   rec: number;
 }
 
-export type MobKind = 'bun' | 'worm' | 'pepper' | 'egg' | 'toast' | 'pea' | 'yogurt' | 'icebat' | 'pickle' | 'golem';
+export type MobKind = 'bun' | 'worm' | 'pepper' | 'egg' | 'toast' | 'pea' | 'yogurt' | 'icebat' | 'pickle' | 'golem'
+  | 'popcorn' | 'imp' | 'bacon' | 'meatball' | 'dragon';
 
 export type BoxTier = 1 | 2 | 3 | 4 | 5;
 export interface LootBox { tier: BoxTier; ilvl: number }
@@ -49,7 +51,7 @@ export type SimEvent =
   | { t: 'skill'; slot: number; kind: string; id: string }
   | { t: 'jump' }
   | { t: 'land' }
-  | { t: 'mobDie'; x: number; y: number; boss: boolean }
+  | { t: 'mobDie'; x: number; y: number; boss: boolean; elite: boolean }
   | { t: 'xp'; n: number }
   | { t: 'drop'; id: number; tier: BoxTier; x: number; y: number }
   | { t: 'pickup'; id: number; tier: BoxTier }
@@ -65,4 +67,5 @@ export type SimEvent =
   | { t: 'use'; slot: number; id: import('./consumables').ConsumableId }
   | { t: 'revive' }
   | { t: 'crumbs'; n: number; x: number; y: number }
-  | { t: 'stone'; n: number; x: number; y: number };
+  | { t: 'stone'; n: number; x: number; y: number }
+  | { t: 'ult'; name: string };

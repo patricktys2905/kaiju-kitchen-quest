@@ -1,0 +1,36 @@
+[
+  {
+    "name": "mob-popcorn",
+    "newChat": true,
+    "refs": ["art-src/ref-kaiju-0.png"],
+    "prompt": "Generate an image. This is a hero from my cute 2D side-scrolling action RPG set in a giant kitchen. I need an ENEMY for the hot OVEN world in exactly the same art style (clean dark outlines, saturated colours, glossy cel shading): a POPCORN POPPER, a jittery puffed popcorn kernel creature with a buttery yellow body, a few unpopped kernels, steam puffs and an excited angry face, tiny legs. Side view facing LEFT, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1 image."
+  },
+  { "name": "mob-imp", "prompt": "Same style, another OVEN ENEMY: a HOT SAUCE IMP, a little red hot-sauce bottle devil with a flame-shaped cap, tiny horns, a pitchfork made of a fork, and a sly grin, small flames around it. Side view facing LEFT, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1 image." },
+  { "name": "mob-bacon", "prompt": "Same style, another OVEN ENEMY: a SIZZLE BACON strip creature, a wavy crispy bacon strip running on stubby legs, sizzling grease droplets, determined angry eyes. Side view facing LEFT, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1 image." },
+  { "name": "mob-meatball", "prompt": "Same style, another OVEN ENEMY: a MEATBALL BRUTE, a huge round meatball bruiser covered in tomato sauce with a parsley tuft, big meaty fists, scowling. Side view facing LEFT, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1 image." },
+  { "name": "boss-dragon", "prompt": "Same style, now the BOSS of the oven world: the GREASE DRAGON, a big dragon made of melted cheese and roasted bacon scales, glowing ember eyes, smoke puffing from its nostrils, small bat wings, a long tail with a pepperoni tip. Imposing but still in the cute game style. Side view facing LEFT, whole body visible, centred, filling about 90% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1 image." },
+  {
+    "name": "bg-far-oven",
+    "newChat": true,
+    "refs": ["art-src/ref-bg.png"],
+    "prompt": "Generate an image. This is the background of the first area of my cute 2D side-scrolling action RPG (tiny food monsters in a giant kitchen). I need the FAR BACKGROUND for the third world, 'The Oven', in exactly the same painted fantasy MMORPG side-scroller style: straight-on side view INSIDE a giant glowing oven: warm orange heating elements glowing on the back wall like distant lava rivers, giant baking trays as cliffs, a huge roasting chicken silhouette far away like a mountain, shimmering heat haze, floating embers. Hot and adventurous but cheerful, not scary. The bottom quarter calm and darker. No characters, no text, no UI. Wide 16:9 landscape image."
+  },
+  { "name": "bg-mid-oven", "prompt": "Now the MIDDLE PARALLAX LAYER in the exact same oven style and colours: a row of giant oven objects along the bottom of the image, seen from the side: a casserole dish, a muffin tin, a stack of cookies on a tray, a roasting pan, a pizza stone, an oven mitt, with gaps between them. They fill only the bottom 60 percent. Everything else (the whole upper area and the gaps) must be solid flat magenta (#FF00FF). No shadows on the magenta, no characters, no text. Wide 16:9 landscape image." },
+  { "name": "tile-oven", "prompt": "Now a GROUND TILE in the same style for the walkable floor in the oven: straight-on side view of a thick slab of a dark iron oven rack and baking tray: a hot glowing orange top edge, then a dark charcoal metal front face with rivets and little ember glows, darker towards the bottom. It must tile SEAMLESSLY left-to-right. Fill the whole square, no background, no objects, no text. Square 1:1 image." },
+  { "name": "bg-far-dragon", "prompt": "Now the FAR BACKGROUND for the oven world's BOSS ARENA, 'Broiler Peak', same painted style: straight-on side view at the very top of a giant oven under a fiercely glowing broiler element, molten cheese waterfalls, a mountain of roasted vegetables, swirling smoke and bright embers, dramatic red-orange light. The bottom quarter calm and darker. No characters, no text, no UI. Wide 16:9 landscape image." },
+  {
+    "name": "map-oven",
+    "newChat": true,
+    "refs": ["art-src/ref-bg.png"],
+    "prompt": "Generate an image. This is a background from my cute painted fantasy 2D action RPG where tiny food monsters adventure through a giant kitchen. I need a second WORLD MAP in the same painted style: a whimsical illustrated fantasy adventure map of a GIANT OVEN seen from a high three-quarter angle with its door wide open, like a storybook RPG map: the open oven door as a ramp at the bottom-left, inside three levels of oven racks with baking trays, muffin tins and casserole dishes as terrain, glowing orange heating elements, and at the top-right a fiercely glowing broiler like a volcano peak. A winding dotted path climbs from the bottom-left up the racks to the top-right. Plenty of open space around the path. No characters, no text, no labels, no numbers, no UI. Wide 16:9 landscape image."
+  },
+  {
+    "name": "eq-spatula",
+    "newChat": true,
+    "refs": ["art-src/ref-eq.png"],
+    "prompt": "Generate an image. This is an item icon from my cute 2D action RPG. I need EQUIPMENT ICONS in exactly the same art style (clean dark outlines, saturated colours, glossy cel shading), shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT, centred, filling 80% of the frame, on a solid flat magenta (#FF00FF) background, no shadow, no text. First: a WEAPON, a heavy flaming metal SPATULA axe with an ember-red edge. Square 1:1 image."
+  },
+  { "name": "eq-skewer", "prompt": "Same style and framing (head top-left, handle bottom-right): a WEAPON, a long KEBAB SKEWER spear with grilled peppers and onions on it and a glowing hot tip. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1." },
+  { "name": "eq-foil", "prompt": "Same style, shown flat and centred: ARMOR, a shiny crinkled ALUMINIUM FOIL chestplate with riveted edges. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1." },
+  { "name": "eq-ember", "prompt": "Same style, shown centred: a CHARM accessory, a glowing EMBER CHILI pendant: a small red chili inside a gold cage, with a tiny flame. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1." }
+]

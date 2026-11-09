@@ -26,11 +26,13 @@ const RANK_BONUS: Record<RankLetter, number> = { S: 1, A: 0.5, B: 0, C: -0.5, D:
 /** Odds level for a stage's clear boxes: the stage's monster level, your rank, and +1.5 on boss stages. */
 export function clearLevel(stageLv: number, rank: RankLetter, boss: boolean): number {
   // tuned so the usual (rank A) reward climbs: Lv2 → Lunchbox, Lv7 → Bento, boss Lv10 → Golden Cloche
-  return Math.max(1, 3.5 + (stageLv - 1) * 0.55 + RANK_BONUS[rank] + (boss ? 1.5 : 0));
+  // after World 1 the odds keep improving, but more slowly
+  const lv = Math.min(stageLv - 1, 9) * 0.55 + Math.max(0, stageLv - 10) * 0.15;
+  return Math.max(1, 3.5 + lv + RANK_BONUS[rank] + (boss ? 1.5 : 0));
 }
 
 /** How many boxes clearing a stage gives: more on higher-level stages. */
-export function clearCount(stageLv: number): number { return 1 + Math.floor((stageLv - 1) / 3); }
+export function clearCount(stageLv: number): number { return Math.min(4, 1 + Math.floor((stageLv - 1) / 6)); }
 
 /** Boxes for clearing a stage (higher stage level / better rank / boss → more and better boxes). */
 export function clearRewards(stageLv: number, rank: RankLetter, boss: boolean, firstClear: boolean, rand: () => number): BoxTier[] {

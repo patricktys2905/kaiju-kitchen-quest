@@ -19,6 +19,10 @@ export interface Item {
   lines: Line[];
   /** skill id → bonus levels; 'all' = every skill */
   skill?: { id: string; n: number };
+  /** set piece (SETS key) */
+  set?: string;
+  /** named legendary (UNIQUES key) */
+  unique?: string;
 }
 
 export interface BaseDef { slot: Slot; name: string; icon: string; main: Line[]; minLv?: number }
@@ -39,6 +43,11 @@ export const BASES: Record<string, BaseDef> = {
   fish: { slot: 'weapon', name: 'Frozen Fish', icon: 'eq-fish', main: [{ k: 'atk', v: 6 }], minLv: 12 },
   cozy: { slot: 'armor', name: 'Tea Cozy Vest', icon: 'eq-cozy', main: [{ k: 'hp', v: 30 }, { k: 'def', v: 3 }], minLv: 12 },
   snow: { slot: 'charm', name: 'Snowflake Charm', icon: 'eq-snow', main: [{ k: 'cdr', v: 0.05 }, { k: 'crit', v: 2 }], minLv: 12 },
+  // World 3 gear (item level 24 up)
+  spatula: { slot: 'weapon', name: 'Flaming Spatula', icon: 'eq-spatula', main: [{ k: 'atk', v: 7 }], minLv: 24 },
+  skewer: { slot: 'weapon', name: 'Kebab Skewer', icon: 'eq-skewer', main: [{ k: 'atk', v: 5 }, { k: 'crit', v: 4 }], minLv: 24 },
+  foil: { slot: 'armor', name: 'Foil Plate', icon: 'eq-foil', main: [{ k: 'def', v: 5 }, { k: 'hp', v: 20 }], minLv: 24 },
+  ember: { slot: 'charm', name: 'Ember Chili', icon: 'eq-ember', main: [{ k: 'skillDmg', v: 0.06 }, { k: 'atk', v: 2 }], minLv: 24 },
 };
 
 export const RARITY_NAMES: Record<Rarity, string> = { 1: 'Common', 2: 'Uncommon', 3: 'Rare', 4: 'Epic', 5: 'Legendary' };
@@ -110,10 +119,18 @@ export function rollItem(id: number, tier: BoxTier, ilvl: number, rand: () => nu
   const it: Item = { id, base, rarity, ilvl, plus: 0, lines, grade: rollGrade(rand, rarity) };
   if (rarity === 5 && rand() < 0.3) it.skill = { id: 'all', n: 1 };
   else if (rarity >= 4 && rand() < 0.6) it.skill = { id: pick(skillIds, rand), n: rarity === 5 ? 2 : 1 };
+  // set pieces (Rare+), from the set of the world this item level belongs to
+  if (rarity >= 3 && rand() < 0.25) it.set = setForLevel(ilvl);
+  // named legendaries
+  if (rarity === 5 && rand() < 0.35) {
+    const u = Object.keys(UNIQUES).filter(k => UNIQUES[k].slot === BASES[base].slot);
+    if (u.length) it.unique = pick(u, rand);
+  }
   return it;
 }
 
 export function itemName(it: Item): string {
+  if (it.unique) return `${UNIQUES[it.unique].name}${it.plus ? ` +${it.plus}` : ''}`;
   const pre = PREFIX[it.rarity][it.id % PREFIX[it.rarity].length];
   return `${pre} ${BASES[it.base].name}${it.plus ? ` +${it.plus}` : ''}`;
 }
@@ -156,3 +173,25 @@ export function fortCost(it: Item): { crumbs: number; stones: number } {
 }
 /** kept for older callers */
 export function enhanceCost(it: Item): number { return fortCost(it).crumbs; }
+
+// ---------- sets ----------
+export interface SetDef { name: string; world: number; two: string; three: string; b2: SetBonus; b3: SetBonus }
+export interface SetBonus { atkPct?: number; hpPct?: number; critDmg?: number; speed?: number; skillDmg?: number; cdr?: number; dr?: number }
+export const SETS: Record<string, SetDef> = {
+  champ: { name: 'Countertop Champion', world: 1, two: '+8% attack', three: '+25% crit damage, +8% speed', b2: { atkPct: 0.08 }, b3: { critDmg: 0.25, speed: 0.08 } },
+  frost: { name: 'Frostbite Guard', world: 2, two: '+12% max HP', three: '-15% damage taken, +10% skill damage', b2: { hpPct: 0.12 }, b3: { dr: 0.15, skillDmg: 0.1 } },
+  inferno: { name: 'Inferno Chef', world: 3, two: '+10% skill damage', three: '-12% cooldowns, +12% attack', b2: { skillDmg: 0.1 }, b3: { cdr: 0.12, atkPct: 0.12 } },
+};
+export function setForLevel(ilvl: number): string { return ilvl >= 25 ? 'inferno' : ilvl >= 13 ? 'frost' : 'champ'; }
+
+// ---------- named legendaries ----------
+export interface UniqueDef { name: string; slot: Slot; effect: string }
+export const UNIQUES: Record<string, UniqueDef> = {
+  momspoon: { name: "Grandma's Spoon", slot: 'weapon', effect: 'Combo finishers heal 4% max HP' },
+  excalifork: { name: 'Excalifork', slot: 'weapon', effect: 'Critical hits fire a bonus seed bolt' },
+  frostfish: { name: 'Brain-Freeze Fish', slot: 'weapon', effect: 'Hits slow monsters by 40% for 2s' },
+  phoenix: { name: 'Phoenix Apron', slot: 'armor', effect: 'Once per stage, survive a knockout at 1 HP' },
+  thornlid: { name: 'Thornshell Lid', slot: 'armor', effect: 'Reflects 30% of damage taken back at the attacker' },
+  lucky: { name: 'Lucky Fortune Cookie', slot: 'charm', effect: '+50% crumbs from monsters' },
+  hourglass: { name: 'Egg-Timer Hourglass', slot: 'charm', effect: 'Each kill cuts skill cooldowns by 1s' },
+};

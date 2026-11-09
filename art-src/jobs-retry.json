@@ -1,7 +1,7 @@
 [
  {
-  "name": "bg-far-freezer",
-  "prompt": "Generate an image. This is the background of the first area of my cute 2D side-scrolling action RPG. I need the FAR BACKGROUND for the fridge world's BOSS ARENA, 'Freezer Throne', same painted style: straight-on side view inside a giant freezer: walls of glittering ice, huge frozen peas and ice cube towers, icicles hanging from above, an eerie but cheerful blue-violet glow, snow sparkles drifting. The bottom quarter calm and darker. No characters, no text, no UI. Wide 16:9 landscape image.",
+  "name": "bg-mid-oven",
+  "prompt": "Generate an image. This is the background of my cute painted 2D side-scrolling action RPG (tiny food monsters in a giant kitchen). I need a MIDDLE PARALLAX LAYER for the oven world in the same painted style, warm orange and charcoal colours: a row of giant oven objects along the bottom of the image, seen from the side: a casserole dish, a muffin tin, a stack of cookies on a tray, a roasting pan, a pizza stone, an oven mitt, with gaps between them. They fill only the bottom 60 percent. Everything else (the whole upper area and the gaps) must be solid flat magenta (#FF00FF). No shadows on the magenta, no characters, no text. Wide 16:9 landscape image.",
   "newChat": true,
   "refs": [
    "art-src/ref-bg.png"

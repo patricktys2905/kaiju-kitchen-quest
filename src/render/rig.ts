@@ -138,7 +138,7 @@ type Anchor = 'hand' | 'chest' | 'neck' | 'back';
 interface Attach { img: Phaser.GameObjects.Image; glow?: Phaser.GameObjects.Image; outline: Phaser.GameObjects.Image[]; strong: boolean; anchor: Anchor; rot: number; swing: boolean; a: number; v: number }
 const RARITY_GLOW = [0, 0, 0, 0x6ab8ff, 0xc88aff, 0xffb02e];
 /** Where each weapon icon's handle is (0..1 in the icon). All icons point their head to the top-left (~-133°). */
-const GRIP: Record<string, [number, number]> = { spoon: [0.76, 0.8], fork: [0.8, 0.82], whisk: [0.63, 0.76], pin: [0.84, 0.84], icepick: [0.82, 0.82], fish: [0.84, 0.84] };
+const GRIP: Record<string, [number, number]> = { spoon: [0.76, 0.8], fork: [0.8, 0.82], whisk: [0.63, 0.76], pin: [0.84, 0.84], icepick: [0.82, 0.82], fish: [0.84, 0.84], spatula: [0.85, 0.86], skewer: [0.86, 0.86] };
 const ICON_ANGLE = -2.33;
 /** Weapon direction at rest relative to the arm: forward and a little up. */
 const HOLD_ANGLE = -0.55;

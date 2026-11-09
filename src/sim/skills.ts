@@ -104,6 +104,60 @@ export const SKILLS: Record<number, { actives: SkillDef[]; passive: PassiveDef }
 
 export function skillsOf(species: number) { return SKILLS[species] ?? SKILLS[0]; }
 
+// ---------- ultimates ----------
+export const ULT_LV = 15;
+/** Each kaiju's ultimate: fills a gauge by landing hits (and taking them); invincible while it plays. */
+export const ULTS: Record<number, SkillDef> = {
+  0: S({ id: 'ult0', name: 'Strawberry Stampede', kind: 'spin', desc: 'A huge, long berry whirlwind', cd: 0, dur: 2.2, dmg: 1.5, reach: 210, h: 140, kx: 260, ky: -260, n: 18 }),
+  10: S({ id: 'ult10', name: 'Blueberry Meteor', kind: 'slam', desc: 'Leaps sky-high and crashes down', cd: 0, dur: 0.9, dmg: 10, reach: 330, h: 120, kx: 300, ky: -700 }),
+  11: S({ id: 'ult11', name: 'Pizza Cutter Rush', kind: 'dash', desc: 'Rolls through everything like a pizza wheel', cd: 0, dur: 0.75, dmg: 8, reach: 90, h: 100, kx: 360, ky: -360 }),
+  4: S({ id: 'ult4', name: 'Moonbeam Nova', kind: 'nova', desc: 'A blinding burst of moon dust', cd: 0, dur: 0.9, dmg: 11, reach: 380, h: 260, kx: 460, ky: -460 }),
+  1: S({ id: 'ult1', name: 'Kraken Whirl', kind: 'spin', desc: 'Every tentacle at once, for ages', cd: 0, dur: 2, dmg: 1.4, reach: 230, h: 140, kx: 240, ky: -200, n: 20 }),
+  2: S({ id: 'ult2', name: 'Cheddar Quake', kind: 'slam', desc: 'A cheese-wheel crash that shakes the kitchen', cd: 0, dur: 0.9, dmg: 10, reach: 350, h: 120, kx: 280, ky: -680 }),
+  5: S({ id: 'ult5', name: 'Toast Storm', kind: 'fan', desc: 'Twelve flaming toast slices', cd: 0, dur: 0.6, dmg: 3.2, reach: 40, h: 40, kx: 260, ky: -220, n: 12 }),
+  6: S({ id: 'ult6', name: 'Steamer Feast', kind: 'nova', desc: 'A giant steam blast that also heals 40%', cd: 0, dur: 0.9, dmg: 8, reach: 340, h: 240, kx: 420, ky: -420, heal: 0.4 }),
+};
+
+// ---------- branches ----------
+export const BRANCH_LV = 3;
+export type BranchId = 'a' | 'b';
+export interface Branch { id: BranchId; name: string; desc: string; mods: { dmg?: number; reach?: number; cd?: number; n?: number; dur?: number; heal?: number; buffT?: number } }
+/** At skill level 3 every active picks one of two upgrades. */
+export function branchesFor(s: SkillDef): [Branch, Branch] {
+  const power: Branch = s.kind === 'buff' || s.kind === 'heal'
+    ? { id: 'a', name: 'Quick Recharge', desc: '-30% cooldown', mods: { cd: 0.7 } }
+    : { id: 'a', name: 'Power', desc: '+35% damage', mods: { dmg: 1.35 } };
+  const B: Record<SkillKind, Branch> = {
+    cone: { id: 'b', name: 'Wide Spray', desc: '+40% reach and height', mods: { reach: 1.4 } },
+    slam: { id: 'b', name: 'Big Shockwave', desc: '+40% radius', mods: { reach: 1.4 } },
+    dash: { id: 'b', name: 'Quick Step', desc: '-35% cooldown', mods: { cd: 0.65 } },
+    bolt: { id: 'b', name: 'Twin Bolt', desc: 'Fires two bolts', mods: { n: 1 } },
+    fan: { id: 'b', name: 'Wide Fan', desc: '+2 bolts', mods: { n: 2 } },
+    spin: { id: 'b', name: 'Long Spin', desc: '+40% duration and hits', mods: { dur: 1.4, n: 0.4 } },
+    uppercut: { id: 'b', name: 'Quick Upper', desc: '-30% cooldown', mods: { cd: 0.7 } },
+    mines: { id: 'b', name: 'More Mines', desc: '+2 mines', mods: { n: 2 } },
+    buff: { id: 'b', name: 'Lasting', desc: '+50% duration', mods: { buffT: 1.5 } },
+    nova: { id: 'b', name: 'Big Nova', desc: '+35% radius', mods: { reach: 1.35 } },
+    heal: { id: 'b', name: 'Big Feast', desc: '+50% healing', mods: { heal: 1.5 } },
+  };
+  return [power, B[s.kind]];
+}
+
+/** A skill with its branch applied (skills are shared constants, so this returns a copy). */
+export function applyBranch(s: SkillDef, b: BranchId | undefined): SkillDef {
+  if (!b) return s;
+  const m = branchesFor(s)[b === 'a' ? 0 : 1].mods;
+  const out: SkillDef = { ...s };
+  if (m.dmg) out.dmg *= m.dmg;
+  if (m.reach) { out.reach *= m.reach; out.h *= Math.sqrt(m.reach); }
+  if (m.cd) out.cd *= m.cd;
+  if (m.dur) out.dur *= m.dur;
+  if (m.n) out.n = s.kind === 'spin' ? Math.round((s.n ?? 6) * (1 + m.n)) : (s.n ?? 1) + m.n;
+  if (m.heal && s.heal) out.heal = s.heal * m.heal;
+  if (m.buffT && s.buff) out.buff = { ...s.buff, t: s.buff.t * m.buffT };
+  return out;
+}
+
 /** Damage multiplier and cooldown at a given skill level. */
 export function skillScale(level: number): { dmg: number; cd: number } {
   const l = Math.max(1, level);

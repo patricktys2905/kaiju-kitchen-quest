@@ -31,6 +31,11 @@ export const WORLDS: WorldDef[] = [
     baseLv: 13, power: 1.3, pool: [[1, 'pea'], [1, 'yogurt'], [3, 'icebat'], [6, 'pickle']], elite: 'pickle', boss: 'golem',
     names: ['Crisper Drawer', 'Dairy Lane', 'Frosty Shelf', 'Pickle Jar Pier', 'Knight of the Brine', 'Egg Carton Cliffs', 'Butter Bridge', 'Ketchup Canyon', 'Ice Tray Steps', 'Freezer Throne'],
   },
+  {
+    id: 3, name: 'The Oven', blurb: 'Preheated to dangerous.', bg: 'bg-far-oven', mid: 'bg-mid-oven', tile: 'tile-oven', platTint: 0xffc8a0, bossBg: 'bg-far-dragon',
+    baseLv: 25, power: 1.6, pool: [[1, 'bacon'], [1, 'popcorn'], [3, 'imp'], [6, 'meatball']], elite: 'meatball', boss: 'dragon',
+    names: ['Oven Door Ramp', 'Bottom Rack', 'Muffin Tin Maze', 'Casserole Cliffs', 'Meatball Mountain', 'Cookie Sheet Plains', 'Roasting Pan Pass', 'Pizza Stone Steppe', 'Top Rack Ascent', 'Broiler Peak'],
+  },
 ];
 
 /** Small seeded RNG so a stage is always laid out the same way. */
