@@ -4,7 +4,7 @@ import { CLASSES, type Stat } from './sim/classes';
 import { CONSUMABLES, type ConsumableId } from './sim/consumables';
 import { type Item, MAX_PLUS, type Slot, BASES, canWear, fortChance, fortCost, fortRisky, gradeOf, rollGrade, rollItem, salvageValue } from './sim/items';
 import { clearRewards } from './sim/loot';
-import { SKILLS } from './sim/skills';
+import { MAX_SKILL, SKILLS } from './sim/skills';
 import { type Derived, type HeroProfile, canLevelSkill, derive, gainXp, newProfile } from './sim/stats';
 import type { BoxTier, LootBox } from './sim/types';
 
@@ -39,6 +39,8 @@ export interface Save {
   storyMode?: 'full' | 'key';
   /** Nightmare mode (per world, after beating its boss on Hard) */
   nightmare?: boolean;
+  /** CPU buddy kaiju that fights alongside you (null = solo) */
+  buddy?: number | null;
 }
 
 // v2: per-kaiju progress, 4 starters, story (older v1 saves are not carried over)
@@ -364,4 +366,18 @@ export function buyGear(id: number): boolean {
   const it = save.shop.stock[i], price = gearPrice(it);
   if (save.crumbs < price) return false;
   save.crumbs -= price; save.shop.stock.splice(i, 1); save.bag.push(it); persist(); return true;
+}
+
+/** A CPU buddy fights at your level: its own gear, stat points auto-spent along its class, its skills learned. */
+export function buddyProfile(species: number, level: number): HeroProfile {
+  const own = save.heroes[species];
+  const p: HeroProfile = JSON.parse(JSON.stringify(own));
+  p.level = Math.max(own.level, level);
+  const cls = CLASSES.find(c => c.species === species)!;
+  const order = (Object.keys(cls.grow) as Stat[]).sort((a, b) => cls.grow[b] - cls.grow[a]);
+  const spent = Object.values(p.alloc).reduce((a, b) => a + b, 0);
+  for (let i = spent; i < (p.level - 1) * 3; i++) p.alloc[order[i % 2]]++;
+  const sk = SKILLS[species];
+  for (const s of [...sk.actives, sk.passive]) if (p.level >= s.unlock) p.skills[s.id] = Math.max(p.skills[s.id] ?? 0, Math.min(MAX_SKILL, 1 + Math.floor(p.level / 8)));
+  return p;
 }

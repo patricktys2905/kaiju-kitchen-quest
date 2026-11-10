@@ -114,3 +114,13 @@ protected healer, snipers behind a charger, a swarm with a bomber, or everything
 gates open + a Bento; the exit needs every arena done. Stage 2: a giant rolling pin chases you (88% of your kaiju's speed,
 flattens monsters). Worlds 2–4 stages 6/9: conveyor belts. Stages 8/9: a moving-tray gauntlet to the secret ledge where
 there's room. Tests: tests/setpieces.test.ts; `node scripts/setpiece-shot.mjs`.
+
+## Party / multi-hero (world.ts heroes[], tests/party.test.ts)
+The sim runs 1–4 heroes: `new World(..., party: Derived[], humans)`, `step([input0, input1, ...])`. `world.hero` is the
+hero the current code is about (the one stepping, a monster's target, a shot's owner) and is the player between steps.
+Monsters target the nearest standing hero (turn-taking per target); downed heroes are revived by a teammate standing
+next to them for 2 s and only a full wipe fails the stage; monster HP +60% per extra player (+35% per CPU buddy);
+stragglers are leashed back; each human gets their own drops (lootOf); arenas pull everyone in; the rolling pin paces
+the slowest; rank / combo / style only count the player. `world.snapshot()` = compact JSON state for online play later.
+CPU buddy: pick on the stage card (save.buddy); it fights at your level (buddyProfile) driven by `new Bot(w, AVERAGE, seed, 1)`,
+revives you and follows you. `node scripts/buddy-shot.mjs`.

@@ -23,6 +23,12 @@ const CSS = `
 #hud .bar b { position: absolute; inset: 0; font-size: 1.5vmin; line-height: 1.9vmin; text-align: center; text-shadow: 0 1px 0 #000; }
 #hud .bar.ult { height: 0.9vmin; display: none; } #hud .bar.ult.on { display: block; } #hud .bar.ult i { background: linear-gradient(90deg, #ffb347, #ff5af0); } #hud .bar.ult.full i { animation: ultf 0.5s infinite alternate; } @keyframes ultf { to { filter: brightness(1.6); } }
 #hud .buff { font-size: 1.6vmin; color: #9fe0ff; min-height: 1.8vmin; }
+#hud .mate { position: absolute; left: calc(1.5vmin + env(safe-area-inset-left)); top: 25vmin; display: none; align-items: center; gap: 0.8vmin; background: #1a1020b0; border-radius: 1.4vmin; padding: 0.5vmin 1vmin; }
+#hud .mate.on { display: flex; }
+#hud .mate i { width: 4.6vmin; height: 4.6vmin; background: center/contain no-repeat; }
+#hud .mate b { font-size: 1.6vmin; color: #a8e8ff; }
+#hud .mate .bar { width: 14vmin; height: 1vmin; background: #0008; border-radius: 1vmin; overflow: hidden; }
+#hud .mate .bar u { display: block; height: 100%; background: #6ad0ff; transform-origin: left; text-decoration: none; }
 #hud .stage { position: absolute; left: 50%; transform: translateX(-50%); top: 1.5vmin; text-align: center; text-shadow: 0 0.3vmin 0.6vmin #000; }
 #hud .stage .t { font-family: 'Luckiest Guy', sans-serif; font-weight: 400; letter-spacing: 0.05em; font-size: 2.6vmin; color: #ffe08a; }
 #hud .stage .s { font-size: 2vmin; }
@@ -86,6 +92,7 @@ export function initHud(onMenu: () => void, onResume: () => void, onLeave: () =>
   root.innerHTML = `
     <div class="card"><div class="face"></div><div><div><span class="nm"></span><span class="lv"></span></div>
       <div class="bar hp"><i></i><b></b></div><div class="bar xp"><i></i></div><div class="bar ult"><i></i></div><div class="buff"></div><div class="boosts"></div></div></div>
+    <div class="mate"><i></i><div><b></b><div class="bar"><u></u></div></div></div>
     <div class="stage"><div class="t"></div><div class="s"></div></div>
     <div class="boss"><div class="t"></div><div class="bar"><i></i><u></u></div></div>
     <div class="right"><div class="loot"><img src="art/box-3.webp"><span>0</span></div><button class="menu">☰</button></div>
@@ -140,6 +147,14 @@ export function updateHud(w: World, p: HeroProfile, st: StageDef): void {
   });
   q('.stage .t').textContent = `${st.num} ${st.name}${w.spicy.length ? ' ' + '🌶'.repeat(w.spicy.length) : ''}`;
   const clock = w.spicy.includes('clock') && !w.portal ? ` · ⏱ ${Math.max(0, Math.ceil(st.par - w.run.time))}s` : '';
+  const mate = w.heroes[1];
+  const mc = q('.mate'); mc.classList.toggle('on', !!mate);
+  if (mate) {
+    const img = `url(art/kaiju-${mate.d.cls.species}.webp)`;
+    const mi = q<HTMLElement>('.mate i'); if (mi.style.backgroundImage !== img) mi.style.backgroundImage = img;
+    q('.mate b').textContent = `CPU ${mate.d.cls.name}${mate.state === 'down' ? ' (DOWN)' : ''}`;
+    q<HTMLElement>('.mate .bar u').style.transform = `scaleX(${Math.max(0, mate.hp / mate.d.maxHp)})`;
+  }
   const ob = st.objective;
   const goal = !ob || w.objDone ? '' : ob.kind === 'escort' && w.npc ? ` · 🧁 ${Math.ceil(w.npc.hp / w.npc.maxHp * 100)}%`
     : ob.kind === 'fetch' && w.scroll && !w.scroll.got ? ` · 📜 ${Math.max(0, Math.ceil(w.objTimer))}s`

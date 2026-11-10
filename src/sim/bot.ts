@@ -14,13 +14,15 @@ export class Bot {
   private tapDir = 0;
   private stuck = 0; private lastX = 0;
   private r: () => number;
-  constructor(private w: World, private o: BotOpts = AVERAGE, seed = 1) {
+  /** hi = which hero it plays (0 = the player slot for balance runs; 1+ = a CPU buddy) */
+  constructor(private w: World, private o: BotOpts = AVERAGE, seed = 1, private hi = 0) {
     let s = seed;
     this.r = () => { s = (s * 16807) % 2147483647; return s / 2147483647; };
   }
 
   think(): Input {
-    const w = this.w, h = w.hero, inp: Input = { ...NO_INPUT };
+    const w = this.w, h = w.heroes[this.hi] ?? w.heroes[0], inp: Input = { ...NO_INPUT };
+    const lead = w.heroes[0];
     const pulse = (w.time * 6 | 0) % 2 === 0; // jump presses must be fresh: pulse the button
     if (h.state === 'down') return inp;
     // dodge sequencer in progress: right, release, right
@@ -34,6 +36,16 @@ export class Bot {
     if (h.hp < h.d.maxHp * this.o.potionAt && h.quickCd <= 0) {
       const i = h.bag.findIndex(b => b && b.n > 0 && (b.id === 'jam' || b.id === 'bigjam'));
       if (i >= 0) { (inp as unknown as Record<string, boolean>)[`item${i + 1}`] = true; return inp; }
+    }
+    // a buddy: pick up a downed teammate first, and never wander far from the player
+    if (this.hi > 0) {
+      const down = w.heroes.find(o => o !== h && o.state === 'down');
+      if (down) { if (Math.abs(down.x - h.x) > 20) inp[down.x > h.x ? 'right' : 'left'] = true; if (down.y < h.y - 40 && h.ground) inp.jump = pulse; return inp; }
+      if (Math.abs(lead.x - h.x) > 320 || (!w.mobs.some(m => m.state !== 'dead' && Math.abs(m.x - h.x) < 400))) {
+        if (Math.abs(lead.x - h.x) > 90) inp[lead.x > h.x ? 'right' : 'left'] = true;
+        if (lead.y < h.y - 40 && h.ground && Math.abs(lead.x - h.x) < 160) inp.jump = pulse;
+        return inp;
+      }
     }
     // the rolling pin is coming: run!
     if (w.chase?.on && w.chase.x > h.x - 520) { inp.right = true; inp.jump = h.ground && w.mobs.some(m => m.state !== 'dead' && m.x > h.x && m.x - h.x < 60) && pulse; return inp; }

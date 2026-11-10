@@ -15,7 +15,8 @@ import { DT, HARD_LV, type Mob, World, guardBreakOf, launcherOf, rankOf } from '
 import { type GearLook, HeroView } from '../render/rig';
 import { BASES } from '../sim/items';
 import type { HeroProfile } from '../sim/stats';
-import { addXp, finishStage, hero, quickBag, save, syncQuickBag } from '../save';
+import { addXp, buddyProfile, finishStage, hero, quickBag, save, syncQuickBag } from '../save';
+import { AVERAGE, Bot } from '../sim/bot';
 import { checkUnlocks, track, trackHero, trackKey } from '../quests';
 import { STORIES, beatAfter } from '../story/stories';
 import { playStory } from '../ui/story';
@@ -71,6 +72,9 @@ export class GameScene extends Phaser.Scene {
   private done = false;
   private hard = false;
   private nightmare = false;
+  /** CPU buddy: its puppet, shadow, name tag and the bot that plays it */
+  private buddy?: { view: HeroView; shadow: Phaser.GameObjects.Ellipse; tag: Phaser.GameObjects.Text; bot: Bot };
+  private downWarned = false;
   /** hazard visuals (one container per hazard) + one graphics layer for lasers / mould puddles / burrow mounds */
   private hazardViews: Phaser.GameObjects.Container[] = [];
   private overlay?: Phaser.GameObjects.Graphics;
@@ -90,6 +94,11 @@ export class GameScene extends Phaser.Scene {
   private quipT = 0; private tauntT = 0; private lastQuip = '';
   private lowWarned = false; private comboQuipped = 0;
   /** Hard mode is open for a world once its boss is beaten. */
+  /** The CPU buddy for this run (an unlocked kaiju other than the one you're playing), or null. */
+  private buddySpecies(): number | null {
+    const b = save.buddy;
+    return b != null && b !== hero().species && save.unlocked.includes(b) ? b : null;
+  }
   private hardOk(): boolean { return !!hero().cleared[`${this.stage.world}-10`]; }
 
   constructor() { super('game'); }
@@ -136,7 +145,8 @@ export class GameScene extends Phaser.Scene {
     const st = this.stage, p = hero();
     this.hard = save.hard && this.hardOk();
     this.nightmare = this.hard && !!save.nightmare && !!hero().hardCleared[`${st.world}-10`];
-    this.world = new World(st, derive(p), (Date.now() & 0xffff) + 1, quickBag(), save.items.revive ?? 0, this.hard, STORIES[p.species]?.variants[st.id], [...(save.spicy ?? [])], nemesisOf(p.species), this.nightmare);
+    this.world = new World(st, derive(p), (Date.now() & 0xffff) + 1, quickBag(), save.items.revive ?? 0, this.hard, STORIES[p.species]?.variants[st.id], [...(save.spicy ?? [])], nemesisOf(p.species), this.nightmare,
+      this.buddySpecies() !== null ? [derive(buddyProfile(this.buddySpecies()!, p.level))] : []);
     const cam = this.cameras.main.setZoom(ZOOM).setBackgroundColor('#f6dcb4');
     const bg = this.has(st.bg) ? st.bg : 'bg-far';
     this.far = this.has(bg) ? this.add.image(SX, SY, bg).setOrigin(0, 0).setScrollFactor(0).setDepth(-100) : undefined;
@@ -205,6 +215,14 @@ export class GameScene extends Phaser.Scene {
     this.aura = this.add.ellipse(0, 0, 80, 100, 0x9fe0ff, 0.25).setDepth(4).setBlendMode(Phaser.BlendModes.ADD).setVisible(false);
     this.hero = new HeroView(this, p.species, k => this.has(k), 84, lookOf(p));
     this.hero.root.setDepth(5);
+    this.buddy = undefined; this.downWarned = false;
+    const bsp = this.buddySpecies();
+    if (bsp !== null && w.heroes[1]) {
+      const view = new HeroView(this, bsp, k => this.has(k), 84, lookOf(save.heroes[bsp]));
+      view.root.setDepth(4.5);
+      const tag = this.add.text(0, 0, 'CPU', { fontFamily: 'Luckiest Guy', fontSize: '11px', color: '#a8e8ff', stroke: '#1a2a40', strokeThickness: 4 }).setOrigin(0.5).setDepth(9).setResolution(3);
+      this.buddy = { view, tag, shadow: this.add.ellipse(0, 0, 54, 12, 0x000000, 0.18).setDepth(-2), bot: new Bot(w, AVERAGE, (Date.now() & 0xff) + 5, 1) };
+    }
     this.cx = w.hero.x; this.cy = st.groundY - 100;
     cam.centerOn(this.cx, this.cy);
     if (w.variant === 'night') { this.add.rectangle(SX, SY, VW * 2, VH * 2, 0x0a0a30, 0.42).setOrigin(0, 0).setScrollFactor(0).setDepth(15); }
@@ -249,7 +267,7 @@ export class GameScene extends Phaser.Scene {
       this.acc += dt;
       while (this.acc >= DT) {
         this.acc -= DT;
-        this.onEvents(w.step(readInput()));
+        this.onEvents(w.step(this.buddy ? [readInput(), this.buddy.bot.think()] : [readInput()]));
       }
     }
     this.draw(dt);
@@ -258,6 +276,7 @@ export class GameScene extends Phaser.Scene {
   private onEvents(evs: SimEvent[]): void {
     const w = this.world!;
     for (const e of evs) {
+      if ((e as { hi?: number }).hi && ['swing', 'skill', 'jump', 'land', 'dodge', 'use', 'ult', 'perfect'].includes(e.t)) continue; // the buddy's own moves
       switch (e.t) {
         case 'hit': {
           const col = e.target === 'hero' ? '#ff5a6a' : e.crit ? '#ffd23c' : '#ffffff';
@@ -632,7 +651,8 @@ export class GameScene extends Phaser.Scene {
   // ---------- drawing ----------
   private draw(dt: number): void {
     const w = this.world!, st = w.stage, h = w.hero, t = this.time.now / 1000;
-    const tx = h.x + h.face * 40, ty = Math.min(h.y - 70, st.groundY + 90 - VH / 2);
+    const mate = w.heroes[1];
+    const tx = (mate && mate.state !== 'down' ? h.x * 0.75 + mate.x * 0.25 : h.x) + h.face * 40, ty = Math.min(h.y - 70, st.groundY + 90 - VH / 2);
     this.cx += (tx - this.cx) * Math.min(1, dt * 5);
     this.cy += (ty - this.cy) * Math.min(1, dt * 3);
     this.cx = Phaser.Math.Clamp(this.cx, VW / 2, st.width - VW / 2);
@@ -654,6 +674,15 @@ export class GameScene extends Phaser.Scene {
     const lift = Math.min(1, (fy - h.y) / 200);
     this.heroShadow.setPosition(h.x, fy - 1).setScale(1 - lift * 0.5).setAlpha(h.state === 'climb' ? 0 : 1);
     this.hero.flash(h.state === 'hurt' && h.t < 0.08);
+    if (this.buddy && mate) {
+      this.buddy.view.update(mate, t, dt); this.buddy.view.flash(mate.state === 'hurt' && mate.t < 0.08);
+      const bf = w.floorBelow(mate.x, mate.y, mate.y + 2000, false);
+      this.buddy.shadow.setPosition(mate.x, (bf ? bf.y : st.groundY) - 1).setAlpha(mate.state === 'climb' ? 0 : 1);
+      this.buddy.tag.setPosition(mate.x, mate.y - 100).setText(mate.state === 'down' ? (mate.revT > 0 ? `REVIVING ${Math.round(mate.revT / 2 * 100)}%` : 'DOWN! Stand by me') : 'CPU');
+    }
+    // you're down but your buddy isn't: hang on
+    if (h.state === 'down' && mate && mate.state !== 'down' && !this.downWarned) { this.downWarned = true; toast('You\'re down! Your buddy is coming to pick you up', { color: '#a8e8ff' }); }
+    if (h.state !== 'down') this.downWarned = false;
     this.aura.setFillStyle(h.counter > 0 ? 0xffd23c : 0x9fe0ff, 0.25).setVisible(!!h.buff || h.counter > 0).setPosition(h.x, h.y - 40).setScale(1 + Math.sin(t * 6) * 0.06).setAlpha(0.18 + Math.sin(t * 6) * 0.06);
 
     this.stepBanter(dt);

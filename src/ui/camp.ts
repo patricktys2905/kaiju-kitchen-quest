@@ -170,6 +170,7 @@ function mapPage(): string {
       <div class="lv">📖 ${STORIES[p.species]?.title ?? ''}${beatBefore(sel.id, sel.id === '1-1').some(b => p.seen.includes(b)) || (sel.boss && p.seen.includes(`w${sel.world}-after`)) ? ` <button class="pill" data-replay="${sel.id}" style="font-size:1.6vmin;padding:0.3vmin 1vmin">REPLAY</button>` : ''} <button class="pill" data-act="storymode" style="font-size:1.6vmin;padding:0.3vmin 1vmin">${save.storyMode === 'key' ? 'KEY SCENES ONLY' : 'FULL STORY'}</button></div>
       ${rank ? `<div class="lv">Best: <b style="color:${RANK_CSS[rank]}">${rank}</b></div>` : ''}
       ${(save.keys ?? []).includes(sel.world) ? (() => { const b = BONUS_STAGES[sel.world - 1]; return `<button class="pill big secret" data-play="${b.id}">🗝 ${b.name} <small>Lv ${b.lv[0]}–${b.lv[1]}</small></button>`; })() : sel.id.endsWith('-7') ? '<div class="lv" style="color:#ffd27a">🗝 A secret chest here hides this world\'s key</div>' : ''}
+      <div class="lv buddy">🤝 CPU BUDDY: <button class="pill" data-act="buddy">${save.buddy != null && save.buddy !== p.species && save.unlocked.includes(save.buddy) ? `<img src="art/kaiju-${save.buddy}.webp"> ${CLASSES.find(c => c.species === save.buddy)!.name}` : 'None'} ▸</button></div>
       <button class="pill go big" data-play="${sel.id}" ${stageUnlocked(sel) ? '' : 'disabled'}>${stageUnlocked(sel) ? '▶ PLAY' : '🔒 LOCKED'}</button>
       <div class="spicy">🌶 SPICY ${SPICY_LIST.map(([k, ic, nm, ds]) => `<button class="chili ${(save.spicy ?? []).includes(k) ? 'on' : ''}" data-spicy="${k}" title="${ds}">${ic} ${nm}</button>`).join('')}
         <small>${(save.spicy ?? []).length ? `+${(save.spicy ?? []).length} bonus box${(save.spicy ?? []).length > 1 ? 'es' : ''}, +${25 * (save.spicy ?? []).length}% crumbs` : 'extra loot for extra pain'}</small></div>
@@ -420,6 +421,13 @@ function onClick(e: MouseEvent): void {
       case 'scroll': if (useScroll(sp)) flash = 'Skill points refunded!'; break;
       case 'hard': save.hard = !save.hard; if (!save.hard) save.nightmare = false; persist(); break;
       case 'nightmare': save.nightmare = !save.nightmare; if (save.nightmare) save.hard = true; persist(); break;
+      case 'buddy': { // cycle: none → each unlocked kaiju except the one you're playing → none
+        const opts: (number | null)[] = [null, ...save.unlocked.filter(s => s !== save.selected)];
+        const i = opts.indexOf(save.buddy ?? null);
+        save.buddy = opts[(i + 1) % opts.length]; persist();
+        flash = save.buddy == null ? 'Going solo' : `${CLASSES.find(c => c.species === save.buddy)!.name} will fight beside you (CPU). Monsters get a bit tougher.`;
+        break;
+      }
       case 'storymode': save.storyMode = save.storyMode === 'key' ? 'full' : 'key'; persist(); flash = save.storyMode === 'key' ? 'Story: only the big scenes (stage 1, your nemesis, the boss)' : 'Story: a short scene before every stage'; break;
       case 'mine': bagMine = !bagMine; selItem = null; break;
       case 'bonus': { const r = claimBonus(); if (r) { flash = 'Daily bonus: ' + r; sfx('reveal5'); } break; }
@@ -528,6 +536,9 @@ const CAMP_CSS = `
 .kq .rw img { width: 3.4vmin; height: 3.4vmin; object-fit: contain; vertical-align: middle; }
 .kq .pill.big { font-size: 3.4vmin; padding: 1.6vmin; margin-top: 0.6vmin; }
 .kq .pill.secret { background: linear-gradient(#6a4ab0, #3a2a70); color: #ffe8a0; border-color: #ffd27a; margin-bottom: 0.8vmin; }
+.kq .buddy { display: flex; align-items: center; gap: 0.6vmin; color: #a8e8ff; }
+.kq .buddy .pill { font-size: 1.6vmin; padding: 0.3vmin 1vmin; display: inline-flex; align-items: center; gap: 0.5vmin; }
+.kq .buddy img { height: 2.6vmin; }
 .kq .spicy { font-size: 1.7vmin; color: #ffb38a; display: flex; flex-wrap: wrap; gap: 0.6vmin; align-items: center; margin: 0.6vmin 0; }
 .kq .spicy .chili { font: inherit; font-weight: 800; padding: 0.4vmin 1vmin; border-radius: 1.2vmin; border: 2px solid #ff7a4a66; background: #2a1a20; color: #d8b0a0; cursor: pointer; }
 .kq .spicy .chili.on { background: #c8401a; color: #fff4e4; border-color: #ffb347; box-shadow: 0 0 1.2vmin #ff6a2a; }
