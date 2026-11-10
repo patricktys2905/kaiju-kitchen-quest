@@ -109,8 +109,27 @@ export const ARC: Record<string, StoryLine[]> = {
     ["me", "Didja hear that? A whole BACKYARD! That's like a gazillion stomps!"],
     ["me", "Big brother, I'm gonna be Gobzilla EXTRA LARGE! Okay, okay. Large first. RAWR!"],
   ],
+  "w7-open": [
+    ["me", "The Backyard! Whoa, the grass is taller than big brother! Stomp count, back to zero. AGAIN!"],
+    ["me", "Sniff sniff. Somebody's grilling! Big brother says BBQs are for BIG kaiju. Gobzilla Large, reporting for snacks!"],
+    ["lo2", "Hah! Baron Brussels awaits thee atop the Grill, berry. Thou art TOAST!"],
+    ["me", "Strawberries don't toast, ya crusty breadstick! RAWR!"],
+  ],
+  "w7-boss": [
+    ["boss", "ATTEN-TION! I am BARON BRUSSELS! Drop and give me twenty, you squishy little berry!"],
+    ["me", "Twenty STOMPS? Easy! Pee-yew, though! Did somebody sit on a stinkbug?"],
+    ["boss", "That is my COLOGNE! Sprout Soldiers, FORM UP! Nobody leaves this grill till they finish their SPROUTS!"],
+    ["me", "Big brother never finishes his sprouts either! Stomp count: ONE! RAWR!"],
+  ],
+  "w7-after": [
+    ["n", "SIZZLE-POP! Baron Brussels bounces off the grill and goes rolling across the lawn!"],
+    ["boss", "Retreat! Always left on the PLATE! The Mystery Meatloaf awaits you in the Garden, berry!"],
+    ["me", "Mystery Meatloaf? What's in him?"],
+    ["boss", "Nobody knows! Not even HIM! Sprout Soldiers, forward MARCH! Hmph!"],
+    ["me", "A mystery?! Gobzilla Large cracks mysteries! Okay, ALMOST large. But look at my shadow in the sunset! RAWR!"],
+  ],
 };
-export const NEMESIS: Record<"w1-elite" | "w2-elite" | "w3-elite" | "w4-elite" | "w5-elite" | "w6-elite", StoryLine[]> = {
+export const NEMESIS: Record<"w1-elite" | "w2-elite" | "w3-elite" | "w4-elite" | "w5-elite" | "w6-elite" | "w7-elite", StoryLine[]> = {
   "w1-elite": [
     ["foe", "Well, well! If it isn't Gobzilla JUNIOR! Lost your big brother, shrimp?"],
     ["me", "Brutus Beetroot! I'm a STRAWBERRY, ya big turnip!"],
@@ -140,5 +159,10 @@ export const NEMESIS: Record<"w1-elite" | "w2-elite" | "w3-elite" | "w4-elite" |
     ["foe", "Psst, Gobzilla! Roast Brute up the ridge. Way bigger than me. And I was BIG."],
     ["me", "Brutus! You came all this way to help?!"],
     ["foe", "Just warning ya! Nobody beets my favorite rival except ME. Hmph!"],
+  ],
+  "w7-elite": [
+    ["foe", "Psst, Gobzilla! Burger Brute up on the plateau. Three patties tall! I counted. Twice."],
+    ["me", "Brutus! You came to the BBQ too?!"],
+    ["foe", "Beets never get invited to BBQs. Just squash it, okay? Not that I'm ROOTING for ya. Hmph!"],
   ],
 };

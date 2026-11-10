@@ -180,3 +180,13 @@ and Señor Sting (`nhornet`, Triple Sting `stingers`). New skill kinds: `pitboun
 `gust`, `drop`, `screech`, `volley`, ults `guacflood`, `fiesta`. Rigs: Avocadrake holds its weapon in a foot, Tacowl flies
 (wings tucked behind the shell, weapon in a talon). Gear w-/a-/k-avo, w-/a-/k-owl, 2 signature legendaries each.
 Art: `node scripts/newkaiju-jobs.mjs`.
+
+## World 7: The Backyard BBQ + Bubblegumbo (9) and Velvaroo (18)
+WORLDS[6] (Lv 71-80, level cap 80): wasp / corn / ketchup / beetle / charcoal / patty (+ sprout soldiers), lawn
+`sprinkler` hazard (launch + slick puddle), boss **Baron Brussels** (`brussels`: stink puddles, sprout summons, charcoal
+rain). Stage generation keeps hazards away from bouncy sponges (bot loop fix). Fetch timer 100 s from World 7.
+Bubblegumbo: `bubbletrap` (world.bubbles: sealed monsters are helpless, then pop), ricocheting `gumball`, two-way
+`trumpet`, ult `megabubble`; nemesis Brittle (`nmouse`, signature `scurry`). Velvaroo: landing-driven `hops`, `flurry`,
+aimed `cakebomb` (frosting slow patch), ult `tko`; nemesis Rocky Road (`ngorilla`, signature `haymaker`, a danger move).
+Unlocks: Baron Brussels / 25 Burger Brutes. Briefs: docs/WORLD7-BRIEF.md, docs/NEWKAIJU2-BRIEF.md. Art: `node scripts/w7-jobs.mjs [stills]`,
+`node scripts/newkaiju2-jobs.mjs`. Screens: `node scripts/w7-shot.mjs`.

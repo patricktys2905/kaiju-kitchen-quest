@@ -58,6 +58,11 @@ export const WORLDS: WorldDef[] = [
     baseLv: 61, power: 3.4, pool: [[1, 'fork'], [1, 'napkin'], [2, 'candle'], [3, 'gravy'], [4, 'teapot'], [7, 'roast']], hazard: 'wax', mimic: 'mimic', elite: 'roast', boss: 'stale',
     names: ['Tablecloth Trail', 'Placemat Plains', 'Candelabra Crossing', 'Gravy Boat Bay', 'Roast Ridge', 'Teacup Terrace', 'Napkin Fold Fort', 'Silverware Siege', 'Chandelier Climb', 'The Head of the Table'],
   },
+  {
+    id: 7, name: 'The Backyard BBQ', blurb: 'Sizzling, smoky and full of ants.', bg: 'bg-far-backyard', mid: 'bg-mid-backyard', tile: 'tile-backyard', platTint: 0xe8d0a8, bossBg: 'bg-far-grill',
+    baseLv: 71, power: 3.8, pool: [[1, 'beetle'], [1, 'wasp'], [2, 'ketchup'], [3, 'charcoal'], [4, 'corn'], [7, 'patty']], hazard: 'sprinkler', mimic: 'mimic', elite: 'patty', boss: 'brussels',
+    names: ['Lawn Launch', 'Hose Highway', 'Sprinkler Springs', 'Paddling Pool Pier', 'Patty Plateau', 'Picnic Table Peak', 'Flowerpot Fort', 'Cooler Canyon', 'Charcoal Climb', 'The Grill Summit'],
+  },
 ];
 
 /** Small seeded RNG so a stage is always laid out the same way. */
@@ -135,13 +140,14 @@ export function genStage(w: WorldDef, n: number, o: { seed?: number; lv?: number
       hazards.push(hazardAt(w.hazard, hx, r() * 3));
     }
   }
+  const inter = interactive(w, n, width, platforms, ladders, r);
   return {
     id, world: w.id, num: id, name: o.name ?? w.names[n - 1], bg: w.bg, mid: w.mid, tile: w.tile, platTint: w.platTint, width, groundY: G,
     lv: [lvLo, n === 5 ? lvHi + 1 : lvHi], par: Math.round(25 + count * 5 + width / 70), rec: lvLo,
-    platforms, ladders, mobs, hazards, ...interactive(w, n, width, platforms, ladders, r),
+    platforms, ladders, mobs, ...inter, hazards: hazards.filter(h => !(inter.props ?? []).some(p => p.kind === 'sponge' && Math.abs(p.x - h.x) < 200)), // never a hazard by a bouncy sponge (it can loop you up to the ledge forever)
     ...setPieces(w, n, width, platforms, mobs, lvLo, lvHi),
     // a goal on stages 4 / 6 / 8 of every world
-    objective: n === 4 ? { kind: 'escort' } : n === 6 ? { kind: 'fetch', t: w.id >= 5 ? 90 : 75, x: width - 260 } : n === 8 ? { kind: 'survive', t: 45 } : undefined,
+    objective: n === 4 ? { kind: 'escort' } : n === 6 ? { kind: 'fetch', t: w.id >= 7 ? 100 : w.id >= 5 ? 90 : 75, x: width - 260 } : n === 8 ? { kind: 'survive', t: 45 } : undefined,
   };
 }
 
@@ -253,6 +259,7 @@ function hazardAt(kind: HazardKind, x: number, offset: number): Hazard {
     case 'ice': return { kind, x, w: 260, period: 1, on: 1, offset };
     case 'tap': return { kind, x, w: 70, period: 3.4, on: 1.1, offset };
     case 'wax': return { kind, x, w: 80, period: 3.6, on: 0.4, offset };
+    case 'sprinkler': return { kind, x, w: 80, period: 3.4, on: 0.7, offset };
   }
 }
 

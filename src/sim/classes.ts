@@ -129,6 +129,20 @@ export const CLASSES: HeroClass[] = [
     combo: [A({ dur: 0.26, hit: [0.06, 0.14], reach: 64 }), A({ dur: 0.26, hit: [0.06, 0.14], reach: 68 }), A({ dur: 0.42, hit: [0.12, 0.24], reach: 88, dmg: 1.8, kx: 300, ky: -360, lunge: 140, stun: 0.55 })],
     air: A({ dur: 0.28, reach: 72, h: 76, dmg: 1.15, kx: 140, ky: 260 }),
   },
+  {
+    species: 9, name: 'Bubblegumbo', role: 'Gum tank: bubble traps, ricocheting gumballs, trumpet shockwaves',
+    hp: 162, atk: 11, speed: 225, jump: 660,
+    base: { str: 6, dex: 2, int: 4, vit: 8 }, grow: { str: 1, dex: 0, int: 1, vit: 3 },
+    combo: [A({ dur: 0.36, hit: [0.1, 0.2], reach: 72 }), A({ dur: 0.36, hit: [0.1, 0.2], reach: 74, dmg: 1.15 }), A({ dur: 0.56, hit: [0.2, 0.34], reach: 96, h: 84, dmg: 2.3, kx: 460, ky: -320, lunge: 70, stun: 0.75 })],
+    air: A({ dur: 0.36, reach: 72, h: 76, dmg: 1.15, kx: 160, ky: 240 }),
+  },
+  {
+    species: 18, name: 'Velvaroo', role: 'Hopping boxer: triple hops, punch flurries, cupcake bombs',
+    hp: 142, atk: 12, speed: 250, jump: 790,
+    base: { str: 7, dex: 5, int: 2, vit: 6 }, grow: { str: 2, dex: 1, int: 0, vit: 2 },
+    combo: [A({ dur: 0.24, hit: [0.05, 0.13], reach: 64 }), A({ dur: 0.24, hit: [0.05, 0.13], reach: 66 }), A({ dur: 0.42, hit: [0.12, 0.24], reach: 90, dmg: 2, kx: 420, ky: -380, lunge: 120, stun: 0.6 })],
+    air: A({ dur: 0.28, reach: 70, h: 74, dmg: 1.15, kx: 160, ky: 300 }),
+  },
 ];
 
 export function classOf(species: number): HeroClass {

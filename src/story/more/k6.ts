@@ -51,6 +51,14 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w6-s7": [["me", "Napkin Fold Fort! A castle made of napkins! Ooh, can we keep it? It's so wipeable!"], ["me", "Secret chest on a high ledge! Sponge, our most loyal subject, you know the drill! BOING!"]],
   "w6-s8": [["me", "Silverware Siege! Decree Number Twenty: forks are for EATING, not for poking kings!"], ["me", "Forty-five seconds! A lord never flees. A lord steams HEROICALLY! Again!"]],
   "w6-s9": [["lo2", "Hark! Climbest thou my chandelier, little king? Up here thou art but a wee dumpling!"], ["me", "A wee dumpling with a BIG crown! Well, a medium crown. Made of dough! Still counts!"]],
+  // World 7: The Backyard BBQ.
+  "w7-s2": [["me", "Hose Highway! A royal water slide! Wait, why is THAT rolling pin here too?! Does it follow the king everywhere?"], ["n", "Uh-oh! It's a big fan, Your Majesty!"], ["me", "Royal retreat! To the RIGHT! Gracefully! Okay, QUICKLY!"]],
+  "w7-s3": [["me", "Sprinkler Springs! Decree Number Twenty-Four: no fwooshing the king! FWOOSH! Hmph. Nobody listens."], ["me", "Pull the lever! Royal rolling pin, mow the royal lawn! Nice and flat!"]],
+  "w7-s4": [[10, "Hmph. Dumpling. This Crumblet wants a swim. Walk it round the Paddling Pool Pier. Don't lose it."], ["me", "Heir number seven! Behold, small one, the royal pool! Stay behind the royal belly. It floats! Boing!"]],
+  "w7-s6": [["me", "Picnic Table Peak! A royal picnic! Sandwiches, lemonade, and a Recipe Scroll for pudding!"], ["lo2", "Fie! Thou art not invited to this picnic either, dumpling! The Baron shall grill thee!"], ["me", "Decree Number Twenty-Five: we're ALWAYS invited! Grab the scroll and hold the table!"]],
+  "w7-s7": [["me", "Flowerpot Fort! A castle of flowerpots, and every tower has a daisy on top! We LOVE it!"], ["me", "Secret chest on a high ledge! Sponge, our most loyal subject, launch the king! BOING!"]],
+  "w7-s8": [[18, "In THIS corner, a teeny dumpling king! Ding ding! Need a sparring partner, Your Shortness?"], ["me", "Your SHORTNESS?! Decree Number Twenty-Six: hold the canyon forty-five seconds, THEN you may bow!"], [18, "Bow? I'll HOP! Let's go, champ! We knead to win!"]],
+  "w7-s9": [["n", "From the Grill Summit, a voice booms: \"Sprout Soldiers, FORM UP! The dumpling goes on the grill!\""], ["me", "The GRILL? We're steamed, not grilled! Decree Number... oh, never mind, just CLIMB!"]],
 };
 
 export const QUIPS: Record<QuipKind, string[]> = {

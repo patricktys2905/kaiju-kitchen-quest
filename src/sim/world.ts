@@ -347,6 +347,7 @@ export class World {
     this.cur = this.heroes[0];
     this.stepHazards(dt);
     this.stepZones(dt);
+    this.stepBubbles(dt);
     this.stepProps(dt);
     for (const h of this.heroes) h.landed = false;
     this.cur = this.heroes[0];
@@ -719,6 +720,35 @@ export class World {
       case 'firefloor':
         for (const m of this.targetsNear(h.x, h.y, sk.reach, 300)) this.zones.push({ id: nextId++, x: m.x, y: m.y, w: 120, t: 3, tick: 0.4, next: 0, dmg: atk * sk.dmg, kind: 'fire' });
         break;
+      case 'bubbletrap':
+        for (const m of this.targetsNear(h.x + h.face * 60, h.y, sk.reach, sk.h).slice(0, sk.n ?? 2)) { this.damageMob(m, atk * sk.dmg * 0.2, h.face, { kx: 0, ky: 0, stun: 0.2 }, true); this.bubble(m, 2.5, atk * sk.dmg, h, sk.kx, sk.ky); }
+        break;
+      case 'megabubble':
+        this.events.push({ t: 'shock', x: h.x, y: h.y - 30, r: 300 });
+        for (const m of this.targetsNear(h.x, h.y, sk.reach, sk.h)) this.bubble(m, 3, atk * sk.dmg, h, sk.kx, sk.ky);
+        break;
+      case 'gumball':
+        for (let i = 0; i < (sk.n ?? 3); i++) this.shots.push({ id: nextId++, x: h.x + h.face * 30, y: h.y - 34 - i * 14, vx: h.face * (520 - i * 40), vy: -60 + i * 40, t: -0.08 * i, dmg: atk * sk.dmg, hit: new Set(), from: 'hero', kx: sk.kx, ky: sk.ky, pierce: false, kind: 'gumball', r: 16, bounces: 0 });
+        break;
+      case 'trumpet':
+        this.events.push({ t: 'shock', x: h.x + h.face * 30, y: h.y - 40, r: 90 });
+        for (const d of [-1, 1]) this.shots.push({ id: nextId++, x: h.x + d * 30, y: h.y - 16, vx: d * 520, vy: 0, t: 0, dmg: atk * sk.dmg, hit: new Set(), from: 'hero', kx: sk.kx, ky: sk.ky, pierce: true, kind: 'trumpet', r: 34 });
+        break;
+      case 'cakebomb': {
+        const tgt = this.mobs.filter(m => m.state !== 'dead' && !m.under && Math.sign(m.x - h.x) === h.face && Math.abs(m.x - h.x) < 460 && Math.abs(m.y - h.y) < 120).sort((p, q) => Math.abs(p.x - h.x) - Math.abs(q.x - h.x))[0];
+        const dx = h.face * clamp(tgt ? Math.abs(tgt.x - h.x) - 24 : 240, 40, 440);
+        this.shots.push({ id: nextId++, x: h.x + h.face * 24, y: h.y - 56, vx: dx / 0.74, vy: -440, t: 0, dmg: atk * sk.dmg, hit: new Set(), from: 'hero', kx: sk.kx, ky: sk.ky, pierce: false, g: 1300, kind: 'cupcake', r: 16 });
+        break;
+      }
+      case 'tko': {
+        const tgt = this.targetsNear(h.x, h.y, sk.reach, sk.h).sort((a, b) => b.maxHp - a.maxHp)[0];
+        if (tgt) {
+          h.x = clamp(tgt.x - h.face * (MOBS[tgt.kind].w / 2 + 30), 20, this.stage.width - 20); h.y = tgt.y; h.face = tgt.x > h.x ? 1 : -1;
+          this.events.push({ t: 'shock', x: tgt.x, y: tgt.y - 40, r: 120 });
+          this.damageMob(tgt, atk * sk.dmg, h.face, { kx: sk.kx, ky: sk.ky, stun: 1.5 }, true);
+        }
+        break;
+      }
       case 'pitbounce':
         this.shots.push({ id: nextId++, x: h.x + h.face * 30, y: h.y - 50, vx: h.face * 430, vy: -360, t: 0, dmg: atk * sk.dmg, hit: new Set(), from: 'hero', kx: sk.kx, ky: sk.ky, pierce: true, g: 1400, kind: 'pit', r: 18, bounces: 0, tx: sk.n ?? 3 });
         break;
@@ -1116,6 +1146,23 @@ export class World {
           const heal = (this.dealt - before) * (sk.leech ?? 0.3); h.hp = Math.min(h.d.maxHp, h.hp + heal);
         }
         break;
+      case 'hops': { // three hops: jump, land with a shockwave, jump again
+        h.vx = h.ticks < 6 ? h.face * 330 : approach(h.vx, 0, 3000 * dt);
+        if (h.ground && h.ticks % 2 === 1) { h.ticks++; h.hitIds = new Set(); this.events.push({ t: 'shock', x: h.x, y: h.y, r: sk.reach }); mk(h.x, sk.reach * 1.6, sk.h); }
+        if (h.ground && h.ticks % 2 === 0 && h.ticks < 6) { h.vy = -470; h.ground = false; h.on = null; h.ticks++; }
+        break;
+      }
+      case 'flurry': { // six quick punches, the last one big
+        h.vx = approach(h.vx, h.face * 80, 2000 * dt);
+        const punch = Math.floor(q * 6);
+        if (punch > h.ticks - 1 && punch < 6) {
+          h.ticks = punch + 1; h.hitIds = new Set();
+          const last = punch === 5;
+          this.hitBox(h.x + h.face * sk.reach / 2, h.y, sk.reach, sk.h, sk.dmg * h.skillMul * (last ? 2.5 : 1), true, { kx: last ? 460 : sk.kx, ky: last ? -340 : sk.ky, stun: last ? 0.8 : 0.3 }, h.hitIds);
+          this.events.push({ t: 'swing', step: punch % 2 });
+        }
+        break;
+      }
       case 'gust':
         h.vx = approach(h.vx, 0, 3000 * dt);
         if (q > 0.25 && !h.ticks) { h.ticks = 1; this.events.push({ t: 'shock', x: h.x + h.face * 80, y: h.y - 30, r: 120 }); this.hitBox(h.x + h.face * sk.reach / 2, h.y, sk.reach, sk.h, sk.dmg * h.skillMul, true, { kx: sk.kx, ky: sk.ky, stun: 0.9 }, h.hitIds); }
@@ -1239,6 +1286,28 @@ export class World {
 
   /** total damage dealt to monsters (drain measures a skill's damage with it) */
   dealt = 0;
+
+  /** Bubblegumbo's gum bubbles: a sealed monster is helpless until it pops */
+  bubbles: { id: number; t: number; dmg: number; owner: number; kx: number; ky: number }[] = [];
+  private bubble(m: Mob, t: number, dmg: number, h: Hero, kx: number, ky: number): void {
+    if (m.state === 'dead' || this.bubbles.some(b => b.id === m.id)) return;
+    this.bubbles.push({ id: m.id, t, dmg, owner: h.idx, kx, ky });
+  }
+  private stepBubbles(dt: number): void {
+    for (const b of this.bubbles) {
+      const m = this.mobs.find(o => o.id === b.id);
+      b.t -= dt;
+      if (!m || m.state === 'dead') { b.t = -1; continue; }
+      if (MOBS[m.kind].brain === 'boss') m.slow = Math.max(m.slow, 0.2); else { m.frozen = Math.max(m.frozen, 0.1); m.vx = 0; }
+      if (b.t <= 0) { // POP
+        this.cur = this.heroes[b.owner] ?? this.heroes[0];
+        this.events.push({ t: 'boom', x: m.x, y: m.y - MOBS[m.kind].h / 2 });
+        this.damageMob(m, b.dmg, this.cur.face, { kx: b.kx, ky: b.ky, stun: 0.6 }, true);
+      }
+    }
+    this.cur = this.heroes[0];
+    this.bubbles = this.bubbles.filter(b => b.t > 0);
+  }
 
   /** a proc's own hits don't set off more procs */
   private procLock = false;
@@ -1595,6 +1664,8 @@ export class World {
         case 'roar': case 'lure': return ad < 260;
         case 'skewer': return ad < 300;
         case 'yank': return ad > 110 && ad < 340;
+        case 'scurry': return ad < 320;
+        case 'haymaker': return ad < 190;
         case 'vanish': return ad > 120;
         case 'summon': return kids < 3;
         case 'shell': return m.shellT <= 0;
@@ -1707,6 +1778,8 @@ export class World {
         this.events.push({ t: 'boom', x: m.x, y: m.y });
         break;
       case 'shell': m.shellT = 4; break;
+      case 'scurry': m.vx = m.face * 720; m.hitDone = false; break;
+      case 'haymaker': m.hitDone = false; break;
       case 'yank': // El Nacho scoops you toward him like a chip in dip
         if (Math.abs(h.x - m.x) < 360 && Math.abs(h.y - m.y) < 120 && h.state !== 'down' && h.inv <= 0) { h.vx = Math.sign(m.x - h.x) * 640; h.vy = -180; h.ground = false; h.on = null; this.events.push({ t: 'shock', x: h.x, y: h.y, r: 50 }); }
         break;
@@ -1771,6 +1844,14 @@ export class World {
     const touch = (reach: number, hgt = 60) => Math.abs(h.x - (m.x + m.face * reach / 2)) < reach / 2 + HERO_W / 2 && h.y > m.y - def.h - 10 && h.y - hgt < m.y + 4;
     switch (m.move) {
       case 'heal': case 'call': case 'snipe': case 'lob': case 'fanshot': case 'rootspike': case 'heatwave': case 'puddle': case 'trap': case 'summon': case 'boomerang': case 'roar': case 'shell': case 'yank': case 'stingers':
+        if (m.t > 0.5) this.endAttack(m);
+        break;
+      case 'scurry': // Brittle darts right past you, nipping on the way
+        if (!m.hitDone && touch(40, 80)) { m.hitDone = true; this.hurtHero(Math.round(m.atk * 0.8), m.face, m); }
+        if (m.t > 0.55) { m.vx = 0; this.endAttack(m); }
+        break;
+      case 'haymaker': // Rocky Road's big one: huge knockback
+        if (!m.hitDone && m.t > 0.08) { m.hitDone = true; if (touch(def.range + 40, 90)) { this.hurtHero(Math.round(m.atk * 1.6), m.face, m); if (h.state !== 'down') { h.vx = m.face * 720; h.vy = -420; h.ground = false; h.on = null; } } }
         if (m.t > 0.5) this.endAttack(m);
         break;
       case 'vanish': // the backstab right after appearing
@@ -1982,6 +2063,7 @@ export class World {
         if (Math.floor(s.t / 0.25) !== Math.floor((s.t - sdt) / 0.25)) s.hit = new Set();
         for (const m of this.targetsNear(s.x, s.y + 30, 140, 90)) if (MOBS[m.kind].brain !== 'boss') m.x += Math.sign(s.x - m.x) * 160 * sdt;
       }
+      if (s.kind === 'gumball') { s.vy += 500 * sdt; const fl = s.vy > 0 ? this.floorBelow(s.x, s.y - s.vy * sdt, s.y, false) : null; if (fl) { s.y = fl.y - 2; s.vy = -Math.abs(s.vy) * 0.7; } }
       if (s.kind === 'gearroll' && Math.floor(s.t / 0.3) !== Math.floor((s.t - sdt) / 0.3)) s.hit = new Set(); // bumps again
       if (s.kind === 'snowball') { s.r = (s.r ?? 14) + 22 * sdt; s.dmg *= 1 + 0.5 * sdt; }
       if (s.g) { // lobbed: falls; berries become mines, mustard becomes goo, meteors burst
@@ -1992,6 +2074,7 @@ export class World {
           if (s.kind === 'berry') this.mines.push({ id: nextId++, x: s.x, y: f.y, t: 0.2, dmg: s.dmg, kx: s.kx, ky: s.ky });
           else if (s.kind === 'goo') this.zones.push({ id: nextId++, x: s.x, y: f.y, w: 80, t: 4, tick: 0.1, next: 0, dmg: s.dmg, kind: 'goo', hit: new Set() });
           else if (s.kind === 'pit' && (s.bounces ?? 0) < (s.tx ?? 3)) { s.bounces = (s.bounces ?? 0) + 1; s.y = f.y - 2; s.vy = -440 * Math.pow(0.78, s.bounces); s.hit = new Set(); this.events.push({ t: 'bounce', x: s.x, y: f.y }); continue; }
+          else if (s.kind === 'cupcake') { this.events.push({ t: 'boom', x: s.x, y: f.y }); for (const m of this.targetsNear(s.x, f.y, 90, 70)) this.damageMob(m, s.dmg, Math.sign(m.x - s.x) || 1, { kx: s.kx, ky: s.ky, stun: 0.6 }, true); this.zones.push({ id: nextId++, x: s.x, y: f.y, w: 160, t: 4, tick: 0.4, next: 0, dmg: 0, kind: 'ice', owner: h.idx }); }
           else if (s.kind === 'salsa' || s.kind === 'candy') { this.events.push({ t: 'boom', x: s.x, y: f.y }); for (const m of this.targetsNear(s.x, f.y, s.kind === 'salsa' ? 70 : 40, 60)) if (!s.hit.has(m.id)) { this.damageMob(m, s.dmg, Math.sign(m.x - s.x) || 1, { kx: s.kx, ky: s.ky, stun: 0.6 }, true); if (s.kind === 'salsa') this.applyFx(m, ['burn'], h); } }
           else if (s.kind === 'gearlob') { this.events.push({ t: 'shock', x: s.x, y: f.y, r: 90 }); for (const m of this.targetsNear(s.x, f.y, 90, 70)) { this.damageMob(m, s.dmg * gearVs(m), Math.sign(m.x - s.x) || 1, { kx: s.kx, ky: s.ky, stun: 0.7 }, true); if (s.fx) this.applyFx(m, s.fx, h); } }
           else if (s.kind === 'meteor') { this.events.push({ t: 'shock', x: s.x, y: f.y, r: 70 }); for (const m of this.targetsNear(s.x, f.y, 70, 60)) if (!s.hit.has(m.id)) this.damageMob(m, s.dmg, Math.sign(m.x - s.x) || 1, { kx: s.kx, ky: s.ky, stun: 0.6 }, true); }
@@ -2006,6 +2089,7 @@ export class World {
           s.hit.add(m.id);
           this.damageMob(m, s.dmg * (s.icon ? gearVs(m) : 1), Math.sign(s.vx) || h.face, { kx: s.kx, ky: s.ky, stun: 0.6 }, true);
           if (s.fx) this.applyFx(m, s.fx, h);
+          if (s.kind === 'gumball' && (s.bounces ?? 0) < 3) { s.bounces = (s.bounces ?? 0) + 1; s.vx = -s.vx * 0.9; s.vy = -200; s.hit = new Set([m.id]); this.events.push({ t: 'bounce', x: s.x, y: s.y }); break; }
           if (s.kind === 'berry') this.events.push({ t: 'boom', x: s.x, y: s.y });
           if (s.kind === 'goo') this.glue(m);
           if (!s.pierce) { s.t = 99; break; }
@@ -2028,17 +2112,18 @@ export class World {
       else { const c = (this.time + z.offset) % z.period; st = c < z.on ? 'on' : c > z.period - 0.9 ? 'warn' : 'off'; }
       if (st !== z.state) { if (st === 'on') z.hit.clear(); z.state = st; if (z.kind !== 'ice') this.events.push({ t: 'hazard', i, on: st === 'on' }); }
       if (st !== 'on' || z.kind === 'ice') return;
-      const reachUp = z.kind === 'vent' ? 110 : z.kind === 'drop' || z.kind === 'wax' ? 70 : z.kind === 'tap' ? 900 : 60;
+      if (z.kind === 'sprinkler' && z.hit.size === 0 && !this.puddles.some(p => Math.abs(p.x - z.x) < 10)) this.puddles.push({ x: z.x, y: G, t: 3, kind: 'slick', w: 90 });
+      const reachUp = z.kind === 'vent' || z.kind === 'sprinkler' ? 110 : z.kind === 'drop' || z.kind === 'wax' ? 70 : z.kind === 'tap' ? 900 : 60;
       if (z.kind === 'wax' && z.hit.size === 0 && !this.puddles.some(p => Math.abs(p.x - z.x) < 10)) this.puddles.push({ x: z.x, y: G, t: 3, kind: 'slow', w: 70 });
       const inZone = (x: number, y: number) => Math.abs(x - z.x) < z.w / 2 && y >= G - reachUp;
-      const pct = (z.kind === 'burner' ? 0.12 : z.kind === 'vent' ? 0.06 : z.kind === 'tap' ? 0.07 : z.kind === 'wax' ? 0.11 : 0.15) * (z.phase2 ? 0.5 : 1);
+      const pct = (z.kind === 'burner' ? 0.12 : z.kind === 'vent' ? 0.06 : z.kind === 'tap' ? 0.07 : z.kind === 'wax' ? 0.11 : z.kind === 'sprinkler' ? 0.05 : 0.15) * (z.phase2 ? 0.5 : 1);
       for (const h of this.heroes) {
         this.cur = h;
         const key = -1 - h.idx;
         if (!z.hit.has(key) && h.state !== 'down' && inZone(h.x, h.y) && (h.inv <= 0 || this.canPerfect())) {
           z.hit.add(key);
           this.hurtHero(h.d.maxHp * pct, Math.sign(h.x - z.x) || 1, undefined, true);
-          if (z.kind === 'vent' && (h.state as string) !== 'down') { h.vy = -900; h.ground = false; h.on = null; }
+          if ((z.kind === 'vent' || z.kind === 'sprinkler') && (h.state as string) !== 'down') { h.vy = z.kind === 'sprinkler' ? -760 : -900; h.ground = false; h.on = null; }
           if (z.kind === 'tap' && (h.state as string) !== 'down') { h.vx = (Math.sign(h.x - z.x) || 1) * 300; h.vy = Math.max(h.vy, 200); }
         }
       }
@@ -2050,7 +2135,7 @@ export class World {
         const dmg = Math.round(m.maxHp * 0.15);
         m.hp -= dmg; m.flash = 0.12; m.hurtShown = 3;
         this.events.push({ t: 'hit', x: m.x, y: m.y - md.h * 0.6, dmg, crit: false, target: 'mob' });
-        if (z.kind === 'vent') { m.vy = -700; m.ground = false; m.on = null; }
+        if (z.kind === 'vent' || z.kind === 'sprinkler') { m.vy = -700; m.ground = false; m.on = null; }
         if (m.hp <= 0) this.killMob(m);
       }
     });
@@ -2158,7 +2243,7 @@ export function rankOf(run: RunStats, par: number): { rank: 'S' | 'A' | 'B' | 'C
 /** hero projectiles that live longer than a bolt */
 /** Bosses shrug off thrown kitchenware a bit (gear skills deal 40% to them). */
 const gearVs = (m: Mob) => (MOBS[m.kind].brain === 'boss' ? 0.4 : 1);
-const LONG_SHOTS = new Set(['guacwave', 'gearroll', 'boomerang', 'homing', 'twister', 'snowball', 'wave', 'reflect']);
+const LONG_SHOTS = new Set(['gumball', 'trumpet', 'guacwave', 'gearroll', 'boomerang', 'homing', 'twister', 'snowball', 'wave', 'reflect']);
 const NEW_BRAINS = new Set(['healer', 'summoner', 'charger', 'sniper', 'turret', 'burrower', 'mimic']);
 
 const gbCache = new WeakMap<AttackDef[], AttackDef>(), lnCache = new WeakMap<AttackDef[], AttackDef>();

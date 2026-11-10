@@ -102,8 +102,26 @@ export const ARC: Record<string, StoryLine[]> = {
     ["me", "Littlest wants to see the world? Fine. We see it together. Hold on to my ear, kiddo."],
     ["me", "Next stop, the Backyard. Littlest calls it \"the big outside\". Hmph. Cute. Don't tell anybody I said cute."],
   ],
+  "w7-open": [
+    ["n", "The Backyard! Littlest squeaks at its very first sky, and Bluebeary's ears go all wiggly."],
+    ["me", "The big outside. Grass up to my nose. Stay on the ear, kiddo. Ear's the safe seat."],
+    ["me", "Smell that? Barbecue. Somebody wants to grill my crumbs? Hmph. Somebody's getting grilled FIRST."],
+  ],
+  "w7-boss": [
+    ["boss", "ATTEN-TION, bear! I am BARON BRUSSELS! That little muffin is hereby drafted into my Sprout Soldiers!"],
+    ["me", "Drafted? It's three inches tall and it's past its nap time."],
+    ["boss", "Then it shall nap on my GRILL! Pee-yew? Nonsense! That is the smell of VICTORY!"],
+    ["me", "Smells like gym socks. Littlest, hold your nose. Papa's busy. GRRRAAAH!"],
+  ],
+  "w7-after": [
+    ["n", "KA-BLAM! Baron Brussels tumbles off the grill and goes rolling across the lawn!"],
+    ["boss", "Retreat! Always left on the PLATE! The Mystery Meatloaf will deal with you in the Garden, bear!"],
+    ["boss", "Nobody knows what's in him! Not even HIM! Hmph!"],
+    ["me", "Mystery meat. Hmph. Littlest, that's a no-eat food."],
+    ["me", "Littlest wants to see the Garden now. Fine. Ear seat, buckle up. Nap after. Okay, nap DURING."],
+  ],
 };
-export const NEMESIS: Record<"w1-elite" | "w2-elite" | "w3-elite" | "w4-elite" | "w5-elite" | "w6-elite", StoryLine[]> = {
+export const NEMESIS: Record<"w1-elite" | "w2-elite" | "w3-elite" | "w4-elite" | "w5-elite" | "w6-elite" | "w7-elite", StoryLine[]> = {
   "w1-elite": [
     ["foe", "Caw! Shiny crumbs, crumbly crumbs! Finders keepers, caw-caw!"],
     ["me", "Those \"crumbs\" are my Crumblets, bird."],
@@ -133,5 +151,10 @@ export const NEMESIS: Record<"w1-elite" | "w2-elite" | "w3-elite" | "w4-elite" |
     ["foe", "Caw! Fuzzy! Roast Brute up the ridge. Smells like Sunday dinner, hits like a truck!"],
     ["me", "Bird. You're supposed to be home watching the kids."],
     ["foe", "Kids are napping! Somebody's gotta watch YOUR back. Caw! Don't make it weird."],
+  ],
+  "w7-elite": [
+    ["foe", "Caw! Fuzzy! Burger Brute on the plateau. Three patties, extra cheese, ZERO manners!"],
+    ["me", "Bird. Who's watching the kids?"],
+    ["foe", "Chocomunch is on nap duty! He keeps saying \"Me watch.\" It's working! Caw! Now go!"],
   ],
 };

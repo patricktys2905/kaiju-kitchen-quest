@@ -56,6 +56,15 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w6-s7": [["me", "Napkin Fold Fort! Secret chest way up high. High is STILL my worst direction!"], ["me", "Good thing sponges come free with dinner. Boing! World 6 key, pass it over!"]],
   "w6-s8": [["me", "Silverware Siege! The whole cutlery drawer wants a piece of me! Forty-five seconds, go!"], ["foe", "Oi, Gobzilla! Lure 'em under the candles! Hot wax makes 'em SPLAT! Not that I'm watching!"], ["me", "Brutus is my biggest fan now! Stomp count, here we GO!"]],
   "w6-s9": [["me", "Chandelier Climb! Whoa, it's like a sparkly upside-down tree!"], ["lo2", "Hah! Climb, little crumb! At the Head of the Table, thou shalt be DESSERT!"], ["me", "Dessert?! I'm the MAIN COURSE! Wait, no. I'm the HERO!"]],
+
+  // World 7: The Backyard BBQ.
+  "w7-s2": [["me", "Hose Highway! Stomp count: one, two... hey, why's the hose wiggling?"], ["n", "Uh-oh! A giant rolling pin comes bouncing down the hose!"], ["me", "A rolling pin at a BBQ?! Somebody wants to make a burger outta ME! RUN!"]],
+  "w7-s3": [["me", "Sprinkler Springs! FWOOSH! Whoa, I'm flying! Gobzilla Large is also Gobzilla AIRBORNE!"], ["me", "Lever up top drops a rolling pin. Squash 'em flat as burger patties! RAWR!"]],
+  "w7-s4": [[10, "Hmph. Strawberry. Stray Crumblet out on Paddling Pool Pier. Walk it to the exit."], ["me", "Gobzilla Medium, babysitter class, poolside edition! Hold my leaf, and no cannonballs!"], [10, "Watch the sprinklers. And the wasps. And the kid. Mostly the kid. Hmph."]],
+  "w7-s6": [["me", "Picnic Table Peak! Recipe Scroll at the far end, then hold out! Ooh, a potato salad mountain!"], ["lo2", "Hah! Baron Brussels shall cook thee WELL DONE, berry!"], ["me", "Well done? Aw, thanks! I DID do well! RAWR!"]],
+  "w7-s7": [["me", "Flowerpot Fort! Secret chest on a high ledge. High is STILL my worst direction!"], [9, "Ooh, a little strawberry! Elephants never forget a face! *POP* Um, have we met?"], ["me", "Not yet! I'm Gobzilla Large! Almost! Boing! World 7 key, you're mine!"]],
+  "w7-s8": [["me", "Cooler Canyon! Forty-five seconds of monster waves. Brrr, it's like the Fridge all over again!"], [18, "In THIS corner, the teeny strawberry with the great big RAWR! Ding ding! Give 'em the old one-two!"], ["me", "One-two STOMP! Stomp count, here I come!"]],
+  "w7-s9": [["me", "Charcoal Climb! Ow ow, hot rocks! Charcoal Imps keep popping up like toast!"], ["n", "From the Grill Summit, a voice booms: \"ATTEN-TION, berry! Report for sprout inspection!\""], ["me", "Nope! Big brother says strawberries are DESSERT! RAWR!"]],
 };
 
 export const QUIPS: Record<QuipKind, string[]> = {

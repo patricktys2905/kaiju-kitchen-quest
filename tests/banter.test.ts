@@ -11,7 +11,7 @@ const SPEAKERS = new Set<unknown>(['me', 'n', 'foe', 'mold', 'lo', 'lo2', ...CLA
 
 describe('story everywhere', () => {
   it('every kaiju has a short scene before stages 2-4 and 6-9 of every world (1-3 lines, sensible length, valid speakers)', () => {
-    for (const c of CLASSES) for (const w of [1, 2, 3, 4, 5, 6]) for (const n of [2, 3, 4, 6, 7, 8, 9]) {
+    for (const c of CLASSES) for (const w of [1, 2, 3, 4, 5, 6, 7]) for (const n of [2, 3, 4, 6, 7, 8, 9]) {
       const key = `w${w}-s${n}`, lines = STORIES[c.species].beats[key];
       expect(lines, `${c.name} ${key}`).toBeDefined();
       expect(lines.length, `${c.name} ${key}`).toBeGreaterThanOrEqual(1);

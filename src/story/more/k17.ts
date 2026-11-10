@@ -51,6 +51,14 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w6-s7": [["me", "Napkin Fold Fort! Napkins are like snow, but folded!"], ["me", "Key chest up on the high ledge. Sponge, my old pal! Boing!"]],
   "w6-s8": [["lo2", "Charge, my silverware! Make yon penguin into dessert!"], ["me", "Forty-five seconds? I'll slide in circles round the plates. Circles STILL count!"]],
   "w6-s9": [["me", "Chandelier Climb! Ooh, shiny! Like icicles, but warmer. Much warmer."], ["lo2", "Forsooth! A cookies-and-cream bird! I shall dunk thee in my tea, varlet!"], ["me", "Nobody dunks THIS penguin! Still true! Wheee!"]],
+  // World 7: The Backyard BBQ.
+  "w7-s2": [["me", "A garden hose! A long green slide! Wheeee!"], ["n", "RUMBLE! A giant rolling pin comes bouncing down right behind the penguin!"], ["me", "A race?! I LOVE races! Wait, I can't stop at the finish! Wheeee!"]],
+  "w7-s3": [["n", "FSSSH! Sprinklers burst up all over Sprinkler Springs!"], ["me", "Cold splashy water! Puddles are just tiny ice rinks that forgot to freeze!"], ["me", "Gates locked! Yank the lever! Penguin bowling, backyard edition!"]],
+  "w7-s4": [[10, "Hmph. Penguin. This Crumblet's never seen a paddling pool. Walk it past the pier. Slowly."], ["me", "A POOL?! Cannonb... no! Slowly! Brakes on! *skrrrt* Okay, little buddy, follow me!"]],
+  "w7-s6": [["me", "Picnic Table Peak! Ooh, is there ice cream? Wait, I'M the ice cream. Eek!"], ["me", "Grab the scroll and hold out! Shoo, wasps! Penguins are NOT on the menu!"]],
+  "w7-s7": [["me", "Flowerpot Fort! Flowers smell nice. Way nicer than that stinky Baron."], [9, "*POP* Hi, little penguin! Elephants never forget! The key chest is up on the, um, the..."], ["me", "The high ledge? Thanks, Bubblegumbo! Sponge, my old pal! Boing!"]],
+  "w7-s8": [["me", "A COOLER! Ice cubes! Frost! It smells like HOME! *sniff* I'm not crying, it's condensation!"], ["me", "Forty-five seconds in here? Best spot in the whole backyard! Circles STILL count! Wheee!"]],
+  "w7-s9": [["me", "Charcoal Climb! The rocks are glowing! Why is EVERYTHING out here so hot?!"], ["lo2", "Climb on, bird! The Baron shall serve thee as a summer slushie! Hahaha!"], ["me", "Slushie?! I'm cookies AND cream! Get it right! Wheee!"]],
 };
 
 export const QUIPS: Record<QuipKind, string[]> = {

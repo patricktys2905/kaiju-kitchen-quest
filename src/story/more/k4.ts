@@ -51,6 +51,14 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w6-s7": [["me", "Napkin Fold Fort! A chest on a high ledge and a bouncy sponge below. Sponges are STILL so nice!"], ["me", "Boing! Keys open doors, doors have windows, and windows have MOONS! Never gets old!"]],
   "w6-s8": [["me", "Silverware Siege! Ooh, the spoons are so shiny I can see myself! Hi, me!"], ["me", "Eep, and the forks are pointy! Forty-five seconds, then I'll admire the spoons. Promise!"]],
   "w6-s9": [["me", "Chandelier Climb! Up, up to the moon's sparkly cousin! Ooooh, shiny!"], ["lo2", "Hahaha! Climb all thou likest, moth! Up here, the candles stay OUT!"], ["me", "Then I'll bring my own glow! I always do!"]],
+  // World 7: The Backyard BBQ.
+  "w7-s2": [["me", "Hose Highway! Ooh, a big round thing rolling this way, all golden in the sunset. Moon?"], ["n", "Uh-oh! It's a giant rolling pin, rumbling down the hose!"], ["me", "Nope! STILL not the moon! Flap flap FLAP!"]],
+  "w7-s3": [["me", "Sprinkler Springs! FWOOSH! Wheee, a rainbow! Rainbows are like moons, but stripy!"], ["me", "Eep, soggy wings! Ooh, a lever! One pull and the rolling pin gives 'em a big flat hug!"]],
+  "w7-s4": [[10, "Hmph. Moth. Lost Crumblet on Paddling Pool Pier. Gettin' dark. Light it home, would ya?"], ["me", "Hi, little swimmer! Look, the pool's full of sunset! Snuggle into my glow, let's go!"]],
+  "w7-s6": [["me", "Picnic Table Peak! A Recipe Scroll at the end. Is it a recipe for moon pie? Please be moon pie!"], ["lo2", "Hah! 'Tis a recipe for SPROUTS, moth! The Baron's finest!"], ["me", "Aw, sprouts? Lettuce hope not! Grabbing it anyway!"]],
+  "w7-s7": [["me", "Flowerpot Fort! A chest on a high ledge and a bouncy sponge below. Sponges are STILL so nice!"], [9, "Ooh, pretty glow! Is that my birthday candle? I lost my party somewhere. *POP*"], ["me", "Aww! I'll watch for it, Bubblegumbo! Boing! Keys open doors, doors have windows, windows have MOONS!"]],
+  "w7-s8": [["me", "Cooler Canyon! Ooh, the sun's going down! Forty-five seconds, then it's moon o'clock!"], ["me", "Eep, Picnic Wasps! Those are NOT fireflies! Shoo, shoo!"]],
+  "w7-s9": [["me", "Charcoal Climb! The coals glow orange, like a hundred tiny sunsets. Ooooh, shiny..."], ["n", "From the Grill Summit, a voice booms: \"ATTEN-TION! More smoke! Hide that SKY!\""], ["me", "Hey! The moon's coming out tonight, and you're NOT gonna smoke it! Flap flap!"]],
 };
 
 export const QUIPS: Record<QuipKind, string[]> = {

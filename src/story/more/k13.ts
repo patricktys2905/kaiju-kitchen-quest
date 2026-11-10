@@ -51,6 +51,14 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w6-s7": [["me", "A napkin fort! Every dragon needs a castle! Can I keep it?"], ["lo2", "Thou canst NOT! Begone, guacamole!"], ["me", "Too late! Sponge! BOING! The key's mine, crusty!"]],
   "w6-s8": [["lo2", "Forks, CHARGE! Scoop up yon dip!"], ["me", "Scoop ME?! Only El Nacho tries that, and even HE gave up! Forty-five seconds, let's go!"]],
   "w6-s9": [["me", "A chandelier! Sparkly! This is the fanciest hoard I've ever seen!"], ["lo2", "Climb, little dip! At the top, I shall leave thee out on the table till thou art BROWN! Hahaha!"], ["me", "BROWN?! Oh, that's IT! Holy guacamole, here I come!"]],
+  // World 7: The Backyard BBQ.
+  "w7-s2": [["me", "Hose Highway! Long, green and bendy. Hey, it's like a big long ME!"], ["n", "RUMBLE! A giant rolling pin comes rolling down the hose!"], ["me", "Mashed avocado on a summer day?! NOPE! Guac and RUN!"]],
+  "w7-s3": [["me", "Sprinklers! Ooh, cool water! Perfect for a sun-safe dragon!"], ["n", "FWOOSH! A sprinkler blasts Avocadrake sky-high!"], ["me", "Wheee! I mean, BEHOLD my flight! Lever! Rolling pin, BONK!"]],
+  "w7-s4": [[10, "Hmph. Dragon. This Crumblet wants to see the pool. Keep it away from the splashy end."], ["me", "Behold, little muffin! My wings make great shade! Small but mighty. Need sunscreen?"], [10, "Hmph. Put some on its frosting."]],
+  "w7-s6": [["me", "Picnic Table Peak! Grab the Recipe Scroll, dragon! Hey, where's my bowl?"], ["lo2", "Hah! The Baron's sprouts took thy dip up to the GRILL! Sizzle, sizzle!"], ["me", "Sizzle?! Not my hoard! Scroll first, then you're TOAST, crusty!"]],
+  "w7-s7": [[9, "Hello there, little lizard! Elephants never forget! *POP* Uh, what was I saying?"], ["me", "DRAGON! And you forgot already! Ooh, is that a treasure chest up there?"], [9, "Bounce on the sponge, buddy! Let's stick together! *POP* Wait, who are you?"]],
+  "w7-s8": [["me", "A cooler! Cold and dark! The perfect spot for guac! Remember this, dragon!"], ["n", "Here they come! Hold out for forty-five seconds!"], ["me", "Chill out, monsters! Get it? COOLER? Holy guacamole!"]],
+  "w7-s9": [["n", "From the grill, a big pompous voice booms: \"ATTEN-TION! Dip on the grill, soldiers! Make it WELL DONE!\""], ["lo2", "Hah! Well done, guacamole! VERY well done! Brown all over!"], ["me", "Grilled guac?! That's the PITS! Hang on, hoard! Climbing!"]],
 };
 
 export const QUIPS: Record<QuipKind, string[]> = {

@@ -51,6 +51,14 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w6-s7": [["me", "Napkin Fold Fort! Somebody folded these into swans. Show-offs!"], ["me", "Key chest up high, sponge right here. The Champion goes for the BOING!"]],
   "w6-s8": [["lo2", "Charge, my silverware! Skewer yon sausage!"], ["me", "Skewers? Pal, I've grilled with Captain Kebab! Forty-five seconds! Bring it on!"]],
   "w6-s9": [["lo2", "Forsooth! A hot dog climbs my chandelier! Thou art not even FANCY, varlet!"], ["me", "Fancy? I'm the Grill Champion! Next up, folks, the main event!"]],
+  // World 7: The Backyard BBQ.
+  "w7-s2": [["n", "RUMBLE! A giant rolling pin comes bouncing down the Hose Highway!"], ["me", "And they're off! The pin on the inside, Hotchog on the hose! Down the stretch they come! RUN!"]],
+  "w7-s3": [["n", "FSSSH! The sprinklers burst up and soak the whole arena!"], ["me", "Aw, my poor coals! Ahem. Gates locked, folks! Lever time! Rolling pin, take it away!"]],
+  "w7-s4": [[10, "Hmph. Hotchog. This Crumblet's never been to a pool party. Get it past the pier. Spikes AWAY."], ["me", "One VIP pass to the pool party, Mr. Bluebeary! Little buddy, no cannonballs till after lunch!"]],
+  "w7-s6": [["me", "Picnic Table Peak! Checkered tablecloth, folks, the classic cookout look!"], ["me", "Scroll's up top! Grab it, hold the line, and keep those wasps off the potato salad!"]],
+  "w7-s7": [[18, "In THIS corner! Hey, Champ! Key chest's on the high ledge. Ding ding, go get it!"], ["me", "W-wow, Velvaroo! Wanna come to the cookout?"], [18, "Is there a bake sale? Kidding! I'll bring cupcakes! HOP!"]],
+  "w7-s8": [["me", "Cooler Canyon! Every cookout needs drinks on ice. The Freezer Golem would LOVE it here!"], ["me", "Forty-five seconds, folks! Same as a good burger needs per side. Let's sear it!"]],
+  "w7-s9": [["n", "From the summit, a voice booms: \"ATTEN-TION! Sprouts, turn the grill to MAXIMUM!\""], ["me", "MAXIMUM?! You'll burn everything! Folks, this is a grilling emergency! Here I come!"]],
 };
 
 export const QUIPS: Record<QuipKind, string[]> = {

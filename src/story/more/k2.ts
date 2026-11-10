@@ -51,6 +51,14 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w6-s7": [["me", "Napkin Fold Fort. Ooh, that napkin's folded like a cabbage! Nope. A swan. Hmph."], ["me", "Key chest on a high ledge. Sponge bounce! Still a pro. Still don't tell anybody!"]],
   "w6-s8": [["me", "Silverware Siege! Forty-five seconds of forks? I've been forked before! Pinch back!"], ["n", "Seed count: twelve! Cabbage count: zero!"], ["me", "Not for long! And quit counting, narrator!"]],
   "w6-s9": [["lo2", "Hark, crab! The chandelier is the finest seat at the table! Come up, if thou canst climb!"], ["me", "I walk SIDEWAYS, buster. Up is just sideways tipped over!"]],
+  // World 7: The Backyard BBQ.
+  "w7-s2": [["me", "Hose Highway! A whole garden hose, just lying around, not watering ANYTHING! Shameful!"], ["n", "Uh-oh! A giant rolling pin comes rumbling down the hose!"], ["me", "Run right! Sideways right! You know the drill, legs! MOVE!"]],
+  "w7-s3": [["me", "Sprinkler Springs! FWOOSH! Finally, somebody's watering this lawn! Way too much, but still!"], ["me", "Gates locked again? Lever, rolling pin, weeded. Hmph! Best garden tool I ever had."]],
+  "w7-s4": [[10, "Hmph. Crab. My Crumblet wants a paddle. Walk it round the Paddling Pool Pier. No splashing."], ["me", "Kid, cheese and pools don't mix. Stick to my shell and DON'T do a cannonball!"]],
+  "w7-s6": [["me", "Picnic Table Peak! A Recipe Scroll right next to the coleslaw. I KNEW it! It's always coleslaw!"], ["lo2", "Hah! Baron Brussels grilleth thy cabbage, crab! 'Tis nearly well done!"], ["me", "Over my dead leaves! Grab the scroll and hold on, legs! Faster!"]],
+  "w7-s7": [["me", "Flowerpot Fort! Real dirt! Real pots! Ahh, now THIS is a fort a gardener can respect!"], ["me", "Key chest on a high ledge. Sponge bounce! Still a pro. STILL don't tell anybody!"]],
+  "w7-s8": [["me", "Cooler Canyon! Nice and chilly. Keeps my cheese from sweating. Forty-five seconds, pinch everything!"], ["n", "Seed count: twelve! Cabbage count: still zero!"], ["me", "Quit counting, narrator! It's on that grill up there. I can SMELL it!"]],
+  "w7-s9": [["n", "From the Grill Summit, a voice booms: \"Sprout Soldiers, FORM UP! The cabbage is almost well done!\""], ["me", "Almost well done?! Hang on, sweetheart, I'm comin'! Up the coals, SIDEWAYS!"]],
 };
 
 export const QUIPS: Record<QuipKind, string[]> = {

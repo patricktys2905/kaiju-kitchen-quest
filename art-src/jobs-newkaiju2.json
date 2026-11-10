@@ -1,0 +1,296 @@
+[
+ {
+  "name": "parts-9",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-9.png"
+  ],
+  "prompt": "Generate an image. This is a character from my 2D side-scrolling game (a pink bubblegum elephant (Bubblegumbo): a chubby glossy pink elephant made of bubblegum with drippy gum, big floppy ears, a trunk blowing a pink bubble, a little tusk, four stubby legs and a tiny tail). I need it as a CUTOUT PUPPET PARTS SHEET so I can animate it. Draw the exact same character, same colours, outlines and shading style, but in a STRICT SIDE PROFILE facing RIGHT like a 2D platformer character (face looking right, one eye visible). Split it into SEPARATE parts laid out apart from each other with big empty gaps (no part touching another): 1) the BODY with head, ears, trunk, tusk, tail and the two FAR-side legs drawn on it, but WITHOUT the two near-side legs, 2) the near-side FRONT LEG, 3) the near-side BACK LEG. IMPORTANT: the body piece must have NO arms, legs, wings or feet drawn on it. Each limb has a rounded complete joint end. IMPORTANT BODY RULE: Bubblegumbo has NO arms and NO hands. Its only limbs are four stubby elephant legs, a trunk and a tiny tail, exactly like the reference. Solid flat magenta (#FF00FF) background, no shadows, no labels, no text. Square 1:1 image."
+ },
+ {
+  "name": "w-gum1",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-peng3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading). A WEAPON themed for my hero a pink bubblegum elephant (Bubblegumbo): a candy-cane club with a pink gum wad on top (Gum Club). Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT, centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "w-gum2",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-peng3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading). A WEAPON themed for my hero a pink bubblegum elephant (Bubblegumbo): a spiked gumball on a chain flail (Gumball Flail). Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT, centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "w-gum3",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-peng3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading). A WEAPON themed for my hero a pink bubblegum elephant (Bubblegumbo): a royal staff topped with a giant glowing gumball (Gumball Scepter). Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT, centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "a-gum1",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/a-peng3.png"
+  ],
+  "prompt": "Generate an image. The reference is an armour icon from my cute 2D kitchen action RPG. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading). ARMOR themed for my hero a pink bubblegum elephant (Bubblegumbo): a vest made of pink gum wrappers (Wrapper Vest), shown flat and centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "a-gum2",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/a-peng3.png"
+  ],
+  "prompt": "Generate an image. The reference is an armour icon from my cute 2D kitchen action RPG. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading). ARMOR themed for my hero a pink bubblegum elephant (Bubblegumbo): armour made of stretchy pink gum plates (Stretch Gum Mail), shown flat and centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "a-gum3",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/a-peng3.png"
+  ],
+  "prompt": "Generate an image. The reference is an armour icon from my cute 2D kitchen action RPG. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading). ARMOR themed for my hero a pink bubblegum elephant (Bubblegumbo): a golden gumball-machine armour with a glass dome chest full of gumballs (Gumball Machine Plate), shown flat and centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "k-gum",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/k-peng.png"
+  ],
+  "prompt": "Generate an image. The reference is a charm icon from my cute 2D kitchen action RPG. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading). A CHARM themed for my hero a pink bubblegum elephant (Bubblegumbo): a lucky gumball on a little string (Lucky Gumball), centred, filling 75% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "u-biggest-bubble-blower",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-peng3.png"
+  ],
+  "prompt": "Generate an image. The reference is an item icon from my cute 2D kitchen action RPG. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY WEAPON themed for my hero a pink bubblegum elephant (Bubblegumbo), called \"Biggest Bubble Blower\": a golden bubble pipe blowing a giant shimmering pink bubble. Make it look special and magical (a faint golden glow, sparkles), clearly fancier than the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT, centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "u-gumball-machine-heart",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/a-peng3.png"
+  ],
+  "prompt": "Generate an image. The reference is an item icon from my cute 2D kitchen action RPG. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY ARMOR themed for my hero a pink bubblegum elephant (Bubblegumbo), called \"Gumball Machine Heart\": a shining armour with a glass gumball-machine dome in the chest full of glowing gumballs. Make it look special and magical (a faint golden glow, sparkles), clearly fancier than the reference. Shown flat and centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "face-9-happy",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-9.png"
+  ],
+  "prompt": "Generate an image. The reference is my game character, a pink bubblegum elephant (Bubblegumbo): a chubby glossy pink elephant made of bubblegum with drippy gum, big floppy ears, a trunk blowing a pink bubble, a little tusk, four stubby legs and a tiny tail. Draw THIS SAME character as a cartoon story portrait showing a strong, funny, very readable emotion: laughing with joy: eyes squeezed into happy arcs, a huge open-mouthed grin, bouncing with delight, little sparkles around it. IMPORTANT BODY RULE: Bubblegumbo has NO arms and NO hands. Its only limbs are four stubby elephant legs, a trunk and a tiny tail, exactly like the reference. Keep it EXACTLY on-model: same body shape and proportions, same colours, same face design, same thick dark outlines and glossy cel shading as the reference. Do not add any clothes, props, extra limbs or extra characters. Same three-quarter view and facing direction as the reference, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Portrait 4:5 image."
+ },
+ {
+  "name": "face-9-angry",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-9.png"
+  ],
+  "prompt": "Generate an image. The reference is my game character, a pink bubblegum elephant (Bubblegumbo): a chubby glossy pink elephant made of bubblegum with drippy gum, big floppy ears, a trunk blowing a pink bubble, a little tusk, four stubby legs and a tiny tail. Draw THIS SAME character as a cartoon story portrait showing a strong, funny, very readable emotion: furious and fired up: deep scowling brows, gritted teeth, leaning forward, a little puff of angry steam above its head. IMPORTANT BODY RULE: Bubblegumbo has NO arms and NO hands. Its only limbs are four stubby elephant legs, a trunk and a tiny tail, exactly like the reference. Keep it EXACTLY on-model: same body shape and proportions, same colours, same face design, same thick dark outlines and glossy cel shading as the reference. Do not add any clothes, props, extra limbs or extra characters. Same three-quarter view and facing direction as the reference, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Portrait 4:5 image."
+ },
+ {
+  "name": "face-9-shocked",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-9.png"
+  ],
+  "prompt": "Generate an image. The reference is my game character, a pink bubblegum elephant (Bubblegumbo): a chubby glossy pink elephant made of bubblegum with drippy gum, big floppy ears, a trunk blowing a pink bubble, a little tusk, four stubby legs and a tiny tail. Draw THIS SAME character as a cartoon story portrait showing a strong, funny, very readable emotion: totally shocked: eyes wide as saucers with tiny pupils, jaw dropped open, leaning back in surprise, a sweat drop flying off its head. IMPORTANT BODY RULE: Bubblegumbo has NO arms and NO hands. Its only limbs are four stubby elephant legs, a trunk and a tiny tail, exactly like the reference. Keep it EXACTLY on-model: same body shape and proportions, same colours, same face design, same thick dark outlines and glossy cel shading as the reference. Do not add any clothes, props, extra limbs or extra characters. Same three-quarter view and facing direction as the reference, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Portrait 4:5 image."
+ },
+ {
+  "name": "face-9-sad",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-9.png"
+  ],
+  "prompt": "Generate an image. The reference is my game character, a pink bubblegum elephant (Bubblegumbo): a chubby glossy pink elephant made of bubblegum with drippy gum, big floppy ears, a trunk blowing a pink bubble, a little tusk, four stubby legs and a tiny tail. Draw THIS SAME character as a cartoon story portrait showing a strong, funny, very readable emotion: sad and worried: droopy teary eyes with one wobbly tear, a trembling frown, its whole body drooping. IMPORTANT BODY RULE: Bubblegumbo has NO arms and NO hands. Its only limbs are four stubby elephant legs, a trunk and a tiny tail, exactly like the reference. Keep it EXACTLY on-model: same body shape and proportions, same colours, same face design, same thick dark outlines and glossy cel shading as the reference. Do not add any clothes, props, extra limbs or extra characters. Same three-quarter view and facing direction as the reference, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Portrait 4:5 image."
+ },
+ {
+  "name": "still-9-intro",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-9.png",
+   "art-src/ref-bg.png"
+  ],
+  "prompt": "Generate an image. The first reference is my character, a pink bubblegum elephant (Bubblegumbo): a chubby glossy pink elephant made of bubblegum with drippy gum, big floppy ears, a trunk blowing a pink bubble, a little tusk, four stubby legs and a tiny tail; the second shows the painted background style. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Cinematic composition, wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. NO text, no letters, no writing on any labels or pages, no speech bubbles, no UI, no border, no signature, no humans. IMPORTANT BODY RULE: Bubblegumbo has NO arms and NO hands. Its only limbs are four stubby elephant legs, a trunk and a tiny tail, exactly like the reference. Scene: Bubblegumbo sits on a kitchen counter next to an empty party hat and a burst balloon, scratching his head with his trunk, looking very confused, blowing a tiny sad bubble."
+ },
+ {
+  "name": "still-9-cliff",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-9.png",
+   "art-src/ref-bg.png"
+  ],
+  "prompt": "Generate an image. The first reference is my character, a pink bubblegum elephant (Bubblegumbo): a chubby glossy pink elephant made of bubblegum with drippy gum, big floppy ears, a trunk blowing a pink bubble, a little tusk, four stubby legs and a tiny tail; the second shows the painted background style. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Cinematic composition, wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. NO text, no letters, no writing on any labels or pages, no speech bubbles, no UI, no border, no signature, no humans. IMPORTANT BODY RULE: Bubblegumbo has NO arms and NO hands. Its only limbs are four stubby elephant legs, a trunk and a tiny tail, exactly like the reference. Scene: Bubblegumbo stands at the dark rim of a giant steel kitchen sink at night, trunk raised, blowing a brave pink bubble. Down in the drain a sickly green glow and a fuzzy crown silhouette of mould rise."
+ },
+ {
+  "name": "still-9-end",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-9.png",
+   "art-src/ref-bg.png"
+  ],
+  "prompt": "Generate an image. The first reference is my character, a pink bubblegum elephant (Bubblegumbo): a chubby glossy pink elephant made of bubblegum with drippy gum, big floppy ears, a trunk blowing a pink bubble, a little tusk, four stubby legs and a tiny tail; the second shows the painted background style. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Cinematic composition, wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. NO text, no letters, no writing on any labels or pages, no speech bubbles, no UI, no border, no signature, no humans. IMPORTANT BODY RULE: Bubblegumbo has NO arms and NO hands. Its only limbs are four stubby elephant legs, a trunk and a tiny tail, exactly like the reference. Scene: Bubblegumbo blows a gigantic record-breaking pink bubble at a happy backyard birthday party at sunset, balloons and bunting, little kitchen friends cheering."
+ },
+ {
+  "name": "mob-nem-mouse",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/mob-bun.png"
+  ],
+  "prompt": "Generate an image. The reference is an enemy from my cute 2D side-scrolling action RPG set in a giant kitchen. I need a NEW story mini-boss: BRITTLE, a sneaky little mouse made of peanut brittle with crunchy peanuts, a long tail and a cheeky grin, holding a peanut like a bomb. Draw it in exactly the same art style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute but menacing). It is a MINI-BOSS, so a bit more detailed and imposing than a normal enemy, with a strong silhouette, and a few fuzzy green mould spots because the Mold Crown has corrupted it. Side view facing LEFT, whole body visible, centred, filling about 85% of the frame. IMPORTANT: a crisp dark outline all round with NO glow or haze around it. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1 image."
+ },
+ {
+  "name": "parts-18",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-18.png"
+  ],
+  "prompt": "Generate an image. This is a character from my 2D side-scrolling game (a red velvet cake kangaroo boxer (Velvaroo): a deep red velvet kangaroo with a white cream-cheese frosting belly and a frosting swirl on its head, red boxing gloves, big feet and a long tail). I need it as a CUTOUT PUPPET PARTS SHEET so I can animate it. Draw the exact same character, same colours, outlines and shading style, but in a STRICT SIDE PROFILE facing RIGHT like a 2D platformer character (face looking right, one eye visible). Split it into SEPARATE parts laid out apart from each other with big empty gaps (no part touching another): 1) the BODY with head, frosting swirl, frosting belly and tail but NO arms or legs drawn on it, 2) one ARM with its boxing glove, 3) a second ARM with its glove, 4) one big hind LEG with its foot, 5) a second hind LEG with its foot. IMPORTANT: the body piece must have NO arms, legs, wings or feet drawn on it. Each limb has a rounded complete joint end. IMPORTANT BODY RULE: Velvaroo has exactly two arms with red boxing gloves, two big hind legs and one long tail, exactly like the reference. Solid flat magenta (#FF00FF) background, no shadows, no labels, no text. Square 1:1 image."
+ },
+ {
+  "name": "w-roo1",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-peng3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading). A WEAPON themed for my hero a red velvet cake kangaroo boxer (Velvaroo): a rolling-pin baton with red velvet stripes (Velvet Baton). Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT, centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "w-roo2",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-peng3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading). A WEAPON themed for my hero a red velvet cake kangaroo boxer (Velvaroo): a cake-server spatula shaped like a sword (Cake Server Blade). Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT, centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "w-roo3",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-peng3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading). A WEAPON themed for my hero a red velvet cake kangaroo boxer (Velvaroo): a golden whisk mace studded with ruby sprinkles (Champion Whisk). Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT, centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "a-roo1",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/a-peng3.png"
+  ],
+  "prompt": "Generate an image. The reference is an armour icon from my cute 2D kitchen action RPG. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading). ARMOR themed for my hero a red velvet cake kangaroo boxer (Velvaroo): a vest made of a giant cupcake liner (Cupcake Liner Vest), shown flat and centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "a-roo2",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/a-peng3.png"
+  ],
+  "prompt": "Generate an image. The reference is an armour icon from my cute 2D kitchen action RPG. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading). ARMOR themed for my hero a red velvet cake kangaroo boxer (Velvaroo): a red velvet boxer robe (Velvet Robe), shown flat and centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "a-roo3",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/a-peng3.png"
+  ],
+  "prompt": "Generate an image. The reference is an armour icon from my cute 2D kitchen action RPG. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading). ARMOR themed for my hero a red velvet cake kangaroo boxer (Velvaroo): a golden championship armour with a frosting crest (Champion Plate), shown flat and centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "k-roo",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/k-peng.png"
+  ],
+  "prompt": "Generate an image. The reference is a charm icon from my cute 2D kitchen action RPG. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading). A CHARM themed for my hero a red velvet cake kangaroo boxer (Velvaroo): a tiny golden boxing-glove charm (Lucky Glove), centred, filling 75% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "u-golden-gloves",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-peng3.png"
+  ],
+  "prompt": "Generate an image. The reference is an item icon from my cute 2D kitchen action RPG. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY WEAPON themed for my hero a red velvet cake kangaroo boxer (Velvaroo), called \"Golden Gloves\": a pair of shining golden boxing gloves with frosting trim. Make it look special and magical (a faint golden glow, sparkles), clearly fancier than the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT, centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "u-championship-belt",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/a-peng3.png"
+  ],
+  "prompt": "Generate an image. The reference is an item icon from my cute 2D kitchen action RPG. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY ARMOR themed for my hero a red velvet cake kangaroo boxer (Velvaroo), called \"Championship Belt\": a gleaming golden championship belt with a cupcake emblem, worn like armour. Make it look special and magical (a faint golden glow, sparkles), clearly fancier than the reference. Shown flat and centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "face-18-happy",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-18.png"
+  ],
+  "prompt": "Generate an image. The reference is my game character, a red velvet cake kangaroo boxer (Velvaroo): a deep red velvet kangaroo with a white cream-cheese frosting belly and a frosting swirl on its head, red boxing gloves, big feet and a long tail. Draw THIS SAME character as a cartoon story portrait showing a strong, funny, very readable emotion: laughing with joy: eyes squeezed into happy arcs, a huge open-mouthed grin, bouncing with delight, little sparkles around it. IMPORTANT BODY RULE: Velvaroo has exactly two arms with red boxing gloves, two big hind legs and one long tail, exactly like the reference. Keep it EXACTLY on-model: same body shape and proportions, same colours, same face design, same thick dark outlines and glossy cel shading as the reference. Do not add any clothes, props, extra limbs or extra characters. Same three-quarter view and facing direction as the reference, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Portrait 4:5 image."
+ },
+ {
+  "name": "face-18-angry",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-18.png"
+  ],
+  "prompt": "Generate an image. The reference is my game character, a red velvet cake kangaroo boxer (Velvaroo): a deep red velvet kangaroo with a white cream-cheese frosting belly and a frosting swirl on its head, red boxing gloves, big feet and a long tail. Draw THIS SAME character as a cartoon story portrait showing a strong, funny, very readable emotion: furious and fired up: deep scowling brows, gritted teeth, leaning forward, a little puff of angry steam above its head. IMPORTANT BODY RULE: Velvaroo has exactly two arms with red boxing gloves, two big hind legs and one long tail, exactly like the reference. Keep it EXACTLY on-model: same body shape and proportions, same colours, same face design, same thick dark outlines and glossy cel shading as the reference. Do not add any clothes, props, extra limbs or extra characters. Same three-quarter view and facing direction as the reference, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Portrait 4:5 image."
+ },
+ {
+  "name": "face-18-shocked",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-18.png"
+  ],
+  "prompt": "Generate an image. The reference is my game character, a red velvet cake kangaroo boxer (Velvaroo): a deep red velvet kangaroo with a white cream-cheese frosting belly and a frosting swirl on its head, red boxing gloves, big feet and a long tail. Draw THIS SAME character as a cartoon story portrait showing a strong, funny, very readable emotion: totally shocked: eyes wide as saucers with tiny pupils, jaw dropped open, leaning back in surprise, a sweat drop flying off its head. IMPORTANT BODY RULE: Velvaroo has exactly two arms with red boxing gloves, two big hind legs and one long tail, exactly like the reference. Keep it EXACTLY on-model: same body shape and proportions, same colours, same face design, same thick dark outlines and glossy cel shading as the reference. Do not add any clothes, props, extra limbs or extra characters. Same three-quarter view and facing direction as the reference, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Portrait 4:5 image."
+ },
+ {
+  "name": "face-18-sad",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-18.png"
+  ],
+  "prompt": "Generate an image. The reference is my game character, a red velvet cake kangaroo boxer (Velvaroo): a deep red velvet kangaroo with a white cream-cheese frosting belly and a frosting swirl on its head, red boxing gloves, big feet and a long tail. Draw THIS SAME character as a cartoon story portrait showing a strong, funny, very readable emotion: sad and worried: droopy teary eyes with one wobbly tear, a trembling frown, its whole body drooping. IMPORTANT BODY RULE: Velvaroo has exactly two arms with red boxing gloves, two big hind legs and one long tail, exactly like the reference. Keep it EXACTLY on-model: same body shape and proportions, same colours, same face design, same thick dark outlines and glossy cel shading as the reference. Do not add any clothes, props, extra limbs or extra characters. Same three-quarter view and facing direction as the reference, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Portrait 4:5 image."
+ },
+ {
+  "name": "still-18-intro",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-18.png",
+   "art-src/ref-bg.png"
+  ],
+  "prompt": "Generate an image. The first reference is my character, a red velvet cake kangaroo boxer (Velvaroo): a deep red velvet kangaroo with a white cream-cheese frosting belly and a frosting swirl on its head, red boxing gloves, big feet and a long tail; the second shows the painted background style. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Cinematic composition, wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. NO text, no letters, no writing on any labels or pages, no speech bubbles, no UI, no border, no signature, no humans. IMPORTANT BODY RULE: Velvaroo has exactly two arms with red boxing gloves, two big hind legs and one long tail, exactly like the reference. Scene: Velvaroo shadow-boxes alone in a dusty cake-stand boxing ring on a kitchen counter, a CANCELLED bake-sale banner (blank, no letters) sagging above, an empty trophy stand."
+ },
+ {
+  "name": "still-18-cliff",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-18.png",
+   "art-src/ref-bg.png"
+  ],
+  "prompt": "Generate an image. The first reference is my character, a red velvet cake kangaroo boxer (Velvaroo): a deep red velvet kangaroo with a white cream-cheese frosting belly and a frosting swirl on its head, red boxing gloves, big feet and a long tail; the second shows the painted background style. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Cinematic composition, wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. NO text, no letters, no writing on any labels or pages, no speech bubbles, no UI, no border, no signature, no humans. IMPORTANT BODY RULE: Velvaroo has exactly two arms with red boxing gloves, two big hind legs and one long tail, exactly like the reference. Scene: Velvaroo stands at the dark rim of a giant steel kitchen sink at night, gloves up, ready to fight. Down in the drain a sickly green glow and a fuzzy crown silhouette of mould rise."
+ },
+ {
+  "name": "still-18-end",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-18.png",
+   "art-src/ref-bg.png"
+  ],
+  "prompt": "Generate an image. The first reference is my character, a red velvet cake kangaroo boxer (Velvaroo): a deep red velvet kangaroo with a white cream-cheese frosting belly and a frosting swirl on its head, red boxing gloves, big feet and a long tail; the second shows the painted background style. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Cinematic composition, wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. NO text, no letters, no writing on any labels or pages, no speech bubbles, no UI, no border, no signature, no humans. IMPORTANT BODY RULE: Velvaroo has exactly two arms with red boxing gloves, two big hind legs and one long tail, exactly like the reference. Scene: Velvaroo stands on top of a giant cake-stand boxing ring at a bake-sale fair, holding up a shining golden championship belt, confetti and cheering kitchen friends all around."
+ },
+ {
+  "name": "mob-nem-gorilla",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/mob-bun.png"
+  ],
+  "prompt": "Generate an image. The reference is an enemy from my cute 2D side-scrolling action RPG set in a giant kitchen. I need a NEW story mini-boss: ROCKY ROAD, a big gorilla boxer made of rocky road ice cream with marshmallow and nut chunks, wearing brown boxing gloves, a cocky grin. Draw it in exactly the same art style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute but menacing). It is a MINI-BOSS, so a bit more detailed and imposing than a normal enemy, with a strong silhouette, and a few fuzzy green mould spots because the Mold Crown has corrupted it. Side view facing LEFT, whole body visible, centred, filling about 85% of the frame. IMPORTANT: a crisp dark outline all round with NO glow or haze around it. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1 image."
+ }
+]

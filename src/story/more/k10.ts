@@ -56,6 +56,15 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w6-s7": [["me", "Napkin Fold Fort. Key chest on a high ledge. Bouncy sponge. Bears STILL don't bounce."], ["me", "BOING! Littlest says do it again. ONE more. Hmph."]],
   "w6-s8": [["me", "Silverware Siege. Forty-five seconds. Fork Soldiers, huh? I brought my own forks. Ten of 'em. Claws."], [11, "Beep beep! Table for two, Bluebeary? I'll take the knives, you take the forks!"], ["me", "Hmph. Deal, raptor."]],
   "w6-s9": [["me", "Chandelier Climb. Littlest says it's a sparkly tree. Sparkly tree full of monsters. Hmph."], ["lo2", "Hahaha! Climb, bear! At the Head of the Table, thy crumbs shall be my croutons!"], ["me", "Count your crumbs, breadstick. You're about to lose a few. Grrr."]],
+
+  // World 7: The Backyard BBQ.
+  "w7-s2": [["me", "Hose Highway. Littlest says the hose is a big green snake. It's a hose, kid."], ["n", "Uh-oh! A giant rolling pin comes rumbling down the hose!"], ["me", "Okay, THAT one bites. Bears JOG! Hold on to the ear! GRRR!"]],
+  "w7-s3": [["me", "Sprinkler Springs. FWOOSH! Wet fur. Littlest LOVED that. Hmph. I did not."], ["me", "Lever up top drops the pin. Monsters get flat. Bear gets dry. Eventually."]],
+  "w7-s4": [["n", "Paddling Pool Pier! A tiny Crumblet drifts by on a pool noodle, totally lost!"], ["me", "Strays walked home: seven. Littlest, say hi to your new buddy. No splashing. Hmph."], ["me", "Okay, ONE splash. Then we walk it to the exit."]],
+  "w7-s6": [["me", "Picnic Table Peak. Recipe Scroll's at the far end. Littlest wants the potato salad. After, kid."], ["lo2", "Hah! Baron Brussels shall grill thee RARE, bear!"], ["me", "Rare? I'm a muffin. I come out golden. Grrr."]],
+  "w7-s7": [["me", "Flowerpot Fort. Key chest on a high ledge. Bouncy sponge. Bears STILL don't bounce."], [9, "Ooh, a bear! Have we met? Elephants never forget! *POP* Who are you again?"], ["me", "Hmph. Bluebeary. Again. Hold the sponge still, big guy. BOING!"]],
+  "w7-s8": [["me", "Cooler Canyon. Forty-five seconds of waves. Cold box, hot tempers. Mostly mine."], [18, "In THIS corner, the grumpy papa bear! Ding ding! Swing for the muffin top!"], ["me", "Hmph. Already swinging."]],
+  "w7-s9": [["me", "Charcoal Climb. Hot rocks. Littlest, stay up on the ear. Paws are for walking on lava."], ["n", "From the Grill Summit, a voice booms: \"ATTEN-TION! That muffin will make a FINE Sprout Soldier!\""], ["me", "My muffin's already got a job. Being little. GRRR."]],
 };
 
 export const QUIPS: Record<QuipKind, string[]> = {

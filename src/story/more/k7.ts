@@ -51,6 +51,14 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w6-s7": [["me", "Napkin Fold Fort. Folded so neatly! Whoever did this has my respect, and far too much free time."], ["me", "A chest on the high ledge, as always. Sponge, my old friend! Boing!"]],
   "w6-s8": [["lo2", "Charge, my silverware! Skewer the raw fish!"], ["me", "Raw? I am rice and sea, you crusty baguette! Forty-five seconds! Bring the whole cutlery drawer!"]],
   "w6-s9": [["lo2", "Forsooth! An old dragon climbs my chandelier! Art thou here for the senior discount?"], ["me", "Nine hundred years, and the jokes are still about my age. Hrrm! Here I come, breadstick!"]],
+  // World 7: The Backyard BBQ.
+  "w7-s2": [["me", "A garden hose! Long, green and coiled. Hrrm, a distant cousin?"], ["n", "RUMBLE! A giant rolling pin comes bouncing down the Hose Highway!"], ["me", "Proverb: \"When the pin rolls, the dragon runs!\" Some things never change! HUP HUP!"]],
+  "w7-s3": [["n", "FSSSH! Sprinklers burst up all over the lawn!"], ["me", "Water from the GROUND? My flame says no thank you."], ["me", "The gates lock! Pull the lever and serve these pests a rolling pin, well done!"]],
+  "w7-s4": [[10, "Hmph. Dragon. This Crumblet's never seen a paddling pool. Walk it past the pier, or else."], ["me", "With honour, papa bear! Little one, the pool is NOT soy sauce. Do not dip yourself."]],
+  "w7-s6": [["me", "Picnic Table Peak! A checkered cloth like a giant game board. The Recipe Scroll waits at the top!"], ["me", "Proverb: \"Ants always find the picnic.\" Hrrm. Picnic Wasps too, apparently. Hold the line!"]],
+  "w7-s7": [["me", "Flowerpot Fort! My ancestors were wrapped in leaves too. The seaweed kind. Less pointy."], ["me", "Key chest on the high ledge. Sponge, old friend, you even came outside! Boing!"]],
+  "w7-s8": [["lo2", "Hold out, old dragon? At thy age, I'd be amazed if thou could hold a CHOPSTICK!"], ["me", "Age jokes again! Forty-five seconds, breadstick, then I toast your OTHER side!"]],
+  "w7-s9": [["n", "From the smoky summit, a voice booms: \"ATTEN-TION! Sprouts, prepare to grill the lizard!\""], ["me", "Lizard?! I am a DRAGON! And pee-yew, who is boiling cabbage up there? Hup hup!"]],
 };
 
 export const QUIPS: Record<QuipKind, string[]> = {

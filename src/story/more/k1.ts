@@ -51,6 +51,14 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w6-s7": [["me", "Napkin Fold Fort! Napkins folded into swans, towers and one very rude goose!"], ["me", "Secret chest on a high ledge! Bouncy sponge, launch the squid! Science is mostly bouncing now!"]],
   "w6-s8": [["me", "Silverware Siege! The Fork Soldiers brought the whole cutlery drawer!"], ["me", "Forty-five seconds! Survive now, write notes later. Gravy-stained notes. Fascinating!"]],
   "w6-s9": [["lo2", "Hark, jelly! Thou climbest my chandelier? Up here we serve only VINTAGE guests!"], ["me", "Vintage? My spore-o-meter says STALE! Readings don't lie, Sir Crusty!"]],
+  // World 7: The Backyard BBQ.
+  "w7-s2": [["me", "Hose Highway! A giant garden hose, perfect for jelly sliding! Wheee!"], ["n", "Uh-oh! A giant rolling pin comes rumbling down the hose!"], ["me", "Even OUTSIDE?! New hypothesis, same as always: RUN RIGHT! Very, VERY right!"]],
+  "w7-s3": [["me", "Sprinkler Springs! FWOOSH! Note to self: jelly plus water equals one VERY bouncy squid!"], ["me", "Gates locked? Lever, rolling pin, SPLAT! My favourite experiment, now with fresh-cut lawn!"]],
+  "w7-s4": [[10, "Hmph. Jelly. My Crumblet wants a swim. Walk it round the Paddling Pool Pier. NO deep end."], ["me", "Assistant number seven! Rules one to five still apply! Rule six: armbands at ALL times!"]],
+  "w7-s6": [["me", "Picnic Table Peak! A Recipe Scroll by the potato salad! Please say antidote. Please DON'T say garlic!"], ["lo2", "Hah! Baron Brussels shall grill thee, jelly! Thou art but a wobbly side dish!"], ["me", "Side dish? I'm the MAIN experiment! Grab it and hold on, GO!"]],
+  "w7-s7": [["me", "Flowerpot Fort! Soil samples EVERYWHERE! Ooh, a worm! Hi, worm! Fascinating!"], ["me", "Secret chest on a high ledge! Bouncy sponge, launch the squid! EUREKA, I'm airborne again!"]],
+  "w7-s8": [[9, "Hello, little squid! Have you seen my birthday party? *POP* Elephants never forget, but I forgot where I left it."], ["me", "A lost party? Fascinating! Note to self: find it right after forty-five seconds of monsters!"]],
+  "w7-s9": [["n", "From the smoky Grill Summit, a voice booms: \"ATTEN-TION! No jellies past this point!\""], ["me", "My spore-o-meter says ninety percent sprout and ten percent STINK! Pee-yew! Up the coals we go!"]],
 };
 
 export const QUIPS: Record<QuipKind, string[]> = {

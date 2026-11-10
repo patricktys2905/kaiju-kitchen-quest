@@ -7,6 +7,14 @@ export type QuipKind = 'combo' | 'lowhp' | 'perfect' | 'levelup' | 'secret' | 'b
 
 /** What each monster says when it first appears in a stage (one is picked at random). */
 export const TAUNTS: Partial<Record<MobKind, string[]>> = {
+  // World 7: The Backyard BBQ
+  wasp: ["Bzzz! Is that a sandwich? Is that YOU?", "Picnic's over, pal! Bzzzt!", "I'm on a sugar rush, buddy!"],
+  corn: ["Pop pop! Here comes the kernel!", "I'm a-MAIZE-ing at this!", "Ears up! Fire!"],
+  ketchup: ["Hold still, I'm saucing you!", "One squirt, one splat!", "Ketchup if you can! Heh!"],
+  beetle: ["Skewer time, comin' through!", "I'm grilled AND thrilled!", "Kebab attack! CHAAARGE!"],
+  charcoal: ["Surprise from the coals!", "Things are heatin' up! Hehe!", "Smokin' hot and right below ya!"],
+  patty: ["Order up! One beatdown, extra cheese!", "I'm a QUARTER POUNDER of pain!", "Well done? You're about to be!"],
+  sprout: ["For the Baron! Pee-yew, that's me!", "Sprout Soldier, reporting! Achoo!", "Nobody finishes us! NOBODY!"],
   // World 6: The Dining Room
   fork: ["Elbows off the table, peasant!", "Fork you very much! Er, I mean... CHARGE!", "Four points of pain, comin' up!"],
   napkin: ["Boo! Did I scare the crumbs off ya?", "Wipe that smile off your face!", "Fold, flutter and FIGHT!"],

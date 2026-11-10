@@ -51,6 +51,14 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w6-s7": [["me", "Napkin Fold Fort! Napkins! Every taco party needs a TON of napkins!"], ["me", "Key chest way up high. Sponge! BOING! Hoo-hoo!"]],
   "w6-s8": [["lo2", "Charge, my silverware! Fork yon owl like a crusty taco!"], ["me", "Forty-five seconds! Mixtape Track forty-two: \"Fork It Over!\""]],
   "w6-s9": [["me", "Chandelier Climb! Look at all those lights! Ooh, the party's gonna need this!"], ["lo2", "Forsooth! Climb, feathered snack! At the top, I shall make thee a stale tostada!"], ["me", "A tostada? Rude! Right shape, but RUDE!"]],
+  // World 7: The Backyard BBQ.
+  "w7-s2": [["me", "Hose Highway! Long and bendy. Great dance floor! Mixtape Track forty-three!"], ["n", "RUMBLE! A giant rolling pin comes chasing down the hose!"], ["me", "New dance! It's called RUN! Flap, flap, FLAP!"]],
+  "w7-s3": [["n", "FWOOSH! The sprinklers burst up and blast Tacowl into the air!"], ["me", "Whoa! A free sprinkler show! Okay, lever, drop that rolling pin! BONK! Hoo-hoo!"]],
+  "w7-s4": [[10, "Hmph. Owl. This Crumblet's never seen a pool. Walk it round the edge. No cannonballs."], ["me", "No cannonballs? Aw. Okay, little muffin, stick with me! I'll hoot if anything splashy comes!"]],
+  "w7-s6": [["me", "Picnic Table Peak! Paper plates, plastic forks... a taco party waiting to happen!"], ["me", "Grab the Recipe Scroll, hold the table! Nobody crashes this picnic but ME!"]],
+  "w7-s7": [[18, "In THIS corner! A tiny taco with wings! Ding ding! Wanna spar?"], ["me", "Spar? I'm a party host, not a boxer! But I throw a mean salsa bomb!"], [18, "Ha! I like ya, feathers! Key's up on that ledge. Bounce on the sponge, champ!"]],
+  "w7-s8": [["me", "Cooler Canyon! Ice, sodas and a cold breeze. Ahhh, night owl weather!"], ["me", "Forty-five seconds! Mixtape Track forty-four: \"Chill Out, Grill Out!\" Hoo-hoo!"]],
+  "w7-s9": [["me", "Charcoal Climb! Hot coals, big smoke. My feathers are getting toasty!"], ["lo2", "Hah! The Baron shall grill thee, owl! Well done and extra crunchy!"], ["me", "Extra crunchy is my BEST look! WHOOO's climbing? This owl!"]],
 };
 
 export const QUIPS: Record<QuipKind, string[]> = {

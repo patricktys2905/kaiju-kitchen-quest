@@ -36,6 +36,33 @@ export interface RigDef {
 }
 
 export const RIGS: Record<number, RigDef> = {
+  // Velvaroo: body (with tail) 202x268@21,17; hind legs 120x172@94,318 / 117x172@330,318 (hip at top); arms 102x63@264,147 / 102x65@390,150 (shoulder top-left, glove right).
+  18: {
+    gear: { hand: [0.85, 0.55], chest: [175, 160], neck: [180, 90], back: [90, 120], size: 0.95 },
+    root: [150, 336],
+    scale: 0.24,
+    legs: 'swing',
+    parts: [
+      { piece: 4, role: 'armBack', joint: [150, 112], pivot: [0.12, 0.22], depth: -3, tint: 0xc890a0, rest: 0.2 },
+      { piece: 2, role: 'legB', joint: [124, 172], pivot: [0.32, 0.08], depth: -2, tint: 0xc890a0 },
+      { piece: 0, role: 'body', joint: [122, 285], pivot: [0.5, 1], depth: 0 },
+      { piece: 1, role: 'legA', joint: [146, 178], pivot: [0.32, 0.08], depth: 0.5 },
+      { piece: 3, role: 'arm', joint: [162, 118], pivot: [0.12, 0.22], depth: 1, rest: -0.1 },
+    ],
+  },
+  // Bubblegumbo: body (with its far-side legs) 369x261@102,50; near legs 63x134@101,327 (front) / 67x133@279,331 (back). Holds its weapon in a front foot.
+  9: {
+    gear: { hand: [0.5, 0.85], chest: [330, 200], neck: [380, 150], back: [230, 90], size: 1.05 },
+    holder: 'legA',
+    root: [300, 312],
+    scale: 0.25,
+    legs: 'swing',
+    parts: [
+      { piece: 0, role: 'body', joint: [286, 311], pivot: [0.5, 1], depth: 0 },
+      { piece: 2, role: 'legB', joint: [178, 192], pivot: [0.5, 0.06], depth: 0.5, tint: 0xf0d0e8 },
+      { piece: 1, role: 'legA', joint: [318, 192], pivot: [0.5, 0.06], depth: 1 },
+    ],
+  },
   // Tacowl: body 328x306@101,34; wings 103x126@41,353 / 102x120@165,359 (shoulder at their top); talons 76x73@303,389 / 75x72@396,388. Flies; holds its weapon in a talon.
   19: {
     gear: { hand: [0.5, 0.85], chest: [330, 250], neck: [370, 175], back: [190, 120], size: 0.95 },

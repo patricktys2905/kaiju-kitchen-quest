@@ -1,0 +1,20 @@
+[
+ {
+  "name": "still-w7-boss",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/boss-brussels.png",
+   "art-src/ref-bg.png"
+  ],
+  "prompt": "Generate an image. The first reference is my boss, BARON BRUSSELS of the Leftovers: draw exactly ONE of him, EXACTLY like this reference (same shape, face, cap, monocle, colours). The second shows the painted background style. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Cinematic composition, wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. NO text, no letters, no writing on any labels, no speech bubbles, no UI, no border, no signature, no humans. Scene: a dramatic low-angle boss reveal: Baron Brussels stands on top of a giant glowing barbecue grill at dusk, flames and smoke behind him, pointing down imperiously. Pompous and menacing but still cute, no other characters."
+ },
+ {
+  "name": "still-w7-cure",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/boss-brussels.png",
+   "art-src/ref-bg.png"
+  ],
+  "prompt": "Generate an image. The first reference is my boss, BARON BRUSSELS of the Leftovers: draw exactly ONE of him (only one in the whole picture), EXACTLY like this reference. The second shows the painted background style. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Cinematic composition, wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. NO text, no letters, no writing on any labels, no speech bubbles, no UI, no border, no signature, no humans. Scene: after the battle: Baron Brussels, singed and with his monocle cracked, rolls away in a huff down a garden path towards a big moonlit vegetable garden, leaving a trail of little stink puffs. Funny, defeated but defiant, no other characters."
+ }
+]

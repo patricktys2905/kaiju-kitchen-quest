@@ -45,7 +45,7 @@ export interface MobDef {
 /** Nemesis moves. Shared basics: slash leap charge rain breath fanshot lob spin roar puddle trap.
  *  Signatures (one nemesis each): slimesurge summon rootspike dive snatch boomerang beam lure vanish shell burrow heatwave skewer finslide. */
 export type NemMove = 'slash' | 'leap' | 'charge' | 'rain' | 'breath' | 'fanshot' | 'lob' | 'spin' | 'roar' | 'puddle' | 'trap' | 'summon'
-  | 'slimesurge' | 'rootspike' | 'dive' | 'snatch' | 'boomerang' | 'beam' | 'lure' | 'vanish' | 'shell' | 'burrow' | 'heatwave' | 'skewer' | 'finslide' | 'yank' | 'stingers';
+  | 'slimesurge' | 'rootspike' | 'dive' | 'snatch' | 'boomerang' | 'beam' | 'lure' | 'vanish' | 'shell' | 'burrow' | 'heatwave' | 'skewer' | 'finslide' | 'yank' | 'stingers' | 'scurry' | 'haymaker';
 export interface NemesisDef {
   /** whose story it belongs to */
   species: number;
@@ -96,6 +96,15 @@ export const MOBS: Record<MobKind, MobDef> = {
   scrub: { name: 'Scrub Brute', brain: 'brute', art: 'mob-scrub', hp: 215, atk: 16, speed: 50, w: 72, h: 76, knock: 0.45, aggro: 280, range: 90, windup: 0.8, patrol: 90, xp: 30, dropChance: 0.6, armor: true },
   sporeling: { name: 'Sporeling', brain: 'hopper', art: 'mob-sporeling', hp: 26, atk: 7, speed: 100, w: 30, h: 28, knock: 1.3, aggro: 340, range: 180, windup: 0.35, patrol: 120, xp: 3, dropChance: 0.04 },
   moldking: { name: 'The Mold Crown', brain: 'boss', art: 'boss-mold', hp: 1850, atk: 18, speed: 80, w: 140, h: 190, knock: 0.2, aggro: 2000, range: 150, windup: 0.75, patrol: 0, xp: 420, dropChance: 1, armor: true, moves: ['slash', 'leap', 'rain', 'charge'], calls: 'sporeling' },
+  // ---- World 7: The Backyard BBQ ----
+  wasp: { name: 'Picnic Wasp', brain: 'flyer', art: 'mob-wasp', hp: 40, atk: 7, speed: 125, w: 44, h: 42, knock: 1.1, aggro: 340, range: 230, windup: 0.5, patrol: 160, xp: 13, dropChance: 0.3 },
+  corn: { name: 'Corn Cob Cannon', brain: 'turret', art: 'mob-corn', hp: 85, atk: 8, speed: 0, w: 50, h: 60, knock: 0, aggro: 400, range: 400, windup: 0.9, patrol: 0, xp: 16, dropChance: 0.4 },
+  ketchup: { name: 'Ketchup Squirter', brain: 'sniper', art: 'mob-ketchup', hp: 60, atk: 14, speed: 60, w: 38, h: 54, knock: 1.1, aggro: 560, range: 540, windup: 1.0, patrol: 80, xp: 18, dropChance: 0.35 },
+  beetle: { name: 'Kebab Beetle', brain: 'charger', art: 'mob-beetle', hp: 115, atk: 12, speed: 70, w: 64, h: 46, knock: 0.6, aggro: 400, range: 380, windup: 0.7, patrol: 110, xp: 18, dropChance: 0.4 },
+  charcoal: { name: 'Charcoal Imp', brain: 'burrower', art: 'mob-charcoal', hp: 90, atk: 12, speed: 100, w: 50, h: 50, knock: 0.9, aggro: 360, range: 40, windup: 0.55, patrol: 120, xp: 18, dropChance: 0.35 },
+  patty: { name: 'Burger Brute', brain: 'brute', art: 'mob-patty', hp: 225, atk: 16, speed: 50, w: 76, h: 78, knock: 0.45, aggro: 280, range: 90, windup: 0.8, patrol: 90, xp: 31, dropChance: 0.6, armor: true },
+  sprout: { name: 'Sprout Soldier', brain: 'hopper', art: 'mob-sprout', hp: 26, atk: 7, speed: 100, w: 30, h: 30, knock: 1.3, aggro: 340, range: 180, windup: 0.35, patrol: 120, xp: 3, dropChance: 0.04 },
+  brussels: { name: 'Baron Brussels', brain: 'boss', art: 'boss-brussels', hp: 1750, atk: 18, speed: 75, w: 130, h: 170, knock: 0.2, aggro: 2000, range: 150, windup: 0.75, patrol: 0, xp: 500, dropChance: 1, armor: true, moves: ['slash', 'leap', 'charge', 'rain'], calls: 'sprout' },
   // ---- World 6: The Dining Room ----
   fork: { name: 'Fork Soldier', brain: 'walker', art: 'mob-fork', hp: 105, atk: 12, speed: 65, w: 40, h: 70, knock: 0.8, aggro: 300, range: 72, windup: 0.5, patrol: 110, xp: 17, dropChance: 0.35 },
   napkin: { name: 'Napkin Ghost', brain: 'flyer', art: 'mob-napkin', hp: 42, atk: 7, speed: 120, w: 46, h: 48, knock: 1.1, aggro: 340, range: 230, windup: 0.5, patrol: 160, xp: 13, dropChance: 0.3 },
@@ -148,6 +157,10 @@ export const MOBS: Record<MobKind, MobDef> = {
     nem: { species: 13, moves: ['yank', 'leap', 'puddle', 'charge'], names: ['Queso Yank', 'Flying Chip Drop', 'Queso Splash', 'Luchador Rush'], puddle: 'slow', shot: 'marinade' } },
   nhornet: { name: 'Señor Sting', brain: 'nemesis', art: 'mob-nem-hornet', hp: 185, atk: 15, speed: 95, w: 70, h: 64, knock: 0.4, aggro: 900, range: 140, windup: 0.68, patrol: 70, xp: 32, dropChance: 1, armor: true,
     nem: { species: 19, moves: ['stingers', 'fanshot', 'rain', 'roar'], names: ['Triple Sting', 'Hot Sauce Spray', 'Sauce Shower', 'Angry Buzz'], fly: true, shot: 'heat' } },
+  nmouse: { name: 'Brittle', brain: 'nemesis', art: 'mob-nem-mouse', hp: 180, atk: 15, speed: 100, w: 60, h: 50, knock: 0.45, aggro: 900, range: 120, windup: 0.6, patrol: 80, xp: 32, dropChance: 1, armor: true,
+    nem: { species: 9, moves: ['scurry', 'trap', 'fanshot', 'leap'], names: ['Squeaky Scurry', 'Mousetrap', 'Peanut Toss', 'Brittle Pounce'], shot: 'crumb' } },
+  ngorilla: { name: 'Rocky Road', brain: 'nemesis', art: 'mob-nem-gorilla', hp: 220, atk: 16, speed: 70, w: 92, h: 100, knock: 0.35, aggro: 900, range: 150, windup: 0.75, patrol: 60, xp: 32, dropChance: 1, armor: true,
+    nem: { species: 18, moves: ['haymaker', 'charge', 'roar', 'slash'], names: ['Rocky Haymaker', 'Marshmallow Rush', 'Nutty Roar', 'Fudge Jab'] } },
   golem: { name: 'Freezer Golem', brain: 'boss', art: 'boss-golem', hp: 1900, atk: 18, speed: 80, w: 130, h: 180, knock: 0.2, aggro: 2000, range: 150, windup: 0.75, patrol: 0, xp: 320, dropChance: 1, armor: true, moves: ['slash', 'leap', 'rain', 'charge'] },
 };
 
@@ -182,6 +195,12 @@ export const BOSS_PATTERNS: Partial<Record<MobKind, { near: string[][]; far: str
     { near: [['slash', 'breath', 'leap'], ['slash', 'charge']], far: [['rain', 'breath'], ['charge', 'leap']] },
     { near: [['breath', 'heatwave', 'slash'], ['leap', 'breath']], far: [['heatwave', 'rain', 'charge'], ['breath', 'breath']] },
   ],
+  // Baron Brussels: stink puddles, sprout soldiers, charcoal rain, a big bellyflop
+  brussels: [
+    { near: [['slash', 'slash'], ['slash', 'puddle']], far: [['rain'], ['summon']] },
+    { near: [['slash', 'roar', 'slash'], ['leap', 'puddle']], far: [['charge', 'rain'], ['summon', 'leap']] },
+    { near: [['roar', 'slash', 'puddle'], ['leap', 'heatwave']], far: [['rain', 'puddle', 'charge'], ['summon', 'heatwave', 'leap']] },
+  ],
   // Sir Stale: lance charges, crumb volleys, crouton squires, a crust shockwave when he's angry
   stale: [
     { near: [['slash', 'slash'], ['slash', 'charge']], far: [['charge'], ['fanshot']] },
@@ -204,7 +223,7 @@ export const BOSS_PATTERNS: Partial<Record<MobKind, { near: string[][]; far: str
 export const BOSS_ARMOR = { take: 0.7, pool: 0.1, heavy: 2.5, weak: 5, weakMul: 1.5, tired: 1.6, tiredMul: 1.25 };
 
 /** Attacks that glow red: they can't be interrupted, only dodged. */
-export const DANGER_MOVES = new Set(['charge', 'leap', 'rush', 'brute', 'skewer', 'finslide']);
+export const DANGER_MOVES = new Set(['charge', 'leap', 'rush', 'brute', 'skewer', 'finslide', 'haymaker']);
 
 /** The nemesis whose story this kaiju is in. */
 export function nemesisOf(species: number): MobKind | undefined {

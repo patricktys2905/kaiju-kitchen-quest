@@ -97,8 +97,27 @@ export const ARC: Record<string, StoryLine[]> = {
     ["me", "Hey! Sign for your order first! Aaand he jumped out the window. Classic dine-and-dash."],
     ["me", "New delivery address: the Backyard! A barbecue? Hot food? Finally, MY kinda crowd! Beep beep!"],
   ],
+  "w7-open": [
+    ["me", "Minute twenty-two! The Backyard! Grass like a jungle and zero road signs. One star for the map!"],
+    ["me", "Smell that? BBQ smoke! The customer's up by the grill. Box is hot, claws are fast. Beep beep!"],
+    ["lo2", "Hah! Thy pizza shall be GRILLED, courier! Charred to a cinder!"],
+    ["me", "Grilled pizza is a thing, pal! And it's DELICIOUS! Vroom!"],
+  ],
+  "w7-boss": [
+    ["boss", "ATTEN-TION, lizard! I am BARON BRUSSELS! I am confiscating that pizza for SPROUT TOPPINGS!"],
+    ["me", "Sprouts on pizza?! That's worse than PINEAPPLE! Pete's gonna flip!"],
+    ["boss", "Sprout Soldiers, FORM UP! Pee-yew? Nonsense! That is the smell of DISCIPLINE!"],
+    ["me", "Smells like a gym bag! ZERO stars! Beep beep, coming THROUGH!"],
+  ],
+  "w7-after": [
+    ["n", "SIZZLE! Baron Brussels bounces off the Grill Summit and goes rolling into the grass!"],
+    ["boss", "Always left on the PLATE! The Mystery Meatloaf will flatten you in the Garden, lizard! Nobody knows what's in him! Not even HIM!"],
+    ["me", "Did he sign? Nope! Did he TIP? Nope! Another dine-and-dash! Er, dine-and-ROLL!"],
+    ["me", "Mystery Meatloaf, huh? Sounds like a guy who never reads the menu."],
+    ["me", "New delivery address: the Garden! Minute thirty-something. Round it DOWN and I'm still on time! Beep beep!"],
+  ],
 };
-export const NEMESIS: Record<"w1-elite" | "w2-elite" | "w3-elite" | "w4-elite" | "w5-elite" | "w6-elite", StoryLine[]> = {
+export const NEMESIS: Record<"w1-elite" | "w2-elite" | "w3-elite" | "w4-elite" | "w5-elite" | "w6-elite" | "w7-elite", StoryLine[]> = {
   "w1-elite": [
     ["foe", "Pineapple Pete Express! Fastest wheels in the kitchen! That pizza's MINE to deliver!"],
     ["me", "Raptor Express doesn't share routes, Pete! Beep beep, outta my way!"],
@@ -126,5 +145,10 @@ export const NEMESIS: Record<"w1-elite" | "w2-elite" | "w3-elite" | "w4-elite" |
     ["foe", "Raptor, hold up! Roast Brute on the ridge. Big, beefy, and it eats delivery guys for lunch!"],
     ["me", "Pete?! You're giving me a TRAFFIC report?!"],
     ["foe", "Hey, only I get to beat you! Now go! I'm timing ya. No pineapple, promise!"],
+  ],
+  "w7-elite": [
+    ["foe", "Raptor! Traffic alert! Burger Brute on Patty Plateau. Three patties high and blocking BOTH lanes!"],
+    ["me", "Pete! Another traffic report?! You're getting good at this!"],
+    ["foe", "Go, go! I gotta flip my pineapple. On a GRILL it's allowed. Look it up!"],
   ],
 };

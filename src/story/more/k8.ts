@@ -51,6 +51,14 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w6-s7": [["me", "Napkin fort! Me make napkin bib. Ooh, me fancy golem now!"], ["me", "Key chest way up high. Sponge! BOING! Me no drop Chef note!"]],
   "w6-s8": [["lo2", "Charge, my silverware! Carve yon golem like a chocolate bunny!"], ["me", "Me NO bunny! Me hold forty-five seconds. Me count all the way. Me good counter now!"]],
   "w6-s9": [["me", "Chandelier! Big and sparkly. Lots of candles. Uh-oh, lots of HOT."], ["lo2", "Climb, little sweet! At the top, I shall serve thee for dessert! Hahaha!"], ["me", "Me dessert? Okay, maybe. But me PUNCHING dessert!"]],
+  // World 7: The Backyard BBQ.
+  "w7-s2": [["me", "Hose long like snake. Me no trust snake."], ["n", "RUMBLE! A giant rolling pin comes bouncing down the Hose Highway!"], ["me", "Pin AGAIN?! Me RUN! Me no chocolate pancake! Not today!"]],
+  "w7-s3": [["n", "FSSSH! Sprinklers burst up all over the lawn!"], ["me", "Ooh! Cold water! Me LOVE sprinkler! Me stay nice and firm!"], ["me", "Gate lock. Me pull lever, pin go BONK! Easy-peasy!"]],
+  "w7-s4": [[10, "Hmph. Chocomunch. This Crumblet's never seen a paddling pool. Walk it to the exit. Keep it dry."], ["me", "Me walk muffin! Me be big chocolate boat! Wait, no. Me sink. Me just walk."]],
+  "w7-s6": [["me", "Picnic table! Big checker blanket. Me want sandwich."], ["me", "No! Scroll first! Me grab scroll, me punch wasps. THEN sandwich."]],
+  "w7-s7": [["me", "Flowerpots! Me like dirt. Dirt cool. Dirt no melt nobody."], ["me", "Chest way up high. Sponge! BOING! Me no drop Chef note!"]],
+  "w7-s8": [["me", "COOLER! Ice inside! Me hug ice. Hi, new friend! Me name you Cubey Two!"], ["me", "Forty-five seconds. This one for Cubey. BOTH Cubeys!"]],
+  "w7-s9": [["me", "Charcoal hot. Grill up top even hotter. Me feet go sizzle! *gulp*"], [15, "Chocomunch! Grill tip from a champ: keep moving and you never stick! Go go go!"], ["me", "Me keep moving! Me scared AND me climb! Chef is friend!"]],
 };
 
 export const QUIPS: Record<QuipKind, string[]> = {

@@ -51,6 +51,14 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w6-s7": [["me", "Napkin Fold Fort. Napkins folded like swans. Classy joint. Heh, right up my alley."], ["me", "Secret chest on a high ledge. Sponge, bounce, swipe. Smooth as butter. Ugh, I miss the Butter."]],
   "w6-s8": [["me", "Silverware Siege! The whole cutlery drawer wants a piece of me. Get in line, forks."], ["me", "Forty-five seconds. Stay crunchy, stay sneaky, and let the cookers do the talking! FSSSHHH!"]],
   "w6-s9": [["lo2", "Hark, thief! The Golden Butter sits at the Head of the Table, and none shall pass Sir Stale!"], ["me", "Heh. Thanks for the tip, Sir Snitch-a-lot."]],
+  // World 7: The Backyard BBQ.
+  "w7-s2": [["me", "Hose Highway. Long, green and wide open. Great for a getaway, lousy for hiding."], ["n", "Uh-oh! A giant rolling pin comes rumbling down the hose!"], ["me", "Every heist needs a chase scene! Run right!"]],
+  "w7-s3": [["me", "Sprinkler Springs. FWOOSH! Soggy toast is a crime, and trust me, I know crimes."], ["me", "Gates locked? Lever, rolling pin, BONK. Some tricks never go stale. Unlike SOME knights. Heh."]],
+  "w7-s4": [[10, "Hmph. Bat. This Crumblet wants to see a pool. Walk it round the Paddling Pool Pier. It can't swim."], ["me", "Neither can toast, kid. Uncle Toastbat's summer tour! Stay dry and stay close!"]],
+  "w7-s6": [["me", "Picnic Table Peak. A Recipe Scroll just lying on the picnic blanket? Heh. Free sample."], ["lo2", "Unhand yon scroll, varlet! The Baron shall grill thee well done!"], ["me", "Already golden, pal. Grab it, hold the fort!"]],
+  "w7-s7": [["me", "Flowerpot Fort. Every pot's a hidey-hole. Heh, my kinda neighbourhood."], ["me", "Secret chest on a high ledge. Sponge, bounce, swipe. Ka-CHING! Still miss the Butter, though."]],
+  "w7-s8": [["me", "Cooler Canyon. Ice, sodas, and maybe a chilled butter dish? Nope. Pickles. Always pickles."], ["me", "Forty-five seconds. Ketchup Squirters on every ledge. Stay crunchy, stay sneaky, keep moving!"]],
+  "w7-s9": [["n", "From the Grill Summit, a voice booms: \"ATTEN-TION! The Golden Butter goes on the corn at SUNDOWN!\""], ["me", "Sundown? Heh. That's my favourite time to work. Up the coals we go!"]],
 };
 
 export const QUIPS: Record<QuipKind, string[]> = {

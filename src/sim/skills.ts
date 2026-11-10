@@ -40,7 +40,15 @@ export type SkillKind =
   | 'drop'      // bombs dropped from above that burst and burn
   | 'screech'   // cone that stuns everything in front
   | 'volley'    // tortilla chips sprayed forward and down
-  | 'guacflood' | 'fiesta';
+  | 'guacflood' | 'fiesta'
+  // Bubblegumbo / Velvaroo
+  | 'bubbletrap' // seals the nearest monsters in gum bubbles (helpless), then they pop
+  | 'gumball'    // gumballs that ricochet off monsters
+  | 'trumpet'    // two shockwaves race along the floor both ways and launch monsters
+  | 'hops'       // three big hops forward, a shockwave at every landing
+  | 'flurry'     // a rapid flurry of punches
+  | 'cakebomb'   // a lobbed cupcake that bursts into a slowing frosting patch
+  | 'megabubble' | 'tko';
 
 export interface SkillDef {
   id: string;
@@ -172,6 +180,22 @@ export const SKILLS: Record<number, { actives: SkillDef[]; passive: PassiveDef }
     ],
     passive: { id: 'spiky', name: 'Extra Spiky', desc: 'Monsters that hurt you take 12% of it back per level', unlock: PASSIVE_UNLOCK, per: { thorns: 0.12 } },
   },
+  9: { // Bubblegumbo — gum tank
+    actives: [
+      S({ id: 'bubbletrap', name: 'Bubble Trap', kind: 'bubbletrap', desc: 'Seals the two nearest monsters in gum bubbles: helpless for 2.5 s, then POP for big damage', cd: 7, dur: 0.5, dmg: 2.6, reach: 320, h: 160, kx: 140, ky: -420, n: 2 }),
+      S({ id: 'gumballs', name: 'Gumball Bounce', kind: 'gumball', desc: 'Fires three gumballs that ricochet off monsters, hitting again and again', unlock: 4, cd: 6, dur: 0.4, dmg: 1.2, reach: 30, h: 30, kx: 200, ky: -160, n: 3 }),
+      S({ id: 'trumpet', name: 'Trumpet Blast', kind: 'trumpet', desc: 'A mighty trumpet: shockwaves race both ways along the floor and launch monsters', unlock: 8, cd: 9, dur: 0.6, dmg: 2.2, reach: 60, h: 50, kx: 160, ky: -620 }),
+    ],
+    passive: { id: 'gumhide', name: 'Gum Hide', desc: '-2% damage taken and 4% of damage taken bounced back per level', unlock: PASSIVE_UNLOCK, per: { dr: 0.02, thorns: 0.04 } },
+  },
+  18: { // Velvaroo — hopping boxer
+    actives: [
+      S({ id: 'hops', name: 'Triple Hop', kind: 'hops', desc: 'Three big hops forward with a shockwave at every landing', cd: 4, dur: 1.6, dmg: 1.4, reach: 110, h: 70, kx: 220, ky: -300 }),
+      S({ id: 'flurry', name: 'One-Two Flurry', kind: 'flurry', desc: 'A blur of six punches; the last one knocks monsters flying', unlock: 4, cd: 5, dur: 0.66, dmg: 0.75, reach: 80, h: 70, kx: 60, ky: -40 }),
+      S({ id: 'cakebomb', name: 'Cupcake Bomb', kind: 'cakebomb', desc: 'Lobs a red velvet cupcake that bursts into a slowing frosting patch', unlock: 8, cd: 8, dur: 0.4, dmg: 2.4, reach: 90, h: 60, kx: 220, ky: -360 }),
+    ],
+    passive: { id: 'footwork', name: 'Footwork', desc: '-3% dodge cooldown and +5% finisher damage per level', unlock: PASSIVE_UNLOCK, per: { dodge: 0.03, heavyDmg: 0.05 } },
+  },
   13: { // Avocadrake — guac guardian
     actives: [
       S({ id: 'pithurl', name: 'Pit Hurl', kind: 'pitbounce', desc: 'Hurls its pit, which bounces along the ground three times, hitting at every bounce', cd: 3, dur: 0.4, dmg: 1.7, reach: 40, h: 40, kx: 260, ky: -300, n: 3 }),
@@ -214,6 +238,8 @@ export const ULTS: Record<number, SkillDef> = {
   7: S({ id: 'ult7', name: 'Dragon Roll Inferno', kind: 'cone', desc: 'A colossal wasabi fire breath', cd: 0, dur: 0.9, dmg: 9, reach: 400, h: 200, kx: 420, ky: -300 }),
   8: S({ id: 'ult8', name: 'Fondue Flood', kind: 'wave', desc: 'A wave of molten chocolate rolls across the whole floor', cd: 0, dur: 0.8, dmg: 8, reach: 120, h: 90, kx: 420, ky: -400 }),
   15: S({ id: 'ult15', name: 'Grand Grill', kind: 'firefloor', desc: 'Lights the floor under every monster on screen', cd: 0, dur: 0.8, dmg: 1.0, reach: 600, h: 80, kx: 60, ky: -120 }),
+  9: S({ id: 'ult9', name: 'Mega Bubble', kind: 'megabubble', desc: 'Blows a giant bubble that seals every monster on screen for 3 s, then POP!', cd: 0, dur: 0.9, dmg: 5, reach: 620, h: 300, kx: 160, ky: -520 }),
+  18: S({ id: 'ult18', name: 'Knockout Punch', kind: 'tko', desc: 'Leaps to the toughest monster around and lands a colossal uppercut', cd: 0, dur: 0.8, dmg: 14, reach: 640, h: 300, kx: 300, ky: -900 }),
   13: S({ id: 'ult13', name: 'Holy Guacamole', kind: 'guacflood', desc: 'A rolling wave of guacamole that leaves healing guac pools behind it', cd: 0, dur: 0.9, dmg: 5, reach: 520, h: 120, kx: 420, ky: -340 }),
   19: S({ id: 'ult19', name: 'Midnight Fiesta', kind: 'fiesta', desc: 'A piñata bursts: every monster on screen is stunned and pelted with candy', cd: 0, dur: 0.9, dmg: 3.2, reach: 620, h: 300, kx: 80, ky: -200, n: 14 }),
   17: S({ id: 'ult17', name: 'Blizzard', kind: 'blizzard', desc: 'A screen-wide blizzard that hits and chills every monster for 3 s', cd: 0, dur: 0.8, dmg: 1.6, reach: 600, h: 200, kx: 40, ky: -60 }),
@@ -226,6 +252,7 @@ export const POSE_OF: Partial<Record<SkillKind, SkillKind>> = {
   geyser: 'nova', drain: 'nova', freeze: 'nova', radial: 'nova', firefloor: 'nova', blizzard: 'nova', orbit: 'buff', counter: 'buff',
   pounce: 'slam', tremor: 'slam', wave: 'slam', meteor: 'slam', swoop: 'dash', blink: 'dash', bulldoze: 'dash', slide: 'dash', rampage: 'dash', slashall: 'dash',
   throw: 'uppercut',
+  bubbletrap: 'nova', gumball: 'cone', trumpet: 'slam', hops: 'dash', flurry: 'cone', cakebomb: 'cone', megabubble: 'nova', tko: 'uppercut',
   pitbounce: 'cone', guac: 'nova', gust: 'cone', drop: 'cone', screech: 'buff', volley: 'cone', guacflood: 'slam', fiesta: 'nova',
 };
 

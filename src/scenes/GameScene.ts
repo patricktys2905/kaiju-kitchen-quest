@@ -99,6 +99,8 @@ export class GameScene extends Phaser.Scene {
   /** hazard visuals (one container per hazard) + one graphics layer for lasers / mould puddles / burrow mounds */
   private hazardViews: Phaser.GameObjects.Container[] = [];
   private overlay?: Phaser.GameObjects.Graphics;
+  /** drawn above the monsters (gum bubbles) */
+  private topFx?: Phaser.GameObjects.Graphics;
   private slowTint?: Phaser.GameObjects.Rectangle;
   /** platform boards (moving trays follow, secret ledges fade in), props and cookers */
   private platViews: { board?: Phaser.GameObjects.Image; shadow: Phaser.GameObjects.Ellipse }[] = [];
@@ -249,6 +251,7 @@ export class GameScene extends Phaser.Scene {
 
     this.hazardViews = w.hazards.map(z => this.buildHazard(z.kind, z.x, z.w, st.groundY));
     this.overlay = this.add.graphics().setDepth(2);
+    this.topFx = this.add.graphics().setDepth(8);
     this.slowTint = this.add.rectangle(SX, SY, VW * 2, VH * 2, 0x6a8aff, 0).setOrigin(0, 0).setScrollFactor(0).setDepth(16);
     this.heroShadow = this.add.ellipse(0, 0, 54, 12, 0x000000, 0.22).setDepth(-2);
     this.bubbleView = this.add.ellipse(0, 0, 96, 112, 0xbfe8ff, 0.22).setStrokeStyle(3, 0xffffff, 0.8).setDepth(6).setVisible(false);
@@ -708,7 +711,11 @@ export class GameScene extends Phaser.Scene {
   /** Hazard look: burner ring / steam grate / shelf shadow / ice sheet (no art needed). */
   private buildHazard(kind: string, x: number, w: number, gy: number): Phaser.GameObjects.Container {
     const parts: Phaser.GameObjects.GameObject[] = [];
-    if (kind === 'wax') { // a candle high above; a hot wax drip falls when it's on
+    if (kind === 'sprinkler') { // a lawn sprinkler head; a fountain of water when it's on
+      parts.push(this.add.rectangle(0, -6, 26, 12, 0x6a7a8a).setStrokeStyle(2, 0x2a3a4a));
+      parts.push(this.add.container(0, -6, [this.add.ellipse(0, -60, w * 0.6, 120, 0x9ad8ff, 0.55), this.add.ellipse(-w * 0.3, -40, 18, 80, 0xc8f0ff, 0.6).setAngle(-25), this.add.ellipse(w * 0.3, -40, 18, 80, 0xc8f0ff, 0.6).setAngle(25)]).setName('fx'));
+      parts.push(this.add.ellipse(0, -2, w, 10, 0x9ad8ff, 0.5).setName('glow'));
+    } else if (kind === 'wax') { // a candle high above; a hot wax drip falls when it's on
       parts.push(this.add.ellipse(0, -2, w, 12, 0x000000, 0.25).setName('glow'));
       parts.push(this.add.container(0, -380, [this.add.rectangle(0, 0, 22, 60, 0xfff4d8).setStrokeStyle(3, 0xc8a070), this.add.ellipse(0, -40, 14, 22, 0xffb347, 0.9)]));
       parts.push(this.add.ellipse(0, -60, 18, 30, 0xfff0c0).setStrokeStyle(2, 0xe0a050).setName('fx'));
@@ -937,11 +944,17 @@ export class GameScene extends Phaser.Scene {
     });
     // lasers, mould puddles, burrow mounds
     const g = this.overlay!;
-    g.clear();
+    g.clear(); this.topFx?.clear();
     for (const p of w.puddles) {
       const col = ({ slow: 0xa83a6a, slick: 0xf0d040, burn: 0xff7a2a, poison: 0x7ab8c8, trap: 0x6a6a72 } as Record<string, number>)[p.kind ?? ''] ?? 0x6ac04a;
       if (p.kind === 'trap') { g.fillStyle(col, 1); g.fillRect(p.x - 14, p.y - 6, 28, 6); g.lineStyle(2, 0xd8d8e0, 1); g.lineBetween(p.x - 12, p.y - 6, p.x + 12, p.y - 14); continue; }
-      g.fillStyle(p.kind === 'slow' && st.world === 6 ? 0xfff0c8 : p.kind === 'slow' && (w.nemesis === 'nslug' || st.world === 5) ? 0x7ab85a : col, Math.min(p.kind === 'burn' ? 0.5 + Math.sin(t * 18) * 0.15 : 0.55, p.t / 2)); g.fillEllipse(p.x, p.y - 1, p.w ?? 70, 10);
+      g.fillStyle(p.kind === 'slow' && st.world === 7 ? 0x9ad06a : p.kind === 'slow' && st.world === 6 ? 0xfff0c8 : p.kind === 'slow' && (w.nemesis === 'nslug' || st.world === 5) ? 0x7ab85a : col, Math.min(p.kind === 'burn' ? 0.5 + Math.sin(t * 18) * 0.15 : 0.55, p.t / 2)); g.fillEllipse(p.x, p.y - 1, p.w ?? 70, 10);
+    }
+    for (const b of w.bubbles) { // gum bubbles around sealed monsters
+      const m = w.mobs.find(o => o.id === b.id); if (!m) continue;
+      const r = Math.max(MOBS[m.kind].w, MOBS[m.kind].h) * 0.62 * (1 + Math.sin(t * 6) * 0.04);
+      this.topFx!.fillStyle(0xff8ad8, 0.28); this.topFx!.fillCircle(m.x, m.y - MOBS[m.kind].h / 2, r);
+      this.topFx!.lineStyle(3, 0xffc8f0, 0.9); this.topFx!.strokeCircle(m.x, m.y - MOBS[m.kind].h / 2, r);
     }
     for (const z of w.zones) {
       const a = Math.min(1, z.t);
@@ -1012,7 +1025,10 @@ export class GameScene extends Phaser.Scene {
       }
       let c = this.shotImgs.get(s.id);
       if (!c) {
-        c = s.kind === 'pit' ? this.add.circle(0, 0, 12, 0x7a4a24).setStrokeStyle(3, 0x3a1e0c)
+        c = s.kind === 'gumball' ? this.add.circle(0, 0, 12, [0xff6ad8, 0x6ad8ff, 0xffe24a][s.id % 3]).setStrokeStyle(3, 0xffffff)
+          : s.kind === 'trumpet' ? this.add.ellipse(0, 0, 70, 50, 0xffc8f0, 0.7).setStrokeStyle(3, 0xff6ad8)
+          : s.kind === 'cupcake' ? this.add.circle(0, 0, 11, 0xb0203a).setStrokeStyle(4, 0xfff4e0)
+          : s.kind === 'pit' ? this.add.circle(0, 0, 12, 0x7a4a24).setStrokeStyle(3, 0x3a1e0c)
           : s.kind === 'salsa' ? this.add.circle(0, 0, 10, 0xd8301a).setStrokeStyle(3, 0x6a0e06)
           : s.kind === 'chip' ? this.add.triangle(0, 0, 0, 12, 8, -10, 16, 12, 0xf0c040).setStrokeStyle(2, 0x9a6a10)
           : s.kind === 'candy' ? this.add.circle(0, 0, 8, [0xff6ad8, 0x6ad8ff, 0xffe24a][s.id % 3]).setStrokeStyle(2, 0xffffff)
@@ -1041,6 +1057,7 @@ export class GameScene extends Phaser.Scene {
           : s.kind === 'reflect' ? this.add.circle(0, 0, 9, 0x8ae07a).setStrokeStyle(2, 0xffffff)
           : s.from === 'hero'
           ? this.add.circle(0, 0, 9, 0xe8c8ff).setStrokeStyle(3, 0xffffff).setBlendMode(Phaser.BlendModes.ADD)
+          : s.kind === 'icicle' && worldOf(this.stage).id === 7 ? this.add.rectangle(0, 0, 14, 12, 0x2a2222).setStrokeStyle(2, 0xff8a2a)
           : s.kind === 'icicle' && worldOf(this.stage).id === 6 ? this.add.rectangle(0, 0, 14, 12, 0xd8a050).setStrokeStyle(2, 0x7a4a20)
           : s.kind === 'icicle' && worldOf(this.stage).id === 5 ? this.add.circle(0, 0, 10, 0x8ac06a, 0.9).setStrokeStyle(3, 0x3a6a2a)
           : s.kind === 'icicle' && worldOf(this.stage).id === 4 ? this.add.circle(0, 0, 11, 0xc8904a).setStrokeStyle(3, 0x6a3a10)

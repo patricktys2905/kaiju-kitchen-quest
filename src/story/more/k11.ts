@@ -56,6 +56,15 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w6-s7": [["me", "Napkin Fold Fort! Secret chest on a high ledge. Bouncy sponge? The Raptor Express elevator! Boing!"], ["me", "World 6 key, delivered right to MY pocket. Tip yourself, raptor!"]],
   "w6-s8": [["me", "Silverware Siege! Forty-five seconds. Every fork in the house wants a bite of this pizza!"], [5, "Heh. Nice feast box, raptor. Shame if it walked off."], ["me", "Hands off, Toastbat! It's a paid order! Well, a promised order!"]],
   "w6-s9": [["me", "Chandelier Climb! The Head of the Table is up top. Customer's that way!"], ["lo2", "Hahaha! Bring me my feast, courier! And let it be STALE as a tombstone!"], ["me", "Sorry, pal! Raptor Express only delivers HOT! Beep beep!"]],
+
+  // World 7: The Backyard BBQ.
+  "w7-s2": [["me", "Minute twenty-three! Hose Highway! A long green road and no tolls. I love it!"], ["n", "Uh-oh! A giant rolling pin comes barreling down the hose!"], ["me", "Tailgater! Get your own lane! Beep beep, VROOM!"]],
+  "w7-s3": [["me", "Sprinkler Springs! FWOOSH! Free air mail! Keep the box DRY, people!"], ["me", "Lever up top. Special delivery: one rolling pin, hot off the press!"]],
+  "w7-s4": [[10, "Hmph. Raptor. Lost Crumblet on Paddling Pool Pier. Bus it to the exit."], ["me", "Passenger number seven! Kiddo, a pool is NOT a bus stop. All aboard!"], [10, "Bus fund's growing. Got two crumbs and a button. Hmph."]],
+  "w7-s6": [["me", "Picnic Table Peak! Pick-up: one Recipe Scroll, then hold out. Ooh, a free buffet! Focus, raptor!"], ["lo2", "Hah! The Baron shall cook thy pizza WELL DONE, courier!"], ["me", "Rare, medium, well done? Nope! Pizza's DONE done!"]],
+  "w7-s7": [["me", "Flowerpot Fort! Secret chest on a high ledge. Bouncy sponge? Raptor Express elevator, going UP!"], [9, "Ooh, pizza! Did I order that? Elephants never forget! *POP* Wait, did I order that?"], ["me", "Sorry, big guy, it's spoken for! Here, have a coupon!"]],
+  "w7-s8": [["me", "Cooler Canyon! Forty-five seconds. A cooler? Great for drinks, TERRIBLE for pizza!"], [18, "In THIS corner, the fastest dino in the yard! Ding ding! Deliver a knockout!"], ["me", "Special delivery: one knuckle sandwich! Beep beep!"]],
+  "w7-s9": [["me", "Charcoal Climb! Hot rocks, hot box, hot raptor! Customer's up top!"], ["n", "A voice booms from the Grill Summit: \"ATTEN-TION, courier! Prepare to be SPROUTED!\""], ["me", "Sorry! Raptor Express doesn't do sprouts! Beep beep!"]],
 };
 
 export const QUIPS: Record<QuipKind, string[]> = {
