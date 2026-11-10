@@ -70,6 +70,7 @@ export class GameScene extends Phaser.Scene {
   private levels = 0;
   private done = false;
   private hard = false;
+  private nightmare = false;
   /** hazard visuals (one container per hazard) + one graphics layer for lasers / mould puddles / burrow mounds */
   private hazardViews: Phaser.GameObjects.Container[] = [];
   private overlay?: Phaser.GameObjects.Graphics;
@@ -131,7 +132,8 @@ export class GameScene extends Phaser.Scene {
   private buildStage(): void {
     const st = this.stage, p = hero();
     this.hard = save.hard && this.hardOk();
-    this.world = new World(st, derive(p), (Date.now() & 0xffff) + 1, quickBag(), save.items.revive ?? 0, this.hard, STORIES[p.species]?.variants[st.id], [...(save.spicy ?? [])], nemesisOf(p.species));
+    this.nightmare = this.hard && !!save.nightmare && !!hero().hardCleared[`${st.world}-10`];
+    this.world = new World(st, derive(p), (Date.now() & 0xffff) + 1, quickBag(), save.items.revive ?? 0, this.hard, STORIES[p.species]?.variants[st.id], [...(save.spicy ?? [])], nemesisOf(p.species), this.nightmare);
     const cam = this.cameras.main.setZoom(ZOOM).setBackgroundColor('#f6dcb4');
     const bg = this.has(st.bg) ? st.bg : 'bg-far';
     this.far = this.has(bg) ? this.add.image(SX, SY, bg).setOrigin(0, 0).setScrollFactor(0).setDepth(-100) : undefined;
@@ -190,7 +192,7 @@ export class GameScene extends Phaser.Scene {
     playMusic(st.boss ? 'boss' : st.world === 2 ? 'world2' : st.world === 3 ? 'world3' : st.world === 4 ? 'world2' : 'world1');
     if (st.boss) this.time.delayedCall(900, () => sfx('boss'));
     if (w.variant) this.time.delayedCall(900, () => toast(`${{ swarm: '🐜 SWARM', ambush: '⚔️ AMBUSH', night: '🌙 NIGHT' }[w.variant!]}!`, { color: '#c8a8ff' }));
-    toast(`${st.num} ${st.name}${this.hard ? ' · HARD' : ''}${w.spicy.length ? ' · ' + '🌶'.repeat(w.spicy.length) : ''}`, { big: true, color: this.hard ? '#ff7a6a' : undefined });
+    toast(`${st.num} ${st.name}${this.nightmare ? ' · 💀 NIGHTMARE' : this.hard ? ' · HARD' : ''}${w.spicy.length ? ' · ' + '🌶'.repeat(w.spicy.length) : ''}`, { big: true, color: this.hard ? '#ff7a6a' : undefined });
     if (st.boss) this.time.delayedCall(1200, () => toast(`The ${MOBS[st.mobs[0].kind].name} awaits!`, { color: '#ff9a6a' }));
   }
 
@@ -323,6 +325,7 @@ export class GameScene extends Phaser.Scene {
           toast(`🗝 WORLD ${e.world} KEY! A secret stage has opened on the map`, { big: true, color: '#ffd27a' });
           break;
         }
+        case 'guardUp': sfx('click'); this.callout(e.x, e.y, 'GUARD UP!', '#c8d8e8', 13); { const near = w.mobs.find(m => m.guardT > 0 && m.state !== 'dead'); if (near && Math.random() < 0.7) this.bubble(['Hah! Same old moves!', 'We\'ve seen THAT before!', 'Try something new, pal!'][Math.floor(Math.random() * 3)], near.id, '#5a1030'); } break;
         case 'mimic': this.time.delayedCall(400, () => this.quip('mimic', true)); sfx('boss'); toast('It\'s a MIMIC!', { color: '#ff9a6a' }); break;
         case 'style': if (e.rank === 'S' || e.rank === 'A') toast(`STYLE ${e.rank}!`, { color: e.rank === 'S' ? '#ffd23c' : '#9fe8ff' }); break;
         case 'hazard': if (e.on && w.hazards[e.i]?.kind === 'drop') { sfx('boom'); } break;
@@ -388,7 +391,7 @@ export class GameScene extends Phaser.Scene {
     save.crumbs += w.run.crumbs;
     save.items.fstone = (save.items.fstone ?? 0) + w.run.stones;
     if (w.run.crumbs) track('crumbs', w.run.crumbs);
-    const res = failed ? null : finishStage(st.id, rankOf(w.run, st.par).rank, w.loot, st.lv[1] + (this.hard ? HARD_LV : 0), !!st.boss, this.hard, chillies);
+    const res = failed ? null : finishStage(st.id, rankOf(w.run, st.par).rank, w.loot, st.lv[1] + (this.hard ? HARD_LV : 0), !!st.boss, this.hard, chillies, this.nightmare);
     const sp = hero().species;
     trackHero(sp, 'combo', w.run.maxCombo, true);
     if (res) {

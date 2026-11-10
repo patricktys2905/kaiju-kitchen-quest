@@ -140,6 +140,7 @@ function mapPage(): string {
   const pts = (w: number) => STAGES.filter(s => s.world === w).map(s => MAP_POS[s.id]).map(([x, y]) => `${x},${y}`).join(' ');
   const done = (w: number) => STAGES.filter(s => s.world === w && hero().cleared[s.id]).map(s => MAP_POS[s.id]);
   const hardOk = hardUnlocked(sel.world);
+  const nightmareOk = !!hero().hardCleared[`${sel.world}-10`];
   if (save.hard && !hardOk) { save.hard = false; persist(); }
   const rank = (save.hard ? hero().hardCleared : hero().cleared)[sel.id] as Rank | undefined;
   const lv = (n: number) => n + (save.hard ? HARD_LV : 0);
@@ -172,7 +173,8 @@ function mapPage(): string {
       <button class="pill go big" data-play="${sel.id}" ${stageUnlocked(sel) ? '' : 'disabled'}>${stageUnlocked(sel) ? '▶ PLAY' : '🔒 LOCKED'}</button>
       <div class="spicy">🌶 SPICY ${SPICY_LIST.map(([k, ic, nm, ds]) => `<button class="chili ${(save.spicy ?? []).includes(k) ? 'on' : ''}" data-spicy="${k}" title="${ds}">${ic} ${nm}</button>`).join('')}
         <small>${(save.spicy ?? []).length ? `+${(save.spicy ?? []).length} bonus box${(save.spicy ?? []).length > 1 ? 'es' : ''}, +${25 * (save.spicy ?? []).length}% crumbs` : 'extra loot for extra pain'}</small></div>
-      <label class="hard ${hardOk ? '' : 'off'}"><input type="checkbox" data-act="hard" ${save.hard ? 'checked' : ''} ${hardOk ? '' : 'disabled'}> HARD MODE ${hardOk ? `(+${HARD_LV} monster levels, better boxes)` : '— beat this world\'s boss'}</label>
+      <label class="hard ${hardOk ? '' : 'off'}"><input type="checkbox" data-act="hard" ${save.hard ? 'checked' : ''} ${hardOk ? '' : 'disabled'}> HARD ${hardOk ? `(+${HARD_LV} levels, better boxes)` : '— beat this world\'s boss'}</label>
+      <label class="hard nm ${nightmareOk ? '' : 'off'}"><input type="checkbox" data-act="nightmare" ${save.nightmare && nightmareOk ? 'checked' : ''} ${nightmareOk ? '' : 'disabled'}> 💀 NIGHTMARE ${nightmareOk ? '(smarter, tougher, a Golden Cloche every clear)' : '— beat this world\'s boss on Hard'}</label>
     </div>
   </div>
   <p class="hint">Tip: double-tap ← or → to <b>dodge roll</b> through attacks. Beat every monster, then walk to the EXIT. Stage 5 has an elite, stage 10 the world boss.</p>`;
@@ -416,7 +418,8 @@ function onClick(e: MouseEvent): void {
       case 'salvage-worse': { const r = salvageWorse(); flash = r.n ? `Salvaged ${r.n} item${r.n > 1 ? 's' : ''} worse than every hero's gear: +🍪${r.crumbs}` : 'Nothing to salvage: every item beats someone\'s gear (or is locked)'; selItem = null; break; }
       case 'best': { const n = equipBest(sp); flash = n ? `Equipped ${n} better item${n > 1 ? 's' : ''}` : 'Already wearing the best gear in your bag'; break; }
       case 'scroll': if (useScroll(sp)) flash = 'Skill points refunded!'; break;
-      case 'hard': save.hard = !save.hard; persist(); break;
+      case 'hard': save.hard = !save.hard; if (!save.hard) save.nightmare = false; persist(); break;
+      case 'nightmare': save.nightmare = !save.nightmare; if (save.nightmare) save.hard = true; persist(); break;
       case 'storymode': save.storyMode = save.storyMode === 'key' ? 'full' : 'key'; persist(); flash = save.storyMode === 'key' ? 'Story: only the big scenes (stage 1, your nemesis, the boss)' : 'Story: a short scene before every stage'; break;
       case 'mine': bagMine = !bagMine; selItem = null; break;
       case 'bonus': { const r = claimBonus(); if (r) { flash = 'Daily bonus: ' + r; sfx('reveal5'); } break; }
@@ -518,7 +521,7 @@ const CAMP_CSS = `
 .kq .node .me { position: absolute; bottom: 4.4vmin; left: 50%; transform: translateX(-50%); width: 7vmin; height: 7vmin; object-fit: contain; filter: drop-shadow(0 0.6vmin 0.6vmin #000a); animation: bob 1s ease-in-out infinite alternate; pointer-events: none; }
 @keyframes bob { to { transform: translate(-50%, -0.8vmin); } }
 .kq .wlabel { position: absolute; transform: translateX(-10%); font-family: 'Luckiest Guy', sans-serif; font-size: 2vmin; color: #fff; text-shadow: 0 0.3vmin 0.4vmin #000, 0 0 1vmin #000; white-space: nowrap; pointer-events: none; }
-.kq .map .info { width: 30vmin; background: #1a1020d8; border-radius: 2vmin; padding: 1.6vmin; display: flex; flex-direction: column; gap: 0.6vmin; align-self: flex-start; }
+.kq .map .info { width: 30vmin; background: #1a1020d8; border-radius: 2vmin; padding: 1.6vmin; display: flex; flex-direction: column; gap: 0.6vmin; align-self: flex-start; max-height: 100%; overflow-y: auto; box-sizing: border-box; scrollbar-width: thin; }
 .kq .map .info .num { font-family: 'Luckiest Guy', sans-serif; color: #ffb347; font-size: 3vmin; }
 .kq .map .info .nm { font-size: 2.8vmin; }
 .kq .map .info .lv { font-size: 2vmin; color: #d8c8d8; }
@@ -531,6 +534,7 @@ const CAMP_CSS = `
 .kq .spicy small { width: 100%; color: #b89888; }
 .kq .hard { font-size: 1.8vmin; color: #ff9a8a; display: flex; gap: 0.6vmin; align-items: center; }
 .kq .hard.off { color: #8a7a8a; }
+.kq .hard.nm { color: #c8a8ff; }
 .kq .hard input { width: 3vmin; height: 3vmin; }
 .kq .hint { color: #b8a8b8; font-size: 1.9vmin; margin: 1vmin 0 0; }
 .kq .subtabs { display: flex; gap: 1vmin; align-items: center; margin-bottom: 1.2vmin; flex-wrap: wrap; }

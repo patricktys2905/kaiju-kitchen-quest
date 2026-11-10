@@ -119,4 +119,6 @@ export type SimEvent =
   | { t: 'key'; world: number }
   | { t: 'objective'; text: string; done?: boolean }
   | { t: 'objFail'; why: string }
+  /** monsters near you read your button-mashing and raise their guard */
+  | { t: 'guardUp'; x: number; y: number }
   | { t: 'heal'; x: number; y: number; n: number; hero: true };

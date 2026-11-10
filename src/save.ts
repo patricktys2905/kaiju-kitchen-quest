@@ -37,6 +37,8 @@ export interface Save {
   keys?: number[];
   /** 'full' = a scene before every stage, 'key' = only the big ones (stage 1, nemesis, boss) */
   storyMode?: 'full' | 'key';
+  /** Nightmare mode (per world, after beating its boss on Hard) */
+  nightmare?: boolean;
 }
 
 // v2: per-kaiju progress, 4 starters, story (older v1 saves are not carried over)
@@ -199,7 +201,7 @@ export function openBox(i: number): { item: Item; crumbs: number; box: LootBox; 
 export interface ClearResult { rank: Rank; boxes: LootBox[]; upgraded: number; firstClear: boolean; spicy: number }
 
 /** Stage finished: rank upgrades some boxes, adds the clear reward, records the best rank. */
-export function finishStage(stageId: string, rank: Rank, found: LootBox[], stageLv: number, boss: boolean, hard = false, spicy = 0): ClearResult {
+export function finishStage(stageId: string, rank: Rank, found: LootBox[], stageLv: number, boss: boolean, hard = false, spicy = 0, nightmare = false): ClearResult {
   const up = { S: 0.5, A: 0.3, B: 0.15, C: 0, D: 0 }[rank];
   let upgraded = 0;
   const boxes = found.map(b => {
@@ -211,6 +213,7 @@ export function finishStage(stageId: string, rank: Rank, found: LootBox[], stage
   const firstClear = !table[stageId];
   for (const tier of clearRewards(stageLv, rank, boss, firstClear, Math.random)) boxes.push({ tier, ilvl: stageLv });
   // each Spicy chilli adds a bonus box (better with more chillies)
+  if (nightmare) boxes.push({ tier: (boss ? 5 : 4) as BoxTier, ilvl: stageLv + 2 }); // Nightmare's reward
   for (let i = 0; i < spicy; i++) boxes.push({ tier: Math.min(5, 2 + spicy) as BoxTier, ilvl: stageLv });
   const prev = table[stageId];
   if (!prev || RANK_ORDER.indexOf(rank) > RANK_ORDER.indexOf(prev)) table[stageId] = rank;

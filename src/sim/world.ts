@@ -23,6 +23,8 @@ const DOUBLE_TAP = 0.28;  // seconds between two taps of a direction for a dodge
 const DODGE_T = 0.32, DODGE_INV = 0.3, DODGE_CD = 0.55;
 /** a hit that lands in the first part of a dodge is a PERFECT dodge */
 export const PERFECT_WIN = 0.2;
+/** Nightmare on top of Hard's levels: tougher, harder-hitting monsters (plus shorter telegraphs and smarter tactics) */
+export const NIGHTMARE = { hp: 1.2, atk: 1.25 };
 const SLOWMO_T = 0.55, SLOWMO_RATE = 0.3, COUNTER_T = 1.6;
 /** style meter letters (0..100) */
 export const STYLE_RANKS: [number, string][] = [[80, 'S'], [60, 'A'], [40, 'B'], [20, 'C'], [0, 'D']];
@@ -119,6 +121,10 @@ export interface Mob {
   glued: number;
   /** nemesis: which world's version (more moves later), shell timer, a stolen quick-bag item */
   phase: number; shellT: number; stolen: number;
+  /** guard raised against a button-masher (blocks plain combo hits) */
+  guardT: number;
+  /** which side of you this monster tries to stand on (flanking) */
+  flank: 1 | -1;
 }
 
 export interface Box { id: number; tier: BoxTier; ilvl: number; x: number; y: number; vy: number; ground: boolean; t: number }
@@ -161,6 +167,12 @@ export class World {
   holdout = 0;
   objDone = false;
   private spawnT = 0;
+  /** button-mash reading: consecutive plain-combo hits */
+  private mash = 0; private mashT = 0;
+  /** Nightmare: Hard's levels + smarter, faster monsters */
+  nightmare = false;
+  /** how many monsters may attack you at once (the rest circle and wait their turn) */
+  get maxAttackers(): number { return this.nightmare ? 3 : 2; }
   /** the hero touched down this step (sponges bounce only on landing) */
   private heroLanded = false;
   /** lingering skill areas: steam / mustard goo / ice trail / fire floor / snow */
@@ -177,7 +189,8 @@ export class World {
   /** story twist on this stage */
   variant: 'swarm' | 'ambush' | 'night' | undefined;
 
-  constructor(public stage: StageDef, d: Derived, seed = 1, bag: Hero['bag'] = [], revives = 0, hard = false, variant?: 'swarm' | 'ambush' | 'night', spicy: Spicy[] = [], public nemesis?: MobKind) {
+  constructor(public stage: StageDef, d: Derived, seed = 1, bag: Hero['bag'] = [], revives = 0, hard = false, variant?: 'swarm' | 'ambush' | 'night', spicy: Spicy[] = [], public nemesis?: MobKind, nightmare = false) {
+    this.nightmare = nightmare; if (nightmare) hard = true;
     this.stage = stage = { ...stage, platforms: stage.platforms.map(p => ({ ...p })) };
     this.platBase = stage.platforms.map(p => p.x);
     this.props = (stage.props ?? []).map(p => ({ id: nextId++, kind: p.kind, x: p.x, y: p.y, hp: p.kind === 'crate' ? 2 : p.kind === 'chest' ? 3 : p.kind === 'jar' ? 1 : 99, cd: 0, key: p.key, tx: p.tx, tw: p.tw }));
@@ -217,7 +230,7 @@ export class World {
     const all = Object.keys(ELITE_MODS) as EliteMod[];
     for (const m of this.mobs) {
       if (MOBS[m.kind].brain === 'boss' || MOBS[m.kind].brain === 'nemesis') continue;
-      const n = m.elite ? (hard ? 2 : 1) : hard && this.rand() < 0.12 ? 1 : 0;
+      const n = m.elite ? (hard ? 2 : 1) : this.nightmare && this.rand() < 0.3 ? 1 : hard && this.rand() < 0.12 ? 1 : 0;
       while (m.mods.length < n) { const k = all[Math.floor(this.rand() * all.length)]; if (!m.mods.includes(k)) m.mods.push(k); }
     }
   }
@@ -246,12 +259,13 @@ export class World {
 
   spawnMob(kind: MobKind, x: number, lv: number, y?: number, elite = false): Mob {
     const pow = WORLDS.find(x => x.id === this.stage.world)?.power ?? 1;
-    const hp = Math.round(mobHp(kind, lv) * (elite ? ELITE.hp : 1) * pow);
+    const nm = this.nightmare ? NIGHTMARE : { hp: 1, atk: 1 };
+    const hp = Math.round(mobHp(kind, lv) * (elite ? ELITE.hp : 1) * pow * nm.hp);
     const m: Mob = {
-      id: nextId++, kind, lv, x, y: y ?? this.stage.groundY, vx: 0, vy: 0, face: -1, hp, maxHp: hp, atk: Math.round(mobAtk(kind, lv) * (elite ? ELITE.atk : 1) * pow),
+      id: nextId++, kind, lv, x, y: y ?? this.stage.groundY, vx: 0, vy: 0, face: -1, hp, maxHp: hp, atk: Math.round(mobAtk(kind, lv) * (elite ? ELITE.atk : 1) * pow * nm.atk),
       state: 'walk', move: '', t: this.rand() * 2, ground: true, on: y === undefined ? -1 : null, home: x, deadT: 0, flash: 0,
       hurtShown: 0, stagger: 0, summoned: 0, hitDone: false, elite, homeY: y ?? this.stage.groundY, slow: 0,
-      mods: [], under: MOBS[kind].brain === 'burrower', disguised: MOBS[kind].brain === 'mimic', aimX: 0, aimY: 0, enraged: false, parent: 0, dropT: 0, surfT: 0, burn: 0, burnT: 0, burnDmg: 0, frozen: 0, glued: 0, phase: this.stage.world, shellT: 0, stolen: -1,
+      mods: [], under: MOBS[kind].brain === 'burrower', disguised: MOBS[kind].brain === 'mimic', aimX: 0, aimY: 0, enraged: false, parent: 0, dropT: 0, surfT: 0, burn: 0, burnT: 0, burnDmg: 0, frozen: 0, glued: 0, phase: this.stage.world, shellT: 0, stolen: -1, guardT: 0, flank: 1,
     };
     if (y !== undefined) { m.on = this.platformAt(x, y); m.ground = m.on !== null; }
     this.mobs.push(m);
@@ -962,6 +976,17 @@ export class World {
     }
     const guardBreak = h.state === 'attack' && h.step === -2;
     if (m.disguised) { m.disguised = false; m.state = 'walk'; m.t = 1; this.events.push({ t: 'mimic', id: m.id }); }
+    const plain = h.state === 'attack' && h.step >= 0; // a plain ground-combo hit
+    if (plain) {
+      if (this.time - this.mashT > 1.5) this.mash = 0;
+      this.mash++; this.mashT = this.time;
+      if (this.mash >= (this.nightmare ? 6 : 9)) { // three full combos in a row and nothing else: they've read you
+        this.mash = 0;
+        for (const o of this.targetsNear(h.x, h.y, 260, 120)) if (MOBS[o.kind].brain !== 'boss') { o.guardT = 2; }
+        this.events.push({ t: 'guardUp', x: m.x, y: m.y - MOBS[m.kind].h - 10 });
+      }
+    } else if (h.state === 'attack' || h.state === 'skill') this.mash = 0; // mixing it up resets the read
+    if (m.guardT > 0 && plain) { raw *= 0.15; this.events.push({ t: 'block', x: m.x + m.face * 20, y: m.y - MOBS[m.kind].h * 0.6 }); }
     // shielders: front hits barely hurt unless it's a skill or a finisher (which also breaks the guard)
     if ((def.shield || m.mods.includes('shielded')) && m.state !== 'hurt' && m.state !== 'stagger' && Math.sign(h.x - m.x) === m.face) {
       if (!heavy && k.stun < 0.6) { raw *= 0.25; this.events.push({ t: 'block', x: m.x + m.face * 20, y: m.y - def.h * 0.6 }); }
@@ -1055,7 +1080,7 @@ export class World {
     const def = MOBS[m.kind], h = this.hero;
     m.t += dt; m.flash = Math.max(0, m.flash - dt); m.hurtShown = Math.max(0, m.hurtShown - dt); m.slow = Math.max(0, m.slow - dt);
     if (m.state === 'dead') { m.deadT += dt; m.vx *= 0.96; this.physics(m, dt, MAX_FALL, false); return; }
-    m.shellT = Math.max(0, m.shellT - dt);
+    m.shellT = Math.max(0, m.shellT - dt); m.guardT = Math.max(0, m.guardT - dt);
     if (m.burn > 0) {
       m.burn -= dt; m.burnT -= dt;
       if (m.burnT <= 0) {
@@ -1091,9 +1116,20 @@ export class World {
     switch (m.state) {
       case 'walk': {
         let dir: number;
+        const melee = !ranged && def.brain !== 'turret' && def.brain !== 'boss' && def.brain !== 'nemesis' && !m.under;
+        const waiting = melee && this.attackers() >= this.maxAttackers; // not my turn: hang back and circle
         if (chase) {
           dir = Math.sign(dx);
           if (ranged && Math.abs(dx) < (def.brain === 'sniper' ? 200 : 150)) dir = -dir; // keep its distance
+          if (melee) {
+            // flank: head for whichever side of you has fewer monsters on it
+            if (Math.floor(this.time) !== Math.floor(this.time - dt)) m.flank = this.flankSide(m);
+            const tx = h.x + m.flank * (waiting ? def.range + 60 : def.range * 0.7);
+            dir = Math.abs(tx - m.x) < 10 ? 0 : Math.sign(tx - m.x);
+            // bodyguards: shield carriers stand between you and a healer
+            const healer = (def.shield || m.mods.includes('shielded')) ? this.mobs.find(o => o.state !== 'dead' && MOBS[o.kind].brain === 'healer' && Math.abs(o.x - m.x) < 350) : undefined;
+            if (healer) { const gx = healer.x + Math.sign(h.x - healer.x || 1) * 70; dir = Math.abs(gx - m.x) < 10 ? 0 : Math.sign(gx - m.x); }
+          }
         } else {
           dir = Math.sin(m.t * 0.7 + m.id) > 0 ? 1 : -1;
           if (Math.abs(m.x - m.home) > def.patrol) dir = Math.sign(m.home - m.x);
@@ -1105,7 +1141,8 @@ export class World {
         if (def.brain === 'turret') dir = 0;
         m.vx = approach(m.vx, dir * (chase ? def.speed * (def.brain === 'bomber' ? 1.6 : m.under ? 1.5 : 1.4) : def.speed) * (m.slow > 0 ? 0.6 : 1) * fast, 800 * dt);
         if (chase) m.face = dx > 0 ? 1 : -1; else if (dir) m.face = dir > 0 ? 1 : -1;
-        if (chase && m.ground && m.t > (m.elite ? 1.4 : 0.4)) { // elites leave an opening after each attack
+        const onMySide = !melee || Math.sign(m.x - h.x) === m.flank || m.t > 2.5; // flankers get round you before attacking
+        if (chase && m.ground && m.t > (m.elite ? 1.4 : 0.4) && !waiting && onMySide) { // elites leave an opening after each attack; others wait their turn
           const near = Math.abs(dx) < def.range;
           if (def.brain === 'boss') this.bossThink(m, dx);
           else if (def.brain === 'nemesis') this.nemThink(m, dx);
@@ -1122,7 +1159,7 @@ export class World {
       }
       case 'windup': {
         m.vx = approach(m.vx, 0, 1200 * dt);
-        const wind = (m.move === 'charge' ? 0.8 : m.move === 'leap' ? 0.55 : m.move === 'rain' || m.move === 'breath' ? 0.8 : def.windup) * TUNE.windup / fast * (m.move === 'brute' && m.elite ? 1.3 : 1); // red elite slams wind up longer: time to see it and dodge
+        const wind = (m.move === 'charge' ? 0.8 : m.move === 'leap' ? 0.55 : m.move === 'rain' || m.move === 'breath' ? 0.8 : def.windup) * TUNE.windup / fast * (m.move === 'brute' && m.elite ? 1.3 : 1) * (this.nightmare ? 0.72 : 1); // red elite slams wind up longer: time to see it and dodge
         if (m.move === 'snipe' && m.t < wind - 0.3) { m.aimX = h.x; m.aimY = h.y - 40; } // the laser tracks you, then locks
         if (m.move === 'beam' && m.t < wind - 0.3) { m.aimX = m.x + m.face * 700; m.aimY = h.y - 40; }
         if (m.t > wind) { m.state = 'attack'; m.t = 0; m.hitDone = false; this.beginAttack(m); }
@@ -1190,6 +1227,21 @@ export class World {
     m.state = 'windup'; m.t = 0; m.vx = 0; m.move = move;
     m.face = dx > 0 ? 1 : -1;
     this.events.push({ t: 'mobAttack', id: m.id, kind: move });
+  }
+
+  /** Monsters currently winding up or attacking you (bosses and nemeses don't wait in line). */
+  private attackers(): number {
+    let n = 0;
+    for (const o of this.mobs) if ((o.state === 'windup' || o.state === 'attack') && MOBS[o.kind].brain !== 'boss' && MOBS[o.kind].brain !== 'nemesis') n++;
+    return n;
+  }
+  /** Melee monsters near you split up: alternate ones take your left and your right. */
+  private flankSide(m: Mob): 1 | -1 {
+    const h = this.hero;
+    const pack = this.mobs.filter(o => o.state !== 'dead' && !o.under && Math.abs(o.x - h.x) < 400 && Math.abs(o.y - h.y) < 60 && MOBS[o.kind].brain !== 'boss' && MOBS[o.kind].brain !== 'nemesis').sort((a, b) => a.id - b.id);
+    if (pack.length < 2) return m.x < h.x ? -1 : 1;
+    const first: 1 | -1 = pack[0].x < h.x ? -1 : 1; // the first keeps its side, the next goes round the back, and so on
+    return (pack.indexOf(m) % 2 === 0 ? first : -first) as 1 | -1;
   }
 
   /** Attack choice for the newer brains. */

@@ -93,3 +93,11 @@ level-ups, secrets, explosions, mimics and objectives (QUIPS). Checks: tests/ban
 All dialogue follows docs/VOICE.md (cartoon characters talking: interjections, sound effects, catchphrases, ham-fisted
 puns; no em dashes, dry narrator punchlines or explained morals). Each kaiju's arc + nemesis scenes: src/story/arcs/k<sp>.ts;
 between-stage scenes + quips: src/story/more/k<sp>.ts; monster taunts: src/story/banter.ts. tests/voice.test.ts guards it.
+
+## Smarter monsters + Nightmare (world.ts)
+Melee monsters take turns (maxAttackers: 2, Nightmare 3 — the rest circle at range), split up to flank both sides of
+you (flankSide) and only attack once round, shield carriers stand between you and a healer, and three full plain combos
+in a row (two on Nightmare) make nearby monsters raise their guard (guardT: plain combo hits do 15% until you mix in a
+launcher, Guard Break, air attack or skill). Nightmare (per world, after its boss on Hard): Hard's levels, ×1.2 HP,
+×1.25 damage (NIGHTMARE), 28% shorter telegraphs, extra modifiers, a Golden Cloche every clear.
+`npx vite-node scripts/balance.ts 3- 2 nightmare`. Tests: tests/ai.test.ts.
