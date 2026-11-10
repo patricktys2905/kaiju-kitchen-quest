@@ -32,7 +32,15 @@ export type SkillKind =
   | 'snowball'  // ground projectile that grows as it rolls
   | 'freeze'    // freezes monsters solid (no knockback)
   // ultimates
-  | 'rampage' | 'meteor' | 'slashall' | 'beam' | 'tremor' | 'homing' | 'wave' | 'firefloor' | 'blizzard';
+  | 'rampage' | 'meteor' | 'slashall' | 'beam' | 'tremor' | 'homing' | 'wave' | 'firefloor' | 'blizzard'
+  // Avocadrake / Tacowl (Act 2)
+  | 'pitbounce' // a pit that bounces along the ground, hitting at every bounce
+  | 'guac'      // a guac pool: slows monsters, heals heroes standing in it
+  | 'gust'      // wing blast that throws monsters far back
+  | 'drop'      // bombs dropped from above that burst and burn
+  | 'screech'   // cone that stuns everything in front
+  | 'volley'    // tortilla chips sprayed forward and down
+  | 'guacflood' | 'fiesta';
 
 export interface SkillDef {
   id: string;
@@ -164,6 +172,22 @@ export const SKILLS: Record<number, { actives: SkillDef[]; passive: PassiveDef }
     ],
     passive: { id: 'spiky', name: 'Extra Spiky', desc: 'Monsters that hurt you take 12% of it back per level', unlock: PASSIVE_UNLOCK, per: { thorns: 0.12 } },
   },
+  13: { // Avocadrake — guac guardian
+    actives: [
+      S({ id: 'pithurl', name: 'Pit Hurl', kind: 'pitbounce', desc: 'Hurls its pit, which bounces along the ground three times, hitting at every bounce', cd: 3, dur: 0.4, dmg: 1.7, reach: 40, h: 40, kx: 260, ky: -300, n: 3 }),
+      S({ id: 'guacpool', name: 'Guac Pool', kind: 'guac', desc: 'Spreads a guac pool for 5 s: monsters in it slow down and take damage, heroes in it heal', unlock: 4, cd: 9, dur: 0.5, dmg: 0.5, reach: 170, h: 60, kx: 20, ky: 0 }),
+      S({ id: 'wingbeat', name: 'Wing Gust', kind: 'gust', desc: 'A mighty wing blast that throws monsters far back and interrupts them', unlock: 8, cd: 8, dur: 0.5, dmg: 2.2, reach: 230, h: 150, kx: 780, ky: -220 }),
+    ],
+    passive: { id: 'fats', name: 'Healthy Fats', desc: '+0.2% max HP regained per second and +3% max HP per level', unlock: PASSIVE_UNLOCK, per: { regen: 0.002, hpPct: 0.03 } },
+  },
+  19: { // Tacowl — night flyer
+    actives: [
+      S({ id: 'salsabomb', name: 'Salsa Bombs', kind: 'drop', desc: 'Drops three salsa bombs that burst and set monsters burning (best from the air)', cd: 3.4, dur: 0.4, dmg: 1.6, reach: 70, h: 60, kx: 120, ky: -260, n: 3, burn: 2 }),
+      S({ id: 'screech', name: 'Night Screech', kind: 'screech', desc: 'A piercing screech that stuns every monster in front for 1.6 s', unlock: 4, cd: 9, dur: 0.55, dmg: 1.2, reach: 240, h: 150, kx: 40, ky: 0 }),
+      S({ id: 'chips', name: 'Chip Volley', kind: 'volley', desc: 'Sprays a volley of crunchy tortilla chips forward and down', unlock: 8, cd: 6, dur: 0.45, dmg: 1.1, reach: 40, h: 40, kx: 140, ky: -120, n: 7 }),
+    ],
+    passive: { id: 'nightowl', name: 'Night Owl', desc: '+1% crit chance and +5% crit damage per level', unlock: PASSIVE_UNLOCK, per: { crit: 1, critDmg: 0.05 } },
+  },
   17: { // Pengwhip — ice skater
     actives: [
       S({ id: 'slide', name: 'Belly Slide', kind: 'slide', desc: 'Slides on its belly, leaving an icy trail that chills monsters', cd: 2.6, dur: 0.45, dmg: 2, reach: 66, h: 60, kx: 280, ky: -240 }),
@@ -190,6 +214,8 @@ export const ULTS: Record<number, SkillDef> = {
   7: S({ id: 'ult7', name: 'Dragon Roll Inferno', kind: 'cone', desc: 'A colossal wasabi fire breath', cd: 0, dur: 0.9, dmg: 9, reach: 400, h: 200, kx: 420, ky: -300 }),
   8: S({ id: 'ult8', name: 'Fondue Flood', kind: 'wave', desc: 'A wave of molten chocolate rolls across the whole floor', cd: 0, dur: 0.8, dmg: 8, reach: 120, h: 90, kx: 420, ky: -400 }),
   15: S({ id: 'ult15', name: 'Grand Grill', kind: 'firefloor', desc: 'Lights the floor under every monster on screen', cd: 0, dur: 0.8, dmg: 1.0, reach: 600, h: 80, kx: 60, ky: -120 }),
+  13: S({ id: 'ult13', name: 'Holy Guacamole', kind: 'guacflood', desc: 'A rolling wave of guacamole that leaves healing guac pools behind it', cd: 0, dur: 0.9, dmg: 5, reach: 520, h: 120, kx: 420, ky: -340 }),
+  19: S({ id: 'ult19', name: 'Midnight Fiesta', kind: 'fiesta', desc: 'A piñata bursts: every monster on screen is stunned and pelted with candy', cd: 0, dur: 0.9, dmg: 3.2, reach: 620, h: 300, kx: 80, ky: -200, n: 14 }),
   17: S({ id: 'ult17', name: 'Blizzard', kind: 'blizzard', desc: 'A screen-wide blizzard that hits and chills every monster for 3 s', cd: 0, dur: 0.8, dmg: 1.6, reach: 600, h: 200, kx: 40, ky: -60 }),
   6: S({ id: 'ult6', name: 'Steamer Feast', kind: 'nova', desc: 'A giant steam blast that also heals 40%', cd: 0, dur: 0.9, dmg: 8, reach: 340, h: 240, kx: 420, ky: -420, heal: 0.4 }),
 };
@@ -200,6 +226,7 @@ export const POSE_OF: Partial<Record<SkillKind, SkillKind>> = {
   geyser: 'nova', drain: 'nova', freeze: 'nova', radial: 'nova', firefloor: 'nova', blizzard: 'nova', orbit: 'buff', counter: 'buff',
   pounce: 'slam', tremor: 'slam', wave: 'slam', meteor: 'slam', swoop: 'dash', blink: 'dash', bulldoze: 'dash', slide: 'dash', rampage: 'dash', slashall: 'dash',
   throw: 'uppercut',
+  pitbounce: 'cone', guac: 'nova', gust: 'cone', drop: 'cone', screech: 'buff', volley: 'cone', guacflood: 'slam', fiesta: 'nova',
 };
 
 // ---------- branches ----------

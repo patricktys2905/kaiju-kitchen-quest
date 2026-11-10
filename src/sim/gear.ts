@@ -59,6 +59,12 @@ export const GEAR: Record<string, GearSkill> = {
   'w-peng1': { name: 'Scoop Bomb', style: 'lob', fx: 'freeze' },
   'w-peng2': { name: 'Wafer Skate', style: 'roll', fx: 'freeze' },
   'w-peng3': { name: 'Cream Hail', style: 'rain', fx: 'freeze' },
+  'w-avo1': { name: 'Pestle Pound', style: 'slam', fx: 'glue' },
+  'w-avo2': { name: 'Lime Lob', style: 'lob', fx: 'slow' },
+  'w-avo3': { name: 'Pit Shower', style: 'rain', fx: 'heal' },
+  'w-owl1': { name: 'Chip Fling', style: 'throw' },
+  'w-owl2': { name: 'Chili Lance', style: 'throw', fx: 'burn' },
+  'w-owl3': { name: 'Piñata Smash', style: 'slam', fx: 'launch' },
 };
 
 /** The gear skill a hero gets from its weapon (null = no weapon). power scales damage with rarity, fortification and grade. */

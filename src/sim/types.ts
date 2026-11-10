@@ -79,7 +79,7 @@ export type MobKind = 'bun' | 'worm' | 'pepper' | 'egg' | 'toast' | 'pea' | 'yog
   // World 6: The Dining Room (Act 2; boss: Sir Stale of the Leftovers)
   | 'fork' | 'napkin' | 'candle' | 'gravy' | 'teapot' | 'roast' | 'crouton' | 'stale'
   // story nemeses (one per kaiju, stage 5 of every world)
-  | 'nbeet' | 'ncrow' | 'npine' | 'nlamp' | 'nshroom' | 'nslug' | 'nrat' | 'ncookie' | 'nginger' | 'nbrulee' | 'nkebab' | 'nshark';
+  | 'nbeet' | 'ncrow' | 'npine' | 'nlamp' | 'nshroom' | 'nslug' | 'nrat' | 'ncookie' | 'nginger' | 'nbrulee' | 'nkebab' | 'nshark' | 'nnacho' | 'nhornet';
 
 export type BoxTier = 1 | 2 | 3 | 4 | 5;
 export interface LootBox { tier: BoxTier; ilvl: number }

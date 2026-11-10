@@ -115,6 +115,20 @@ export const CLASSES: HeroClass[] = [
     combo: [A({ dur: 0.26, hit: [0.06, 0.14], reach: 66 }), A({ dur: 0.26, hit: [0.06, 0.14], reach: 70 }), A({ dur: 0.4, hit: [0.1, 0.24], reach: 96, dmg: 1.7, kx: 340, ky: -320, lunge: 200, stun: 0.55 })],
     air: A({ dur: 0.28, reach: 70, h: 70, dmg: 1 }),
   },
+  {
+    species: 13, name: 'Avocadrake', role: 'Guac guardian: bouncing pits, healing guac pools, wing gusts',
+    hp: 138, atk: 11, speed: 238, jump: 700,
+    base: { str: 5, dex: 3, int: 6, vit: 6 }, grow: { str: 1, dex: 0, int: 2, vit: 1 },
+    combo: [A({ dur: 0.32, hit: [0.08, 0.18], reach: 66 }), A({ dur: 0.32, hit: [0.08, 0.18], reach: 70, dmg: 1.1 }), A({ dur: 0.5, hit: [0.16, 0.3], reach: 92, h: 80, dmg: 2.1, kx: 420, ky: -300, lunge: 80, stun: 0.6 })],
+    air: A({ dur: 0.32, reach: 70, h: 72, dmg: 1.1, kx: 160, ky: 200 }),
+  },
+  {
+    species: 19, name: 'Tacowl', role: 'Night flyer: salsa bombs from above, stunning screeches',
+    hp: 122, atk: 10, speed: 255, jump: 760,
+    base: { str: 4, dex: 7, int: 5, vit: 5 }, grow: { str: 1, dex: 2, int: 1, vit: 2 },
+    combo: [A({ dur: 0.26, hit: [0.06, 0.14], reach: 64 }), A({ dur: 0.26, hit: [0.06, 0.14], reach: 68 }), A({ dur: 0.42, hit: [0.12, 0.24], reach: 88, dmg: 1.8, kx: 300, ky: -360, lunge: 140, stun: 0.55 })],
+    air: A({ dur: 0.28, reach: 72, h: 76, dmg: 1.15, kx: 140, ky: 260 }),
+  },
 ];
 
 export function classOf(species: number): HeroClass {

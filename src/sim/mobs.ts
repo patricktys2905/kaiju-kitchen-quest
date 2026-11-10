@@ -45,7 +45,7 @@ export interface MobDef {
 /** Nemesis moves. Shared basics: slash leap charge rain breath fanshot lob spin roar puddle trap.
  *  Signatures (one nemesis each): slimesurge summon rootspike dive snatch boomerang beam lure vanish shell burrow heatwave skewer finslide. */
 export type NemMove = 'slash' | 'leap' | 'charge' | 'rain' | 'breath' | 'fanshot' | 'lob' | 'spin' | 'roar' | 'puddle' | 'trap' | 'summon'
-  | 'slimesurge' | 'rootspike' | 'dive' | 'snatch' | 'boomerang' | 'beam' | 'lure' | 'vanish' | 'shell' | 'burrow' | 'heatwave' | 'skewer' | 'finslide';
+  | 'slimesurge' | 'rootspike' | 'dive' | 'snatch' | 'boomerang' | 'beam' | 'lure' | 'vanish' | 'shell' | 'burrow' | 'heatwave' | 'skewer' | 'finslide' | 'yank' | 'stingers';
 export interface NemesisDef {
   /** whose story it belongs to */
   species: number;
@@ -144,6 +144,10 @@ export const MOBS: Record<MobKind, MobDef> = {
     nem: { species: 15, moves: ['skewer', 'spin', 'lob', 'charge'], names: ['Skewer Thrust', 'Spit-Roast Spin', 'Marinade Toss', 'Kebab Charge'], shot: 'marinade' } },
   nshark: { name: 'Finn Freezepop', brain: 'nemesis', art: 'mob-nem-shark', hp: 195, atk: 15, speed: 90, w: 90, h: 70, knock: 0.4, aggro: 900, range: 140, windup: 0.7, patrol: 70, xp: 32, dropChance: 1, armor: true,
     nem: { species: 17, moves: ['finslide', 'rain', 'roar', 'leap'], names: ['Fin Slide', 'Icicle Drop', 'Brain Freeze', 'Iceberg Belly-Flop'], shot: 'icicle' } },
+  nnacho: { name: 'El Nacho', brain: 'nemesis', art: 'mob-nem-nacho', hp: 210, atk: 15, speed: 80, w: 80, h: 84, knock: 0.4, aggro: 900, range: 140, windup: 0.72, patrol: 70, xp: 32, dropChance: 1, armor: true,
+    nem: { species: 13, moves: ['yank', 'leap', 'puddle', 'charge'], names: ['Queso Yank', 'Flying Chip Drop', 'Queso Splash', 'Luchador Rush'], puddle: 'slow', shot: 'marinade' } },
+  nhornet: { name: 'Señor Sting', brain: 'nemesis', art: 'mob-nem-hornet', hp: 185, atk: 15, speed: 95, w: 70, h: 64, knock: 0.4, aggro: 900, range: 140, windup: 0.68, patrol: 70, xp: 32, dropChance: 1, armor: true,
+    nem: { species: 19, moves: ['stingers', 'fanshot', 'rain', 'roar'], names: ['Triple Sting', 'Hot Sauce Spray', 'Sauce Shower', 'Angry Buzz'], fly: true, shot: 'heat' } },
   golem: { name: 'Freezer Golem', brain: 'boss', art: 'boss-golem', hp: 1900, atk: 18, speed: 80, w: 130, h: 180, knock: 0.2, aggro: 2000, range: 150, windup: 0.75, patrol: 0, xp: 320, dropChance: 1, armor: true, moves: ['slash', 'leap', 'rain', 'charge'] },
 };
 

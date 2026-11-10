@@ -36,6 +36,8 @@ If a line wouldn't sound natural shouted by a cartoon character, rewrite it.
 | **Chocomunch** (chocolate golem) | Caveman speech, always "Me ...": "Me SMASH!", "Me no like hot." Sweet and simple, scared of melting but brave. |
 | **Hotchog** (hot-dog hedgehog) | Shy, stammers ("I-I-I..."), turns into a sports announcer when excited about grilling. Stammer fades as he grows braver. |
 | **Pengwhip** (cookies-and-cream penguin) | Hyper and bouncy. "Wheeee!", can't brake, ice puns ("ice to meet you", "cool!"), homesick for the freezer. |
+| **Avocadrake** (avocado dragon) | A young dragon who thinks he is a fearsome ancient wyrm: "BEHOLD!", booming voice that cracks into a squeak. Terrified of turning brown ("Am I browning? Be honest!"). Guac puns ("Holy guacamole!", "guac and roll", "that's the pits"). |
+| **Tacowl** (taco owl) | Night-owl party host and DJ: "WHOOO's ready to party?!", hoots mid-sentence, fiesta energy, "Taco 'bout it!". Obsessed with Taco Tuesday. Wise-owl lines that turn out to be about snacks. |
 | **Narrator** | Cartoon announcer, rare: "Meanwhile...", "Uh-oh!", "Will our hero...?" |
 | **The Mold Crown** (`mold`) | Creepy, giggly, oozy villain. "Hehehe...", "Come closer, little snack...". Short. |
 | **Nemeses** (`foe`) | Classic cartoon rivals: boastful, sneery, catchphrases of their own, cackle, storm off when beaten ("This isn't over!"). |

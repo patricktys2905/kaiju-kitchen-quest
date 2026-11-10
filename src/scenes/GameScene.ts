@@ -811,6 +811,8 @@ export class GameScene extends Phaser.Scene {
         this.tweens.add({ targets: sw, alpha: 0.2, yoyo: true, repeat: 3, duration: sk.dur * 125 });
         break;
       }
+      case 'gust': for (let i = 0; i < 3; i++) this.time.delayedCall(i * 60, () => { const arc = this.add.ellipse(h.x + h.face * (50 + i * 50), h.y - 40, 30, 120, 0xc8f0a0, 0.45).setDepth(7); this.tweens.add({ targets: arc, x: arc.x + h.face * 160, alpha: 0, scaleY: 1.4, duration: 300, onComplete: () => arc.destroy() }); }); break;
+      case 'screech': for (let i = 0; i < 3; i++) this.time.delayedCall(i * 90, () => this.ring(h.x + h.face * (40 + i * 60), h.y - 44, 70 + i * 30, 0xffe08a)); break;
       case 'blink': this.burst(h.x, h.y - 40, 0x6a3a8a, 18); this.ring(h.x, h.y - 30, 50, 0xb08aff); break;
       case 'counter': this.ring(h.x, h.y - 40, 60, 0xffffff); this.callout(h.x, h.y - 100, 'COUNTER STANCE', '#ffe8a0', 11); break;
       case 'orbit': this.ring(h.x, h.y - 40, 64, 0xf4f0e0); break;
@@ -945,6 +947,7 @@ export class GameScene extends Phaser.Scene {
       const a = Math.min(1, z.t);
       if (z.kind === 'steam') { g.fillStyle(0xf4f4ff, 0.3 * a); g.fillEllipse(z.x, z.y - 45, z.w, 90 + Math.sin(t * 6) * 6); }
       else if (z.kind === 'goo') { g.fillStyle(0xf0c820, 0.7 * a); g.fillEllipse(z.x, z.y - 2, z.w, 12); }
+      else if (z.kind === 'guac') { g.fillStyle(0x9ad84a, 0.75 * a); g.fillEllipse(z.x, z.y - 3, z.w, 14); g.fillStyle(0xd8f0a0, 0.6 * a); g.fillEllipse(z.x - z.w * 0.2, z.y - 5, z.w * 0.3, 5); }
       else if (z.kind === 'ice') { g.fillStyle(0xcfeeff, 0.55 * a); g.fillEllipse(z.x, z.y - 2, z.w, 10); }
       else if (z.kind === 'fire') { g.fillStyle(0xff7a2a, (0.4 + Math.sin(t * 20 + z.id) * 0.15) * a); g.fillEllipse(z.x, z.y - 20, z.w, 44); }
       else { g.fillStyle(0xffffff, 0.75 * a); for (let i = 0; i < 40; i++) { const sx = z.x - z.w / 2 + ((i * 97 + t * 160) % z.w), sy = z.y - 300 + ((i * 53 + t * 220) % 320); g.fillCircle(sx, sy, 2.5); } }
@@ -1009,7 +1012,12 @@ export class GameScene extends Phaser.Scene {
       }
       let c = this.shotImgs.get(s.id);
       if (!c) {
-        c = s.kind === 'berry' ? this.add.circle(0, 0, 8, 0x3a4aa0).setStrokeStyle(2, 0x9ab0ff)
+        c = s.kind === 'pit' ? this.add.circle(0, 0, 12, 0x7a4a24).setStrokeStyle(3, 0x3a1e0c)
+          : s.kind === 'salsa' ? this.add.circle(0, 0, 10, 0xd8301a).setStrokeStyle(3, 0x6a0e06)
+          : s.kind === 'chip' ? this.add.triangle(0, 0, 0, 12, 8, -10, 16, 12, 0xf0c040).setStrokeStyle(2, 0x9a6a10)
+          : s.kind === 'candy' ? this.add.circle(0, 0, 8, [0xff6ad8, 0x6ad8ff, 0xffe24a][s.id % 3]).setStrokeStyle(2, 0xffffff)
+          : s.kind === 'guacwave' ? this.add.ellipse(0, 0, 150, 60, 0x8ac83a, 0.9).setStrokeStyle(4, 0x3a6a10)
+          : s.kind === 'berry' ? this.add.circle(0, 0, 8, 0x3a4aa0).setStrokeStyle(2, 0x9ab0ff)
           : s.kind === 'boomerang' ? this.add.circle(0, 0, 13, 0xd8d8e0).setStrokeStyle(4, 0xe8a040)
           : s.kind === 'homing' ? this.add.rectangle(0, 0, 18, 14, 0xc88a40).setStrokeStyle(3, 0xff7a2a)
           : s.kind === 'toast' ? this.add.rectangle(0, 0, 18, 16, 0xd8a050).setStrokeStyle(2, 0x7a4a20)

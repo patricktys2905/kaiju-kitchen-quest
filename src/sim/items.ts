@@ -87,6 +87,11 @@ export const BASES: Record<string, BaseDef> = {
   'a-hog1': AR('Napkin Bib', 'a-hog1', 15, [{ k: 'def', v: 3 }, { k: 'hp', v: 22 }], 1), 'a-hog2': AR('Bun Shell', 'a-hog2', 15, [{ k: 'def', v: 5 }, { k: 'hp', v: 28 }], 2), 'a-hog3': AR('Grill Plate Armor', 'a-hog3', 15, [{ k: 'def', v: 6 }, { k: 'hp', v: 34 }, { k: 'vit', v: 2 }], 3), 'k-hog': CH('Relish Charm', 'k-hog', 15, [{ k: 'def', v: 3 }, { k: 'atk', v: 2 }]),
   'w-peng1': W('Ice Cream Scoop', 'w-peng1', 17, 1, [{ k: 'atk', v: 3 }, { k: 'crit', v: 3 }]), 'w-peng2': W('Wafer Ice Sword', 'w-peng2', 17, 2, [{ k: 'atk', v: 4 }, { k: 'crit', v: 3 }, { k: 'speed', v: 0.02 }]), 'w-peng3': W('Frozen Cream Trident', 'w-peng3', 17, 3, [{ k: 'atk', v: 5 }, { k: 'dex', v: 2 }, { k: 'crit', v: 4 }]),
   'a-peng1': AR('Cookie Crumb Vest', 'a-peng1', 17, [{ k: 'def', v: 2 }, { k: 'hp', v: 16 }, { k: 'dex', v: 1 }], 1), 'a-peng2': AR('Cream Puff Coat', 'a-peng2', 17, [{ k: 'def', v: 3 }, { k: 'hp', v: 22 }, { k: 'dex', v: 1 }], 2), 'a-peng3': AR('Ice Crystal Armor', 'a-peng3', 17, [{ k: 'def', v: 4 }, { k: 'hp', v: 28 }, { k: 'dex', v: 2 }], 3), 'k-peng': CH('Cherry Charm', 'k-peng', 17, [{ k: 'crit', v: 4 }]),
+  // the Act 2 kaiju
+  'w-avo1': W('Molcajete Pestle', 'w-avo1', 13, 1, [{ k: 'atk', v: 4 }, { k: 'hp', v: 8 }]), 'w-avo2': W('Lime Wedge Mace', 'w-avo2', 13, 2, [{ k: 'atk', v: 5 }, { k: 'skillDmg', v: 0.05 }]), 'w-avo3': W('Golden Pit Staff', 'w-avo3', 13, 3, [{ k: 'atk', v: 6 }, { k: 'int', v: 2 }, { k: 'skillDmg', v: 0.07 }]),
+  'a-avo1': AR('Avocado Skin Guard', 'a-avo1', 13, [{ k: 'def', v: 3 }, { k: 'hp', v: 20 }], 1), 'a-avo2': AR('Chip Scale Armor', 'a-avo2', 13, [{ k: 'def', v: 4 }, { k: 'hp', v: 26 }, { k: 'int', v: 1 }], 2), 'a-avo3': AR('Jade Guac Plate', 'a-avo3', 13, [{ k: 'def', v: 5 }, { k: 'hp', v: 32 }, { k: 'int', v: 2 }], 3), 'k-avo': CH('Lime Charm', 'k-avo', 13, [{ k: 'hp', v: 24 }, { k: 'skillDmg', v: 0.04 }]),
+  'w-owl1': W('Chip Fan', 'w-owl1', 19, 1, [{ k: 'atk', v: 3 }, { k: 'crit', v: 3 }]), 'w-owl2': W('Chili Spear', 'w-owl2', 19, 2, [{ k: 'atk', v: 4 }, { k: 'crit', v: 4 }]), 'w-owl3': W('Piñata Staff', 'w-owl3', 19, 3, [{ k: 'atk', v: 5 }, { k: 'dex', v: 2 }, { k: 'critDmg', v: 0.1 }]),
+  'a-owl1': AR('Tortilla Wrap', 'a-owl1', 19, [{ k: 'def', v: 2 }, { k: 'hp', v: 16 }, { k: 'dex', v: 1 }], 1), 'a-owl2': AR('Fiesta Poncho', 'a-owl2', 19, [{ k: 'def', v: 3 }, { k: 'hp', v: 22 }, { k: 'dex', v: 1 }], 2), 'a-owl3': AR('Golden Husk Armor', 'a-owl3', 19, [{ k: 'def', v: 4 }, { k: 'hp', v: 28 }, { k: 'dex', v: 2 }], 3), 'k-owl': CH('Cilantro Charm', 'k-owl', 19, [{ k: 'crit', v: 4 }]),
   // ----- generic armor (one per world + the lid) -----
   apron: { slot: 'armor', name: 'Checkered Apron', icon: 'eq-apron', main: [{ k: 'hp', v: 20 }, { k: 'def', v: 2 }] },
   lid: { slot: 'armor', name: 'Pot Lid', icon: 'eq-lid', main: [{ k: 'def', v: 4 }] },
@@ -272,7 +277,7 @@ export const SETS: Record<string, SetDef> = {
   champ: { name: 'Countertop Champion', world: 1, two: '+8% attack', three: '+25% crit damage, +8% speed', b2: { atkPct: 0.08 }, b3: { critDmg: 0.25, speed: 0.08 } },
   frost: { name: 'Frostbite Guard', world: 2, two: '+12% max HP', three: '-15% damage taken, +10% skill damage', b2: { hpPct: 0.12 }, b3: { dr: 0.15, skillDmg: 0.1 } },
   pantry: { name: 'Pantry Raider', world: 4, two: '+12% attack', three: '+15% max HP, -10% cooldowns', b2: { atkPct: 0.12 }, b3: { hpPct: 0.15, cdr: 0.1 } },
-  ...Object.fromEntries(([[0, 'Gobzilla'], [10, 'Bluebeary'], [11, 'Pizzaraptor'], [4, 'Mothball'], [1, 'Squidgeon'], [2, 'Crabbage'], [5, 'Toastbat'], [6, 'Dumplord'], [7, 'Norigon'], [8, 'Chocomunch'], [15, 'Hotchog'], [17, 'Pengwhip']] as [number, string][]).map(([sp, n]) => [`sig${sp}`, {
+  ...Object.fromEntries(([[0, 'Gobzilla'], [10, 'Bluebeary'], [11, 'Pizzaraptor'], [4, 'Mothball'], [1, 'Squidgeon'], [2, 'Crabbage'], [5, 'Toastbat'], [6, 'Dumplord'], [7, 'Norigon'], [8, 'Chocomunch'], [15, 'Hotchog'], [17, 'Pengwhip'], [13, 'Avocadrake'], [19, 'Tacowl']] as [number, string][]).map(([sp, n]) => [`sig${sp}`, {
     name: `${n}'s Regalia`, world: 0, two: '+15% skill damage', three: 'Ultimate charges 50% faster and hits 25% harder',
     b2: { skillDmg: 0.15 }, b3: { ultGain: 0.5, ultDmg: 0.25 } } as SetDef])),
   dining: { name: 'Fine Dining', world: 6, two: '+15% skill damage, +8% speed', three: '+20% attack, -10% cooldowns', b2: { skillDmg: 0.15, speed: 0.08 }, b3: { atkPct: 0.2, cdr: 0.1 } },
@@ -308,6 +313,10 @@ const SIGS: Record<string, UniqueDef> = {
   picnicnet: SIG('Picnic Net Launcher', 'weapon', 15, 'mustard', { n: 2, dmg: 1.3 }, 'Mustard Glue fires 5 blobs instead of 3'),
   grillmaster: SIG('Grillmaster Apron', 'armor', 15, 'grillspin', { n: 6, burn: 2 }, 'Quill Burst fires 16 red-hot quills'),
   sundae: SIG('Sundae Scepter', 'weapon', 17, 'snowball', { dmg: 1.4, freeze: true }, 'Rolling Snowball hits 40% harder and freezes'),
+  guacbowl: SIG('Holy Guacamole Bowl', 'weapon', 13, 'guacpool', { reach: 1.5, dmg: 1.3 }, 'Guac Pool spreads 50% wider and hits harder'),
+  pitplate: SIG('Pit of Destiny Plate', 'armor', 13, 'pithurl', { n: 2, dmg: 1.3 }, 'Pit Hurl bounces five times and hits 30% harder'),
+  tuesday: SIG('Taco Tuesday Calendar', 'weapon', 19, 'salsabomb', { n: 3, burn: 3 }, 'Salsa Bombs drops six bombs that burn longer'),
+  fiestacape: SIG('Midnight Fiesta Cape', 'armor', 19, 'screech', { reach: 1.4, cd: 0.7 }, 'Night Screech reaches 40% further and comes back sooner'),
   cherrybomb: SIG('Cherry Bomb Vest', 'armor', 17, 'slide', { cd: 0.7, burn: 2 }, 'Belly Slide comes back sooner and leaves a fiery trail of hurt'),
 };
 export interface UniqueDef { name: string; slot: Slot; effect: string;

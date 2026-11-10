@@ -13,6 +13,9 @@ export const UNLOCKS: { species: number; text: string; key: string; goal: number
   { species: 8, text: 'Defeat 30 Pickle Knights', key: 'kill:pickle', goal: 30 },
   { species: 15, text: 'Defeat 60 Sizzle Bacon', key: 'kill:bacon', goal: 60 },
   { species: 17, text: 'Defeat 40 Brain-Freeze Bats', key: 'kill:icebat', goal: 40 },
+  // Act 2 newcomers: they turn up once the story reaches them
+  { species: 13, text: 'Defeat the Mold Crown (end of Act 1)', key: 'kill:moldking', goal: 1 },
+  { species: 19, text: 'Defeat Sir Stale in the Dining Room', key: 'kill:stale', goal: 1 },
 ];
 
 export interface KQuest { id: string; title: string; text: string; key: string; goal: number; reward: { crumbs?: number; fstone?: number; gstone?: number; ggstone?: number; box?: 1 | 2 | 3 | 4 | 5; sigCharm?: boolean } }
@@ -30,6 +33,8 @@ const FLAVOUR: Record<number, { foe: MobKind; titles: string[] }> = {
   7: { foe: 'imp', titles: ['Fire Against Fire', 'Wasabi Breath', 'The Old Road', 'Dragon Dance', 'Unscorched Scales', 'Frozen Shrine', 'Inferno Roll', 'Flame Reborn'] },
   8: { foe: 'popcorn', titles: ['Pop Goes the Corn', 'Chocolate Fists', 'Me Strong', 'Punch Punch Punch', 'Me Not Melt', 'Me Like Fridge', 'Fondue Fall', 'Bravest Chocolate'] },
   15: { foe: 'can', titles: ['Can Opener', 'Spiky Roller', 'Practice Round', 'Grill Marks', 'Clean Plate', 'Cold Cookout', 'Spin Dog', 'Grill Champion'] },
+  13: { foe: 'garlic', titles: ['Garlic Breath', 'Pit Stop', 'Holy Guacamole', 'Guac and Roll', 'Fresh, Not Brown', 'Chill Avocado', 'Guac Tsunami', 'Guardian of the Guac'] },
+  19: { foe: 'ant', titles: ['Ant Snacks', 'Salsa Drop', 'Night Shift', 'Fiesta Combo', 'Who? Me?', 'Cool Owl', 'Midnight Fiesta', 'Every Day Is Taco Tuesday'] },
   17: { foe: 'flour', titles: ['Ghost Busting', 'Belly Slider', 'Long Slide', 'Cookie Flurry', 'Slippery', 'Home Sweet Freezer', 'Blizzard', 'Home Is Where the Friends Are'] },
 };
 

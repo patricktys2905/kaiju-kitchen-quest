@@ -10,7 +10,7 @@ import { World } from '../src/sim/world';
 import { STORIES } from '../src/story/stories';
 
 const NEMS = (Object.keys(MOBS) as MobKind[]).filter(k => MOBS[k].brain === 'nemesis');
-const SIGNATURES = ['slimesurge', 'summon', 'rootspike', 'dive', 'snatch', 'boomerang', 'beam', 'lure', 'vanish', 'shell', 'burrow', 'heatwave', 'skewer', 'finslide'];
+const SIGNATURES = ['slimesurge', 'summon', 'rootspike', 'dive', 'snatch', 'boomerang', 'beam', 'lure', 'vanish', 'shell', 'burrow', 'heatwave', 'skewer', 'finslide', 'yank', 'stingers'];
 function hero(species: number, level: number) {
   const p = newProfile(species); p.level = level;
   for (const s of [...skillsOf(species).actives, skillsOf(species).passive]) if (level >= s.unlock) p.skills[s.id] = 1;

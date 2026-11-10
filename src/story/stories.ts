@@ -82,6 +82,16 @@ export const STORIES: Record<number, Story> = {
     variants: { '1-5': 'swarm', '1-8': 'swarm', '2-4': 'ambush', '2-9': 'night', '3-6': 'swarm', '4-8': 'swarm' },
     beats: {}, // filled from src/story/arcs + src/story/more
   },
+  13: {
+    title: '', tagline: '',
+    variants: { '1-4': 'swarm', '1-7': 'night', '2-3': 'ambush', '2-8': 'swarm', '3-5': 'night', '4-4': 'swarm' },
+    beats: {}, // filled from src/story/arcs + src/story/more
+  },
+  19: {
+    title: '', tagline: '',
+    variants: { '1-2': 'night', '1-8': 'night', '2-4': 'night', '2-9': 'swarm', '3-6': 'night', '4-5': 'ambush' },
+    beats: {}, // filled from src/story/arcs + src/story/more
+  },
   17: {
     title: 'Long Way Home', tagline: 'A homesick penguin who slid much too far.',
     variants: { '1-3': 'swarm', '1-6': 'ambush', '2-2': 'night', '2-5': 'swarm', '3-7': 'swarm', '4-6': 'ambush' },

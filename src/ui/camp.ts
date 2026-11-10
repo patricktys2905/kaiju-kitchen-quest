@@ -31,7 +31,7 @@ type Tab = 'map' | 'free' | 'hero' | 'skills' | 'bag' | 'market' | 'boxes' | 'qu
 type BagTab = Slot | 'items';
 const RANK_CSS: Record<Rank, string> = { S: '#ffd23c', A: '#7ee87e', B: '#7ac0ff', C: '#d8c8d8', D: '#a89898' };
 const TIER_CSS: Record<BoxTier, string> = { 1: '#e0c09a', 2: '#7ee87e', 3: '#7ac0ff', 4: '#ffd23c', 5: '#ff8af4' };
-export const SKILL_ICON: Record<SkillKind, string> = { cone: '💥', slam: '🌋', dash: '⚡', bolt: '✨', spin: '🌀', uppercut: '⤴️', mines: '🫐', buff: '🛡️', nova: '🌟', fan: '🎐', heal: '🥟',
+export const SKILL_ICON: Record<SkillKind, string> = { pitbounce: '🥑', guac: '🥣', gust: '🌬️', drop: '🌶️', screech: '🦉', volley: '🌮', guacflood: '🌊', fiesta: '🪅', cone: '💥', slam: '🌋', dash: '⚡', bolt: '✨', spin: '🌀', uppercut: '⤴️', mines: '🫐', buff: '🛡️', nova: '🌟', fan: '🎐', heal: '🥟',
   vortex: '🌪️', boomerang: '🍕', whip: '🦑', pull: '🪝', geyser: '⚗️', counter: '🦀', pounce: '🧀', swoop: '🦇', blink: '👤', rain: '🍞', zone: '♨️', drain: '🍜', breath: '🔥', orbit: '🍙', twister: '🌀', throw: '🤼', bulldoze: '🐂', roll: '🦔', goo: '🌭', radial: '📍', slide: '🐧', snowball: '⛄', freeze: '🧊',
   rampage: '🍓', meteor: '☄️', slashall: '🔪', beam: '🌙', tremor: '🌋', homing: '🎯', wave: '🍫', firefloor: '♨️', blizzard: '🌨️' };
 const SLOT_NAMES: Record<Slot, string> = { weapon: 'Weapon', armor: 'Armor', charm: 'Charm' };

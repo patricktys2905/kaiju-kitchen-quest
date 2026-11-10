@@ -172,3 +172,11 @@ summons). Act 2 nemeses have retired: stage x-5 is a plain elite from World 6 on
 Leftovers roster (for later worlds): W7 Backyard BBQ Baron Brussels, W8 Garden the Mystery Meatloaf, W9 Supermarket the
 Tupperwraith, W10 Old Fruitcake. 'lo2' (Sir Stale) speaks with his boss art in Act 2 scenes. Brief: docs/WORLD6-BRIEF.md.
 Art `node scripts/w6-jobs.mjs [stills]`, screens `node scripts/w6-shot.mjs`.
+
+## Act 2 kaiju: Avocadrake (13) and Tacowl (19)
+Recruited by beating the Mold Crown / Sir Stale (UNLOCKS); start at 1-1 with their own full stories ("Holy Guacamole",
+"Taco 'Bout Tuesday", written from docs/NEWKAIJU-BRIEF.md) and nemeses El Nacho (`nnacho`, signature Queso Yank `yank`)
+and Señor Sting (`nhornet`, Triple Sting `stingers`). New skill kinds: `pitbounce`, `guac` (zone that heals heroes),
+`gust`, `drop`, `screech`, `volley`, ults `guacflood`, `fiesta`. Rigs: Avocadrake holds its weapon in a foot, Tacowl flies
+(wings tucked behind the shell, weapon in a talon). Gear w-/a-/k-avo, w-/a-/k-owl, 2 signature legendaries each.
+Art: `node scripts/newkaiju-jobs.mjs`.

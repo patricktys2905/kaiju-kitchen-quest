@@ -36,6 +36,38 @@ export interface RigDef {
 }
 
 export const RIGS: Record<number, RigDef> = {
+  // Tacowl: body 328x306@101,34; wings 103x126@41,353 / 102x120@165,359 (shoulder at their top); talons 76x73@303,389 / 75x72@396,388. Flies; holds its weapon in a talon.
+  19: {
+    gear: { hand: [0.5, 0.85], chest: [330, 250], neck: [370, 175], back: [190, 120], size: 0.95 },
+    holder: 'legA',
+    root: [282, 405],
+    scale: 0.22,
+    legs: 'dangle',
+    hover: true,
+    fly: true,
+    parts: [
+      { piece: 2, role: 'wingBack', joint: [222, 86], pivot: [0.8, 0.1], depth: -4, tint: 0xd8b880, rest: 1.25 },
+      { piece: 3, role: 'legB', joint: [246, 330], pivot: [0.5, 0.1], depth: -2, tint: 0xd8c090 },
+      { piece: 0, role: 'body', joint: [265, 338], pivot: [0.5, 0.99], depth: 0 },
+      { piece: 4, role: 'legA', joint: [306, 332], pivot: [0.5, 0.1], depth: 1 },
+      { piece: 1, role: 'wing', joint: [200, 96], pivot: [0.85, 0.1], depth: -3, rest: 1.55 },
+    ],
+  },
+  // Avocadrake: body 211x294@221,70; wings 145x93@37,199 / 144x96@36,50 (shoulder stump at their right end); feet 47x75@285,389 / 54x67@367,387. Holds its weapon in a foot.
+  13: {
+    gear: { hand: [0.5, 0.8], chest: [372, 285], neck: [398, 175], back: [250, 190], size: 0.95 },
+    holder: 'legA',
+    root: [325, 420],
+    scale: 0.24,
+    legs: 'shuffle',
+    parts: [
+      { piece: 2, role: 'wingBack', joint: [262, 196], pivot: [0.93, 0.6], depth: -4, tint: 0xa8b890, rest: 0.25 },
+      { piece: 1, role: 'wing', joint: [250, 210], pivot: [0.93, 0.6], depth: -3, rest: -0.1 },
+      { piece: 3, role: 'legB', joint: [300, 352], pivot: [0.5, 0.08], depth: -2, tint: 0xb8c8a0 },
+      { piece: 0, role: 'body', joint: [326, 360], pivot: [0.5, 0.99], depth: 0 },
+      { piece: 4, role: 'legA', joint: [352, 352], pivot: [0.4, 0.08], depth: 1 },
+    ],
+  },
   // Gobzilla Jr.: body 227x281@169,52; tail @39,281; legs @306,326 / @199,340; arm @399,230
   0: {
     gear: { hand: [0.8, 0.75], chest: [318, 268], neck: [330, 212], back: [205, 222], size: 1 },
