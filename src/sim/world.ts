@@ -90,6 +90,8 @@ export interface Hero {
   echo: { sk: SkillDef; t: number } | null;
   /** procs: shield bubble (HP it soaks, seconds left, cooldown), spike / zap counters, highest point of the current fall */
   shield: number; shieldT: number; bubbleCd: number; spikeCd: number; zapN: number; peakY: number;
+  /** how far the last landing dropped (px): a sponge only bounces you if you jumped or walked onto it, not fell from the ledge */
+  lastFall: number;
 }
 
 export interface Mob {
@@ -245,7 +247,7 @@ export class World {
       boosts: {}, bag: b.map(q => q && { ...q }), revives: rv, quickCd: 0, lastTap: { dir: 0, t: -9 }, dodgeCd: 0, ult: 0, phoenixUsed: false,
       counter: 0, perfectDone: false, spikyT: 0, orbs: null, skillFace: 1, targets: [], bounced: false,
       idx, cpu: idx >= this.humans, revT: 0, landed: false,
-      echo: null, shield: 0, shieldT: 0, bubbleCd: 0, spikeCd: 0, zapN: 0, peakY: stage.groundY,
+      echo: null, shield: 0, shieldT: 0, bubbleCd: 0, spikeCd: 0, zapN: 0, peakY: stage.groundY, lastFall: 0,
     });
     this.heroes = [mk(d, 0, 100, bag, revives), ...party.map((pd, i) => mk(pd, i + 1, 60 - i * 30, partyBags[i]?.bag ?? [], partyBags[i]?.revives ?? 0))];
     this.cur = this.heroes[0];
@@ -612,6 +614,7 @@ export class World {
     if (h.shieldT > 0) { h.shieldT -= dt; if (h.shieldT <= 0) h.shield = 0; }
     if (!h.ground) h.peakY = Math.min(h.peakY, h.y);
     else {
+      if (h.landed) h.lastFall = h.y - h.peakY;
       if (h.landed && h.y - h.peakY > 180 && h.d.procs.includes('quake')) {
         this.events.push({ t: 'shock', x: h.x, y: h.y, r: 120 });
         for (const m of this.targetsNear(h.x, h.y, 130, 70)) this.damageMob(m, h.d.atk * 1.5, Math.sign(m.x - h.x) || 1, { kx: 160, ky: -380, stun: 0.7 }, true);
@@ -1056,7 +1059,7 @@ export class World {
     });
     for (const p of this.props) {
       p.cd = Math.max(0, p.cd - dt);
-      if (p.kind === 'sponge') for (const h of this.heroes) if (h.landed && h.ground && h.state !== 'climb' && Math.abs(h.x - p.x) < 34 && Math.abs(h.y - p.y) < 3) { // jump or fall onto it
+      if (p.kind === 'sponge') for (const h of this.heroes) if (h.landed && h.ground && h.state !== 'climb' && Math.abs(h.x - p.x) < 34 && Math.abs(h.y - p.y) < 3 && h.lastFall < 200) { // jump or walk onto it (dropping off the ledge above doesn't send you back up)
         h.vy = -1150; h.ground = false; h.on = null; h.bounced = true; this.events.push({ t: 'bounce', x: p.x, y: p.y });
       }
     }
