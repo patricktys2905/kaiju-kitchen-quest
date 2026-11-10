@@ -5,7 +5,7 @@
   "refs": [
    "art-src/ref-kaiju-2.png"
   ],
-  "prompt": "Generate an image. The reference is my game character, a grumpy cheese crab with a cabbage-leaf shell (Crabbage). Draw THIS SAME character as a cartoon story portrait showing a strong, funny, very readable emotion: laughing with joy: eyes squeezed into happy arcs, a huge open-mouthed grin, bouncing with delight, little sparkles around it. IMPORTANT BODY RULE: Crabbage has exactly TWO big claws and a few short crab legs, exactly like the reference. Never add extra claws, arms or hands. Show the emotion with the face, the eye stalks and the pose of those two claws. Keep it EXACTLY on-model: same body shape and proportions, same colours, same face design, same thick dark outlines and glossy cel shading as the reference. Do not add any clothes, props, extra limbs or extra characters that are not in the reference. Same three-quarter view and facing direction as the reference, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Portrait 4:5 image."
+  "prompt": "Generate an image. The reference is my game character, a grumpy cheese crab with a cabbage-leaf shell (Crabbage). Draw THIS SAME character as a cartoon story portrait showing a strong, funny, very readable emotion: laughing with joy: eyes squeezed into happy arcs, a huge open-mouthed grin, bouncing with delight, little sparkles around it. IMPORTANT BODY RULE: Crabbage has exactly TWO big claws (both raised at the sides) and a few short pointed crab legs, exactly like the reference: never extra claws, arms or hands. Its ONLY two eyes sit on top of its two long eye stalks; its round body has NO eyes and NO eyebrows on it, only a mouth. Show the emotion with the mouth, the eyes and eyelids on the stalks, and the pose of the two claws. Keep it EXACTLY on-model: same body shape and proportions, same colours, same face design, same thick dark outlines and glossy cel shading as the reference. Do not add any clothes, props, extra limbs or extra characters that are not in the reference. Same three-quarter view and facing direction as the reference, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Portrait 4:5 image."
  },
  {
   "name": "face-2-angry",
@@ -13,7 +13,7 @@
   "refs": [
    "art-src/ref-kaiju-2.png"
   ],
-  "prompt": "Generate an image. The reference is my game character, a grumpy cheese crab with a cabbage-leaf shell (Crabbage). Draw THIS SAME character as a cartoon story portrait showing a strong, funny, very readable emotion: furious and fired up: deep scowling brows, gritted teeth, leaning forward, a little puff of angry steam above its head. IMPORTANT BODY RULE: Crabbage has exactly TWO big claws and a few short crab legs, exactly like the reference. Never add extra claws, arms or hands. Show the emotion with the face, the eye stalks and the pose of those two claws. Keep it EXACTLY on-model: same body shape and proportions, same colours, same face design, same thick dark outlines and glossy cel shading as the reference. Do not add any clothes, props, extra limbs or extra characters that are not in the reference. Same three-quarter view and facing direction as the reference, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Portrait 4:5 image."
+  "prompt": "Generate an image. The reference is my game character, a grumpy cheese crab with a cabbage-leaf shell (Crabbage). Draw THIS SAME character as a cartoon story portrait showing a strong, funny, very readable emotion: furious and fired up: deep scowling brows, gritted teeth, leaning forward, a little puff of angry steam above its head. IMPORTANT BODY RULE: Crabbage has exactly TWO big claws (both raised at the sides) and a few short pointed crab legs, exactly like the reference: never extra claws, arms or hands. Its ONLY two eyes sit on top of its two long eye stalks; its round body has NO eyes and NO eyebrows on it, only a mouth. Show the emotion with the mouth, the eyes and eyelids on the stalks, and the pose of the two claws. Keep it EXACTLY on-model: same body shape and proportions, same colours, same face design, same thick dark outlines and glossy cel shading as the reference. Do not add any clothes, props, extra limbs or extra characters that are not in the reference. Same three-quarter view and facing direction as the reference, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Portrait 4:5 image."
  },
  {
   "name": "face-2-shocked",
@@ -21,7 +21,7 @@
   "refs": [
    "art-src/ref-kaiju-2.png"
   ],
-  "prompt": "Generate an image. The reference is my game character, a grumpy cheese crab with a cabbage-leaf shell (Crabbage). Draw THIS SAME character as a cartoon story portrait showing a strong, funny, very readable emotion: totally shocked: eyes wide as saucers with tiny pupils, jaw dropped open, leaning back in surprise, a sweat drop flying off its head. IMPORTANT BODY RULE: Crabbage has exactly TWO big claws and a few short crab legs, exactly like the reference. Never add extra claws, arms or hands. Show the emotion with the face, the eye stalks and the pose of those two claws. Keep it EXACTLY on-model: same body shape and proportions, same colours, same face design, same thick dark outlines and glossy cel shading as the reference. Do not add any clothes, props, extra limbs or extra characters that are not in the reference. Same three-quarter view and facing direction as the reference, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Portrait 4:5 image."
+  "prompt": "Generate an image. The reference is my game character, a grumpy cheese crab with a cabbage-leaf shell (Crabbage). Draw THIS SAME character as a cartoon story portrait showing a strong, funny, very readable emotion: totally shocked: eyes wide as saucers with tiny pupils, jaw dropped open, leaning back in surprise, a sweat drop flying off its head. IMPORTANT BODY RULE: Crabbage has exactly TWO big claws (both raised at the sides) and a few short pointed crab legs, exactly like the reference: never extra claws, arms or hands. Its ONLY two eyes sit on top of its two long eye stalks; its round body has NO eyes and NO eyebrows on it, only a mouth. Show the emotion with the mouth, the eyes and eyelids on the stalks, and the pose of the two claws. Keep it EXACTLY on-model: same body shape and proportions, same colours, same face design, same thick dark outlines and glossy cel shading as the reference. Do not add any clothes, props, extra limbs or extra characters that are not in the reference. Same three-quarter view and facing direction as the reference, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Portrait 4:5 image."
  },
  {
   "name": "face-2-sad",
@@ -29,102 +29,6 @@
   "refs": [
    "art-src/ref-kaiju-2.png"
   ],
-  "prompt": "Generate an image. The reference is my game character, a grumpy cheese crab with a cabbage-leaf shell (Crabbage). Draw THIS SAME character as a cartoon story portrait showing a strong, funny, very readable emotion: sad and worried: droopy teary eyes with one wobbly tear, a trembling frown, its whole body drooping. IMPORTANT BODY RULE: Crabbage has exactly TWO big claws and a few short crab legs, exactly like the reference. Never add extra claws, arms or hands. Show the emotion with the face, the eye stalks and the pose of those two claws. Keep it EXACTLY on-model: same body shape and proportions, same colours, same face design, same thick dark outlines and glossy cel shading as the reference. Do not add any clothes, props, extra limbs or extra characters that are not in the reference. Same three-quarter view and facing direction as the reference, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Portrait 4:5 image."
- },
- {
-  "name": "face-5-happy",
-  "newChat": true,
-  "refs": [
-   "art-src/ref-kaiju-5.png"
-  ],
-  "prompt": "Generate an image. The reference is my game character, a little loaf-bread bat with toast-slice wings and a butter pat on its head (Toastbat). Draw THIS SAME character as a cartoon story portrait showing a strong, funny, very readable emotion: laughing with joy: eyes squeezed into happy arcs, a huge open-mouthed grin, bouncing with delight, little sparkles around it. IMPORTANT BODY RULE: Toastbat has NO arms and NO hands at all. Its only limbs are its two toast-slice wings on its back and tiny stubby feet, exactly like the reference. Show the emotion with the face, the ears and the wings. Keep it EXACTLY on-model: same body shape and proportions, same colours, same face design, same thick dark outlines and glossy cel shading as the reference. Do not add any clothes, props, extra limbs or extra characters that are not in the reference. Same three-quarter view and facing direction as the reference, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Portrait 4:5 image."
- },
- {
-  "name": "face-5-angry",
-  "newChat": true,
-  "refs": [
-   "art-src/ref-kaiju-5.png"
-  ],
-  "prompt": "Generate an image. The reference is my game character, a little loaf-bread bat with toast-slice wings and a butter pat on its head (Toastbat). Draw THIS SAME character as a cartoon story portrait showing a strong, funny, very readable emotion: furious and fired up: deep scowling brows, gritted teeth, leaning forward, a little puff of angry steam above its head. IMPORTANT BODY RULE: Toastbat has NO arms and NO hands at all. Its only limbs are its two toast-slice wings on its back and tiny stubby feet, exactly like the reference. Show the emotion with the face, the ears and the wings. Keep it EXACTLY on-model: same body shape and proportions, same colours, same face design, same thick dark outlines and glossy cel shading as the reference. Do not add any clothes, props, extra limbs or extra characters that are not in the reference. Same three-quarter view and facing direction as the reference, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Portrait 4:5 image."
- },
- {
-  "name": "face-5-shocked",
-  "newChat": true,
-  "refs": [
-   "art-src/ref-kaiju-5.png"
-  ],
-  "prompt": "Generate an image. The reference is my game character, a little loaf-bread bat with toast-slice wings and a butter pat on its head (Toastbat). Draw THIS SAME character as a cartoon story portrait showing a strong, funny, very readable emotion: totally shocked: eyes wide as saucers with tiny pupils, jaw dropped open, leaning back in surprise, a sweat drop flying off its head. IMPORTANT BODY RULE: Toastbat has NO arms and NO hands at all. Its only limbs are its two toast-slice wings on its back and tiny stubby feet, exactly like the reference. Show the emotion with the face, the ears and the wings. Keep it EXACTLY on-model: same body shape and proportions, same colours, same face design, same thick dark outlines and glossy cel shading as the reference. Do not add any clothes, props, extra limbs or extra characters that are not in the reference. Same three-quarter view and facing direction as the reference, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Portrait 4:5 image."
- },
- {
-  "name": "face-5-sad",
-  "newChat": true,
-  "refs": [
-   "art-src/ref-kaiju-5.png"
-  ],
-  "prompt": "Generate an image. The reference is my game character, a little loaf-bread bat with toast-slice wings and a butter pat on its head (Toastbat). Draw THIS SAME character as a cartoon story portrait showing a strong, funny, very readable emotion: sad and worried: droopy teary eyes with one wobbly tear, a trembling frown, its whole body drooping. IMPORTANT BODY RULE: Toastbat has NO arms and NO hands at all. Its only limbs are its two toast-slice wings on its back and tiny stubby feet, exactly like the reference. Show the emotion with the face, the ears and the wings. Keep it EXACTLY on-model: same body shape and proportions, same colours, same face design, same thick dark outlines and glossy cel shading as the reference. Do not add any clothes, props, extra limbs or extra characters that are not in the reference. Same three-quarter view and facing direction as the reference, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Portrait 4:5 image."
- },
- {
-  "name": "face-10-happy",
-  "newChat": true,
-  "refs": [
-   "art-src/ref-kaiju-10.png"
-  ],
-  "prompt": "Generate an image. The reference is my game character, a gruff blueberry-muffin bear (Bluebeary). Draw THIS SAME character as a cartoon story portrait showing a strong, funny, very readable emotion: laughing with joy: eyes squeezed into happy arcs, a huge open-mouthed grin, bouncing with delight, little sparkles around it. IMPORTANT BODY RULE: Bluebeary has NO arms, NO hands and NO paws at all. It is only a round blueberry-bear head and body sitting in a paper muffin cup. Show the emotion ONLY with the face, the ears and by tilting, squashing or stretching the body. Keep it EXACTLY on-model: same body shape and proportions, same colours, same face design, same thick dark outlines and glossy cel shading as the reference. Do not add any clothes, props, extra limbs or extra characters that are not in the reference. Same three-quarter view and facing direction as the reference, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Portrait 4:5 image."
- },
- {
-  "name": "face-10-angry",
-  "newChat": true,
-  "refs": [
-   "art-src/ref-kaiju-10.png"
-  ],
-  "prompt": "Generate an image. The reference is my game character, a gruff blueberry-muffin bear (Bluebeary). Draw THIS SAME character as a cartoon story portrait showing a strong, funny, very readable emotion: furious and fired up: deep scowling brows, gritted teeth, leaning forward, a little puff of angry steam above its head. IMPORTANT BODY RULE: Bluebeary has NO arms, NO hands and NO paws at all. It is only a round blueberry-bear head and body sitting in a paper muffin cup. Show the emotion ONLY with the face, the ears and by tilting, squashing or stretching the body. Keep it EXACTLY on-model: same body shape and proportions, same colours, same face design, same thick dark outlines and glossy cel shading as the reference. Do not add any clothes, props, extra limbs or extra characters that are not in the reference. Same three-quarter view and facing direction as the reference, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Portrait 4:5 image."
- },
- {
-  "name": "face-10-shocked",
-  "newChat": true,
-  "refs": [
-   "art-src/ref-kaiju-10.png"
-  ],
-  "prompt": "Generate an image. The reference is my game character, a gruff blueberry-muffin bear (Bluebeary). Draw THIS SAME character as a cartoon story portrait showing a strong, funny, very readable emotion: totally shocked: eyes wide as saucers with tiny pupils, jaw dropped open, leaning back in surprise, a sweat drop flying off its head. IMPORTANT BODY RULE: Bluebeary has NO arms, NO hands and NO paws at all. It is only a round blueberry-bear head and body sitting in a paper muffin cup. Show the emotion ONLY with the face, the ears and by tilting, squashing or stretching the body. Keep it EXACTLY on-model: same body shape and proportions, same colours, same face design, same thick dark outlines and glossy cel shading as the reference. Do not add any clothes, props, extra limbs or extra characters that are not in the reference. Same three-quarter view and facing direction as the reference, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Portrait 4:5 image."
- },
- {
-  "name": "face-10-sad",
-  "newChat": true,
-  "refs": [
-   "art-src/ref-kaiju-10.png"
-  ],
-  "prompt": "Generate an image. The reference is my game character, a gruff blueberry-muffin bear (Bluebeary). Draw THIS SAME character as a cartoon story portrait showing a strong, funny, very readable emotion: sad and worried: droopy teary eyes with one wobbly tear, a trembling frown, its whole body drooping. IMPORTANT BODY RULE: Bluebeary has NO arms, NO hands and NO paws at all. It is only a round blueberry-bear head and body sitting in a paper muffin cup. Show the emotion ONLY with the face, the ears and by tilting, squashing or stretching the body. Keep it EXACTLY on-model: same body shape and proportions, same colours, same face design, same thick dark outlines and glossy cel shading as the reference. Do not add any clothes, props, extra limbs or extra characters that are not in the reference. Same three-quarter view and facing direction as the reference, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Portrait 4:5 image."
- },
- {
-  "name": "face-15-happy",
-  "newChat": true,
-  "refs": [
-   "art-src/ref-kaiju-15.png"
-  ],
-  "prompt": "Generate an image. The reference is my game character, a shy hedgehog sitting in a hot-dog bun with mustard and ketchup on its spikes (Hotchog). Draw THIS SAME character as a cartoon story portrait showing a strong, funny, very readable emotion: laughing with joy: eyes squeezed into happy arcs, a huge open-mouthed grin, bouncing with delight, little sparkles around it. IMPORTANT BODY RULE: Hotchog stays lying down INSIDE its hot-dog bun, exactly like the reference: it never sits up or stands, and it has NO arms or hands. Show the emotion with the face, its spikes and the bun. Keep it EXACTLY on-model: same body shape and proportions, same colours, same face design, same thick dark outlines and glossy cel shading as the reference. Do not add any clothes, props, extra limbs or extra characters that are not in the reference. Same three-quarter view and facing direction as the reference, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Portrait 4:5 image."
- },
- {
-  "name": "face-15-angry",
-  "newChat": true,
-  "refs": [
-   "art-src/ref-kaiju-15.png"
-  ],
-  "prompt": "Generate an image. The reference is my game character, a shy hedgehog sitting in a hot-dog bun with mustard and ketchup on its spikes (Hotchog). Draw THIS SAME character as a cartoon story portrait showing a strong, funny, very readable emotion: furious and fired up: deep scowling brows, gritted teeth, leaning forward, a little puff of angry steam above its head. IMPORTANT BODY RULE: Hotchog stays lying down INSIDE its hot-dog bun, exactly like the reference: it never sits up or stands, and it has NO arms or hands. Show the emotion with the face, its spikes and the bun. Keep it EXACTLY on-model: same body shape and proportions, same colours, same face design, same thick dark outlines and glossy cel shading as the reference. Do not add any clothes, props, extra limbs or extra characters that are not in the reference. Same three-quarter view and facing direction as the reference, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Portrait 4:5 image."
- },
- {
-  "name": "face-15-shocked",
-  "newChat": true,
-  "refs": [
-   "art-src/ref-kaiju-15.png"
-  ],
-  "prompt": "Generate an image. The reference is my game character, a shy hedgehog sitting in a hot-dog bun with mustard and ketchup on its spikes (Hotchog). Draw THIS SAME character as a cartoon story portrait showing a strong, funny, very readable emotion: totally shocked: eyes wide as saucers with tiny pupils, jaw dropped open, leaning back in surprise, a sweat drop flying off its head. IMPORTANT BODY RULE: Hotchog stays lying down INSIDE its hot-dog bun, exactly like the reference: it never sits up or stands, and it has NO arms or hands. Show the emotion with the face, its spikes and the bun. Keep it EXACTLY on-model: same body shape and proportions, same colours, same face design, same thick dark outlines and glossy cel shading as the reference. Do not add any clothes, props, extra limbs or extra characters that are not in the reference. Same three-quarter view and facing direction as the reference, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Portrait 4:5 image."
- },
- {
-  "name": "face-15-sad",
-  "newChat": true,
-  "refs": [
-   "art-src/ref-kaiju-15.png"
-  ],
-  "prompt": "Generate an image. The reference is my game character, a shy hedgehog sitting in a hot-dog bun with mustard and ketchup on its spikes (Hotchog). Draw THIS SAME character as a cartoon story portrait showing a strong, funny, very readable emotion: sad and worried: droopy teary eyes with one wobbly tear, a trembling frown, its whole body drooping. IMPORTANT BODY RULE: Hotchog stays lying down INSIDE its hot-dog bun, exactly like the reference: it never sits up or stands, and it has NO arms or hands. Show the emotion with the face, its spikes and the bun. Keep it EXACTLY on-model: same body shape and proportions, same colours, same face design, same thick dark outlines and glossy cel shading as the reference. Do not add any clothes, props, extra limbs or extra characters that are not in the reference. Same three-quarter view and facing direction as the reference, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Portrait 4:5 image."
+  "prompt": "Generate an image. The reference is my game character, a grumpy cheese crab with a cabbage-leaf shell (Crabbage). Draw THIS SAME character as a cartoon story portrait showing a strong, funny, very readable emotion: sad and worried: droopy teary eyes with one wobbly tear, a trembling frown, its whole body drooping. IMPORTANT BODY RULE: Crabbage has exactly TWO big claws (both raised at the sides) and a few short pointed crab legs, exactly like the reference: never extra claws, arms or hands. Its ONLY two eyes sit on top of its two long eye stalks; its round body has NO eyes and NO eyebrows on it, only a mouth. Show the emotion with the mouth, the eyes and eyelids on the stalks, and the pose of the two claws. Keep it EXACTLY on-model: same body shape and proportions, same colours, same face design, same thick dark outlines and glossy cel shading as the reference. Do not add any clothes, props, extra limbs or extra characters that are not in the reference. Same three-quarter view and facing direction as the reference, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Portrait 4:5 image."
  }
 ]

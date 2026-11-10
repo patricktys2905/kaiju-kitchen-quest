@@ -19,7 +19,7 @@ const K = {
 // Body rules for kaiju without ordinary arms (Gemini adds arms when a mood says "arms up").
 const LIMBS = {
   10: 'IMPORTANT BODY RULE: Bluebeary has NO arms, NO hands and NO paws at all. It is only a round blueberry-bear head and body sitting in a paper muffin cup. Show the emotion ONLY with the face, the ears and by tilting, squashing or stretching the body.',
-  2: 'IMPORTANT BODY RULE: Crabbage has exactly TWO big claws and a few short crab legs, exactly like the reference. Never add extra claws, arms or hands. Show the emotion with the face, the eye stalks and the pose of those two claws.',
+  2: 'IMPORTANT BODY RULE: Crabbage has exactly TWO big claws (both raised at the sides) and a few short pointed crab legs, exactly like the reference: never extra claws, arms or hands. Its ONLY two eyes sit on top of its two long eye stalks; its round body has NO eyes and NO eyebrows on it, only a mouth. Show the emotion with the mouth, the eyes and eyelids on the stalks, and the two claws, which are always crab pincers with two jaws (never fists or fingers).',
   5: 'IMPORTANT BODY RULE: Toastbat has NO arms and NO hands at all. Its only limbs are its two toast-slice wings on its back and tiny stubby feet, exactly like the reference. Show the emotion with the face, the ears and the wings.',
   15: 'IMPORTANT BODY RULE: Hotchog stays lying down INSIDE its hot-dog bun, exactly like the reference: it never sits up or stands, and it has NO arms or hands. Show the emotion with the face, its spikes and the bun.',
 };
