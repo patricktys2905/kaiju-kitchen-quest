@@ -1,0 +1,10 @@
+[
+ {
+  "name": "face-2-neutral",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-2.png"
+  ],
+  "prompt": "Generate an image. Redraw this exact character, Crabbage (a grumpy cheese crab with a cabbage-leaf shell), IDENTICAL in pose, expression, colours, outlines and style, with ONE fix: it must have exactly TWO big claws (the two raised up at the sides). Remove the third, smaller claw at the bottom front; in its place show only its short pointed crab legs, like the legs on the sides. Keep everything else the same. Whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Portrait 4:5 image."
+ }
+]
