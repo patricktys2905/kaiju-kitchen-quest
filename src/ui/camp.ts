@@ -1,5 +1,6 @@
 // Camp (hub) menus as an HTML overlay: world MAP, HERO (stats + equipment), SKILLS, BAG (gear tabs + compare,
 // consumables + quick bag), MARKET, BOXES (gacha). Also the stage result panel. Reads/writes src/save.ts.
+import { MOBS as MOB_DEFS, nemesisOf } from '../sim/mobs';
 import type { Spicy } from '../sim/types';
 import { CLASSES, type Stat } from '../sim/classes';
 import { CONSUMABLES, type ConsumableId, QUICK_SLOTS } from '../sim/consumables';
@@ -157,7 +158,7 @@ function mapPage(): string {
       }).join('')}
     </div>
     <div class="info">
-      <div class="num">${sel.num}${sel.boss ? ' · BOSS' : sel.id.endsWith('-5') ? ' · ELITE' : ''}</div>
+      <div class="num">${sel.num}${sel.boss ? ' · BOSS' : sel.id.endsWith('-5') && nemesisOf(p.species) ? ` · NEMESIS: ${MOB_DEFS[nemesisOf(p.species)!].name}` : sel.id.endsWith('-5') ? ' · ELITE' : ''}</div>
       <div class="nm">${sel.name}</div>
       <div class="lv">Monsters Lv ${lv(sel.lv[0])}${sel.lv[1] !== sel.lv[0] ? '–' + lv(sel.lv[1]) : ''}</div>
       <div class="lv" style="color:${low ? '#ff8a8a' : '#a8f0a8'}">Recommended Lv ${lv(sel.rec)} (you: ${p.level})</div>

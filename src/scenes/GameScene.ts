@@ -6,7 +6,7 @@ import { initHud, showHud, showPause, toast, updateHud } from '../hud';
 import { readInput, takeTaps } from '../input';
 import { TIER_COLORS, TIER_NAMES } from '../sim/loot';
 import { CONSUMABLES } from '../sim/consumables';
-import { ELITE, ELITE_MODS, MOBS } from '../sim/mobs';
+import { ELITE, ELITE_MODS, MOBS, nemesisOf } from '../sim/mobs';
 import { ULT_LV, applyBranch, skillsOf, skillScale } from '../sim/skills';
 import { STAGES, stageById, worldOf } from '../sim/stages';
 import { derive } from '../sim/stats';
@@ -118,7 +118,7 @@ export class GameScene extends Phaser.Scene {
   private buildStage(): void {
     const st = this.stage, p = hero();
     this.hard = save.hard && this.hardOk();
-    this.world = new World(st, derive(p), (Date.now() & 0xffff) + 1, quickBag(), save.items.revive ?? 0, this.hard, STORIES[p.species]?.variants[st.id], [...(save.spicy ?? [])]);
+    this.world = new World(st, derive(p), (Date.now() & 0xffff) + 1, quickBag(), save.items.revive ?? 0, this.hard, STORIES[p.species]?.variants[st.id], [...(save.spicy ?? [])], nemesisOf(p.species));
     const cam = this.cameras.main.setZoom(ZOOM).setBackgroundColor('#f6dcb4');
     const bg = this.has(st.bg) ? st.bg : 'bg-far';
     this.far = this.has(bg) ? this.add.image(SX, SY, bg).setOrigin(0, 0).setScrollFactor(0).setDepth(-100) : undefined;
@@ -263,6 +263,9 @@ export class GameScene extends Phaser.Scene {
         case 'enrage': sfx('boss'); this.shake = 14; this.cameras.main.flash(250, 255, 80, 60); toast(`${e.name.toUpperCase()} IS ENRAGED!`, { big: true, color: '#ff6a5a' }); break;
         case 'heal': this.callout(e.x, e.y, '+' + e.n, '#7ae87a', 13); this.burst(e.x, e.y + 20, 0x7ae87a, 8); break;
         case 'burrow': this.burst(e.x, e.y - 6, 0x8a6a4a, e.up ? 16 : 10); if (e.up) { sfx('boom'); this.shake = Math.max(this.shake, 4); } break;
+        case 'steal': sfx('hurt'); toast(`Your ${e.name} was snatched! Beat the thief to get it back`, { color: '#ff9a6a' }); break;
+        case 'recover': sfx('pickup'); toast(`Got your ${e.name} back!`, { color: '#a8f0a8' }); break;
+        case 'nemesisMove': this.callout(w.hero.x, w.hero.y - 150, e.move.toUpperCase() + '!', '#ff9ad8', 13); break;
         case 'mimic': sfx('boss'); toast('It\'s a MIMIC!', { color: '#ff9a6a' }); break;
         case 'style': if (e.rank === 'S' || e.rank === 'A') toast(`STYLE ${e.rank}!`, { color: e.rank === 'S' ? '#ffd23c' : '#9fe8ff' }); break;
         case 'hazard': if (e.on && w.hazards[e.i]?.kind === 'drop') { sfx('boom'); } break;
@@ -525,7 +528,11 @@ export class GameScene extends Phaser.Scene {
     // lasers, mould puddles, burrow mounds
     const g = this.overlay!;
     g.clear();
-    for (const p of w.puddles) { g.fillStyle(0x6ac04a, Math.min(0.55, p.t / 2)); g.fillEllipse(p.x, p.y - 1, 70, 10); }
+    for (const p of w.puddles) {
+      const col = ({ slow: 0xa83a6a, slick: 0xf0d040, burn: 0xff7a2a, poison: 0x7ab8c8, trap: 0x6a6a72 } as Record<string, number>)[p.kind ?? ''] ?? 0x6ac04a;
+      if (p.kind === 'trap') { g.fillStyle(col, 1); g.fillRect(p.x - 14, p.y - 6, 28, 6); g.lineStyle(2, 0xd8d8e0, 1); g.lineBetween(p.x - 12, p.y - 6, p.x + 12, p.y - 14); continue; }
+      g.fillStyle(p.kind === 'slow' && w.nemesis === 'nslug' ? 0x9ad0a0 : col, Math.min(p.kind === 'burn' ? 0.5 + Math.sin(t * 18) * 0.15 : 0.55, p.t / 2)); g.fillEllipse(p.x, p.y - 1, p.w ?? 70, 10);
+    }
     for (const z of w.zones) {
       const a = Math.min(1, z.t);
       if (z.kind === 'steam') { g.fillStyle(0xf4f4ff, 0.3 * a); g.fillEllipse(z.x, z.y - 45, z.w, 90 + Math.sin(t * 6) * 6); }
@@ -544,6 +551,11 @@ export class GameScene extends Phaser.Scene {
         const sy = m.y - MOBS[m.kind].h * 0.7, lock = m.t > 0.6;
         g.lineStyle(lock ? 2.5 : 1.2, 0xff2a2a, lock ? 0.9 : 0.5); g.lineBetween(m.x + m.face * 22, sy, m.aimX, m.aimY);
       }
+      if (m.move === 'beam' && (m.state === 'windup' || m.state === 'attack')) {
+        const on = m.state === 'attack'; g.lineStyle(on ? 16 : 2, on ? 0xe8d0ff : 0xc8a0ff, on ? 0.85 : 0.6); g.lineBetween(m.x + m.face * 20, m.aimY, m.aimX, m.aimY);
+      }
+      if (m.shellT > 0) { g.lineStyle(3, 0xffd27a, 0.8); g.strokeEllipse(m.x, m.y - MOBS[m.kind].h / 2, MOBS[m.kind].w * 1.6, MOBS[m.kind].h * 1.3); }
+      if (m.under && m.state !== 'dead' && m.kind === 'nshark') { g.fillStyle(0x6ab8e8, 1); g.fillTriangle(m.x - 10, m.y - 2, m.x + 14, m.y - 2, m.x + 2 * m.face, m.y - 34); continue; }
       if (m.under && m.state !== 'dead') { g.fillStyle(0x7a5a3a, 0.9); g.fillEllipse(m.x, m.y - 3, 46, m.state === 'windup' ? 16 + Math.sin(t * 40) * 4 : 12); }
     }
     this.slowTint?.setFillStyle(0x6a8aff, w.slowmo > 0 ? 0.16 : 0);
@@ -590,6 +602,17 @@ export class GameScene extends Phaser.Scene {
           : s.kind === 'wave' ? this.add.ellipse(0, 0, 130, 46, 0x6a3a1a, 0.9).setStrokeStyle(3, 0x3a1a08)
           : s.kind === 'quill' ? this.add.ellipse(0, 0, 18, 5, 0x6a4a2a).setStrokeStyle(1, 0xffe0a0)
           : s.kind === 'goo' ? this.add.circle(0, 0, 9, 0xf0c820).setStrokeStyle(2, 0xa07a10)
+          : s.kind === 'spike' ? this.add.triangle(0, 0, 0, 14, 9, -14, 18, 14, 0x8a3a5a).setStrokeStyle(2, 0x3a1020)
+          : s.kind === 'heat' ? this.add.ellipse(0, 0, 30, 22, 0xff6a2a, 0.75).setBlendMode(Phaser.BlendModes.ADD)
+          : s.kind === 'ring' ? this.add.circle(0, 0, 13).setStrokeStyle(6, 0xf0d040)
+          : s.kind === 'crumb' ? this.add.circle(0, 0, 6, 0x9a6a3a).setStrokeStyle(2, 0x4a2a10)
+          : s.kind === 'spark' ? this.add.circle(0, 0, 7, 0xc8a0ff).setStrokeStyle(2, 0xffffff).setBlendMode(Phaser.BlendModes.ADD)
+          : s.kind === 'spore' ? this.add.circle(0, 0, 8, 0x7ab8c8, 0.85).setStrokeStyle(2, 0x2a5a6a)
+          : s.kind === 'acid' ? this.add.circle(0, 0, 8, 0xa8e04a).setStrokeStyle(2, 0x4a7a10)
+          : s.kind === 'knife' ? this.add.ellipse(0, 0, 20, 5, 0xe0e0e8).setStrokeStyle(1, 0x5a5a6a)
+          : s.kind === 'fortune' ? this.add.rectangle(0, 0, 16, 8, 0xfff8e0).setStrokeStyle(1, 0xa08a50)
+          : s.kind === 'marinade' ? this.add.circle(0, 0, 9, 0xc0401a).setStrokeStyle(2, 0x6a1a08)
+          : s.kind?.startsWith('puddle-') ? this.add.circle(0, 0, 9, s.kind === 'puddle-burn' ? 0xff7a2a : s.kind === 'puddle-poison' ? 0x7ab8c8 : s.kind === 'puddle-slick' ? 0xf0d040 : 0xa83a6a).setStrokeStyle(2, 0x2a1020)
           : s.kind === 'reflect' ? this.add.circle(0, 0, 9, 0x8ae07a).setStrokeStyle(2, 0xffffff)
           : s.from === 'hero'
           ? this.add.circle(0, 0, 9, 0xe8c8ff).setStrokeStyle(3, 0xffffff).setBlendMode(Phaser.BlendModes.ADD)
@@ -603,7 +626,8 @@ export class GameScene extends Phaser.Scene {
         c.setDepth(8); this.shotImgs.set(s.id, c);
       }
       c.setPosition(s.x, s.y).setScale(1 + Math.sin(t * 30) * 0.12);
-      if (s.kind === 'laser' || s.kind === 'quill') c.setRotation(Math.atan2(s.vy, s.vx));
+      if (s.kind === 'laser' || s.kind === 'quill' || s.kind === 'knife') c.setRotation(Math.atan2(s.vy, s.vx));
+      if (s.kind === 'ring' || s.kind === 'fortune') c.setRotation(t * 14);
       if (s.kind === 'boomerang' || s.kind === 'snowball') c.setRotation(t * 20 * Math.sign(s.vx || 1));
       if (s.kind === 'snowball') c.setScale((s.r ?? 14) / 14);
       if (s.kind === 'twister') c.setScale(1 + Math.sin(t * 30) * 0.08, 1);

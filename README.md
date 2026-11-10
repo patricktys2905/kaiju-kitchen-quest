@@ -63,3 +63,11 @@ Every kaiju's 3 actives, ultimate and passive are its own: tests/skills.test.ts 
 an ultimate kind, a passive stat or a skill name. Skill ids never change (saves store levels/branches by id).
 New mechanics live in world.ts startSkill/stepSkill (+ zones, orbs, burn/freeze status, special projectiles);
 POSE_OF maps them to existing animations. Preview: `node scripts/skill-shot.mjs [species...]` → shots/skills-sheet.png.
+
+## Story nemeses (mobs.ts `nem`, src/story/nemesis.ts)
+Each kaiju has one rival (brain 'nemesis') who replaces the elite at stage 5 of every world in that kaiju's story only
+(World(..., nemesis)). It uses 2 / 3 / 4 / 4 of its moves in worlds 1–4 (nemesisMoves) and enrages at half HP.
+Shared basics (slash, leap, charge, rain, breath, fanshot, lob, spin, roar, puddle, trap) + one signature move each
+(rootspike, dive/snatch, boomerang, beam/lure, summon, slimesurge, vanish, shell, burrow, heatwave, skewer, finslide).
+Story speaker 'foe'. Checks: tests/nemesis.test.ts; `npx vite-node scripts/nem-diag.ts 4-5 Toastbat` (what hurts);
+`node scripts/nemesis-shot.mjs` (screenshots).

@@ -3,6 +3,8 @@
 import type { MobKind } from './types';
 
 export type Brain = 'walker' | 'hopper' | 'ranged' | 'brute' | 'flyer' | 'bomber' | 'boss'
+  /** a kaiju's story rival: picks from its own move list, more moves each world */
+  | 'nemesis'
   /** heals hurt monsters nearby, keeps away from you */
   | 'healer'
   /** travels underground, pops up under you */
@@ -36,6 +38,28 @@ export interface MobDef {
   scale?: number;
   /** summoner: what it calls */
   calls?: MobKind;
+  /** nemesis: its moves in unlock order (world 1 uses the first 2, world 2 the first 3, worlds 3-4 all 4) */
+  nem?: NemesisDef;
+}
+
+/** Nemesis moves. Shared basics: slash leap charge rain breath fanshot lob spin roar puddle trap.
+ *  Signatures (one nemesis each): slimesurge summon rootspike dive snatch boomerang beam lure vanish shell burrow heatwave skewer finslide. */
+export type NemMove = 'slash' | 'leap' | 'charge' | 'rain' | 'breath' | 'fanshot' | 'lob' | 'spin' | 'roar' | 'puddle' | 'trap' | 'summon'
+  | 'slimesurge' | 'rootspike' | 'dive' | 'snatch' | 'boomerang' | 'beam' | 'lure' | 'vanish' | 'shell' | 'burrow' | 'heatwave' | 'skewer' | 'finslide';
+export interface NemesisDef {
+  /** whose story it belongs to */
+  species: number;
+  moves: NemMove[];
+  /** what each move is called for this nemesis (shown as it winds up) */
+  names: string[];
+  fly?: boolean;
+  /** puddle flavour: slow (sticky), burn, poison, slick (slippery) */
+  puddle?: 'slow' | 'burn' | 'poison' | 'slick';
+  /** leaves a slime trail as it moves */
+  trail?: boolean;
+  calls?: MobKind;
+  /** projectile look */
+  shot?: string;
 }
 
 export const MOBS: Record<MobKind, MobDef> = {
@@ -77,6 +101,31 @@ export const MOBS: Record<MobKind, MobDef> = {
   noodle: { name: 'Noodle Lurker', brain: 'burrower', art: 'mob-noodle', hp: 90, atk: 13, speed: 100, w: 56, h: 50, knock: 0.9, aggro: 360, range: 40, windup: 0.55, patrol: 120, xp: 18, dropChance: 0.35 },
   raisin: { name: 'Raisin Sniper', brain: 'sniper', art: 'mob-raisin', hp: 60, atk: 16, speed: 60, w: 38, h: 46, knock: 1.1, aggro: 580, range: 560, windup: 1.0, patrol: 80, xp: 18, dropChance: 0.35 },
   cereal: { name: 'Cereal Box Mimic', brain: 'mimic', art: 'mob-cereal', hp: 165, atk: 16, speed: 110, w: 60, h: 70, knock: 0.7, aggro: 300, range: 74, windup: 0.4, patrol: 0, xp: 34, dropChance: 1 },
+  // ---- story nemeses: one per kaiju, fought at stage 5 of every world with more moves each time ----
+  nbeet: { name: 'Brutus Beetroot', brain: 'nemesis', art: 'mob-nem-beet', hp: 210, atk: 15, speed: 75, w: 70, h: 92, knock: 0.4, aggro: 900, range: 120, windup: 0.75, patrol: 60, xp: 32, dropChance: 1, armor: true,
+    nem: { species: 0, moves: ['slash', 'rootspike', 'puddle', 'roar'], names: ['Beet Slap', 'Root Spikes', 'Beet Juice', 'Bully Roar'], puddle: 'slow', shot: 'spike' } },
+  ncrow: { name: 'Crustwing', brain: 'nemesis', art: 'mob-nem-crow', hp: 165, atk: 14, speed: 130, w: 70, h: 70, knock: 0.6, aggro: 900, range: 260, windup: 0.6, patrol: 80, xp: 32, dropChance: 1, armor: true,
+    nem: { species: 10, moves: ['dive', 'fanshot', 'snatch', 'rain'], names: ['Peck Dive', 'Crumb Scatter', 'Snatch!', 'Feather Storm'], fly: true, shot: 'crumb' } },
+  npine: { name: 'Pineapple Pete', brain: 'nemesis', art: 'mob-nem-pine', hp: 180, atk: 14, speed: 110, w: 56, h: 88, knock: 0.5, aggro: 900, range: 120, windup: 0.6, patrol: 80, xp: 32, dropChance: 1, armor: true,
+    nem: { species: 11, moves: ['charge', 'boomerang', 'puddle', 'spin'], names: ['Skate Rush', 'Ring Toss', 'Juice Slick', 'Pineapple Spin'], puddle: 'slick', shot: 'ring' } },
+  nlamp: { name: 'Zapsy the Bug Lamp', brain: 'nemesis', art: 'mob-nem-lamp', hp: 180, atk: 14, speed: 60, w: 60, h: 96, knock: 0.3, aggro: 900, range: 120, windup: 0.8, patrol: 50, xp: 32, dropChance: 1, armor: true,
+    nem: { species: 4, moves: ['beam', 'trap', 'lure', 'rain'], names: ['Zapper Beam', 'Zap Bulbs', 'Lure Glow', 'Spark Shower'], shot: 'spark' } },
+  nshroom: { name: 'Professor Penicillin', brain: 'nemesis', art: 'mob-nem-shroom', hp: 180, atk: 13, speed: 65, w: 60, h: 90, knock: 0.4, aggro: 900, range: 120, windup: 0.75, patrol: 60, xp: 32, dropChance: 1, armor: true,
+    nem: { species: 1, moves: ['lob', 'summon', 'puddle', 'fanshot'], names: ['Spore Flask', 'Grow Minions', 'Spore Cloud', 'Spore Spray'], puddle: 'poison', calls: 'bun', shot: 'spore' } },
+  nslug: { name: 'Sir Slurp', brain: 'nemesis', art: 'mob-nem-slug', hp: 240, atk: 14, speed: 55, w: 90, h: 64, knock: 0.3, aggro: 900, range: 130, windup: 0.75, patrol: 60, xp: 32, dropChance: 1, armor: true,
+    nem: { species: 2, moves: ['slash', 'slimesurge', 'leap', 'puddle'], names: ['Slime Slap', 'Slime Surge', 'Belly Flop', 'Slime Pool'], trail: true, puddle: 'slow', shot: 'acid' } },
+  nrat: { name: 'Ricotta Rat', brain: 'nemesis', art: 'mob-nem-rat', hp: 165, atk: 12, speed: 115, w: 54, h: 70, knock: 0.6, aggro: 900, range: 120, windup: 0.55, patrol: 80, xp: 32, dropChance: 1, armor: true,
+    nem: { species: 5, moves: ['vanish', 'fanshot', 'trap', 'charge'], names: ['Smoke Bomb', 'Knife Fan', 'Mousetraps', 'Pickpocket Dash'], shot: 'knife' } },
+  ncookie: { name: 'Duke Fortune Cookie', brain: 'nemesis', art: 'mob-nem-cookie', hp: 195, atk: 13, speed: 60, w: 70, h: 80, knock: 0.4, aggro: 900, range: 120, windup: 0.75, patrol: 50, xp: 32, dropChance: 1, armor: true,
+    nem: { species: 6, moves: ['slash', 'shell', 'fanshot', 'rain'], names: ['Royal Swat', 'Crumble Shell', 'Royal Decrees', 'Fortune Rain'], shot: 'fortune' } },
+  nginger: { name: 'Gari the Ginger Serpent', brain: 'nemesis', art: 'mob-nem-ginger', hp: 195, atk: 15, speed: 85, w: 90, h: 80, knock: 0.4, aggro: 900, range: 140, windup: 0.7, patrol: 70, xp: 32, dropChance: 1, armor: true,
+    nem: { species: 7, moves: ['breath', 'burrow', 'spin', 'leap'], names: ['Pink Flame', 'Serpent Dive', 'Coil Whirl', 'Strike'] } },
+  nbrulee: { name: 'Torchy Brûlée', brain: 'nemesis', art: 'mob-nem-brulee', hp: 210, atk: 15, speed: 65, w: 70, h: 80, knock: 0.4, aggro: 900, range: 140, windup: 0.75, patrol: 60, xp: 32, dropChance: 1, armor: true,
+    nem: { species: 8, moves: ['breath', 'heatwave', 'puddle', 'leap'], names: ['Blowtorch', 'Heat Wave', 'Hot Caramel', 'Caramel Crash'], puddle: 'burn', shot: 'heat' } },
+  nkebab: { name: 'Captain Kebab', brain: 'nemesis', art: 'mob-nem-kebab', hp: 195, atk: 15, speed: 80, w: 60, h: 96, knock: 0.4, aggro: 900, range: 140, windup: 0.7, patrol: 70, xp: 32, dropChance: 1, armor: true,
+    nem: { species: 15, moves: ['skewer', 'spin', 'lob', 'charge'], names: ['Skewer Thrust', 'Spit-Roast Spin', 'Marinade Toss', 'Kebab Charge'], shot: 'marinade' } },
+  nshark: { name: 'Finn Freezepop', brain: 'nemesis', art: 'mob-nem-shark', hp: 195, atk: 15, speed: 90, w: 90, h: 70, knock: 0.4, aggro: 900, range: 140, windup: 0.7, patrol: 70, xp: 32, dropChance: 1, armor: true,
+    nem: { species: 17, moves: ['finslide', 'rain', 'roar', 'leap'], names: ['Fin Slide', 'Icicle Drop', 'Brain Freeze', 'Iceberg Belly-Flop'], shot: 'icicle' } },
   golem: { name: 'Freezer Golem', brain: 'boss', art: 'boss-golem', hp: 1700, atk: 18, speed: 80, w: 130, h: 180, knock: 0.2, aggro: 2000, range: 150, windup: 0.75, patrol: 0, xp: 320, dropChance: 1, armor: true, moves: ['slash', 'leap', 'rain', 'charge'] },
 };
 
@@ -94,7 +143,17 @@ export const ELITE_MODS: Record<EliteMod, { name: string; desc: string; color: s
   splitting: { name: 'Splitting', desc: 'Splits into two smaller copies', color: '#c87aff' },
 };
 /** Attacks that glow red: they can't be interrupted, only dodged. */
-export const DANGER_MOVES = new Set(['charge', 'leap', 'rush', 'brute']);
+export const DANGER_MOVES = new Set(['charge', 'leap', 'rush', 'brute', 'skewer', 'finslide']);
+
+/** The nemesis whose story this kaiju is in. */
+export function nemesisOf(species: number): MobKind | undefined {
+  return (Object.keys(MOBS) as MobKind[]).find(k => MOBS[k].nem?.species === species);
+}
+/** Moves a nemesis uses in a given world (2, 3, then all 4). */
+export function nemesisMoves(kind: MobKind, world: number): NemMove[] {
+  const n = MOBS[kind].nem; if (!n) return [];
+  return n.moves.slice(0, Math.min(n.moves.length, world + 1));
+}
 
 /** Global difficulty knobs (tuned with scripts/balance.ts). */
 export const TUNE = { hp: 2.5, atk: 1.8, bossHp: 1.15, bossAtk: 0.6, windup: 0.85 };

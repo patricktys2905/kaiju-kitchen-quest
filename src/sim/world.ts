@@ -4,7 +4,7 @@
 import type { AttackDef } from './classes';
 import { rollTier } from './loot';
 import { type BoostKind, CONSUMABLES, type ConsumableId, QUICK_CD } from './consumables';
-import { DANGER_MOVES, ELITE, ELITE_MODS, type EliteMod, MOBS, TUNE, dropLevel, mobAtk, mobCrumbs, mobHp, mobXp } from './mobs';
+import { DANGER_MOVES, ELITE, ELITE_MODS, type EliteMod, MOBS, type NemMove, TUNE, nemesisMoves, dropLevel, mobAtk, mobCrumbs, mobHp, mobXp } from './mobs';
 import { type SkillDef, ULTS, ULT_LV, applyBranch, skillScale, skillsOf } from './skills';
 import { WORLDS } from './stages';
 import type { Derived } from './stats';
@@ -115,6 +115,8 @@ export interface Mob {
   burn: number; burnT: number; burnDmg: number; frozen: number;
   /** stuck in mustard: can't move or act (can still be hit) */
   glued: number;
+  /** nemesis: which world's version (more moves later), shell timer, a stolen quick-bag item */
+  phase: number; shellT: number; stolen: number;
 }
 
 export interface Box { id: number; tier: BoxTier; ilvl: number; x: number; y: number; vy: number; ground: boolean; t: number }
@@ -143,7 +145,9 @@ export class World {
   /** monsters move in slow motion after a perfect dodge */
   slowmo = 0;
   hazards: (Hazard & { state: 'off' | 'warn' | 'on'; hit: Set<number> })[] = [];
-  puddles: { x: number; y: number; t: number }[] = [];
+  /** ground puddles left by monsters: mould / slime slow you, slick makes you slide, burn and poison hurt, trap snaps once */
+  puddles: { x: number; y: number; t: number; kind?: 'slow' | 'slick' | 'burn' | 'poison' | 'trap'; dmg?: number; w?: number }[] = [];
+  private puddleTick = 0;
   /** lingering skill areas: steam / mustard goo / ice trail / fire floor / snow */
   zones: { id: number; x: number; y: number; w: number; t: number; tick: number; next: number; dmg: number; kind: 'steam' | 'goo' | 'ice' | 'fire' | 'snow'; hit?: Set<number> }[] = [];
   spicy: Spicy[];
@@ -158,7 +162,7 @@ export class World {
   /** story twist on this stage */
   variant: 'swarm' | 'ambush' | 'night' | undefined;
 
-  constructor(public stage: StageDef, d: Derived, seed = 1, bag: Hero['bag'] = [], revives = 0, hard = false, variant?: 'swarm' | 'ambush' | 'night', spicy: Spicy[] = []) {
+  constructor(public stage: StageDef, d: Derived, seed = 1, bag: Hero['bag'] = [], revives = 0, hard = false, variant?: 'swarm' | 'ambush' | 'night', spicy: Spicy[] = [], public nemesis?: MobKind) {
     this.spicy = spicy; this.hard = hard;
     this.hazards = (stage.hazards ?? []).map(h => ({ ...h, state: 'off', hit: new Set<number>() }));
     let s = seed >>> 0 || 1;
@@ -174,7 +178,9 @@ export class World {
     // Hard mode: every monster +HARD_LV levels
     this.variant = stage.boss ? undefined : variant; // bosses are never changed by the story
     const night = this.variant === 'night' ? 1 : 0;
-    for (const m of stage.mobs) this.spawnMob(m.kind, m.x, m.lv + (hard ? HARD_LV : 0) + night, m.y, m.elite);
+    // stage 5: this kaiju's story nemesis takes the elite's place
+    const nemStage = !!nemesis && !stage.boss && stage.id.endsWith('-5');
+    for (const m of stage.mobs) this.spawnMob(m.elite && nemStage ? nemesis! : m.kind, m.x, m.lv + (hard ? HARD_LV : 0) + night, m.y, m.elite);
     if (this.variant === 'swarm') {
       for (const m of stage.mobs.filter((_, i) => i % 2 === 0)) this.spawnMob(m.kind, Math.min(stage.width - 200, m.x + 70), m.lv + (hard ? HARD_LV : 0), m.y, m.elite);
       for (const m of this.mobs) if (!m.elite) { m.hp = m.maxHp = Math.round(m.maxHp * 0.65); }
@@ -186,7 +192,7 @@ export class World {
     // elite modifiers: one per elite (two in Hard); in Hard some normal monsters get one too. Bosses never change.
     const all = Object.keys(ELITE_MODS) as EliteMod[];
     for (const m of this.mobs) {
-      if (MOBS[m.kind].brain === 'boss') continue;
+      if (MOBS[m.kind].brain === 'boss' || MOBS[m.kind].brain === 'nemesis') continue;
       const n = m.elite ? (hard ? 2 : 1) : hard && this.rand() < 0.12 ? 1 : 0;
       while (m.mods.length < n) { const k = all[Math.floor(this.rand() * all.length)]; if (!m.mods.includes(k)) m.mods.push(k); }
     }
@@ -221,7 +227,7 @@ export class World {
       id: nextId++, kind, lv, x, y: y ?? this.stage.groundY, vx: 0, vy: 0, face: -1, hp, maxHp: hp, atk: Math.round(mobAtk(kind, lv) * (elite ? ELITE.atk : 1) * pow),
       state: 'walk', move: '', t: this.rand() * 2, ground: true, on: y === undefined ? -1 : null, home: x, deadT: 0, flash: 0,
       hurtShown: 0, stagger: 0, summoned: 0, hitDone: false, elite, homeY: y ?? this.stage.groundY, slow: 0,
-      mods: [], under: MOBS[kind].brain === 'burrower', disguised: MOBS[kind].brain === 'mimic', aimX: 0, aimY: 0, enraged: false, parent: 0, dropT: 0, surfT: 0, burn: 0, burnT: 0, burnDmg: 0, frozen: 0, glued: 0,
+      mods: [], under: MOBS[kind].brain === 'burrower', disguised: MOBS[kind].brain === 'mimic', aimX: 0, aimY: 0, enraged: false, parent: 0, dropT: 0, surfT: 0, burn: 0, burnT: 0, burnDmg: 0, frozen: 0, glued: 0, phase: this.stage.world, shellT: 0, stolen: -1,
     };
     if (y !== undefined) { m.on = this.platformAt(x, y); m.ground = m.on !== null; }
     this.mobs.push(m);
@@ -289,10 +295,17 @@ export class World {
     if (h.buff && (h.buff.t -= dt) <= 0) h.buff = null;
     h.t += dt;
     const dir = (inp.right ? 1 : 0) - (inp.left ? 1 : 0);
-    const inMould = h.ground && this.puddles.some(p => Math.abs(p.x - h.x) < 42 && Math.abs(p.y - h.y) < 4);
+    const under = h.ground ? this.puddles.filter(p => Math.abs(p.x - h.x) < (p.w ?? 84) / 2 && Math.abs(p.y - h.y) < 4) : [];
+    const inMould = under.some(p => !p.kind || p.kind === 'slow');
+    if ((this.puddleTick -= dt) <= 0 && h.state !== 'down') {
+      const hot = under.find(p => p.kind === 'burn' || p.kind === 'poison');
+      if (hot) { this.puddleTick = 0.6; this.hurtHero(h.d.maxHp * 0.04, 0, undefined, true); }
+    }
+    const trap = under.find(p => p.kind === 'trap');
+    if (trap && h.state !== 'down' && h.state !== 'dodge') { trap.t = 0; this.hurtHero(trap.dmg ?? 10, 0); }
     const speed = c.speed * h.d.speed * (1 + (h.buff?.speed ?? 0) + (h.boosts.speed?.[0] ?? 0)) * (inMould ? 0.55 : 1);
     // ice: you keep sliding (low grip)
-    const grip = h.ground && h.on === -1 && this.hazards.some(z => z.kind === 'ice' && z.state === 'on' && Math.abs(h.x - z.x) < z.w / 2) ? 0.18 : 1;
+    const grip = (h.ground && h.on === -1 && this.hazards.some(z => z.kind === 'ice' && z.state === 'on' && Math.abs(h.x - z.x) < z.w / 2)) || under.some(p => p.kind === 'slick') ? 0.18 : 1;
     // dodge roll: tap the same direction twice quickly
     const tapDir = pressed('left') ? -1 : pressed('right') ? 1 : 0;
     if (tapDir) {
@@ -783,6 +796,10 @@ export class World {
     // (k may be replaced below: an interrupt lengthens the stun)
     const def = MOBS[m.kind], h = this.hero;
     const isBoss = def.brain === 'boss';
+    if (m.shellT > 0) { // Crumble Shell: only a Guard Break cracks it
+      if (h.state === 'attack' && h.step === -2) { m.shellT = 0; m.state = 'stagger'; m.t = 0; m.vx = 0; this.events.push({ t: 'guardBreak', x: m.x, y: m.y - def.h * 0.6 }); }
+      else { raw *= 0.1; this.events.push({ t: 'block', x: m.x, y: m.y - def.h * 0.6 }); }
+    }
     const guardBreak = h.state === 'attack' && h.step === -2;
     if (m.disguised) { m.disguised = false; m.state = 'walk'; m.t = 1; this.events.push({ t: 'mimic', id: m.id }); }
     // shielders: front hits barely hurt unless it's a skill or a finisher (which also breaks the guard)
@@ -821,7 +838,7 @@ export class World {
     else if (h.step === 2) this.addStyle('finisher', 5);
     else this.addStyle('hit', 2);
     // boss phase 2 at half HP (the same for every kaiju): faster, and the arena hazards switch on
-    if (isBoss && !m.enraged && m.hp > 0 && m.hp < m.maxHp / 2) { m.enraged = true; this.events.push({ t: 'enrage', name: def.name }); }
+    if ((isBoss || def.brain === 'nemesis') && !m.enraged && m.hp > 0 && m.hp < m.maxHp / 2) { m.enraged = true; this.events.push({ t: 'enrage', name: def.name }); }
     // interrupt: hitting a wind-up cancels it, unless it's a red (danger) attack or the monster is armoured and the hit is light
     const danger = this.isDanger(m);
     if (m.state === 'windup' && !isBoss && !danger && m.hp > 0 && (!(def.armor || m.elite) || heavy || k.stun >= 0.6)) {
@@ -852,6 +869,7 @@ export class World {
     this.run.kills++;
     this.addStyle('kill', 3);
     if (m.mods.includes('splitting')) for (const off of [-40, 40]) { const c = this.spawnMob(m.kind, clamp(m.x + off, 30, this.stage.width - 30), Math.max(1, m.lv - 1), m.on !== null && m.on >= 0 ? m.y : undefined); c.hp = c.maxHp = Math.round(c.maxHp * 0.6); c.vy = -380; c.vx = off * 5; c.ground = false; c.on = null; c.state = 'hurt'; c.t = 0; c.under = false; c.disguised = false; }
+    if (m.stolen >= 0) { const slot = h.bag[m.stolen]; if (slot) slot.n++; this.events.push({ t: 'recover', name: slot ? CONSUMABLES[slot.id].name : '' }); m.stolen = -1; }
     if (def.split) for (const off of [-30, 30]) { const c = this.spawnMob(def.split, clamp(m.x + off, 30, this.stage.width - 30), Math.max(1, m.lv - 2), m.on !== null && m.on >= 0 ? m.y : undefined); c.vy = -380; c.vx = off * 6; c.ground = false; c.on = null; c.state = 'hurt'; c.t = 0; }
     this.events.push({ t: 'mobDie', x: m.x, y: m.y, boss: def.brain === 'boss', elite: m.elite, kind: m.kind });
     this.events.push({ t: 'xp', n: Math.round(mobXp(m.kind, m.lv) * (m.elite ? ELITE.xp : 1)) });
@@ -877,6 +895,7 @@ export class World {
     const def = MOBS[m.kind], h = this.hero;
     m.t += dt; m.flash = Math.max(0, m.flash - dt); m.hurtShown = Math.max(0, m.hurtShown - dt); m.slow = Math.max(0, m.slow - dt);
     if (m.state === 'dead') { m.deadT += dt; m.vx *= 0.96; this.physics(m, dt, MAX_FALL, false); return; }
+    m.shellT = Math.max(0, m.shellT - dt);
     if (m.burn > 0) {
       m.burn -= dt; m.burnT -= dt;
       if (m.burnT <= 0) {
@@ -903,7 +922,9 @@ export class World {
     const ranged = def.brain === 'ranged' || def.brain === 'healer' || def.brain === 'sniper' || def.brain === 'summoner';
     const sameLevel = Math.abs(h.y - m.y) < (ranged ? 70 : 40);
     const heroOk = h.state !== 'down';
-    const chase = heroOk && (def.brain === 'boss' || (sameLevel && Math.abs(dx) < def.aggro) || (def.brain === 'turret' && Math.abs(dx) < def.aggro && Math.abs(h.y - m.y) < 260));
+    if (def.nem?.fly) { this.stepNemFly(m, dt, fast); return; }
+    if (def.nem?.trail && m.ground && Math.abs(m.vx) > 10 && (m.dropT -= dt) <= 0 && this.puddles.length < 40) { m.dropT = 0.45; this.puddles.push({ x: m.x, y: m.y, t: 5, kind: 'slow' }); }
+    const chase = heroOk && (def.brain === 'boss' || def.brain === 'nemesis' || (sameLevel && Math.abs(dx) < def.aggro) || (def.brain === 'turret' && Math.abs(dx) < def.aggro && Math.abs(h.y - m.y) < 260));
     // a surfaced burrower digs back down after a while
     if (def.brain === 'burrower' && !m.under && m.state === 'walk' && m.ground && (m.surfT += dt) > 3) { m.under = true; m.surfT = 0; this.events.push({ t: 'burrow', x: m.x, y: m.y, up: false }); }
 
@@ -927,6 +948,7 @@ export class World {
         if (chase && m.ground && m.t > (m.elite ? 1.4 : 0.4)) { // elites leave an opening after each attack
           const near = Math.abs(dx) < def.range;
           if (def.brain === 'boss') this.bossThink(m, dx);
+          else if (def.brain === 'nemesis') this.nemThink(m, dx);
           else if (NEW_BRAINS.has(def.brain)) this.mobDecide(m, dx);
           else if (near && (def.brain !== 'ranged' || Math.abs(dx) > 90 || m.t > 2)) { m.state = 'windup'; m.t = 0; m.vx = def.brain === 'bomber' ? m.vx * 0.3 : 0; m.move = def.brain; }
         }
@@ -942,6 +964,7 @@ export class World {
         m.vx = approach(m.vx, 0, 1200 * dt);
         const wind = (m.move === 'charge' ? 0.8 : m.move === 'leap' ? 0.55 : m.move === 'rain' || m.move === 'breath' ? 0.8 : def.windup) * TUNE.windup / fast * (m.move === 'brute' && m.elite ? 1.3 : 1); // red elite slams wind up longer: time to see it and dodge
         if (m.move === 'snipe' && m.t < wind - 0.3) { m.aimX = h.x; m.aimY = h.y - 40; } // the laser tracks you, then locks
+        if (m.move === 'beam' && m.t < wind - 0.3) { m.aimX = m.x + m.face * 700; m.aimY = h.y - 40; }
         if (m.t > wind) { m.state = 'attack'; m.t = 0; m.hitDone = false; this.beginAttack(m); }
         break;
       }
@@ -1032,9 +1055,126 @@ export class World {
     }
   }
 
+  /** Nemesis: pick one of this world's moves that fits the distance. */
+  private nemThink(m: Mob, dx: number): void {
+    const def = MOBS[m.kind], ad = Math.abs(dx), h = this.hero;
+    const kids = this.mobs.filter(o => o.parent === m.id && o.state !== 'dead').length;
+    const ok = (mv: NemMove) => {
+      switch (mv) {
+        case 'slash': case 'spin': return ad < 150;
+        case 'roar': case 'lure': return ad < 260;
+        case 'skewer': return ad < 300;
+        case 'vanish': return ad > 120;
+        case 'summon': return kids < 3;
+        case 'shell': return m.shellT <= 0;
+        case 'beam': return Math.abs(h.y - m.y) < 120;
+        default: return true;
+      }
+    };
+    const moves = nemesisMoves(m.kind, m.phase).filter(ok);
+    if (!moves.length) return; // walk closer
+    const mv = moves[Math.floor(this.rand() * moves.length)];
+    m.state = 'windup'; m.t = 0; m.vx = 0; m.move = mv; m.face = dx > 0 ? 1 : -1;
+    const i = def.nem!.moves.indexOf(mv);
+    this.events.push({ t: 'mobAttack', id: m.id, kind: mv });
+    this.events.push({ t: 'nemesisMove', name: def.name, move: def.nem!.names[i] ?? mv });
+  }
+
+  /** Crustwing: hovers out of reach, then dives / snatches / scatters crumbs. */
+  private stepNemFly(m: Mob, dt: number, fast: number): void {
+    const def = MOBS[m.kind], h = this.hero, dx = h.x - m.x;
+    const hoverY = m.homeY - 110 + Math.sin(this.time * 2) * 10;
+    switch (m.state) {
+      case 'walk': {
+        const tx = h.x - Math.sign(dx || 1) * 160;
+        m.vx = approach(m.vx, clamp((tx - m.x) * 2, -def.speed, def.speed) * fast, 600 * dt);
+        m.vy = approach(m.vy, (hoverY - m.y) * 3, 900 * dt);
+        m.face = dx > 0 ? 1 : -1;
+        if (h.state !== 'down' && m.t > 1.4 / fast) this.nemThink(m, dx);
+        break;
+      }
+      case 'windup':
+        m.vx = approach(m.vx, 0, 800 * dt); m.vy = approach(m.vy, -40, 400 * dt);
+        if (m.t > def.windup * TUNE.windup / fast) {
+          m.state = 'attack'; m.t = 0; m.hitDone = false;
+          if (m.move === 'dive' || m.move === 'snatch') { const ty = h.y - 30, d = Math.hypot(h.x - m.x, ty - m.y) || 1; m.vx = (h.x - m.x) / d * 480; m.vy = (ty - m.y) / d * 480; }
+          else this.beginAttack(m);
+        }
+        break;
+      case 'attack':
+        if (m.move === 'dive' || m.move === 'snatch') {
+          if (!m.hitDone && Math.abs(h.x - m.x) < 40 && m.y > h.y - 90 && m.y < h.y + 10) {
+            m.hitDone = true;
+            if (m.move === 'snatch' && m.stolen < 0 && h.inv <= 0 && !this.canPerfect()) {
+              const i = h.bag.findIndex(b => b && b.n > 0);
+              if (i >= 0) { h.bag[i]!.n--; m.stolen = i; this.events.push({ t: 'steal', name: CONSUMABLES[h.bag[i]!.id].name }); }
+            }
+            this.hurtHero(m.move === 'snatch' ? Math.round(m.atk * 0.6) : m.atk, Math.sign(m.vx) || 1, m);
+          }
+          if (m.t > 0.8) { m.state = 'stagger'; m.t = 0; } // lands to catch its breath: your chance to hit it
+        } else if (m.t > 0.6) this.endAttack(m);
+        break;
+      case 'stagger': // resting on the floor
+        m.vx = approach(m.vx, 0, 900 * dt); m.vy = approach(m.vy, 500, 1500 * dt);
+        if (m.t > 1.5) { m.state = 'walk'; m.t = 0; }
+        break;
+      default:
+        m.vx = approach(m.vx, 0, 600 * dt); m.vy = approach(m.vy, 0, 900 * dt);
+        if (m.t > 0.4) { m.state = 'walk'; m.t = 0; }
+    }
+    m.x = clamp(m.x + m.vx * dt, 20, this.stage.width - 20);
+    m.y = Math.min(m.y + m.vy * dt, m.state === 'stagger' ? m.homeY : m.homeY - 16);
+    m.ground = m.state === 'stagger' && m.y >= m.homeY; m.on = m.ground ? -1 : null;
+  }
+
+  /** A monster projectile (nemesis shots use their own look). */
+  private mobShot(m: Mob, x: number, y: number, vx: number, vy: number, dmg: number, g = 300, kind?: string): void {
+    this.shots.push({ id: nextId++, x, y, vx, vy, t: 0, dmg, hit: new Set(), from: 'mob', kx: 200, ky: -200, pierce: false, g, kind: kind ?? MOBS[m.kind].nem?.shot });
+  }
+
   private beginAttack(m: Mob): void {
     const h = this.hero, def = MOBS[m.kind];
     switch (m.move) {
+      case 'fanshot':
+        for (let i = 0; i < 5; i++) { const a = (i / 4 - 0.5) * 0.6; this.mobShot(m, m.x + m.face * 30, m.y - def.h * 0.6, m.face * 420 * Math.cos(a), 420 * Math.sin(a), Math.round(m.atk * 0.7), 200); }
+        break;
+      case 'rootspike': case 'heatwave': // travels along the floor: jump over it
+        for (const d of m.move === 'heatwave' ? [-1, 1] : [m.face]) this.mobShot(m, m.x + d * 40, m.y - 12, d * 330, 0, m.atk, 0, m.move === 'heatwave' ? 'heat' : 'spike');
+        break;
+      case 'puddle': {
+        const kind = def.nem?.puddle ?? 'slow';
+        for (let i = 0; i < 3; i++) {
+          const T = 0.8, tx = h.x + (i - 1) * 90, sx = m.x + m.face * 20, sy = m.y - def.h * 0.7;
+          this.shots.push({ id: nextId++, x: sx, y: sy, vx: (tx - sx) / T, vy: (h.y - sy - 0.5 * 900 * T * T) / T, t: 0, dmg: Math.round(m.atk * 0.5), hit: new Set(), from: 'mob', kx: 60, ky: -80, pierce: false, g: 900, kind: 'puddle-' + kind });
+        }
+        break;
+      }
+      case 'trap':
+        for (const off of [-70, 70]) this.puddles.push({ x: clamp(h.x + off, 30, this.stage.width - 30), y: h.y, t: 12, kind: 'trap', dmg: m.atk, w: 40 });
+        break;
+      case 'summon': // reuses the summoner call
+        this.events.push({ t: 'summon' });
+        for (const off of [-60, 60]) { const c = this.spawnMob(def.nem?.calls ?? 'bun', clamp(m.x + off, 30, this.stage.width - 30), Math.max(1, m.lv - 3), m.on !== null && m.on >= 0 ? m.y : undefined); c.parent = m.id; c.vy = -380; c.vx = off * 3; c.ground = false; c.on = null; c.state = 'hurt'; c.t = 0; c.under = false; }
+        break;
+      case 'boomerang': {
+        const sx = m.x + m.face * 30;
+        this.shots.push({ id: nextId++, x: sx, y: m.y - def.h * 0.55, vx: m.face * 460, vy: 0, t: 0, dmg: m.atk, hit: new Set(), from: 'mob', kx: 200, ky: -200, pierce: true, g: 0, kind: 'ring', tx: sx });
+        break;
+      }
+      case 'roar':
+        this.events.push({ t: 'shock', x: m.x, y: m.y, r: 240 });
+        if (Math.abs(h.x - m.x) < 240 && Math.abs(h.y - m.y) < 120) { this.hurtHero(Math.round(m.atk * 0.6), Math.sign(h.x - m.x) || 1, m); if (h.state !== 'down') h.vx = Math.sign(h.x - m.x || 1) * 520; }
+        break;
+      case 'vanish': // smoke, then appear behind you
+        this.events.push({ t: 'boom', x: m.x, y: m.y });
+        m.x = clamp(h.x - h.face * 70, 30, this.stage.width - 30); m.y = h.ground ? h.y : m.y; m.face = h.x > m.x ? 1 : -1;
+        this.events.push({ t: 'boom', x: m.x, y: m.y });
+        break;
+      case 'shell': m.shellT = 4; break;
+      case 'burrow': m.under = true; this.events.push({ t: 'burrow', x: m.x, y: m.y, up: false }); break;
+      case 'skewer': m.vx = m.face * 320; break;
+      case 'slimesurge': m.vx = m.face * 430; m.dropT = 0; break;
+      case 'finslide': m.under = true; m.vx = m.face * 500; this.events.push({ t: 'burrow', x: m.x, y: m.y, up: false }); break;
       case 'heal':
         for (const o of this.mobs) if (o.state !== 'dead' && !o.under && Math.abs(o.x - m.x) < 260 && Math.abs(o.y - m.y) < 120 && o.hp < o.maxHp) {
           const n = Math.round(o.maxHp * 0.16); o.hp = Math.min(o.maxHp, o.hp + n); this.events.push({ t: 'heal', x: o.x, y: o.y - MOBS[o.kind].h, n });
@@ -1072,7 +1212,7 @@ export class World {
       case 'breath': // a cone of fire from the mouth
         for (let i = 0; i < 7; i++) {
           const a = (i / 6 - 0.5) * 0.6, sp = 360 + this.rand() * 80;
-          this.shots.push({ id: nextId++, x: m.x + m.face * 60, y: m.y - 120, vx: m.face * sp * Math.cos(a), vy: sp * Math.sin(a) + 60, t: -i * 0.04, dmg: Math.round(m.atk * 0.8), hit: new Set(), from: 'mob', kx: 160, ky: -180, pierce: false, g: 120, kind: 'fire' });
+          this.shots.push({ id: nextId++, x: m.x + m.face * 60 * Math.min(1, def.h / 170), y: m.y - def.h * 0.7, vx: m.face * sp * Math.cos(a), vy: sp * Math.sin(a) + 60, t: -i * 0.04, dmg: Math.round(m.atk * 0.8), hit: new Set(), from: 'mob', kx: 160, ky: -180, pierce: false, g: 120, kind: 'fire' });
         }
         break;
       case 'rain': // icicles (or embers) fall over the hero
@@ -1088,8 +1228,48 @@ export class World {
     const h = this.hero, def = MOBS[m.kind];
     const touch = (reach: number, hgt = 60) => Math.abs(h.x - (m.x + m.face * reach / 2)) < reach / 2 + HERO_W / 2 && h.y > m.y - def.h - 10 && h.y - hgt < m.y + 4;
     switch (m.move) {
-      case 'heal': case 'call': case 'snipe': case 'lob':
+      case 'heal': case 'call': case 'snipe': case 'lob': case 'fanshot': case 'rootspike': case 'heatwave': case 'puddle': case 'trap': case 'summon': case 'boomerang': case 'roar': case 'shell':
         if (m.t > 0.5) this.endAttack(m);
+        break;
+      case 'vanish': // the backstab right after appearing
+        if (!m.hitDone && m.t > 0.12) { m.hitDone = true; if (touch(def.range + 30, 120)) this.hurtHero(m.atk, m.face, m); }
+        if (m.t > 0.6) this.endAttack(m);
+        break;
+      case 'spin': { // whirls toward you, hitting every 0.3 s
+        m.vx = approach(m.vx, Math.sign(h.x - m.x) * 140, 800 * dt);
+        if (m.t - m.aimX > 0.3 && Math.abs(h.x - m.x) < def.w / 2 + 50 && Math.abs(h.y - m.y) < 90) { m.aimX = m.t; this.hurtHero(Math.round(m.atk * 0.6), Math.sign(h.x - m.x) || 1, m); }
+        if (m.t > 1.2) { m.aimX = 0; this.endAttack(m); }
+        break;
+      }
+      case 'beam': // a long line along the locked aim
+        if (!m.hitDone && m.t > 0.05) {
+          m.hitDone = true;
+          const lo = Math.min(m.x, m.aimX), hi = Math.max(m.x, m.aimX);
+          if (h.x > lo && h.x < hi && Math.abs((h.y - 40) - m.aimY) < 34) this.hurtHero(Math.round(m.atk * 1.1), m.face, m);
+        }
+        if (m.t > 0.45) this.endAttack(m);
+        break;
+      case 'lure': // drags you toward the lamp, then zaps if you're close
+        if (h.state !== 'dodge' && h.state !== 'down' && Math.abs(h.x - m.x) > 50) h.x -= Math.sign(h.x - m.x) * 170 * dt;
+        if (m.t > 1.0) { if (Math.abs(h.x - m.x) < 90) this.hurtHero(m.atk, Math.sign(h.x - m.x) || 1, m); this.events.push({ t: 'shock', x: m.x, y: m.y - 30, r: 90 }); this.endAttack(m); }
+        break;
+      case 'burrow': // tunnels to you, then erupts
+        m.vx = Math.sign(h.x - m.x) * 300;
+        if (Math.abs(h.x - m.x) < 30 || m.t > 1.6) { m.move = 'pop'; m.t = 0; m.hitDone = false; m.under = false; m.vy = -650; m.ground = false; m.on = null; this.events.push({ t: 'burrow', x: m.x, y: m.y, up: true }); }
+        break;
+      case 'slimesurge': // belly-slide on its own slime, laying a long trail
+        if ((m.dropT -= dt) <= 0 && this.puddles.length < 50) { m.dropT = 0.1; this.puddles.push({ x: m.x, y: m.y, t: 5, kind: 'slow' }); }
+        if (!m.hitDone && touch(def.w * 0.6, 70)) { m.hitDone = true; this.hurtHero(m.atk, m.face, m); }
+        if (m.t > 0.9 || m.x <= 40 || m.x >= this.stage.width - 40) { m.vx = approach(m.vx, 0, 3000 * dt); if (Math.abs(m.vx) < 5) this.endAttack(m); }
+        break;
+      case 'skewer': // long thrust
+        if (!m.hitDone && m.t > 0.06) { m.hitDone = true; if (touch(280, 100)) this.hurtHero(Math.round(m.atk * 1.3), m.face, m); }
+        m.vx = approach(m.vx, 0, 1400 * dt);
+        if (m.t > 0.6) this.endAttack(m);
+        break;
+      case 'finslide': // a fin cutting along the floor, then a jump out
+        if (!m.hitDone && touch(def.w * 0.6, 70)) { m.hitDone = true; this.hurtHero(m.atk, m.face, m); if (this.hero.state !== 'down') this.hero.vy = -520; }
+        if (m.t > 1.0 || m.x <= 40 || m.x >= this.stage.width - 40) { m.under = false; m.vy = -480; m.ground = false; m.on = null; m.vx *= 0.3; this.endAttack(m); this.events.push({ t: 'burrow', x: m.x, y: m.y, up: true }); }
         break;
       case 'rush': {
         if (!m.hitDone && touch(def.w * 0.7, 90)) { m.hitDone = true; this.hurtHero(m.atk, m.face, m); }
@@ -1207,6 +1387,11 @@ export class World {
       s.x += s.vx * sdt; s.y += s.vy * sdt;
       if (s.from === 'mob') {
         s.vy += (s.g ?? 300) * sdt;
+        if (s.kind === 'ring' && s.t > 0.55 && s.tx !== undefined) { s.vx = approach(s.vx, Math.sign(s.tx - s.x) * 520, 2200 * sdt); if (Math.abs(s.x - s.tx) < 20 && s.t > 0.9) { s.t = 99; continue; } }
+        if (s.kind?.startsWith('puddle-') && s.vy > 0) {
+          const f = this.floorBelow(s.x, s.y - s.vy * sdt, s.y, false);
+          if (f) { this.puddles.push({ x: s.x, y: f.y, t: 5, kind: s.kind.slice(7) as 'slow', w: 90 }); s.t = 99; continue; }
+        }
         if (Math.abs(h.x - s.x) < 22 && s.y > h.y - 70 && s.y < h.y + 4) {
           if (h.buff?.reflect) { // Leaf Shell: it bounces back as yours
             s.from = 'hero'; s.vx = -s.vx || h.face * 400; s.vy = -Math.abs(s.vy) * 0.3; s.g = undefined; s.t = 0; s.hit = new Set(); s.dmg = h.d.atk * 1.5; s.kind = 'reflect';

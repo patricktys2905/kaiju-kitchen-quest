@@ -4,7 +4,7 @@
 import { AVERAGE, Bot } from '../src/sim/bot';
 import { CLASSES, type Stat } from '../src/sim/classes';
 import { rollItem, BASES, type Slot } from '../src/sim/items';
-import { MOBS } from '../src/sim/mobs';
+import { MOBS, nemesisOf } from '../src/sim/mobs';
 import { skillsOf, MAX_SKILL } from '../src/sim/skills';
 import { STAGES } from '../src/sim/stages';
 import { type HeroProfile, derive, newProfile } from '../src/sim/stats';
@@ -41,7 +41,7 @@ for (const st of STAGES.filter(s => s.id.startsWith(filter))) {
     let hc = 0;
     for (let r = 0; r < RUNS; r++) {
       const p = heroAt(c.species, st.rec, r + 1);
-      const w = new World(st, derive(p), 100 + r, [{ id: 'jam', n: 3 }, null, null, null], 0);
+      const w = new World(st, derive(p), 100 + r, [{ id: 'jam', n: 3 }, null, null, null], 0, false, undefined, [], nemesisOf(c.species));
       const bot = new Bot(w, AVERAGE, 7 + r);
       const LIMIT = 60 * 60 * 6;
       let i = 0;

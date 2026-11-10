@@ -49,7 +49,9 @@ export interface StageDef {
 export type MobKind = 'bun' | 'worm' | 'pepper' | 'egg' | 'toast' | 'pea' | 'yogurt' | 'icebat' | 'pickle' | 'golem'
   | 'popcorn' | 'imp' | 'bacon' | 'meatball' | 'dragon'
   | 'can' | 'cheerio' | 'minicheerio' | 'soda' | 'flour' | 'jar'
-  | 'garlic' | 'ant' | 'mimic' | 'carrot' | 'milk' | 'jelly' | 'jellybit' | 'kettle' | 'sausage' | 'marsh' | 'noodle' | 'raisin' | 'cereal';
+  | 'garlic' | 'ant' | 'mimic' | 'carrot' | 'milk' | 'jelly' | 'jellybit' | 'kettle' | 'sausage' | 'marsh' | 'noodle' | 'raisin' | 'cereal'
+  // story nemeses (one per kaiju, stage 5 of every world)
+  | 'nbeet' | 'ncrow' | 'npine' | 'nlamp' | 'nshroom' | 'nslug' | 'nrat' | 'ncookie' | 'nginger' | 'nbrulee' | 'nkebab' | 'nshark';
 
 export type BoxTier = 1 | 2 | 3 | 4 | 5;
 export interface LootBox { tier: BoxTier; ilvl: number }
@@ -91,4 +93,8 @@ export type SimEvent =
   | { t: 'burrow'; x: number; y: number; up: boolean }
   | { t: 'mimic'; id: number }
   | { t: 'style'; rank: string }
-  | { t: 'hazard'; i: number; on: boolean };
+  | { t: 'hazard'; i: number; on: boolean }
+  /** a nemesis stole a quick-bag item (given back when it is beaten) */
+  | { t: 'steal'; name: string }
+  | { t: 'recover'; name: string }
+  | { t: 'nemesisMove'; name: string; move: string };

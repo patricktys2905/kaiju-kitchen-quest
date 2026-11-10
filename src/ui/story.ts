@@ -1,6 +1,6 @@
 // Story scenes: comic-style dialogue over the world's background, with portraits. Tap to advance, SKIP to jump out.
 import { CLASSES } from '../sim/classes';
-import { MOBS } from '../sim/mobs';
+import { MOBS, nemesisOf } from '../sim/mobs';
 import { WORLDS } from '../sim/stages';
 import { STORIES, stillFor, type StoryLine } from '../story/stories';
 import { sfx } from '../audio';
@@ -68,8 +68,9 @@ export function playStory(species: number, beats: string[], done: () => void): v
     const w = WORLDS.find(x => x.id === world) ?? WORLDS[0];
     const boss = MOBS[w.boss];
     const isMe = who === 'me', other = typeof who === 'number' ? who : null;
-    const name = who === 'me' ? me.name : who === 'boss' ? boss.name : who === 'mold' ? '???' : other !== null ? CLASSES.find(c => c.species === other)?.name ?? '' : '';
-    const rightArt = who === 'boss' ? `art/${boss.art}.webp` : other !== null ? `art/kaiju-${other}.webp` : '';
+    const foe = nemesisOf(species);
+    const name = who === 'me' ? me.name : who === 'boss' ? boss.name : who === 'foe' ? (foe ? MOBS[foe].name : '') : who === 'mold' ? '???' : other !== null ? CLASSES.find(c => c.species === other)?.name ?? '' : '';
+    const rightArt = who === 'boss' ? `art/${boss.art}.webp` : who === 'foe' && foe ? `art/${MOBS[foe].art}.webp` : other !== null ? `art/kaiju-${other}.webp` : '';
     root.style.backgroundImage = `url(art/${w.bg}.webp)`;
     if (still !== curStill) {
       // crossfade: the old painting fades out on top while the new one fades in and slowly zooms

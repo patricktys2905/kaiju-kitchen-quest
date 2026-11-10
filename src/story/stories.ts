@@ -4,7 +4,9 @@
 // or a species number for a cameo. Beats: intro (before 1-1), w{N}-open (before N-1), w{N}-elite (before N-5),
 // w{N}-boss (before N-10), w{N}-after (after N-10), ending (after the last world). Bosses stay the same for everyone.
 
-export type Speaker = 'me' | 'boss' | 'n' | 'mold' | number;
+import { NEMESIS_BEATS } from './nemesis';
+
+export type Speaker = 'me' | 'boss' | 'n' | 'mold' | 'foe' | number;
 export type StoryLine = [Speaker, string];
 /** Story twists on normal stages (bosses never change). */
 export type Variant = 'swarm' | 'ambush' | 'night';
@@ -314,6 +316,9 @@ export function beatAfter(stageId: string): string[] {
   const [w, n] = stageId.split('-').map(Number);
   return n === 10 ? [`w${w}-after`] : [];
 }
+
+// each kaiju's stage-5 beats are its own nemesis's (src/story/nemesis.ts)
+for (const [sp, b] of Object.entries(NEMESIS_BEATS)) if (STORIES[Number(sp)]) Object.assign(STORIES[Number(sp)].beats, b);
 
 /** Painted still behind a story line (art name in public/art), or null for the plain background + portraits.
  *  Per kaiju: the intro and the World 4 cliffhanger (from the Mold's first line on). Shared, since bosses are the
