@@ -75,6 +75,14 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w9-s7": [["me", "Canned Goods Keep. Canned TUNA. Hang in there, guys."], ["me", "Key chest way up high. Sponge! BOING! Key, bagged!"]],
   "w9-s8": [["foe", "Clean-up on aisle nine! Forty-five seconds, fishy! I'll bag the bad guys!"], ["me", "Grizzle! Okay, team! Check out THIS combo!"]],
   "w9-s9": [["me", "The Frozen Aisle. Brrr! Fish sticks in every box. Don't look, bro. Don't look."], ["n", "From the dark, a spooky voice wails: \"Woooo! Who's shopping in MY aisle? Woooo!\""], ["me", "A ghost tub, sitting on my crew's ice? Your expiry date's TODAY, bro!"]],
+  // World 10: The Feast of the Forgotten.
+  "w10-s2": [["me", "Jam Jar Junction! Backwards! Tail first! How'd I get so good at this?"], ["n", "RUMBLE! A giant rolling pin comes rolling between the jars!"], ["me", "Okay, FORWARDS for this part! RUN!"]],
+  "w10-s3": [["me", "Takeaway Towers. Old takeaway boxes. Is that fish and chips? Don't look, bro. Don't look."], ["me", "Lever! Rolling pin goes BONK! You're all way past your sell-by, bros!"]],
+  "w10-s4": [[10, "Hmph. Fish. This is my LAST Crumblet. The very last one. Walk it out. And no laps."], ["me", "The last one? I got this, Coach! Little muffin, ride on my lemon. Final lap!"], [10, "Hmph. Good fish. Don't let it go to your head."]],
+  "w10-s6": [[11, "Beep beep! Fishy! Still running BACKWARDS?! Scroll's at the end of the chains! Clock's ticking!"], ["me", "Backwards is harder, Pizzaraptor! I'm climbing UP the party chains! Grab, hold, let's GOOO!"]],
+  "w10-s7": [["me", "The Forgotten Shelf. Old jars nobody's opened in years. Hang in there, guys."], ["me", "Last key, up on the high ledge. No sponge this time! Okay, ONE sponge. BOING!"]],
+  "w10-s8": [["lo2", "Forsooth, fishy! The WHOLE army! Forty-five seconds! Thou shalt be filleted!"], ["me", "Last stand? That's the fourth quarter, bro! Fins up! Let's GOOO!"]],
+  "w10-s9": [["me", "The Long Table. Longest table I ever saw. Like a river with no water."], ["n", "From the cake-tin throne, a grumpy voice booms: \"Bring me the fish! Every feast needs a FISH!\""], ["me", "Wrong fish, bro! Climbing! Uphill, obviously!"]],
 };
 
 export const QUIPS: Record<QuipKind, string[]> = {

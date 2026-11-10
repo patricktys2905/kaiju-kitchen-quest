@@ -6,7 +6,7 @@
 
 import { ARCS } from './arcs';
 import { MORE_BEATS } from './more';
-import { HOOK } from './finale';
+import { HOOK, HOOK2 } from './finale';
 
 /** 'lo' / 'lo2': the Leftovers in the post-credits tease (src/story/finale.ts) */
 export type Speaker = 'me' | 'boss' | 'n' | 'mold' | 'foe' | 'lo' | 'lo2' | number;
@@ -141,10 +141,11 @@ export function beatBefore(stageId: string, firstEver: boolean): string[] {
   return out;
 }
 /** Short between-stage scenes (skipped when the story setting is "key scenes only"). */
-export const isMinorBeat = (b: string) => /^w\d-s\d$/.test(b);
+export const isMinorBeat = (b: string) => /^w\d+-s\d$/.test(b);
 export function beatAfter(stageId: string): string[] {
   const [w, n] = stageId.split('-').map(Number);
   if (stageId === '5-10') return ['w5-after', 'credits', 'w5-hook']; // the end of Act 1
+  if (stageId === '10-10') return ['w10-after', 'credits2', 'w10-hook']; // the end of Act 2
   return n === 10 ? [`w${w}-after`] : [];
 }
 /** Stand-in beats that aren't dialogue (the story player shows the credits roll for this one). */
@@ -155,7 +156,7 @@ for (const [sp, a] of Object.entries(ARCS)) { const st = STORIES[Number(sp)]; if
 // and a short scene before every other stage (src/story/more/k<species>.ts)
 for (const [sp, b] of Object.entries(MORE_BEATS)) if (STORIES[Number(sp)]) Object.assign(STORIES[Number(sp)].beats, b);
 // and the post-credits tease, the same for everyone
-for (const st of Object.values(STORIES)) st.beats['w5-hook'] = HOOK;
+for (const st of Object.values(STORIES)) { st.beats['w5-hook'] = HOOK; st.beats['w10-hook'] = HOOK2; }
 
 /** Painted still behind a story line (art name in public/art), or null for the plain background + portraits.
  *  Per kaiju: the intro and the World 4 cliffhanger (from the Mold's first line on). Shared, since bosses are the
@@ -163,10 +164,16 @@ for (const st of Object.values(STORIES)) st.beats['w5-hook'] = HOOK;
 export function stillFor(species: number, beat: string, lineIndex: number): string | null {
   if (beat === 'intro') return `still-${species}-intro`;
   if (beat === 'w5-hook') return 'still-w5-hook';
-  const m = /^w(\d)-(open|boss|after)$/.exec(beat);
+  if (beat === 'w10-hook') return 'still-w10-hook';
+  const m = /^w(\d+)-(open|boss|after)$/.exec(beat);
   if (!m) return null;
   const w = Number(m[1]);
   if (m[2] !== 'after') return `still-w${w}-${m[2]}`;
+  if (w === 10) { // Old Fruitcake beaten and softening, then the big shared feast
+    const lines = STORIES[species]?.beats[beat] ?? [];
+    let lastBoss = -1; lines.forEach(([who], i) => { if (who === 'boss') lastBoss = i; });
+    return lineIndex > lastBoss ? 'still-w10-end' : 'still-w10-cure';
+  }
   if (w === 5) { // the shrunken Mold Crown and the clean sink, then this kaiju's own happy ending
     const lines = STORIES[species]?.beats[beat] ?? [];
     let lastBoss = -1; lines.forEach(([who], i) => { if (who === 'boss') lastBoss = i; });

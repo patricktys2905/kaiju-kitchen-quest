@@ -75,6 +75,14 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w9-s7": [["me", "Canned Goods Keep! A chest on a high ledge and a bouncy sponge below. Sponges are STILL so nice!"], [3, "Wibble wobble! Ooh, you glow like a dessert table candle! Is there a dessert table? Am I invited?"], ["me", "Hee! Come to my moon party, Bloblin! Boing! Keys open doors, doors have windows, windows have MOONS!"]],
   "w9-s8": [["me", "Checkout Chaos! Ooh, the scanner glows red and goes beep! Hi, scanner! Forty-five seconds, go!"], [14, "Let's GOOO, moth! Fly against the breeze! That's o-fish-ally how champions do it!"], ["me", "Ooh, okay! Flap flap FLAP! Wheee, I'm going backwards!"]],
   "w9-s9": [["me", "The Frozen Aisle! Ooh, every freezer door has its own little light! Brrr, chilly moons!"], ["n", "From the Back Aisle, a spooky voice wails: \"Woooo! Turn off that glow! I like it DARK back here!\""], ["me", "Aww, that's just 'cause you've never had a nightlight! I'm coming!"]],
+  // World 10: The Feast of the Forgotten.
+  "w10-s2": [["me", "Jam Jar Junction! Ooh, a big round thing rolling this way, all frosty and pale. Moon?"], ["n", "Uh-oh! It's a giant rolling pin, rumbling off the jam jars!"], ["me", "Nope! STILL not the moon! Ten whole worlds and it's NEVER the moon! Flap flap FLAP!"]],
+  "w10-s3": [["me", "Takeaway Towers! Ooh, a fortune cookie! \"You will find the moon.\" Hee, I KNEW it!"], ["me", "Eep, here come the monsters! Ooh, a lever! One pull and the rolling pin gives 'em a big flat hug!"]],
+  "w10-s4": [[10, "Hmph. Moth. Last stray Crumblet in the whole House. Frost Drawer Falls is real dark. Light it home?"], ["me", "The LAST one? Ooh, then it gets my extra-special glow! Snuggle in, little one!"], [10, "Hmph. Thanks, moth. For all of 'em."]],
+  "w10-s6": [["me", "Paper Chain Pass! Ooh, paper moons on the party chains! And a Recipe Scroll at the end!"], ["lo2", "Hah! 'Tis a recipe for a FORGOTTEN feast, moth! Served cold, in the dark!"], ["me", "Aw, nobody likes eating in the dark! Grabbing it anyway! Flap flap!"]],
+  "w10-s7": [["me", "The Forgotten Shelf! The last chest on the last high ledge, and a bouncy sponge below!"], [8, "Moth! Me hold sponge. Me no melt. Back of fridge nice and cold!"], ["me", "Hee, thanks, Chocomunch! Boing! Keys open doors, doors have windows, windows have MOONS!"]],
+  "w10-s8": [["me", "The Last Stand! Forty-five seconds, and every monster from every world! Eep, it's sooo dark!"], ["foe", "Bzzt! Not for long! Party lights, ON! Go get 'em, moth!"], ["me", "Ooooh, sparkly! Thanks, Zapsy! FWOOSH!"]],
+  "w10-s9": [["me", "The Long Table! It goes on forever, all dusty and dark. Not one candle on it. Aww."], ["n", "From the cake-tin throne, a voice grumbles: \"Turn off that glow, moth. Nobody's coming to my table.\""], ["me", "I'm coming! And I'm bringing the light! Flap flap!"]],
 };
 
 export const QUIPS: Record<QuipKind, string[]> = {

@@ -154,8 +154,29 @@ export const ARC: Record<string, StoryLine[]> = {
     ["lo", "Hehe. Bring my pizza home, lizard. The Feast is set. And I NEVER tip."],
     ["me", "Never tips?! Oh, it's ON! New delivery address: the House! Last stop on the route! Beep beep!"],
   ],
+  "w10-open": [
+    ["me", "Minute forty-three! The back of the Fridge! Last stop on the route! Brrr, box, stay WARM!"],
+    ["lo", "Hmph. The courier's late. Bring my feast to the Long Table, lizard. And wipe your feet."],
+    ["me", "Late?! I'm two whole minutes EARLY for minute forty-five! Beep beep!"],
+  ],
+  "w10-boss": [
+    ["boss", "At LAST! I am OLD FRUITCAKE, King of the Leftovers! Set my feast down and SCRAM, lizard!"],
+    ["me", "Sign here, please! And, uh, about the TIP..."],
+    ["boss", "Tip?! Nobody ever CUTS me, nobody ever WANTS me, and you want a TIP?! Nobody gets a feast!"],
+    ["me", "No signature, no tip, no manners? ZERO stars! Beep beep, Raptor Express coming THROUGH!"],
+  ],
+  "w10-after": [
+    ["boss", "Oof! My crown's just a dented old cake tin. And that pizza box is still WARM?"],
+    ["boss", "Nobody ever comes to my door, lizard. I ordered a feast so somebody would. I just wanted an invite."],
+    ["boss", "Here. Your tip. One slice of ME. First slice anybody ever cut! *sniff*"],
+    ["me", "A TIP?! From the guy who NEVER tips?! Pete, write that down!"],
+    ["foe", "Writing it! Minute forty-five, delivered HOT! Five stars!"],
+    ["me", "But a feast needs a crowd! Sir Stale, Baron, Meatloaf, Wraith, pull up a chair! Pizza's on the house!"],
+    ["me", "You're the GUEST now, Fruitcake. Wait, did I just tip HIM? Eh! Still five stars!"],
+    ["me", "Raptor Express ALWAYS delivers! Thirty minutes or less, give or take a whole HOUSE! Beep beep!"],
+  ],
 };
-export const NEMESIS: Record<"w1-elite" | "w2-elite" | "w3-elite" | "w4-elite" | "w5-elite" | "w6-elite" | "w7-elite" | "w8-elite" | "w9-elite", StoryLine[]> = {
+export const NEMESIS: Record<"w1-elite" | "w2-elite" | "w3-elite" | "w4-elite" | "w5-elite" | "w6-elite" | "w7-elite" | "w8-elite" | "w9-elite" | "w10-elite", StoryLine[]> = {
   "w1-elite": [
     ["foe", "Pineapple Pete Express! Fastest wheels in the kitchen! That pizza's MINE to deliver!"],
     ["me", "Raptor Express doesn't share routes, Pete! Beep beep, outta my way!"],
@@ -198,5 +219,10 @@ export const NEMESIS: Record<"w1-elite" | "w2-elite" | "w3-elite" | "w4-elite" |
     ["foe", "Raptor! Traffic alert! Watermelon Brute on Melon Mountain. Big, stripy, and spitting seeds across ALL lanes!"],
     ["me", "Pete! What're you doing here, shopping?"],
     ["foe", "Found the pineapples! Fruit and Veg, two for one! Now go, go! I'm timing ya!"],
+  ],
+  "w10-elite": [
+    ["foe", "Raptor! Traffic alert! Fruitcake Knight up ahead. Big, crumbly, and parked in EVERY lane!"],
+    ["me", "Pete! The last traffic report of the whole route!"],
+    ["foe", "Go, go! I'm timing ya! And save me a slice at the feast. Pineapple side, obviously!"],
   ],
 };

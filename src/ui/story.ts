@@ -65,13 +65,13 @@ function ensure(): HTMLElement {
 
 /** Plays beats (e.g. ['intro', 'w1-open']) of a kaiju's story, then calls done. */
 export function playStory(species: number, beats: string[], done: () => void): void {
-  // the credits roll sits between beats (end of Act 1)
-  const ci = beats.indexOf('credits');
-  if (ci >= 0) { playStory(species, beats.slice(0, ci), () => showCredits(species, () => playStory(species, beats.slice(ci + 1), done))); return; }
+  // the credits roll sits between beats (end of Act 1 / Act 2)
+  const ci = beats.findIndex(b => b === 'credits' || b === 'credits2');
+  if (ci >= 0) { const act = beats[ci] === 'credits2' ? 2 : 1; playStory(species, beats.slice(0, ci), () => showCredits(species, () => playStory(species, beats.slice(ci + 1), done), act)); return; }
   const story = STORIES[species];
   const lines: { line: StoryLine; world: number; still: string | null }[] = [];
   for (const b of beats) {
-    const w = Number(/^w(\d)/.exec(b)?.[1] ?? 1);
+    const w = Number(/^w(\d+)/.exec(b)?.[1] ?? 1);
     (story?.beats[b] ?? []).forEach((line, k) => lines.push({ line, world: w, still: stillFor(species, b, k) }));
   }
   if (!story || !lines.length) { done(); return; }
@@ -101,7 +101,7 @@ export function playStory(species: number, beats: string[], done: () => void): v
     }
     // Who is already painted into the still: the kaiju in its own intro / cliffhanger, the boss in the boss and
     // "cured" paintings, nobody in the world vistas. Anyone not in the painting still gets their portrait.
-    const painted = new Set(!still ? [] : /-(intro|cliff|end)$/.test(still) ? ['me'] : /-(boss|cure)$/.test(still) ? ['boss'] : /-hook$/.test(still) ? ['me', 'lo', 'lo2'] : []);
+    const painted = new Set(!still || /w10-(end|hook)$/.test(still) ? [] : /-(intro|cliff|end)$/.test(still) ? ['me'] : /-(boss|cure)$/.test(still) ? ['boss'] : /w5-hook$/.test(still) ? ['me', 'lo', 'lo2'] : /w10-(cure|boss)$/.test(still) ? ['boss'] : []);
     const face = who === 'me' ? faceArt(species, text) : rightArt;
     const chip = still && face ? `<img src="${face}" alt="">` : '';
     const left = painted.has('me') ? '' : `<div class="por l ${isMe ? 'talk' : 'dim'}" style="background-image:url(${isMe ? face : `art/kaiju-${species}.webp`})"></div>`;

@@ -12,5 +12,13 @@ export const HOOK: StoryLine[] = [
   ['n', 'The adventure continues in Act 2: Beyond the Kitchen!'],
 ];
 
+/** The end of Act 2: the post-credits tease of what comes next. */
+export const HOOK2: StoryLine[] = [
+  ['n', 'The next morning, a shiny delivery van rumbles up to the house...'],
+  ['n', 'On the doorstep: a golden envelope. "You are invited to... THE GREAT FOOD FESTIVAL!"'],
+  ['me', 'A festival?! With MORE food? And MORE friends? Count me in!'],
+  ['n', 'The adventure continues! Maybe. Probably. Definitely! THE END of Act 2.'],
+];
+
 /** Who says what in the tease (shown as dark silhouettes). */
 export const LEFTOVER_NAMES: Record<string, string> = { lo: 'Old Fruitcake', lo2: 'Sir Stale' };

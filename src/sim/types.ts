@@ -84,6 +84,8 @@ export type MobKind = 'bun' | 'worm' | 'pepper' | 'egg' | 'toast' | 'pea' | 'yog
   | 'snail' | 'ladybug' | 'peapod' | 'mole' | 'tomato' | 'radish' | 'pumpkin' | 'chunk' | 'meatloaf'
   // World 9: The Supermarket (boss: the Tupperwraith)
   | 'trolley' | 'bag' | 'scanner' | 'banana' | 'can2' | 'melon' | 'lid' | 'tupper'
+  // World 10: The Feast of the Forgotten (final boss: Old Fruitcake)
+  | 'cherrysoldier' | 'fruitknight' | 'peel' | 'fruitcake'
   // story nemeses (one per kaiju, stage 5 of every world)
   | 'nbeet' | 'ncrow' | 'npine' | 'nlamp' | 'nshroom' | 'nslug' | 'nrat' | 'ncookie' | 'nginger' | 'nbrulee' | 'nkebab' | 'nshark' | 'nnacho' | 'nhornet' | 'nmouse' | 'ngorilla' | 'nbird' | 'nhare' | 'ngelato' | 'nbear';
 

@@ -24,24 +24,24 @@ const CSS = `
 let styled = false;
 
 /** Rolls the credits (the kaiju whose story just ended goes first), then calls done. */
-export function showCredits(species: number, done: () => void): void {
+export function showCredits(species: number, done: () => void, act = 1): void {
   if (!styled) { styled = true; const st = document.createElement('style'); st.textContent = CSS; document.head.appendChild(st); }
   const el = document.createElement('div');
   el.id = 'credits';
   const cast = [...CLASSES].sort((a, b) => (a.species === species ? -1 : b.species === species ? 1 : 0));
   const star = (img: string, name: string, line: string, me = false) => `<div class="star ${me ? 'me' : ''}"><img src="art/${img}.webp" alt=""><div><b>${name}</b><i>${line}</i></div></div>`;
   el.innerHTML = `<button class="skip">SKIP ▶▶</button><div class="roll">
-    <h1>KAIJU KITCHEN QUEST</h1><p>Act 1 complete! The Mold Crown is down the drain and the Head Chef is safe.</p>
+    <h1>KAIJU KITCHEN QUEST</h1><p>${act === 2 ? 'Act 2 complete! Old Fruitcake has a seat at the table, and nobody gets forgotten anymore.' : 'Act 1 complete! The Mold Crown is down the drain and the Head Chef is safe.'}</p>
     <h2>Starring</h2>
     ${cast.map(c => star(`kaiju-${c.species}`, c.name, `in "${STORIES[c.species]?.title ?? ''}"`, c.species === species)).join('')}
     <h2>The Nemeses</h2>
     ${cast.map(c => nemesisOf(c.species)).filter((k, i, a) => k && a.indexOf(k) === i).map(k => star(MOBS[k!].art, MOBS[k!].name, 'Maybe not so bad after all?')).join('')}
     <h2>The Bosses</h2>
-    ${WORLDS.filter(w => w.id <= 5).map(w => star(MOBS[w.boss].art, MOBS[w.boss].name, `${w.name}${w.id === 5 ? ' (gone down the drain)' : ' (cured, and a bit embarrassed)'}`)).join('')}
+    ${WORLDS.filter(w => act === 2 ? w.id > 5 : w.id <= 5).map(w => star(MOBS[w.boss].art, MOBS[w.boss].name, act === 2 ? `${w.name} (now invited to dinner)` : `${w.name}${w.id === 5 ? ' (gone down the drain)' : ' (cured, and a bit embarrassed)'}`)).join('')}
     <h2>And</h2>
     <p>Every Crumblet, Sporeling and Moldy Bun who got bonked along the way</p>
     <p>The Head Chef, who will be washing up for a week</p>
-    <h2>Thanks for playing!</h2><p>But wait... something stirs at the back of the Fridge.</p>
+    <h2>Thanks for playing!</h2><p>${act === 2 ? 'But wait... what is that van doing outside?' : 'But wait... something stirs at the back of the Fridge.'}</p>
   </div>`;
   document.body.appendChild(el);
   playMusic('camp', true);

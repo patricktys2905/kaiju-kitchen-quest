@@ -75,6 +75,14 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w9-s7": [["me", "Canned Goods Keep. Cold tins everywhere. Ahhh, nice and chilly on the shell."], ["me", "Bouncy sponge! BOING! Key's mine. Knob? Nope. Two for one on bummers."]],
   "w9-s8": [["lo2", "Hold out, frosty knave! The Tupperwraith shall BAG thee at the checkout!"], ["me", "Paper or plastic? Neither, dude. Forty-five seconds. Waffle Wall, up!"]],
   "w9-s9": [["me", "THE FROZEN AISLE! Biggest freezer in the world! Drip count: below zero! Is that a thing?!"], ["n", "From the back aisle, a ghostly voice wails: \"Woooo! The knob is MINE! I keep EVERYTHING!\""], ["me", "Cool, cool, cool. Not for long, dude."]],
+  // World 10: The Feast of the Forgotten.
+  "w10-s2": [["me", "Jam Jar Junction. Cold jars, cold jam. Drip count holding at zero."], ["n", "RUMBLE! A giant rolling pin comes rolling between the jars!"], ["me", "Even at the back of the Fridge, dude?! Okay, last run. Legs, go!"]],
+  "w10-s3": [["me", "Takeaway Towers. Noodle boxes, best before LAST year. Not cool. Well, literally cool."], ["me", "Shell bump, lever down, rolling pin drops. Order up, dude."]],
+  "w10-s4": [[10, "Hmph. Turtle. This is my LAST Crumblet. The very last one. Walk it out. Carefully."], ["me", "Last shell ride, big guy. Hop on, little muffin. Slow, steady and frosty."], [10, "Hmph. Stay close to the turtle, kid. He's a good one."]],
+  "w10-s6": [["me", "Paper Chain Pass. Old party chains, all faded. Somebody threw a party back here once."], [17, "Wheee! Minturtle! It's so cold back here! It's like the freezer! I'm HOME! Ish!"], ["me", "Ice to see ya, Pengwhip. Grab the scroll, then Waffle Wall. Stay frosty."]],
+  "w10-s7": [["me", "The Forgotten Shelf. Dusty jars nobody ever opens. Dude, that's kinda sad."], ["me", "Last key, up on the high ledge. Bouncy sponge! BOING! Grabbed it with my mouth. Still no arms."]],
+  "w10-s8": [["lo2", "Forsooth, frosty knave! The WHOLE army! Forty-five seconds! Thou shalt MELT!"], ["me", "In a fridge? Dude, I'm thriving. Waffle Wall, up!"]],
+  "w10-s9": [["me", "The Long Table. Long, dusty and super empty. Not a single plate."], ["n", "From the cake-tin throne, a grumpy voice booms: \"Bring me that knob, little scoop! My oven is ALWAYS on!\""], ["me", "Always on? Cool, cool, cool. Totally fine. Climbing."]],
 };
 
 export const QUIPS: Record<QuipKind, string[]> = {

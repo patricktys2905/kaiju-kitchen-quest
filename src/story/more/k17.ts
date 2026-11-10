@@ -75,6 +75,14 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w9-s7": [[3, "Wibble wobble! A penguin! Are you dessert? Are you going to the dessert table?"], ["me", "I'm cookies AND cream! I'm basically a dessert table! Wanna come to my freezer for a sleepover?"], [3, "Eee! A frosty jelly sleepover! That's the jiggle of it! Key chest's up high! Go boing!"]],
   "w9-s8": [["lo2", "The checkout, bird! I shall scan thee, bag thee and pop thee in the freezer section!"], ["me", "Ooh, yes please! Wait, nope! Forty-five seconds! Circles STILL count! Wheee!"]],
   "w9-s9": [["me", "THE FROZEN AISLE! Frost! Freezers all the way down! Is this home? Aw, it's not home, is it?"], ["n", "Uh-oh! A freezer door swings open, and a spooky voice wails: \"Woooo! Get out of my aisle!\""], ["me", "YOUR aisle?! Brrr, that's a cold welcome! I love it! Long way home, part six and a half! Wheee!"]],
+  // World 10: The Feast of the Forgotten.
+  "w10-s2": [["me", "Jam Jar Junction! Sticky floors! Uh-oh, you can't slide on jam!"], ["n", "RUMBLE! A giant rolling pin comes rolling between the jam jars!"], ["me", "Last race, pin! I STILL can't stop at the finish! Wheeee!"]],
+  "w10-s3": [["me", "Takeaway Towers! Ooh, a tub of ice cream! Nope, it's soup. Cold soup. Close enough!"], ["me", "Gates locked! Yank the lever! Penguin bowling, FINAL edition!"]],
+  "w10-s4": [[10, "Hmph. Penguin. My LAST Crumblet. The very last one. Walk it down Frost Drawer Falls. Slowly."], ["me", "Slowly! Brakes on! *skrrrt* Little buddy, frost is MY turf! Follow my footprints!"], [10, "It's wearing a tiny bobble hat. Don't look at me. It's the frost, okay?"]],
+  "w10-s6": [["me", "Paper Chain Pass! Party streamers! Wait, are they frozen? They're FROZEN! Wheee!"], ["me", "Grab the LAST Recipe Scroll, then hold out! Stay cool, Pengwhip! You're SO cool!"]],
+  "w10-s7": [[16, "Whoa, little dude. The back of the Fridge. Finally, somewhere cool enough for us. Cool, cool, cool."], ["me", "Right?! It's like a holiday! Last key's up high! Sponge, my old pal! One last boing!"]],
+  "w10-s8": [["lo2", "Hold out one last time, bird? Thou shalt be forgotten at the back, like a frozen pea!"], ["me", "Peas are great! Forty-five seconds! Circles STILL count! Even the last ones! Wheee!"]],
+  "w10-s9": [["n", "A grumpy old voice booms down the long, empty table: \"Who's SLIDING on my banquet table?!\""], ["me", "Me! Sorry! It's so dusty and slidey! Wait, why is a feast table EMPTY?"], ["me", "Aw, nuts. That's the saddest party ever! Long way home, part seven and a half! Here I come!"]],
 };
 
 export const QUIPS: Record<QuipKind, string[]> = {

@@ -75,6 +75,14 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w9-s7": [["me", "Canned Goods Keep! So many tins, and nobody's opened them either! Fear not, little cans! Later!"], ["me", "Secret chest on a high ledge! Sponge, our most loyal subject, launch the king! BOING!"]],
   "w9-s8": [[3, "Wibble wobble! A king! Your Majesty, is there a dessert table at your court? I'm never invited!"], ["me", "Never invited?! Hold Checkout Chaos forty-five seconds with us and you get the FRONT row!"], [3, "Eeee! I'm all a-jiggle! Let's check 'em OUT!"]],
   "w9-s9": [["n", "From the Frozen Aisle, a voice wails: \"Woooo! A king? Coming to open ME? Nobody opens me!\""], ["me", "Somebody's opening you NOW! Into the frosty aisle! Royally! Brrr, royally and QUICKLY!"]],
+  // World 10: The Feast of the Forgotten.
+  "w10-s2": [["me", "Jam Jar Junction! Royal preserves! Wait, why is that rolling pin in the FRIDGE now?!"], ["n", "Uh-oh! It's your biggest fan, Your Majesty! It came for the finale!"], ["me", "Royal retreat! To the RIGHT! Gracefully! Okay, QUICKLY!"]],
+  "w10-s3": [["me", "Takeaway Towers! Decree Number Forty-Two: every takeaway box gets taken AWAY! To a party!"], ["me", "Pull the lever! Royal rolling pin, one last parade! Nice and flat!"]],
+  "w10-s4": [[10, "Hmph. Dumpling. This is the last Crumblet. The very last one. Walk it down Frost Drawer Falls."], ["me", "Heir number ten! The FINAL heir! Behold, small one, the royal waterfall! Stay behind the royal belly! Boing!"], [10, "Hmph. And it gets a front-row seat at that feast. Royal decree. MY decree."]],
+  "w10-s6": [["me", "Paper Chain Pass! Party decorations, dusty and droopy and ROYALLY sad. We'll fix that!"], ["lo2", "Take yon scroll, little king. I am beaten. Thou mayest even dub me Sir Fresh. Just this once."], ["me", "Arise, Sir Fresh! Decree Number Forty-Three: grab the scroll and hold the pass!"]],
+  "w10-s7": [["me", "The Forgotten Shelf! Jars nobody's opened in AGES! Fear not, little jars! You're on the guest list!"], ["me", "The final secret chest! Sponge, our most loyal subject, one last royal launch! BOING!"]],
+  "w10-s8": [[3, "Wibble wobble! Your Majesty! Is it true? Is there finally a DESSERT table?"], ["me", "Front row, as promised! Hold The Last Stand forty-five seconds with us first!"], [3, "Eeee! I'm set for success! That's the jiggle of it!"]],
+  "w10-s9": [["lo", "Heh heh. The little king made it. Come sit at my long, empty table. Your stale seat is waiting."], ["me", "Decree Number Forty-Four: no seat stays empty! Up to the table! Royally! Okay, QUICKLY!"]],
 };
 
 export const QUIPS: Record<QuipKind, string[]> = {

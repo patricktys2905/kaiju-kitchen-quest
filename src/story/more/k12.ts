@@ -75,6 +75,14 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w9-s7": [[14, "Let's GOOO! Up the canned goods, against the current! Race ya, sloth!"], ["me", "Heyyy, Salmonster. You swim. I'll take the sponge. BOING!"], ["me", "Key chest on the ledge. Two for one: a key AND a nap spot."]],
   "w9-s8": [["lo2", "Forsooth! Thy time is up, sloth! Check out NOW!"], ["me", "Checkout? I'm in the slow lane, dude. Forty-five seconds. Bag it."]],
   "w9-s9": [["me", "Frozen Aisle. Brrr. Frosty fur again. Heyyy, it's Minturtle's dream house."], ["n", "From the back aisle, a voice wails: \"Woooo! Nobody throws ME out! Nobody even OPENS me!\""], ["me", "Spooky. I'll open ya, dude. Gently. Climbing."]],
+  // World 10: The Feast of the Forgotten.
+  "w10-s2": [["me", "Jam Jar Junction. Sticky jars, comfy lids. Tiny nap?"], ["n", "RUMBLE! A giant rolling pin comes rolling between the jars!"], ["me", "Okay, okay. One more rush. A jam-packed rush. Go, legs!"]],
+  "w10-s3": [["me", "Takeaway Towers. Old noodle boxes up to the ceiling. Duuude, somebody forgot a LOT of dinners."], ["me", "Lever! Rolling pin goes BONK. Order up, Leftovers."]],
+  "w10-s4": [[10, "Hmph. Sloth. This is my LAST Crumblet. The very last one. Walk it out of the cold."], ["me", "The last one? Okay, papa bear. Hop on, little muffin. Slowest, safest bus in the Fridge."], [10, "...Hmph. Thanks. Don't tell anybody I said that."]],
+  "w10-s6": [[16, "Yo, Sloba. Stay frosty. Scroll's at the end of the paper chains. Race ya?"], ["me", "Race? Heyyy, Minturtle. I'll meet ya there. Grab it, hold out. No pressure, just tea-sure."]],
+  "w10-s7": [["me", "The Forgotten Shelf. Dusty jars, no labels. Heyyy, jars. I see ya."], [3, "Wibble wobble! Sloba! I'm writing names on ALL the jars! Wanna help?"], ["me", "Sure. Right after the sponge. BOING! Last key. Got it."]],
+  "w10-s8": [["lo2", "Forsooth, sloth! The WHOLE army! Forty-five seconds! Thou art doomed!"], ["me", "Forty-five seconds? Sir Stale, that's, like, one yawn. *yaaawn* Okay, go."]],
+  "w10-s9": [["me", "The Long Table. Duuude, it's super long. And nobody's sitting at it."], ["n", "From the cake-tin throne, a grumpy voice booms: \"Nobody touches my table! NOBODY gets a seat!\""], ["me", "Heyyy. Saved myself one anyway. Since lunch. Climbing."]],
 };
 
 export const QUIPS: Record<QuipKind, string[]> = {

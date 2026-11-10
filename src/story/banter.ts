@@ -7,6 +7,10 @@ export type QuipKind = 'combo' | 'lowhp' | 'perfect' | 'levelup' | 'secret' | 'b
 
 /** What each monster says when it first appears in a stage (one is picked at random). */
 export const TAUNTS: Partial<Record<MobKind, string[]>> = {
+  // World 10: The Feast of the Forgotten
+  cherrysoldier: ["For the King! Er, the CAKE!", "Candied and dangerous!", "Cherry on top? Cherry ON YOU!"],
+  fruitknight: ["None shall pass! Nobody eats me anyway!", "Aged one hundred years. FIGHT me!", "I'm dense, I'm tough, I'm FRUITCAKE!"],
+  peel: ["Zest for battle! Hehe!", "Peel out, intruder!", "Sweet AND sour, baby!"],
   // World 9: The Supermarket
   trolley: ["Clean-up on aisle YOU!", "Squeak squeak, comin' through!", "No returns, no refunds!"],
   bag: ["Paper or PLASTIC? Plastic! Wooo!", "I'm bag-ging you up!", "Floatin' in the breeze, baby!"],

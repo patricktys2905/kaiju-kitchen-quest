@@ -75,6 +75,14 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w9-s7": [["me", "Canned Goods Keep. Dented cans with lasers. Everybody gets a laser but me!"], ["me", "Bouncy sponge! BOING! Key's mine! Still no flag. Best before SOON, please!"]],
   "w9-s8": [["lo2", "Hold out, wobbly knave! Thou art EXPIRED! Clean-up on aisle nine!"], ["me", "I'm jelly, Sir Stale! Jelly's got a LONG shelf life! Forty-five seconds, check it out!"]],
   "w9-s9": [["me", "The Frozen Aisle! Brrr! Jelly's best friend! I'm SO firm right now!"], ["n", "From the Back Aisle, a voice moans: \"Woooo! Nobody opens me! Nobody remembers me! Woooo!\""], ["me", "Aww. I know that feeling. But I still want my flag back! Climbing!"]],
+  // World 10: The Feast of the Forgotten.
+  "w10-s2": [["me", "Jam Jar Junction! Jam is jelly's cousin! Hi, cousins! Love the lids!"], ["n", "RUMBLE! A giant rolling pin comes rolling between the jars!"], ["me", "You AGAIN?! Fine, you're invited too! Just stop chasing me! RUN!"]],
+  "w10-s3": [["me", "Takeaway Towers! Old noodle boxes nobody came back for. Aww. Hi, noodles!"], ["me", "Lever down, pin drops, BONK! Gimme a T! For TAKEAWAY! Takeaway THIS!"]],
+  "w10-s4": [[10, "Hmph. Jelly. This is my LAST Crumblet. The very last one. Walk it out of the cold."], ["me", "The last one?! Hop in my whipped cream, little muffin! I'll cheer the WHOLE way!"], [10, "Hmph. And, uh, save us a seat at that party. Both of us."]],
+  "w10-s6": [["me", "Paper Chain Pass! Party chains! I'm fixing them as I go! Ta-daa! Ooh, scroll first."], [15, "B-B-Bloblin! I'll hold the line! I-I'm not even scared! Okay, a l-little scared!"], ["me", "Go, Hotchog! Gimme an H! Grab, hold, wibble wobble!"]],
+  "w10-s7": [["me", "The Forgotten Shelf. Jars with no labels. Nobody even knows their names!"], ["me", "*scribble scribble* There! Now you're Jam Jar Jeff! Okay, sponge! BOING! Last key!"]],
+  "w10-s8": [["lo2", "Hold out, wobbly knave! The WHOLE army! Forty-five seconds! Thou art doomed!"], ["me", "Sir Stale! Want a name flag? I've got spares! Okay, after! Wobble Shield, up!"]],
+  "w10-s9": [["me", "The Long Table. It's SO long. And SO empty. Not one plate. Not one flag."], ["n", "From the cake-tin throne, a grumpy voice booms: \"NOBODY sits at my table! Nobody EVER came!\""], ["me", "Nobody ever came? Aww. Hang on, Mr. Fruitcake! Somebody's coming! Wibbling up!"]],
 };
 
 export const QUIPS: Record<QuipKind, string[]> = {

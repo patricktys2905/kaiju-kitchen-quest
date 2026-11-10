@@ -47,11 +47,12 @@ const MAP_POS: Record<string, [number, number]> = {
   '7-1': [5, 92], '7-2': [15, 85], '7-3': [28, 84], '7-4': [40, 82], '7-5': [50, 72], '7-6': [62, 70], '7-7': [79, 64], '7-8': [82, 48], '7-9': [77, 36], '7-10': [86, 28],
   '8-1': [12, 88], '8-2': [24, 80], '8-3': [33, 68], '8-4': [46, 62], '8-5': [54, 54], '8-6': [48, 42], '8-7': [56, 32], '8-8': [66, 30], '8-9': [72, 22], '8-10': [79, 14],
   '9-1': [28, 74], '9-2': [40, 70], '9-3': [62, 72], '9-4': [72, 58], '9-5': [60, 47], '9-6': [50, 30], '9-7': [36, 46], '9-8': [24, 40], '9-9': [28, 22], '9-10': [75, 20],
+  '10-1': [14, 86], '10-2': [30, 88], '10-3': [46, 84], '10-4': [58, 72], '10-5': [46, 55], '10-6': [62, 47], '10-7': [40, 32], '10-8': [60, 33], '10-9': [76, 38], '10-10': [82, 16],
   '2-1': [52, 77], '2-2': [61, 67], '2-3': [69, 61], '2-4': [75, 54], '2-5': [79, 46], '2-6': [77, 38], '2-7': [81, 30], '2-8': [79, 22], '2-9': [83, 15], '2-10': [85, 7],
 };
 
 /** Map pages: which painted map shows which worlds. */
-const MAPS = [{ img: 'map-world', name: 'Kitchen', worlds: [1, 2] }, { img: 'map-oven', name: 'Oven', worlds: [3] }, { img: 'map-pantry', name: 'Pantry', worlds: [4] }, { img: 'map-sink', name: 'Sink', worlds: [5] }, { img: 'map-dining', name: 'Dining Room', worlds: [6] }, { img: 'map-backyard', name: 'Backyard', worlds: [7] }, { img: 'map-garden', name: 'Garden', worlds: [8] }, { img: 'map-market', name: 'Supermarket', worlds: [9] }];
+const MAPS = [{ img: 'map-world', name: 'Kitchen', worlds: [1, 2] }, { img: 'map-oven', name: 'Oven', worlds: [3] }, { img: 'map-pantry', name: 'Pantry', worlds: [4] }, { img: 'map-sink', name: 'Sink', worlds: [5] }, { img: 'map-dining', name: 'Dining Room', worlds: [6] }, { img: 'map-backyard', name: 'Backyard', worlds: [7] }, { img: 'map-garden', name: 'Garden', worlds: [8] }, { img: 'map-market', name: 'Supermarket', worlds: [9] }, { img: 'map-fridgeback', name: 'The Feast', worlds: [10] }];
 
 let el: HTMLElement;
 let tab: Tab = 'map';

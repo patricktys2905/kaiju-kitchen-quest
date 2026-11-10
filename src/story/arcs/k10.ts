@@ -156,8 +156,29 @@ export const ARC: Record<string, StoryLine[]> = {
     ["lo", "Bring the muffins to the House, bear. Every forgotten crumb gets a seat at my Feast."],
     ["me", "Littlest's got a blankie and a papa. Hmph. Nap first. Then we crash your Feast, Fruitcake. GRRR."],
   ],
+  "w10-open": [
+    ["n", "The back of the Fridge! Frosty shelves, dusty jars, and one long, empty table waiting at the end!"],
+    ["me", "Head count. Littlest on the ear, blankie on Littlest. Five at home with the bird. Hmph. Good."],
+    ["me", "Last stop on the world tour, kid. Then home for the biggest nap in history. Grrr."],
+  ],
+  "w10-boss": [
+    ["boss", "The papa bear! I am OLD FRUITCAKE! Your crumbs go stale out here, and stale crumbs sit at MY table!"],
+    ["me", "My crumbs sit at MY table. With bibs on. Hmph."],
+    ["boss", "Nobody ever CUTS me, bear! Nobody ever counts ME! So nobody gets a feast!"],
+    ["me", "Littlest, cover your ears. GRRRAAAH!"],
+  ],
+  "w10-after": [
+    ["boss", "Oof. My crown. Just a dented old cake tin."],
+    ["boss", "Every Christmas they wrap me up and pass me on. Nobody ever brings me home. I just wanted an invite, bear."],
+    ["boss", "One seat at one feast. Was that so much? *sniff*"],
+    ["me", "Hmph. Littlest's giving you its blankie. Don't make it weird."],
+    ["me", "Big table back home. Bring your gang. Breadstick sits by the bird."],
+    ["foe", "Caw?! Not by the bird! Fine. He can have the shiny fork."],
+    ["me", "One, two, three, four, five, Littlest, bird, ten strays, a bunch of Leftovers and one old Fruitcake. Hmph."],
+    ["me", "Everybody's counted. Now NAP. ...Okay, fine. Cake first."],
+  ],
 };
-export const NEMESIS: Record<"w1-elite" | "w2-elite" | "w3-elite" | "w4-elite" | "w5-elite" | "w6-elite" | "w7-elite" | "w8-elite" | "w9-elite", StoryLine[]> = {
+export const NEMESIS: Record<"w1-elite" | "w2-elite" | "w3-elite" | "w4-elite" | "w5-elite" | "w6-elite" | "w7-elite" | "w8-elite" | "w9-elite" | "w10-elite", StoryLine[]> = {
   "w1-elite": [
     ["foe", "Caw! Shiny crumbs, crumbly crumbs! Finders keepers, caw-caw!"],
     ["me", "Those \"crumbs\" are my Crumblets, bird."],
@@ -202,5 +223,10 @@ export const NEMESIS: Record<"w1-elite" | "w2-elite" | "w3-elite" | "w4-elite" |
     ["foe", "Caw! Fuzzy! Watermelon Brute on Melon Mountain. Big, stripy, and it spits seeds! I caught nine. Shiny ones!"],
     ["me", "Bird. Who's on nap duty?"],
     ["foe", "Bloblin! She jiggles 'em to sleep like a waterbed! Wibble wobble, they're OUT! Caw!"],
+  ],
+  "w10-elite": [
+    ["foe", "Caw! Fuzzy! Fruitcake Knight up ahead. Crumbly, nutty, and the cherries are SHINY!"],
+    ["me", "Bird. Who's on nap duty?"],
+    ["foe", "Nobody! The kids wanted to see Papa's big finish! Front row, with snacks! Caw! Feast after, right?"],
   ],
 };

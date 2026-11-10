@@ -75,6 +75,14 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w9-s7": [[14, "Let's GOOO! Old dragon! Key chest's on the high ledge. I'd swim up, but there's no current!"], ["me", "Then ride the sponge, fish friend! Proverb: \"Sushi and salmon are the best of pals.\""], [14, "Wait. SUSHI?! Holy mackerel! Ahem. O-fish-ally fine with it. Go go GO!"]],
   "w9-s8": [["lo2", "Hold out at the checkout, old dragon? Thou art centuries past thy best-before date!"], ["me", "Age jokes, EXPIRED edition?! Forty-five seconds, breadstick! Then YOU check out! FWOOSH!"]],
   "w9-s9": [["n", "From the Frozen Aisle, a spooky voice wails: \"Woooo! Don't open me! Nobody remembers what's in meee!\""], ["me", "Hrrm! Proverb: \"Always check behind the Tupperware lid.\" Brrr. I shall check fast, then thaw."]],
+  // World 10: The Feast of the Forgotten.
+  "w10-s2": [["me", "Jam Jar Junction! Proverb: \"Old jam is never in a hurry.\""], ["n", "RUMBLE! A giant rolling pin comes rolling down between the jam jars!"], ["me", "Proverb update: \"Old DRAGON is in a hurry!\" One last time! HUP HUP HUP!"]],
+  "w10-s3": [["me", "Takeaway Towers! Noodle boxes stacked to the ceiling, and not ONE of them has sushi. Hrrm!"], ["me", "The gates lock! Proverb: \"Leftovers taste better the next day.\" Not these ones! BONK!"]],
+  "w10-s4": [[10, "Hmph. Dragon. My LAST Crumblet. The very last one. Walk it down Frost Drawer Falls, or else."], ["me", "With honour, papa bear! Little one, ice is NOT a slide. Ask Pengwhip, then do the opposite."], [10, "It's wearing a tiny scarf. Don't look at me. It's the frost, okay?"]],
+  "w10-s6": [["me", "Paper Chain Pass! Old party streamers, faded and droopy. Hrrm. Somebody's party got forgotten here."], ["me", "The LAST Recipe Scroll! Proverb: \"Grab the scroll, then hold the line.\" Not ancient, but it works!"]],
+  "w10-s7": [[0, "Mr. Dragon! Mr. Dragon! The last key's up on the ledge! Do the tiny puff again! Do it!"], ["me", "Tiny puff? Little one, watch THIS! FWOOOOSH! Ahem. Sponge, my oldest friend! BOING!"]],
+  "w10-s8": [["lo2", "Hold out one last time, old dragon? Thou art older than this whole FRIDGE!"], ["me", "Age jokes, FINAL edition?! Forty-five seconds, breadstick! And save room for dinner! FWOOSH!"]],
+  "w10-s9": [["n", "A dusty voice echoes down the long, empty table: \"Who dares bring PARTY HATS to MY feast?!\""], ["me", "Hrrm. A whole banquet table, and not one plate on it. Proverb: \"An empty table is a sad table.\""], ["me", "Let us fix that! Gari, guard my seat! Hup hup!"]],
 };
 
 export const QUIPS: Record<QuipKind, string[]> = {

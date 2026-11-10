@@ -75,6 +75,14 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w9-s7": [["me", "Canned Goods Keep! Look at all these dented cans. Somebody's been sparring in here!"], ["me", "Key chest on the high shelf! Sponge! BOING! Top rope, baby!"]],
   "w9-s8": [[3, "Wibble wobble! Gimme a V! Gimme an E! Gimme a, uh, how many letters ARE there?"], ["me", "A cheerleader! Bloblin, you're hired! Forty-five seconds, for the crowd! Ding ding!"]],
   "w9-s9": [["foe", "Welcome to MY turf, Champ! The Frozen Aisle! Ahh, finally not melting!"], ["n", "From the back aisle, a spooky voice wails: \"Woooo! Nobody opens me! Nobody BEATS me! Woooo!\""], ["me", "Nobody opened you YET! Main event, here I come! Ding ding!"]],
+  // World 10: The Feast of the Forgotten.
+  "w10-s2": [["me", "Jam Jar Junction! Last roadwork of the season! Hop, hop, HOP!"], ["n", "RUMBLE! A giant rolling pin comes crashing through the jam jars!"], ["me", "Jam on red velvet? Tempting! But NO! HOP!"]],
+  "w10-s3": [["me", "Takeaway Towers! A big cardboard ring! Last undercard before the main event!"], ["lo2", "Hah! Leftovers, ATTACK! Flatten yon marsupial!"], ["me", "Undercard bout, round five! Gloves up! Ding ding!"]],
+  "w10-s4": [[10, "Hmph. Velvaroo. My LAST Crumblet. It wants a ringside seat for your title fight."], ["me", "Into the pouch, champ-in-training! Best seat in the house for the biggest fight EVER!"], [10, "Hmph. Save me one too."]],
+  "w10-s6": [["me", "Paper Chain Pass! Somebody decorated for my title fight! Aw, you shouldn't have!"], ["me", "Grab the Recipe Scroll and hold the pass! A champ never drops the scroll!"]],
+  "w10-s7": [["me", "The Forgotten Shelf! Dusty jars everywhere. It's like a locker room nobody ever cleaned!"], [4, "Ooooh, a shiny golden belt... is it the moon?"], ["me", "Nope, Mothball! But it's almost as shiny! Key's up high! Sponge! BOING!"]],
+  "w10-s8": [["lo2", "Hah! The Last Stand, marsupial! The whole army is here! Thou shalt never reach the champion!"], ["me", "Forty-five seconds? That's ONE round! Gloves up! Ding ding!"]],
+  "w10-s9": [[15, "And NOW, folks! The main event! In the red corner, the hoppiest heavyweight in the house! VEL-VA-ROOOO!"], ["me", "Hotchog! You did it at my title fight! And not one stammer!"], ["n", "From the cake-tin throne, a grand grumpy voice booms: \"Climb up, kangaroo! The champ is WAITING!\""]],
 };
 
 export const QUIPS: Record<QuipKind, string[]> = {

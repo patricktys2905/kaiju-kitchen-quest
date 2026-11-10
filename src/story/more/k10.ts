@@ -83,6 +83,15 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w9-s7": [["me", "Canned Goods Keep. Key chest on a high ledge. Bouncy sponge. Bears STILL don't bounce."], [14, "Let's GOOO, papa bear! Bounce against gravity! That's how I swim upstream!"], ["me", "Hmph. BOING! Littlest says do it again. Fine. ONE more."]],
   "w9-s8": [["me", "Checkout Chaos. Forty-five seconds. A conveyor belt full of monsters. Somebody ring 'em up."], [11, "Beep beep! Express lane, Bluebeary! Ten monsters or less! Wait, that's like fifty!"], ["me", "Hmph. You bag 'em, raptor. I'll do the scanning. With my paws."]],
   "w9-s9": [["me", "Frozen Aisle. Brrr. Littlest, under the fur. Blueberries go hard in the cold."], ["n", "From the Back Aisle, a spooky voice wails: \"Woooo! Is that a muffin? I'll keep it in a TUB!\""], ["me", "Nobody keeps my muffins but me. GRRR."]],
+
+  // World 10: The Feast of the Forgotten.
+  "w10-s2": [["me", "Jam Jar Junction. Littlest wants to lick the jam. No, kid. That jam's older than me."], ["n", "Uh-oh! A giant rolling pin comes rumbling off the jam jars!"], ["me", "Bears JOG! Hold the ear! Last jog, I promise! GRRR!"]],
+  "w10-s3": [["me", "Takeaway Towers. Noodle boxes stacked to the ceiling. Somebody never cleans this fridge."], ["me", "Lever up top drops the pin. Monsters get flat. Bear gets a fortune cookie."]],
+  "w10-s4": [["n", "Frost Drawer Falls! A tiny Crumblet shivers on an ice cube. The very last stray in the House!"], ["me", "Strays walked home: ten. The last one. C'mere, kiddo. Littlest, scoot over on the ear."], ["me", "Two on the ear. Ear's getting crowded. Ear's FINE. Hmph."]],
+  "w10-s6": [["me", "Paper Chain Pass. Recipe Scroll's at the far end. Littlest wants a paper chain. After, kid."], ["lo2", "Hah! Thy crumbs shall be the party favors, bear!"], ["me", "Party's over for you, breadstick. Grrr."]],
+  "w10-s7": [["me", "The Forgotten Shelf. Last key chest, high ledge. Bouncy sponge. Bears STILL don't bounce."], [12, "Heyyy, papa bear. *yaaawn* Last bounce, dude. Make it count."], ["me", "Hmph. BOING! Littlest says do it again. No. Okay, ONE more."]],
+  "w10-s8": [["me", "The Last Stand. Forty-five seconds. Every monster in the House, and one bear in the way."], [11, "Beep beep! Bluebeary! Bus fund's FULL! After this, everybody rides home!"], ["me", "Hmph. Then let's earn the ride, raptor. GRRR."]],
+  "w10-s9": [["me", "The Long Table. Long, dusty, empty. Not a crumb on it. Hmph. Sad table."], ["n", "From the cake-tin throne, a voice booms: \"Every forgotten crumb sits at MY table, bear!\""], ["me", "Nobody forgets these crumbs. I count 'em. GRRR."]],
 };
 
 export const QUIPS: Record<QuipKind, string[]> = {

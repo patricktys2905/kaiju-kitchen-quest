@@ -75,6 +75,14 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w9-s7": [[14, "Let's GOOO! Taco bird! Race ya up the soup cans! Against the current!"], ["me", "Salmonster! Wanna headline my Fish Taco Friday?"], [14, "Holy mackerel, NO! Key chest's up top! Sponge! GOOO!"]],
   "w9-s8": [["me", "Checkout Chaos! Beep, beep, beep! Those scanners have a BEAT!"], ["me", "Forty-five seconds! Mixtape Track forty-seven: \"Beep Beep Checkout!\" It's a two-for-one banger!"]],
   "w9-s9": [["me", "The Frozen Aisle! Brrr! Owls aren't built for this! My cheese is going stiff!"], ["n", "From the back aisle, a spooky voice wails: \"Woooo! Leftovers Night, every night! Woooo!\""], ["me", "Over my crunchy shell! WHOOO's climbing? This owl!"]],
+  // World 10: The Feast of the Forgotten.
+  "w10-s2": [["me", "Jam Jar Junction! Jam on a taco? Wise owl says: never say never."], ["n", "RUMBLE! A giant rolling pin comes crashing through the jam jars!"], ["me", "New dance! The Jam Session! Flap, flap, FLAP!"]],
+  "w10-s3": [["me", "Takeaway Towers! Old taco boxes?! Somebody ordered tacos and FORGOT them? That's a crime!"], ["lo2", "Hah! Leftovers, ATTACK! Make yon owl stale!"], ["me", "WHOOO's ready to party?! Salsa bombs away!"]],
+  "w10-s4": [[10, "Hmph. Owl. This is my LAST Crumblet. The very last one. Walk it out of Frost Drawer Falls."], ["me", "One last walk, little muffin! No loud music, promise. Okay, one tiny hoot."], [10, "Hmph. One. A small one."]],
+  "w10-s6": [["me", "Paper Chain Pass! Party decorations! They just need some string lights and a DJ!"], ["me", "Grab the Recipe Scroll and hold the pass! Wise owl says: never leave a party early!"]],
+  "w10-s7": [["me", "The Forgotten Shelf! Dusty jars, old lids, and a lonely taco shell. Hang in there, buddy!"], [17, "Wheee! Tacowl! Ice to meet you at the back of the fridge! The key's up high!"], ["me", "Pengwhip! Bounce with me! Sponge! BOING! Hoo-hoo!"]],
+  "w10-s8": [["lo2", "Hah! The Last Stand, owl! The whole army is here! Thy party is OVER!"], ["me", "Forty-five seconds! Mixtape Track forty-seven and a half: \"Last Stand Shuffle!\" Hoo-hoo!"]],
+  "w10-s9": [["me", "The Long Table! So long, so dusty, and not one taco on it! Wise owl says: that's just sad furniture."], ["n", "From the cake-tin throne, a grumpy old voice booms: \"No Tuesdays here, owl! Only LEFTOVERS!\""], ["me", "Not for long! WHOOO's climbing? This owl!"]],
 };
 
 export const QUIPS: Record<QuipKind, string[]> = {

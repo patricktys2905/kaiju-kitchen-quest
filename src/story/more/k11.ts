@@ -83,6 +83,15 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w9-s7": [["me", "Canned Goods Keep! Secret chest on a high ledge. Bouncy sponge? Raptor Express elevator, going UP!"], [3, "Wibble wobble! Is that pizza for the dessert table? Am I invited? Please say I'm invited!"], ["me", "Wrong menu, jelly! Here, have a coupon! Boing! World 9 key, delivered!"]],
   "w9-s8": [["me", "Checkout Chaos! Forty-five seconds on the conveyor. Finally, a road that moves FOR me!"], [14, "Let's GOOO, raptor! Run against the belt! It's o-fish-ally the best workout!"], ["me", "Against traffic?! That's a ticket, buddy! Beep beep!"]],
   "w9-s9": [["me", "The Frozen Aisle! Brrr! Pizza box, stay warm! Think warm thoughts! Think toasty ovens!"], ["n", "From the Back Aisle, a spooky voice wails: \"Woooo! Is that PIZZA? Into the tub it goes!\""], ["me", "Nope! Hot deliveries only! No tub, no tip, NO way!"]],
+
+  // World 10: The Feast of the Forgotten.
+  "w10-s2": [["me", "Minute forty-four! Jam Jar Junction! Sticky road, but I've got grippy claws!"], ["n", "Uh-oh! A giant rolling pin comes rumbling off the jam jars!"], ["me", "The SAME tailgater?! It followed me all the way here! Beep beep, VROOM!"]],
+  "w10-s3": [["me", "Takeaway Towers! Old takeaway boxes everywhere! Rival delivery companies?! Unacceptable!"], ["me", "Lever up top. Special delivery: one rolling pin, no chopsticks needed!"]],
+  "w10-s4": [[10, "Hmph. Raptor. Last stray Crumblet in the House, out on Frost Drawer Falls. Bus it to the exit."], ["me", "Passenger number TEN! Final stop! Bluebeary, how's the bus fund?"], [10, "Two crumbs, a button, a seed, a grape and an IOU. Hmph. It's a bus."]],
+  "w10-s6": [["me", "Paper Chain Pass! Pick-up: one Recipe Scroll, then hold out. Ooh, party streamers!"], ["lo2", "Hah! Paper chains for a forgotten feast, courier! Not one guest hath RSVP'd!"], ["me", "I RSVP'd! I'm the DELIVERY! Beep beep!"]],
+  "w10-s7": [["me", "The Forgotten Shelf! Final secret chest, high ledge. Raptor Express elevator, last ride UP!"], [9, "Ooh, pizza! Elephants never forget! *POP* Hey, it's the pizza from the Dining Room!"], ["me", "You REMEMBERED?! Big guy, that's a five-star memory! Boing!"]],
+  "w10-s8": [["me", "The Last Stand! Forty-five seconds of EVERY monster. It's rush hour at the end of the world!"], ["foe", "Raptor! I'm on traffic control! Pineapple barricade, deployed!"], ["me", "Pete! Pineapple on the ROAD is finally allowed! Beep beep!"]],
+  "w10-s9": [["me", "The Long Table! Delivery address confirmed! Wow, that's one LONG, EMPTY table."], ["n", "From the cake-tin throne, a voice grumbles: \"Bring it here, lizard. And don't expect a TIP.\""], ["me", "Customer's in! Keep the box level, raptor. Last fifty feet!"]],
 };
 
 export const QUIPS: Record<QuipKind, string[]> = {

@@ -75,6 +75,14 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w9-s7": [[14, "Let's GOOO! Big choco dude! Key chest's on the high ledge! I swim UP to it. Against the current!"], ["me", "Me no swim. Me sink like rock. Me go BOING instead!"], [14, "O-fish-ally awesome! Race ya!"]],
   "w9-s8": [["lo2", "Hold out at the checkout, varlet? Thou shalt be scanned, bagged and SOLD!"], ["me", "Me no for sale! Me no on sale! Forty-five seconds. Me count all the way!"]],
   "w9-s9": [["me", "FREEZER AISLE! Me LOVE freezer aisle! Me firm! Me crunchy! Me happiest golem!"], ["n", "Uh-oh! From the dark, a spooky voice wails: \"Woooo! Who's in my aisle?\""], ["me", "GHOST! *gulp* Me scared. Me still go. Me ALWAYS still go!"]],
+  // World 10: The Feast of the Forgotten.
+  "w10-s2": [["me", "Jam jars! Me like jam! Me walk nice and slow and..."], ["n", "RUMBLE! A giant rolling pin comes rolling between the jam jars!"], ["me", "PIN?! Pin follow me to back of FRIDGE?! Last time! Me RUN!"]],
+  "w10-s3": [[16, "Stay frosty, choco dude. Back of the Fridge is the chillest spot in the house. Cool, cool, cool."], ["me", "Me LOVE chill! Takeaway box towers! Me hungry. No! Focus!"], ["me", "Gate lock. Me pull lever, pin go BONK! Bad guys flat like old pizza!"]],
+  "w10-s4": [[10, "Hmph. Chocomunch. My LAST Crumblet. The very last one. Walk it down Frost Drawer Falls. Gently."], ["me", "Me walk LAST muffin! Me hold it gentle, like Cubey. Muffin say yay!"], [10, "It's wearing tiny mittens. Don't look at me. It's the frost, okay?"]],
+  "w10-s6": [["me", "Paper chains! Old party stuff. Party sad and dusty. Me want to fix party!"], ["me", "First, scroll! Me grab scroll, me hold line. THEN fix party!"]],
+  "w10-s7": [["me", "Forgotten Shelf. Old jars, old boxes. Me no like forgotten. Me remember EVERYBODY!"], ["me", "Last key way up high. Sponge! BOING! Cubey Three, hold on tight!"]],
+  "w10-s8": [["lo2", "Hold out one last time, varlet? Thou shalt be frozen solid and FORGOTTEN!"], ["me", "Frozen? Ooh, me like frozen! Me count forty-five! Me count all the way! Last time!"]],
+  "w10-s9": [["n", "A grumpy old voice booms down the long, empty table: \"Who let a CHOCOLATE into my feast hall?!\""], ["me", "Big table. No food. That saddest table me ever see."], ["me", "*gulp* Me scared AND me go! Me ALWAYS still go!"]],
 };
 
 export const QUIPS: Record<QuipKind, string[]> = {

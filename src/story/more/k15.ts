@@ -75,6 +75,14 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w9-s7": [[3, "Wibble wobble! Hi, Champ! Key chest's up high! Um, will there be a dessert table at your cookout?"], ["me", "A d-dessert table? Folks, there WILL be one, and you're invited! Front row!"], [3, "EEEE! Invited! That's the jiggle of it! Go boing, Champ!"]],
   "w9-s8": [["lo2", "Hold out at the checkout, sausage? I shall bag thee and sell thee, two for one!"], ["me", "Two for one? Folks, I'm a PREMIUM sausage! Forty-five seconds! Ring 'em up!"]],
   "w9-s9": [["n", "From the Frozen Aisle, a spooky voice wails: \"Woooo! Who goes there? Nobody EVER opens meee!\""], ["me", "B-b-brrr! Folks, it's cold in here! Ahem. Freezer burn is no match for a HOT dog! Here I come!"]],
+  // World 10: The Feast of the Forgotten.
+  "w10-s2": [["n", "RUMBLE! A giant rolling pin comes rolling through Jam Jar Junction!"], ["me", "And they're off, folks, for the LAST time! The pin's sticky with jam, but Hotchog's got hot feet! RUN!"]],
+  "w10-s3": [["me", "Takeaway Towers, folks! Noodle boxes, curry tubs, and a fortune cookie! It says..."], ["me", "\"You will win a big feast-off.\" HA! Gates locked! Lever time! Rolling pin, take it away!"]],
+  "w10-s4": [[10, "Hmph. Hotchog. My LAST Crumblet. The very last one. Get it down Frost Drawer Falls. Spikes AWAY."], ["me", "The final VIP pass, Mr. Bluebeary! Little buddy, you get a front row seat at the feast. Promise!"], [10, "It's wearing a tiny party hat. Don't look at me. It's the frost, okay?"]],
+  "w10-s6": [["me", "Paper Chain Pass! Folks, these decorations are older than Sir Stale. And twice as dusty!"], ["me", "The LAST Recipe Scroll! Grab it in time, hold the line, and save these streamers for the party!"]],
+  "w10-s7": [[3, "Wibble wobble! Champ! The last key chest is up high! Is the dessert table still on?"], ["me", "Still on, Bloblin! Folks, it's the BIGGEST dessert table in history! Sponge, BOING!"]],
+  "w10-s8": [["lo2", "Hold out one last time, sausage? Thy buns shall go as stale as MINE!"], ["me", "Stale buns? Pal, we TOAST 'em! Forty-five seconds, folks, then you're coming to dinner too!"]],
+  "w10-s9": [["n", "A grumpy old voice booms down the long, empty table: \"A cookout? HERE? Nobody feasts in MY Fridge!\""], ["me", "Folks, look at that table! Not one plate! That's a foul if I ever saw one!"], ["me", "It's the feast-off finals! The Champion's coming in HOT! Here I come!"]],
 };
 
 export const QUIPS: Record<QuipKind, string[]> = {

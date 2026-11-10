@@ -75,6 +75,14 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w9-s7": [["me", "Canned Goods Keep! Tins are teeny time capsules! Fascinating! Also dented. VERY dented."], ["me", "Secret chest on a high ledge! Bouncy sponge, launch the squid! Clean-up on aisle EUREKA!"]],
   "w9-s8": [[3, "Wibble wobble! Ooh, another jelly! Are you invited to the dessert table? I never am!"], ["me", "I'm a jelly SCIENTIST! Hold Checkout Chaos forty-five seconds with me and I'll write you an invite!"], [3, "Eeee! I'm set for success! That's the jiggle of it!"]],
   "w9-s9": [["n", "From the frosty Frozen Aisle, a voice wails: \"Woooo! Who goes there? Don't you DARE throw me out!\""], ["me", "Spore-o-meter says ninety percent leftovers and ten percent spooky! Brrr! Into the cold we go!"]],
+  // World 10: The Feast of the Forgotten.
+  "w10-s2": [["me", "Jam Jar Junction! Note to self: jam plus jelly equals one VERY sticky squid!"], ["n", "Uh-oh! A giant rolling pin comes rumbling between the jam jars!"], ["me", "Even at the back of the FRIDGE?! Final hypothesis, same as always: RUN RIGHT! Very, VERY right!"]],
+  "w10-s3": [["me", "Takeaway Towers! Old noodle boxes stacked like skyscrapers! Best before date: the Stone Age!"], ["me", "Gates locked? Lever, rolling pin, SPLAT! My favourite experiment, final serving!"]],
+  "w10-s4": [[10, "Hmph. Jelly. This is the last Crumblet. The very LAST one. Walk it down Frost Drawer Falls."], ["me", "Assistant number ten! Rules one to eight still apply! Rule nine: you're invited to the feast!"], [10, "Hmph. Fine. It sits next to ME."]],
+  "w10-s6": [["me", "Paper Chain Pass! The very last Recipe Scroll! Please say antidote. Please, PLEASE don't say garlic!"], ["lo2", "Hmph! I am beaten, jelly. Take yon scroll. 'Tis a fruitcake recipe. Nobody ever readeth it."], ["me", "A fruitcake recipe?! Fascinating! Grab it and hold on, GO!"]],
+  "w10-s7": [["me", "The Forgotten Shelf! Dusty jars labelled \"Do Not Open\" and \"Gravy? Maybe?\" Fascinating!"], ["me", "Last secret chest, last key! Bouncy sponge, launch the squid! EUREKA, I'm airborne one final time!"]],
+  "w10-s8": [[4, "Ooooh, shiny... is that the moon? Oh, it's the fridge light. Hi, little squid!"], ["me", "Mothball! Help me survive The Last Stand for forty-five seconds? Then we feast under the fridge light!"], [4, "Ooooh, a moonlit feast! I'm in!"]],
+  "w10-s9": [["lo", "Heh heh. Come to the long table, little jelly. My feast is EMPTY, just how I like it."], ["me", "Spore-o-meter says one hundred percent fruitcake! Final lab, final sample! Colander helmet: ON!"]],
 };
 
 export const QUIPS: Record<QuipKind, string[]> = {

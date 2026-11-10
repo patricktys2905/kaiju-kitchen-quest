@@ -42,6 +42,9 @@ export function lookOf(p: HeroProfile): GearLook {
   };
 }
 
+/** "The Burnt Toast King", "The Mold Crown", "Old Fruitcake" / "Sir Stale" (titles and proper names get no "The"). */
+const theName = (n: string) => /^(The |Sir |Baron |Old )/.test(n) ? n : `The ${n}`;
+
 export const CANVAS = { w: 1920, h: 1080 };
 const ZOOM = 3;
 let VW = CANVAS.w / ZOOM, SX = 0;
@@ -273,11 +276,11 @@ export class GameScene extends Phaser.Scene {
     cam.centerOn(this.cx, this.cy);
     if (w.variant === 'night') { this.add.rectangle(SX, SY, VW * 2, VH * 2, 0x0a0a30, 0.42).setOrigin(0, 0).setScrollFactor(0).setDepth(15); }
     setTouchVisible(true); showHud(true);
-    playMusic(st.boss ? 'boss' : st.world === 2 || st.world === 4 ? 'world2' : st.world === 3 || st.world === 5 ? 'world3' : st.world === 6 ? 'world2' : st.world === 8 ? 'world3' : st.world === 9 ? 'world2' : 'world1');
+    playMusic(st.boss ? 'boss' : st.world === 2 || st.world === 4 ? 'world2' : st.world === 3 || st.world === 5 ? 'world3' : st.world === 6 ? 'world2' : st.world === 8 ? 'world3' : st.world === 9 ? 'world2' : st.world === 10 ? 'world3' : 'world1');
     if (st.boss) this.time.delayedCall(900, () => sfx('boss'));
     if (w.variant) this.time.delayedCall(900, () => toast(`${{ swarm: '🐜 SWARM', ambush: '⚔️ AMBUSH', night: '🌙 NIGHT' }[w.variant!]}!`, { color: '#c8a8ff' }));
     toast(`${st.num} ${st.name}${this.nightmare ? ' · 💀 NIGHTMARE' : this.hard ? ' · HARD' : ''}${w.spicy.length ? ' · ' + '🌶'.repeat(w.spicy.length) : ''}`, { big: true, color: this.hard ? '#ff7a6a' : undefined });
-    if (st.boss) this.time.delayedCall(1200, () => toast(`The ${MOBS[st.mobs[0].kind].name} awaits!`, { color: '#ff9a6a' }));
+    if (st.boss) this.time.delayedCall(1200, () => toast(`${theName(MOBS[st.mobs[0].kind].name)} awaits!`, { color: '#ff9a6a' }));
   }
 
   /** Debug/screenshot helper: freeze the hero in a state at time t. */
@@ -501,7 +504,7 @@ export class GameScene extends Phaser.Scene {
         }
         case 'pickup': sfx('pickup'); break;
         case 'drop': sfx('drop'); toast(`${TIER_NAMES[e.tier]} dropped!`, { tier: e.tier }); break;
-        case 'summon': toast(w.boss ? `The ${MOBS[w.boss.kind].name} calls for help!` : 'More little ones!', { color: '#ff9a6a' }); break;
+        case 'summon': toast(w.boss ? `${theName(MOBS[w.boss.kind].name)} calls for help!` : 'More little ones!', { color: '#ff9a6a' }); break;
         case 'perfect': {
           this.quip('perfect');
           sfx('crit'); track('perfects');
@@ -1077,6 +1080,7 @@ export class GameScene extends Phaser.Scene {
           : s.kind === 'reflect' ? this.add.circle(0, 0, 9, 0x8ae07a).setStrokeStyle(2, 0xffffff)
           : s.from === 'hero'
           ? this.add.circle(0, 0, 9, 0xe8c8ff).setStrokeStyle(3, 0xffffff).setBlendMode(Phaser.BlendModes.ADD)
+          : s.kind === 'icicle' && worldOf(this.stage).id === 10 ? this.add.circle(0, 0, 9, 0xd8203a).setStrokeStyle(3, 0x5a8a2a)
           : s.kind === 'icicle' && worldOf(this.stage).id === 9 ? this.add.circle(0, 0, 9, 0xb05a2a).setStrokeStyle(2, 0x5a2a10)
           : s.kind === 'icicle' && worldOf(this.stage).id === 8 ? this.add.circle(0, 0, 10, 0xd83020).setStrokeStyle(2, 0x5a8a2a)
           : s.kind === 'icicle' && worldOf(this.stage).id === 7 ? this.add.rectangle(0, 0, 14, 12, 0x2a2222).setStrokeStyle(2, 0xff8a2a)

@@ -165,8 +165,29 @@ export const ARC: Record<string, StoryLine[]> = {
     ["lo", "Bring the little berry to the House, wraith. The Feast of the Forgotten is about to begin. Hehehe..."],
     ["me", "Big brother was a JUNIOR?! *sniff* Then Juniors get BIG! See ya at the House, Fruitcake! RAWR!"],
   ],
+  "w10-open": [
+    ["me", "The back of the Fridge! Brrr! Stomp count, back to zero. AGAIN! Last time, I promise!"],
+    ["me", "Big brother wore that teeny bib once, and look how big HE got! Gobzilla LARGE, here I come!"],
+    ["lo", "Hehehe. Come in, little berry. Back here, everybody gets forgotten. Even big brothers."],
+    ["me", "Nobody forgets a RAWR this loud! RAWR!"],
+  ],
+  "w10-boss": [
+    ["boss", "So! The berry who wants to be LARGE! I am OLD FRUITCAKE, King of the Leftovers!"],
+    ["me", "Whoa, you're HUGE! And lumpy! Are those cherries? Can I have one?"],
+    ["boss", "Every year I'm wrapped, re-gifted and shoved to the back! Nobody ever CUTS me! So NOBODY gets a feast!"],
+    ["me", "Then I'll cut ya down to size! Stomp count: FOUR! RAWR!"],
+  ],
+  "w10-after": [
+    ["boss", "Oof! My crown! It's just a dented old cake tin. It always was."],
+    ["boss", "I never wanted to wreck the feasts, kid. I just wanted somebody to invite me. Just once!"],
+    ["boss", "Every Christmas it's \"Ooh, fruitcake! Put it in the back.\" *sniff*"],
+    ["me", "Well, I'M inviting ya! And Sir Stale, and the Baron, and Meatloaf, and the Wraith! Everybody!"],
+    ["me", "Big brother! You came! Look, Mr. Fruitcake, he's cutting you a slice! A LARGE one!"],
+    ["foe", "Save the second slice for the beet! I'm a GUEST now! Hmph!"],
+    ["me", "And big brother says I'm Gobzilla LARGE now! He said it with his mouth full, but it COUNTS! RAWR!"],
+  ],
 };
-export const NEMESIS: Record<"w1-elite" | "w2-elite" | "w3-elite" | "w4-elite" | "w5-elite" | "w6-elite" | "w7-elite" | "w8-elite" | "w9-elite", StoryLine[]> = {
+export const NEMESIS: Record<"w1-elite" | "w2-elite" | "w3-elite" | "w4-elite" | "w5-elite" | "w6-elite" | "w7-elite" | "w8-elite" | "w9-elite" | "w10-elite", StoryLine[]> = {
   "w1-elite": [
     ["foe", "Well, well! If it isn't Gobzilla JUNIOR! Lost your big brother, shrimp?"],
     ["me", "Brutus Beetroot! I'm a STRAWBERRY, ya big turnip!"],
@@ -211,5 +232,10 @@ export const NEMESIS: Record<"w1-elite" | "w2-elite" | "w3-elite" | "w4-elite" |
     ["foe", "Psst, Gobzilla! Watermelon Brute up on Melon Mountain. Big, green, and it spits SEEDS!"],
     ["me", "Brutus! What are YOU doing in a supermarket?!"],
     ["foe", "Beets are on sale, two for one! Go squash it before it spits on ME! Not that I'm worried! Hmph!"],
+  ],
+  "w10-elite": [
+    ["foe", "Psst, Gobzilla! Fruitcake Knight up ahead. Big, crumbly, and totally nuts. Like YOU!"],
+    ["me", "Brutus! You came to the FINAL fight?!"],
+    ["foe", "Heard there's a feast after. Save me a seat, okay? NOT next to the sprouts! Hmph!"],
   ],
 };

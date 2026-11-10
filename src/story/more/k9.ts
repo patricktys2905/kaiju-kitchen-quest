@@ -75,6 +75,14 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w9-s7": [[14, "Let's GOOO! Big pink guy! Race ya up the cans! I always go the hard way!"], ["me", "Ooh, a race! I forget the rules. Is it the one with the sponge? BOING!"], [14, "Holy mackerel, that works! Key's yours, buddy!"]],
   "w9-s8": [["me", "Checkout Chaos! Beep! Beep! Hey, they're scanning ME! What's my price?"], ["lo2", "Hah! Bag yon pink beast! Two for one!"], ["me", "Nobody bags the birthday boy! Forty-five seconds! Chew on THIS!"]],
   "w9-s9": [["me", "The Frozen Aisle! Brrr! My gum's going stiff again! Square bubbles!"], ["n", "From the back aisle, a spooky voice wails: \"Woooo! Forget your wand, little elephant! Forget EVERYTHING! Woooo!\""], ["me", "Hey! Forgetting is MY job! Climbing! *POP*"]],
+  // World 10: The Feast of the Forgotten.
+  "w10-s2": [["me", "Jam Jar Junction! Jam and gum? Double sticky! I fit right in!"], ["n", "RUMBLE! A giant rolling pin comes crashing through the jam jars!"], ["me", "Flat elephant is STILL not a party look! RUN!"]],
+  "w10-s3": [["me", "Takeaway Towers! Noodle boxes everywhere! Ooh, did I order these? I forget!"], ["me", "Leftovers! Chew on THIS, you expired lot! Bubble Trap! *POP*"]],
+  "w10-s4": [[10, "Hmph. Bubblegumbo. My very LAST Crumblet. Walk it out of the Frost Drawer. Don't sit on it."], ["me", "I'd never! Not even once! Come on, muffin! Last walk, best walk!"], [10, "Hmph. And don't forget it this time."]],
+  "w10-s6": [["me", "Paper Chain Pass! Somebody had a party here and forgot all about it! I know the feeling!"], ["me", "Recipe Scroll! Grab it and hold on! I tied a string round my trunk. For SOMETHING!"]],
+  "w10-s7": [["me", "The Forgotten Shelf! Hey, these old jars have names written on them! Like my ears!"], [3, "Wibble wobble! Gumbo! Is there a dessert table at this feast? Can I come?"], ["me", "Everybody can come, Bloblin! First, the key! Sponge! BOING!"]],
+  "w10-s8": [["lo2", "Hah! The Last Stand, pink beast! Forget thy friends and FLEE!"], ["foe", "Squeak! Nobody's forgetting anybody! Forty-five seconds, Gumbo! I've got your back!"], ["me", "Let's stick together, Brittle! Chew on THIS, army!"]],
+  "w10-s9": [["me", "The Long Table! So long and so empty! No cake, no balloons, no NOTHING!"], ["n", "From the cake-tin throne, a grumpy voice booms: \"Forget the feast, elephant! Everybody else did!\""], ["me", "Not me! Elephants never forget a party! Climbing! *POP*"]],
 };
 
 export const QUIPS: Record<QuipKind, string[]> = {

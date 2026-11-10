@@ -83,6 +83,15 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w9-s7": [["me", "Canned Goods Keep! Secret chest on a high ledge. High is STILL my worst direction!"], [3, "Wibble wobble! Go, go, little berry! Gimme an S! Gimme a T! Gimme... um, a sponge?"], ["me", "Got one! BOING! World 9 key, check it OUT! Get it? Check out? Hehe!"]],
   "w9-s8": [["me", "Checkout Chaos! Forty-five seconds of waves on a giant conveyor belt! Beep, beep, BEEP!"], [14, "Let's GOOO, little dude! Stomp against the belt! That's how ya get o-fish-ally strong!"], ["me", "Stomping uphill on a treadmill! Stomp count, here I come! RAWR!"]],
   "w9-s9": [["me", "The Frozen Aisle! Brrr! My leaves are shivering AGAIN! Anybody got a scarf? Still no?"], ["n", "From the Back Aisle, a spooky voice wails: \"Woooo! Who's there? Has anybody seen my LABEL?\""], ["me", "I'm not scared of a lunch tub! Okay, okay. MEDIUM scared!"]],
+
+  // World 10: The Feast of the Forgotten.
+  "w10-s2": [["me", "Jam Jar Junction! Stomp count: one, two... why are the jam jars rattling?"], ["n", "Uh-oh! A giant rolling pin comes rumbling off the top shelf!"], ["me", "Strawberries go IN jam, not UNDER rolling pins! Run, berry, RUN!"]],
+  "w10-s3": [["me", "Takeaway Towers! Old noodle boxes stacked taller than the House! Who ordered all this?"], [11, "Not me! Raptor Express only delivers HOT! Beep beep!"], ["me", "Lever up top drops a rolling pin. Squash 'em flat as takeaway menus! RAWR!"]],
+  "w10-s4": [[10, "Hmph. Strawberry. Last stray Crumblet in the whole House, out on Frost Drawer Falls. Walk it to the exit."], ["me", "The LAST one?! Gobzilla Large, babysitter class, FINAL edition! Hold my leaf, little guy!"], [10, "Large. I said it. Twice now. Hmph."]],
+  "w10-s6": [["me", "Paper Chain Pass! Recipe Scroll at the far end, then hold out! Ooh, party decorations!"], ["lo2", "Hah! 'Tis a party for the FORGOTTEN, berry! Fresh fruit not invited!"], ["me", "Then I'm crashing it! Crash-STOMP! RAWR!"]],
+  "w10-s7": [["me", "The Forgotten Shelf! The final key's on a high ledge. High is STILL my worst direction!"], [3, "Wibble wobble! Go, little berry! Psst, I'm inviting Old Fruitcake to dessert after! Shh!"], ["me", "Ooh, good idea! BOING! Last key, you're MINE!"]],
+  "w10-s8": [["me", "The Last Stand! Forty-five seconds, and every monster from every world is here!"], ["foe", "Oi, Gobzilla! Back to back! Nobody beets us TOGETHER!"], ["me", "Brutus and Gobzilla, tag team! Stomp count, here we GO! RAWR!"]],
+  "w10-s9": [["me", "The Long Table! Whoa, it's SO long and SO empty. Not one snack on it!"], ["n", "From the cake-tin throne, a voice grumbles: \"Nobody ever comes to MY table, berry. Why would YOU?\""], ["me", "'Cause I'm hungry! And I'm LARGE! Almost! RAWR!"]],
 };
 
 export const QUIPS: Record<QuipKind, string[]> = {

@@ -207,3 +207,11 @@ back for the Recipe Scroll if it rode past it (fetch stages were undercounted). 
 `upstream`, `tide` (carries monsters), wavy `salmon`, ult `salmonrun`; nemesis Grizzly Grizzle (`nbear`, `swipe`). All 20
 Kitchen Kaiju cast are now playable. Briefs: docs/WORLD9-BRIEF.md, docs/NEWKAIJU4-BRIEF.md. Screens: `node scripts/w9-shot.mjs`.
 Note: run one gem-gen at a time (two jobs in the same Gemini tab can swap images).
+
+## World 10: The Feast of the Forgotten (Act 2 finale)
+WORLDS[9] (Lv 101-110, level cap 110): the Leftovers' army (fork / beetle / snail / scanner) + candied cherry soldiers,
+candied peel bats and Fruitcake Knights; final boss **Old Fruitcake** (`fruitcake`: every lieutenant's trick + candied fruit
+storm). After 10-10: `w10-after` (still-w10-cure while he speaks, then the shared feast still-w10-end), the Act 2 credits
+(`credits2` → showCredits(sp, done, 2)), then the teaser `w10-hook` (src/story/finale.ts HOOK2, still-w10-hook: an invite to
+the Great Food Festival). World numbers can be two digits now (beat regexes use \d+). Brief: docs/WORLD10-BRIEF.md.
+Screens: `node scripts/w10-shot.mjs`.

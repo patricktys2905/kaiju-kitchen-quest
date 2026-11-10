@@ -75,6 +75,14 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w9-s7": [[3, "Wibble wobble! A dragon! Are you going to the dessert table? Can I come?"], ["me", "Guac isn't dessert, Bloblin. But it SHOULD be! Ooh, a chest up high! Sponge! BOING!"]],
   "w9-s8": [["me", "Checkout Chaos! Beep! Beep! Hey, nobody scans the dragon!"], ["lo2", "Hah! Bag yon dip, my troops! Two for one!"], ["me", "Forty-five seconds, crusty! Then YOU'RE checked out! Guac and roll!"]],
   "w9-s9": [["me", "The Frozen Aisle! Cold and frosty! Perfect for guac! Brrr, maybe TOO perfect!"], ["n", "From the back aisle, a spooky voice wails: \"Woooo! Your dip will keep in my tub way past its best before! Woooo!\""], ["me", "Past its BEST BEFORE?! Hang on, hoard! Climbing!"]],
+  // World 10: The Feast of the Forgotten.
+  "w10-s2": [["me", "Jam Jar Junction! Sticky jars everywhere. Ooh, lime marmalade! Remember that, dragon!"], ["n", "RUMBLE! A giant rolling pin comes crashing through the jam jars!"], ["me", "Smashed avocado? NOT on today's menu! RUN!"]],
+  "w10-s3": [["me", "Takeaway Towers! Old noodle boxes, older curry boxes. Who ordered all this and FORGOT it?"], ["lo2", "Hah! Leftovers, ATTACK yon dip!"], ["me", "Back for seconds, crusty? Pit Hurl! Order up! BONK!"]],
+  "w10-s4": [[10, "Hmph. Dragon. This is my LAST Crumblet. The very last one. Get it out of the frost. Please."], ["me", "Behold, little muffin! The final escort of the mighty wyrm! Small but mighty, one last time!"], [10, "Hmph. Small. But mighty. *sniff* Go."]],
+  "w10-s6": [["me", "Paper Chain Pass! Party decorations, all faded. Somebody had a party here ages ago."], ["me", "Grab the Recipe Scroll and hold the pass! Ooh, is it a fruitcake recipe? Ew. Or is it? Focus, dragon!"]],
+  "w10-s7": [["me", "The Forgotten Shelf! Is that a guac jar way in the back? It's SO brown! Don't look, dragon!"], [8, "Brown okay, remember? Me brown! Me still strong!"], ["me", "Right, Chocomunch! Okay, sponge! BOING! The very last key for the hoard!"]],
+  "w10-s8": [["lo2", "Hah! The Last Stand, dip! The whole army is here! Thou shalt be left out FOREVER!"], ["me", "Forty-five seconds? Ha! I've stayed fresh since TUESDAY! Guac and roll!"]],
+  "w10-s9": [["me", "The Long Table. So long! So dusty! And not one bowl of guac on it!"], ["n", "From the cake-tin throne, a grand grumpy voice booms: \"Nobody comes to MY feast fresh, little dragon!\""], ["me", "Then BEHOLD, your first fresh guest! Climbing!"]],
 };
 
 export const QUIPS: Record<QuipKind, string[]> = {

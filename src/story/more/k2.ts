@@ -75,6 +75,14 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w9-s7": [["me", "Canned Goods Keep! Peas in a CAN? Who does that to a veggie?! Key chest up on that ledge, too."], ["n", "Seed count: twelve! Cabbage count: STILL zero!"], ["me", "Quit counting, narrator! Sponge bounce, then the back aisle. Hang on, sweetheart!"]],
   "w9-s8": [[14, "Let's GOOO! Hey, crab! I'm swimming the WRONG way down the checkout belt! On purpose!"], ["me", "Wrong way? I go SIDEWAYS, fishface! Hold Checkout Chaos forty-five seconds with me!"], [14, "O-fish-ally the grumpiest crab I ever met! Let's GOOO!"]],
   "w9-s9": [["n", "From the Frozen Aisle, a voice wails: \"Woooo! A cabbage? Is THAT what's in me? I forget!\""], ["me", "She's not IN ya, she's stuck WITH ya, ya spooky tub! Hang on, sweetheart! Down the aisle, SIDEWAYS!"]],
+  // World 10: The Feast of the Forgotten.
+  "w10-s2": [["me", "Jam Jar Junction! Jam's just fruit that gave up on life. Hmph! Kids these days!"], ["n", "Uh-oh! A giant rolling pin comes rumbling between the jam jars!"], ["me", "One last time! Run right! Sideways right! MOVE, legs!"]],
+  "w10-s3": [["me", "Takeaway Towers! Old noodle boxes stacked to the ceiling. Nobody even recycles back here!"], ["me", "Gates locked? Lever, rolling pin, weeded. Hmph! Gonna miss this thing."]],
+  "w10-s4": [[10, "Hmph. Crab. This is the last Crumblet. The LAST one. Walk it down Frost Drawer Falls."], ["me", "The last one? Then stick to my shell like glue, small fry. And you're comin' to the feast!"], [10, "Hmph. It sits next to me. Grrr."]],
+  "w10-s6": [["me", "Paper Chain Pass. Party decorations for a party nobody came to. That's just sad. Hmph!"], ["lo2", "Take yon scroll, crab. I am beaten and stale. 'Tis a recipe for coleslaw, if thou must know."], ["me", "COLESLAW?! I KNEW it! Grab it anyway and hold on, legs!"]],
+  "w10-s7": [["me", "The Forgotten Shelf. Dusty jars of pickled who-knows-what. This place needs a good weeding!"], ["me", "Last key chest on a high ledge. Final sponge bounce! Ten worlds a pro. Fine, TELL everybody!"]],
+  "w10-s8": [[7, "Hrrm. Small crab, a last stand is like a garden. Hold the line, and the weeds give up."], ["me", "Huh. That's actually wise, seaweed. Forty-five seconds, then?"], [7, "Hrrm. And then rice."]],
+  "w10-s9": [["n", "From the long, dusty table, a voice grumbles: \"Nobody eats cabbage! Nobody eats FRUITCAKE either!\""], ["me", "Then it's high time somebody started! Up the table, SIDEWAYS!"]],
 };
 
 export const QUIPS: Record<QuipKind, string[]> = {

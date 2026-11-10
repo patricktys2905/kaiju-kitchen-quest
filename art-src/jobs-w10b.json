@@ -1,0 +1,29 @@
+[
+ {
+  "name": "still-w10-boss",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/boss-fruitcake.png",
+   "art-src/ref-bg.png"
+  ],
+  "prompt": "Generate an image. The first reference is my final boss, OLD FRUITCAKE: draw exactly ONE of him, EXACTLY like this reference (same shape, crown, cloak, face, colours). The second shows the painted background style. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Cinematic composition, wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. NO text, no letters, no writing on any banners, labels or signs, no speech bubbles, no UI, no border, no signature, no humans. Scene: a dramatic low-angle final boss reveal: Old Fruitcake rises from his throne of stacked cake tins at the end of a long gloomy banquet table in the frosty back of a giant fridge, cling-wrap cloak swirling, candy-cane sceptre raised, candied cherries glinting, cold blue light. Menacing but still cute, no other characters."
+ },
+ {
+  "name": "still-w10-cure",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/boss-fruitcake.png",
+   "art-src/ref-bg.png"
+  ],
+  "prompt": "Generate an image. The first reference is my final boss, OLD FRUITCAKE: draw exactly ONE of him, EXACTLY like this reference. The second shows the painted background style. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Cinematic composition, wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. NO text, no letters, no writing on any banners, labels or signs, no speech bubbles, no UI, no border, no signature, no humans. Scene: after the final battle: Old Fruitcake sits on the steps of his cake-tin throne with his crooked crown in his hands, looking small, tired and a little teary but softening, as warm golden light spills in through a gap in the fridge door and frost melts around him. Touching and hopeful, no other characters."
+ },
+ {
+  "name": "still-w10-end",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/boss-fruitcake.png",
+   "art-src/ref-bg.png"
+  ],
+  "prompt": "Generate an image. The first reference is OLD FRUITCAKE: draw him EXACTLY like this reference. The second shows the painted background style. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Cinematic composition, wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. NO text, no letters, no writing on any banners, labels or signs, no speech bubbles, no UI, no border, no signature, no humans. Scene: the happy ending: a huge joyful feast in a warm, brightly lit kitchen at sunset, a long table covered with colourful food, party lights and bunting. Old Fruitcake sits at the head of the table smiling for the first time, wearing a paper party crown, with his old gang happily joining in: a stale baguette knight with a bread-roll helmet, a Brussels sprout with a monocle, a lumpy meatloaf with ketchup glaze, and a ghostly plastic food tub. Lots of empty seats with name cards (blank) waiting for more guests. Heart-warming, no other characters."
+ }
+]

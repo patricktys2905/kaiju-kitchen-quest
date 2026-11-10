@@ -292,6 +292,7 @@ export const SETS: Record<string, SetDef> = {
   ...Object.fromEntries(([[0, 'Gobzilla'], [10, 'Bluebeary'], [11, 'Pizzaraptor'], [4, 'Mothball'], [1, 'Squidgeon'], [2, 'Crabbage'], [5, 'Toastbat'], [6, 'Dumplord'], [7, 'Norigon'], [8, 'Chocomunch'], [15, 'Hotchog'], [17, 'Pengwhip'], [13, 'Avocadrake'], [19, 'Tacowl'], [9, 'Bubblegumbo'], [18, 'Velvaroo'], [12, 'Sloba'], [16, 'Minturtle'], [3, 'Bloblin'], [14, 'Salmonster']] as [number, string][]).map(([sp, n]) => [`sig${sp}`, {
     name: `${n}'s Regalia`, world: 0, two: '+15% skill damage', three: 'Ultimate charges 50% faster and hits 25% harder',
     b2: { skillDmg: 0.15 }, b3: { ultGain: 0.5, ultDmg: 0.25 } } as SetDef])),
+  feast: { name: 'Feast of Friends', world: 10, two: '+20% skill damage, +10% max HP', three: '+25% attack, ultimate charges 30% faster', b2: { skillDmg: 0.2, hpPct: 0.1 }, b3: { atkPct: 0.25, ultGain: 0.3 } },
   market: { name: 'Best Before', world: 9, two: '+15% attack, +8% speed', three: '+25% crit damage, -12% damage taken', b2: { atkPct: 0.15, speed: 0.08 }, b3: { critDmg: 0.25, dr: 0.12 } },
   garden: { name: 'Green Thumb', world: 8, two: '+12% max HP, -10% cooldowns', three: '+20% skill damage, -10% damage taken', b2: { hpPct: 0.12, cdr: 0.1 }, b3: { skillDmg: 0.2, dr: 0.1 } },
   bbq: { name: 'Pitmaster', world: 7, two: '+15% crit damage, +10% max HP', three: '+20% attack, +15% skill damage', b2: { critDmg: 0.15, hpPct: 0.1 }, b3: { atkPct: 0.2, skillDmg: 0.15 } },
@@ -299,7 +300,7 @@ export const SETS: Record<string, SetDef> = {
   sink: { name: 'Deep Clean', world: 5, two: '+15% attack', three: '+20% max HP, -15% damage taken', b2: { atkPct: 0.15 }, b3: { hpPct: 0.2, dr: 0.15 } },
   inferno: { name: 'Inferno Chef', world: 3, two: '+10% skill damage', three: '-12% cooldowns, +12% attack', b2: { skillDmg: 0.1 }, b3: { cdr: 0.12, atkPct: 0.12 } },
 };
-export function setForLevel(ilvl: number): string { return ilvl >= 97 ? 'market' : ilvl >= 85 ? 'garden' : ilvl >= 73 ? 'bbq' : ilvl >= 61 ? 'dining' : ilvl >= 49 ? 'sink' : ilvl >= 37 ? 'pantry' : ilvl >= 25 ? 'inferno' : ilvl >= 13 ? 'frost' : 'champ'; }
+export function setForLevel(ilvl: number): string { return ilvl >= 107 ? 'feast' : ilvl >= 97 ? 'market' : ilvl >= 85 ? 'garden' : ilvl >= 73 ? 'bbq' : ilvl >= 61 ? 'dining' : ilvl >= 49 ? 'sink' : ilvl >= 37 ? 'pantry' : ilvl >= 25 ? 'inferno' : ilvl >= 13 ? 'frost' : 'champ'; }
 
 // ---------- named legendaries ----------
 // Signature legendaries: two per kaiju (a weapon and an armour), each upgrading one of that kaiju's skills.

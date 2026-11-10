@@ -75,6 +75,14 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w9-s7": [["me", "Canned Goods Keep. A fortress of tins, and every one's a teeny safe. Heh. I'm home."], ["me", "Secret chest on a high ledge. Sponge, bounce, swipe. Ka-CHING! Butter's close. I can SMELL it."]],
   "w9-s8": [[14, "Let's GOOO! Hey, bat! Robbing the place after closing? That's o-fish-ally against the rules!"], ["me", "Heh. Just picking up my stuff, fishface. Help me hold the checkout forty-five seconds?"], [14, "Against the current AND the clock? My favourite! Let's GOOO!"]],
   "w9-s9": [["n", "From the Frozen Aisle, a voice wails: \"Woooo! Is that a THIEF? Nobody touches my hoard!\""], ["me", "Heh. A ghost AND a hoarder? My favourite kind of mark. Into the cold, wings tucked!"]],
+  // World 10: The Feast of the Forgotten.
+  "w10-s2": [["me", "Jam Jar Junction. Sticky floors, zero traction. Worst getaway route since the placemat."], ["n", "Uh-oh! A giant rolling pin comes rumbling between the jam jars!"], ["me", "One last chase scene! Run right!"]],
+  "w10-s3": [["me", "Takeaway Towers. Old noodle boxes stacked like a city skyline. Heh. Rough part of town."], ["me", "Gates locked? Lever, rolling pin, BONK. The oldest trick in my book, one last time."]],
+  "w10-s4": [[10, "Hmph. Bat. This is the last Crumblet. The very last. Walk it down Frost Drawer Falls. Don't lose it."], ["me", "Uncle Toastbat's farewell tour! Stick close, kid. And when we're done, there's a feast."], [10, "Hmph. It sits by me. And no swiping its pudding."]],
+  "w10-s6": [["me", "Paper Chain Pass. Party streamers, dusty and droopy. Heh. Somebody threw a party and nobody showed."], ["lo2", "Take yon scroll, thief. I am beaten. My lance is but a stale breadstick now."], ["me", "Heh. Thanks, Sir Snitch-a-lot. Grab it, hold the fort, one last time!"]],
+  "w10-s7": [["me", "The Forgotten Shelf. Jars nobody's opened since Grandma was a crumb. Heh. A vault full of vaults."], ["me", "Final secret chest on a high ledge. Sponge, bounce, swipe. Ka-CHING! Career high, folks."]],
+  "w10-s8": [[11, "Beep beep! Special delivery! One extra pair of claws for The Last Stand, express!"], ["me", "Heh. Forty-five seconds, Pizza. Then you can deliver us all to a feast."], [11, "Five stars, bat! I'm bringing extra garlic bread!"]],
+  "w10-s9": [["lo", "Heh heh. Bring me that Butter, little thief. My long table's been empty for YEARS."], ["me", "Empty, huh? Heh. Not for long, pal. Up the table, wings tucked!"]],
 };
 
 export const QUIPS: Record<QuipKind, string[]> = {

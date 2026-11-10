@@ -73,6 +73,11 @@ export const WORLDS: WorldDef[] = [
     baseLv: 91, power: 4.6, pool: [[1, 'trolley'], [1, 'bag'], [2, 'banana'], [3, 'scanner'], [4, 'can2'], [7, 'melon']], hazard: 'chill', mimic: 'mimic', elite: 'melon', boss: 'tupper',
     names: ['Sliding Doors', 'Trolley Track', 'Cereal Aisle', 'Fruit and Veg', 'Melon Mountain', 'Bakery Bluff', 'Canned Goods Keep', 'Checkout Chaos', 'The Frozen Aisle', 'The Back Aisle'],
   },
+  {
+    id: 10, name: 'The Feast of the Forgotten', blurb: 'Where forgotten food goes to sulk.', bg: 'bg-far-fridgeback', mid: 'bg-mid-fridgeback', tile: 'tile-fridgeback', platTint: 0xd0e0f0, bossBg: 'bg-far-feast',
+    baseLv: 101, power: 5.0, pool: [[1, 'cherrysoldier'], [1, 'peel'], [2, 'fork'], [3, 'beetle'], [4, 'snail'], [5, 'scanner'], [7, 'fruitknight']], hazard: 'chill', mimic: 'mimic', elite: 'fruitknight', boss: 'fruitcake',
+    names: ['The Cold Door', 'Jam Jar Junction', 'Takeaway Towers', 'Frost Drawer Falls', 'Knight of the Fruitcake', 'Paper Chain Pass', 'The Forgotten Shelf', 'The Last Stand', 'The Long Table', 'The Feast of the Forgotten'],
+  },
 ];
 
 /** Small seeded RNG so a stage is always laid out the same way. */
@@ -254,7 +259,7 @@ function genBonus(w: WorldDef): StageDef {
   const props: Prop[] = [...(base.props ?? [])];
   for (let i = 0; i < 12; i++) props.push({ kind: r() < 0.5 ? 'crate' : 'jar', x: Math.round(400 + i * (base.width - 800) / 12), y: G });
   return {
-    ...base, id: `S-${w.id}`, num: `★${w.id}`, name: `Secret ${['Spice Garden', 'Ice Cream Vault', 'Bakery Hideout', 'Honey Cellar'][w.id - 1]}`,
+    ...base, id: `S-${w.id}`, num: `★${w.id}`, name: `Secret ${['Spice Garden', 'Ice Cream Vault', 'Bakery Hideout', 'Honey Cellar', 'Soap Bubble Grotto', 'Silver Vault', 'Treehouse', 'Seed Vault', 'Stockroom', 'Royal Pantry'][w.id - 1] ?? 'Hideout'}`,
     props, cookers: [Math.round(base.width * 0.5)], hazards: [], objective: undefined,
     mobs: [...base.mobs.slice(0, 8), { kind: w.elite, lv: base.lv[1] + 2, x: base.width - 520, elite: true }],
     lv: [base.lv[0] + 1, base.lv[1] + 2], rec: base.rec + 1,
