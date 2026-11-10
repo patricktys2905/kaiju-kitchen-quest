@@ -124,3 +124,13 @@ stragglers are leashed back; each human gets their own drops (lootOf); arenas pu
 the slowest; rank / combo / style only count the player. `world.snapshot()` = compact JSON state for online play later.
 CPU buddy: pick on the stage card (save.buddy); it fights at your level (buddyProfile) driven by `new Bot(w, AVERAGE, seed, 1)`,
 revives you and follows you. `node scripts/buddy-shot.mjs`.
+
+## Online co-op (src/net, src/ui/online.ts, tests/net.test.ts)
+Camp map → 🌐 ONLINE: host a room (4-letter code) or join one; up to 4 players, each with their own kaiju, level and gear
+(`kitOf` sends a trimmed HeroProfile). Same netcode as Kitchen Kaiju: PeerJS direct link first, MQTT public-broker backup
+route if that fails (`?net=backup` forces it). The host runs the only real World (`party` = friends' kits,
+`humans` = player count) and feeds friends' inputs into `step([...])`; ~15 snapshots/s (8 on the backup route) via
+`makeSnapshot`; guests copy them into a drawing-only World with `applySnapshot` + `world.view(seat)`.
+Online stages skip story twists, nemesis and spicy rules (same stage for everyone); only the host has potions.
+A friend who drops mid-stage is handed to the CPU; a friend who levels up sends a new kit (`setDerivedOf`).
+After a stage everyone gets their own loot and goes back to the room. Test: `node scripts/online-shot.mjs [backup]`.
