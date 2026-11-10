@@ -72,6 +72,10 @@ export class GameScene extends Phaser.Scene {
   private hazardViews: Phaser.GameObjects.Container[] = [];
   private overlay?: Phaser.GameObjects.Graphics;
   private slowTint?: Phaser.GameObjects.Rectangle;
+  /** platform boards (moving trays follow, secret ledges fade in), props and cookers */
+  private platViews: { board?: Phaser.GameObjects.Image; shadow: Phaser.GameObjects.Ellipse }[] = [];
+  private propViews = new Map<number, Phaser.GameObjects.Image>();
+  private cookerViews = new Map<number, Phaser.GameObjects.Image>();
   /** Hard mode is open for a world once its boss is beaten. */
   private hardOk(): boolean { return !!hero().cleared[`${this.stage.world}-10`]; }
 
@@ -132,9 +136,17 @@ export class GameScene extends Phaser.Scene {
     for (const l of st.ladders) {
       if (this.has('ob-ladder')) this.add.image(l.x, l.top - 12, 'ob-ladder').setOrigin(0.5, 0).setDisplaySize(44, l.bottom - l.top + 12).setDepth(-6);
     }
-    for (const pl of st.platforms) {
-      this.add.ellipse(pl.x + pl.w / 2, st.groundY - 4, pl.w * 0.8, 10, 0x000000, 0.1).setDepth(-9);
-      if (this.has('plat-board')) this.add.image(pl.x + pl.w / 2, pl.y - 6, 'plat-board').setOrigin(0.5, 0.08).setDisplaySize(pl.w + 28, 38).setDepth(-5).setTint(st.platTint);
+    this.platViews = this.world.stage.platforms.map(pl => ({
+      shadow: this.add.ellipse(pl.x + pl.w / 2, st.groundY - 4, pl.w * 0.8, 10, 0x000000, pl.secret ? 0 : 0.1).setDepth(-9),
+      board: this.has('plat-board') ? this.add.image(pl.x + pl.w / 2, pl.y - 6, 'plat-board').setOrigin(0.5, 0.08).setDisplaySize(pl.w + 28, 38).setDepth(-5).setTint(pl.secret ? 0xffe8a0 : pl.move ? 0xd8e8f8 : st.platTint) : undefined,
+    }));
+    this.propViews.clear(); this.cookerViews.clear();
+    for (const p of this.world.props) {
+      const key = `ob-${p.kind}`;
+      if (!this.has(key)) continue;
+      const img = this.add.image(p.x, p.y + 2, key).setOrigin(0.5, 1).setDepth(p.kind === 'sponge' ? -4 : 1);
+      img.setScale(({ crate: 44, jar: 40, sponge: 22, lever: 56, chest: 40 } as Record<string, number>)[p.kind] / img.height);
+      this.propViews.set(p.id, img);
     }
     // exit: a glowing golden plate that appears once the stage is cleared
     const w = this.world;
@@ -266,6 +278,28 @@ export class GameScene extends Phaser.Scene {
         case 'steal': sfx('hurt'); toast(`Your ${e.name} was snatched! Beat the thief to get it back`, { color: '#ff9a6a' }); break;
         case 'recover': sfx('pickup'); toast(`Got your ${e.name} back!`, { color: '#a8f0a8' }); break;
         case 'nemesisMove': this.callout(w.hero.x, w.hero.y - 150, e.move.toUpperCase() + '!', '#ff9ad8', 13); break;
+        case 'prop': {
+          sfx(e.kind === 'chest' ? 'reveal3' : 'hit'); this.burst(e.x, e.y - 20, e.kind === 'jar' ? 0xff8af4 : e.kind === 'chest' ? 0xffd23c : 0xc8a070, 14);
+          const v = [...this.propViews.entries()].find(([id]) => !w.props.find(p => p.id === id && p.hp > 0));
+          if (v) { this.tweens.add({ targets: v[1], alpha: 0, scaleY: 0.2, duration: 220, onComplete: () => v[1].destroy() }); this.propViews.delete(v[0]); }
+          if (e.kind === 'chest') toast('Secret chest!', { color: '#ffd27a' });
+          break;
+        }
+        case 'bounce': sfx('jump'); this.ring(e.x, e.y, 40, 0xf0e060); break;
+        case 'lever': {
+          sfx('boom'); this.shake = 10;
+          const pin = this.add.rectangle(e.x, w.stage.groundY - 300, 240, 34, 0xc89a60).setStrokeStyle(4, 0x6a4a20).setDepth(8);
+          this.tweens.add({ targets: pin, y: w.stage.groundY - 18, duration: 180, ease: 'Quad.easeIn', onComplete: () => this.tweens.add({ targets: pin, alpha: 0, delay: 400, duration: 300, onComplete: () => pin.destroy() }) });
+          toast('Rolling pin away!', { color: '#ffd27a' });
+          break;
+        }
+        case 'fuse': sfx('shake'); this.callout(e.x, e.y - 70, '!!', '#ff4a3a', 18); break;
+        case 'key': {
+          sfx('reveal5'); this.cameras.main.flash(250, 255, 230, 160);
+          if (!(save.keys ?? []).includes(e.world)) save.keys = [...(save.keys ?? []), e.world];
+          toast(`🗝 WORLD ${e.world} KEY! A secret stage has opened on the map`, { big: true, color: '#ffd27a' });
+          break;
+        }
         case 'mimic': sfx('boss'); toast('It\'s a MIMIC!', { color: '#ff9a6a' }); break;
         case 'style': if (e.rank === 'S' || e.rank === 'A') toast(`STYLE ${e.rank}!`, { color: e.rank === 'S' ? '#ffd23c' : '#9fe8ff' }); break;
         case 'hazard': if (e.on && w.hazards[e.i]?.kind === 'drop') { sfx('boom'); } break;
@@ -350,7 +384,7 @@ export class GameScene extends Phaser.Scene {
       { stage: st, res, time: w.run.time, hits: w.run.hitsTaken, combo: w.run.maxCombo, xp: this.xpGained, levels: this.levels, failed, crumbs: w.run.crumbs, hard: this.hard, unlocked: newKaiju.map(s => CLASSES.find(c => c.species === s)!.name) },
       a => {
         if (a === 'retry') this.scene.restart({ stage: st.id });
-        else if (a === 'next') { const n = STAGES[STAGES.indexOf(st) + 1]; this.scene.restart(n && stageUnlocked(n) ? { stage: n.id } : {}); }
+        else if (a === 'next') { const ix = STAGES.indexOf(st), n = ix >= 0 ? STAGES[ix + 1] : undefined; this.scene.restart(n && stageUnlocked(n) ? { stage: n.id } : {}); }
         else if (a === 'boxes') { this.scene.restart({}); setTimeout(() => { showCamp('boxes'); runGacha(save.boxes.map((_, i) => i)); }, 50); }
         else this.scene.restart({});
       })));
@@ -509,6 +543,26 @@ export class GameScene extends Phaser.Scene {
     this.heroShadow.setPosition(h.x, fy - 1).setScale(1 - lift * 0.5).setAlpha(h.state === 'climb' ? 0 : 1);
     this.hero.flash(h.state === 'hurt' && h.t < 0.08);
     this.aura.setFillStyle(h.counter > 0 ? 0xffd23c : 0x9fe0ff, 0.25).setVisible(!!h.buff || h.counter > 0).setPosition(h.x, h.y - 40).setScale(1 + Math.sin(t * 6) * 0.06).setAlpha(0.18 + Math.sin(t * 6) * 0.06);
+
+    // platforms that move or hide
+    w.stage.platforms.forEach((pl, i) => {
+      const v = this.platViews[i]; if (!v) return;
+      if (pl.move) { v.board?.setX(pl.x + pl.w / 2); v.shadow.setX(pl.x + pl.w / 2); }
+      if (pl.secret) { const near = Math.max(0, 1 - Math.max(0, Math.abs(h.x - (pl.x + pl.w / 2)) - 120) / 160); v.board?.setAlpha(0.08 + near * 0.92); }
+    });
+    for (const p of w.props) {
+      const img = this.propViews.get(p.id); if (!img) continue;
+      if (p.kind === 'chest') { const pl = w.stage.platforms.find(q => q.secret && p.x >= q.x && p.x <= q.x + q.w); const near = pl ? Math.max(0, 1 - Math.max(0, Math.abs(h.x - p.x) - 120) / 160) : 1; img.setAlpha(0.08 + near * 0.92).setY(p.y + 2 + Math.sin(t * 3) * 2); }
+      if (p.kind === 'sponge') img.setScale(img.scaleX, (22 / img.height) * (1 - Math.max(0, 0.3 - Math.abs(h.x - p.x) / 120) * (h.ground ? 1 : 0)));
+      if (p.kind === 'lever') img.setRotation(p.cd > 0 ? 0.6 : 0);
+    }
+    for (const c of w.cookers) {
+      let img = this.cookerViews.get(c.id);
+      if (!img && this.has('ob-cooker')) { img = this.add.image(0, 0, 'ob-cooker').setOrigin(0.5, 1).setDepth(3); img.setScale(54 / img.height); this.cookerViews.set(c.id, img); }
+      if (!img) continue;
+      img.setVisible(c.gone <= 0).setPosition(c.x, c.y + (c.fuse > 0 ? Math.sin(t * 60) * 2 : Math.abs(Math.sin(t * 8)) * -3)).setFlipX(c.face > 0);
+      if (c.fuse > 0 && Math.floor(t * 16) % 2 === 0) img.setTint(0xff5040).setTintMode(Phaser.TintModes.FILL); else img.clearTint();
+    }
 
     // hazards
     w.hazards.forEach((z, i) => {

@@ -8,7 +8,7 @@ import { DANGER_MOVES, ELITE, ELITE_MODS, type EliteMod, MOBS, type NemMove, TUN
 import { type SkillDef, ULTS, ULT_LV, applyBranch, skillScale, skillsOf } from './skills';
 import { WORLDS } from './stages';
 import type { Derived } from './stats';
-import { type BoxTier, type Hazard, type Input, type LootBox, type MobKind, NO_INPUT, type SimEvent, type Spicy, type StageDef } from './types';
+import { type BoxTier, type Hazard, type Input, type Prop, type LootBox, type MobKind, NO_INPUT, type SimEvent, type Spicy, type StageDef } from './types';
 
 export const DT = 1 / 60;
 export const GRAVITY = 1900;
@@ -72,6 +72,8 @@ export interface Hero {
   spikyT: number;
   /** Rice Ball Ring: orbs circling the hero */
   orbs: { t: number; n: number; dmg: number; cd: Map<number, number> } | null;
+  /** launched by a sponge (letting go of jump doesn't cut it short) */
+  bounced: boolean;
   /** multi-step skills: facing at the start, queued targets */
   skillFace: 1 | -1;
   targets: number[];
@@ -148,6 +150,12 @@ export class World {
   /** ground puddles left by monsters: mould / slime slow you, slick makes you slide, burn and poison hurt, trap snaps once */
   puddles: { x: number; y: number; t: number; kind?: 'slow' | 'slick' | 'burn' | 'poison' | 'trap'; dmg?: number; w?: number }[] = [];
   private puddleTick = 0;
+  /** interactive props (crates, jars, sponges, levers, chests) and runaway pressure cookers */
+  props: { id: number; kind: Prop['kind']; x: number; y: number; hp: number; cd: number; key?: boolean; tx?: number; tw?: number }[] = [];
+  cookers: { id: number; x: number; y: number; vx: number; home: number; face: 1 | -1; fuse: number; gone: number }[] = [];
+  private platBase: number[] = [];
+  /** the hero touched down this step (sponges bounce only on landing) */
+  private heroLanded = false;
   /** lingering skill areas: steam / mustard goo / ice trail / fire floor / snow */
   zones: { id: number; x: number; y: number; w: number; t: number; tick: number; next: number; dmg: number; kind: 'steam' | 'goo' | 'ice' | 'fire' | 'snow'; hit?: Set<number> }[] = [];
   spicy: Spicy[];
@@ -163,6 +171,10 @@ export class World {
   variant: 'swarm' | 'ambush' | 'night' | undefined;
 
   constructor(public stage: StageDef, d: Derived, seed = 1, bag: Hero['bag'] = [], revives = 0, hard = false, variant?: 'swarm' | 'ambush' | 'night', spicy: Spicy[] = [], public nemesis?: MobKind) {
+    this.stage = stage = { ...stage, platforms: stage.platforms.map(p => ({ ...p })) };
+    this.platBase = stage.platforms.map(p => p.x);
+    this.props = (stage.props ?? []).map(p => ({ id: nextId++, kind: p.kind, x: p.x, y: p.y, hp: p.kind === 'crate' ? 2 : p.kind === 'chest' ? 3 : p.kind === 'jar' ? 1 : 99, cd: 0, key: p.key, tx: p.tx, tw: p.tw }));
+    this.cookers = (stage.cookers ?? []).map(x => ({ id: nextId++, x, y: stage.groundY, vx: 0, home: x, face: -1, fuse: 0, gone: 0 }));
     this.spicy = spicy; this.hard = hard;
     this.hazards = (stage.hazards ?? []).map(h => ({ ...h, state: 'off', hit: new Set<number>() }));
     let s = seed >>> 0 || 1;
@@ -173,7 +185,7 @@ export class World {
       hitIds: new Set(), hp: d.maxHp, inv: 0, cds: [0, 0, 0], skill: null, skillMul: 1, ticks: 0,
       coyote: 0, jumpBuf: 0, atkBuf: 0, dropT: 0, prev: { ...NO_INPUT }, gliding: false, buff: null,
       boosts: {}, bag: bag.map(b => b && { ...b }), revives, quickCd: 0, lastTap: { dir: 0, t: -9 }, dodgeCd: 0, ult: 0, phoenixUsed: false,
-      counter: 0, perfectDone: false, spikyT: 0, orbs: null, skillFace: 1, targets: [],
+      counter: 0, perfectDone: false, spikyT: 0, orbs: null, skillFace: 1, targets: [], bounced: false,
     };
     // Hard mode: every monster +HARD_LV levels
     this.variant = stage.boss ? undefined : variant; // bosses are never changed by the story
@@ -255,6 +267,8 @@ export class World {
     for (const m of this.mobs) this.stepMob(m, mdt);
     this.stepHazards(dt);
     this.stepZones(dt);
+    this.stepProps(dt);
+    this.heroLanded = false;
     this.stepOrbs(dt);
     if (this.hero.d.regen > 0 && this.hero.state !== 'down') this.hero.hp = Math.min(this.hero.d.maxHp, this.hero.hp + this.hero.d.maxHp * this.hero.d.regen * dt);
     this.stepShots(dt, mdt);
@@ -374,7 +388,8 @@ export class World {
             this.events.push({ t: 'jump' });
           }
         }
-        if (!inp.jump && h.vy < -250) h.vy = -250;
+        if (h.ground) h.bounced = false;
+        if (!inp.jump && h.vy < -250 && !h.bounced) h.vy = -250; // short hop when jump is let go (not on a sponge bounce)
         h.gliding = !!c.glide && !h.ground && inp.jump && h.vy > 0;
         if (h.atkBuf > 0) {
           h.atkBuf = 0;
@@ -565,6 +580,76 @@ export class World {
     if (MOBS[m.kind].brain === 'boss') { m.slow = Math.max(m.slow, 2.5); return; }
     if (m.glued <= 0) this.events.push({ t: 'block', x: m.x, y: m.y - MOBS[m.kind].h - 6 });
     m.glued = 2.5; m.vx = 0; if (m.state === 'windup' || m.state === 'attack') { m.state = 'walk'; m.t = 0; m.move = ''; }
+  }
+
+  private hitProp(p: World['props'][number]): void {
+    const h = this.hero;
+    if (p.kind === 'lever') {
+      p.cd = 8;
+      this.events.push({ t: 'lever', x: p.tx ?? p.x }, { t: 'shock', x: p.tx ?? p.x, y: this.stage.groundY, r: (p.tw ?? 260) / 2 });
+      for (const m of this.targetsNear(p.tx ?? p.x, this.stage.groundY, (p.tw ?? 260) / 2, 60)) {
+        const d = MOBS[m.kind], dmg = Math.round(m.maxHp * (d.brain === 'boss' ? 0.06 : 0.4));
+        m.hp -= dmg; m.flash = 0.15; m.hurtShown = 3; m.state = m.state === 'dead' ? m.state : 'hurt'; m.t = -0.8;
+        this.events.push({ t: 'hit', x: m.x, y: m.y - d.h * 0.6, dmg, crit: true, target: 'mob' });
+        if (m.hp <= 0) this.killMob(m);
+      }
+      return;
+    }
+    if (--p.hp > 0) { this.events.push({ t: 'block', x: p.x, y: p.y - 30 }); return; }
+    this.events.push({ t: 'prop', kind: p.kind, x: p.x, y: p.y });
+    const lv = this.stage.lv[1];
+    const cr = Math.round((p.kind === 'chest' ? 40 : 4) + lv * (p.kind === 'chest' ? 4 : 0.8));
+    this.run.crumbs += cr; this.events.push({ t: 'crumbs', n: cr, x: p.x, y: p.y - 40 });
+    if (p.kind === 'jar') { const n = Math.round(h.d.maxHp * 0.08); h.hp = Math.min(h.d.maxHp, h.hp + n); this.events.push({ t: 'heal', x: h.x, y: h.y - 70, n, hero: true }); }
+    const drops = p.kind === 'chest' ? 2 : p.kind === 'crate' && this.rand() < 0.3 ? 1 : 0;
+    for (let i = 0; i < drops; i++) {
+      const tier = (p.kind === 'chest' ? 4 : 1 + Math.floor(this.rand() * 2)) as BoxTier;
+      const b: Box = { id: nextId++, tier, ilvl: lv, x: p.x + (i - (drops - 1) / 2) * 40, y: p.y - 20, vy: -380, ground: false, t: 0 };
+      this.boxes.push(b); this.events.push({ t: 'drop', id: b.id, tier, x: b.x, y: b.y });
+    }
+    if (p.key) this.events.push({ t: 'key', world: this.stage.world });
+  }
+
+  /** Moving trays, sponges, runaway pressure cookers. */
+  private stepProps(dt: number): void {
+    const h = this.hero;
+    this.stage.platforms.forEach((p, i) => {
+      if (!p.move) return;
+      const nx = this.platBase[i] + p.move.dx * (0.5 - 0.5 * Math.cos(this.time * Math.PI * 2 / p.move.period));
+      const d = nx - p.x; p.x = nx;
+      if (h.on === i && h.ground) h.x += d;
+      for (const m of this.mobs) if (m.on === i && m.ground) m.x += d;
+    });
+    for (const p of this.props) {
+      p.cd = Math.max(0, p.cd - dt);
+      if (p.kind === 'sponge' && this.heroLanded && h.ground && h.state !== 'climb' && Math.abs(h.x - p.x) < 34 && Math.abs(h.y - p.y) < 3) { // jump or fall onto it
+        h.vy = -1150; h.ground = false; h.on = null; h.bounced = true; this.events.push({ t: 'bounce', x: p.x, y: p.y });
+      }
+    }
+    for (const c of this.cookers) {
+      if (c.gone > 0) { if ((c.gone -= dt) <= 0) { c.x = c.home; c.vx = 0; c.fuse = 0; } continue; }
+      if (c.fuse > 0) {
+        c.vx = approach(c.vx, 0, 600 * dt);
+        if ((c.fuse -= dt) <= 0) { // boom: hurts everything close, monsters most of all
+          c.gone = 6;
+          this.events.push({ t: 'boom', x: c.x, y: c.y }, { t: 'shock', x: c.x, y: c.y, r: 130 });
+          if (Math.abs(h.x - c.x) < 130 && Math.abs(h.y - c.y) < 110) this.hurtHero(h.d.maxHp * 0.15, Math.sign(h.x - c.x) || 1, undefined, true);
+          for (const m of this.targetsNear(c.x, c.y, 130, 110)) {
+            const d = MOBS[m.kind], dmg = Math.round(m.maxHp * (d.brain === 'boss' ? 0.08 : 0.6));
+            m.hp -= dmg; m.flash = 0.15; m.hurtShown = 3; this.dealt += dmg;
+            this.events.push({ t: 'hit', x: m.x, y: m.y - d.h * 0.6, dmg, crit: true, target: 'mob' });
+            if (m.hp <= 0) this.killMob(m); else if (d.brain !== 'boss') { m.vx = Math.sign(m.x - c.x || 1) * 400; m.vy = -420; m.ground = false; m.on = null; m.state = 'hurt'; m.t = -0.6; }
+          }
+        }
+      } else {
+        // waddles about; anything that comes close lights the fuse
+        if (Math.abs(c.vx) < 60) { if (Math.abs(c.x - c.home) > 140) c.face = c.x > c.home ? -1 : 1; c.vx = c.face * 50; }
+        else c.vx = approach(c.vx, c.face * 50, 500 * dt);
+        const near = (Math.abs(h.x - c.x) < 70 && Math.abs(h.y - c.y) < 60 && h.state !== 'down') || this.mobs.some(m => m.state !== 'dead' && !m.under && Math.abs(m.x - c.x) < 60 && Math.abs(m.y - c.y) < 60);
+        if (near) { c.fuse = 1; this.events.push({ t: 'fuse', x: c.x, y: c.y }); }
+      }
+      c.x = clamp(c.x + c.vx * dt, 30, this.stage.width - 30);
+    }
   }
 
   /** Lingering skill zones: tick damage, slow, burn, glue. */
@@ -787,6 +872,11 @@ export class World {
       // air attacks that connect keep you aloft a little: juggles
       if (h.state === 'attack' && h.step === -1 && !h.ground) h.vy = Math.min(h.vy, -170);
     }
+    for (const p of this.props) {
+      if (p.hp <= 0 || p.cd > 0 || p.kind === 'sponge' || Math.abs(p.x - cx) > w / 2 + 22 || p.y - 50 > y || p.y < y - hh) continue;
+      p.cd = 0.25; this.hitProp(p);
+    }
+    for (const c of this.cookers) if (c.gone <= 0 && Math.abs(c.x - cx) < w / 2 + 24 && Math.abs(c.y - y) < hh) { c.vx = (Math.sign(c.x - h.x) || h.face) * 420; c.face = c.vx > 0 ? 1 : -1; }
   }
 
   /** total damage dealt to monsters (drain measures a skill's damage with it) */
@@ -1528,7 +1618,7 @@ export class World {
       const floor = this.floorBelow(e.x, e.y, ny, dropping);
       if (floor !== null) {
         e.y = floor.y; e.vy = 0; e.ground = true; e.on = floor.on;
-        if (e === this.hero) this.events.push({ t: 'land' });
+        if (e === this.hero) { this.events.push({ t: 'land' }); this.heroLanded = true; }
         return;
       }
     }

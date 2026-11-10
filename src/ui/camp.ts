@@ -7,7 +7,7 @@ import { CONSUMABLES, type ConsumableId, QUICK_SLOTS } from '../sim/consumables'
 import { BASES, SETS, UNIQUES, canWear, ownerOf, GRADES, GRADE_CSS, GRADE_MUL, type Item, MAX_PLUS, RARITY_CSS, RARITY_NAMES, type Slot, fortChance, fortCost, fortMul, fortRisky, gradeOf, itemLines, itemName, lineText, salvageValue } from '../sim/items';
 import { TIER_NAMES, clearCount, likelyTier } from '../sim/loot';
 import { BRANCH_LV, SKILLS, MAX_SKILL, type SkillDef, type SkillKind, ULTS, ULT_LV, branchesFor, skillsOf } from '../sim/skills';
-import { STAGES, WORLDS } from '../sim/stages';
+import { STAGES, WORLDS, BONUS_STAGES, stageById } from '../sim/stages';
 import { STAT_INFO, STATS, derive, xpFor } from '../sim/stats';
 import type { BoxTier, LootBox, StageDef } from '../sim/types';
 import { HARD_LV } from '../sim/world';
@@ -92,6 +92,7 @@ const ownerName = (it: Item) => { const o = ownerOf(it); return o === undefined 
 const cIcon = (id: ConsumableId) => `art/${CONSUMABLES[id].icon}.webp`;
 
 export function stageUnlocked(s: StageDef): boolean {
+  if (s.id.startsWith('S-')) return (save.keys ?? []).includes(s.world);
   const i = STAGES.indexOf(s);
   return i === 0 || !!hero().cleared[STAGES[i - 1].id];
 }
@@ -166,6 +167,7 @@ function mapPage(): string {
       ${STORIES[p.species]?.variants[sel.id] ? (() => { const v = VARIANT_INFO[STORIES[p.species].variants[sel.id]]; return `<div class="lv vtx">${v.icon} Story twist: <b>${v.name}</b> — ${v.desc}</div>`; })() : ''}
       <div class="lv">📖 ${STORIES[p.species]?.title ?? ''}${beatBefore(sel.id, sel.id === '1-1').some(b => p.seen.includes(b)) || (sel.boss && p.seen.includes(`w${sel.world}-after`)) ? ` <button class="pill" data-replay="${sel.id}" style="font-size:1.6vmin;padding:0.3vmin 1vmin">REPLAY</button>` : ''}</div>
       ${rank ? `<div class="lv">Best: <b style="color:${RANK_CSS[rank]}">${rank}</b></div>` : ''}
+      ${(save.keys ?? []).includes(sel.world) ? (() => { const b = BONUS_STAGES[sel.world - 1]; return `<button class="pill big secret" data-play="${b.id}">🗝 ${b.name} <small>Lv ${b.lv[0]}–${b.lv[1]}</small></button>`; })() : sel.id.endsWith('-7') ? '<div class="lv" style="color:#ffd27a">🗝 A secret chest here hides this world\'s key</div>' : ''}
       <button class="pill go big" data-play="${sel.id}" ${stageUnlocked(sel) ? '' : 'disabled'}>${stageUnlocked(sel) ? '▶ PLAY' : '🔒 LOCKED'}</button>
       <div class="spicy">🌶 SPICY ${SPICY_LIST.map(([k, ic, nm, ds]) => `<button class="chili ${(save.spicy ?? []).includes(k) ? 'on' : ''}" data-spicy="${k}" title="${ds}">${ic} ${nm}</button>`).join('')}
         <small>${(save.spicy ?? []).length ? `+${(save.spicy ?? []).length} bonus box${(save.spicy ?? []).length > 1 ? 'es' : ''}, +${25 * (save.spicy ?? []).length}% crumbs` : 'extra loot for extra pain'}</small></div>
@@ -358,7 +360,7 @@ function onClick(e: MouseEvent): void {
   else if (ds.node) selStage = ds.node;
   else if (ds.mappage) { const m = MAPS[Number(ds.mappage)]; selStage = [...STAGES].reverse().find(x => m.worlds.includes(x.world) && stageUnlocked(x))?.id ?? `${m.worlds[0]}-1`; }
   else if (ds.play) {
-    const s = STAGES.find(x => x.id === ds.play)!;
+    const s = stageById(ds.play);
     if (!stageUnlocked(s)) return;
     const p = hero();
     const beats = beatBefore(s.id, !p.seen.includes('intro')).filter(b => !p.seen.includes(b));
@@ -520,6 +522,7 @@ const CAMP_CSS = `
 .kq .map .info .lv { font-size: 2vmin; color: #d8c8d8; }
 .kq .rw img { width: 3.4vmin; height: 3.4vmin; object-fit: contain; vertical-align: middle; }
 .kq .pill.big { font-size: 3.4vmin; padding: 1.6vmin; margin-top: 0.6vmin; }
+.kq .pill.secret { background: linear-gradient(#6a4ab0, #3a2a70); color: #ffe8a0; border-color: #ffd27a; margin-bottom: 0.8vmin; }
 .kq .spicy { font-size: 1.7vmin; color: #ffb38a; display: flex; flex-wrap: wrap; gap: 0.6vmin; align-items: center; margin: 0.6vmin 0; }
 .kq .spicy .chili { font: inherit; font-weight: 800; padding: 0.4vmin 1vmin; border-radius: 1.2vmin; border: 2px solid #ff7a4a66; background: #2a1a20; color: #d8b0a0; cursor: pointer; }
 .kq .spicy .chili.on { background: #c8401a; color: #fff4e4; border-color: #ffb347; box-shadow: 0 0 1.2vmin #ff6a2a; }

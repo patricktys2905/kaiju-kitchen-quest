@@ -12,7 +12,14 @@ export interface Input {
 export const NO_INPUT: Input = { left: false, right: false, up: false, down: false, jump: false, attack: false, skill1: false, skill2: false, skill3: false, item1: false, item2: false, item3: false, item4: false, ult: false };
 
 /** One-way platform: you can jump up through it and drop down with DOWN + JUMP. */
-export interface Platform { x: number; y: number; w: number; solid?: boolean }
+export interface Platform { x: number; y: number; w: number; solid?: boolean;
+  /** moving tray: slides dx px and back over period seconds */
+  move?: { dx: number; period: number };
+  /** hidden ledge: only shows when you're near; reached with a sponge */
+  secret?: boolean }
+/** Interactive props. crate/jar break for loot, sponge bounces you up, lever drops a rolling pin on [tx-tw/2, tx+tw/2],
+ *  chest (on secret ledges) holds a big box and maybe this world's key. */
+export interface Prop { kind: 'crate' | 'jar' | 'sponge' | 'lever' | 'chest'; x: number; y: number; key?: boolean; tx?: number; tw?: number }
 export interface Ladder { x: number; top: number; bottom: number }
 export interface MobSpawn { kind: MobKind; x: number; y?: number; lv: number; elite?: boolean }
 /** Stage hazard on the ground floor. burner = flame pillar, vent = steam launch, drop = falling can, ice = slippery.
@@ -37,6 +44,9 @@ export interface StageDef {
   ladders: Ladder[];
   mobs: MobSpawn[];
   hazards?: Hazard[];
+  props?: Prop[];
+  /** runaway pressure cookers: can't be hurt, explode near anything (lure monsters into them) */
+  cookers?: number[];
   /** monster level shown on the map */
   lv: [number, number];
   boss?: boolean;
@@ -97,4 +107,11 @@ export type SimEvent =
   /** a nemesis stole a quick-bag item (given back when it is beaten) */
   | { t: 'steal'; name: string }
   | { t: 'recover'; name: string }
-  | { t: 'nemesisMove'; name: string; move: string };
+  | { t: 'nemesisMove'; name: string; move: string }
+  | { t: 'prop'; kind: string; x: number; y: number }
+  | { t: 'bounce'; x: number; y: number }
+  | { t: 'lever'; x: number }
+  | { t: 'fuse'; x: number; y: number }
+  /** found this world's secret key */
+  | { t: 'key'; world: number }
+  | { t: 'heal'; x: number; y: number; n: number; hero: true };

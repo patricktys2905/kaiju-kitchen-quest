@@ -1,0 +1,66 @@
+[
+ {
+  "name": "ob-crate",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/mob-bun.png"
+  ],
+  "prompt": "Generate an image. The reference shows the art style of my cute 2D side-scrolling action RPG set in a giant kitchen. Draw a small wooden kitchen crate full of vegetables peeking out, nailed shut, that can be smashed open, in exactly the same art style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute). Side view, whole object visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no letters. Square 1:1 image."
+ },
+ {
+  "name": "ob-jar",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/mob-bun.png"
+  ],
+  "prompt": "Generate an image. The reference shows the art style of my cute 2D side-scrolling action RPG set in a giant kitchen. Draw a round glass storage jar with a cork lid, full of colourful sweets, that can be smashed, in exactly the same art style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute). Side view, whole object visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no letters. Square 1:1 image."
+ },
+ {
+  "name": "ob-sponge",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/mob-bun.png"
+  ],
+  "prompt": "Generate an image. The reference shows the art style of my cute 2D side-scrolling action RPG set in a giant kitchen. Draw a thick bouncy yellow-and-green kitchen sponge lying flat, squishy, used as a springy bounce pad, in exactly the same art style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute). Side view, whole object visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no letters. Square 1:1 image."
+ },
+ {
+  "name": "ob-cooker",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/mob-bun.png"
+  ],
+  "prompt": "Generate an image. The reference shows the art style of my cute 2D side-scrolling action RPG set in a giant kitchen. Draw a RUNAWAY PRESSURE COOKER: a dented steel pressure cooker with tiny legs, a wild face, steam whistling from its valve and a red warning glow, about to explode, facing LEFT, in exactly the same art style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute). Side view, whole object visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no letters. Square 1:1 image."
+ },
+ {
+  "name": "ob-lever",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/mob-bun.png"
+  ],
+  "prompt": "Generate an image. The reference shows the art style of my cute 2D side-scrolling action RPG set in a giant kitchen. Draw a big wooden kitchen lever made from a soup ladle stuck in a little brass base, like a switch, in exactly the same art style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute). Side view, whole object visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no letters. Square 1:1 image."
+ },
+ {
+  "name": "ob-chest",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/mob-bun.png"
+  ],
+  "prompt": "Generate an image. The reference shows the art style of my cute 2D side-scrolling action RPG set in a giant kitchen. Draw a fancy secret treasure chest shaped like an ornate golden bento box with gems, slightly glowing, closed, in exactly the same art style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute). Side view, whole object visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no letters. Square 1:1 image."
+ },
+ {
+  "name": "icon-key",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/mob-bun.png"
+  ],
+  "prompt": "Generate an image. The reference shows the art style of my cute 2D side-scrolling action RPG set in a giant kitchen. Draw an ornate golden key whose bow is shaped like a star anise spice, glowing softly, an item icon, in exactly the same art style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute). Side view, whole object visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no letters. Square 1:1 image."
+ },
+ {
+  "name": "npc-crumblet",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/mob-bun.png"
+  ],
+  "prompt": "Generate an image. The reference shows the art style of my cute 2D side-scrolling action RPG set in a giant kitchen. Draw a tiny lost blueberry-muffin crumb child with big worried eyes and stubby legs, very cute, facing RIGHT, in exactly the same art style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute). Side view, whole object visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no letters. Square 1:1 image."
+ }
+]

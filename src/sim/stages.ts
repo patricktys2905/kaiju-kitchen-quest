@@ -3,7 +3,7 @@
 // Reach: the lowest jumper (Bluebeary) rises ~105 px, so tiers are 90 px apart; the top tier needs a ladder
 // or a lower platform beside it (tests/world.test.ts checks every platform is reachable).
 import { MOBS } from './mobs';
-import type { Hazard, HazardKind, MobKind, MobSpawn, Platform, Ladder, StageDef } from './types';
+import type { Hazard, HazardKind, MobKind, MobSpawn, Platform, Ladder, Prop, StageDef } from './types';
 
 const G = 470;
 const SPECIALIST = new Set(['turret', 'sniper', 'healer', 'summoner', 'charger', 'burrower']);
@@ -126,7 +126,53 @@ function genStage(w: WorldDef, n: number): StageDef {
   return {
     id, world: w.id, num: id, name: w.names[n - 1], bg: w.bg, mid: w.mid, tile: w.tile, platTint: w.platTint, width, groundY: G,
     lv: [lvLo, n === 5 ? lvHi + 1 : lvHi], par: Math.round(25 + count * 5 + width / 70), rec: lvLo,
-    platforms, ladders, mobs, hazards,
+    platforms, ladders, mobs, hazards, ...interactive(w, n, width, platforms, ladders, r),
+  };
+}
+
+/** Props, moving trays, cookers and a secret ledge for a normal stage (seeded, the same for everyone). */
+function interactive(w: WorldDef, n: number, width: number, platforms: Platform[], ladders: Ladder[], r: () => number): { props: Prop[]; cookers: number[] } {
+  const props: Prop[] = [];
+  const free = (x: number) => !props.some(p => Math.abs(p.x - x) < 70);
+  // breakables: a few on the floor, some on platforms
+  for (let i = 0; i < 3 + Math.floor(n / 3); i++) {
+    const onPlat = platforms.length && r() < 0.4;
+    const p = onPlat ? platforms[Math.floor(r() * platforms.length)] : null;
+    const x = p ? Math.round(p.x + 30 + r() * (p.w - 60)) : Math.round(420 + r() * (width - 800));
+    if (free(x)) props.push({ kind: r() < 0.6 ? 'crate' : 'jar', x, y: p ? p.y : G });
+  }
+  // a moving tray from World 2 on (one of the low single steps)
+  if (w.id >= 2) { const p = platforms.find(q => q.y === TIER[0] && !platforms.some(o => o !== q && Math.abs(o.x - q.x) < q.w + 160)); if (p) p.move = { dx: 120, period: 4 }; }
+  // a lever that drops a rolling pin on the stretch ahead (stages 3 and 7)
+  if (n === 3 || n === 7) { const x = Math.round(width * 0.35); props.push({ kind: 'lever', x, y: G, tx: x + 260, tw: 260 }); }
+  // a secret ledge high above the floor, a sponge to bounce up, a chest on top (World key in stage 7)
+  if ([2, 4, 6, 7, 8, 9].includes(n)) {
+    for (let tries = 0; tries < 60; tries++) {
+      const x = Math.round(500 + r() * (width - 1100));
+      // prefer open sky; after 30 tries accept a spot above other platforms (one-way: the bounce passes through)
+      if ((tries < 30 && platforms.some(p => p.x < x + 200 && x - 40 < p.x + p.w)) || platforms.some(p => p.secret) || !free(x + 70) || ladders.some(l => Math.abs(l.x - x - 70) < 60)) continue;
+      platforms.push({ x, y: 150, w: 140, secret: true });
+      // the sponge sits under the ledge's left end, so dropping off the middle doesn't bounce you straight back up
+      props.push({ kind: 'sponge', x: x + 12, y: G }, { kind: 'chest', x: x + 80, y: 150, key: n === 7 });
+      break;
+    }
+  }
+  // runaway pressure cookers: stages 4, 6, 8 and 9
+  const cookers = [4, 6, 8, 9].includes(n) ? [Math.round(width * (0.4 + r() * 0.3))] : [];
+  return { props, cookers };
+}
+
+/** Secret bonus stage of a world (opened with that world's key): crates everywhere and a golden elite. */
+function genBonus(w: WorldDef): StageDef {
+  const base = genStage(w, 9);
+  const r = rng(w.id * 777 + 5);
+  const props: Prop[] = [...(base.props ?? [])];
+  for (let i = 0; i < 12; i++) props.push({ kind: r() < 0.5 ? 'crate' : 'jar', x: Math.round(400 + i * (base.width - 800) / 12), y: G });
+  return {
+    ...base, id: `S-${w.id}`, num: `★${w.id}`, name: `Secret ${['Spice Garden', 'Ice Cream Vault', 'Bakery Hideout', 'Honey Cellar'][w.id - 1]}`,
+    props, cookers: [Math.round(base.width * 0.5)], hazards: [],
+    mobs: [...base.mobs.slice(0, 8), { kind: w.elite, lv: base.lv[1] + 2, x: base.width - 520, elite: true }],
+    lv: [base.lv[0] + 1, base.lv[1] + 2], rec: base.rec + 1,
   };
 }
 
@@ -140,6 +186,8 @@ function hazardAt(kind: HazardKind, x: number, offset: number): Hazard {
 }
 
 export const STAGES: StageDef[] = WORLDS.flatMap(w => Array.from({ length: 10 }, (_, i) => genStage(w, i + 1)));
+/** Secret bonus stages, one per world (keys from that world's stage 7 secret chest). */
+export const BONUS_STAGES: StageDef[] = WORLDS.map(genBonus);
 
-export function stageById(id: string): StageDef { return STAGES.find(s => s.id === id) ?? STAGES[0]; }
+export function stageById(id: string): StageDef { return STAGES.find(s => s.id === id) ?? BONUS_STAGES.find(s => s.id === id) ?? STAGES[0]; }
 export function worldOf(s: StageDef): WorldDef { return WORLDS.find(w => w.id === s.world) ?? WORLDS[0]; }

@@ -33,6 +33,8 @@ export interface Save {
   unlocked: number[];
   /** Spicy challenges switched on for the next stages */
   spicy?: Spicy[];
+  /** World Keys found in secret chests (open that world's secret bonus stage) */
+  keys?: number[];
 }
 
 // v2: per-kaiju progress, 4 starters, story (older v1 saves are not carried over)

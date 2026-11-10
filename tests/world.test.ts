@@ -72,7 +72,8 @@ describe('stages', () => {
           const fromGround = st.groundY - p.y <= minJump;
           const byLadder = st.ladders.some(l => l.top === p.y && l.x >= p.x && l.x <= p.x + p.w);
           const fromPlat = [...reach].some(j => { const q = st.platforms[j]; return q.y - p.y <= minJump && q.y > p.y && q.x < p.x + p.w + 120 && p.x < q.x + q.w + 120; });
-          if (fromGround || byLadder || fromPlat) { reach.add(i); grew = true; }
+          const bySponge = !!p.secret && !!st.props?.some(o => o.kind === 'sponge' && o.x >= p.x && o.x <= p.x + p.w); // a sponge bounce reaches secret ledges
+          if (fromGround || byLadder || fromPlat || bySponge) { reach.add(i); grew = true; }
         });
       }
       expect(reach.size, st.id).toBe(st.platforms.length);
@@ -402,7 +403,7 @@ describe('art', () => {
     const need = [
       ...Object.values(BASES).map(b => b.icon), ...Object.values(MOBS).map(m => m.art), ...Object.values(CONSUMABLES).map(c => c.icon),
       ...STAGES.flatMap(s => [s.bg, s.tile, ...(s.mid ? [s.mid] : [])]), ...CLASSES.map(c => `kaiju-${c.species}`),
-      ...Object.entries(RIGS).flatMap(([sp, r]) => r.parts.map(p => `parts-${sp}-${p.piece}`)), 'map-world', 'map-oven', 'map-pantry', 'title-key', ...allStills(),
+      ...Object.entries(RIGS).flatMap(([sp, r]) => r.parts.map(p => `parts-${sp}-${p.piece}`)), 'map-world', 'map-oven', 'map-pantry', 'title-key', 'ob-crate', 'ob-jar', 'ob-sponge', 'ob-cooker', 'ob-lever', 'ob-chest', 'icon-key', 'npc-crumblet', ...allStills(),
     ];
     expect(need.filter(k => !have.has(k))).toEqual([]);
   });

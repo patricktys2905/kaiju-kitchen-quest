@@ -71,3 +71,11 @@ Shared basics (slash, leap, charge, rain, breath, fanshot, lob, spin, roar, pudd
 (rootspike, dive/snatch, boomerang, beam/lure, summon, slimesurge, vanish, shell, burrow, heatwave, skewer, finslide).
 Story speaker 'foe'. Checks: tests/nemesis.test.ts; `npx vite-node scripts/nem-diag.ts 4-5 Toastbat` (what hurts);
 `node scripts/nemesis-shot.mjs` (screenshots).
+
+## Interactive maps (stages.ts interactive(), world.ts stepProps)
+Seeded per stage, the same for everyone: breakable crates (2 hits, crumbs, sometimes a box) and jars (heal 8%), a moving
+tray from World 2 on, a ladle lever on stages 3/7 (drops a rolling pin on the stretch ahead), runaway pressure cookers on
+stages 4/6/8/9 (can't be hurt; your hits shove them; they explode near anything — lure monsters in), and a secret ledge
+on stages 2/4/6/7/8/9 (fades in when near; jump onto the sponge under its end to bounce up) with a chest. Stage 7's chest
+holds the World Key → that world's secret bonus stage (BONUS_STAGES, S-1..S-4, button on the stage card).
+Checks: tests/props.test.ts, `node scripts/props-shot.mjs`.
