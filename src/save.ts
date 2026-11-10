@@ -1,4 +1,4 @@
-// Save data (localStorage 'kkq-save-v1'): every hero's progress, the shared bag, unopened boxes, crumbs, stage ranks.
+// Save data (localStorage 'kkq-save-v3'): every hero's progress, the shared bag, unopened boxes, crumbs, stage ranks.
 import type { Spicy } from './sim/types';
 import { CLASSES, type Stat } from './sim/classes';
 import { CONSUMABLES, type ConsumableId } from './sim/consumables';
@@ -48,7 +48,7 @@ export interface Save {
 }
 
 // v2: per-kaiju progress, 4 starters, story (older v1 saves are not carried over)
-const KEY = 'kkq-save-v2';
+const KEY = 'kkq-save-v3'; // v3: fresh start after the 2026-11-10 balance passes (v2 saves are left untouched in storage)
 export const RANK_ORDER: Rank[] = ['D', 'C', 'B', 'A', 'S'];
 
 function fresh(): Save {
