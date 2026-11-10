@@ -127,16 +127,20 @@ export function genStage(w: WorldDef, n: number, o: { seed?: number; lv?: number
   }
   const kinds = w.pool.filter(([from]) => n >= from).map(([, k]) => k);
   const basics = kinds.filter(k => !SPECIALIST.has(MOBS[k].brain));
-  const count = 7 + Math.floor(n * 0.8);
+  const count = 7 + Math.floor(n * 0.8) + (n === 1 && w.id >= 2 ? 2 : 0); // a world's first stage was a stroll
   const mobs: MobSpawn[] = [];
   for (let i = 0; i < count; i++) {
     let kind = kinds[Math.floor(r() * kinds.length)];
     // specialists (turrets, snipers, healers, chargers...) are spice, not the meal: at most 2 of each per stage (1 turret)
     if (SPECIALIST.has(MOBS[kind].brain) && mobs.filter(m => m.kind === kind).length >= (MOBS[kind].brain === 'turret' ? 1 : 2)) kind = basics[Math.floor(r() * basics.length)] ?? kind;
     const lv = r() < 0.5 ? lvLo : lvHi;
-    // flyers and turrets always start at ground level (from a high platform they would be out of reach)
+    // flyers and turrets always start at ground level (from a high platform they would be out of reach); monsters stay
+    // off the top tier (only precise hops or a ladder reach it, and a knock-back there undoes the climb), and brutes
+    // stay on the floor (on a ledge they just shove you off it)
+    const perches = platforms.filter(p => p.y >= TIER[1]);
     if (MOBS[kind].brain !== 'flyer' && MOBS[kind].brain !== 'turret' && r() < 0.35 && platforms.length > 0) {
-      const p = platforms[Math.floor(r() * platforms.length)];
+      const p = MOBS[kind].brain === 'brute' || !perches.length ? null : perches[Math.floor(r() * perches.length)];
+      if (!p) { r(); mobs.push({ kind, lv, x: Math.round(520 + (i / count) * (width - 900) + r() * 120) }); continue; }
       mobs.push({ kind, lv, x: Math.round(p.x + 30 + r() * (p.w - 60)), y: p.y });
     } else {
       mobs.push({ kind, lv, x: Math.round(520 + (i / count) * (width - 900) + r() * 120) });
@@ -147,7 +151,7 @@ export function genStage(w: WorldDef, n: number, o: { seed?: number; lv?: number
   if (n === 3 || n === 7 || n === 9) mobs.push({ kind: w.mimic, lv: lvHi, x: Math.round(width * (0.45 + r() * 0.3)) });
   // hazards on open ground from stage 2 on, more later in the world; never at the start or the exit
   const hazards: Hazard[] = [];
-  if (n >= 2) {
+  if (n >= 2 || w.id >= 2) {
     const want = 1 + Math.floor(n / 3);
     for (let tries = 0; hazards.length < want && tries < 40; tries++) {
       const hx = Math.round(500 + r() * (width - 1000));

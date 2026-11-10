@@ -1,0 +1,25 @@
+/** Per-kaiju fine tuning: multipliers on max HP and attack so every kaiju clears stages and bosses about as often,
+ *  while keeping its own style (tanks still have the most HP, glass cannons still hit hardest).
+ *  Written by `node scripts/kaiju-tune.mjs` from balance-bot benchmarks (scripts/kaiju-bench.ts). */
+export const KAIJU_TUNE: Record<number, { hp: number; dmg: number }> = {
+  0: { hp: 1.19, dmg: 1.06 },
+  1: { hp: 1.28, dmg: 0.98 },
+  2: { hp: 0.88, dmg: 0.99 },
+  3: { hp: 1.02, dmg: 0.98 },
+  4: { hp: 0.90, dmg: 1.02 },
+  5: { hp: 1.40, dmg: 0.87 },
+  6: { hp: 0.81, dmg: 0.46 },
+  7: { hp: 0.91, dmg: 1.02 },
+  8: { hp: 0.82, dmg: 0.74 },
+  9: { hp: 0.88, dmg: 0.97 },
+  10: { hp: 0.87, dmg: 0.61 },
+  11: { hp: 1.67, dmg: 0.99 },
+  12: { hp: 0.95, dmg: 1.02 },
+  13: { hp: 1.21, dmg: 1.00 },
+  14: { hp: 1.09, dmg: 1.05 },
+  15: { hp: 0.91, dmg: 0.90 },
+  16: { hp: 1.38, dmg: 0.92 },
+  17: { hp: 1.45, dmg: 1.05 },
+  18: { hp: 1.43, dmg: 1.04 },
+  19: { hp: 1.63, dmg: 0.68 },
+};

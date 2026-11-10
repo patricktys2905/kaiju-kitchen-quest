@@ -434,7 +434,7 @@ export class World {
       if (!lv || h.cds[i] > 0) continue;
       if (dir) h.face = dir > 0 ? 1 : -1;
       const sc = skillScale(lv);
-      h.cds[i] = sk.cd * sc.cd * (1 - h.d.cdr);
+      h.cds[i] = sk.cd * sc.cd * (1 - (sk.kind === 'heal' ? Math.min(0.25, h.d.cdr) : h.d.cdr)); // heals: at most 25% faster
       h.skill = sk; h.skillMul = sc.dmg * h.d.skillDmg; h.ticks = 0;
       this.enter(h, 'skill');
       h.hitIds = new Set();
@@ -1194,7 +1194,7 @@ export class World {
         if (q > 0.5 && !h.ticks) {
           h.ticks = 1; this.events.push({ t: 'shock', x: h.x, y: h.y - 30, r: sk.reach });
           const before = this.dealt; mk(h.x, sk.reach * 2, sk.h, h.y + sk.h / 3);
-          const heal = (this.dealt - before) * (sk.leech ?? 0.3); h.hp = Math.min(h.d.maxHp, h.hp + heal);
+          const heal = Math.min(h.d.maxHp * 0.12, (this.dealt - before) * (sk.leech ?? 0.3)); h.hp = Math.min(h.d.maxHp, h.hp + heal); // at most 12% max HP a slurp
         }
         break;
       case 'jiggle': // boing up, splat down: glue everything nearby

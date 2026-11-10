@@ -1,5 +1,6 @@
 // Hero progression: level, XP, primary stats (STR/DEX/INT/VIT), skill levels and equipment → combat numbers.
 import { type HeroClass, type Stat, type Stats, classOf } from './classes';
+import { KAIJU_TUNE } from './kaijuTune';
 import { type Item, SETS, type SkillMod, type Slot, UNIQUES, itemIcon, itemLines } from './items';
 import { type HeroGear, gearOf } from './gear';
 import { MAX_SKILL, PASSIVE_UNLOCK, skillScale, skillsOf } from './skills';
@@ -87,7 +88,7 @@ export interface Derived {
 
 /** Main-stat scaling (tuned with scripts/kaiju-diag.ts and scripts/balance.ts). INT's skill bonus is measured against the
  *  level (so casters don't run away late), STR also multiplies attack a little, and DEX past the crit cap adds crit damage. */
-export const SCALE = { int: 0.025, intLv: 0.024, str: 0.0017, critCap: 75, dexOver: 0.006, hpLv: 14, drSoft: 0.7, drOver: 0.4 };
+export const SCALE = { int: 0.025, intLv: 0.024, str: 0.0017, critCap: 75, dexOver: 0.006, hpLv: 14, drSoft: 0.7, drOver: 0.4, hpAll: 0.73, dmgAll: 1.36 };
 /** Damage reduction past drSoft counts for less (so the sturdiest kaiju still feel boss hits). */
 const softDr = (dr: number) => dr <= SCALE.drSoft ? dr : SCALE.drSoft + (dr - SCALE.drSoft) * SCALE.drOver;
 
@@ -125,12 +126,13 @@ export function derive(p: HeroProfile): Derived {
   for (const [k, n] of Object.entries(sets)) for (const b of [n >= 2 ? SETS[k].b2 : null, n >= 3 ? SETS[k].b3 : null]) if (b) for (const [bk, bv] of Object.entries(b)) sb[bk as keyof typeof sb] += bv;
   const per = (k: keyof typeof pas.per) => (pas.per[k] ?? 0) * pl;
 
+  const tune = KAIJU_TUNE[p.species] ?? { hp: 1, dmg: 1 };
   const def = prim.vit * 0.6 + (eq.def ?? 0);
   const critRaw = 5 + prim.dex * 0.5 + (eq.crit ?? 0) + per('crit');
   return {
     cls, level: p.level, prim,
-    maxHp: Math.round((cls.hp + prim.vit * 9 + p.level * SCALE.hpLv + (eq.hp ?? 0)) * (1 + per('hpPct') + sb.hpPct)),
-    atk: Math.round((cls.atk + prim.str * 1.2 + p.level + (eq.atk ?? 0)) * (1 + SCALE.str * prim.str) * (1 + per('atkPct') + sb.atkPct)),
+    maxHp: Math.round((cls.hp + prim.vit * 9 + p.level * SCALE.hpLv + (eq.hp ?? 0)) * (1 + per('hpPct') + sb.hpPct) * tune.hp * SCALE.hpAll),
+    atk: Math.round((cls.atk + prim.str * 1.2 + p.level + (eq.atk ?? 0)) * (1 + SCALE.str * prim.str) * (1 + per('atkPct') + sb.atkPct) * tune.dmg * SCALE.dmgAll),
     def: Math.round(def),
     dr: softDr(1 - (1 - def / (def + 80)) * (1 - sb.dr) * (1 - per('dr'))),
     crit: Math.min(SCALE.critCap, critRaw),

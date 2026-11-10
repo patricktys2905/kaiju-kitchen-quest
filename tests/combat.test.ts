@@ -183,12 +183,12 @@ describe('new monsters', () => {
     run(w, {}, 80);
     expect(w.shots.some(s => s.kind === 'laser') || w.hero.hp < w.hero.d.maxHp).toBe(true);
   });
-  it('every world has 3 new monsters in its pool, a mimic in stages 3/7/9 and hazards from stage 2', () => {
+  it('every world has 3 new monsters in its pool, a mimic in stages 3/7/9 and hazards from stage 2 (stage 1 too after World 1)', () => {
     const fresh: MobKind[] = ['garlic', 'ant', 'carrot', 'milk', 'jelly', 'kettle', 'sausage', 'marsh', 'noodle', 'raisin'];
     for (const k of fresh) expect(STAGES.some(s => s.mobs.some(m => m.kind === k)), k).toBe(true);
     for (const w of WORLDS) {
       for (const n of [3, 7, 9]) expect(STAGES.find(s => s.id === `${w.id}-${n}`)!.mobs.some(m => MOBS[m.kind].brain === 'mimic'), `${w.id}-${n}`).toBe(true);
-      expect(STAGES.find(s => s.id === `${w.id}-1`)!.hazards ?? []).toEqual([]);
+      expect((STAGES.find(s => s.id === `${w.id}-1`)!.hazards ?? []).length > 0).toBe(w.id >= 2); // 1-1 is the gentle first stage
       for (let n = 2; n <= 9; n++) expect((STAGES.find(s => s.id === `${w.id}-${n}`)!.hazards ?? []).length).toBeGreaterThan(0);
       expect(STAGES.find(s => s.id === `${w.id}-10`)!.hazards!.every(h => h.phase2)).toBe(true);
     }

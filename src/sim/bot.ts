@@ -99,7 +99,8 @@ export class Bot {
     // stuck detection: jump
     if (Math.abs(h.x - this.lastX) < 0.5 && h.state === 'move') this.stuck++; else this.stuck = 0;
     this.lastX = h.x;
-    if (h.state === 'climb') { inp[dy < 0 ? 'up' : 'down'] = true; return inp; }
+    // on a ladder: climb toward the target's height; once level with it, hop off toward it (no dithering up/down)
+    if (h.state === 'climb') { if (Math.abs(dy) < 16) { inp[dx > 0 ? 'right' : 'left'] = true; inp.jump = pulse; } else inp[dy < 0 ? 'up' : 'down'] = true; return inp; }
     if (sameLevel || (flyer && Math.abs(dx) < reach + 20)) {
       if (Math.abs(dx) > reach * 0.85) {
         inp[dx > 0 ? 'right' : 'left'] = true;

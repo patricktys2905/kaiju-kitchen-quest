@@ -167,10 +167,10 @@ export const SKILLS: Record<number, { actives: SkillDef[]; passive: PassiveDef }
   6: { // Dumplord — healer
     actives: [
       S({ id: 'steam', name: 'Steam Cloud', kind: 'zone', desc: 'Leaves a scalding steam cloud that hurts monsters for 3 s', cd: 4, dur: 0.4, dmg: 0.7, reach: 180, h: 110, kx: 60, ky: -80 }),
-      S({ id: 'feast', name: 'Dumpling Feast', kind: 'heal', desc: 'Eats a snack: heals 25% HP (+5% per level)', unlock: 4, cd: 14, dur: 0.6, dmg: 0, heal: 0.25 }),
-      S({ id: 'soup', name: 'Soup Slurp', kind: 'drain', desc: 'Slurps the life out of everything nearby: heals 30% of the damage', unlock: 8, cd: 11, dur: 0.7, dmg: 3.6, reach: 230, h: 160, kx: 120, ky: -200, leech: 0.3 }),
+      S({ id: 'feast', name: 'Dumpling Feast', kind: 'heal', desc: 'Eats a snack: heals 20% HP (+5% per level)', unlock: 4, cd: 18, dur: 0.6, dmg: 0, heal: 0.2 }),
+      S({ id: 'soup', name: 'Soup Slurp', kind: 'drain', desc: 'Slurps the life out of everything nearby: heals 20% of the damage (up to 12% of its HP)', unlock: 8, cd: 11, dur: 0.7, dmg: 3.6, reach: 230, h: 160, kx: 120, ky: -200, leech: 0.2 }),
     ],
-    passive: { id: 'aura', name: 'Steamy Aura', desc: 'Regenerates 0.4% max HP per second per level', unlock: PASSIVE_UNLOCK, per: { regen: 0.004 } },
+    passive: { id: 'aura', name: 'Steamy Aura', desc: 'Regenerates 0.12% max HP per second per level', unlock: PASSIVE_UNLOCK, per: { regen: 0.0012 } },
   },
   7: { // Norigon — dragon mage
     actives: [

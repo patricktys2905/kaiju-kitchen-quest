@@ -56,12 +56,15 @@ export function endlessFloor(floor: number, heroLv: number, seed: number): Stage
   };
 }
 
+/** Boss Rush bosses are this strong compared with the story (tuned with scripts/free-balance.ts). */
+export const RUSH_POWER = 0.8;
 /** Boss Rush: the bosses of every world this kaiju has beaten, in order, at its level. */
 export function rushStages(beaten: number[], heroLv: number): StageDef[] {
   return WORLDS.filter(w => beaten.includes(w.id)).map((w, i) => {
     const lv = heroLv + 1;
     const st = genStage(w, 10, { lv: lv - 2, id: `R-${w.id}`, name: `Boss Rush ${i + 1}: ${MOBS[w.boss].name}` });
-    return { ...st, num: `RUSH ${i + 1}`, power: powerFor(lv), mobs: st.mobs.map(m => ({ ...m, lv })) };
+    // a little gentler than the story fight: these come back to back with only half your health back in between
+    return { ...st, num: `RUSH ${i + 1}`, power: powerFor(lv) * RUSH_POWER, mobs: st.mobs.map(m => ({ ...m, lv })) };
   });
 }
 

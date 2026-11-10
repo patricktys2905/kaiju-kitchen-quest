@@ -231,3 +231,9 @@ your damage reduction. The balance bot steps out of (and waits at) firing hazard
 Full sweep: `for w in 1 2 3 4 5 6 7 8 9 10; do npx vite-node scripts/balance.ts $w- 3 > shots/bal/w$w.txt & done`, then
 `node scripts/bal-sum.mjs` (per-kaiju clear % by world, stages outside target, bot timeouts). Why is a kaiju weak:
 `npx vite-node scripts/kaiju-diag.ts [stages] [bosses] [runs]` (DPS, HP lost per minute, boss kill time). Stats: `scripts/stat-table.ts`.
+EVENING THE KAIJU: `src/sim/kaijuTune.ts` holds a small HP / attack multiplier per kaiju (global offset in `SCALE.hpAll` /
+`dmgAll`). `node scripts/kaiju-tune.mjs [rounds]` benchmarks all 20 in parallel (`scripts/kaiju-bench.ts`: every boss ×10,
+nine stages ×4, stuck-bot timeouts ignored) and nudges each toward ~55% boss clears; `--dry` just reports. Re-run it after
+changing a kaiju's skills or stats. Healing skills only get up to 25% cooldown reduction; Soup Slurp heals at most 12% a cast.
+Stage rules: monsters never start on the top tier, brutes never on ledges; the bot hops off ladders level with its target.
+Probes: `scripts/stage-probe.ts <stage> <species>` (layout + where the bot ends up), `scripts/heal-probe.ts <stage> <species>`.
