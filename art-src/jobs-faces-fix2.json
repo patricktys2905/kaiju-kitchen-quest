@@ -1,0 +1,10 @@
+[
+ {
+  "name": "face-2-angry",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-2.png"
+  ],
+  "prompt": "Generate an image. The reference is my game character, a grumpy cheese crab with a cabbage-leaf shell (Crabbage). Draw THIS SAME character as a cartoon story portrait showing a strong, funny, very readable emotion: furious and fired up: deep scowling brows, gritted teeth, leaning forward, a little puff of angry steam above its head. IMPORTANT BODY RULE: Crabbage has exactly TWO big claws and a few short crab legs, exactly like the reference. Never add extra claws, arms or hands. Show the emotion with the face, the eye stalks and those two claws held up OPEN and snapping (crab pincers, never fists or fingers). Keep it EXACTLY on-model: same body shape and proportions, same colours, same face design, same thick dark outlines and glossy cel shading as the reference. Do not add any clothes, props, extra limbs or extra characters that are not in the reference. Same three-quarter view and facing direction as the reference, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Portrait 4:5 image."
+ }
+]
