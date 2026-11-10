@@ -43,6 +43,14 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w5-s7": [["me", "Plughole Pass! Don't slide into the plughole. Don't slide into the plughole. Oops, almost!"], ["me", "Last key's up on a high ledge! Sponge, my old pal! Boing!"]],
   "w5-s8": [["me", "Greasy Pan Pits! Grease is slippery! Grease is SO slippery! I kinda love grease!"], ["me", "Forty-five seconds? Easy! I'll slide in circles again. Circles still count!"]],
   "w5-s9": [["mold", "Hehehe... slide down, little bird. Down, down the drain. It's cold and dark, just like home!"], ["me", "Nope! Home is cold and SPARKLY and full of friends! You've got the wrong freezer, buddy!"]],
+  // World 6: The Dining Room (Act 2).
+  "w6-s2": [["me", "Placemat Plains! Smooth and flat! Perfect for sli... uh-oh."], ["n", "RUMBLE! A giant rolling pin is chasing Pengwhip across the placemats!"], ["me", "No brakes, no problem! Wheeee!"]],
+  "w6-s3": [["me", "Candelabras! Pretty lights! Ow! Hot wax! Pretty OUCHY lights!"], ["me", "Gates locked! Yank the lever and bowl 'em over! Penguin bowling, fancy dinner edition!"]],
+  "w6-s4": [[10, "Hmph. Penguin. This Crumblet wants to see the world. Walk it through Gravy Boat Bay. Slowly."], ["me", "Slowly! Brakes on! *skrrrt* Oops, gravy's slippery too! Hang on, little buddy!"]],
+  "w6-s6": [["me", "Teacup Terrace! Ooh, iced tea? No? Just hot tea? Aw, nuts."], ["me", "Grab the scroll, then hold out! Stay cool, Pengwhip! You're SO cool!"]],
+  "w6-s7": [["me", "Napkin Fold Fort! Napkins are like snow, but folded!"], ["me", "Key chest up on the high ledge. Sponge, my old pal! Boing!"]],
+  "w6-s8": [["lo2", "Charge, my silverware! Make yon penguin into dessert!"], ["me", "Forty-five seconds? I'll slide in circles round the plates. Circles STILL count!"]],
+  "w6-s9": [["me", "Chandelier Climb! Ooh, shiny! Like icicles, but warmer. Much warmer."], ["lo2", "Forsooth! A cookies-and-cream bird! I shall dunk thee in my tea, varlet!"], ["me", "Nobody dunks THIS penguin! Still true! Wheee!"]],
 };
 
 export const QUIPS: Record<QuipKind, string[]> = {

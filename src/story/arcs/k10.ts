@@ -82,8 +82,28 @@ export const ARC: Record<string, StoryLine[]> = {
     ["me", "Shh! You'll wake 'em. Get in, bird. Hmph. Seven."],
     ["me", "Don't look at me like that. This is my grumpy face. It's just... smiling a little. Hmph."],
   ],
+  "w6-open": [
+    ["n", "Act 2: Beyond the Kitchen! A few days later, it's head count time..."],
+    ["me", "One, two, three, four, five, bird. FIVE?! Where's the Littlest?!"],
+    ["me", "A note. In crayon. \"Gone to see the wurld! Back for nap. Love, Littlest.\" The WORLD?!"],
+    ["lo", "Hehe. Little crumbs go stale out here, bear. And stale crumbs belong to US."],
+    ["me", "It can't even see over a spoon! Bird, watch the kids. Papa's going for a walk. GRRRAAAH!"],
+  ],
+  "w6-boss": [
+    ["boss", "Halt, bear! I am SIR STALE, aged to perfection! Thy little muffin shall be my squire!"],
+    ["me", "It's past its nap time, breadstick. So are you."],
+    ["boss", "BREADSTICK?! I am a VINTAGE baguette! Have at thee!"],
+    ["me", "Hmph. Have at THIS. GRRRAAAH!"],
+  ],
+  "w6-after": [
+    ["n", "SNAP! The butter-knife lance breaks in half, and Sir Stale dives out the window!"],
+    ["boss", "Unhand me, varlet! To the Backyard! Baron Brussels shall grill thee AND thy crumbs!"],
+    ["me", "Grill my crumbs? Hmph. Now it's personal."],
+    ["me", "Littlest wants to see the world? Fine. We see it together. Hold on to my ear, kiddo."],
+    ["me", "Next stop, the Backyard. Littlest calls it \"the big outside\". Hmph. Cute. Don't tell anybody I said cute."],
+  ],
 };
-export const NEMESIS: Record<"w1-elite" | "w2-elite" | "w3-elite" | "w4-elite" | "w5-elite", StoryLine[]> = {
+export const NEMESIS: Record<"w1-elite" | "w2-elite" | "w3-elite" | "w4-elite" | "w5-elite" | "w6-elite", StoryLine[]> = {
   "w1-elite": [
     ["foe", "Caw! Shiny crumbs, crumbly crumbs! Finders keepers, caw-caw!"],
     ["me", "Those \"crumbs\" are my Crumblets, bird."],
@@ -108,5 +128,10 @@ export const NEMESIS: Record<"w1-elite" | "w2-elite" | "w3-elite" | "w4-elite" |
     ["me", "Kids are home, bird. You're guarding a sink full of dirty forks."],
     ["foe", "They're SHINY forks! Caw... fine. Beat me and maybe I'll quit snatching stuff. MAYBE!"],
     ["me", "Hmph. Offer's still open. Gotta flatten ya first, though. GRRR."],
+  ],
+  "w6-elite": [
+    ["foe", "Caw! Fuzzy! Roast Brute up the ridge. Smells like Sunday dinner, hits like a truck!"],
+    ["me", "Bird. You're supposed to be home watching the kids."],
+    ["foe", "Kids are napping! Somebody's gotta watch YOUR back. Caw! Don't make it weird."],
   ],
 };

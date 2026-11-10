@@ -105,7 +105,7 @@ export function playStory(species: number, beats: string[], done: () => void): v
     const face = who === 'me' ? faceArt(species, text) : rightArt;
     const chip = still && face ? `<img src="${face}" alt="">` : '';
     const left = painted.has('me') ? '' : `<div class="por l ${isMe ? 'talk' : 'dim'}" style="background-image:url(${isMe ? face : `art/kaiju-${species}.webp`})"></div>`;
-    const right = (who === 'lo' || who === 'lo2') && painted.has(who) ? '' : who === 'lo' || who === 'lo2' ? `<div class="por r lo ${who === 'lo2' ? 'two' : ''}"></div>` : who === 'mold' ? '<div class="por r mold"></div>' : rightArt && !(who === 'boss' && painted.has('boss')) ? `<div class="por r ${isMe || who === 'n' ? 'dim' : 'talk'}" style="background-image:url(${rightArt})"></div>` : '';
+    const right = (who === 'lo' || who === 'lo2') && painted.has(who) ? '' : who === 'lo2' ? '<div class="por r" style="background-image:url(art/boss-stale.webp)"></div>' : who === 'lo' ? '<div class="por r lo"></div>' : who === 'mold' ? '<div class="por r mold"></div>' : rightArt && !(who === 'boss' && painted.has('boss')) ? `<div class="por r ${isMe || who === 'n' ? 'dim' : 'talk'}" style="background-image:url(${rightArt})"></div>` : '';
     cnt.innerHTML = `<div class="ttl">${story.title}<small>${me.name} · World ${w.id}: ${w.name}</small></div>
       ${left}
       ${right}

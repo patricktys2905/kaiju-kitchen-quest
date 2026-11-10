@@ -47,6 +47,15 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w5-s7": [["me", "Plughole Pass! Secret chest on a high ledge. High is STILL my worst direction."], ["me", "But I've got a bouncy sponge and a big RAWR! Boing! Up goes the World 5 key!"]],
   "w5-s8": [["me", "Greasy Pan Pits! Forty-five seconds of waves. Ew, nobody washed these pans EVER!"], ["foe", "Psst, shrimp. Er, Gobzilla. Lure 'em under the drippy taps. SPLOOSH! Not that I care!"], ["me", "Brutus is HELPING?! Wait till big brother hears THIS!"]],
   "w5-s9": [["me", "Drain Descent. It's dark. Stomp count? Who's counting? Not me. Too busy being brave."], ["mold", "Hehehe... closer, little berry. Everything goes down the drain sooner or later. Even little brothers."], ["me", "Not THIS little brother! I'm the MEDIUM one! RAWR!"]],
+
+  // World 6: The Dining Room (Act 2).
+  "w6-s2": [["me", "Placemat Plains! Stomp count: one! Two! Wait, why's the whole table shaking?"], ["n", "Uh-oh! A giant rolling pin comes rumbling across the placemats!"], ["me", "Rolling pins are my BEST friends! Just not when they're chasing me! RUN!"]],
+  "w6-s3": [["me", "Candelabra Crossing! These candles are taller than lighthouses! Ow, hot wax! Drip drip SPLAT!"], ["me", "Lever up top? Pull it and the pin goes SQUASH. Some things never change! Rawr!"]],
+  "w6-s4": [[10, "Hmph. Strawberry. One of mine wandered off to see the world. Gravy Boat Bay's no place for it."], ["me", "Gobzilla Medium, babysitter class, on tour! Hold my leaf, little guy. Mind the gravy!"], [10, "Wanted a big adventure. Like somebody I know. Hmph."]],
+  "w6-s6": [["me", "Teacup Terrace! Recipe Scroll at the far end. Grab it, then hold out! Pinkies up!"], ["lo2", "Forsooth! A berry at the tea party? Mind thy manners, peasant!"], ["me", "My manners say STOMP! Rawr!"]],
+  "w6-s7": [["me", "Napkin Fold Fort! Secret chest way up high. High is STILL my worst direction!"], ["me", "Good thing sponges come free with dinner. Boing! World 6 key, pass it over!"]],
+  "w6-s8": [["me", "Silverware Siege! The whole cutlery drawer wants a piece of me! Forty-five seconds, go!"], ["foe", "Oi, Gobzilla! Lure 'em under the candles! Hot wax makes 'em SPLAT! Not that I'm watching!"], ["me", "Brutus is my biggest fan now! Stomp count, here we GO!"]],
+  "w6-s9": [["me", "Chandelier Climb! Whoa, it's like a sparkly upside-down tree!"], ["lo2", "Hah! Climb, little crumb! At the Head of the Table, thou shalt be DESSERT!"], ["me", "Dessert?! I'm the MAIN COURSE! Wait, no. I'm the HERO!"]],
 };
 
 export const QUIPS: Record<QuipKind, string[]> = {

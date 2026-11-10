@@ -1,0 +1,11 @@
+[
+ {
+  "name": "still-w6-cure",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/boss-stale.png",
+   "art-src/ref-bg.png"
+  ],
+  "prompt": "Generate an image. The first reference is my boss, SIR STALE of the Leftovers: draw him EXACTLY like this reference. The second shows the painted background style. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Cinematic composition, wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. NO text, no letters, no writing on any labels, no speech bubbles, no UI, no border, no signature, no humans. Scene: after the battle: exactly ONE Sir Stale (only one of him in the whole picture), his butter-knife lance snapped in two and a big chunk bitten out of his crust, storms off in a huff through an open window towards a moonlit backyard with a barbecue grill, leaving a trail of crumbs. Funny, defeated but defiant, no other characters."
+ }
+]

@@ -43,6 +43,14 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w5-s7": [["me", "Plughole Pass. My patch is right around here. I can smell the dirt! Ahh, lovely dirt!"], ["me", "Key chest on a high ledge, sponge to bounce on. I'm a sponge-bouncing PRO now. Don't tell anybody!"]],
   "w5-s8": [["foe", "Slurrrp! Crab! I'm on your side now! Mostly! Forty-five seconds, I'll slime the left!"], ["me", "Hmph! Fine! Just don't slime the seeds, ya goof!"]],
   "w5-s9": [["mold", "Hehehe... down here, crab. Your little patch is all fuzz now. Come and see!"], ["me", "That's MY patch you're squatting on! Seed count: twelve. Pinch count: about to be a LOT!"]],
+  // World 6: The Dining Room (Act 2).
+  "w6-s2": [["me", "Placemat Plains. Flat, bare, and not one weed. Somebody shoulda planted something!"], ["n", "Uh-oh! A giant rolling pin comes rumbling across the placemat!"], ["me", "Run right! Sideways right! We've done this before, legs! MOVE!"]],
+  "w6-s3": [["me", "Candelabra Crossing. Hot wax dripping everywhere! That stuff ruins good soil!"], ["me", "Gates locked again? Lever, rolling pin, weeded. Hmph! I could do this in my sleep."]],
+  "w6-s4": [[10, "Hmph. Crab. My Crumblet wants to see the world. Walk it across Gravy Boat Bay."], ["me", "Kid, the world's mostly gravy and monsters. Stick to my shell and don't drink the bay!"]],
+  "w6-s6": [["me", "Teacup Terrace! Tea's just leaf soup. Gardeners respect leaf soup."], ["lo2", "Pinch not my teacups, crab! Yon Recipe Scroll belongs to the Feast!"], ["me", "Then the Feast can come and GET it! Grab it and hold on, legs!"]],
+  "w6-s7": [["me", "Napkin Fold Fort. Ooh, that napkin's folded like a cabbage! Nope. A swan. Hmph."], ["me", "Key chest on a high ledge. Sponge bounce! Still a pro. Still don't tell anybody!"]],
+  "w6-s8": [["me", "Silverware Siege! Forty-five seconds of forks? I've been forked before! Pinch back!"], ["n", "Seed count: twelve! Cabbage count: zero!"], ["me", "Not for long! And quit counting, narrator!"]],
+  "w6-s9": [["lo2", "Hark, crab! The chandelier is the finest seat at the table! Come up, if thou canst climb!"], ["me", "I walk SIDEWAYS, buster. Up is just sideways tipped over!"]],
 };
 
 export const QUIPS: Record<QuipKind, string[]> = {

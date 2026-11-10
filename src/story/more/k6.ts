@@ -43,6 +43,14 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w5-s7": [["me", "Decree Number Fourteen: nobody goes down the plughole! Especially not us. ESPECIALLY us."], ["me", "Secret chest on a high ledge! Bouncy sponge, our most loyal subject, launch the king! BOING!"]],
   "w5-s8": [["foe", "Psst, dumpling! My fortune says: \"The grease hates soap.\" I didn't even write this one. Honest!"], ["me", "Duke, helping?! Forty-five seconds, then we're having a long royal chat about your attitude!"]],
   "w5-s9": [["mold", "Hehehe... deeper, little lord. Down here everyone kneels, and you'll never be lonely again."], ["me", "Lonely? We've got FRIENDS now! Lots! Well, seven! Seven is LOTS!"]],
+  // World 6: The Dining Room (Act 2).
+  "w6-s2": [["me", "Placemat Plains! Royal dining is served! Wait, why is that rolling pin rolling at the king AGAIN?!"], ["n", "Uh-oh! It still wants to roll you flat, Your Majesty!"], ["me", "Royal retreat! To the RIGHT! Gracefully! Okay, QUICKLY!"]],
+  "w6-s3": [["me", "Candelabra Crossing! Decree Number Nineteen: candles may NOT drip on the king! SPLAT! Ow! Hot hot HOT!"], ["me", "Pull the lever! Royal rolling pin, roll out the red carpet! Nice and flat!"]],
+  "w6-s4": [[10, "Hmph. Dumpling. This Crumblet wants to see the world. Start it on Gravy Boat Bay. Don't spill it."], ["me", "Heir number six! Behold, small one, the world! It's mostly gravy! Stay behind the royal belly!"]],
+  "w6-s6": [["me", "Teacup Terrace! A royal tea party! With a Recipe Scroll for afters!"], ["lo2", "Fie! Thou art not invited, dumpling! Teapot Nannies, pour him OUT!"], ["me", "How RUDE! We're grabbing the scroll AND staying for crumpets!"]],
+  "w6-s7": [["me", "Napkin Fold Fort! A castle made of napkins! Ooh, can we keep it? It's so wipeable!"], ["me", "Secret chest on a high ledge! Sponge, our most loyal subject, you know the drill! BOING!"]],
+  "w6-s8": [["me", "Silverware Siege! Decree Number Twenty: forks are for EATING, not for poking kings!"], ["me", "Forty-five seconds! A lord never flees. A lord steams HEROICALLY! Again!"]],
+  "w6-s9": [["lo2", "Hark! Climbest thou my chandelier, little king? Up here thou art but a wee dumpling!"], ["me", "A wee dumpling with a BIG crown! Well, a medium crown. Made of dough! Still counts!"]],
 };
 
 export const QUIPS: Record<QuipKind, string[]> = {

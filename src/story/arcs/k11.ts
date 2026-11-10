@@ -78,8 +78,27 @@ export const ARC: Record<string, StoryLine[]> = {
     ["me", "Delivered at minute two hundred and... something! Thirty minutes or less, give or take a WEEK!"],
     ["me", "*bows* Thank you, thank you! Raptor Express ALWAYS delivers! Eventually! Beep beep!"],
   ],
+  "w6-open": [
+    ["n", "Act 2: Beyond the Kitchen! Ring ring! A brand new order for Raptor Express!"],
+    ["me", "Raptor Express, fastest claws in the kitchen! Uh-huh. One FEAST-size pizza, to... the Head of the Table?"],
+    ["lo", "Hmph. For the Feast of the Forgotten, lizard. Thirty minutes. And make it STALE."],
+    ["me", "Stale?! I deliver HOT and FRESH, buddy! But, uh... feast-size order, feast-size tip?"],
+    ["me", "Order accepted! Clock starts NOW! Dispatch, don't wait up! Beep beep!"],
+  ],
+  "w6-boss": [
+    ["boss", "Hark, the courier! I am SIR STALE, Head of the Table! And thy pizza is FAR too fresh!"],
+    ["me", "YOU placed the order?! Who orders a stale pizza? What kind of monster are you?!"],
+    ["boss", "A VINTAGE one! Have at thee! And forsooth, no tip for thee, lizard!"],
+    ["me", "No tip?! ZERO stars! Beep beep, Raptor Express coming THROUGH!"],
+  ],
+  "w6-after": [
+    ["n", "SNAP! Sir Stale's butter-knife lance breaks clean in two!"],
+    ["boss", "Unhand me, varlet! I'm off to the Backyard! Baron Brussels shall grill thy pizza to a cinder!"],
+    ["me", "Hey! Sign for your order first! Aaand he jumped out the window. Classic dine-and-dash."],
+    ["me", "New delivery address: the Backyard! A barbecue? Hot food? Finally, MY kinda crowd! Beep beep!"],
+  ],
 };
-export const NEMESIS: Record<"w1-elite" | "w2-elite" | "w3-elite" | "w4-elite" | "w5-elite", StoryLine[]> = {
+export const NEMESIS: Record<"w1-elite" | "w2-elite" | "w3-elite" | "w4-elite" | "w5-elite" | "w6-elite", StoryLine[]> = {
   "w1-elite": [
     ["foe", "Pineapple Pete Express! Fastest wheels in the kitchen! That pizza's MINE to deliver!"],
     ["me", "Raptor Express doesn't share routes, Pete! Beep beep, outta my way!"],
@@ -102,5 +121,10 @@ export const NEMESIS: Record<"w1-elite" | "w2-elite" | "w3-elite" | "w4-elite" |
     ["me", "Pete, buddy, we talked about this. The mold doesn't TIP!"],
     ["foe", "It gave me SPEED, though! Ugh, fine. Beat me and maybe I'll quit pineappling your lane. MAYBE!"],
     ["me", "Deal! Beep beep, eat my bubbles!"],
+  ],
+  "w6-elite": [
+    ["foe", "Raptor, hold up! Roast Brute on the ridge. Big, beefy, and it eats delivery guys for lunch!"],
+    ["me", "Pete?! You're giving me a TRAFFIC report?!"],
+    ["foe", "Hey, only I get to beat you! Now go! I'm timing ya. No pineapple, promise!"],
   ],
 };

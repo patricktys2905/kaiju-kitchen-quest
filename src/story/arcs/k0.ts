@@ -90,8 +90,27 @@ export const ARC: Record<string, StoryLine[]> = {
     ["foe", "Hmph. Not bad, shr... I mean, not bad, Gobzilla."],
     ["me", "Gobzilla MEDIUM! Say it! Everybody say it! Hey, big brother, guess who's the big one now?!"],
   ],
+  "w6-open": [
+    ["n", "Act 2: Beyond the Kitchen! A few days later..."],
+    ["me", "Big brother says saving one kitchen only makes ya Gobzilla Medium. LARGE is a whole HOUSE thing!"],
+    ["me", "Hey, what's this? A trail of stale crumbs, going out the door to the Dining Room! Ew, crunchy!"],
+    ["lo", "Hmph. Forgotten, like a little brother. Come and find us, berry. If ya can."],
+    ["me", "Nobody forgets Gobzilla! Stomp count back to zero. Gobzilla LARGE, here I come! RAWR!"],
+  ],
+  "w6-boss": [
+    ["boss", "Halt, varlet! I am SIR STALE, aged to perfection! Have at thee!"],
+    ["me", "Aged? You're a crusty old baguette with a moustache!"],
+    ["boss", "STALE?! I am VINTAGE! Forsooth, I shall make thee a crouton!"],
+    ["me", "Croutons are tiny! I'm LARGE now! Almost! RAWR!"],
+  ],
+  "w6-after": [
+    ["n", "SNAP! Sir Stale's butter-knife lance breaks clean in two!"],
+    ["boss", "My lance! Unhand me, varlet! Out the window I go! Baron Brussels shall grill thee in the Backyard!"],
+    ["me", "Didja hear that? A whole BACKYARD! That's like a gazillion stomps!"],
+    ["me", "Big brother, I'm gonna be Gobzilla EXTRA LARGE! Okay, okay. Large first. RAWR!"],
+  ],
 };
-export const NEMESIS: Record<"w1-elite" | "w2-elite" | "w3-elite" | "w4-elite" | "w5-elite", StoryLine[]> = {
+export const NEMESIS: Record<"w1-elite" | "w2-elite" | "w3-elite" | "w4-elite" | "w5-elite" | "w6-elite", StoryLine[]> = {
   "w1-elite": [
     ["foe", "Well, well! If it isn't Gobzilla JUNIOR! Lost your big brother, shrimp?"],
     ["me", "Brutus Beetroot! I'm a STRAWBERRY, ya big turnip!"],
@@ -116,5 +135,10 @@ export const NEMESIS: Record<"w1-elite" | "w2-elite" | "w3-elite" | "w4-elite" |
     ["me", "Hey! Zilla's MY family name, ya big turnip!"],
     ["foe", "Grrr! Beet me one more time and fine, I'll quit the bully stuff. MAYBE! Don't get excited!"],
     ["me", "Too late! I'm SO excited! RAWR!"],
+  ],
+  "w6-elite": [
+    ["foe", "Psst, Gobzilla! Roast Brute up the ridge. Way bigger than me. And I was BIG."],
+    ["me", "Brutus! You came all this way to help?!"],
+    ["foe", "Just warning ya! Nobody beets my favorite rival except ME. Hmph!"],
   ],
 };

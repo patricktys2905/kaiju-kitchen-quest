@@ -43,6 +43,14 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w5-s7": [["me", "Plughole Pass! A chest on a high ledge, and a bouncy sponge right below. Sponges are so nice!"], ["me", "Boing! Keys open doors, doors have windows, and windows have MOONS!"]],
   "w5-s8": [["me", "Greasy Pan Pits! Ooh, the drippy taps sparkle like falling stars!"], ["me", "Falling stars that BLAST you? Eep! Then the monsters can stand under 'em! Forty-five seconds, go!"]],
   "w5-s9": [["me", "Drain Descent. It's so dark, I'm the only light left. Hee, I'm the moon now!"], ["mold", "Hehehe... come down, little light. I'm so thirsty. One more sip and the dark lasts FOREVER."], ["me", "Nuh-uh! I'm not a juice box! And I'm taking my moon home!"]],
+  // World 6: The Dining Room (Act 2).
+  "w6-s2": [["me", "Placemat Plains! So flat and dark. Ooh, a big round thing rolling this way! Moon?"], ["n", "Uh-oh! It's a giant rolling pin, and it's coming FAST!"], ["me", "Nope, not the moon! DEFINITELY not the moon! Flap flap FLAP!"]],
+  "w6-s3": [["me", "Candelabra Crossing! Ooooh, real candles, like little lighthouses!"], ["me", "Eep, hot wax! Shiny but SPLATTY. Ooh, a lever! One pull and the rolling pin gives 'em a big flat hug!"]],
+  "w6-s4": [[10, "Hmph. Moth. Lost Crumblet in Gravy Boat Bay. Wanted to see the world. Light it home, would ya?"], ["me", "Hi, little explorer! Snuggle into my glow. The gravy's deep, but we're brave!"]],
+  "w6-s6": [["me", "Teacup Terrace! A Recipe Scroll at the end. Ooh, every teacup has a teeny moon in the tea!"], ["lo2", "Forsooth! No moons at MY tea party, moth! Only stale crumpets!"], ["me", "Aw, you're no fun. Grabbing the scroll anyway! Pinkies up!"]],
+  "w6-s7": [["me", "Napkin Fold Fort! A chest on a high ledge and a bouncy sponge below. Sponges are STILL so nice!"], ["me", "Boing! Keys open doors, doors have windows, and windows have MOONS! Never gets old!"]],
+  "w6-s8": [["me", "Silverware Siege! Ooh, the spoons are so shiny I can see myself! Hi, me!"], ["me", "Eep, and the forks are pointy! Forty-five seconds, then I'll admire the spoons. Promise!"]],
+  "w6-s9": [["me", "Chandelier Climb! Up, up to the moon's sparkly cousin! Ooooh, shiny!"], ["lo2", "Hahaha! Climb all thou likest, moth! Up here, the candles stay OUT!"], ["me", "Then I'll bring my own glow! I always do!"]],
 };
 
 export const QUIPS: Record<QuipKind, string[]> = {

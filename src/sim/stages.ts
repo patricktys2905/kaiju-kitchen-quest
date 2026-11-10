@@ -52,6 +52,12 @@ export const WORLDS: WorldDef[] = [
     baseLv: 49, power: 3.0, pool: [[1, 'plate'], [1, 'bubble'], [2, 'mug'], [3, 'eel'], [4, 'glove'], [7, 'scrub']], hazard: 'tap', mimic: 'mimic', elite: 'scrub', boss: 'moldking',
     names: ['Faucet Falls', 'Suds Slide', 'Sponge Shoals', 'Dish Rack Ridge', 'Steel Wool Wall', 'Bubble Bay', 'Plughole Pass', 'Greasy Pan Pits', 'Drain Descent', 'The Mold Throne'],
   },
+  // ---- Act 2: Beyond the Kitchen ----
+  {
+    id: 6, name: 'The Dining Room', blurb: 'Fancy plates, forgotten feasts.', bg: 'bg-far-dining', mid: 'bg-mid-dining', tile: 'tile-dining', platTint: 0xf0e0c8, bossBg: 'bg-far-table',
+    baseLv: 61, power: 3.4, pool: [[1, 'fork'], [1, 'napkin'], [2, 'candle'], [3, 'gravy'], [4, 'teapot'], [7, 'roast']], hazard: 'wax', mimic: 'mimic', elite: 'roast', boss: 'stale',
+    names: ['Tablecloth Trail', 'Placemat Plains', 'Candelabra Crossing', 'Gravy Boat Bay', 'Roast Ridge', 'Teacup Terrace', 'Napkin Fold Fort', 'Silverware Siege', 'Chandelier Climb', 'The Head of the Table'],
+  },
 ];
 
 /** Small seeded RNG so a stage is always laid out the same way. */
@@ -246,6 +252,7 @@ function hazardAt(kind: HazardKind, x: number, offset: number): Hazard {
     case 'drop': return { kind, x, w: 80, period: 3.8, on: 0.35, offset };
     case 'ice': return { kind, x, w: 260, period: 1, on: 1, offset };
     case 'tap': return { kind, x, w: 70, period: 3.4, on: 1.1, offset };
+    case 'wax': return { kind, x, w: 80, period: 3.6, on: 0.4, offset };
   }
 }
 

@@ -43,6 +43,14 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w5-s7": [["me", "Plughole! Me no go down hole. Me go UP! Sponge! BOING!"], ["me", "Last key in high chest. Me hold key SO tight. Key no go down the drain!"]],
   "w5-s8": [["me", "Greasy pan. Eww. Me need bath after this. Good thing we in Sink!"], ["me", "Forty-five seconds. Me count all the way now! Me good counter! Wanna hear? One, two, FORTY-FIVE!"]],
   "w5-s9": [["mold", "Hehehe... going down, little golem? Down where the water's HOT. Steamy, melty, gooey hot!"], ["me", "Me scared. Me still go. Me ALWAYS still go! Chef is friend!"]],
+  // World 6: The Dining Room (Act 2).
+  "w6-s2": [["me", "Placemat flat. Me like flat! Me walk nice and slow and..."], ["n", "RUMBLE! A giant rolling pin comes bouncing over the placemats!"], ["me", "Nope! Me RUN! Me no chocolate pancake!"]],
+  "w6-s3": [["me", "Big candles drip hot wax. SPLAT! Hot! Me no like hot!"], ["me", "Me pull lever, rolling pin drop. Bad guys go flat. Me stay FAR from candle!"]],
+  "w6-s4": [[10, "Hmph. Chocomunch. This Crumblet wants to see the world. Walk it past the gravy boats, would ya?"], ["me", "Me walk muffin! Gravy boat go vroom? Me punch boat. Muffin say yay!"]],
+  "w6-s6": [["me", "Teacups big like bathtub! Me no take bath. Me grab scroll!"], ["me", "Teapot Nanny heal bad guys? No fair! Me punch teapot first. POW!"]],
+  "w6-s7": [["me", "Napkin fort! Me make napkin bib. Ooh, me fancy golem now!"], ["me", "Key chest way up high. Sponge! BOING! Me no drop Chef note!"]],
+  "w6-s8": [["lo2", "Charge, my silverware! Carve yon golem like a chocolate bunny!"], ["me", "Me NO bunny! Me hold forty-five seconds. Me count all the way. Me good counter now!"]],
+  "w6-s9": [["me", "Chandelier! Big and sparkly. Lots of candles. Uh-oh, lots of HOT."], ["lo2", "Climb, little sweet! At the top, I shall serve thee for dessert! Hahaha!"], ["me", "Me dessert? Okay, maybe. But me PUNCHING dessert!"]],
 };
 
 export const QUIPS: Record<QuipKind, string[]> = {

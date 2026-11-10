@@ -164,3 +164,11 @@ Screens: `node scripts/w5-shot.mjs`. Damage diagnosis: `npx vite-node scripts/dm
   fights; best time in `save.free.rush`; a Legendary box for finishing.
 GameScene runs it from `data.free` (`FreeRun`) and `finishFree()` chains the stages. Balance: `npx vite-node scripts/free-balance.ts`
 (bot: daily 59-83% clears, Endless median 9 floors, Boss Rush 29-38%). Screens: `node scripts/free-shot.mjs`.
+
+## Act 2: Beyond the Kitchen — World 6: The Dining Room
+WORLDS[5] (Lv 61-70, level cap now 70): fork / napkin / candle / gravy / teapot / roast (+ crouton squires), hot-wax hazard
+`wax` (drip + sticky puddle), boss **Sir Stale** (`stale`, Leftovers lieutenant: lance charges, crumb volleys, crouton
+summons). Act 2 nemeses have retired: stage x-5 is a plain elite from World 6 on and `w6-elite` is a friendly cameo.
+Leftovers roster (for later worlds): W7 Backyard BBQ Baron Brussels, W8 Garden the Mystery Meatloaf, W9 Supermarket the
+Tupperwraith, W10 Old Fruitcake. 'lo2' (Sir Stale) speaks with his boss art in Act 2 scenes. Brief: docs/WORLD6-BRIEF.md.
+Art `node scripts/w6-jobs.mjs [stills]`, screens `node scripts/w6-shot.mjs`.

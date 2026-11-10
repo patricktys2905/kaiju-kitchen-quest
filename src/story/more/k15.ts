@@ -43,6 +43,14 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w5-s7": [["me", "Plughole Pass! Careful, everybody. Nobody drop the ketchup down there."], ["me", "Key chest's up high. A champion always checks the sponges! BOING!"]],
   "w5-s8": [["me", "Greasy Pan Pits! Somebody forgot to wash up after the cookout. Was it me? It was me. Sorry!"], [7, "Hrrm! Young champion! Your grill still burns with my flame. Forty-five seconds, side by side?"], ["me", "Side by side, Mr. Norigon! Light 'em up!"]],
   "w5-s9": [["mold", "Hehehe... cookouts end, little sausage. Everybody goes home, and you're all alone with the dishes."], ["me", "Nope! After a cookout, everybody helps with the dishes. That's the best part!"], ["me", "Well, second-best. After the burgers."]],
+  // World 6: The Dining Room (Act 2).
+  "w6-s2": [["n", "RUMBLE! A giant rolling pin comes rolling across the Placemat Plains!"], ["me", "And they're off! The pin starts strong, but Hotchog is on fire today, folks! RUN!"]],
+  "w6-s3": [["me", "Whoa, candelabras! Hot wax dripping everywhere. Watch your step, folks. Sticky!"], ["me", "Gates locked? You know the drill. Lever time! Rolling pin, take it away!"]],
+  "w6-s4": [[10, "Hmph. Hotchog. This Crumblet wants to see the world. Get it through Gravy Boat Bay in one piece."], ["me", "You got it, Mr. Bluebeary! Little buddy, gravy is a topping, not a swimming pool!"]],
+  "w6-s6": [["me", "Teacup Terrace! Pinkies up, folks! The scroll's at the far end."], ["me", "Teapot Nannies healing the baddies? That's a foul! Grab the scroll and hold the line!"]],
+  "w6-s7": [["me", "Napkin Fold Fort! Somebody folded these into swans. Show-offs!"], ["me", "Key chest up high, sponge right here. The Champion goes for the BOING!"]],
+  "w6-s8": [["lo2", "Charge, my silverware! Skewer yon sausage!"], ["me", "Skewers? Pal, I've grilled with Captain Kebab! Forty-five seconds! Bring it on!"]],
+  "w6-s9": [["lo2", "Forsooth! A hot dog climbs my chandelier! Thou art not even FANCY, varlet!"], ["me", "Fancy? I'm the Grill Champion! Next up, folks, the main event!"]],
 };
 
 export const QUIPS: Record<QuipKind, string[]> = {

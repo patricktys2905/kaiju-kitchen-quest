@@ -275,10 +275,11 @@ export const SETS: Record<string, SetDef> = {
   ...Object.fromEntries(([[0, 'Gobzilla'], [10, 'Bluebeary'], [11, 'Pizzaraptor'], [4, 'Mothball'], [1, 'Squidgeon'], [2, 'Crabbage'], [5, 'Toastbat'], [6, 'Dumplord'], [7, 'Norigon'], [8, 'Chocomunch'], [15, 'Hotchog'], [17, 'Pengwhip']] as [number, string][]).map(([sp, n]) => [`sig${sp}`, {
     name: `${n}'s Regalia`, world: 0, two: '+15% skill damage', three: 'Ultimate charges 50% faster and hits 25% harder',
     b2: { skillDmg: 0.15 }, b3: { ultGain: 0.5, ultDmg: 0.25 } } as SetDef])),
+  dining: { name: 'Fine Dining', world: 6, two: '+15% skill damage, +8% speed', three: '+20% attack, -10% cooldowns', b2: { skillDmg: 0.15, speed: 0.08 }, b3: { atkPct: 0.2, cdr: 0.1 } },
   sink: { name: 'Deep Clean', world: 5, two: '+15% attack', three: '+20% max HP, -15% damage taken', b2: { atkPct: 0.15 }, b3: { hpPct: 0.2, dr: 0.15 } },
   inferno: { name: 'Inferno Chef', world: 3, two: '+10% skill damage', three: '-12% cooldowns, +12% attack', b2: { skillDmg: 0.1 }, b3: { cdr: 0.12, atkPct: 0.12 } },
 };
-export function setForLevel(ilvl: number): string { return ilvl >= 49 ? 'sink' : ilvl >= 37 ? 'pantry' : ilvl >= 25 ? 'inferno' : ilvl >= 13 ? 'frost' : 'champ'; }
+export function setForLevel(ilvl: number): string { return ilvl >= 61 ? 'dining' : ilvl >= 49 ? 'sink' : ilvl >= 37 ? 'pantry' : ilvl >= 25 ? 'inferno' : ilvl >= 13 ? 'frost' : 'champ'; }
 
 // ---------- named legendaries ----------
 // Signature legendaries: two per kaiju (a weapon and an armour), each upgrading one of that kaiju's skills.

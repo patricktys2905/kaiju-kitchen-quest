@@ -43,11 +43,12 @@ const MAP_POS: Record<string, [number, number]> = {
   '3-1': [27, 87], '3-2': [36, 77], '3-3': [46, 68], '3-4': [60, 62], '3-5': [45, 52], '3-6': [55, 42], '3-7': [73, 48], '3-8': [46, 20], '3-9': [62, 32], '3-10': [77, 23],
   '4-1': [21, 83], '4-2': [27, 74], '4-3': [31, 63], '4-4': [36, 60], '4-5': [39, 50], '4-6': [44, 40], '4-7': [52, 43], '4-8': [61, 43], '4-9': [68, 37], '4-10': [76, 22],
   '5-1': [5, 87], '5-2': [14, 77], '5-3': [26, 74], '5-4': [38, 82], '5-5': [47, 76], '5-6': [50, 52], '5-7': [62, 61], '5-8': [70, 45], '5-9': [84, 56], '5-10': [77, 75],
+  '6-1': [11, 86], '6-2': [23, 80], '6-3': [36, 82], '6-4': [43, 66], '6-5': [53, 56], '6-6': [62, 56], '6-7': [70, 52], '6-8': [74, 38], '6-9': [81, 33], '6-10': [87, 22],
   '2-1': [52, 77], '2-2': [61, 67], '2-3': [69, 61], '2-4': [75, 54], '2-5': [79, 46], '2-6': [77, 38], '2-7': [81, 30], '2-8': [79, 22], '2-9': [83, 15], '2-10': [85, 7],
 };
 
 /** Map pages: which painted map shows which worlds. */
-const MAPS = [{ img: 'map-world', name: 'Kitchen', worlds: [1, 2] }, { img: 'map-oven', name: 'Oven', worlds: [3] }, { img: 'map-pantry', name: 'Pantry', worlds: [4] }, { img: 'map-sink', name: 'Sink', worlds: [5] }];
+const MAPS = [{ img: 'map-world', name: 'Kitchen', worlds: [1, 2] }, { img: 'map-oven', name: 'Oven', worlds: [3] }, { img: 'map-pantry', name: 'Pantry', worlds: [4] }, { img: 'map-sink', name: 'Sink', worlds: [5] }, { img: 'map-dining', name: 'Dining Room', worlds: [6] }];
 
 let el: HTMLElement;
 let tab: Tab = 'map';
@@ -167,7 +168,7 @@ function mapPage(): string {
       }).join('')}
     </div>
     <div class="info">
-      <div class="num">${sel.num}${sel.boss ? ' · BOSS' : sel.id.endsWith('-5') && nemesisOf(p.species) ? ` · NEMESIS: ${MOB_DEFS[nemesisOf(p.species)!].name}` : sel.id.endsWith('-5') ? ' · ELITE' : ''}</div>
+      <div class="num">${sel.num}${sel.boss ? ' · BOSS' : sel.id.endsWith('-5') && sel.world <= 5 && nemesisOf(p.species) ? ` · NEMESIS: ${MOB_DEFS[nemesisOf(p.species)!].name}` : sel.id.endsWith('-5') ? ' · ELITE' : ''}</div>
       <div class="nm">${sel.name}</div>
       <div class="lv">Monsters Lv ${lv(sel.lv[0])}${sel.lv[1] !== sel.lv[0] ? '–' + lv(sel.lv[1]) : ''}</div>
       <div class="lv" style="color:${low ? '#ff8a8a' : '#a8f0a8'}">Recommended Lv ${lv(sel.rec)} (you: ${p.level})</div>

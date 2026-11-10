@@ -47,6 +47,15 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w5-s7": [["me", "Plughole Pass. Key's in a chest on a high ledge. Bouncy sponge. Bears don't bounce."], ["me", "BOING! Wheee! AHEM. Nobody saw that. Hmph."]],
   "w5-s8": [["me", "Greasy Pan Pits. Forty-five seconds. These pans need a scrub. So do the monsters. GRRR."], [11, "Beep beep! Watch the taps, Bluebeary! When they pour, they BLAST ya!"], ["me", "I know how taps work, raptor. Hmph. Thanks."]],
   "w5-s9": [["me", "Drain Descent. Sniff sniff. Smells like a fridge nobody cleaned."], ["mold", "Hehehe... come down, bear. Is anybody counting YOU?"], ["me", "Six little somebodies. Every night. Grrr."]],
+
+  // World 6: The Dining Room (Act 2).
+  "w6-s2": [["me", "Placemat Plains. Crumbs everywhere. Stale ones. None of 'em the Littlest. Hmph."], ["n", "Uh-oh! A giant rolling pin comes rolling across the placemats!"], ["me", "Bears JOG, remember? Faster jog. FASTER! GRRR!"]],
+  "w6-s3": [["me", "Candelabra Crossing. Hot wax drips everywhere. Ow! Gets right in the fur. Hmph."], ["me", "Lever up top drops a rolling pin. Monsters get flat. Bear gets a minute to grumble."]],
+  "w6-s4": [["n", "Gravy Boat Bay! A tiny Crumblet waves from a gravy boat. It's the Littlest!"], ["me", "LITTLEST! Found ya! Still wanna see the world? Hmph. Fine. Together. Stay close."], ["me", "Strays walked home: six. This one's mine, so it counts double."]],
+  "w6-s6": [["me", "Teacup Terrace. Recipe Scroll's at the far end. Littlest wants a tea party. After, kid."], ["lo2", "Forsooth, a bear at tea! Mind thy elbows, furry oaf! Pinkies UP!"], ["me", "This pinky's for squashing. Hmph."]],
+  "w6-s7": [["me", "Napkin Fold Fort. Key chest on a high ledge. Bouncy sponge. Bears STILL don't bounce."], ["me", "BOING! Littlest says do it again. ONE more. Hmph."]],
+  "w6-s8": [["me", "Silverware Siege. Forty-five seconds. Fork Soldiers, huh? I brought my own forks. Ten of 'em. Claws."], [11, "Beep beep! Table for two, Bluebeary? I'll take the knives, you take the forks!"], ["me", "Hmph. Deal, raptor."]],
+  "w6-s9": [["me", "Chandelier Climb. Littlest says it's a sparkly tree. Sparkly tree full of monsters. Hmph."], ["lo2", "Hahaha! Climb, bear! At the Head of the Table, thy crumbs shall be my croutons!"], ["me", "Count your crumbs, breadstick. You're about to lose a few. Grrr."]],
 };
 
 export const QUIPS: Record<QuipKind, string[]> = {

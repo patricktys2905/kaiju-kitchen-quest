@@ -43,6 +43,14 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w5-s7": [["me", "Plughole Pass! Note to self: do NOT go down the drain. Underline that. Twice!"], ["me", "Secret chest on a high ledge! Bouncy sponge, launch the squid! EUREKA, I'm airborne!"]],
   "w5-s8": [["foe", "Psst, colleague! Grease monsters HATE soap. That's free data. Don't tell anyone I helped!"], ["me", "Professor Penicillin, sharing data?! Peer review WORKS! Forty-five seconds, let's scrub up!"]],
   "w5-s9": [["mold", "Hehehe... closer, little chemist. Bring your bottle down the drain. I want to taste your last one percent."], ["me", "My tentacles are tingling! That's either science or fear. Final note before the drain: it's SCIENCE!"]],
+  // World 6: The Dining Room (Act 2).
+  "w6-s2": [["me", "Placemat Plains! Placemats keep tables clean. This one's keeping a giant rolling pin warm!"], ["me", "New hypothesis, same as the old hypothesis: RUN RIGHT! Very, VERY right!"]],
+  "w6-s3": [["me", "Candelabra Crossing! Hot wax drips everywhere. Jelly plus wax equals one sticky squid!"], ["me", "Gates locked? Lever, rolling pin, SPLAT! My favourite experiment, now served on fine china!"]],
+  "w6-s4": [[10, "Hmph. Jelly. This Crumblet wants to see the world. Start it on Gravy Boat Bay. Bring it back in one piece."], ["me", "Assistant number six! Rules one to four still apply! Rule five: no swimming in the gravy!"]],
+  "w6-s6": [["me", "Teacup Terrace! A Recipe Scroll, and Teapot Nannies healing everything I bonk! Unfair!"], ["lo2", "Hah! Thou shalt never hold yon scroll, jelly! Thou art far too WOBBLY!"], ["me", "Wobbly is a perfectly good state of matter! Grab it and hold on, GO!"]],
+  "w6-s7": [["me", "Napkin Fold Fort! Napkins folded into swans, towers and one very rude goose!"], ["me", "Secret chest on a high ledge! Bouncy sponge, launch the squid! Science is mostly bouncing now!"]],
+  "w6-s8": [["me", "Silverware Siege! The Fork Soldiers brought the whole cutlery drawer!"], ["me", "Forty-five seconds! Survive now, write notes later. Gravy-stained notes. Fascinating!"]],
+  "w6-s9": [["lo2", "Hark, jelly! Thou climbest my chandelier? Up here we serve only VINTAGE guests!"], ["me", "Vintage? My spore-o-meter says STALE! Readings don't lie, Sir Crusty!"]],
 };
 
 export const QUIPS: Record<QuipKind, string[]> = {

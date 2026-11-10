@@ -250,7 +250,7 @@ export class World {
     const night = this.variant === 'night' ? 1 : 0;
     if (this.npc) { this.npc.maxHp = this.npc.hp = Math.round(d.maxHp * 0.7); }
     // stage 5: this kaiju's story nemesis takes the elite's place
-    const nemStage = !!nemesis && !stage.boss && stage.id.endsWith('-5');
+    const nemStage = !!nemesis && !stage.boss && stage.id.endsWith('-5') && stage.world <= 5; // Act 2: the nemeses have hung up their capes
     for (const m of stage.mobs) this.spawnMob(m.elite && nemStage ? nemesis! : m.kind, m.x, m.lv + (hard ? HARD_LV : 0) + night, m.y, m.elite);
     if (this.variant === 'swarm') {
       for (const m of stage.mobs.filter((_, i) => i % 2 === 0)) this.spawnMob(m.kind, Math.min(stage.width - 200, m.x + 70), m.lv + (hard ? HARD_LV : 0), m.y, m.elite);
@@ -1987,9 +1987,10 @@ export class World {
       else { const c = (this.time + z.offset) % z.period; st = c < z.on ? 'on' : c > z.period - 0.9 ? 'warn' : 'off'; }
       if (st !== z.state) { if (st === 'on') z.hit.clear(); z.state = st; if (z.kind !== 'ice') this.events.push({ t: 'hazard', i, on: st === 'on' }); }
       if (st !== 'on' || z.kind === 'ice') return;
-      const reachUp = z.kind === 'vent' ? 110 : z.kind === 'drop' ? 70 : z.kind === 'tap' ? 900 : 60;
+      const reachUp = z.kind === 'vent' ? 110 : z.kind === 'drop' || z.kind === 'wax' ? 70 : z.kind === 'tap' ? 900 : 60;
+      if (z.kind === 'wax' && z.hit.size === 0 && !this.puddles.some(p => Math.abs(p.x - z.x) < 10)) this.puddles.push({ x: z.x, y: G, t: 3, kind: 'slow', w: 70 });
       const inZone = (x: number, y: number) => Math.abs(x - z.x) < z.w / 2 && y >= G - reachUp;
-      const pct = (z.kind === 'burner' ? 0.12 : z.kind === 'vent' ? 0.06 : z.kind === 'tap' ? 0.07 : 0.15) * (z.phase2 ? 0.5 : 1);
+      const pct = (z.kind === 'burner' ? 0.12 : z.kind === 'vent' ? 0.06 : z.kind === 'tap' ? 0.07 : z.kind === 'wax' ? 0.11 : 0.15) * (z.phase2 ? 0.5 : 1);
       for (const h of this.heroes) {
         this.cur = h;
         const key = -1 - h.idx;

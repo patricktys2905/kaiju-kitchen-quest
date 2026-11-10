@@ -47,6 +47,15 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w5-s7": [["me", "Plughole Pass! Secret chest on a high ledge. A bouncy sponge? My kind of elevator!"], ["me", "World 5 key, here I come! Raptor Express delivers to EVERY floor!"]],
   "w5-s8": [["me", "Greasy Pan Pits! Who leaves pans THIS greasy? One star for the dishwasher!"], ["foe", "Psst, raptor! Lure 'em under the taps! SPLOOSH! What? I'm on the clock too!"], ["me", "Pete! You're helping?! Forty-five seconds, let's ROLL!"]],
   "w5-s9": [["me", "Drain Descent. Going down! Next stop: the customer! *gulp*"], ["mold", "Hehehe... down, down, little courier. Your pizza's getting cold. And cold pizza is MINE."], ["me", "Cold pizza is a breakfast classic, and you're NOT invited!"]],
+
+  // World 6: The Dining Room (Act 2).
+  "w6-s2": [["me", "Minute four! Placemat Plains! Flat road, zero traffic. Wait, what's that rumble?"], ["n", "Uh-oh! A giant rolling pin is chasing the delivery dino!"], ["me", "You want this pizza? Get in LINE! Beep beep, VROOM!"]],
+  "w6-s3": [["me", "Candelabra Crossing! Hot wax? Keep it OFF the box! Splat-free delivery, people!"], ["me", "Lever up top. Special delivery: one rolling pin, express to your face!"]],
+  "w6-s4": [[10, "Hmph. Raptor. Lost Crumblet in Gravy Boat Bay. Wanted to see the world. Bus it to the exit."], ["me", "Passenger number six! Hey, did ya chip in for that bus yet, Bluebeary?"], [10, "Hmph. Check's in the mail."]],
+  "w6-s6": [["me", "Teacup Terrace! Pick-up: one Recipe Scroll, then hold out. Fancy tea party, no tips. Typical."], ["lo2", "Forsooth! Thy feast is LATE, courier! A knight hateth tardiness!"], ["me", "Late?! It's minute fourteen! That's EARLY for me!"]],
+  "w6-s7": [["me", "Napkin Fold Fort! Secret chest on a high ledge. Bouncy sponge? The Raptor Express elevator! Boing!"], ["me", "World 6 key, delivered right to MY pocket. Tip yourself, raptor!"]],
+  "w6-s8": [["me", "Silverware Siege! Forty-five seconds. Every fork in the house wants a bite of this pizza!"], [5, "Heh. Nice feast box, raptor. Shame if it walked off."], ["me", "Hands off, Toastbat! It's a paid order! Well, a promised order!"]],
+  "w6-s9": [["me", "Chandelier Climb! The Head of the Table is up top. Customer's that way!"], ["lo2", "Hahaha! Bring me my feast, courier! And let it be STALE as a tombstone!"], ["me", "Sorry, pal! Raptor Express only delivers HOT! Beep beep!"]],
 };
 
 export const QUIPS: Record<QuipKind, string[]> = {

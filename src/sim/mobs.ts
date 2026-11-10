@@ -96,6 +96,15 @@ export const MOBS: Record<MobKind, MobDef> = {
   scrub: { name: 'Scrub Brute', brain: 'brute', art: 'mob-scrub', hp: 215, atk: 16, speed: 50, w: 72, h: 76, knock: 0.45, aggro: 280, range: 90, windup: 0.8, patrol: 90, xp: 30, dropChance: 0.6, armor: true },
   sporeling: { name: 'Sporeling', brain: 'hopper', art: 'mob-sporeling', hp: 26, atk: 7, speed: 100, w: 30, h: 28, knock: 1.3, aggro: 340, range: 180, windup: 0.35, patrol: 120, xp: 3, dropChance: 0.04 },
   moldking: { name: 'The Mold Crown', brain: 'boss', art: 'boss-mold', hp: 1850, atk: 18, speed: 80, w: 140, h: 190, knock: 0.2, aggro: 2000, range: 150, windup: 0.75, patrol: 0, xp: 420, dropChance: 1, armor: true, moves: ['slash', 'leap', 'rain', 'charge'], calls: 'sporeling' },
+  // ---- World 6: The Dining Room ----
+  fork: { name: 'Fork Soldier', brain: 'walker', art: 'mob-fork', hp: 105, atk: 12, speed: 65, w: 40, h: 70, knock: 0.8, aggro: 300, range: 72, windup: 0.5, patrol: 110, xp: 17, dropChance: 0.35 },
+  napkin: { name: 'Napkin Ghost', brain: 'flyer', art: 'mob-napkin', hp: 42, atk: 7, speed: 120, w: 46, h: 48, knock: 1.1, aggro: 340, range: 230, windup: 0.5, patrol: 160, xp: 13, dropChance: 0.3 },
+  candle: { name: 'Candle Imp', brain: 'ranged', art: 'mob-candle', hp: 58, atk: 9, speed: 60, w: 40, h: 54, knock: 1, aggro: 360, range: 320, windup: 0.55, patrol: 100, xp: 13, dropChance: 0.3 },
+  gravy: { name: 'Gravy Boat Rammer', brain: 'charger', art: 'mob-gravy', hp: 110, atk: 11, speed: 65, w: 66, h: 50, knock: 0.6, aggro: 400, range: 380, windup: 0.7, patrol: 110, xp: 18, dropChance: 0.4 },
+  teapot: { name: 'Teapot Nanny', brain: 'healer', art: 'mob-teapot', hp: 70, atk: 8, speed: 55, w: 50, h: 54, knock: 1, aggro: 320, range: 260, windup: 0.9, patrol: 100, xp: 15, dropChance: 0.4 },
+  roast: { name: 'Roast Brute', brain: 'brute', art: 'mob-roast', hp: 220, atk: 16, speed: 50, w: 76, h: 74, knock: 0.45, aggro: 280, range: 90, windup: 0.8, patrol: 90, xp: 30, dropChance: 0.6, armor: true },
+  crouton: { name: 'Crouton Squire', brain: 'hopper', art: 'mob-crouton', hp: 26, atk: 7, speed: 100, w: 30, h: 30, knock: 1.3, aggro: 340, range: 180, windup: 0.35, patrol: 120, xp: 3, dropChance: 0.04 },
+  stale: { name: 'Sir Stale', brain: 'boss', art: 'boss-stale', hp: 1700, atk: 18, speed: 85, w: 110, h: 200, knock: 0.2, aggro: 2000, range: 160, windup: 0.75, patrol: 0, xp: 460, dropChance: 1, armor: true, moves: ['slash', 'leap', 'charge', 'fanshot'], calls: 'crouton' },
   // ---- new monsters, 3 per world ----
   garlic: { name: 'Garlic Cleric', brain: 'healer', art: 'mob-garlic', hp: 55, atk: 7, speed: 60, w: 44, h: 56, knock: 1, aggro: 320, range: 260, windup: 0.9, patrol: 100, xp: 14, dropChance: 0.4 },
   ant: { name: 'Sugar Ant Digger', brain: 'burrower', art: 'mob-ant', hp: 60, atk: 11, speed: 95, w: 50, h: 42, knock: 1, aggro: 340, range: 40, windup: 0.6, patrol: 120, xp: 13, dropChance: 0.3 },
@@ -168,6 +177,12 @@ export const BOSS_PATTERNS: Partial<Record<MobKind, { near: string[][]; far: str
     { near: [['slash', 'breath'], ['slash', 'slash']], far: [['breath'], ['charge']] },
     { near: [['slash', 'breath', 'leap'], ['slash', 'charge']], far: [['rain', 'breath'], ['charge', 'leap']] },
     { near: [['breath', 'heatwave', 'slash'], ['leap', 'breath']], far: [['heatwave', 'rain', 'charge'], ['breath', 'breath']] },
+  ],
+  // Sir Stale: lance charges, crumb volleys, crouton squires, a crust shockwave when he's angry
+  stale: [
+    { near: [['slash', 'slash'], ['slash', 'charge']], far: [['charge'], ['fanshot']] },
+    { near: [['slash', 'rootspike', 'slash'], ['leap', 'slash']], far: [['fanshot', 'charge'], ['summon', 'charge']] },
+    { near: [['roar', 'slash', 'slash'], ['leap', 'rootspike']], far: [['charge', 'fanshot', 'charge'], ['summon', 'leap', 'fanshot']] },
   ],
   // the final boss: spore rain, Sporelings, mould tendrils along the floor, mould puddles
   moldking: [

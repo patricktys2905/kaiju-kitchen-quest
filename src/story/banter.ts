@@ -7,6 +7,14 @@ export type QuipKind = 'combo' | 'lowhp' | 'perfect' | 'levelup' | 'secret' | 'b
 
 /** What each monster says when it first appears in a stage (one is picked at random). */
 export const TAUNTS: Partial<Record<MobKind, string[]>> = {
+  // World 6: The Dining Room
+  fork: ["Elbows off the table, peasant!", "Fork you very much! Er, I mean... CHARGE!", "Four points of pain, comin' up!"],
+  napkin: ["Boo! Did I scare the crumbs off ya?", "Wipe that smile off your face!", "Fold, flutter and FIGHT!"],
+  candle: ["Light 'em up! Hehehe!", "Wanna see a trick? HOT WAX!", "Burnin' the candle at both ends, baby!"],
+  gravy: ["Gravy train, comin' through!", "You're gonna get SAUCED!", "Make way! Extra gravy!"],
+  teapot: ["Now, now, dearies, nobody hurts my monsters!", "Tea time is TOUGH time!", "I'm a little teapot, short and MAD!"],
+  roast: ["I'm the main course, pal!", "Stuffed with STRENGTH!", "You're about to get carved!"],
+  crouton: ["For Sir Stale! Crunch crunch!", "I'm small but I'm CRUNCHY!", "Squire reporting for battle! Eep!"],
   // World 5: The Sink
   plate: ["Nobody's washin' THIS plate!", "I've got crust AND a shield! Bring it!", "You're on my dish list, pal!"],
   bubble: ["Pop quiz! Hehe, get it? POP?", "Wheee! Catch me if you can!", "Ooh, you look like you need a bath!"],

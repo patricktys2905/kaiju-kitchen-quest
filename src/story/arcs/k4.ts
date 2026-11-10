@@ -31,11 +31,32 @@ export const ARC: Record<string, StoryLine[]> = {
     ["foe", "Bzzt... wow. That IS a nice light. Can I watch too? No zapping. Promise."],
     ["me", "Sure, Zapsy! Ooooh, shiny! And this time it really IS the moon! Hee!"],
   ],
+  "w6-open": [
+    ["n", "Act 2: Beyond the Kitchen! It's moon-watching night at the kitchen window..."],
+    ["me", "Hi, moon! Hi, Zapsy! And hiii to the big sparkly chandelier next door!"],
+    ["me", "Huh? Where'd the chandelier go? The whole Dining Room just went DARK!"],
+    ["lo", "Hmph. Forgotten rooms don't need lights, moth. Soon the whole house'll be dark and stale."],
+    ["me", "Forgotten?! That chandelier is the moon's sparkly cousin! Nobody forgets family!"],
+    ["me", "Hang on, chandelier! Mothball's coming to switch you back on! Flap flap!"],
+  ],
+  "w6-boss": [
+    ["boss", "Halt, moth! I am SIR STALE! This table is MINE, and I like it dark and crusty!"],
+    ["me", "Ooh, a knight! And a big shiny butter knife! Is that the... nope. Not the moon."],
+    ["boss", "Forsooth, quit gawking at my lance! Have at thee!"],
+    ["me", "Sorry, Sir Crusty! Lights back on, right NOW! FWOOSH!"],
+  ],
+  "w6-after": [
+    ["n", "SNAP! The lance breaks, and the chandelier blinks back on, all twinkly!"],
+    ["boss", "Crusty?! I am VINTAGE! Out the window I go! Baron Brussels shall roast thee in the Backyard, moth!"],
+    ["me", "Ooooh, twinkly! Hi, chandelier! The moon says hi!"],
+    ["me", "Wait, the Backyard? That's OUTSIDE, where the real sky is! With real stars! Wait for me!"],
+  ],
 };
-export const NEMESIS: Record<"w1-elite" | "w2-elite" | "w3-elite" | "w4-elite" | "w5-elite", StoryLine[]> = {
+export const NEMESIS: Record<"w1-elite" | "w2-elite" | "w3-elite" | "w4-elite" | "w5-elite" | "w6-elite", StoryLine[]> = {
   "w1-elite": [["foe", "Bzzzt! Hey there, little moth! Come to the light! MY light! Only my light!"], ["me", "Ooooh, you're so bright! But, um, you're not the moon."], ["foe", "I can BE your moon! Closer, closerrrr... BZZZZT!"], ["me", "Yikes! My fuzz! Okay, no thank you!"]],
   "w2-elite": [["foe", "Bzzt! Even in the cold, moths come to Zapsy! They ALWAYS come!"], ["me", "Not this moth! I know the difference now. The moon doesn't go ZAP!"]],
   "w3-elite": [["foe", "Bzzt! The oven glows, but I glow BRIGHTER! Look at me, moth! LOOK AT ME!"], ["me", "La la la, not looking! I'm daydreaming about moonlight!"]],
   "w4-elite": [["foe", "Why won't you love my light?! EVERYBODY loves my light! Bzzt!"], ["me", "Your light just wants to catch stuff. The moon only wants to shine!"], ["foe", "Bzz, bzz... I just wanted a buddy. *sniff*"]],
   "w5-elite": [["foe", "BZZZT! Look, moth! Steel wool coils! I'm the BRIGHTEST thing in the whole Sink!"], ["me", "Ooh, you are super sparkly. But you're still not the moon, Zapsy!"], ["foe", "Bzz! Then what am I supposed to BE?! Fine! Beat me and maybe I'll quit zapping. MAYBE!"], ["me", "You could be a nightlight! Nightlights are everybody's buddy!"]],
+  "w6-elite": [["foe", "Bzzt! Moth! Roast Brute on the ridge. I lit it up so you can see it coming. Nightlight duty!"], ["me", "Zapsy! You came! And you're glowing all friendly!"], ["foe", "Bzz, don't tell anybody. I've got a reputation. ZAP! Er, I mean, good luck."]],
 };

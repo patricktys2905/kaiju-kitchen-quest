@@ -43,6 +43,14 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w5-s7": [["me", "The last secret chest, high above the plughole. Proverb: \"Never drop your key down the drain.\""], ["me", "Hrrm. That one is less ancient and more common sense. Boing, sponge! Boing!"]],
   "w5-s8": [["me", "A greasy pan! Fear not, pan. When this is over, a Roll Dragon always washes up."], [15, "Mr. Norigon! My grill's still lit with your flame! Forty-five seconds, side by side?"], ["me", "Side by side, young champion! FWOOSH!"]],
   "w5-s9": [["mold", "Hehehe... closer, old dragon. Down here it's dark and damp, and every fire goes fizzle."], ["me", "Fizzle? I waited nine hundred years for this flame. I can out-wait one soggy drain!"], ["me", "Hrrm. Actually, no. I am very impatient. HERE I COME!"]],
+  // World 6: The Dining Room (Act 2).
+  "w6-s2": [["me", "Placemat Plains! Flat as a sheet of nori. Proverb: \"On flat ground, the dragon strolls.\""], ["n", "RUMBLE! A giant rolling pin comes thundering across the placemats!"], ["me", "Proverb update: \"The dragon RUNS!\" HUP HUP HUP!"]],
+  "w6-s3": [["me", "Candelabras like lighthouses, dripping hot wax! Even my ancestors never dined THIS fancy."], ["me", "The gates lock! A lever up top, a rolling pin waiting. Pass the pin, please! BONK!"]],
+  "w6-s4": [[10, "Hmph. Dragon. This Crumblet wants to see the world. Walk it past the gravy boats, or else."], ["me", "With honour, papa bear! Little one, never swim in gravy. It is NOT soup, whatever it tells you."]],
+  "w6-s6": [["me", "Teacup Terrace! A tea ceremony, my favourite! The Recipe Scroll waits at the far end."], ["me", "Proverb: \"Sip slowly, run quickly.\" Today we skip the sipping. Hup hup!"]],
+  "w6-s7": [["me", "Napkin Fold Fort. Folded so neatly! Whoever did this has my respect, and far too much free time."], ["me", "A chest on the high ledge, as always. Sponge, my old friend! Boing!"]],
+  "w6-s8": [["lo2", "Charge, my silverware! Skewer the raw fish!"], ["me", "Raw? I am rice and sea, you crusty baguette! Forty-five seconds! Bring the whole cutlery drawer!"]],
+  "w6-s9": [["lo2", "Forsooth! An old dragon climbs my chandelier! Art thou here for the senior discount?"], ["me", "Nine hundred years, and the jokes are still about my age. Hrrm! Here I come, breadstick!"]],
 };
 
 export const QUIPS: Record<QuipKind, string[]> = {

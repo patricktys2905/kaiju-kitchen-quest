@@ -43,6 +43,14 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w5-s7": [["me", "Plughole Pass. One wrong step and my career goes down the drain. Like, for real down the drain."], ["me", "Secret chest on a high ledge? Bounce the sponge, grab the key. I've done this once or twice."]],
   "w5-s8": [["foe", "Squeak! Psst, bat. Grease monsters can't climb the pan edges. Don't say I never gave ya nothin'!"], ["me", "Ricotta, giving tips? Heh. Forty-five seconds, then we're square, cheese-face."]],
   "w5-s9": [["mold", "Hehehe... closer, little thief. Bring the Butter all the way down. I'll keep it SAFE."], ["me", "Heh. That's what every crook says. Trust me, I'd know."]],
+  // World 6: The Dining Room (Act 2).
+  "w6-s2": [["me", "Placemat Plains. Wide open, no shadows, zero cover. Worst heist layout ever."], ["n", "Uh-oh! A giant rolling pin comes rumbling across the placemat!"], ["me", "Every heist needs a chase scene! Run right!"]],
+  "w6-s3": [["me", "Candelabra Crossing. Hot wax dripping from above! Toast plus wax equals one very fancy candle."], ["me", "Gates locked? Lever, rolling pin, BONK. The oldest trick in my book. Also the only page."]],
+  "w6-s4": [[10, "Hmph. Bat. This Crumblet wants to see the world. Show it Gravy Boat Bay. SAFELY."], ["me", "Uncle Toastbat's world tour, now with gravy! Stick close, kid, and stay clear of the hissy pots."]],
+  "w6-s6": [["me", "Teacup Terrace! A Recipe Scroll sitting out in the open? Heh. Rude not to take it."], ["lo2", "Unhand yon scroll, varlet! 'Tis Feast property!"], ["me", "Funny, that's what I'd say if I swiped it first. Grab it, hold the fort!"]],
+  "w6-s7": [["me", "Napkin Fold Fort. Napkins folded like swans. Classy joint. Heh, right up my alley."], ["me", "Secret chest on a high ledge. Sponge, bounce, swipe. Smooth as butter. Ugh, I miss the Butter."]],
+  "w6-s8": [["me", "Silverware Siege! The whole cutlery drawer wants a piece of me. Get in line, forks."], ["me", "Forty-five seconds. Stay crunchy, stay sneaky, and let the cookers do the talking! FSSSHHH!"]],
+  "w6-s9": [["lo2", "Hark, thief! The Golden Butter sits at the Head of the Table, and none shall pass Sir Stale!"], ["me", "Heh. Thanks for the tip, Sir Snitch-a-lot."]],
 };
 
 export const QUIPS: Record<QuipKind, string[]> = {
