@@ -86,3 +86,17 @@ describe('props', () => {
     expect(st.platforms.map(p => p.x).join()).toBe(before);
   });
 });
+
+describe('sponges', () => {
+  it('a sponge is never under another platform or near a ladder (no accidental launches)', () => {
+    for (const st of [...STAGES, ...BONUS_STAGES]) for (const p of st.props ?? []) {
+      if (p.kind !== 'sponge') continue;
+      const above = st.platforms.filter(q => !q.secret && p.x > q.x - 60 && p.x < q.x + q.w + 60);
+      expect(above.map(q => `${q.x},${q.y}`), `${st.id} sponge at ${p.x}`).toEqual([]);
+      expect(st.ladders.some(l => Math.abs(l.x - p.x) < 80), `${st.id} sponge near a ladder`).toBe(false);
+    }
+  });
+  it('every stage 7 still has its key chest', () => {
+    for (const wd of WORLDS) expect(STAGES.find(s => s.id === `${wd.id}-7`)!.props!.some(p => p.kind === 'chest' && p.key), `world ${wd.id}`).toBe(true);
+  });
+});

@@ -149,14 +149,17 @@ function interactive(w: WorldDef, n: number, width: number, platforms: Platform[
   if (n === 3 || n === 7) { const x = Math.round(width * 0.35); props.push({ kind: 'lever', x, y: G, tx: x + 260, tw: 260 }); }
   // a secret ledge high above the floor, a sponge to bounce up, a chest on top (World key in stage 7)
   if ([2, 4, 6, 7, 8, 9].includes(n)) {
-    for (let tries = 0; tries < 60; tries++) {
-      const x = Math.round(500 + r() * (width - 1100));
-      // prefer open sky; after 30 tries accept a spot above other platforms (one-way: the bounce passes through)
-      if ((tries < 30 && platforms.some(p => p.x < x + 200 && x - 40 < p.x + p.w)) || platforms.some(p => p.secret) || !free(x + 70) || ladders.some(l => Math.abs(l.x - x - 70) < 60)) continue;
+    // the sponge must have open sky above it (else you'd drop onto it from a platform by accident and get flung up)
+    // and no ladder close by; the ledge itself may sit above lower platforms
+    const open = (x: number) => !platforms.some(p => p.x - 70 < x + 12 && x + 12 < p.x + p.w + 70) // nothing above the sponge
+      && !platforms.some(p => p.y < 200 && p.x < x + 140 && x < p.x + p.w) && !ladders.some(l => Math.abs(l.x - (x + 12)) < 80) && free(x + 12) && free(x + 80);
+    const spots: number[] = [];
+    for (let x = 500; x < width - 600; x += 20) if (open(x)) spots.push(x);
+    if (spots.length) {
+      const x = spots[Math.floor(r() * spots.length)];
       platforms.push({ x, y: 150, w: 140, secret: true });
       // the sponge sits under the ledge's left end, so dropping off the middle doesn't bounce you straight back up
       props.push({ kind: 'sponge', x: x + 12, y: G }, { kind: 'chest', x: x + 80, y: 150, key: n === 7 });
-      break;
     }
   }
   // runaway pressure cookers: stages 4, 6, 8 and 9
