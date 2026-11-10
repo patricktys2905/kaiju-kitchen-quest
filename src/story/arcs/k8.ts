@@ -18,10 +18,14 @@ export const ARC: Record<string, StoryLine[]> = {
   "w4-open": [["me", "Ahh, Pantry cool! Me firm again! Me READY!"]],
   "w4-boss": [["boss", "CHOCOLATE COOKIE! THE BEST KIND! CHOMP CHOMP!"], ["me", "Me no cookie! Me FIST! POW!"]],
   "w4-after": [["n", "Look! A note from the Chef: \"Chocomunch, I knew you could do it! Now come to the Sink.\""], ["me", "Sink? Water? Hah! Me okay with water. Water not hot!"], ["mold", "Hehehe... HOT water, little golem. Very hot water."], ["me", "*gulp* Me scared. Me go anyway!"], ["n", "To be continued in World 5: The Sink."]],
+  "w5-open": [["me", "Sink! Big water! Me dip one toe. Ooh, warm-ish. Me no melt! Me okay!"], ["me", "Chef down there somewhere. Me coming, Chef!"]],
+  "w5-boss": [["boss", "Hehehe... little golem. My drain is full of HOT water. You'll melt like a candy bar in a sunny car!"], ["me", "Me scared of melting! Me scared whole trip!"], ["boss", "Then RUN home, little snack! Hehehe!"], ["me", "Nope! Me scared AND me here! Me SMASH crown! POW!"]],
+  "w5-after": [["boss", "Squeak! Ow! I was only a little science project! Somebody grew me in the back of the fridge!"], ["me", "Who grow you? Me want to know!"], ["boss", "Can't say! They forgot me behind the pickles! Blub blub bluuub!"], ["n", "SHLOOORP! Down the drain goes the Mold Crown! And look, a note from the Head Chef floats up!"], ["me", "Me read it! \"Chocomunch, I'm safe! Come warm up by the Oven. No fondue, promise!\""], ["me", "Oven? OVEN?! ...Okay. Me go. Chef is friend."], ["me", "Ahhh. Oven glow so cozy. Me no melting! Me just toasty!"], ["me", "Me hold up Chef note for everybody! Me so proud! Me gonna frame it! In CHOCOLATE!"]],
 };
-export const NEMESIS: Record<"w1-elite" | "w2-elite" | "w3-elite" | "w4-elite", StoryLine[]> = {
+export const NEMESIS: Record<"w1-elite" | "w2-elite" | "w3-elite" | "w4-elite" | "w5-elite", StoryLine[]> = {
   "w1-elite": [["foe", "A CHOCOLATE golem? Ooh, this'll be fun! Say hello to my little blowtorch! FWOOSH!"], ["me", "Yikes! Me no like torch!"], ["foe", "Nobody likes the torch, sweetie. That's what makes it FUN! Mwahaha!"]],
   "w2-elite": [["foe", "Cold fridge, hot torch! You can't hide in here forever, golem!"], ["me", "Me no hiding! Me waiting. And now me PUNCHING!"]],
   "w3-elite": [["foe", "The OVEN! Home sweet home! And look, you're already soft, golem! Hehehe!"], ["me", "Me soft. Me still punch! POW!"]],
   "w4-elite": [["foe", "Why aren't you melting?! Everything melts! Even crème brûlée melts!"], ["me", "Me scared of melting. Me MORE scared of friends getting hurt!"], ["foe", "Ugh! That's so annoyingly brave! This isn't over, golem!"]],
+  "w5-elite": [["foe", "Look at me now, golem! Biggest torch in the whole kitchen! FWOOSH! Why won't you MELT already?!"], ["me", "Me no melt in Oven. Me no melt in Pantry. Me no melt for YOU! POW!"], ["foe", "Ugh! Fine! Maybe I'll stop torching things. MAYBE! Can I at least still torch crème brûlée?"], ["me", "Hmm. Okay. Me like crème brûlée. Me save you a spoon!"]],
 };

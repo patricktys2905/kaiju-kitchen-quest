@@ -882,7 +882,10 @@ export class World {
   private stepObjective(dt: number): void {
     const h = this.hero, ob = this.stage.objective;
     if (!ob || this.failed || this.cleared) return;
-    const fail = (why: string) => { this.events.push({ t: 'objFail', why }); for (const p of this.heroes) { p.hp = 0; this.enter(p, 'down'); } };
+    const fail = (why: string) => { // the whole stage is lost at once (re-downing everyone each frame kept it from ever ending)
+      this.events.push({ t: 'objFail', why }); for (const p of this.heroes) { p.hp = 0; this.enter(p, 'down'); }
+      this.failed = true; this.events.push({ t: 'down' });
+    };
     // the Crumblet follows a step behind you along the floor and gets hurt by attacks and shots near it
     const n = this.npc;
     if (n && n.hp > 0) {
@@ -1652,8 +1655,9 @@ export class World {
         for (const off of [-70, 70]) this.puddles.push({ x: clamp(h.x + off, 30, this.stage.width - 30), y: h.y, t: 12, kind: 'trap', dmg: m.atk, w: 40 });
         break;
       case 'summon': // reuses the summoner call
+        if (this.mobs.filter(o => o.parent === m.id && o.state !== 'dead').length >= 4) break;
         this.events.push({ t: 'summon' });
-        for (const off of [-60, 60]) { const c = this.spawnMob(def.nem?.calls ?? 'bun', clamp(m.x + off, 30, this.stage.width - 30), Math.max(1, m.lv - 3), m.on !== null && m.on >= 0 ? m.y : undefined); c.parent = m.id; c.vy = -380; c.vx = off * 3; c.ground = false; c.on = null; c.state = 'hurt'; c.t = 0; c.under = false; }
+        for (const off of [-60, 60]) { const c = this.spawnMob(def.nem?.calls ?? def.calls ?? 'bun', clamp(m.x + off, 30, this.stage.width - 30), Math.max(1, m.lv - 3), m.on !== null && m.on >= 0 ? m.y : undefined); c.parent = m.id; c.vy = -380; c.vx = off * 3; c.ground = false; c.on = null; c.state = 'hurt'; c.t = 0; c.under = false; }
         break;
       case 'boomerang': {
         const sx = m.x + m.face * 30;
@@ -1983,9 +1987,9 @@ export class World {
       else { const c = (this.time + z.offset) % z.period; st = c < z.on ? 'on' : c > z.period - 0.9 ? 'warn' : 'off'; }
       if (st !== z.state) { if (st === 'on') z.hit.clear(); z.state = st; if (z.kind !== 'ice') this.events.push({ t: 'hazard', i, on: st === 'on' }); }
       if (st !== 'on' || z.kind === 'ice') return;
-      const reachUp = z.kind === 'vent' ? 110 : z.kind === 'drop' ? 70 : 60;
+      const reachUp = z.kind === 'vent' ? 110 : z.kind === 'drop' ? 70 : z.kind === 'tap' ? 900 : 60;
       const inZone = (x: number, y: number) => Math.abs(x - z.x) < z.w / 2 && y >= G - reachUp;
-      const pct = (z.kind === 'burner' ? 0.12 : z.kind === 'vent' ? 0.06 : 0.15) * (z.phase2 ? 0.5 : 1);
+      const pct = (z.kind === 'burner' ? 0.12 : z.kind === 'vent' ? 0.06 : z.kind === 'tap' ? 0.07 : 0.15) * (z.phase2 ? 0.5 : 1);
       for (const h of this.heroes) {
         this.cur = h;
         const key = -1 - h.idx;
@@ -1993,6 +1997,7 @@ export class World {
           z.hit.add(key);
           this.hurtHero(h.d.maxHp * pct, Math.sign(h.x - z.x) || 1, undefined, true);
           if (z.kind === 'vent' && (h.state as string) !== 'down') { h.vy = -900; h.ground = false; h.on = null; }
+          if (z.kind === 'tap' && (h.state as string) !== 'down') { h.vx = (Math.sign(h.x - z.x) || 1) * 300; h.vy = Math.max(h.vy, 200); }
         }
       }
       this.cur = this.heroes[0];

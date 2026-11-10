@@ -145,3 +145,11 @@ After a stage everyone gets their own loot and goes back to the room. Test: `nod
   (`applyMod`: dmg / reach / cd / n / burn / freeze / glue / slow / leech / echo). They roll on that kaiju's gear, more
   often for the kaiju you play. Art: `node scripts/sig-jobs.mjs`. Screens: `node scripts/gear-shot.mjs`.
 
+
+## World 5: The Sink (Act 1 finale)
+Stages 5-1..5-10 (WORLDS[4]: plate / bubble / mug / eel / glove / scrub, faucet hazard `tap`, map-sink), final boss
+**The Mold Crown** (`moldking`: spore rain, Sporelings (`calls`, max 4), floor tendrils, mould puddles; 3 phases).
+After 5-10: the kaiju's ending (`w5-after`: still-w5-cure then still-<sp>-end), the credits roll (src/ui/credits.ts),
+then the post-credits tease of Act 2's villains, THE LEFTOVERS (src/story/finale.ts, speakers 'lo'/'lo2', still-w5-hook).
+Deep Clean set (ilvl 49+), S-5 bonus stage. Story brief for writers: docs/WORLD5-BRIEF.md. Art: `node scripts/w5-jobs.mjs`.
+Screens: `node scripts/w5-shot.mjs`. Damage diagnosis: `npx vite-node scripts/dmg-diag.ts 5-6 11`.

@@ -70,8 +70,28 @@ export const ARC: Record<string, StoryLine[]> = {
     ["me", "Okay, medium scared."],
     ["n", "To be continued in World 5: The Sink."],
   ],
+  "w5-open": [
+    ["me", "The Sink! Big brother says this is where dishes go to get SCARED. Rawr!"],
+    ["me", "Whoa, that faucet's taller than a skyscraper. Medium kaiju can swim, right? Right?!"],
+  ],
+  "w5-boss": [
+    ["boss", "Hehehe... the little berry came all this way. Your big brother never would. He's too SMART!"],
+    ["me", "Hey! Nobody picks on big brother except ME!"],
+    ["boss", "Wear the Crown, shrimp. You'll be BIG forever. Big and green and fuzzy!"],
+    ["me", "No thanks! I'm growing the regular way! One STOMP at a time! RAAAWR!"],
+  ],
+  "w5-after": [
+    ["boss", "Squeak! Okay, okay! I'm just a little science project! Somebody grew me in the back of the fridge and FORGOT me!"],
+    ["me", "Who?! Tell me who!"],
+    ["boss", "Not telling! Squeeeak! SLUUURP!"],
+    ["n", "GLUG! Down the drain it goes! And up floats a note: \"Safe and sound, little hero. Love, the Head Chef.\""],
+    ["me", "Little HERO! Did ya hear that? The Chef's okay and I did it! Me!"],
+    ["me", "Whoa, look at my shadow on the wall! It's GIGANTIC! Rawr! RAWR!"],
+    ["foe", "Hmph. Not bad, shr... I mean, not bad, Gobzilla."],
+    ["me", "Gobzilla MEDIUM! Say it! Everybody say it! Hey, big brother, guess who's the big one now?!"],
+  ],
 };
-export const NEMESIS: Record<"w1-elite" | "w2-elite" | "w3-elite" | "w4-elite", StoryLine[]> = {
+export const NEMESIS: Record<"w1-elite" | "w2-elite" | "w3-elite" | "w4-elite" | "w5-elite", StoryLine[]> = {
   "w1-elite": [
     ["foe", "Well, well! If it isn't Gobzilla JUNIOR! Lost your big brother, shrimp?"],
     ["me", "Brutus Beetroot! I'm a STRAWBERRY, ya big turnip!"],
@@ -90,5 +110,11 @@ export const NEMESIS: Record<"w1-elite" | "w2-elite" | "w3-elite" | "w4-elite", 
     ["foe", "Huff, puff! Every time! You get back up EVERY time! Why?!"],
     ["me", "'Cause real kaiju don't stay down! Even the medium ones!"],
     ["foe", "Hmph. Fine. One last round. And if you win... you can just call me Brutus, okay?"],
+  ],
+  "w5-elite": [
+    ["foe", "Huff, puff! Check it out, shrimp! Steel wool roots! I'm a BEET-ZILLA now!"],
+    ["me", "Hey! Zilla's MY family name, ya big turnip!"],
+    ["foe", "Grrr! Beet me one more time and fine, I'll quit the bully stuff. MAYBE! Don't get excited!"],
+    ["me", "Too late! I'm SO excited! RAWR!"],
   ],
 };

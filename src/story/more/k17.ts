@@ -35,6 +35,14 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w4-s7": [["me", "Pasta Jar Peaks! Spaghetti makes terrible skis. Trust me, I tried."], ["me", "One more key, one more chest! I've bounced so much I'm basically a sponge! Boing!"]],
   "w4-s8": [["me", "Honey Hollow. Sticky floor. No sliding?! Uh-oh. I'm a penguin standing STILL!"], ["me", "Forty-five seconds of waddling. Okay! Waddle mode: ACTIVATE! Waddle waddle!"]],
   "w4-s9": [["me", "The top shelf! From up here I can see the freezer AND all my friends! Hi, everybody!"], ["mold", "Look the other way, little penguin. The Sink is dripping. Drip, drip. Hehehe!"], ["me", "Hey! Whoever's dripping, cut it out! We're having a moment here!"]],
+  // World 5: The Sink. Finally, water! Penguin turf.
+  "w5-s2": [["n", "Uh-oh! A giant rolling pin is chasing Pengwhip down the Suds Slide!"], ["me", "A soapy slide AND a chase?! Who needs brakes? Wheeeee!"]],
+  "w5-s3": [["me", "Sponge Shoals! It's like bouncing on a big, wet cloud! Boing! Squish! Boing!"], ["me", "Gates locked! Lever time, then rolling pin bowling! Strike!"]],
+  "w5-s4": [[10, "Hmph. Penguin. My last Crumblet. Walk it through the dish rack. Slowly. SLOWLY."], ["me", "Slowly! Got it! I've got brakes now, Mr. Bluebeary! *skrrrt* See?"], [10, "Hmph. Show-off. Keep its cup dry."]],
+  "w5-s6": [["me", "Bubble Bay! Bubbles AND conveyor belts? It's a water park! Scroll first, splashing after!"], ["me", "Seventy-five seconds! That's like a hundred slides! Wheee!"]],
+  "w5-s7": [["me", "Plughole Pass! Don't slide into the plughole. Don't slide into the plughole. Oops, almost!"], ["me", "Last key's up on a high ledge! Sponge, my old pal! Boing!"]],
+  "w5-s8": [["me", "Greasy Pan Pits! Grease is slippery! Grease is SO slippery! I kinda love grease!"], ["me", "Forty-five seconds? Easy! I'll slide in circles again. Circles still count!"]],
+  "w5-s9": [["mold", "Hehehe... slide down, little bird. Down, down the drain. It's cold and dark, just like home!"], ["me", "Nope! Home is cold and SPARKLY and full of friends! You've got the wrong freezer, buddy!"]],
 };
 
 export const QUIPS: Record<QuipKind, string[]> = {

@@ -87,6 +87,15 @@ export const MOBS: Record<MobKind, MobDef> = {
   soda: { name: 'Baking Soda Bomb', brain: 'bomber', art: 'mob-soda', hp: 40, atk: 22, speed: 150, w: 40, h: 46, knock: 1.2, aggro: 340, range: 60, windup: 0.7, patrol: 140, xp: 12, dropChance: 0.25 },
   flour: { name: 'Flour Ghost', brain: 'flyer', art: 'mob-flour', hp: 55, atk: 11, speed: 110, w: 46, h: 50, knock: 1.1, aggro: 340, range: 230, windup: 0.5, patrol: 160, xp: 13, dropChance: 0.3 },
   jar: { name: 'Cookie Jar Mimic', brain: 'boss', art: 'boss-jar', hp: 1400, atk: 19, speed: 85, w: 130, h: 170, knock: 0.2, aggro: 2000, range: 150, windup: 0.75, patrol: 0, xp: 360, dropChance: 1, armor: true, moves: ['slash', 'leap', 'rain', 'charge'] },
+  // ---- World 5: The Sink ----
+  plate: { name: 'Crusty Plate Knight', brain: 'walker', art: 'mob-plate', hp: 125, atk: 13, speed: 55, w: 54, h: 62, knock: 0.6, aggro: 280, range: 70, windup: 0.6, patrol: 100, xp: 19, dropChance: 0.4, shield: true },
+  bubble: { name: 'Soap Bubble Sprite', brain: 'flyer', art: 'mob-bubble', hp: 42, atk: 9, speed: 115, w: 44, h: 44, knock: 1.1, aggro: 340, range: 230, windup: 0.5, patrol: 160, xp: 13, dropChance: 0.3 },
+  glove: { name: 'Grabby Glove', brain: 'charger', art: 'mob-glove', hp: 110, atk: 13, speed: 70, w: 56, h: 54, knock: 0.6, aggro: 400, range: 380, windup: 0.7, patrol: 110, xp: 18, dropChance: 0.4 },
+  eel: { name: 'Drain Eel', brain: 'burrower', art: 'mob-eel', hp: 95, atk: 13, speed: 100, w: 56, h: 56, knock: 0.9, aggro: 360, range: 40, windup: 0.55, patrol: 120, xp: 18, dropChance: 0.35 },
+  mug: { name: 'Mouldy Mug', brain: 'ranged', art: 'mob-mug', hp: 60, atk: 8, speed: 60, w: 44, h: 50, knock: 1, aggro: 360, range: 320, windup: 0.55, patrol: 100, xp: 12, dropChance: 0.3 },
+  scrub: { name: 'Scrub Brute', brain: 'brute', art: 'mob-scrub', hp: 215, atk: 16, speed: 50, w: 72, h: 76, knock: 0.45, aggro: 280, range: 90, windup: 0.8, patrol: 90, xp: 30, dropChance: 0.6, armor: true },
+  sporeling: { name: 'Sporeling', brain: 'hopper', art: 'mob-sporeling', hp: 26, atk: 7, speed: 100, w: 30, h: 28, knock: 1.3, aggro: 340, range: 180, windup: 0.35, patrol: 120, xp: 3, dropChance: 0.04 },
+  moldking: { name: 'The Mold Crown', brain: 'boss', art: 'boss-mold', hp: 1850, atk: 18, speed: 80, w: 140, h: 190, knock: 0.2, aggro: 2000, range: 150, windup: 0.75, patrol: 0, xp: 420, dropChance: 1, armor: true, moves: ['slash', 'leap', 'rain', 'charge'], calls: 'sporeling' },
   // ---- new monsters, 3 per world ----
   garlic: { name: 'Garlic Cleric', brain: 'healer', art: 'mob-garlic', hp: 55, atk: 7, speed: 60, w: 44, h: 56, knock: 1, aggro: 320, range: 260, windup: 0.9, patrol: 100, xp: 14, dropChance: 0.4 },
   ant: { name: 'Sugar Ant Digger', brain: 'burrower', art: 'mob-ant', hp: 60, atk: 11, speed: 95, w: 50, h: 42, knock: 1, aggro: 340, range: 40, windup: 0.6, patrol: 120, xp: 13, dropChance: 0.3 },
@@ -159,6 +168,12 @@ export const BOSS_PATTERNS: Partial<Record<MobKind, { near: string[][]; far: str
     { near: [['slash', 'breath'], ['slash', 'slash']], far: [['breath'], ['charge']] },
     { near: [['slash', 'breath', 'leap'], ['slash', 'charge']], far: [['rain', 'breath'], ['charge', 'leap']] },
     { near: [['breath', 'heatwave', 'slash'], ['leap', 'breath']], far: [['heatwave', 'rain', 'charge'], ['breath', 'breath']] },
+  ],
+  // the final boss: spore rain, Sporelings, mould tendrils along the floor, mould puddles
+  moldking: [
+    { near: [['slash', 'slash'], ['slash', 'rootspike']], far: [['rain'], ['summon']] },
+    { near: [['slash', 'puddle', 'slash'], ['leap', 'slash']], far: [['rootspike', 'rain'], ['summon', 'charge']] },
+    { near: [['roar', 'slash', 'slash'], ['leap', 'rootspike']], far: [['rain', 'puddle', 'charge'], ['summon', 'rootspike', 'rain']] },
   ],
   jar: [
     { near: [['slash', 'slash'], ['leap']], far: [['rain'], ['charge']] },

@@ -35,6 +35,14 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w4-s7": [["me", "Pasta Jar Peaks hides the last secret key! The royal treasury shall have four keys! And a button!"], ["me", "Decree Number Eleven: all treasure shall be SHARED. Ugh. Yes. Shared. Get used to it, Dumplord."]],
   "w4-s8": [[2, "Hmph! Hold the hollow with you? Fine. But I'm NOT your subject, dumpling."], ["me", "No, no! You're our FRIEND! Way harder to get rid of. Forty-five seconds, friend!"]],
   "w4-s9": [["me", "Royal Census, final count! Subjects: two. Friends: um, we lost count! Hee hee!"], ["me", "Decree Number Twelve: nobody in OUR kitchen goes mouldy! Not today, not on our shelf!"]],
+  // World 5: The Sink.
+  "w5-s2": [["me", "Suds Slide! A royal waterpark! Wheee! Hold on, why is that rolling pin chasing the king?!"], ["n", "Uh-oh! It wants to roll you flat, Your Majesty!"], ["me", "Royal retreat! To the RIGHT! A lord never runs, he hurries GRACEFULLY!"]],
+  "w5-s3": [["me", "Sponge Shoals! The gates locked us in! Nobody locks in the king! Except, apparently, these gates."], ["me", "Three waves of rebels? Pull the lever! Royal rolling pin, roll out the welcome!"]],
+  "w5-s4": [[10, "Hmph. Dumpling. One more Crumblet needs walking over Dish Rack Ridge. Don't make me count twice."], ["me", "Heir number five! Fear not, small one! The royal belly protects all! Boing!"]],
+  "w5-s6": [["me", "Bubble Bay! The final Recipe Scroll! Surely it says \"Dumplings are the best\"!"], ["me", "Seventy-five seconds on a conveyor belt! At LAST, the king is being carried! Sort of!"]],
+  "w5-s7": [["me", "Decree Number Fourteen: nobody goes down the plughole! Especially not us. ESPECIALLY us."], ["me", "Secret chest on a high ledge! Bouncy sponge, our most loyal subject, launch the king! BOING!"]],
+  "w5-s8": [["foe", "Psst, dumpling! My fortune says: \"The grease hates soap.\" I didn't even write this one. Honest!"], ["me", "Duke, helping?! Forty-five seconds, then we're having a long royal chat about your attitude!"]],
+  "w5-s9": [["mold", "Hehehe... deeper, little lord. Down here everyone kneels, and you'll never be lonely again."], ["me", "Lonely? We've got FRIENDS now! Lots! Well, seven! Seven is LOTS!"]],
 };
 
 export const QUIPS: Record<QuipKind, string[]> = {

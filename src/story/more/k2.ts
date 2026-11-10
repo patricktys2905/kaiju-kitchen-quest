@@ -35,6 +35,14 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w4-s7": [["me", "Pasta Jar Peaks. Noodles burrowing under my feet! Like worms, but useless for the soil."], ["me", "Last key's on those ledges. A secret honey cellar! Bees help gardens grow. Grumpily. Like me."]],
   "w4-s8": [["me", "Honey Hollow. Forty-five seconds against everybody! Sticky, but honest work."], ["foe", "Psst! Crab! Say I wanted to grow something. Where would I even start?"], ["me", "Step one: don't EAT it! Now hold the line, slug!"]],
   "w4-s9": [["me", "Seed count: twelve! Enough for a patch. A big patch. A patch for, uh, more than one crab."], ["mold", "Hehehe... the jar's just a door, crab. What's behind it goes all the way down the drain."], ["me", "Then I'll dig all the way down! Gardeners don't mind dirty claws. Hmph!"]],
+  // World 5: The Sink.
+  "w5-s2": [["me", "Suds Slide? Crabs don't slide, we SCUTTLE! Hey, why's there a giant rolling pin behind me?!"], ["me", "Run right! Sideways right! Same thing! HURRY UP, legs!"]],
+  "w5-s3": [["me", "Sponge Shoals. Sponges soak up the water my sprouts should be drinking! Thieves, the lot of 'em!"], ["me", "Gates locked, three waves. Pull the lever and the rolling pin does the weeding. Hmph! Love that thing."]],
+  "w5-s4": [[10, "Hmph. Crab. My Crumblet needs walking over Dish Rack Ridge. You're grumpy enough to keep it safe."], ["me", "Takes one to know one, muffin! C'mon, small fry, stick to my shell and don't lick the plates!"]],
+  "w5-s6": [["me", "Bubble Bay. Bubbles popping on my shell! Pop, pop, POP! Kids these days!"], ["me", "Last Scroll's down the conveyor belts. Seventy-five seconds! If it's coleslaw, it goes down the drain!"]],
+  "w5-s7": [["me", "Plughole Pass. My patch is right around here. I can smell the dirt! Ahh, lovely dirt!"], ["me", "Key chest on a high ledge, sponge to bounce on. I'm a sponge-bouncing PRO now. Don't tell anybody!"]],
+  "w5-s8": [["foe", "Slurrrp! Crab! I'm on your side now! Mostly! Forty-five seconds, I'll slime the left!"], ["me", "Hmph! Fine! Just don't slime the seeds, ya goof!"]],
+  "w5-s9": [["mold", "Hehehe... down here, crab. Your little patch is all fuzz now. Come and see!"], ["me", "That's MY patch you're squatting on! Seed count: twelve. Pinch count: about to be a LOT!"]],
 };
 
 export const QUIPS: Record<QuipKind, string[]> = {

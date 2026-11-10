@@ -18,10 +18,24 @@ export const ARC: Record<string, StoryLine[]> = {
   "w4-open": [["me", "Dark shelves and dusty air. Ah-choo! Okay, wings, time to glow!"], ["me", "Follow me, everybody! I'm the nightlight now!"]],
   "w4-boss": [["boss", "NO LIGHT IN MY JAR! ONLY COOKIES! COOOOKIES!"], ["me", "There's a moon in there and you know it! Let the light OUT!"]],
   "w4-after": [["n", "CRASH! The jar breaks open, and moonlight pours across the Pantry!"], ["me", "Ooooh... there you are! Hi, moon! I missed you SO much!"], ["mold", "Hehehe. Enjoy it while it lasts, moth. Down in the Sink, there's no light at all."], ["me", "No light? Then I'll bring some! I've got plenty!"], ["n", "To be continued in World 5: The Sink."]],
+  "w5-open": [["me", "The Sink! Ooh, so many bubbles, and every one has a teeny moon inside! Hi, teeny moons!"], ["me", "It's getting darker down by the drain. That's okay! I brought my glow. Flap flap!"]],
+  "w5-boss": [["boss", "Hehehe... the little light came to me. I drank your moon, moth. Every last drop!"], ["me", "You did WHAT?! That's not a drink, that's the MOON!"], ["boss", "And it tasted sooo creamy. Now for dessert. YOU!"], ["me", "Nope! Spit it out! The moon is coming out of you right NOW! FWOOSH!"]],
+  "w5-after": [
+    ["boss", "Squeak! Hic! Okay, okay! I'm just a teeny science project! Somebody grew me in the back of the fridge and forgot about me!"],
+    ["me", "Aww. Who?"],
+    ["boss", "Can't tell! Hic! Bye! SLUUURP!"],
+    ["n", "GLUG! Down the drain! And up from the plughole pours a river of silvery moonlight!"],
+    ["me", "Ooh, a note from the Chef! \"Safe and sound. Somebody please leave the window open!\""],
+    ["me", "The light's floating up! Up the faucet, out the window! Wait for me!"],
+    ["me", "There you are! Big and round and bright! Hi, moon! Did ya miss me?"],
+    ["foe", "Bzzt... wow. That IS a nice light. Can I watch too? No zapping. Promise."],
+    ["me", "Sure, Zapsy! Ooooh, shiny! And this time it really IS the moon! Hee!"],
+  ],
 };
-export const NEMESIS: Record<"w1-elite" | "w2-elite" | "w3-elite" | "w4-elite", StoryLine[]> = {
+export const NEMESIS: Record<"w1-elite" | "w2-elite" | "w3-elite" | "w4-elite" | "w5-elite", StoryLine[]> = {
   "w1-elite": [["foe", "Bzzzt! Hey there, little moth! Come to the light! MY light! Only my light!"], ["me", "Ooooh, you're so bright! But, um, you're not the moon."], ["foe", "I can BE your moon! Closer, closerrrr... BZZZZT!"], ["me", "Yikes! My fuzz! Okay, no thank you!"]],
   "w2-elite": [["foe", "Bzzt! Even in the cold, moths come to Zapsy! They ALWAYS come!"], ["me", "Not this moth! I know the difference now. The moon doesn't go ZAP!"]],
   "w3-elite": [["foe", "Bzzt! The oven glows, but I glow BRIGHTER! Look at me, moth! LOOK AT ME!"], ["me", "La la la, not looking! I'm daydreaming about moonlight!"]],
   "w4-elite": [["foe", "Why won't you love my light?! EVERYBODY loves my light! Bzzt!"], ["me", "Your light just wants to catch stuff. The moon only wants to shine!"], ["foe", "Bzz, bzz... I just wanted a buddy. *sniff*"]],
+  "w5-elite": [["foe", "BZZZT! Look, moth! Steel wool coils! I'm the BRIGHTEST thing in the whole Sink!"], ["me", "Ooh, you are super sparkly. But you're still not the moon, Zapsy!"], ["foe", "Bzz! Then what am I supposed to BE?! Fine! Beat me and maybe I'll quit zapping. MAYBE!"], ["me", "You could be a nightlight! Nightlights are everybody's buddy!"]],
 };

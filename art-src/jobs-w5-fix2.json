@@ -1,0 +1,11 @@
+[
+ {
+  "name": "still-w5-boss",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/boss-mold.png",
+   "art-src/ref-bg.png"
+  ],
+  "prompt": "Generate an image. The first reference is my final boss, THE MOLD CROWN: draw it EXACTLY like this reference (same shape, face, crown, colours); the second shows the painted background style. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Cinematic composition, wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. NO text, no letters, no writing on any labels or jars, no speech bubbles, no UI, no border, no signature, no humans. Scene: a dramatic low-angle boss reveal: the Mold Crown rises out of a huge glowing sink drain, spores swirling like a storm. Menacing but still cute, no other characters."
+ }
+]

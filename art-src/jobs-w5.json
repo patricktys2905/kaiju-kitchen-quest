@@ -1,0 +1,247 @@
+[
+ {
+  "name": "bg-far-sink",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-bg.png"
+  ],
+  "prompt": "Generate an image. This is the background of the first area of my cute 2D side-scrolling action RPG (tiny food monsters in a giant kitchen). I need the FAR BACKGROUND for the fifth and final world, The Sink, in exactly the same painted fantasy MMORPG side-scroller style: straight-on side view inside a giant stainless-steel kitchen sink: tall shiny steel walls, a towering chrome faucet arching overhead like a great bridge, stacks of dirty plates and pots like distant cliffs, floating soap bubbles catching the light, water drips, cool blue-green light from a window above, and creeping patches of fuzzy green mould. Mysterious but still cheerful. The bottom quarter calm and darker. No characters, no text, no UI. Wide 16:9 landscape image."
+ },
+ {
+  "name": "bg-mid-sink",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-bg.png"
+  ],
+  "prompt": "Generate an image. This is the background of the first area of my cute 2D side-scrolling action RPG (tiny food monsters in a giant kitchen). I need a MIDDLE PARALLAX LAYER for the sink world in the same painted style, cool steel and soapy blue colours: a row of giant sink objects standing along the bottom of the image, seen from the side: a stack of dirty plates, a yellow-and-green sponge, a dish-soap bottle, a scrub brush, an upturned mug, a dish rack, with gaps between them. They fill only the bottom 60 percent. Everything else (the whole upper area and the gaps) must be solid flat magenta (#FF00FF). No shadows on the magenta, no characters, no text. Wide 16:9 landscape image."
+ },
+ {
+  "name": "tile-sink",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-bg.png"
+  ],
+  "prompt": "Generate an image. This is the background of the first area of my cute 2D side-scrolling action RPG (tiny food monsters in a giant kitchen). I need a GROUND TILE in the same painted style for the walkable floor in the sink world: straight-on side view of a thick slab of brushed stainless steel: a wet shiny top edge with a few water droplets and soap suds, then the brushed metal front face with faint rivets, darker towards the bottom. It must tile SEAMLESSLY left-to-right. Fill the whole square, no background, no objects, no text. Square 1:1 image."
+ },
+ {
+  "name": "bg-far-drain",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-bg.png"
+  ],
+  "prompt": "Generate an image. This is the background of the first area of my cute 2D side-scrolling action RPG (tiny food monsters in a giant kitchen). I need the FAR BACKGROUND for the FINAL BOSS ARENA, The Drain, same painted style: straight-on side view of the very bottom of a giant steel sink: a huge round metal drain grate in the middle glowing sickly green from below, thick fuzzy carpets of green-grey mould climbing the steel walls, a crown-shaped silhouette of mould looming in the shadows, spores drifting like snow, one shaft of hopeful sunlight from far above. The bottom quarter calm and darker. No characters, no text, no UI. Wide 16:9 landscape image."
+ },
+ {
+  "name": "map-sink",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-bg.png"
+  ],
+  "prompt": "Generate an image. This is a background from my cute painted fantasy 2D action RPG where tiny food monsters adventure through a giant kitchen. I need another WORLD MAP in the same painted style: a whimsical illustrated fantasy adventure map of a GIANT DOUBLE KITCHEN SINK seen from above at an angle, like a storybook RPG map: soapy water lakes in the basins, dish-rack mountains, sponge islands, plate bridges, a chrome faucet like a great arch, and a winding dotted path from the bottom-left to a big drain glowing sickly green at the top-right. Plenty of open space around the path. No characters, no text, no labels, no numbers, no UI. Wide 16:9 landscape image."
+ },
+ {
+  "name": "mob-plate",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/mob-bun.png"
+  ],
+  "prompt": "Generate an image. The reference is an enemy from my cute 2D side-scrolling action RPG set in a giant kitchen. Draw a NEW enemy for the final world, THE SINK, in exactly the same art style (clean dark outlines, saturated colours, glossy cel shading, cute but menacing), with a few fuzzy green mould spots because the Mold Crown has corrupted it. A CRUSTY PLATE KNIGHT: a dirty dinner plate standing on its edge with stubby legs and a grumpy face, dried food crusted on it, holding a fork like a spear and a smaller saucer like a shield in front. Side view facing LEFT, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1 image."
+ },
+ {
+  "name": "mob-bubble",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/mob-bun.png"
+  ],
+  "prompt": "Generate an image. The reference is an enemy from my cute 2D side-scrolling action RPG set in a giant kitchen. Draw a NEW enemy for the final world, THE SINK, in exactly the same art style (clean dark outlines, saturated colours, glossy cel shading, cute but menacing), with a few fuzzy green mould spots because the Mold Crown has corrupted it. A SOAP BUBBLE SPRITE: a floating shimmering rainbow soap bubble with a mischievous face inside it, two little foam puffs like wings, trailing tiny bubbles. Side view facing LEFT, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1 image."
+ },
+ {
+  "name": "mob-glove",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/mob-bun.png"
+  ],
+  "prompt": "Generate an image. The reference is an enemy from my cute 2D side-scrolling action RPG set in a giant kitchen. Draw a NEW enemy for the final world, THE SINK, in exactly the same art style (clean dark outlines, saturated colours, glossy cel shading, cute but menacing), with a few fuzzy green mould spots because the Mold Crown has corrupted it. A GRABBY GLOVE: a bright yellow rubber washing-up glove that runs on two of its fingers like legs and reaches forward with the others, a cheeky face on the back of the hand, ready to charge. Side view facing LEFT, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1 image."
+ },
+ {
+  "name": "mob-eel",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/mob-bun.png"
+  ],
+  "prompt": "Generate an image. The reference is an enemy from my cute 2D side-scrolling action RPG set in a giant kitchen. Draw a NEW enemy for the final world, THE SINK, in exactly the same art style (clean dark outlines, saturated colours, glossy cel shading, cute but menacing), with a few fuzzy green mould spots because the Mold Crown has corrupted it. A DRAIN EEL: a slimy grey-green eel made of tangled drain gunk and a few noodles, popping up in an S-curve with a toothy grin, a bottle-cap on its head like a helmet. Side view facing LEFT, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1 image."
+ },
+ {
+  "name": "mob-mug",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/mob-bun.png"
+  ],
+  "prompt": "Generate an image. The reference is an enemy from my cute 2D side-scrolling action RPG set in a giant kitchen. Draw a NEW enemy for the final world, THE SINK, in exactly the same art style (clean dark outlines, saturated colours, glossy cel shading, cute but menacing), with a few fuzzy green mould spots because the Mold Crown has corrupted it. A MOULDY MUG: a chipped coffee mug creature with tiny legs, half full of old cold coffee with a fuzzy mould island floating on top, a sneering face, ready to spit coffee. Side view facing LEFT, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1 image."
+ },
+ {
+  "name": "mob-scrub",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/mob-bun.png"
+  ],
+  "prompt": "Generate an image. The reference is an enemy from my cute 2D side-scrolling action RPG set in a giant kitchen. Draw a NEW enemy for the final world, THE SINK, in exactly the same art style (clean dark outlines, saturated colours, glossy cel shading, cute but menacing), with a few fuzzy green mould spots because the Mold Crown has corrupted it. A SCRUB BRUTE: a big hulking steel-wool scouring pad monster with a green scrubby back, muscular stubby arms, angry eyes, sparks of metal fibre. It is a tough BRUTE, bigger and chunkier than normal enemies. Side view facing LEFT, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1 image."
+ },
+ {
+  "name": "mob-sporeling",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/mob-bun.png"
+  ],
+  "prompt": "Generate an image. The reference is an enemy from my cute 2D side-scrolling action RPG set in a giant kitchen. Draw a NEW enemy for the final world, THE SINK, in exactly the same art style (clean dark outlines, saturated colours, glossy cel shading, cute but menacing), with a few fuzzy green mould spots because the Mold Crown has corrupted it. A SPORELING: a tiny fuzzy round puff of green-grey mould with two beady glowing eyes, little stubby feet and a few spores drifting off it. Small and silly. Side view facing LEFT, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1 image."
+ },
+ {
+  "name": "boss-mold",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/boss-jar.png"
+  ],
+  "prompt": "Generate an image. The reference is a boss from my cute 2D side-scrolling action RPG set in a giant kitchen. Same style (clean dark outlines, saturated colours, glossy cel shading). I need the FINAL BOSS: THE MOLD CROWN, a towering king made of fuzzy green-grey mould growing over an old mouldy loaf of bread, with glowing yellow eyes, a wide sneering mouth, long fuzzy tendril arms, a crooked crown made of rotten crusts and bottle caps, and spores drifting off it. Imposing and creepy but still in the cute game style. Side view facing LEFT, whole body visible, centred, filling about 90% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1 image."
+ },
+ {
+  "name": "still-w5-open",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-bg.png"
+  ],
+  "prompt": "Generate an image. The reference shows the painted background style. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Cinematic composition, wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. NO text, no letters, no writing on any labels or jars, no speech bubbles, no UI, no border, no signature, no humans. Scene: an establishing wide vista with no characters. The Sink: a giant stainless-steel kitchen sink seen as a vast landscape at dusk, soapy water lakes, mountains of dirty dishes, a chrome faucet arching across the sky like a bridge, soap bubbles drifting, and far away the drain glowing sickly green with fuzzy mould spreading from it."
+ },
+ {
+  "name": "still-w5-boss",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/boss-jar.png",
+   "art-src/ref-bg.png"
+  ],
+  "prompt": "Generate an image. The first reference shows the style of my boss monsters; the second shows the painted background style. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Cinematic composition, wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. NO text, no letters, no writing on any labels or jars, no speech bubbles, no UI, no border, no signature, no humans. Scene: a dramatic low-angle boss reveal: THE MOLD CROWN, a towering king of fuzzy green-grey mould grown over an old loaf, glowing yellow eyes, long fuzzy tendril arms, a crooked crown of rotten crusts and bottle caps, rises out of a huge glowing sink drain, spores swirling like a storm. Menacing but still cute, no other characters."
+ },
+ {
+  "name": "still-w5-cure",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-bg.png"
+  ],
+  "prompt": "Generate an image. The reference shows the painted background style. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Cinematic composition, wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. NO text, no letters, no writing on any labels or jars, no speech bubbles, no UI, no border, no signature, no humans. Scene: after the final battle: bright morning sunlight floods a sparkling clean kitchen sink, the last wisps of green mould dissolving into glitter, a tiny harmless puff of mould shrinking away down the drain, and the Head Chef's white chef's hat resting safely on the rim of the sink. Hopeful, triumphant light, no characters."
+ },
+ {
+  "name": "still-w5-hook",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-bg.png"
+  ],
+  "prompt": "Generate an image. The reference shows the painted background style. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Cinematic composition, wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. NO text, no letters, no writing on any labels or jars, no speech bubbles, no UI, no border, no signature, no humans. Scene: a spooky post-credits teaser: the dark, forgotten back corner of a giant refrigerator shelf at night, lit only by a cold blue glow. Behind a stack of old takeaway boxes, five menacing silhouettes of FORGOTTEN FOODS watch with glowing eyes: a tall lumpy old fruitcake wearing a crooked crown (the leader), a stale baguette like a knight, a hulking Brussels sprout, a grey mystery meatloaf, and a ghostly old plastic food tub. Mostly in shadow, only their outlines and eyes visible. Ominous but still cute."
+ },
+ {
+  "name": "still-0-end",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-0.png",
+   "art-src/ref-bg.png"
+  ],
+  "prompt": "Generate an image. The first reference is my character, a little strawberry kaiju dinosaur (Gobzilla Jr.); the second shows the painted background style. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Cinematic composition, wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. NO text, no letters, no writing on any labels or jars, no speech bubbles, no UI, no border, no signature, no humans. Scene: the happy ending of its story: Gobzilla Jr. stands proudly on the rim of a sparkling clean kitchen sink at sunrise, chest puffed out, its tiny shadow cast huge on the wall behind it like a giant monster, tiny friends cheering below. Warm, triumphant, heart-warming."
+ },
+ {
+  "name": "still-1-end",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-1.png",
+   "art-src/ref-bg.png"
+  ],
+  "prompt": "Generate an image. The first reference is my character, a blue jelly octopus scientist wearing a metal colander as a helmet (Squidgeon); the second shows the painted background style. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Cinematic composition, wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. NO text, no letters, no writing on any labels or jars, no speech bubbles, no UI, no border, no signature, no humans. Scene: the happy ending of its story: Squidgeon stands in its little kitchen-counter laboratory raising an empty antidote bottle high in triumph with one tentacle, the petri dish beside it now clean, test tubes bubbling with happy sparkles. Warm, triumphant, heart-warming."
+ },
+ {
+  "name": "still-2-end",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-2.png",
+   "art-src/ref-bg.png"
+  ],
+  "prompt": "Generate an image. The first reference is my character, a grumpy cheese crab with a cabbage-leaf shell (Crabbage), with exactly two claws and its eyes only on its two eye stalks; the second shows the painted background style. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Cinematic composition, wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. NO text, no letters, no writing on any labels or jars, no speech bubbles, no UI, no border, no signature, no humans. Scene: the happy ending of its story: Crabbage stands in its cabbage garden by the sink, now green and growing again with fresh sprouts, friendly little kitchen creatures watering the plants, Crabbage pretending to be grumpy but clearly pleased. Warm, triumphant, heart-warming."
+ },
+ {
+  "name": "still-4-end",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-4.png",
+   "art-src/ref-bg.png"
+  ],
+  "prompt": "Generate an image. The first reference is my character, a fluffy marshmallow moth (Mothball); the second shows the painted background style. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Cinematic composition, wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. NO text, no letters, no writing on any labels or jars, no speech bubbles, no UI, no border, no signature, no humans. Scene: the happy ending of its story: Mothball flutters up outside the kitchen window at night beside a big round full moon glowing bright again, the moth's own soft glow matching the moonlight, sparkles in the air. Warm, triumphant, heart-warming."
+ },
+ {
+  "name": "still-5-end",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-5.png",
+   "art-src/ref-bg.png"
+  ],
+  "prompt": "Generate an image. The first reference is my character, a little loaf-bread bat with toast-slice wings and a butter pat on its head (Toastbat), with no arms; the second shows the painted background style. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Cinematic composition, wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. NO text, no letters, no writing on any labels or jars, no speech bubbles, no UI, no border, no signature, no humans. Scene: the happy ending of its story: Toastbat hangs upside down from a kitchen cabinet handle in the moonlight next to an open butter dish glowing golden, a very satisfied sly grin. Warm, triumphant, heart-warming."
+ },
+ {
+  "name": "still-6-end",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-6.png",
+   "art-src/ref-bg.png"
+  ],
+  "prompt": "Generate an image. The first reference is my character, a plump steamed dumpling lord with a little steam curl on top (Dumplord); the second shows the painted background style. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Cinematic composition, wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. NO text, no letters, no writing on any labels or jars, no speech bubbles, no UI, no border, no signature, no humans. Scene: the happy ending of its story: Dumplord sits on an upturned bowl like a throne on the kitchen counter, its little dough crown slightly crooked, as a crowd of tiny kitchen creatures finally cheers for it. Warm, triumphant, heart-warming."
+ },
+ {
+  "name": "still-7-end",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-7.png",
+   "art-src/ref-bg.png"
+  ],
+  "prompt": "Generate an image. The first reference is my character, a teal sushi-roll dragon with pink spikes and a salmon belly (Norigon); the second shows the painted background style. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Cinematic composition, wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. NO text, no letters, no writing on any labels or jars, no speech bubbles, no UI, no border, no signature, no humans. Scene: the happy ending of its story: Norigon sits calmly on a bamboo sushi mat at dawn, a bright strong green flame burning steadily in front of it, mist drifting like mountain clouds. Warm, triumphant, heart-warming."
+ },
+ {
+  "name": "still-8-end",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-8.png",
+   "art-src/ref-bg.png"
+  ],
+  "prompt": "Generate an image. The first reference is my character, a chocolate-bar golem made of chocolate blocks (Chocomunch); the second shows the painted background style. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Cinematic composition, wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. NO text, no letters, no writing on any labels or jars, no speech bubbles, no UI, no border, no signature, no humans. Scene: the happy ending of its story: Chocomunch stands proudly in front of the warm orange glow of the oven, not melting at all, holding up a small folded note from the Chef, a big happy grin. Warm, triumphant, heart-warming."
+ },
+ {
+  "name": "still-10-end",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-10.png",
+   "art-src/ref-bg.png"
+  ],
+  "prompt": "Generate an image. The first reference is my character, a gruff blueberry-muffin bear (Bluebeary); the second shows the painted background style. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Cinematic composition, wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. NO text, no letters, no writing on any labels or jars, no speech bubbles, no UI, no border, no signature, no humans. Scene: the happy ending of its story: Bluebeary sits back home in its muffin tin on the kitchen counter, six tiny happy muffin crumb-babies asleep in paper cups all around it, a gruff but secretly happy smile, warm evening light. Warm, triumphant, heart-warming."
+ },
+ {
+  "name": "still-11-end",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-11.png",
+   "art-src/ref-bg.png"
+  ],
+  "prompt": "Generate an image. The first reference is my character, a pizza raptor dinosaur made of melty cheesy pizza with pepperoni (Pizzaraptor); the second shows the painted background style. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Cinematic composition, wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. NO text, no letters, no writing on any labels or jars, no speech bubbles, no UI, no border, no signature, no humans. Scene: the happy ending of its story: Pizzaraptor proudly sets its steaming pizza delivery box down on a little table set for one, the Chef's white hat hanging on the chair, a jar of crumbs as a big tip beside it, taking a bow. Warm, triumphant, heart-warming."
+ },
+ {
+  "name": "still-15-end",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-15.png",
+   "art-src/ref-bg.png"
+  ],
+  "prompt": "Generate an image. The first reference is my character, a shy hedgehog lying in a hot-dog bun with mustard and ketchup on its spikes (Hotchog), with no arms, always lying in its bun; the second shows the painted background style. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Cinematic composition, wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. NO text, no letters, no writing on any labels or jars, no speech bubbles, no UI, no border, no signature, no humans. Scene: the happy ending of its story: Hotchog, wearing a small champion's sash, lies happily in its bun at the centre of a big cosy cookout party around a glowing barbecue grill, friends and string lights all around. Warm, triumphant, heart-warming."
+ },
+ {
+  "name": "still-17-end",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-17.png",
+   "art-src/ref-bg.png"
+  ],
+  "prompt": "Generate an image. The first reference is my character, a cookies-and-cream penguin with a cherry on its head (Pengwhip); the second shows the painted background style. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Cinematic composition, wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. NO text, no letters, no writing on any labels or jars, no speech bubbles, no UI, no border, no signature, no humans. Scene: the happy ending of its story: Pengwhip slides joyfully on its belly across a sparkling clean sink full of soap bubbles, splashing, the sunrise shining through the window. Warm, triumphant, heart-warming."
+ }
+]

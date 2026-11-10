@@ -62,8 +62,28 @@ export const ARC: Record<string, StoryLine[]> = {
     ["me", "Over my frosting, ya creep."],
     ["n", "To be continued in World 5: The Sink."],
   ],
+  "w5-open": [
+    ["me", "The Sink. Six Crumblets tucked in at home. Counted 'em twice. Okay, nine times."],
+    ["me", "Now for the creep who wants to MEET 'em. Bath time, mold. Grrr."],
+  ],
+  "w5-boss": [
+    ["boss", "Hehehe... the papa bear! Six little crumbs, all alone at home. Who's counting them NOW?"],
+    ["me", "Me. Always. I count 'em in my sleep. And you just made my list of things to SQUASH."],
+    ["boss", "Stay down here with me, bear! Muffins go stale. Mold is FOREVER!"],
+    ["me", "Not on my watch, fuzzface. GRRRAAAH!"],
+  ],
+  "w5-after": [
+    ["boss", "Squeeeak! Don't squash me! I'm only a little science project! Somebody grew me in the back of the fridge and forgot!"],
+    ["me", "Who leaves a science project in the FRIDGE?!"],
+    ["boss", "Can't say! Byeee! SLUUURP!"],
+    ["n", "GLUG! Down the drain! A note floats up: \"Safe and sound. Go home to those little ones, bear. The Chef.\""],
+    ["me", "One, two, three, four, five, six. All asleep in their cups. Hmph. Good."],
+    ["foe", "Caw! Psst! That spare muffin cup still free, fuzzy?"],
+    ["me", "Shh! You'll wake 'em. Get in, bird. Hmph. Seven."],
+    ["me", "Don't look at me like that. This is my grumpy face. It's just... smiling a little. Hmph."],
+  ],
 };
-export const NEMESIS: Record<"w1-elite" | "w2-elite" | "w3-elite" | "w4-elite", StoryLine[]> = {
+export const NEMESIS: Record<"w1-elite" | "w2-elite" | "w3-elite" | "w4-elite" | "w5-elite", StoryLine[]> = {
   "w1-elite": [
     ["foe", "Caw! Shiny crumbs, crumbly crumbs! Finders keepers, caw-caw!"],
     ["me", "Those \"crumbs\" are my Crumblets, bird."],
@@ -82,5 +102,11 @@ export const NEMESIS: Record<"w1-elite" | "w2-elite" | "w3-elite" | "w4-elite", 
     ["me", "They're my FAMILY, featherbrain. Bet you wouldn't get it."],
     ["foe", "Caw... nobody ever came looking for me."],
     ["me", "Hmph."],
+  ],
+  "w5-elite": [
+    ["foe", "CAW! Steel wool feathers, fuzzy! Scratchy AND shiny! Last chance, hand over the crumbs!"],
+    ["me", "Kids are home, bird. You're guarding a sink full of dirty forks."],
+    ["foe", "They're SHINY forks! Caw... fine. Beat me and maybe I'll quit snatching stuff. MAYBE!"],
+    ["me", "Hmph. Offer's still open. Gotta flatten ya first, though. GRRR."],
   ],
 };

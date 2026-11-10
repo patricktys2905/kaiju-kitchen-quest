@@ -1,0 +1,10 @@
+[
+ {
+  "name": "boss-mold",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/boss-jar.png"
+  ],
+  "prompt": "Generate an image. The reference is a boss from my cute 2D side-scrolling action RPG set in a giant kitchen. Same style (clean dark outlines, saturated colours, glossy cel shading). I need the FINAL BOSS: THE MOLD CROWN, a towering king made of fuzzy green-grey mould growing over an old mouldy loaf of bread, with glowing yellow eyes, a wide sneering mouth, long fuzzy tendril arms, a crooked crown made of rotten crusts and bottle caps, and just a few separate spore dots near it. Imposing and creepy but still in the cute game style. Side view facing LEFT, whole body visible, centred, filling about 90% of the frame. IMPORTANT: a crisp dark outline all round the body with NO glow, haze, mist or spore cloud around it. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1 image."
+ }
+]

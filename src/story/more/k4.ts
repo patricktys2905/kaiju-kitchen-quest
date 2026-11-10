@@ -35,6 +35,14 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w4-s7": [["me", "Hey, who turned off the Pantry? Wait... a silver glow, way up in the cookie jar!"], ["me", "My moon is IN THERE! But first, the last secret key on Pasta Jar Peaks. Moths can find stuff in the dark!"]],
   "w4-s8": [["me", "Honey Hollow! Golden and glowy like a harvest moon! Ooooh, shiny..."], ["me", "No! I promised! Not every glow is the moon. Buuut it IS very pretty."], ["me", "Forty-five seconds, then the jar!"]],
   "w4-s9": [["me", "The Top Shelf Climb! Right up to the cookie jar! Right up to my moon!"], ["mold", "Hehehe, go on, little light. Break the jar. The Sink is soooo dark, and it's waiting for you."], ["me", "Ooh, then it'll be happy to have some company!"]],
+  // World 5: The Sink.
+  "w5-s2": [["me", "Suds Slide! Wheee, my wings are all bubbly! I'm a bubble moth now!"], ["n", "Uh-oh! A giant rolling pin comes thundering down the suds!"], ["me", "Eep! Flap flap FLAP! Moths are NOT for rolling!"]],
+  "w5-s3": [["me", "Sponge Shoals! The gates went clunk. Here come the grumpy monsters, all soapy and squeaky."], ["me", "Ooh, a shiny lever! One pull and the rolling pin gives 'em a big flat hug!"]],
+  "w5-s4": [[10, "Hmph. Moth. Stray Crumblet up on Dish Rack Ridge. Light the way for it, would ya?"], ["me", "Ooh, I'd love to! Snuggle into my glow, little one. The plates are big, but we're brave!"]],
+  "w5-s6": [["me", "Bubble Bay! A Recipe Scroll way out at the end. Ooh, moving floors! The floor flies for me!"], ["me", "Grab it, then hang on tight. Maybe THIS one's a recipe for moon pie!"]],
+  "w5-s7": [["me", "Plughole Pass! A chest on a high ledge, and a bouncy sponge right below. Sponges are so nice!"], ["me", "Boing! Keys open doors, doors have windows, and windows have MOONS!"]],
+  "w5-s8": [["me", "Greasy Pan Pits! Ooh, the drippy taps sparkle like falling stars!"], ["me", "Falling stars that BLAST you? Eep! Then the monsters can stand under 'em! Forty-five seconds, go!"]],
+  "w5-s9": [["me", "Drain Descent. It's so dark, I'm the only light left. Hee, I'm the moon now!"], ["mold", "Hehehe... come down, little light. I'm so thirsty. One more sip and the dark lasts FOREVER."], ["me", "Nuh-uh! I'm not a juice box! And I'm taking my moon home!"]],
 };
 
 export const QUIPS: Record<QuipKind, string[]> = {

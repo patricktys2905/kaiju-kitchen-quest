@@ -38,6 +38,15 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w4-s7": [["me", "Pasta Jar Peaks! Pizza and pasta, together at last! The dream team!"], ["me", "Last secret key's on a sponge ledge. Raptor Express delivers to hard-to-reach places! Boing!"]],
   "w4-s8": [["me", "Honey Hollow! Forty-five seconds of waves. In HONEY. My claws are gonna be SO sticky!"], [10, "Hmph. You're still lugging that box around?"], ["me", "A delivery's a promise, Bluebeary! Like you and your Crumblets!"]],
   "w4-s9": [["me", "Top Shelf. Minute... uh, let's say thirty and never talk about it again. Deal?"], ["me", "The box is kinda warm and the customer's still missing. Eh! Up we go! Beep beep!"]],
+
+  // World 5: The Sink.
+  "w5-s2": [["me", "Suds Slide! Wheee, soap makes EVERYTHING go faster! This is my new favorite road!"], ["n", "Uh-oh! A giant rolling pin is rolling right behind the raptor!"], ["me", "Finally, somebody who wants to race! Beep beep, eat my bubbles!"]],
+  "w5-s3": [["me", "Sponge Shoals! Gates locked? RUDE! I've got a customer waiting!"], ["me", "Lever up top. Special delivery: one rolling pin, right to your doorstep! Tip not included!"]],
+  "w5-s4": [[10, "Hmph. Raptor. Stray Crumblet on Dish Rack Ridge. Gonna need your bus."], ["me", "Passenger number five! Climb aboard, kiddo! I am SO buying a bus after this."], [10, "Hmph. I'll chip in."]],
+  "w5-s6": [["me", "Bubble Bay! Conveyor belts? Free express lanes! Scroll pick-up, seventy-five seconds, GO!"], ["me", "Hey, quit popping on the box! It's a pizza, not a bubble bath!"]],
+  "w5-s7": [["me", "Plughole Pass! Secret chest on a high ledge. A bouncy sponge? My kind of elevator!"], ["me", "World 5 key, here I come! Raptor Express delivers to EVERY floor!"]],
+  "w5-s8": [["me", "Greasy Pan Pits! Who leaves pans THIS greasy? One star for the dishwasher!"], ["foe", "Psst, raptor! Lure 'em under the taps! SPLOOSH! What? I'm on the clock too!"], ["me", "Pete! You're helping?! Forty-five seconds, let's ROLL!"]],
+  "w5-s9": [["me", "Drain Descent. Going down! Next stop: the customer! *gulp*"], ["mold", "Hehehe... down, down, little courier. Your pizza's getting cold. And cold pizza is MINE."], ["me", "Cold pizza is a breakfast classic, and you're NOT invited!"]],
 };
 
 export const QUIPS: Record<QuipKind, string[]> = {

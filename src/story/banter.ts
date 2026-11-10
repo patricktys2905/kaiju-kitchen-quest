@@ -7,6 +7,14 @@ export type QuipKind = 'combo' | 'lowhp' | 'perfect' | 'levelup' | 'secret' | 'b
 
 /** What each monster says when it first appears in a stage (one is picked at random). */
 export const TAUNTS: Partial<Record<MobKind, string[]>> = {
+  // World 5: The Sink
+  plate: ["Nobody's washin' THIS plate!", "I've got crust AND a shield! Bring it!", "You're on my dish list, pal!"],
+  bubble: ["Pop quiz! Hehe, get it? POP?", "Wheee! Catch me if you can!", "Ooh, you look like you need a bath!"],
+  glove: ["Gimme five! Gimme ALL five!", "Grabby time! Hands off? Nope!", "I'm gonna wring ya out!"],
+  eel: ["Surprise from the plughole!", "Down the drain with ya!", "Slurrrp! Fresh snack!"],
+  mug: ["Have a cup of cold coffee! PTOO!", "I'm a MUG, and you're a mug too!", "Bitter? Me? Always!"],
+  scrub: ["Time for a DEEP clean!", "I scrub tougher stains than you!", "Elbow grease! EXTRA grease!"],
+  sporeling: ["Puff puff! For the Crown!", "Achoo! Uh, I mean BOO!", "Little spore, BIG trouble!"],
   bun: ["Hey! You're toast! ...Wait, that's MY line!", "Rollin' in! Get it? ROLL-in'?", "Ooh, a fresh one. Let's get crusty!"],
   worm: ["Wiggle wiggle, here comes trouble!", "Sour power, baby!", "Ew, a hero! Gross!"],
   pepper: ["Ooh, things are gettin' SPICY!", "Achoo! Pepper attack!", "Hot stuff comin' through!"],

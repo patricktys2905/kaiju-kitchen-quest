@@ -258,7 +258,7 @@ export class GameScene extends Phaser.Scene {
     cam.centerOn(this.cx, this.cy);
     if (w.variant === 'night') { this.add.rectangle(SX, SY, VW * 2, VH * 2, 0x0a0a30, 0.42).setOrigin(0, 0).setScrollFactor(0).setDepth(15); }
     setTouchVisible(true); showHud(true);
-    playMusic(st.boss ? 'boss' : st.world === 2 ? 'world2' : st.world === 3 ? 'world3' : st.world === 4 ? 'world2' : 'world1');
+    playMusic(st.boss ? 'boss' : st.world === 2 || st.world === 4 ? 'world2' : st.world === 3 || st.world === 5 ? 'world3' : 'world1');
     if (st.boss) this.time.delayedCall(900, () => sfx('boss'));
     if (w.variant) this.time.delayedCall(900, () => toast(`${{ swarm: '🐜 SWARM', ambush: '⚔️ AMBUSH', night: '🌙 NIGHT' }[w.variant!]}!`, { color: '#c8a8ff' }));
     toast(`${st.num} ${st.name}${this.nightmare ? ' · 💀 NIGHTMARE' : this.hard ? ' · HARD' : ''}${w.spicy.length ? ' · ' + '🌶'.repeat(w.spicy.length) : ''}`, { big: true, color: this.hard ? '#ff7a6a' : undefined });
@@ -649,7 +649,12 @@ export class GameScene extends Phaser.Scene {
   /** Hazard look: burner ring / steam grate / shelf shadow / ice sheet (no art needed). */
   private buildHazard(kind: string, x: number, w: number, gy: number): Phaser.GameObjects.Container {
     const parts: Phaser.GameObjects.GameObject[] = [];
-    if (kind === 'ice') {
+    if (kind === 'tap') { // a chrome spout high up; the waterfall pours when it's on
+      parts.push(this.add.rectangle(0, -230, w * 0.55, 460, 0x7ac8ff, 0.55).setStrokeStyle(2, 0xe0f4ff, 0.8).setName('fx'));
+      parts.push(this.add.rectangle(0, -462, 34, 30, 0xc8d0d8).setStrokeStyle(3, 0x6a7480));
+      parts.push(this.add.rectangle(-18, -478, 80, 12, 0xd8e0e8).setStrokeStyle(3, 0x6a7480));
+      parts.push(this.add.ellipse(0, -4, w + 20, 14, 0xbfe8ff, 0.8).setName('glow'));
+    } else if (kind === 'ice') {
       parts.push(this.add.ellipse(0, -2, w + 30, 16, 0xbfe8ff, 0.55).setStrokeStyle(2, 0xffffff, 0.8));
       for (let i = 0; i < 4; i++) parts.push(this.add.rectangle(-w / 2 + 20 + i * (w - 40) / 3, -4, 18, 2, 0xffffff, 0.8).setAngle(-12));
     } else if (kind === 'burner') {
@@ -871,7 +876,7 @@ export class GameScene extends Phaser.Scene {
     for (const p of w.puddles) {
       const col = ({ slow: 0xa83a6a, slick: 0xf0d040, burn: 0xff7a2a, poison: 0x7ab8c8, trap: 0x6a6a72 } as Record<string, number>)[p.kind ?? ''] ?? 0x6ac04a;
       if (p.kind === 'trap') { g.fillStyle(col, 1); g.fillRect(p.x - 14, p.y - 6, 28, 6); g.lineStyle(2, 0xd8d8e0, 1); g.lineBetween(p.x - 12, p.y - 6, p.x + 12, p.y - 14); continue; }
-      g.fillStyle(p.kind === 'slow' && w.nemesis === 'nslug' ? 0x9ad0a0 : col, Math.min(p.kind === 'burn' ? 0.5 + Math.sin(t * 18) * 0.15 : 0.55, p.t / 2)); g.fillEllipse(p.x, p.y - 1, p.w ?? 70, 10);
+      g.fillStyle(p.kind === 'slow' && (w.nemesis === 'nslug' || st.world === 5) ? 0x7ab85a : col, Math.min(p.kind === 'burn' ? 0.5 + Math.sin(t * 18) * 0.15 : 0.55, p.t / 2)); g.fillEllipse(p.x, p.y - 1, p.w ?? 70, 10);
     }
     for (const z of w.zones) {
       const a = Math.min(1, z.t);
@@ -965,6 +970,7 @@ export class GameScene extends Phaser.Scene {
           : s.kind === 'reflect' ? this.add.circle(0, 0, 9, 0x8ae07a).setStrokeStyle(2, 0xffffff)
           : s.from === 'hero'
           ? this.add.circle(0, 0, 9, 0xe8c8ff).setStrokeStyle(3, 0xffffff).setBlendMode(Phaser.BlendModes.ADD)
+          : s.kind === 'icicle' && worldOf(this.stage).id === 5 ? this.add.circle(0, 0, 10, 0x8ac06a, 0.9).setStrokeStyle(3, 0x3a6a2a)
           : s.kind === 'icicle' && worldOf(this.stage).id === 4 ? this.add.circle(0, 0, 11, 0xc8904a).setStrokeStyle(3, 0x6a3a10)
           : s.kind === 'icicle' && worldOf(this.stage).id === 3 ? this.add.circle(0, 0, 8, 0xff6a2a).setStrokeStyle(2, 0xffd27a).setBlendMode(Phaser.BlendModes.ADD)
           : s.kind === 'icicle' ? this.add.ellipse(0, 0, 10, 26, 0xc8f0ff).setStrokeStyle(2, 0x6ab8ff)

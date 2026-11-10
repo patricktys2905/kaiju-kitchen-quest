@@ -35,6 +35,14 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w4-s7": [["me", "Pasta Jar Peaks! The last hidden key waits up high. Up we bounce, and never break the noodle!"], ["me", "Proverb: \"Long noodles, long life!\" That one isn't even about sushi. I borrowed it. Shh."]],
   "w4-s8": [[15, "M-M-Mr. Norigon? When this is over, c-could your fire light my grill?"], ["me", "Hold Honey Hollow with me forty-five seconds, young champion, and I will light EVERY grill you own!"]],
   "w4-s9": [["me", "The Top Shelf. This kitchen gave me back my fire! Now it gets every last spark. FWOOSH!"], ["me", "This is the way of the Roll! Hrrm. I always knew what that one meant. Mostly."]],
+  // World 5: The Sink.
+  "w5-s2": [["me", "A giant rolling pin! At last, someone else who knows the way of the Roll!"], ["me", "Wait, it is rolling at ME. Proverb: \"When the pin rolls, the dragon runs!\" HUP HUP HUP!"]],
+  "w5-s3": [["me", "Sponge Shoals! Soft, squishy and full of holes. Like my memory of the ancient proverbs."], ["me", "The gates lock! Pull the lever, and these monsters get scrubbed right out. Hrrm!"]],
+  "w5-s4": [[10, "Hmph. Dragon. My last Crumblet. Walk it out of this soggy dish rack, or else."], ["me", "Fear not, papa bear! I shall carry it with honour. And keep its paper cup dry."], [10, "It's wearing a tiny rain hat. Don't look at me. It's the steam, okay?"]],
+  "w5-s6": [["me", "Bubble Bay! The scroll waits at the far end, and the floor moves by itself!"], ["me", "A conveyor belt? Ha! My ancestors invented these. We called it sushi-go-round!"]],
+  "w5-s7": [["me", "The last secret chest, high above the plughole. Proverb: \"Never drop your key down the drain.\""], ["me", "Hrrm. That one is less ancient and more common sense. Boing, sponge! Boing!"]],
+  "w5-s8": [["me", "A greasy pan! Fear not, pan. When this is over, a Roll Dragon always washes up."], [15, "Mr. Norigon! My grill's still lit with your flame! Forty-five seconds, side by side?"], ["me", "Side by side, young champion! FWOOSH!"]],
+  "w5-s9": [["mold", "Hehehe... closer, old dragon. Down here it's dark and damp, and every fire goes fizzle."], ["me", "Fizzle? I waited nine hundred years for this flame. I can out-wait one soggy drain!"], ["me", "Hrrm. Actually, no. I am very impatient. HERE I COME!"]],
 };
 
 export const QUIPS: Record<QuipKind, string[]> = {

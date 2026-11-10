@@ -35,6 +35,14 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w4-s7": [["me", "Pasta Jar Peaks, and the whole Pantry's swarming! Somebody REALLY doesn't want me up high."], ["me", "Fine! Lever, rolling pin, spaghetti everywhere. Just this once, let's make some NOISE!"]],
   "w4-s8": [[6, "Hear ye, thief! By royal decree you are pardoned! Now help us hold this line!"], ["me", "Pardoned? Aw, I'm touched. Mostly by honey. Forty-five seconds, Your Stickiness!"]],
   "w4-s9": [["me", "The Top Shelf! Where they keep the good stuff. My whole career led right here!"], ["me", "Funny, I thought I'd be drooling. Instead I keep thinking the kitchen needs it more. Ugh. Gross."]],
+  // World 5: The Sink.
+  "w5-s2": [["me", "Suds Slide! Wet toast is the worst toast. Soggy disguise, zero style."], ["n", "Uh-oh! A giant rolling pin comes rumbling down the suds!"], ["me", "Getaway time! Run right! Every great heist needs a chase scene!"]],
+  "w5-s3": [["me", "Sponge Shoals. Gates slam shut, three waves of guards. Classic vault security."], ["me", "Lucky for me, every vault has a weak spot. This one's a lever and a rolling pin. BONK!"]],
+  "w5-s4": [[10, "Hmph. Bat. One more Crumblet stuck up on Dish Rack Ridge. You know the drill."], ["me", "Uncle Toastbat, back on babysitting duty! Stick close, kid. The plates are slippy and so am I."]],
+  "w5-s6": [["me", "Bubble Bay! A Recipe Scroll at the end of a conveyor belt, seventy-five seconds on the clock. Like a jewel heist movie!"], ["me", "Ride the belt, snatch the scroll, hold the fort. Smooth as butter. GOLDEN butter. Heh."]],
+  "w5-s7": [["me", "Plughole Pass. One wrong step and my career goes down the drain. Like, for real down the drain."], ["me", "Secret chest on a high ledge? Bounce the sponge, grab the key. I've done this once or twice."]],
+  "w5-s8": [["foe", "Squeak! Psst, bat. Grease monsters can't climb the pan edges. Don't say I never gave ya nothin'!"], ["me", "Ricotta, giving tips? Heh. Forty-five seconds, then we're square, cheese-face."]],
+  "w5-s9": [["mold", "Hehehe... closer, little thief. Bring the Butter all the way down. I'll keep it SAFE."], ["me", "Heh. That's what every crook says. Trust me, I'd know."]],
 };
 
 export const QUIPS: Record<QuipKind, string[]> = {

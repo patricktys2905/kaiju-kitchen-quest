@@ -57,8 +57,29 @@ export const ARC: Record<string, StoryLine[]> = {
     ["mold", "Hehehe! Bring the pizza, little raptor. The Crown is HUNGRY."],
     ["n", "To be continued in World 5: The Sink."],
   ],
+  "w5-open": [
+    ["me", "The Sink! Delivery address confirmed! Minute, uh, let's just call it \"fashionably late\"!"],
+    ["me", "Box is warm-ish, customer's somewhere down a drain. Easy! Beep beep!"],
+  ],
+  "w5-boss": [
+    ["boss", "Hehehe... a pizza for the Crown? Ooh, you shouldn't have, little courier."],
+    ["me", "I DIDN'T! It's for the Head Chef! It says so right on the box!"],
+    ["boss", "Leave it with me. Let it get nice and fuzzy. Nobody tips a lizard anyway!"],
+    ["me", "That's it! ZERO stars! Beep beep, Raptor Express coming THROUGH!"],
+  ],
+  "w5-after": [
+    ["boss", "Squeak! Stop! I'm only a little science project! Somebody grew me in the back of the fridge and forgot!"],
+    ["me", "Who?! I need a name for the complaint form!"],
+    ["boss", "Nope! Bye-bye! SLUUURP!"],
+    ["n", "GLUG! Down the drain it goes! The Head Chef is safe, and look, a little table set for one!"],
+    ["me", "Special delivery! One large pepperoni, extra cheese! And there's the Chef's hat. Close enough, sign here!"],
+    ["me", "Whoa, a whole jar of crumbs for a tip?! Biggest tip in kitchen history!"],
+    ["foe", "Five stars, raptor. Even I gotta admit it."],
+    ["me", "Delivered at minute two hundred and... something! Thirty minutes or less, give or take a WEEK!"],
+    ["me", "*bows* Thank you, thank you! Raptor Express ALWAYS delivers! Eventually! Beep beep!"],
+  ],
 };
-export const NEMESIS: Record<"w1-elite" | "w2-elite" | "w3-elite" | "w4-elite", StoryLine[]> = {
+export const NEMESIS: Record<"w1-elite" | "w2-elite" | "w3-elite" | "w4-elite" | "w5-elite", StoryLine[]> = {
   "w1-elite": [
     ["foe", "Pineapple Pete Express! Fastest wheels in the kitchen! That pizza's MINE to deliver!"],
     ["me", "Raptor Express doesn't share routes, Pete! Beep beep, outta my way!"],
@@ -75,5 +96,11 @@ export const NEMESIS: Record<"w1-elite" | "w2-elite" | "w3-elite" | "w4-elite", 
     ["foe", "The mold promised me every delivery in the kitchen if I stopped you!"],
     ["me", "Pete, buddy, the mold doesn't TIP. Trust me."],
     ["foe", "Huh. It really doesn't. Aw, nuts!"],
+  ],
+  "w5-elite": [
+    ["foe", "Raptor! Look, steel wool turbo wheels! Last race! Winner takes EVERY route!"],
+    ["me", "Pete, buddy, we talked about this. The mold doesn't TIP!"],
+    ["foe", "It gave me SPEED, though! Ugh, fine. Beat me and maybe I'll quit pineappling your lane. MAYBE!"],
+    ["me", "Deal! Beep beep, eat my bubbles!"],
   ],
 };

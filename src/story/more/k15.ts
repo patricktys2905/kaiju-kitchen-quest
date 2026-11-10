@@ -35,6 +35,14 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w4-s7": [[11, "Beep beep! Special delivery for one shy hedgehog: a hot tip! Key chest's past the sponge!"], ["me", "W-wow, thanks! Hey, are you coming to the cookout?"], [11, "Is there pizza? Then I'm already there! Zoom!"]],
   "w4-s8": [["n", "Drip drip! Honey oozes off the shelves, and a sticky swarm of monsters with it!"], ["me", "Ooh, honey glaze! Thanks for the idea! Now everybody line up for the grill!"], ["me", "I waited a whole year for this cookout. I can wait forty-five more seconds!"]],
   "w4-s9": [["me", "Top shelf! The Cookie Vault's right up there, and the recipe with it!"], ["me", "Last year I couldn't even say hi without stammering. Watch this! HELLO, TOP SHELF!"]],
+  // World 5: The Sink. The Champion cleans up. Stammer nearly gone.
+  "w5-s2": [["n", "RUMBLE! A giant rolling pin comes bouncing down the Suds Slide!"], ["me", "And the rolling pin takes the lead! But here comes Hotchog on the outside! RUN, Hotchog, RUN!"]],
+  "w5-s3": [["me", "Sponge Shoals! Great for scrubbing a grill. Not so great with monsters living in it!"], ["me", "Gates locked? Then it's lever time! Rolling pin, you're up!"]],
+  "w5-s4": [[10, "Hmph. Hotchog. My last Crumblet. Walk it through the dish rack. Spikes pointed AWAY."], ["me", "You got it, Mr. Bluebeary! One VIP pass to the cookout, coming right up!"]],
+  "w5-s6": [["me", "Bubble Bay! Conveyor belts all the way to the scroll. It's a giant rotisserie!"], ["me", "Seventy-five seconds on the timer, folks! Ding ding! Let's GO!"]],
+  "w5-s7": [["me", "Plughole Pass! Careful, everybody. Nobody drop the ketchup down there."], ["me", "Key chest's up high. A champion always checks the sponges! BOING!"]],
+  "w5-s8": [["me", "Greasy Pan Pits! Somebody forgot to wash up after the cookout. Was it me? It was me. Sorry!"], [7, "Hrrm! Young champion! Your grill still burns with my flame. Forty-five seconds, side by side?"], ["me", "Side by side, Mr. Norigon! Light 'em up!"]],
+  "w5-s9": [["mold", "Hehehe... cookouts end, little sausage. Everybody goes home, and you're all alone with the dishes."], ["me", "Nope! After a cookout, everybody helps with the dishes. That's the best part!"], ["me", "Well, second-best. After the burgers."]],
 };
 
 export const QUIPS: Record<QuipKind, string[]> = {

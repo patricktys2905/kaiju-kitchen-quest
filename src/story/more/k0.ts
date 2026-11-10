@@ -38,6 +38,15 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w4-s7": [["me", "Pasta Jar Peaks! Noodle Lurkers wiggling under the spaghetti. Gross AND spooky!"], ["me", "The last secret key's up there somewhere. Penne for your thoughts on where? Hehe!"]],
   "w4-s8": [["me", "Honey Hollow! Forty-five seconds of sticky waves. If I get stuck, I'll stomp in place!"], [8, "Small berry fight good! Me watch. Me cheer. GO BERRY GO!"]],
   "w4-s9": [["me", "The Top Shelf! Higher than big brother's EVER been! Whoa, don't look down!"], ["mold", "Hehehe! Climb all you like, little berry. Every road goes down... to the Sink."], ["me", "Then I'll stomp that jar and come down as Gobzilla MEDIUM! Final answer!"]],
+
+  // World 5: The Sink.
+  "w5-s2": [["me", "Suds Slide! Stomp count: a gazillion! Wait, why are the bubbles rumbling?"], ["n", "Uh-oh! A giant rolling pin comes tumbling down the suds!"], ["me", "I LOVE rolling pins! Just not from THIS side! Run run RUN!"]],
+  "w5-s3": [["me", "Sponge Shoals! Gates locked, monsters coming. Time to get soap-er! I mean SUPER!"], ["me", "Ladle lever, rolling pin, SQUISH! I'm gonna wash these guys right outta my leaves!"]],
+  "w5-s4": [[10, "Hmph. Strawberry. Stray Crumblet up on Dish Rack Ridge. You know the drill."], ["me", "Gobzilla Medium, babysitter class, back on duty! Hold my leaf, little guy. Plates are slippy!"], [10, "You're getting good at this. Don't let it go to your leaves. Hmph."]],
+  "w5-s6": [["me", "Bubble Bay! Recipe Scroll way out at the far end. Conveyor belts? Free rides! Wheee!"], ["me", "Pop! Pop! Big brother says bubbles are for babies. Big brother's not HERE! Pop!"]],
+  "w5-s7": [["me", "Plughole Pass! Secret chest on a high ledge. High is STILL my worst direction."], ["me", "But I've got a bouncy sponge and a big RAWR! Boing! Up goes the World 5 key!"]],
+  "w5-s8": [["me", "Greasy Pan Pits! Forty-five seconds of waves. Ew, nobody washed these pans EVER!"], ["foe", "Psst, shrimp. Er, Gobzilla. Lure 'em under the drippy taps. SPLOOSH! Not that I care!"], ["me", "Brutus is HELPING?! Wait till big brother hears THIS!"]],
+  "w5-s9": [["me", "Drain Descent. It's dark. Stomp count? Who's counting? Not me. Too busy being brave."], ["mold", "Hehehe... closer, little berry. Everything goes down the drain sooner or later. Even little brothers."], ["me", "Not THIS little brother! I'm the MEDIUM one! RAWR!"]],
 };
 
 export const QUIPS: Record<QuipKind, string[]> = {

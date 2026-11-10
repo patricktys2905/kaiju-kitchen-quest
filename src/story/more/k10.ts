@@ -38,6 +38,15 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w4-s7": [["me", "Pasta Jar Peaks. Last secret key's up on a sponge ledge."], ["me", "Noodle Lurkers under the pasta? Noodles don't lurk. Noodles are DINNER. Grrr."]],
   "w4-s8": [["me", "Honey Hollow. Honey! Bears like honey. Bears LOVE honey..."], ["me", "Nope! Focus! Forty-five seconds of waves first. Honey after. Okay, maybe one lick during."]],
   "w4-s9": [["n", "Squeak! A tiny, sticky squeak floats down from the Top Shelf!"], ["mold", "Hehehe! Last little crumb, bear. Can I keep it? The Sink has room for everyone."], ["me", "Hold on, littlest. Papa's climbing."]],
+
+  // World 5: The Sink.
+  "w5-s2": [["me", "Suds Slide. Crumblets would slide down this all day. Nobody tell 'em."], ["n", "Uh-oh! A giant rolling pin comes rumbling down the suds!"], ["me", "Bears don't run. Bears JOG. Real fast. GO GO GO!"]],
+  "w5-s3": [["me", "Sponge Shoals. Gates locked, three waves. Hmph. I've done bath time with six muffins. This is nothing."], ["me", "Lever drops the pin. Monsters get washed up. For good. Grrr."]],
+  "w5-s4": [["n", "A lost Crumblet wobbles on Dish Rack Ridge, between two giant plates!"], ["me", "Strays walked home: four. Five after you. Grab my fur, kid. Plates bite back."], [0, "Ooh, Bluebeary! Need a babysitter? I'm medium class now!"]],
+  "w5-s6": [["me", "Bubble Bay. Recipe Scroll at the far end, seventy-five seconds. Conveyor belts. Lazy floors. Hmph."], ["me", "Bubbles keep popping on my nose. Not funny. Okay, a little funny."]],
+  "w5-s7": [["me", "Plughole Pass. Key's in a chest on a high ledge. Bouncy sponge. Bears don't bounce."], ["me", "BOING! Wheee! AHEM. Nobody saw that. Hmph."]],
+  "w5-s8": [["me", "Greasy Pan Pits. Forty-five seconds. These pans need a scrub. So do the monsters. GRRR."], [11, "Beep beep! Watch the taps, Bluebeary! When they pour, they BLAST ya!"], ["me", "I know how taps work, raptor. Hmph. Thanks."]],
+  "w5-s9": [["me", "Drain Descent. Sniff sniff. Smells like a fridge nobody cleaned."], ["mold", "Hehehe... come down, bear. Is anybody counting YOU?"], ["me", "Six little somebodies. Every night. Grrr."]],
 };
 
 export const QUIPS: Record<QuipKind, string[]> = {

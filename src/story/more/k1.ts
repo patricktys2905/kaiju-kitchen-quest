@@ -35,6 +35,14 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w4-s7": [["me", "Pasta Jar Peaks! The Noodle Lurkers burrow and bite! I call it al dente aggression!"], ["me", "One more key, one more secret door! Note to self: side quests are FUN!"]],
   "w4-s8": [["me", "EUREKA! Honey fights fungus! Honey Hollow might have the final ingredient!"], ["me", "Uh-oh, my scanner says one extra elite. Big and cranky! Survive forty-five seconds first!"]],
   "w4-s9": [["mold", "Hehehe... ninety-nine percent, little chemist. So close! The last percent is waiting in the Sink."], ["me", "Then that's where the experiment ends! Final note before the jar: good luck, me! You got this!"]],
+  // World 5: The Sink.
+  "w5-s2": [["me", "Suds Slide! Note to self: soap plus jelly equals ZOOM! Wheee!"], ["me", "Wait, why is a giant rolling pin following me?! New hypothesis: RUN RIGHT! Very, VERY right!"]],
+  "w5-s3": [["me", "Sponge Shoals! Sponges soak up eight hundred times their weight! I made that number up. Fascinating!"], ["me", "Gates locked, three waves! Lever, rolling pin, SPLAT! The classic experiment, now with bubbles!"]],
+  "w5-s4": [[10, "Hmph. Jelly. Walk my Crumblet over Dish Rack Ridge. Gently. Those plates are slippy."], ["me", "Assistant number five! Rules one to three still apply! Rule four: no sliding on the plates! ...Okay, ONE slide."]],
+  "w5-s6": [["me", "Bubble Bay! The last Recipe Scroll! Please say \"soap\". PLEASE don't say garlic!"], ["me", "Conveyor belts AND seventy-five seconds? Science on a treadmill! Go, go, GO!"]],
+  "w5-s7": [["me", "Plughole Pass! Note to self: do NOT go down the drain. Underline that. Twice!"], ["me", "Secret chest on a high ledge! Bouncy sponge, launch the squid! EUREKA, I'm airborne!"]],
+  "w5-s8": [["foe", "Psst, colleague! Grease monsters HATE soap. That's free data. Don't tell anyone I helped!"], ["me", "Professor Penicillin, sharing data?! Peer review WORKS! Forty-five seconds, let's scrub up!"]],
+  "w5-s9": [["mold", "Hehehe... closer, little chemist. Bring your bottle down the drain. I want to taste your last one percent."], ["me", "My tentacles are tingling! That's either science or fear. Final note before the drain: it's SCIENCE!"]],
 };
 
 export const QUIPS: Record<QuipKind, string[]> = {

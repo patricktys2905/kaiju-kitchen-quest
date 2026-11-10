@@ -35,6 +35,14 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w4-s7": [[7, "Hrrm. Chocomunch! You walked through the Oven. Few chocolate warriors could."], ["me", "Me scared whole time!"], [7, "Scared, yet you went? Ancient wisdom calls that courage. Or rice. Anyway, sponge is that way."]],
   "w4-s8": [["me", "Honey Hollow! Sticky sweet! Me and honey same team. Team Dessert!"], ["me", "Before, me count one, two, many. Now me count ALL the way to forty-five! Me ready!"]],
   "w4-s9": [["me", "Top shelf! Sniff sniff. Me smell Chef apron! Chef close!"], ["mold", "Drip, drip! Hear the Sink, little golem? It's waiting for you. Hehehe!"], ["me", "Me hear. Me climb anyway! Chef is friend!"]],
+  // World 5: The Sink. Hot water, last climb down, the bravest golem.
+  "w5-s2": [["n", "Uh-oh! A giant rolling pin is rumbling down the Suds Slide, right at Chocomunch!"], ["me", "Rolling pin supposed to be on MY team! Me no pull ladle this time!"], ["me", "Okay! Me RUN! Me run fast like hot fudge! Wait, no, me no like hot!"]],
+  "w5-s3": [["me", "Sponge Shoals! Sponge soak up water. Sponge soak up bad guys? Me find out!"], ["me", "Gate lock! Me pull lever, rolling pin drop. Bad guys get SCRUBBED! Hehe!"]],
+  "w5-s4": [[10, "Hmph. Chocomunch. My last Crumblet. Get it past those dishes, and keep its frosting dry."], ["me", "Me walk muffin! Soggy muffin is sad muffin. Me no allow sad muffin!"]],
+  "w5-s6": [["me", "Bubbles! Me pop bubble! Me pop ALL the bubble! Hehe, pop pop pop!"], ["me", "Oh, right. Scroll. Me grab scroll in seventy-five seconds. THEN me pop bubble."]],
+  "w5-s7": [["me", "Plughole! Me no go down hole. Me go UP! Sponge! BOING!"], ["me", "Last key in high chest. Me hold key SO tight. Key no go down the drain!"]],
+  "w5-s8": [["me", "Greasy pan. Eww. Me need bath after this. Good thing we in Sink!"], ["me", "Forty-five seconds. Me count all the way now! Me good counter! Wanna hear? One, two, FORTY-FIVE!"]],
+  "w5-s9": [["mold", "Hehehe... going down, little golem? Down where the water's HOT. Steamy, melty, gooey hot!"], ["me", "Me scared. Me still go. Me ALWAYS still go! Chef is friend!"]],
 };
 
 export const QUIPS: Record<QuipKind, string[]> = {

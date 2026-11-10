@@ -47,6 +47,11 @@ export const WORLDS: WorldDef[] = [
     baseLv: 37, power: 2.5, pool: [[1, 'cheerio'], [1, 'flour'], [2, 'noodle'], [3, 'can'], [4, 'raisin'], [5, 'soda']], hazard: 'drop', mimic: 'cereal', elite: 'can', boss: 'jar',
     names: ['Cupboard Door', 'Cereal Canyon', 'Flour Drifts', 'Tin Can Alley', 'Shield Wall', 'Spice Rack Ridge', 'Pasta Jar Peaks', 'Honey Hollow', 'Top Shelf Climb', 'Cookie Vault'],
   },
+  {
+    id: 5, name: 'The Sink', blurb: 'Deep, damp and down the drain.', bg: 'bg-far-sink', mid: 'bg-mid-sink', tile: 'tile-sink', platTint: 0xd0e4f0, bossBg: 'bg-far-drain',
+    baseLv: 49, power: 3.0, pool: [[1, 'plate'], [1, 'bubble'], [2, 'mug'], [3, 'eel'], [4, 'glove'], [7, 'scrub']], hazard: 'tap', mimic: 'mimic', elite: 'scrub', boss: 'moldking',
+    names: ['Faucet Falls', 'Suds Slide', 'Sponge Shoals', 'Dish Rack Ridge', 'Steel Wool Wall', 'Bubble Bay', 'Plughole Pass', 'Greasy Pan Pits', 'Drain Descent', 'The Mold Throne'],
+  },
 ];
 
 /** Small seeded RNG so a stage is always laid out the same way. */
@@ -129,7 +134,7 @@ function genStage(w: WorldDef, n: number): StageDef {
     platforms, ladders, mobs, hazards, ...interactive(w, n, width, platforms, ladders, r),
     ...setPieces(w, n, width, platforms, mobs, lvLo, lvHi),
     // a goal on stages 4 / 6 / 8 of every world
-    objective: n === 4 ? { kind: 'escort' } : n === 6 ? { kind: 'fetch', t: 75, x: width - 260 } : n === 8 ? { kind: 'survive', t: 45 } : undefined,
+    objective: n === 4 ? { kind: 'escort' } : n === 6 ? { kind: 'fetch', t: w.id >= 5 ? 90 : 75, x: width - 260 } : n === 8 ? { kind: 'survive', t: 45 } : undefined,
   };
 }
 
@@ -239,6 +244,7 @@ function hazardAt(kind: HazardKind, x: number, offset: number): Hazard {
     case 'vent': return { kind, x, w: 70, period: 3.2, on: 0.8, offset };
     case 'drop': return { kind, x, w: 80, period: 3.8, on: 0.35, offset };
     case 'ice': return { kind, x, w: 260, period: 1, on: 1, offset };
+    case 'tap': return { kind, x, w: 70, period: 3.4, on: 1.1, offset };
   }
 }
 
