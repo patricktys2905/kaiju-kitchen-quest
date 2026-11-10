@@ -223,6 +223,7 @@ export class World {
   variant: 'swarm' | 'ambush' | 'night' | undefined;
 
   constructor(public stage: StageDef, d: Derived, seed = 1, bag: Hero['bag'] = [], revives = 0, hard = false, variant?: 'swarm' | 'ambush' | 'night', spicy: Spicy[] = [], public nemesis?: MobKind, nightmare = false, party: Derived[] = [], humans = 1, partyBags: { bag: Hero['bag']; revives: number }[] = []) {
+    nextId = 1; // ids restart with every stage: the same seed and inputs always play out the same (monster patrols use the id)
     this.humans = Math.max(1, humans); this.lootOf = Array.from({ length: this.humans }, () => []);
     this.nightmare = nightmare; if (nightmare) hard = true;
     this.stage = stage = { ...stage, platforms: stage.platforms.map(p => ({ ...p })) };
@@ -690,6 +691,9 @@ export class World {
           h.counter = Math.max(h.counter, 0.05);
           this.damageMob(m, atk * sk.dmg, h.face, { kx: sk.kx, ky: sk.ky, stun: 0.8 }, true);
         } else h.x = clamp(h.x + h.face * 120, 20, this.stage.width - 20);
+        // reappearing somewhere else (beside a flyer up in the air, or past a ledge's edge) means you aren't standing on
+        // whatever you stood on before: let physics find the floor (it lands you straight away if there is one)
+        h.ground = false; h.on = null;
         break;
       }
       case 'rain': case 'meteor': { // drops from the sky over the area ahead
@@ -813,6 +817,7 @@ export class World {
         const tgt = this.targetsNear(h.x, h.y, sk.reach, sk.h).sort((a, b) => b.maxHp - a.maxHp)[0];
         if (tgt) {
           h.x = clamp(tgt.x - h.face * (MOBS[tgt.kind].w / 2 + 30), 20, this.stage.width - 20); h.y = tgt.y; h.face = tgt.x > h.x ? 1 : -1;
+          h.ground = false; h.on = null; // landed beside the target, maybe up in the air: let physics find the floor
           this.events.push({ t: 'shock', x: tgt.x, y: tgt.y - 40, r: 120 });
           this.damageMob(tgt, atk * sk.dmg, h.face, { kx: sk.kx, ky: sk.ky, stun: 1.5 }, true);
         }
@@ -903,7 +908,12 @@ export class World {
         else return;
       }
       // gates: nobody gets out until it's over
-      for (const p of this.heroes) { if (p.x < a.x0 - 60 || p.x > a.x1 + 60) { p.x = (a.x0 + a.x1) / 2; p.y = G; p.vy = 0; } p.x = clamp(p.x, a.x0 + 24, a.x1 - 24); }
+      for (const p of this.heroes) {
+        if (p.x < a.x0 - 60 || p.x > a.x1 + 60) { p.x = (a.x0 + a.x1) / 2; p.y = G; p.vy = 0; }
+        p.x = clamp(p.x, a.x0 + 24, a.x1 - 24);
+        // held back by the gate while a moving tray slides away underneath: you drop instead of standing on air
+        if (p.ground && p.on !== null && p.on >= 0) { const q = this.stage.platforms[p.on]; if (p.x < q.x - 4 || p.x > q.x + q.w + 4) { p.ground = false; p.on = null; } }
+      }
       const mine = this.mobs.filter(m => m.arena === i && m.state !== 'dead');
       for (const m of mine) m.x = clamp(m.x, a.x0 + 24, a.x1 - 24);
       if (mine.length) return;
