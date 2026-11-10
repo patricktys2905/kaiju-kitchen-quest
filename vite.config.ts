@@ -46,6 +46,9 @@ export default defineConfig({
         // Precache the whole game so it runs with no connection after the first visit.
         globPatterns: ['**/*.{js,css,html,svg,png,webp,ico,json,woff2}'],
         maximumFileSizeToCacheInBytes: 4 * 1024 * 1024,
+        // each kaiju's own stage-5 story paintings (200 of them) download when first shown, then stay cached for offline play
+        globIgnores: ['**/art/still-*-w*-elite.webp'],
+        runtimeCaching: [{ urlPattern: /\/art\/still-\d+-w\d+-elite\.webp$/, handler: 'CacheFirst', options: { cacheName: 'kaiju-scenes', expiration: { maxEntries: 220 } } }],
         cleanupOutdatedCaches: true,
         navigateFallback: 'index.html',
       },

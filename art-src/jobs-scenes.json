@@ -1,0 +1,692 @@
+[
+ {
+  "name": "still-w1-s2",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/bg-far.png",
+   "art-src/raw/mob-bun.png",
+   "art-src/raw/mob-worm.png"
+  ],
+  "prompt": "Generate an image. The first reference shows the painted background style and the place. The other references are characters/objects to include. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. IMPORTANT: keep the LEFT third of the picture free of characters (just open floor and scenery there: the hero will stand there). NO text, no letters, no words written anywhere (not on the floor, banners, labels or signs), no speech bubbles, no UI, no border, no signature, no humans. Scene: a long downhill stretch in The Countertop, a giant sunny kitchen countertop. At the top of the slope a GIANT wooden rolling pin is just starting to roll down, about to chase whoever is below. A few Moldy Buns and Sour Worms (draw them exactly like the references) wait along the way, looking smug."
+ },
+ {
+  "name": "still-w1-s3",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/bg-far.png",
+   "art-src/raw/mob-bun.png",
+   "art-src/raw/mob-worm.png"
+  ],
+  "prompt": "Generate an image. The first reference shows the painted background style and the place. The other references are characters/objects to include. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. IMPORTANT: keep the LEFT third of the picture free of characters (just open floor and scenery there: the hero will stand there). NO text, no letters, no words written anywhere (not on the floor, banners, labels or signs), no speech bubbles, no UI, no border, no signature, no humans. Scene: Gummy Gully, in The Countertop, a giant sunny kitchen countertop: a wide open arena walled in by two tall wooden ladle pillars; a gang of Moldy Buns and Sour Worms (exactly like the references) gathers in the middle, ready to fight. A big lever sticks out of the floor nearby."
+ },
+ {
+  "name": "still-w1-s4",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/bg-far.png",
+   "art-src/raw/npc-crumblet.png",
+   "art-src/raw/mob-bun.png"
+  ],
+  "prompt": "Generate an image. The first reference shows the painted background style and the place. The other references are characters/objects to include. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. IMPORTANT: keep the LEFT third of the picture free of characters (just open floor and scenery there: the hero will stand there). NO text, no letters, no words written anywhere (not on the floor, banners, labels or signs), no speech bubbles, no UI, no border, no signature, no humans. Scene: Toaster Hills, in The Countertop, a giant sunny kitchen countertop: a tiny lost CRUMBLET (draw it exactly like the first character reference: a small cute crumb creature) hides and trembles behind a big object, peeking out, hoping to be rescued. In the distance a Moldy Bun (like the second reference) prowls about."
+ },
+ {
+  "name": "still-w1-s6",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/bg-far.png",
+   "art-src/raw/c-scroll.png",
+   "art-src/raw/mob-bun.png"
+  ],
+  "prompt": "Generate an image. The first reference shows the painted background style and the place. The other references are characters/objects to include. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. IMPORTANT: keep the LEFT third of the picture free of characters (just open floor and scenery there: the hero will stand there). NO text, no letters, no words written anywhere (not on the floor, banners, labels or signs), no speech bubbles, no UI, no border, no signature, no humans. Scene: Spice Shelf, in The Countertop, a giant sunny kitchen countertop: far away at the end of the path, the glowing RECIPE SCROLL (exactly like the reference) rests on a high spot, golden light and sparkles around it. Moldy Buns (like the reference) stand guard along the path."
+ },
+ {
+  "name": "still-w1-s7",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/bg-far.png",
+   "art-src/raw/ob-chest.png",
+   "art-src/raw/mob-worm.png"
+  ],
+  "prompt": "Generate an image. The first reference shows the painted background style and the place. The other references are characters/objects to include. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. IMPORTANT: keep the LEFT third of the picture free of characters (just open floor and scenery there: the hero will stand there). NO text, no letters, no words written anywhere (not on the floor, banners, labels or signs), no speech bubbles, no UI, no border, no signature, no humans. Scene: Pepper Pass, in The Countertop, a giant sunny kitchen countertop: a treasure chest (exactly like the reference) glints on a high hidden ledge above the path, out of easy reach; a few Sour Worms (like the reference) patrol below."
+ },
+ {
+  "name": "still-w1-s8",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/bg-far.png",
+   "art-src/raw/mob-bun.png",
+   "art-src/raw/mob-ant.png"
+  ],
+  "prompt": "Generate an image. The first reference shows the painted background style and the place. The other references are characters/objects to include. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. IMPORTANT: keep the LEFT third of the picture free of characters (just open floor and scenery there: the hero will stand there). NO text, no letters, no words written anywhere (not on the floor, banners, labels or signs), no speech bubbles, no UI, no border, no signature, no humans. Scene: Cutting Board Bluffs, in The Countertop, a giant sunny kitchen countertop: a big horde of Moldy Buns and Sugar Ants (exactly like the references) pours in from the right, dramatic and exciting, the place about to be overrun. Hold the line!"
+ },
+ {
+  "name": "still-w1-s9",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/bg-far.png",
+   "art-src/raw/boss-toast.png"
+  ],
+  "prompt": "Generate an image. The first reference shows the painted background style and the place. The other references are characters/objects to include. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. IMPORTANT: keep the LEFT third of the picture free of characters (just open floor and scenery there: the hero will stand there). NO text, no letters, no words written anywhere (not on the floor, banners, labels or signs), no speech bubbles, no UI, no border, no signature, no humans. Scene: the last climb of Burner Approach, in The Countertop, a giant sunny kitchen countertop. Far ahead and high up looms the lair of the Burnt Toast King: its shape (like the reference, but dark, distant and half hidden) at the top, ominous light and long shadows. The final fight is near."
+ },
+ {
+  "name": "still-w2-s2",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/bg-far-fridge.png",
+   "art-src/raw/mob-pea.png",
+   "art-src/raw/mob-yogurt.png"
+  ],
+  "prompt": "Generate an image. The first reference shows the painted background style and the place. The other references are characters/objects to include. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. IMPORTANT: keep the LEFT third of the picture free of characters (just open floor and scenery there: the hero will stand there). NO text, no letters, no words written anywhere (not on the floor, banners, labels or signs), no speech bubbles, no UI, no border, no signature, no humans. Scene: a long downhill stretch in The Fridge, a giant chilly refrigerator. At the top of the slope a GIANT wooden rolling pin is just starting to roll down, about to chase whoever is below. A few Pea Shooters and Yogurt Blobs (draw them exactly like the references) wait along the way, looking smug."
+ },
+ {
+  "name": "still-w2-s3",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/bg-far-fridge.png",
+   "art-src/raw/mob-pea.png",
+   "art-src/raw/mob-yogurt.png"
+  ],
+  "prompt": "Generate an image. The first reference shows the painted background style and the place. The other references are characters/objects to include. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. IMPORTANT: keep the LEFT third of the picture free of characters (just open floor and scenery there: the hero will stand there). NO text, no letters, no words written anywhere (not on the floor, banners, labels or signs), no speech bubbles, no UI, no border, no signature, no humans. Scene: Frosty Shelf, in The Fridge, a giant chilly refrigerator: a wide open arena walled in by two tall wooden ladle pillars; a gang of Pea Shooters and Yogurt Blobs (exactly like the references) gathers in the middle, ready to fight. A big lever sticks out of the floor nearby."
+ },
+ {
+  "name": "still-w2-s4",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/bg-far-fridge.png",
+   "art-src/raw/npc-crumblet.png",
+   "art-src/raw/mob-pea.png"
+  ],
+  "prompt": "Generate an image. The first reference shows the painted background style and the place. The other references are characters/objects to include. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. IMPORTANT: keep the LEFT third of the picture free of characters (just open floor and scenery there: the hero will stand there). NO text, no letters, no words written anywhere (not on the floor, banners, labels or signs), no speech bubbles, no UI, no border, no signature, no humans. Scene: Pickle Jar Pier, in The Fridge, a giant chilly refrigerator: a tiny lost CRUMBLET (draw it exactly like the first character reference: a small cute crumb creature) hides and trembles behind a big object, peeking out, hoping to be rescued. In the distance a Pea Shooter (like the second reference) prowls about."
+ },
+ {
+  "name": "still-w2-s6",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/bg-far-fridge.png",
+   "art-src/raw/c-scroll.png",
+   "art-src/raw/mob-pea.png"
+  ],
+  "prompt": "Generate an image. The first reference shows the painted background style and the place. The other references are characters/objects to include. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. IMPORTANT: keep the LEFT third of the picture free of characters (just open floor and scenery there: the hero will stand there). NO text, no letters, no words written anywhere (not on the floor, banners, labels or signs), no speech bubbles, no UI, no border, no signature, no humans. Scene: Egg Carton Cliffs, in The Fridge, a giant chilly refrigerator: far away at the end of the path, the glowing RECIPE SCROLL (exactly like the reference) rests on a high spot, golden light and sparkles around it. Pea Shooters (like the reference) stand guard along the path."
+ },
+ {
+  "name": "still-w2-s7",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/bg-far-fridge.png",
+   "art-src/raw/ob-chest.png",
+   "art-src/raw/mob-yogurt.png"
+  ],
+  "prompt": "Generate an image. The first reference shows the painted background style and the place. The other references are characters/objects to include. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. IMPORTANT: keep the LEFT third of the picture free of characters (just open floor and scenery there: the hero will stand there). NO text, no letters, no words written anywhere (not on the floor, banners, labels or signs), no speech bubbles, no UI, no border, no signature, no humans. Scene: Butter Bridge, in The Fridge, a giant chilly refrigerator: a treasure chest (exactly like the reference) glints on a high hidden ledge above the path, out of easy reach; a few Yogurt Blobs (like the reference) patrol below."
+ },
+ {
+  "name": "still-w2-s8",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/bg-far-fridge.png",
+   "art-src/raw/mob-pea.png",
+   "art-src/raw/mob-milk.png"
+  ],
+  "prompt": "Generate an image. The first reference shows the painted background style and the place. The other references are characters/objects to include. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. IMPORTANT: keep the LEFT third of the picture free of characters (just open floor and scenery there: the hero will stand there). NO text, no letters, no words written anywhere (not on the floor, banners, labels or signs), no speech bubbles, no UI, no border, no signature, no humans. Scene: Ketchup Canyon, in The Fridge, a giant chilly refrigerator: a big horde of Pea Shooters and Milk Carton Bulls (exactly like the references) pours in from the right, dramatic and exciting, the place about to be overrun. Hold the line!"
+ },
+ {
+  "name": "still-w2-s9",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/bg-far-fridge.png",
+   "art-src/raw/boss-golem.png"
+  ],
+  "prompt": "Generate an image. The first reference shows the painted background style and the place. The other references are characters/objects to include. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. IMPORTANT: keep the LEFT third of the picture free of characters (just open floor and scenery there: the hero will stand there). NO text, no letters, no words written anywhere (not on the floor, banners, labels or signs), no speech bubbles, no UI, no border, no signature, no humans. Scene: the last climb of Ice Tray Steps, in The Fridge, a giant chilly refrigerator. Far ahead and high up looms the lair of the Freezer Golem: its shape (like the reference, but dark, distant and half hidden) at the top, ominous light and long shadows. The final fight is near."
+ },
+ {
+  "name": "still-w3-s2",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/bg-far-oven.png",
+   "art-src/raw/mob-bacon.png",
+   "art-src/raw/mob-popcorn.png"
+  ],
+  "prompt": "Generate an image. The first reference shows the painted background style and the place. The other references are characters/objects to include. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. IMPORTANT: keep the LEFT third of the picture free of characters (just open floor and scenery there: the hero will stand there). NO text, no letters, no words written anywhere (not on the floor, banners, labels or signs), no speech bubbles, no UI, no border, no signature, no humans. Scene: a long downhill stretch in The Oven, a giant hot oven with glowing racks. At the top of the slope a GIANT wooden rolling pin is just starting to roll down, about to chase whoever is below. A few Bacon Strips and Popcorn Kernels (draw them exactly like the references) wait along the way, looking smug."
+ },
+ {
+  "name": "still-w3-s3",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/bg-far-oven.png",
+   "art-src/raw/mob-bacon.png",
+   "art-src/raw/mob-popcorn.png"
+  ],
+  "prompt": "Generate an image. The first reference shows the painted background style and the place. The other references are characters/objects to include. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. IMPORTANT: keep the LEFT third of the picture free of characters (just open floor and scenery there: the hero will stand there). NO text, no letters, no words written anywhere (not on the floor, banners, labels or signs), no speech bubbles, no UI, no border, no signature, no humans. Scene: Muffin Tin Maze, in The Oven, a giant hot oven with glowing racks: a wide open arena walled in by two tall wooden ladle pillars; a gang of Bacon Strips and Popcorn Kernels (exactly like the references) gathers in the middle, ready to fight. A big lever sticks out of the floor nearby."
+ },
+ {
+  "name": "still-w3-s4",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/bg-far-oven.png",
+   "art-src/raw/npc-crumblet.png",
+   "art-src/raw/mob-bacon.png"
+  ],
+  "prompt": "Generate an image. The first reference shows the painted background style and the place. The other references are characters/objects to include. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. IMPORTANT: keep the LEFT third of the picture free of characters (just open floor and scenery there: the hero will stand there). NO text, no letters, no words written anywhere (not on the floor, banners, labels or signs), no speech bubbles, no UI, no border, no signature, no humans. Scene: Casserole Cliffs, in The Oven, a giant hot oven with glowing racks: a tiny lost CRUMBLET (draw it exactly like the first character reference: a small cute crumb creature) hides and trembles behind a big object, peeking out, hoping to be rescued. In the distance a Bacon Strip (like the second reference) prowls about."
+ },
+ {
+  "name": "still-w3-s6",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/bg-far-oven.png",
+   "art-src/raw/c-scroll.png",
+   "art-src/raw/mob-bacon.png"
+  ],
+  "prompt": "Generate an image. The first reference shows the painted background style and the place. The other references are characters/objects to include. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. IMPORTANT: keep the LEFT third of the picture free of characters (just open floor and scenery there: the hero will stand there). NO text, no letters, no words written anywhere (not on the floor, banners, labels or signs), no speech bubbles, no UI, no border, no signature, no humans. Scene: Cookie Sheet Plains, in The Oven, a giant hot oven with glowing racks: far away at the end of the path, the glowing RECIPE SCROLL (exactly like the reference) rests on a high spot, golden light and sparkles around it. Bacon Strips (like the reference) stand guard along the path."
+ },
+ {
+  "name": "still-w3-s7",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/bg-far-oven.png",
+   "art-src/raw/ob-chest.png",
+   "art-src/raw/mob-popcorn.png"
+  ],
+  "prompt": "Generate an image. The first reference shows the painted background style and the place. The other references are characters/objects to include. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. IMPORTANT: keep the LEFT third of the picture free of characters (just open floor and scenery there: the hero will stand there). NO text, no letters, no words written anywhere (not on the floor, banners, labels or signs), no speech bubbles, no UI, no border, no signature, no humans. Scene: Roasting Pan Pass, in The Oven, a giant hot oven with glowing racks: a treasure chest (exactly like the reference) glints on a high hidden ledge above the path, out of easy reach; a few Popcorn Kernels (like the reference) patrol below."
+ },
+ {
+  "name": "still-w3-s8",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/bg-far-oven.png",
+   "art-src/raw/mob-bacon.png",
+   "art-src/raw/mob-sausage.png"
+  ],
+  "prompt": "Generate an image. The first reference shows the painted background style and the place. The other references are characters/objects to include. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. IMPORTANT: keep the LEFT third of the picture free of characters (just open floor and scenery there: the hero will stand there). NO text, no letters, no words written anywhere (not on the floor, banners, labels or signs), no speech bubbles, no UI, no border, no signature, no humans. Scene: Pizza Stone Steppe, in The Oven, a giant hot oven with glowing racks: a big horde of Bacon Strips and Sausage Links (exactly like the references) pours in from the right, dramatic and exciting, the place about to be overrun. Hold the line!"
+ },
+ {
+  "name": "still-w3-s9",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/bg-far-oven.png",
+   "art-src/raw/boss-dragon.png"
+  ],
+  "prompt": "Generate an image. The first reference shows the painted background style and the place. The other references are characters/objects to include. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. IMPORTANT: keep the LEFT third of the picture free of characters (just open floor and scenery there: the hero will stand there). NO text, no letters, no words written anywhere (not on the floor, banners, labels or signs), no speech bubbles, no UI, no border, no signature, no humans. Scene: the last climb of Top Rack Ascent, in The Oven, a giant hot oven with glowing racks. Far ahead and high up looms the lair of the Grease Dragon: its shape (like the reference, but dark, distant and half hidden) at the top, ominous light and long shadows. The final fight is near."
+ },
+ {
+  "name": "still-w4-s2",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/bg-far-pantry.png",
+   "art-src/raw/mob-cheerio.png",
+   "art-src/raw/mob-flour.png"
+  ],
+  "prompt": "Generate an image. The first reference shows the painted background style and the place. The other references are characters/objects to include. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. IMPORTANT: keep the LEFT third of the picture free of characters (just open floor and scenery there: the hero will stand there). NO text, no letters, no words written anywhere (not on the floor, banners, labels or signs), no speech bubbles, no UI, no border, no signature, no humans. Scene: a long downhill stretch in The Pantry, giant dusty pantry shelves. At the top of the slope a GIANT wooden rolling pin is just starting to roll down, about to chase whoever is below. A few Cheerio Rings and Flour Ghosts (draw them exactly like the references) wait along the way, looking smug."
+ },
+ {
+  "name": "still-w4-s3",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/bg-far-pantry.png",
+   "art-src/raw/mob-cheerio.png",
+   "art-src/raw/mob-flour.png"
+  ],
+  "prompt": "Generate an image. The first reference shows the painted background style and the place. The other references are characters/objects to include. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. IMPORTANT: keep the LEFT third of the picture free of characters (just open floor and scenery there: the hero will stand there). NO text, no letters, no words written anywhere (not on the floor, banners, labels or signs), no speech bubbles, no UI, no border, no signature, no humans. Scene: Flour Drifts, in The Pantry, giant dusty pantry shelves: a wide open arena walled in by two tall wooden ladle pillars; a gang of Cheerio Rings and Flour Ghosts (exactly like the references) gathers in the middle, ready to fight. A big lever sticks out of the floor nearby."
+ },
+ {
+  "name": "still-w4-s4",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/bg-far-pantry.png",
+   "art-src/raw/npc-crumblet.png",
+   "art-src/raw/mob-cheerio.png"
+  ],
+  "prompt": "Generate an image. The first reference shows the painted background style and the place. The other references are characters/objects to include. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. IMPORTANT: keep the LEFT third of the picture free of characters (just open floor and scenery there: the hero will stand there). NO text, no letters, no words written anywhere (not on the floor, banners, labels or signs), no speech bubbles, no UI, no border, no signature, no humans. Scene: Tin Can Alley, in The Pantry, giant dusty pantry shelves: a tiny lost CRUMBLET (draw it exactly like the first character reference: a small cute crumb creature) hides and trembles behind a big object, peeking out, hoping to be rescued. In the distance a Cheerio Ring (like the second reference) prowls about."
+ },
+ {
+  "name": "still-w4-s6",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/bg-far-pantry.png",
+   "art-src/raw/c-scroll.png",
+   "art-src/raw/mob-cheerio.png"
+  ],
+  "prompt": "Generate an image. The first reference shows the painted background style and the place. The other references are characters/objects to include. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. IMPORTANT: keep the LEFT third of the picture free of characters (just open floor and scenery there: the hero will stand there). NO text, no letters, no words written anywhere (not on the floor, banners, labels or signs), no speech bubbles, no UI, no border, no signature, no humans. Scene: Spice Rack Ridge, in The Pantry, giant dusty pantry shelves: far away at the end of the path, the glowing RECIPE SCROLL (exactly like the reference) rests on a high spot, golden light and sparkles around it. Cheerio Rings (like the reference) stand guard along the path."
+ },
+ {
+  "name": "still-w4-s7",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/bg-far-pantry.png",
+   "art-src/raw/ob-chest.png",
+   "art-src/raw/mob-flour.png"
+  ],
+  "prompt": "Generate an image. The first reference shows the painted background style and the place. The other references are characters/objects to include. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. IMPORTANT: keep the LEFT third of the picture free of characters (just open floor and scenery there: the hero will stand there). NO text, no letters, no words written anywhere (not on the floor, banners, labels or signs), no speech bubbles, no UI, no border, no signature, no humans. Scene: Pasta Jar Peaks, in The Pantry, giant dusty pantry shelves: a treasure chest (exactly like the reference) glints on a high hidden ledge above the path, out of easy reach; a few Flour Ghosts (like the reference) patrol below."
+ },
+ {
+  "name": "still-w4-s8",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/bg-far-pantry.png",
+   "art-src/raw/mob-cheerio.png",
+   "art-src/raw/mob-noodle.png"
+  ],
+  "prompt": "Generate an image. The first reference shows the painted background style and the place. The other references are characters/objects to include. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. IMPORTANT: keep the LEFT third of the picture free of characters (just open floor and scenery there: the hero will stand there). NO text, no letters, no words written anywhere (not on the floor, banners, labels or signs), no speech bubbles, no UI, no border, no signature, no humans. Scene: Honey Hollow, in The Pantry, giant dusty pantry shelves: a big horde of Cheerio Rings and Noodle Monsters (exactly like the references) pours in from the right, dramatic and exciting, the place about to be overrun. Hold the line!"
+ },
+ {
+  "name": "still-w4-s9",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/bg-far-pantry.png",
+   "art-src/raw/boss-jar.png"
+  ],
+  "prompt": "Generate an image. The first reference shows the painted background style and the place. The other references are characters/objects to include. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. IMPORTANT: keep the LEFT third of the picture free of characters (just open floor and scenery there: the hero will stand there). NO text, no letters, no words written anywhere (not on the floor, banners, labels or signs), no speech bubbles, no UI, no border, no signature, no humans. Scene: the last climb of Top Shelf Climb, in The Pantry, giant dusty pantry shelves. Far ahead and high up looms the lair of the Cookie Jar Mimic: its shape (like the reference, but dark, distant and half hidden) at the top, ominous light and long shadows. The final fight is near."
+ },
+ {
+  "name": "still-w5-s2",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/bg-far-sink.png",
+   "art-src/raw/mob-plate.png",
+   "art-src/raw/mob-bubble.png"
+  ],
+  "prompt": "Generate an image. The first reference shows the painted background style and the place. The other references are characters/objects to include. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. IMPORTANT: keep the LEFT third of the picture free of characters (just open floor and scenery there: the hero will stand there). NO text, no letters, no words written anywhere (not on the floor, banners, labels or signs), no speech bubbles, no UI, no border, no signature, no humans. Scene: a long downhill stretch in The Sink, a giant soapy kitchen sink. At the top of the slope a GIANT wooden rolling pin is just starting to roll down, about to chase whoever is below. A few Crusty Plates and Soap Bubbles (draw them exactly like the references) wait along the way, looking smug."
+ },
+ {
+  "name": "still-w5-s3",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/bg-far-sink.png",
+   "art-src/raw/mob-plate.png",
+   "art-src/raw/mob-bubble.png"
+  ],
+  "prompt": "Generate an image. The first reference shows the painted background style and the place. The other references are characters/objects to include. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. IMPORTANT: keep the LEFT third of the picture free of characters (just open floor and scenery there: the hero will stand there). NO text, no letters, no words written anywhere (not on the floor, banners, labels or signs), no speech bubbles, no UI, no border, no signature, no humans. Scene: Sponge Shoals, in The Sink, a giant soapy kitchen sink: a wide open arena walled in by two tall wooden ladle pillars; a gang of Crusty Plates and Soap Bubbles (exactly like the references) gathers in the middle, ready to fight. A big lever sticks out of the floor nearby."
+ },
+ {
+  "name": "still-w5-s4",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/bg-far-sink.png",
+   "art-src/raw/npc-crumblet.png",
+   "art-src/raw/mob-plate.png"
+  ],
+  "prompt": "Generate an image. The first reference shows the painted background style and the place. The other references are characters/objects to include. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. IMPORTANT: keep the LEFT third of the picture free of characters (just open floor and scenery there: the hero will stand there). NO text, no letters, no words written anywhere (not on the floor, banners, labels or signs), no speech bubbles, no UI, no border, no signature, no humans. Scene: Dish Rack Ridge, in The Sink, a giant soapy kitchen sink: a tiny lost CRUMBLET (draw it exactly like the first character reference: a small cute crumb creature) hides and trembles behind a big object, peeking out, hoping to be rescued. In the distance a Crusty Plate (like the second reference) prowls about."
+ },
+ {
+  "name": "still-w5-s6",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/bg-far-sink.png",
+   "art-src/raw/c-scroll.png",
+   "art-src/raw/mob-plate.png"
+  ],
+  "prompt": "Generate an image. The first reference shows the painted background style and the place. The other references are characters/objects to include. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. IMPORTANT: keep the LEFT third of the picture free of characters (just open floor and scenery there: the hero will stand there). NO text, no letters, no words written anywhere (not on the floor, banners, labels or signs), no speech bubbles, no UI, no border, no signature, no humans. Scene: Bubble Bay, in The Sink, a giant soapy kitchen sink: far away at the end of the path, the glowing RECIPE SCROLL (exactly like the reference) rests on a high spot, golden light and sparkles around it. Crusty Plates (like the reference) stand guard along the path."
+ },
+ {
+  "name": "still-w5-s7",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/bg-far-sink.png",
+   "art-src/raw/ob-chest.png",
+   "art-src/raw/mob-bubble.png"
+  ],
+  "prompt": "Generate an image. The first reference shows the painted background style and the place. The other references are characters/objects to include. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. IMPORTANT: keep the LEFT third of the picture free of characters (just open floor and scenery there: the hero will stand there). NO text, no letters, no words written anywhere (not on the floor, banners, labels or signs), no speech bubbles, no UI, no border, no signature, no humans. Scene: Plughole Pass, in The Sink, a giant soapy kitchen sink: a treasure chest (exactly like the reference) glints on a high hidden ledge above the path, out of easy reach; a few Soap Bubbles (like the reference) patrol below."
+ },
+ {
+  "name": "still-w5-s8",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/bg-far-sink.png",
+   "art-src/raw/mob-plate.png",
+   "art-src/raw/mob-mug.png"
+  ],
+  "prompt": "Generate an image. The first reference shows the painted background style and the place. The other references are characters/objects to include. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. IMPORTANT: keep the LEFT third of the picture free of characters (just open floor and scenery there: the hero will stand there). NO text, no letters, no words written anywhere (not on the floor, banners, labels or signs), no speech bubbles, no UI, no border, no signature, no humans. Scene: Greasy Pan Pits, in The Sink, a giant soapy kitchen sink: a big horde of Crusty Plates and Grumpy Mugs (exactly like the references) pours in from the right, dramatic and exciting, the place about to be overrun. Hold the line!"
+ },
+ {
+  "name": "still-w5-s9",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/bg-far-sink.png",
+   "art-src/raw/boss-mold.png"
+  ],
+  "prompt": "Generate an image. The first reference shows the painted background style and the place. The other references are characters/objects to include. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. IMPORTANT: keep the LEFT third of the picture free of characters (just open floor and scenery there: the hero will stand there). NO text, no letters, no words written anywhere (not on the floor, banners, labels or signs), no speech bubbles, no UI, no border, no signature, no humans. Scene: the last climb of Drain Descent, in The Sink, a giant soapy kitchen sink. Far ahead and high up looms the lair of the Mold Crown: its shape (like the reference, but dark, distant and half hidden) at the top, ominous light and long shadows. The final fight is near."
+ },
+ {
+  "name": "still-w6-s2",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/bg-far-dining.png",
+   "art-src/raw/mob-fork.png",
+   "art-src/raw/mob-napkin.png"
+  ],
+  "prompt": "Generate an image. The first reference shows the painted background style and the place. The other references are characters/objects to include. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. IMPORTANT: keep the LEFT third of the picture free of characters (just open floor and scenery there: the hero will stand there). NO text, no letters, no words written anywhere (not on the floor, banners, labels or signs), no speech bubbles, no UI, no border, no signature, no humans. Scene: a long downhill stretch in The Dining Room, a giant fancy dining table. At the top of the slope a GIANT wooden rolling pin is just starting to roll down, about to chase whoever is below. A few Fork Soldiers and Napkin Ghosts (draw them exactly like the references) wait along the way, looking smug."
+ },
+ {
+  "name": "still-w6-s3",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/bg-far-dining.png",
+   "art-src/raw/mob-fork.png",
+   "art-src/raw/mob-napkin.png"
+  ],
+  "prompt": "Generate an image. The first reference shows the painted background style and the place. The other references are characters/objects to include. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. IMPORTANT: keep the LEFT third of the picture free of characters (just open floor and scenery there: the hero will stand there). NO text, no letters, no words written anywhere (not on the floor, banners, labels or signs), no speech bubbles, no UI, no border, no signature, no humans. Scene: Candelabra Crossing, in The Dining Room, a giant fancy dining table: a wide open arena walled in by two tall wooden ladle pillars; a gang of Fork Soldiers and Napkin Ghosts (exactly like the references) gathers in the middle, ready to fight. A big lever sticks out of the floor nearby."
+ },
+ {
+  "name": "still-w6-s4",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/bg-far-dining.png",
+   "art-src/raw/npc-crumblet.png",
+   "art-src/raw/mob-fork.png"
+  ],
+  "prompt": "Generate an image. The first reference shows the painted background style and the place. The other references are characters/objects to include. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. IMPORTANT: keep the LEFT third of the picture free of characters (just open floor and scenery there: the hero will stand there). NO text, no letters, no words written anywhere (not on the floor, banners, labels or signs), no speech bubbles, no UI, no border, no signature, no humans. Scene: Gravy Boat Bay, in The Dining Room, a giant fancy dining table: a tiny lost CRUMBLET (draw it exactly like the first character reference: a small cute crumb creature) hides and trembles behind a big object, peeking out, hoping to be rescued. In the distance a Fork Soldier (like the second reference) prowls about."
+ },
+ {
+  "name": "still-w6-s6",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/bg-far-dining.png",
+   "art-src/raw/c-scroll.png",
+   "art-src/raw/mob-fork.png"
+  ],
+  "prompt": "Generate an image. The first reference shows the painted background style and the place. The other references are characters/objects to include. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. IMPORTANT: keep the LEFT third of the picture free of characters (just open floor and scenery there: the hero will stand there). NO text, no letters, no words written anywhere (not on the floor, banners, labels or signs), no speech bubbles, no UI, no border, no signature, no humans. Scene: Teacup Terrace, in The Dining Room, a giant fancy dining table: far away at the end of the path, the glowing RECIPE SCROLL (exactly like the reference) rests on a high spot, golden light and sparkles around it. Fork Soldiers (like the reference) stand guard along the path."
+ },
+ {
+  "name": "still-w6-s7",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/bg-far-dining.png",
+   "art-src/raw/ob-chest.png",
+   "art-src/raw/mob-napkin.png"
+  ],
+  "prompt": "Generate an image. The first reference shows the painted background style and the place. The other references are characters/objects to include. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. IMPORTANT: keep the LEFT third of the picture free of characters (just open floor and scenery there: the hero will stand there). NO text, no letters, no words written anywhere (not on the floor, banners, labels or signs), no speech bubbles, no UI, no border, no signature, no humans. Scene: Napkin Fold Fort, in The Dining Room, a giant fancy dining table: a treasure chest (exactly like the reference) glints on a high hidden ledge above the path, out of easy reach; a few Napkin Ghosts (like the reference) patrol below."
+ },
+ {
+  "name": "still-w6-s8",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/bg-far-dining.png",
+   "art-src/raw/mob-fork.png",
+   "art-src/raw/mob-candle.png"
+  ],
+  "prompt": "Generate an image. The first reference shows the painted background style and the place. The other references are characters/objects to include. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. IMPORTANT: keep the LEFT third of the picture free of characters (just open floor and scenery there: the hero will stand there). NO text, no letters, no words written anywhere (not on the floor, banners, labels or signs), no speech bubbles, no UI, no border, no signature, no humans. Scene: Silverware Siege, in The Dining Room, a giant fancy dining table: a big horde of Fork Soldiers and Candle Imps (exactly like the references) pours in from the right, dramatic and exciting, the place about to be overrun. Hold the line!"
+ },
+ {
+  "name": "still-w6-s9",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/bg-far-dining.png",
+   "art-src/raw/boss-stale.png"
+  ],
+  "prompt": "Generate an image. The first reference shows the painted background style and the place. The other references are characters/objects to include. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. IMPORTANT: keep the LEFT third of the picture free of characters (just open floor and scenery there: the hero will stand there). NO text, no letters, no words written anywhere (not on the floor, banners, labels or signs), no speech bubbles, no UI, no border, no signature, no humans. Scene: the last climb of Chandelier Climb, in The Dining Room, a giant fancy dining table. Far ahead and high up looms the lair of Sir Stale: its shape (like the reference, but dark, distant and half hidden) at the top, ominous light and long shadows. The final fight is near."
+ },
+ {
+  "name": "still-w7-s2",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/bg-far-backyard.png",
+   "art-src/raw/mob-beetle.png",
+   "art-src/raw/mob-wasp.png"
+  ],
+  "prompt": "Generate an image. The first reference shows the painted background style and the place. The other references are characters/objects to include. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. IMPORTANT: keep the LEFT third of the picture free of characters (just open floor and scenery there: the hero will stand there). NO text, no letters, no words written anywhere (not on the floor, banners, labels or signs), no speech bubbles, no UI, no border, no signature, no humans. Scene: a long downhill stretch in The Backyard BBQ, a giant sunny backyard barbecue. At the top of the slope a GIANT wooden rolling pin is just starting to roll down, about to chase whoever is below. A few Kebab Beetles and Picnic Wasps (draw them exactly like the references) wait along the way, looking smug."
+ },
+ {
+  "name": "still-w7-s3",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/bg-far-backyard.png",
+   "art-src/raw/mob-beetle.png",
+   "art-src/raw/mob-wasp.png"
+  ],
+  "prompt": "Generate an image. The first reference shows the painted background style and the place. The other references are characters/objects to include. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. IMPORTANT: keep the LEFT third of the picture free of characters (just open floor and scenery there: the hero will stand there). NO text, no letters, no words written anywhere (not on the floor, banners, labels or signs), no speech bubbles, no UI, no border, no signature, no humans. Scene: Sprinkler Springs, in The Backyard BBQ, a giant sunny backyard barbecue: a wide open arena walled in by two tall wooden ladle pillars; a gang of Kebab Beetles and Picnic Wasps (exactly like the references) gathers in the middle, ready to fight. A big lever sticks out of the floor nearby."
+ },
+ {
+  "name": "still-w7-s4",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/bg-far-backyard.png",
+   "art-src/raw/npc-crumblet.png",
+   "art-src/raw/mob-beetle.png"
+  ],
+  "prompt": "Generate an image. The first reference shows the painted background style and the place. The other references are characters/objects to include. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. IMPORTANT: keep the LEFT third of the picture free of characters (just open floor and scenery there: the hero will stand there). NO text, no letters, no words written anywhere (not on the floor, banners, labels or signs), no speech bubbles, no UI, no border, no signature, no humans. Scene: Paddling Pool Pier, in The Backyard BBQ, a giant sunny backyard barbecue: a tiny lost CRUMBLET (draw it exactly like the first character reference: a small cute crumb creature) hides and trembles behind a big object, peeking out, hoping to be rescued. In the distance a Kebab Beetle (like the second reference) prowls about."
+ },
+ {
+  "name": "still-w7-s6",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/bg-far-backyard.png",
+   "art-src/raw/c-scroll.png",
+   "art-src/raw/mob-beetle.png"
+  ],
+  "prompt": "Generate an image. The first reference shows the painted background style and the place. The other references are characters/objects to include. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. IMPORTANT: keep the LEFT third of the picture free of characters (just open floor and scenery there: the hero will stand there). NO text, no letters, no words written anywhere (not on the floor, banners, labels or signs), no speech bubbles, no UI, no border, no signature, no humans. Scene: Picnic Table Peak, in The Backyard BBQ, a giant sunny backyard barbecue: far away at the end of the path, the glowing RECIPE SCROLL (exactly like the reference) rests on a high spot, golden light and sparkles around it. Kebab Beetles (like the reference) stand guard along the path."
+ },
+ {
+  "name": "still-w7-s7",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/bg-far-backyard.png",
+   "art-src/raw/ob-chest.png",
+   "art-src/raw/mob-wasp.png"
+  ],
+  "prompt": "Generate an image. The first reference shows the painted background style and the place. The other references are characters/objects to include. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. IMPORTANT: keep the LEFT third of the picture free of characters (just open floor and scenery there: the hero will stand there). NO text, no letters, no words written anywhere (not on the floor, banners, labels or signs), no speech bubbles, no UI, no border, no signature, no humans. Scene: Flowerpot Fort, in The Backyard BBQ, a giant sunny backyard barbecue: a treasure chest (exactly like the reference) glints on a high hidden ledge above the path, out of easy reach; a few Picnic Wasps (like the reference) patrol below."
+ },
+ {
+  "name": "still-w7-s8",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/bg-far-backyard.png",
+   "art-src/raw/mob-beetle.png",
+   "art-src/raw/mob-ketchup.png"
+  ],
+  "prompt": "Generate an image. The first reference shows the painted background style and the place. The other references are characters/objects to include. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. IMPORTANT: keep the LEFT third of the picture free of characters (just open floor and scenery there: the hero will stand there). NO text, no letters, no words written anywhere (not on the floor, banners, labels or signs), no speech bubbles, no UI, no border, no signature, no humans. Scene: Cooler Canyon, in The Backyard BBQ, a giant sunny backyard barbecue: a big horde of Kebab Beetles and Ketchup Bottles (exactly like the references) pours in from the right, dramatic and exciting, the place about to be overrun. Hold the line!"
+ },
+ {
+  "name": "still-w7-s9",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/bg-far-backyard.png",
+   "art-src/raw/boss-brussels.png"
+  ],
+  "prompt": "Generate an image. The first reference shows the painted background style and the place. The other references are characters/objects to include. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. IMPORTANT: keep the LEFT third of the picture free of characters (just open floor and scenery there: the hero will stand there). NO text, no letters, no words written anywhere (not on the floor, banners, labels or signs), no speech bubbles, no UI, no border, no signature, no humans. Scene: the last climb of Charcoal Climb, in The Backyard BBQ, a giant sunny backyard barbecue. Far ahead and high up looms the lair of Baron Brussels: its shape (like the reference, but dark, distant and half hidden) at the top, ominous light and long shadows. The final fight is near."
+ },
+ {
+  "name": "still-w8-s2",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/bg-far-garden.png",
+   "art-src/raw/mob-snail.png",
+   "art-src/raw/mob-ladybug.png"
+  ],
+  "prompt": "Generate an image. The first reference shows the painted background style and the place. The other references are characters/objects to include. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. IMPORTANT: keep the LEFT third of the picture free of characters (just open floor and scenery there: the hero will stand there). NO text, no letters, no words written anywhere (not on the floor, banners, labels or signs), no speech bubbles, no UI, no border, no signature, no humans. Scene: a long downhill stretch in The Garden, a giant vegetable garden. At the top of the slope a GIANT wooden rolling pin is just starting to roll down, about to chase whoever is below. A few Lettuce Snails and Tomato Ladybugs (draw them exactly like the references) wait along the way, looking smug."
+ },
+ {
+  "name": "still-w8-s3",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/bg-far-garden.png",
+   "art-src/raw/mob-snail.png",
+   "art-src/raw/mob-ladybug.png"
+  ],
+  "prompt": "Generate an image. The first reference shows the painted background style and the place. The other references are characters/objects to include. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. IMPORTANT: keep the LEFT third of the picture free of characters (just open floor and scenery there: the hero will stand there). NO text, no letters, no words written anywhere (not on the floor, banners, labels or signs), no speech bubbles, no UI, no border, no signature, no humans. Scene: Sunflower Grove, in The Garden, a giant vegetable garden: a wide open arena walled in by two tall wooden ladle pillars; a gang of Lettuce Snails and Tomato Ladybugs (exactly like the references) gathers in the middle, ready to fight. A big lever sticks out of the floor nearby."
+ },
+ {
+  "name": "still-w8-s4",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/bg-far-garden.png",
+   "art-src/raw/npc-crumblet.png",
+   "art-src/raw/mob-snail.png"
+  ],
+  "prompt": "Generate an image. The first reference shows the painted background style and the place. The other references are characters/objects to include. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. IMPORTANT: keep the LEFT third of the picture free of characters (just open floor and scenery there: the hero will stand there). NO text, no letters, no words written anywhere (not on the floor, banners, labels or signs), no speech bubbles, no UI, no border, no signature, no humans. Scene: Pumpkin Patch Path, in The Garden, a giant vegetable garden: a tiny lost CRUMBLET (draw it exactly like the first character reference: a small cute crumb creature) hides and trembles behind a big object, peeking out, hoping to be rescued. In the distance a Lettuce Snail (like the second reference) prowls about."
+ },
+ {
+  "name": "still-w8-s6",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/bg-far-garden.png",
+   "art-src/raw/c-scroll.png",
+   "art-src/raw/mob-snail.png"
+  ],
+  "prompt": "Generate an image. The first reference shows the painted background style and the place. The other references are characters/objects to include. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. IMPORTANT: keep the LEFT third of the picture free of characters (just open floor and scenery there: the hero will stand there). NO text, no letters, no words written anywhere (not on the floor, banners, labels or signs), no speech bubbles, no UI, no border, no signature, no humans. Scene: Beanstalk Heights, in The Garden, a giant vegetable garden: far away at the end of the path, the glowing RECIPE SCROLL (exactly like the reference) rests on a high spot, golden light and sparkles around it. Lettuce Snails (like the reference) stand guard along the path."
+ },
+ {
+  "name": "still-w8-s7",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/bg-far-garden.png",
+   "art-src/raw/ob-chest.png",
+   "art-src/raw/mob-ladybug.png"
+  ],
+  "prompt": "Generate an image. The first reference shows the painted background style and the place. The other references are characters/objects to include. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. IMPORTANT: keep the LEFT third of the picture free of characters (just open floor and scenery there: the hero will stand there). NO text, no letters, no words written anywhere (not on the floor, banners, labels or signs), no speech bubbles, no UI, no border, no signature, no humans. Scene: Compost Keep, in The Garden, a giant vegetable garden: a treasure chest (exactly like the reference) glints on a high hidden ledge above the path, out of easy reach; a few Tomato Ladybugs (like the reference) patrol below."
+ },
+ {
+  "name": "still-w8-s8",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/bg-far-garden.png",
+   "art-src/raw/mob-snail.png",
+   "art-src/raw/mob-peapod.png"
+  ],
+  "prompt": "Generate an image. The first reference shows the painted background style and the place. The other references are characters/objects to include. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. IMPORTANT: keep the LEFT third of the picture free of characters (just open floor and scenery there: the hero will stand there). NO text, no letters, no words written anywhere (not on the floor, banners, labels or signs), no speech bubbles, no UI, no border, no signature, no humans. Scene: Scarecrow Stand, in The Garden, a giant vegetable garden: a big horde of Lettuce Snails and Peapod Snipers (exactly like the references) pours in from the right, dramatic and exciting, the place about to be overrun. Hold the line!"
+ },
+ {
+  "name": "still-w8-s9",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/bg-far-garden.png",
+   "art-src/raw/boss-meatloaf.png"
+  ],
+  "prompt": "Generate an image. The first reference shows the painted background style and the place. The other references are characters/objects to include. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. IMPORTANT: keep the LEFT third of the picture free of characters (just open floor and scenery there: the hero will stand there). NO text, no letters, no words written anywhere (not on the floor, banners, labels or signs), no speech bubbles, no UI, no border, no signature, no humans. Scene: the last climb of Greenhouse Steps, in The Garden, a giant vegetable garden. Far ahead and high up looms the lair of the Mystery Meatloaf: its shape (like the reference, but dark, distant and half hidden) at the top, ominous light and long shadows. The final fight is near."
+ },
+ {
+  "name": "still-w9-s2",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/bg-far-market.png",
+   "art-src/raw/mob-trolley.png",
+   "art-src/raw/mob-bag.png"
+  ],
+  "prompt": "Generate an image. The first reference shows the painted background style and the place. The other references are characters/objects to include. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. IMPORTANT: keep the LEFT third of the picture free of characters (just open floor and scenery there: the hero will stand there). NO text, no letters, no words written anywhere (not on the floor, banners, labels or signs), no speech bubbles, no UI, no border, no signature, no humans. Scene: a long downhill stretch in The Supermarket, giant supermarket aisles. At the top of the slope a GIANT wooden rolling pin is just starting to roll down, about to chase whoever is below. A few Runaway Trolleys and Plastic Bag Ghosts (draw them exactly like the references) wait along the way, looking smug."
+ },
+ {
+  "name": "still-w9-s3",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/bg-far-market.png",
+   "art-src/raw/mob-trolley.png",
+   "art-src/raw/mob-bag.png"
+  ],
+  "prompt": "Generate an image. The first reference shows the painted background style and the place. The other references are characters/objects to include. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. IMPORTANT: keep the LEFT third of the picture free of characters (just open floor and scenery there: the hero will stand there). NO text, no letters, no words written anywhere (not on the floor, banners, labels or signs), no speech bubbles, no UI, no border, no signature, no humans. Scene: Cereal Aisle, in The Supermarket, giant supermarket aisles: a wide open arena walled in by two tall wooden ladle pillars; a gang of Runaway Trolleys and Plastic Bag Ghosts (exactly like the references) gathers in the middle, ready to fight. A big lever sticks out of the floor nearby."
+ },
+ {
+  "name": "still-w9-s4",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/bg-far-market.png",
+   "art-src/raw/npc-crumblet.png",
+   "art-src/raw/mob-trolley.png"
+  ],
+  "prompt": "Generate an image. The first reference shows the painted background style and the place. The other references are characters/objects to include. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. IMPORTANT: keep the LEFT third of the picture free of characters (just open floor and scenery there: the hero will stand there). NO text, no letters, no words written anywhere (not on the floor, banners, labels or signs), no speech bubbles, no UI, no border, no signature, no humans. Scene: Fruit and Veg, in The Supermarket, giant supermarket aisles: a tiny lost CRUMBLET (draw it exactly like the first character reference: a small cute crumb creature) hides and trembles behind a big object, peeking out, hoping to be rescued. In the distance a Runaway Trolley (like the second reference) prowls about."
+ },
+ {
+  "name": "still-w9-s6",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/bg-far-market.png",
+   "art-src/raw/c-scroll.png",
+   "art-src/raw/mob-trolley.png"
+  ],
+  "prompt": "Generate an image. The first reference shows the painted background style and the place. The other references are characters/objects to include. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. IMPORTANT: keep the LEFT third of the picture free of characters (just open floor and scenery there: the hero will stand there). NO text, no letters, no words written anywhere (not on the floor, banners, labels or signs), no speech bubbles, no UI, no border, no signature, no humans. Scene: Bakery Bluff, in The Supermarket, giant supermarket aisles: far away at the end of the path, the glowing RECIPE SCROLL (exactly like the reference) rests on a high spot, golden light and sparkles around it. Runaway Trolleys (like the reference) stand guard along the path."
+ },
+ {
+  "name": "still-w9-s7",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/bg-far-market.png",
+   "art-src/raw/ob-chest.png",
+   "art-src/raw/mob-bag.png"
+  ],
+  "prompt": "Generate an image. The first reference shows the painted background style and the place. The other references are characters/objects to include. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. IMPORTANT: keep the LEFT third of the picture free of characters (just open floor and scenery there: the hero will stand there). NO text, no letters, no words written anywhere (not on the floor, banners, labels or signs), no speech bubbles, no UI, no border, no signature, no humans. Scene: Canned Goods Keep, in The Supermarket, giant supermarket aisles: a treasure chest (exactly like the reference) glints on a high hidden ledge above the path, out of easy reach; a few Plastic Bag Ghosts (like the reference) patrol below."
+ },
+ {
+  "name": "still-w9-s8",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/bg-far-market.png",
+   "art-src/raw/mob-trolley.png",
+   "art-src/raw/mob-banana.png"
+  ],
+  "prompt": "Generate an image. The first reference shows the painted background style and the place. The other references are characters/objects to include. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. IMPORTANT: keep the LEFT third of the picture free of characters (just open floor and scenery there: the hero will stand there). NO text, no letters, no words written anywhere (not on the floor, banners, labels or signs), no speech bubbles, no UI, no border, no signature, no humans. Scene: Checkout Chaos, in The Supermarket, giant supermarket aisles: a big horde of Runaway Trolleys and Banana Bunches (exactly like the references) pours in from the right, dramatic and exciting, the place about to be overrun. Hold the line!"
+ },
+ {
+  "name": "still-w9-s9",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/bg-far-market.png",
+   "art-src/raw/boss-tupper.png"
+  ],
+  "prompt": "Generate an image. The first reference shows the painted background style and the place. The other references are characters/objects to include. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. IMPORTANT: keep the LEFT third of the picture free of characters (just open floor and scenery there: the hero will stand there). NO text, no letters, no words written anywhere (not on the floor, banners, labels or signs), no speech bubbles, no UI, no border, no signature, no humans. Scene: the last climb of The Frozen Aisle, in The Supermarket, giant supermarket aisles. Far ahead and high up looms the lair of the Tupperwraith: its shape (like the reference, but dark, distant and half hidden) at the top, ominous light and long shadows. The final fight is near."
+ },
+ {
+  "name": "still-w10-s2",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/bg-far-fridgeback.png",
+   "art-src/raw/mob-cherrysoldier.png",
+   "art-src/raw/mob-peel.png"
+  ],
+  "prompt": "Generate an image. The first reference shows the painted background style and the place. The other references are characters/objects to include. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. IMPORTANT: keep the LEFT third of the picture free of characters (just open floor and scenery there: the hero will stand there). NO text, no letters, no words written anywhere (not on the floor, banners, labels or signs), no speech bubbles, no UI, no border, no signature, no humans. Scene: a long downhill stretch in the forgotten back of a giant old fridge, a frosty gloomy kingdom. At the top of the slope a GIANT wooden rolling pin is just starting to roll down, about to chase whoever is below. A few Candied Cherry Soldiers and Candied Peel Bats (draw them exactly like the references) wait along the way, looking smug."
+ },
+ {
+  "name": "still-w10-s3",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/bg-far-fridgeback.png",
+   "art-src/raw/mob-cherrysoldier.png",
+   "art-src/raw/mob-peel.png"
+  ],
+  "prompt": "Generate an image. The first reference shows the painted background style and the place. The other references are characters/objects to include. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. IMPORTANT: keep the LEFT third of the picture free of characters (just open floor and scenery there: the hero will stand there). NO text, no letters, no words written anywhere (not on the floor, banners, labels or signs), no speech bubbles, no UI, no border, no signature, no humans. Scene: Takeaway Towers, in the forgotten back of a giant old fridge, a frosty gloomy kingdom: a wide open arena walled in by two tall wooden ladle pillars; a gang of Candied Cherry Soldiers and Candied Peel Bats (exactly like the references) gathers in the middle, ready to fight. A big lever sticks out of the floor nearby."
+ },
+ {
+  "name": "still-w10-s4",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/bg-far-fridgeback.png",
+   "art-src/raw/npc-crumblet.png",
+   "art-src/raw/mob-cherrysoldier.png"
+  ],
+  "prompt": "Generate an image. The first reference shows the painted background style and the place. The other references are characters/objects to include. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. IMPORTANT: keep the LEFT third of the picture free of characters (just open floor and scenery there: the hero will stand there). NO text, no letters, no words written anywhere (not on the floor, banners, labels or signs), no speech bubbles, no UI, no border, no signature, no humans. Scene: Frost Drawer Falls, in the forgotten back of a giant old fridge, a frosty gloomy kingdom: a tiny lost CRUMBLET (draw it exactly like the first character reference: a small cute crumb creature) hides and trembles behind a big object, peeking out, hoping to be rescued. In the distance a Candied Cherry Soldier (like the second reference) prowls about."
+ },
+ {
+  "name": "still-w10-s6",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/bg-far-fridgeback.png",
+   "art-src/raw/c-scroll.png",
+   "art-src/raw/mob-cherrysoldier.png"
+  ],
+  "prompt": "Generate an image. The first reference shows the painted background style and the place. The other references are characters/objects to include. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. IMPORTANT: keep the LEFT third of the picture free of characters (just open floor and scenery there: the hero will stand there). NO text, no letters, no words written anywhere (not on the floor, banners, labels or signs), no speech bubbles, no UI, no border, no signature, no humans. Scene: Paper Chain Pass, in the forgotten back of a giant old fridge, a frosty gloomy kingdom: far away at the end of the path, the glowing RECIPE SCROLL (exactly like the reference) rests on a high spot, golden light and sparkles around it. Candied Cherry Soldiers (like the reference) stand guard along the path."
+ },
+ {
+  "name": "still-w10-s7",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/bg-far-fridgeback.png",
+   "art-src/raw/ob-chest.png",
+   "art-src/raw/mob-peel.png"
+  ],
+  "prompt": "Generate an image. The first reference shows the painted background style and the place. The other references are characters/objects to include. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. IMPORTANT: keep the LEFT third of the picture free of characters (just open floor and scenery there: the hero will stand there). NO text, no letters, no words written anywhere (not on the floor, banners, labels or signs), no speech bubbles, no UI, no border, no signature, no humans. Scene: The Forgotten Shelf, in the forgotten back of a giant old fridge, a frosty gloomy kingdom: a treasure chest (exactly like the reference) glints on a high hidden ledge above the path, out of easy reach; a few Candied Peel Bats (like the reference) patrol below."
+ },
+ {
+  "name": "still-w10-s8",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/bg-far-fridgeback.png",
+   "art-src/raw/mob-cherrysoldier.png",
+   "art-src/raw/mob-fruitknight.png"
+  ],
+  "prompt": "Generate an image. The first reference shows the painted background style and the place. The other references are characters/objects to include. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. IMPORTANT: keep the LEFT third of the picture free of characters (just open floor and scenery there: the hero will stand there). NO text, no letters, no words written anywhere (not on the floor, banners, labels or signs), no speech bubbles, no UI, no border, no signature, no humans. Scene: The Last Stand, in the forgotten back of a giant old fridge, a frosty gloomy kingdom: a big horde of Candied Cherry Soldiers and Fruitcake Knights (exactly like the references) pours in from the right, dramatic and exciting, the place about to be overrun. Hold the line!"
+ },
+ {
+  "name": "still-w10-s9",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/bg-far-fridgeback.png",
+   "art-src/raw/boss-fruitcake.png"
+  ],
+  "prompt": "Generate an image. The first reference shows the painted background style and the place. The other references are characters/objects to include. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. IMPORTANT: keep the LEFT third of the picture free of characters (just open floor and scenery there: the hero will stand there). NO text, no letters, no words written anywhere (not on the floor, banners, labels or signs), no speech bubbles, no UI, no border, no signature, no humans. Scene: the last climb of The Long Table, in the forgotten back of a giant old fridge, a frosty gloomy kingdom. Far ahead and high up looms the lair of Old Fruitcake: its shape (like the reference, but dark, distant and half hidden) at the top, ominous light and long shadows. The final fight is near."
+ }
+]

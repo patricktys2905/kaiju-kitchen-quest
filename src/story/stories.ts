@@ -167,6 +167,12 @@ export function stillFor(species: number, beat: string, lineIndex: number): stri
   if (beat === 'intro') return `still-${species}-intro`;
   if (beat === 'w5-hook') return 'still-w5-hook';
   if (beat === 'w10-hook') return 'still-w10-hook';
+  // the short scene before stages 2-4 and 6-9: a painted moment of that stage, shared by every kaiju (yours stands in front)
+  const sm = /^w(\d+)-s(\d)$/.exec(beat);
+  if (sm) return `still-w${sm[1]}-s${sm[2]}`;
+  // stage 5: this kaiju and its nemesis (Worlds 1-5 a standoff, 6-10 the nemesis as a friend), painted for each kaiju
+  const em = /^w(\d+)-elite$/.exec(beat);
+  if (em) return `still-${species}-w${em[1]}-elite`;
   const m = /^w(\d+)-(open|boss|after)$/.exec(beat);
   if (!m) return null;
   const w = Number(m[1]);

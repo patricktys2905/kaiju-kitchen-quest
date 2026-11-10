@@ -254,3 +254,15 @@ star, `gearburst`) and TRAP (planted on the floor, snaps the first monster: a Mi
 styles too. Icons: `node scripts/weapons2-jobs.mjs` → gem-gen → `npm run art`; review with `node scripts/icon-sheet.mjs`.
 Screens: `node scripts/gearstyle-shot.mjs`. Lobbed hero shots (Berry Mines, mustard goo, lobbed gear) remember the height they
 were thrown from (`Shot.fromY`) and fall through ledges above it, so they land among the monsters (tests/berry.test.ts).
+
+## Painted story scenes (stories.ts stillFor, ui/story.ts)
+- 70 shared scenes `still-w<N>-s<n>` for the short scene before stages 2-4 and 6-9 of every world (the rolling-pin chase, the
+  arena, the lost Crumblet, the Recipe Scroll, the secret chest, the horde, the boss lair ahead). The left third is kept clear:
+  your kaiju's portrait stands there. Jobs: `node scripts/scenes-jobs.mjs`.
+- 200 per-kaiju scenes `still-<sp>-w<N>-elite` for the stage-5 beat: Worlds 1-5 a standoff with the kaiju's nemesis, 6-10 the
+  nemesis as a friend pointing at the world's elite. Both are painted in, so their portraits hide. Jobs: `node scripts/elite-jobs.mjs`.
+  These aren't precached (vite.config.ts globIgnores): they download when first shown and are then cached for offline play.
+- Generate with `sh scripts/gem-batch.sh <jobs.json> <log>` (one job at a time, a time limit each, skips art that exists,
+  resumable). Review with `node scripts/icon-sheet.mjs <jobs.json> --wide`. Prompts must not name characters (Gemini drew a
+  famous cartoon for "Finn") or places (it paints the name as text). Screens: `node scripts/story-shot.mjs`.
+- A scene whose painting is missing falls back to portraits (the story player reads art/manifest.json).

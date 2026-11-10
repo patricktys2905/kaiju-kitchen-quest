@@ -8,6 +8,11 @@ import { moodOf } from '../story/mood';
 import { LEFTOVER_NAMES } from '../story/finale';
 import { showCredits } from './credits';
 
+/** The art that exists (art/manifest.json): a scene whose painting isn't made yet falls back to portraits only. */
+let artList: Set<string> | null = null;
+if (typeof fetch !== 'undefined') fetch('art/manifest.json').then(r => r.json()).then((a: string[]) => { artList = new Set(a); }).catch(() => {});
+const hasArt = (key: string) => !artList || artList.has(key);
+
 /** Expression portrait for a kaiju saying this line (the neutral one when no mood shows). */
 export function faceArt(sp: number, text: string): string {
   const m = moodOf(text);
@@ -72,7 +77,7 @@ export function playStory(species: number, beats: string[], done: () => void): v
   const lines: { line: StoryLine; world: number; still: string | null }[] = [];
   for (const b of beats) {
     const w = Number(/^w(\d+)/.exec(b)?.[1] ?? 1);
-    (story?.beats[b] ?? []).forEach((line, k) => lines.push({ line, world: w, still: stillFor(species, b, k) }));
+    (story?.beats[b] ?? []).forEach((line, k) => { const s = stillFor(species, b, k); lines.push({ line, world: w, still: s && hasArt(s) ? s : null }); });
   }
   if (!story || !lines.length) { done(); return; }
   for (const k of new Set(lines.map(l => l.still))) if (k) new Image().src = `art/${k}.webp`; // preload the paintings
@@ -101,11 +106,11 @@ export function playStory(species: number, beats: string[], done: () => void): v
     }
     // Who is already painted into the still: the kaiju in its own intro / cliffhanger, the boss in the boss and
     // "cured" paintings, nobody in the world vistas. Anyone not in the painting still gets their portrait.
-    const painted = new Set(!still || /w10-(end|hook)$/.test(still) ? [] : /-(intro|cliff|end)$/.test(still) ? ['me'] : /-(boss|cure)$/.test(still) ? ['boss'] : /w5-hook$/.test(still) ? ['me', 'lo', 'lo2'] : /w10-(cure|boss)$/.test(still) ? ['boss'] : []);
+    const painted = new Set(!still || /w10-(end|hook)$/.test(still) ? [] : /-(intro|cliff|end)$/.test(still) ? ['me'] : /-w\d+-elite$/.test(still) ? ['me', 'foe'] : /-(boss|cure)$/.test(still) ? ['boss'] : /w5-hook$/.test(still) ? ['me', 'lo', 'lo2'] : /w10-(cure|boss)$/.test(still) ? ['boss'] : []);
     const face = who === 'me' ? faceArt(species, text) : rightArt;
     const chip = still && face ? `<img src="${face}" alt="">` : '';
     const left = painted.has('me') ? '' : `<div class="por l ${isMe ? 'talk' : 'dim'}" style="background-image:url(${isMe ? face : `art/kaiju-${species}.webp`})"></div>`;
-    const right = (who === 'lo' || who === 'lo2') && painted.has(who) ? '' : who === 'lo2' ? '<div class="por r" style="background-image:url(art/boss-stale.webp)"></div>' : who === 'lo' ? '<div class="por r lo"></div>' : who === 'mold' ? '<div class="por r mold"></div>' : rightArt && !(who === 'boss' && painted.has('boss')) ? `<div class="por r ${isMe || who === 'n' ? 'dim' : 'talk'}" style="background-image:url(${rightArt})"></div>` : '';
+    const right = (who === 'lo' || who === 'lo2') && painted.has(who) ? '' : who === 'lo2' ? '<div class="por r" style="background-image:url(art/boss-stale.webp)"></div>' : who === 'lo' ? '<div class="por r lo"></div>' : who === 'mold' ? '<div class="por r mold"></div>' : rightArt && !((who === 'boss' || who === 'foe') && painted.has(who)) ? `<div class="por r ${isMe || who === 'n' ? 'dim' : 'talk'}" style="background-image:url(${rightArt})"></div>` : '';
     cnt.innerHTML = `<div class="ttl">${story.title}<small>${me.name} · World ${w.id}: ${w.name}</small></div>
       ${left}
       ${right}
