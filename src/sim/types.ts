@@ -26,6 +26,7 @@ export interface MobSpawn { kind: MobKind; x: number; y?: number; lv: number; el
  *  Timed hazards cycle: on for `on` s, off, then glow a warning for the last 0.9 s before the next burst. */
 export type HazardKind = 'burner' | 'vent' | 'drop' | 'ice';
 export interface Hazard { kind: HazardKind; x: number; w: number; period: number; on: number; offset: number; /** boss arenas: only after the boss enrages */ phase2?: boolean }
+export interface Objective { kind: 'escort' | 'fetch' | 'survive'; /** seconds: survive length, or fetch time limit */ t?: number; /** fetch: where the scroll is */ x?: number }
 /** Optional "Spicy" challenges chosen before a stage (each adds loot). */
 export type Spicy = 'nopots' | 'glass' | 'clock';
 
@@ -47,6 +48,8 @@ export interface StageDef {
   props?: Prop[];
   /** runaway pressure cookers: can't be hurt, explode near anything (lure monsters into them) */
   cookers?: number[];
+  /** stage goal beyond "beat everything": escort the lost Crumblet, fetch the Recipe Scroll in time, or survive the waves */
+  objective?: Objective;
   /** monster level shown on the map */
   lv: [number, number];
   boss?: boolean;
@@ -114,4 +117,6 @@ export type SimEvent =
   | { t: 'fuse'; x: number; y: number }
   /** found this world's secret key */
   | { t: 'key'; world: number }
+  | { t: 'objective'; text: string; done?: boolean }
+  | { t: 'objFail'; why: string }
   | { t: 'heal'; x: number; y: number; n: number; hero: true };

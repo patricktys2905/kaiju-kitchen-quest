@@ -79,3 +79,6 @@ stages 4/6/8/9 (can't be hurt; your hits shove them; they explode near anything 
 on stages 2/4/6/7/8/9 (fades in when near; jump onto the sponge under its end to bounce up) with a chest. Stage 7's chest
 holds the World Key → that world's secret bonus stage (BONUS_STAGES, S-1..S-4, button on the stage card).
 Checks: tests/props.test.ts, `node scripts/props-shot.mjs`.
+Objectives (stage.objective, world.ts stepObjective): stage 4 escort the lost Crumblet (follows you, monsters hurt it,
+the exit needs it there), stage 6 fetch the Recipe Scroll within 75 s then hold out 25 s, stage 8 survive 45 s of waves.
+Completing one adds a bonus Bento. Checks: tests/objectives.test.ts, `node scripts/objective-shot.mjs`.

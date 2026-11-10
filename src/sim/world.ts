@@ -154,6 +154,13 @@ export class World {
   props: { id: number; kind: Prop['kind']; x: number; y: number; hp: number; cd: number; key?: boolean; tx?: number; tw?: number }[] = [];
   cookers: { id: number; x: number; y: number; vx: number; home: number; face: 1 | -1; fuse: number; gone: number }[] = [];
   private platBase: number[] = [];
+  /** objective state: the escorted Crumblet, the fetch scroll, the survival / hold-out timer */
+  npc: { x: number; y: number; hp: number; maxHp: number; face: 1 | -1; hurt: number } | null = null;
+  scroll: { x: number; y: number; got: boolean } | null = null;
+  objTimer = 0;
+  holdout = 0;
+  objDone = false;
+  private spawnT = 0;
   /** the hero touched down this step (sponges bounce only on landing) */
   private heroLanded = false;
   /** lingering skill areas: steam / mustard goo / ice trail / fire floor / snow */
@@ -176,6 +183,10 @@ export class World {
     this.props = (stage.props ?? []).map(p => ({ id: nextId++, kind: p.kind, x: p.x, y: p.y, hp: p.kind === 'crate' ? 2 : p.kind === 'chest' ? 3 : p.kind === 'jar' ? 1 : 99, cd: 0, key: p.key, tx: p.tx, tw: p.tw }));
     this.cookers = (stage.cookers ?? []).map(x => ({ id: nextId++, x, y: stage.groundY, vx: 0, home: x, face: -1, fuse: 0, gone: 0 }));
     this.spicy = spicy; this.hard = hard;
+    const ob = stage.objective;
+    if (ob?.kind === 'escort') this.npc = { x: 60, y: stage.groundY, hp: 1, maxHp: 1, face: 1, hurt: 0 };
+    if (ob?.kind === 'fetch') { this.scroll = { x: ob.x ?? stage.width - 260, y: stage.groundY, got: false }; this.objTimer = ob.t ?? 75; }
+    if (ob?.kind === 'survive') { this.objTimer = ob.t ?? 45; this.holdout = this.objTimer; }
     this.hazards = (stage.hazards ?? []).map(h => ({ ...h, state: 'off', hit: new Set<number>() }));
     let s = seed >>> 0 || 1;
     this.rand = () => { s ^= s << 13; s ^= s >>> 17; s ^= s << 5; return ((s >>> 0) % 100000) / 100000; };
@@ -190,6 +201,7 @@ export class World {
     // Hard mode: every monster +HARD_LV levels
     this.variant = stage.boss ? undefined : variant; // bosses are never changed by the story
     const night = this.variant === 'night' ? 1 : 0;
+    if (this.npc) { this.npc.maxHp = this.npc.hp = Math.round(d.maxHp * 0.7); }
     // stage 5: this kaiju's story nemesis takes the elite's place
     const nemStage = !!nemesis && !stage.boss && stage.id.endsWith('-5');
     for (const m of stage.mobs) this.spawnMob(m.elite && nemStage ? nemesis! : m.kind, m.x, m.lv + (hard ? HARD_LV : 0) + night, m.y, m.elite);
@@ -279,9 +291,13 @@ export class World {
     this.stepMines(dt);
     this.stepBoxes(dt);
     this.mobs = this.mobs.filter(m => !(m.state === 'dead' && m.deadT > 0.7));
-    if (!this.portal && this.alive === 0) { this.portal = true; this.events.push({ t: 'portal' }); }
+    this.stepObjective(dt);
+    const holding = this.holdout > 0 || (this.scroll !== null && !this.scroll.got);
+    if (!this.portal && this.alive === 0 && !holding) { this.portal = true; this.events.push({ t: 'portal' }); }
     const h = this.hero;
-    if (this.portal && h.state !== 'down' && Math.abs(h.x - this.exitX) < 40 && Math.abs(h.y - this.stage.groundY) < 4) {
+    const npcHome = !this.npc || Math.abs(this.npc.x - this.exitX) < 140;
+    if (this.portal && npcHome && h.state !== 'down' && Math.abs(h.x - this.exitX) < 40 && Math.abs(h.y - this.stage.groundY) < 4) {
+      if (this.stage.objective && !this.objDone) { this.objDone = true; this.loot.push({ tier: 3, ilvl: this.stage.lv[1] }); this.events.push({ t: 'objective', text: 'Objective complete! Bonus Bento box', done: true }); }
       // boxes still lying around are swept up for you
       for (const b of this.boxes) { this.loot.push({ tier: b.tier, ilvl: b.ilvl }); this.events.push({ t: 'pickup', id: b.id, tier: b.tier }); }
       this.boxes = [];
@@ -608,6 +624,60 @@ export class World {
       this.boxes.push(b); this.events.push({ t: 'drop', id: b.id, tier, x: b.x, y: b.y });
     }
     if (p.key) this.events.push({ t: 'key', world: this.stage.world });
+  }
+
+  /** Escort / fetch / survive. */
+  private stepObjective(dt: number): void {
+    const h = this.hero, ob = this.stage.objective;
+    if (!ob || this.failed || this.cleared) return;
+    const fail = (why: string) => { this.events.push({ t: 'objFail', why }); h.hp = 0; this.enter(h, 'down'); };
+    // the Crumblet follows a step behind you along the floor and gets hurt by attacks and shots near it
+    const n = this.npc;
+    if (n && n.hp > 0) {
+      n.hurt = Math.max(0, n.hurt - dt);
+      const tx = this.portal ? this.exitX : h.x - h.face * 70;
+      if (Math.abs(tx - n.x) > 8) { n.face = tx > n.x ? 1 : -1; n.x += n.face * Math.min(Math.abs(tx - n.x), 130 * dt); }
+      for (const m of this.mobs) {
+        if (m.state === 'dead' || m.under || n.hurt > 0) continue;
+        const d = MOBS[m.kind];
+        if ((m.state === 'attack' || (m.state === 'walk' && d.brain === 'hopper' && !m.ground)) && Math.abs(m.x - n.x) < d.w / 2 + 18 && Math.abs(m.y - n.y) < 50) {
+          n.hp -= Math.round(m.atk * 0.6); n.hurt = 0.8;
+          this.events.push({ t: 'hit', x: n.x, y: n.y - 40, dmg: Math.round(m.atk * 0.6), crit: false, target: 'hero' });
+        }
+      }
+      for (const s of this.shots) if (s.from === 'mob' && s.t >= 0 && Math.abs(s.x - n.x) < 18 && s.y > n.y - 44 && s.y < n.y + 4 && n.hurt <= 0) {
+        n.hp -= Math.round(s.dmg * 0.6); n.hurt = 0.8; s.t = 99;
+        this.events.push({ t: 'hit', x: n.x, y: n.y - 40, dmg: Math.round(s.dmg * 0.6), crit: false, target: 'hero' });
+      }
+      if (n.hp <= 0) { n.hp = 0; fail('The Crumblet got hurt too badly!'); return; }
+    }
+    // fetch: grab the Recipe Scroll in time, then hold out
+    if (this.scroll && !this.scroll.got) {
+      this.objTimer -= dt;
+      if (Math.abs(h.x - this.scroll.x) < 36 && Math.abs(h.y - this.scroll.y) < 60) {
+        this.scroll.got = true; this.holdout = 25;
+        this.events.push({ t: 'objective', text: 'Got the Recipe Scroll! Hold out for 25 seconds!' });
+      } else if (this.objTimer <= 0) { fail('Too slow: the Recipe Scroll crumbled away!'); return; }
+    }
+    // survive / hold out: waves from both sides until the timer runs out
+    if (this.holdout > 0) {
+      this.holdout -= dt;
+      if ((this.spawnT -= dt) <= 0 && this.alive < 10) {
+        this.spawnT = 4.5;
+        const w = WORLDS.find(x => x.id === this.stage.world) ?? WORLDS[0];
+        const kinds = w.pool.map(([, k]) => k).filter(k => MOBS[k].brain !== 'turret' && MOBS[k].brain !== 'mimic' && MOBS[k].brain !== 'burrower');
+        for (const side of [-1, 1]) {
+          const x = clamp(h.x + side * 380, 40, this.stage.width - 40);
+          const m = this.spawnMob(kinds[Math.floor(this.rand() * kinds.length)], x, this.stage.lv[0] + (this.hard ? HARD_LV : 0));
+          m.face = side > 0 ? -1 : 1; m.t = 1;
+        }
+      }
+      if (this.holdout <= 0) { // the waves retreat
+        this.holdout = 0;
+        for (const m of this.mobs) if (m.state !== 'dead') { m.state = 'dead'; m.deadT = 0.3; m.hp = 0; }
+        this.events.push({ t: 'objective', text: 'You held out! The monsters retreat' });
+      }
+    }
   }
 
   /** Moving trays, sponges, runaway pressure cookers. */

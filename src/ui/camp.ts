@@ -164,6 +164,7 @@ function mapPage(): string {
       <div class="lv">Monsters Lv ${lv(sel.lv[0])}${sel.lv[1] !== sel.lv[0] ? '–' + lv(sel.lv[1]) : ''}</div>
       <div class="lv" style="color:${low ? '#ff8a8a' : '#a8f0a8'}">Recommended Lv ${lv(sel.rec)} (you: ${p.level})</div>
       <div class="lv">Clear: ${rewardLine(sel)}</div>
+      ${sel.objective ? `<div class="lv" style="color:#ffd27a">${({ escort: '🧁 Objective: escort the lost Crumblet to the exit', fetch: `📜 Objective: grab the Recipe Scroll within ${sel.objective.t}s, then hold out`, survive: `⏱ Objective: hold out for ${sel.objective.t}s` })[sel.objective.kind]} (+ bonus Bento)</div>` : ''}
       ${STORIES[p.species]?.variants[sel.id] ? (() => { const v = VARIANT_INFO[STORIES[p.species].variants[sel.id]]; return `<div class="lv vtx">${v.icon} Story twist: <b>${v.name}</b> — ${v.desc}</div>`; })() : ''}
       <div class="lv">📖 ${STORIES[p.species]?.title ?? ''}${beatBefore(sel.id, sel.id === '1-1').some(b => p.seen.includes(b)) || (sel.boss && p.seen.includes(`w${sel.world}-after`)) ? ` <button class="pill" data-replay="${sel.id}" style="font-size:1.6vmin;padding:0.3vmin 1vmin">REPLAY</button>` : ''}</div>
       ${rank ? `<div class="lv">Best: <b style="color:${RANK_CSS[rank]}">${rank}</b></div>` : ''}

@@ -127,6 +127,8 @@ function genStage(w: WorldDef, n: number): StageDef {
     id, world: w.id, num: id, name: w.names[n - 1], bg: w.bg, mid: w.mid, tile: w.tile, platTint: w.platTint, width, groundY: G,
     lv: [lvLo, n === 5 ? lvHi + 1 : lvHi], par: Math.round(25 + count * 5 + width / 70), rec: lvLo,
     platforms, ladders, mobs, hazards, ...interactive(w, n, width, platforms, ladders, r),
+    // a goal on stages 4 / 6 / 8 of every world
+    objective: n === 4 ? { kind: 'escort' } : n === 6 ? { kind: 'fetch', t: 75, x: width - 260 } : n === 8 ? { kind: 'survive', t: 45 } : undefined,
   };
 }
 
@@ -170,7 +172,7 @@ function genBonus(w: WorldDef): StageDef {
   for (let i = 0; i < 12; i++) props.push({ kind: r() < 0.5 ? 'crate' : 'jar', x: Math.round(400 + i * (base.width - 800) / 12), y: G });
   return {
     ...base, id: `S-${w.id}`, num: `★${w.id}`, name: `Secret ${['Spice Garden', 'Ice Cream Vault', 'Bakery Hideout', 'Honey Cellar'][w.id - 1]}`,
-    props, cookers: [Math.round(base.width * 0.5)], hazards: [],
+    props, cookers: [Math.round(base.width * 0.5)], hazards: [], objective: undefined,
     mobs: [...base.mobs.slice(0, 8), { kind: w.elite, lv: base.lv[1] + 2, x: base.width - 520, elite: true }],
     lv: [base.lv[0] + 1, base.lv[1] + 2], rec: base.rec + 1,
   };

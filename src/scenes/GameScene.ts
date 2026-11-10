@@ -76,6 +76,8 @@ export class GameScene extends Phaser.Scene {
   private platViews: { board?: Phaser.GameObjects.Image; shadow: Phaser.GameObjects.Ellipse }[] = [];
   private propViews = new Map<number, Phaser.GameObjects.Image>();
   private cookerViews = new Map<number, Phaser.GameObjects.Image>();
+  private npcView?: { img: Phaser.GameObjects.Image; bar: Phaser.GameObjects.Rectangle; bg: Phaser.GameObjects.Rectangle };
+  private scrollView?: { img: Phaser.GameObjects.Image; glow: Phaser.GameObjects.Arc };
   /** Hard mode is open for a world once its boss is beaten. */
   private hardOk(): boolean { return !!hero().cleared[`${this.stage.world}-10`]; }
 
@@ -140,7 +142,17 @@ export class GameScene extends Phaser.Scene {
       shadow: this.add.ellipse(pl.x + pl.w / 2, st.groundY - 4, pl.w * 0.8, 10, 0x000000, pl.secret ? 0 : 0.1).setDepth(-9),
       board: this.has('plat-board') ? this.add.image(pl.x + pl.w / 2, pl.y - 6, 'plat-board').setOrigin(0.5, 0.08).setDisplaySize(pl.w + 28, 38).setDepth(-5).setTint(pl.secret ? 0xffe8a0 : pl.move ? 0xd8e8f8 : st.platTint) : undefined,
     }));
-    this.propViews.clear(); this.cookerViews.clear();
+    this.propViews.clear(); this.cookerViews.clear(); this.npcView = undefined; this.scrollView = undefined;
+    if (this.world.npc && this.has('npc-crumblet')) {
+      const img = this.add.image(0, 0, 'npc-crumblet').setOrigin(0.5, 1).setDepth(4); img.setScale(46 / img.height);
+      this.npcView = { img, bg: this.add.rectangle(0, 0, 40, 5, 0x000000, 0.6).setDepth(9), bar: this.add.rectangle(0, 0, 40, 5, 0x7ae87a).setOrigin(0, 0.5).setDepth(9) };
+    }
+    if (this.world.scroll && this.has('c-scroll')) {
+      const glow = this.add.circle(0, 0, 26, 0xffe27a, 0.35).setDepth(1).setBlendMode(Phaser.BlendModes.ADD);
+      const img = this.add.image(0, 0, 'c-scroll').setOrigin(0.5, 1).setDepth(2); img.setScale(38 / img.height);
+      this.scrollView = { img, glow };
+    }
+    if (this.world.stage.objective) this.time.delayedCall(1500, () => toast(({ escort: '🧁 Keep the lost Crumblet safe and bring it to the EXIT', fetch: '📜 Grab the Recipe Scroll at the far end before time runs out!', survive: '⏱ Hold out until the timer runs out!' })[this.world!.stage.objective!.kind], { color: '#ffd27a' }));
     for (const p of this.world.props) {
       const key = `ob-${p.kind}`;
       if (!this.has(key)) continue;
@@ -278,6 +290,8 @@ export class GameScene extends Phaser.Scene {
         case 'steal': sfx('hurt'); toast(`Your ${e.name} was snatched! Beat the thief to get it back`, { color: '#ff9a6a' }); break;
         case 'recover': sfx('pickup'); toast(`Got your ${e.name} back!`, { color: '#a8f0a8' }); break;
         case 'nemesisMove': this.callout(w.hero.x, w.hero.y - 150, e.move.toUpperCase() + '!', '#ff9ad8', 13); break;
+        case 'objective': sfx(e.done ? 'reveal3' : 'portal'); toast(e.text, { big: !!e.done, color: '#a8f0a8' }); break;
+        case 'objFail': toast(e.why, { big: true, color: '#ff8a8a' }); break;
         case 'prop': {
           sfx(e.kind === 'chest' ? 'reveal3' : 'hit'); this.burst(e.x, e.y - 20, e.kind === 'jar' ? 0xff8af4 : e.kind === 'chest' ? 0xffd23c : 0xc8a070, 14);
           const v = [...this.propViews.entries()].find(([id]) => !w.props.find(p => p.id === id && p.hp > 0));
@@ -543,6 +557,17 @@ export class GameScene extends Phaser.Scene {
     this.heroShadow.setPosition(h.x, fy - 1).setScale(1 - lift * 0.5).setAlpha(h.state === 'climb' ? 0 : 1);
     this.hero.flash(h.state === 'hurt' && h.t < 0.08);
     this.aura.setFillStyle(h.counter > 0 ? 0xffd23c : 0x9fe0ff, 0.25).setVisible(!!h.buff || h.counter > 0).setPosition(h.x, h.y - 40).setScale(1 + Math.sin(t * 6) * 0.06).setAlpha(0.18 + Math.sin(t * 6) * 0.06);
+
+    // objective bits
+    if (this.npcView && w.npc) {
+      const n = w.npc, v = this.npcView;
+      v.img.setPosition(n.x, n.y + (Math.abs(Math.sin(t * 9)) * -3)).setFlipX(n.face < 0).setAlpha(n.hp > 0 ? (n.hurt > 0 && Math.floor(t * 20) % 2 ? 0.4 : 1) : 0.3);
+      v.bg.setPosition(n.x, n.y - 54); v.bar.setPosition(n.x - 20, n.y - 54).setScale(Math.max(0, n.hp / n.maxHp), 1);
+    }
+    if (this.scrollView && w.scroll) {
+      const s = w.scroll, v = this.scrollView;
+      v.img.setVisible(!s.got).setPosition(s.x, s.y - 8 + Math.sin(t * 3) * 4); v.glow.setVisible(!s.got).setPosition(s.x, s.y - 26).setScale(1 + Math.sin(t * 5) * 0.15);
+    }
 
     // platforms that move or hide
     w.stage.platforms.forEach((pl, i) => {
