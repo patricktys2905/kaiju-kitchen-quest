@@ -78,12 +78,16 @@ export function playStory(species: number, beats: string[], done: () => void): v
       if (still) { const img = document.createElement('i'); img.style.backgroundImage = `url(art/${still}.webp)`; stillEl.prepend(img); }
       curStill = still;
     }
-    // over a painting the big portraits would double up the characters: show a small face in the name tag instead
+    // Who is already painted into the still: the kaiju in its own intro / cliffhanger, the boss in the boss and
+    // "cured" paintings, nobody in the world vistas. Anyone not in the painting still gets their portrait.
+    const painted = new Set(!still ? [] : /-(intro|cliff)$/.test(still) ? ['me'] : /-(boss|cure)$/.test(still) ? ['boss'] : []);
     const face = who === 'me' ? `art/kaiju-${species}.webp` : rightArt;
     const chip = still && face ? `<img src="${face}" alt="">` : '';
+    const left = painted.has('me') ? '' : `<div class="por l ${isMe ? '' : 'dim'}" style="background-image:url(art/kaiju-${species}.webp)"></div>`;
+    const right = who === 'mold' ? '<div class="por r mold"></div>' : rightArt && !(who === 'boss' && painted.has('boss')) ? `<div class="por r" style="background-image:url(${rightArt})"></div>` : '';
     cnt.innerHTML = `<div class="ttl">${story.title}<small>${me.name} · World ${w.id}: ${w.name}</small></div>
-      ${still ? '' : `<div class="por l ${isMe ? '' : 'dim'}" style="background-image:url(art/kaiju-${species}.webp)"></div>
-      ${who === 'mold' ? '<div class="por r mold"></div>' : rightArt ? `<div class="por r" style="background-image:url(${rightArt})"></div>` : ''}`}
+      ${left}
+      ${right}
       <div class="box ${who === 'n' ? 'n' : who === 'mold' ? 'mold' : ''}"><span class="who">${chip}${name}</span><span class="tx"></span><span class="next">▼ tap</span></div>
       <button class="skip">SKIP ▶▶</button>`;
     cnt.querySelector('.skip')!.addEventListener('click', e => { e.stopPropagation(); finish(); });
