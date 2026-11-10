@@ -248,3 +248,9 @@ Most weapon drops (65%, not signature legendaries) roll a twist: a new gear-skil
 and usually an effect (burn / freeze / glue / slow / launch / pull / heal). The weapon is named for it ("Frosty Rolling Pin")
 and its gear skill becomes e.g. "Frosty Pin Lob". Each kaiju's 2nd / 3rd weapon tier now drops from item level 6 / 14
 (was 12 / 24). Screen: `node scripts/twist-shot.mjs`.
+NEW WEAPON TYPES: every kaiju has 2 more weapons (BASES `w-<ref>a` from item level 0, `w-<ref>b` from 6), each with its own
+gear skill, mostly the newer styles: BOOMERANG (out and back, hits both ways, shot kind `gearboom`), BURST (eight copies in a
+star, `gearburst`) and TRAP (planted on the floor, snaps the first monster: a Mine with `icon` + `fx`). Twists can roll these
+styles too. Icons: `node scripts/weapons2-jobs.mjs` → gem-gen → `npm run art`; review with `node scripts/icon-sheet.mjs`.
+Screens: `node scripts/gearstyle-shot.mjs`. Lobbed hero shots (Berry Mines, mustard goo, lobbed gear) remember the height they
+were thrown from (`Shot.fromY`) and fall through ledges above it, so they land among the monsters (tests/berry.test.ts).

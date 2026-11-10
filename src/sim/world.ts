@@ -147,8 +147,8 @@ export interface Mob {
 }
 
 export interface Box { id: number; tier: BoxTier; ilvl: number; x: number; y: number; vy: number; ground: boolean; t: number; /** only this player can pick it up (each player gets their own drops) */ owner?: number }
-export interface Shot { /** extra effects on hit (gear skills, upgraded skills) and the weapon icon a gear shot is drawn as */ fx?: string[]; icon?: string; id: number; x: number; y: number; vx: number; vy: number; t: number; dmg: number; hit: Set<number>; from: 'hero' | 'mob'; kx: number; ky: number; pierce: boolean; g?: number; kind?: string; /** hit radius (default 14) */ r?: number; back?: boolean; /** Pit Hurl: bounces so far */ bounces?: number; /** lobbed shots: where it will land (drawn as a warning) */ tx?: number; ty?: number; /** hero who fired it */ owner?: number }
-export interface Mine { id: number; x: number; y: number; t: number; dmg: number; kx: number; ky: number; owner?: number; /** Jam Trap: glues what it hits */ glue?: boolean }
+export interface Shot { /** lobbed by a hero: the floor height it was thrown from (it falls through ledges above that) */ fromY?: number; /** extra effects on hit (gear skills, upgraded skills) and the weapon icon a gear shot is drawn as */ fx?: string[]; icon?: string; id: number; x: number; y: number; vx: number; vy: number; t: number; dmg: number; hit: Set<number>; from: 'hero' | 'mob'; kx: number; ky: number; pierce: boolean; g?: number; kind?: string; /** hit radius (default 14) */ r?: number; back?: boolean; /** Pit Hurl: bounces so far */ bounces?: number; /** lobbed shots: where it will land (drawn as a warning) */ tx?: number; ty?: number; /** hero who fired it */ owner?: number }
+export interface Mine { id: number; x: number; y: number; t: number; dmg: number; kx: number; ky: number; owner?: number; /** Jam Trap: glues what it hits */ glue?: boolean; /** gear trap: the weapon's icon and on-hit effects */ icon?: string; fx?: string[] }
 
 export interface RunStats { time: number; hitsTaken: number; dmgTaken: number; maxCombo: number; kills: number; crumbs: number; revived: number; stones: number; perfects: number; interrupts: number; styleSum: number; styleTime: number; stylePeak: number }
 
@@ -575,7 +575,7 @@ export class World {
       case 'lob': { // lands on the nearest monster in front (or 220px ahead); flight time is ~0.74s
         const tgt = this.mobs.filter(m => m.state !== 'dead' && !m.under && Math.sign(m.x - h.x) === h.face && Math.abs(m.x - h.x) < 460 && Math.abs(m.y - h.y) < 120).sort((p, q) => Math.abs(p.x - h.x) - Math.abs(q.x - h.x))[0];
         const dx = tgt ? Math.abs(tgt.x - h.x) - 24 : 220;
-        this.shots.push({ ...base, id: nextId++, x: h.x + h.face * 24, y: h.y - 56, vx: h.face * clamp(dx / 0.74, 100, 600), vy: -440, g: 1300, pierce: false, kind: 'gearlob', r: 18, tx: h.x + h.face * (dx + 24), ty: h.y });
+        this.shots.push({ fromY: h.y, ...base, id: nextId++, x: h.x + h.face * 24, y: h.y - 56, vx: h.face * clamp(dx / 0.74, 100, 600), vy: -440, g: 1300, pierce: false, kind: 'gearlob', r: 18, tx: h.x + h.face * (dx + 24), ty: h.y });
         break;
       }
       case 'roll': this.shots.push({ ...base, id: nextId++, x: h.x + h.face * 30, y: h.y - 20, vx: h.face * 430, vy: 0, pierce: true, kind: 'gearroll', r: 22 }); break;
@@ -586,6 +586,17 @@ export class World {
       case 'rain':
         for (let i = 0; i < 5; i++) this.shots.push({ ...base, hit: new Set(), id: nextId++, x: h.x + h.face * (70 + i * 55), y: h.y - 330, vx: 0, vy: 120, t: -0.09 * i, g: 1500, pierce: false, kind: 'gearrain', r: 20 });
         break;
+      case 'boomerang': // out and back, hitting both ways
+        this.shots.push({ ...base, id: nextId++, x: h.x + h.face * 30, y: h.y - 44, vx: h.face * 680, vy: 0, pierce: true, kind: 'gearboom', r: 24 });
+        break;
+      case 'burst': // eight copies in a star
+        for (let i = 0; i < 8; i++) { const a = (i / 8) * Math.PI * 2; this.shots.push({ ...base, hit: new Set(), id: nextId++, x: h.x, y: h.y - 44, vx: Math.cos(a) * 520, vy: Math.sin(a) * 520, pierce: true, kind: 'gearburst', r: 20 }); }
+        break;
+      case 'trap': { // planted on the floor ahead: snaps the first monster to step on it
+        const fl = this.floorBelow(h.x + h.face * 50, h.y - 2, h.y + 400, false);
+        this.mines.push({ id: nextId++, x: h.x + h.face * 50, y: fl ? fl.y : h.y, t: 0, dmg: atk, kx: 160, ky: g.fx === 'launch' ? -620 : -300, owner: h.idx, icon: g.icon, fx });
+        break;
+      }
     }
     this.events.push({ t: 'gear', name: g.name, style: g.style, x: h.x, y: h.y });
   }
@@ -640,7 +651,7 @@ export class World {
       case 'mines':
         if (sk.toss) { // a spread of berries lobbed near, middle and far
           const n = sk.n ?? 3;
-          for (let i = 0; i < n; i++) this.shots.push({ id: nextId++, x: h.x + h.face * 24, y: h.y - 56, vx: h.face * (190 + i * (300 / Math.max(1, n - 1))), vy: -430, t: 0, dmg: atk * sk.dmg, hit: new Set(), from: 'hero', kx: sk.kx, ky: sk.ky, pierce: false, g: 1500, kind: 'berry' });
+          for (let i = 0; i < n; i++) this.shots.push({ fromY: h.y, id: nextId++, x: h.x + h.face * 24, y: h.y - 56, vx: h.face * (190 + i * (300 / Math.max(1, n - 1))), vy: -430, t: 0, dmg: atk * sk.dmg, hit: new Set(), from: 'hero', kx: sk.kx, ky: sk.ky, pierce: false, g: 1500, kind: 'berry' });
           break;
         }
         for (let i = 0; i < (sk.n ?? 3); i++) this.mines.push({ id: nextId++, x: h.x + h.face * (40 + i * 45), y: this.stage.groundY, t: 0, dmg: atk * sk.dmg, kx: sk.kx, ky: sk.ky });
@@ -710,7 +721,7 @@ export class World {
         break;
       }
       case 'goo':
-        for (let i = 0; i < (sk.n ?? 3); i++) this.shots.push({ id: nextId++, x: h.x + h.face * 24, y: h.y - 50, vx: h.face * (70 + i * 100), vy: -380, t: 0, dmg: atk * sk.dmg, hit: new Set(), from: 'hero', kx: 0, ky: 0, pierce: false, g: 1500, kind: 'goo' });
+        for (let i = 0; i < (sk.n ?? 3); i++) this.shots.push({ fromY: h.y, id: nextId++, x: h.x + h.face * 24, y: h.y - 50, vx: h.face * (70 + i * 100), vy: -380, t: 0, dmg: atk * sk.dmg, hit: new Set(), from: 'hero', kx: 0, ky: 0, pierce: false, g: 1500, kind: 'goo' });
         break;
       case 'radial':
         for (let i = 0; i < (sk.n ?? 10); i++) { const a = (i / (sk.n ?? 10)) * Math.PI * 2; this.shots.push({ id: nextId++, x: h.x, y: h.y - 40, vx: Math.cos(a) * 520, vy: Math.sin(a) * 520, t: 0, dmg: atk * sk.dmg, hit: new Set(), from: 'hero', kx: sk.kx, ky: sk.ky, pierce: false, kind: 'quill' }); }
@@ -2177,7 +2188,8 @@ export class World {
         }
         continue;
       }
-      if (s.kind === 'boomerang' && !s.back && s.t > 0.42) { s.back = true; s.hit = new Set(); } // comes back: hits again
+      if ((s.kind === 'boomerang' || s.kind === 'gearboom') && !s.back && s.t > 0.42) { s.back = true; s.hit = new Set(); } // comes back: hits again
+      if (s.kind === 'gearburst' && s.t > 0.55) { s.t = 99; continue; } // the star doesn't fly forever
       if (s.back) { s.vx = approach(s.vx, Math.sign(h.x - s.x) * 700, 2600 * sdt); if (Math.abs(h.x - s.x) < 30 && Math.abs(h.y - 44 - s.y) < 60) { s.t = 99; continue; } }
       if (s.kind === 'homing') {
         const tgt = this.targetsNear(s.x, s.y, 700, 500)[0];
@@ -2195,7 +2207,8 @@ export class World {
       if (s.g) { // lobbed: falls; berries become mines, mustard becomes goo, meteors burst
         const prevY = s.y - s.vy * sdt;
         s.vy += s.g * sdt;
-        const f = s.vy > 0 ? this.floorBelow(s.x, prevY, s.y, false) : null;
+        let f = s.vy > 0 ? this.floorBelow(s.x, prevY, s.y, false) : null;
+        if (f && s.fromY !== undefined && f.y < s.fromY - 4) f = null; // thrown from below a ledge: it drops past it to the monsters' level
         if (f) {
           if (s.kind === 'berry') this.mines.push({ id: nextId++, x: s.x, y: f.y, t: 0.2, dmg: s.dmg, kx: s.kx, ky: s.ky });
           else if (s.kind === 'goo') this.zones.push({ id: nextId++, x: s.x, y: f.y, w: 80, t: 4, tick: 0.1, next: 0, dmg: s.dmg, kind: 'goo', hit: new Set() });
@@ -2286,7 +2299,7 @@ export class World {
         const ids = new Set<number>();
         for (const m of this.mobs) {
           if (m.state === 'dead' || m.under || ids.has(m.id)) continue;
-          if (Math.abs(m.x - mi.x) < 70 && Math.abs(m.y - mi.y) < 60) { ids.add(m.id); this.damageMob(m, mi.dmg, Math.sign(m.x - mi.x) || 1, { kx: mi.kx, ky: mi.ky, stun: 0.7 }, true); if (mi.glue && MOBS[m.kind].brain !== 'boss') this.glue(m); }
+          if (Math.abs(m.x - mi.x) < 70 && Math.abs(m.y - mi.y) < 60) { ids.add(m.id); this.damageMob(m, mi.dmg, Math.sign(m.x - mi.x) || 1, { kx: mi.kx, ky: mi.ky, stun: 0.7 }, true); if (mi.glue && MOBS[m.kind].brain !== 'boss') this.glue(m); if (mi.fx?.length) this.applyFx(m, mi.fx, this.cur); }
         }
       }
     }
@@ -2376,7 +2389,7 @@ export function rankOf(run: RunStats, par: number): { rank: 'S' | 'A' | 'B' | 'C
 /** hero projectiles that live longer than a bolt */
 /** Bosses shrug off thrown kitchenware a bit (gear skills deal 40% to them). */
 const gearVs = (m: Mob) => (MOBS[m.kind].brain === 'boss' ? 0.4 : 1);
-const LONG_SHOTS = new Set(['minijelly', 'tide', 'salmon', 'gumball', 'trumpet', 'guacwave', 'gearroll', 'boomerang', 'homing', 'twister', 'snowball', 'wave', 'reflect']);
+const LONG_SHOTS = new Set(['gearboom', 'minijelly', 'tide', 'salmon', 'gumball', 'trumpet', 'guacwave', 'gearroll', 'boomerang', 'homing', 'twister', 'snowball', 'wave', 'reflect']);
 const NEW_BRAINS = new Set(['healer', 'summoner', 'charger', 'sniper', 'turret', 'burrower', 'mimic']);
 
 const gbCache = new WeakMap<AttackDef[], AttackDef>(), lnCache = new WeakMap<AttackDef[], AttackDef>();

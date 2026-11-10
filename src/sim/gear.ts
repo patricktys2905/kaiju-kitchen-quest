@@ -4,7 +4,7 @@
 //  - Signature legendaries (items.ts UNIQUES with `skill`) upgrade one of their kaiju's skills.
 import { BASES, GRADE_MUL, type Item, fortMul, gradeOf } from './items';
 
-export type GearStyle = 'throw' | 'lob' | 'roll' | 'slam' | 'rain';
+export type GearStyle = 'throw' | 'lob' | 'roll' | 'slam' | 'rain' | 'boomerang' | 'burst' | 'trap';
 export type GearFx = 'burn' | 'freeze' | 'glue' | 'slow' | 'launch' | 'pull' | 'heal';
 export interface GearSkill { name: string; style: GearStyle; fx?: GearFx }
 
@@ -15,6 +15,9 @@ export const STYLE: Record<GearStyle, { dmg: number; cd: number; text: string }>
   roll: { dmg: 1.2, cd: 10, text: 'Send it rolling along the floor, bumping everything again and again' },
   slam: { dmg: 2.4, cd: 9, text: 'Slam it down: a shockwave runs both ways along the floor' },
   rain: { dmg: 1.1, cd: 12, text: 'Five copies drop from the sky in front of you' },
+  boomerang: { dmg: 1.5, cd: 8, text: 'Throw it like a boomerang: it hits on the way out and again on the way back' },
+  burst: { dmg: 1.6, cd: 9, text: 'Eight copies burst out all around you in a star' },
+  trap: { dmg: 3.4, cd: 9, text: 'Plant it on the floor: it snaps the first monster that steps on it' },
 };
 export const FX_TEXT: Record<GearFx, string> = {
   burn: 'sets monsters on fire', freeze: 'freezes monsters solid', glue: 'glues monsters in place', slow: 'slows monsters down',
@@ -83,10 +86,50 @@ export const GEAR: Record<string, GearSkill> = {
   'w-owl1': { name: 'Chip Fling', style: 'throw' },
   'w-owl2': { name: 'Chili Lance', style: 'throw', fx: 'burn' },
   'w-owl3': { name: 'Piñata Smash', style: 'slam', fx: 'launch' },
+  'w-goba': { name: 'Seed Spray', style: 'burst', fx: 'slow' },
+  'w-gobb': { name: 'Leafy Boomerang', style: 'boomerang', fx: 'pull' },
+  'w-bluea': { name: 'Tin Snap', style: 'trap', fx: 'glue' },
+  'w-blueb': { name: 'Hive Burst', style: 'burst', fx: 'glue' },
+  'w-pizzaa': { name: 'Pepperoni Boomerang', style: 'boomerang', fx: 'burn' },
+  'w-pizzab': { name: 'Topping Burst', style: 'burst', fx: 'burn' },
+  'w-motha': { name: 'Glow Snare', style: 'trap', fx: 'slow' },
+  'w-mothb': { name: 'Toasty Burst', style: 'burst', fx: 'burn' },
+  'w-squida': { name: 'Potion Trap', style: 'trap', fx: 'glue' },
+  'w-squidb': { name: 'Coral Boomerang', style: 'boomerang', fx: 'slow' },
+  'w-craba': { name: 'Cheddar Boomerang', style: 'boomerang', fx: 'launch' },
+  'w-crabb': { name: 'Leaf Burst', style: 'burst', fx: 'slow' },
+  'w-toasta': { name: 'Breadstick Burst', style: 'burst', fx: 'burn' },
+  'w-toastb': { name: 'Jam Boomerang', style: 'boomerang', fx: 'glue' },
+  'w-dumpa': { name: 'Broth Burst', style: 'burst', fx: 'heal' },
+  'w-dumpb': { name: 'Steamy Bao Trap', style: 'trap', fx: 'heal' },
+  'w-noria': { name: 'Chopstick Boomerang', style: 'boomerang', fx: 'pull' },
+  'w-norib': { name: 'Soy Snare', style: 'trap', fx: 'slow' },
+  'w-chocoa': { name: 'Cocoa Trap', style: 'trap', fx: 'launch' },
+  'w-chocob': { name: 'Truffle Burst', style: 'burst', fx: 'launch' },
+  'w-hoga': { name: 'Mustard Trap', style: 'trap', fx: 'glue' },
+  'w-hogb': { name: 'Bun Boomerang', style: 'boomerang', fx: 'burn' },
+  'w-penga': { name: 'Skate Boomerang', style: 'boomerang', fx: 'freeze' },
+  'w-pengb': { name: 'Sprinkle Burst', style: 'burst', fx: 'freeze' },
+  'w-avoa': { name: 'Chip Burst', style: 'burst', fx: 'slow' },
+  'w-avob': { name: 'Lime Boomerang', style: 'boomerang', fx: 'heal' },
+  'w-owla': { name: 'Salsa Trap', style: 'trap', fx: 'burn' },
+  'w-owlb': { name: 'Feather Burst', style: 'burst', fx: 'slow' },
+  'w-guma': { name: 'Gum Trap', style: 'trap', fx: 'glue' },
+  'w-gumb': { name: 'Jawbreaker Boomerang', style: 'boomerang', fx: 'launch' },
+  'w-rooa': { name: 'Frosting Burst', style: 'burst', fx: 'launch' },
+  'w-roob': { name: 'Cake Boomerang', style: 'boomerang', fx: 'slow' },
+  'w-sloa': { name: 'Pillow Trap', style: 'trap', fx: 'slow' },
+  'w-slob': { name: 'Bamboo Boomerang', style: 'boomerang', fx: 'pull' },
+  'w-minta': { name: 'Scoop Trap', style: 'trap', fx: 'freeze' },
+  'w-mintb': { name: 'Choc-Chip Burst', style: 'burst', fx: 'freeze' },
+  'w-bloba': { name: 'Jiggle Burst', style: 'burst', fx: 'glue' },
+  'w-blobb': { name: 'Gummy Boomerang', style: 'boomerang', fx: 'heal' },
+  'w-fisha': { name: 'Hook Boomerang', style: 'boomerang', fx: 'pull' },
+  'w-fishb': { name: 'Roe Trap', style: 'trap', fx: 'launch' },
 };
 
 /** Gear skill names for a twist: the effect word + the style's noun, e.g. 'Frosty Lob'. */
-const STYLE_NOUN: Record<GearStyle, string> = { throw: 'Fling', lob: 'Lob', roll: 'Roll', slam: 'Slam', rain: 'Shower' };
+const STYLE_NOUN: Record<GearStyle, string> = { throw: 'Fling', lob: 'Lob', roll: 'Roll', slam: 'Slam', rain: 'Shower', boomerang: 'Boomerang', burst: 'Burst', trap: 'Trap' };
 const FX_WORD: Record<GearFx, string> = { burn: 'Scorching', freeze: 'Frosty', glue: 'Sticky', slow: 'Syrupy', launch: 'Bouncy', pull: 'Grabby', heal: 'Hearty' };
 /** The gear skill a weapon item gives: its rolled twist, or its base weapon's own skill. */
 export function gearSkillOf(weapon: Item): GearSkill | undefined {

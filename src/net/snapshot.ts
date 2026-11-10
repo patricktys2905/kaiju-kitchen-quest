@@ -28,7 +28,7 @@ export interface Snapshot {
   hz: number[];         // hazard states
   z: (number | string)[][]; // skill zones
   pu: (number | string)[][]; // puddles
-  mi: number[][];       // mines
+  mi: (number | string)[][]; // mines [id, x, y, gear-trap icon]
   npc: number[] | null;
   sc: number;           // scroll got
   ar: number[][];       // arenas [locked, done, wave]
@@ -53,7 +53,7 @@ export function makeSnapshot(w: World): Snapshot {
     hz: w.hazards.map(z => HAZ.indexOf(z.state)),
     z: w.zones.map(z => [z.id, r(z.x), r(z.y), r(z.w), r1(z.t), z.kind]),
     pu: w.puddles.map(p => [r(p.x), r(p.y), r1(p.t), p.kind ?? '', p.w ?? 0]),
-    mi: w.mines.map(x => [x.id, r(x.x), r(x.y)]),
+    mi: w.mines.map(x => [x.id, r(x.x), r(x.y), x.icon ?? '']),
     npc: w.npc ? [r(w.npc.x), r(w.npc.y), r(w.npc.hp), w.npc.maxHp, w.npc.face, r2(w.npc.hurt)] : null,
     sc: b(!!w.scroll?.got),
     ar: w.arenas.map(a => [b(a.locked), b(a.done), a.wave]),
@@ -110,7 +110,7 @@ export function applySnapshot(w: World, s: Snapshot): void {
   s.hz.forEach((st, i) => { const z = w.hazards[i]; if (z) z.state = HAZ[st] ?? 'off'; });
   w.zones = s.z.map(a => { const [id, x, y, ww, t, kind] = a as never as [number, number, number, number, number, 'steam']; return { id, x, y, w: ww, t, kind, tick: 1, next: 1, dmg: 0 }; });
   w.puddles = s.pu.map(a => { const [x, y, t, kind, ww] = a as never as [number, number, number, string, number]; return { x, y, t, kind: (kind || undefined) as 'slow' | undefined, w: ww || undefined }; });
-  w.mines = s.mi.map(([id, x, y]) => ({ id, x, y, t: 1, dmg: 0, kx: 0, ky: 0 }));
+  w.mines = s.mi.map(([id, x, y, icon]) => ({ id: id as number, x: x as number, y: y as number, t: 1, dmg: 0, kx: 0, ky: 0, icon: (icon as string) || undefined }));
   if (w.npc && s.npc) { const [x, y, hp, maxHp, face, hurt] = s.npc; Object.assign(w.npc, { x, y, hp, maxHp, face, hurt }); }
   if (w.scroll) w.scroll.got = !!s.sc;
   s.ar.forEach(([locked, done, wave], i) => { const a = w.arenas[i]; if (a) Object.assign(a, { locked: !!locked, done: !!done, wave }); });

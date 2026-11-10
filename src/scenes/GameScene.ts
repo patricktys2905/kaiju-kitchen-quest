@@ -1202,6 +1202,13 @@ export class GameScene extends Phaser.Scene {
     const seenM = new Set<number>();
     for (const mi of w.mines) {
       seenM.add(mi.id);
+      if (mi.icon) { // a planted gear trap: the weapon itself, lying on the floor and twitching
+        seenS.add(mi.id);
+        let gi = this.gearImgs.get(mi.id);
+        if (!gi) { gi = this.add.image(0, 0, this.has(mi.icon) ? mi.icon : '__WHITE').setDepth(3); gi.setScale(40 / gi.height); this.gearImgs.set(mi.id, gi); }
+        gi.setPosition(mi.x, mi.y - 14).setRotation(Math.PI * 0.25 + (Math.sin(t * 10 + mi.id) > 0.8 ? 0.15 : 0));
+        continue;
+      }
       let c = this.mineImgs.get(mi.id);
       if (!c) { c = this.add.circle(0, 0, 9, 0x3a4aa0).setStrokeStyle(2, 0x9ab0ff).setDepth(3); this.mineImgs.set(mi.id, c); }
       c.setPosition(mi.x, mi.y - 8).setScale(1 + (Math.sin(t * 8 + mi.id) > 0.7 ? 0.15 : 0));

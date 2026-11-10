@@ -216,8 +216,10 @@ describe('challenge', () => {
     for (let i = 0; i < 40 && !b.enraged; i++) evs = [...evs, ...tap(w, { attack: true }), ...run(w, {}, 10)];
     expect(b.enraged).toBe(true);
     expect(evs.some(e => e.t === 'enrage')).toBe(true);
-    run(w, {}, 300);
-    expect(w.hazards.some(z => z.state !== 'off')).toBe(true);
+    // the arena hazards cycle on and off: one of them must come on within a few seconds
+    let lit = false;
+    for (let i = 0; i < 300 && !lit; i++) { run(w, {}, 1); lit = w.hazards.some(z => z.state !== 'off'); }
+    expect(lit).toBe(true);
   });
   it('a burner hurts you for a fixed share of your HP when it flares', () => {
     const st: StageDef = { ...flat, hazards: [{ kind: 'burner', x: 500, w: 90, period: 3.6, on: 1.2, offset: 0 }] };

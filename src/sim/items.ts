@@ -32,12 +32,12 @@ export interface Item {
 }
 
 /** Weapon twists: the throwing styles and effects a weapon's gear skill can roll (kept in step with gear.ts STYLE / FX_TEXT). */
-export const TWIST_STYLES = ['throw', 'lob', 'roll', 'slam', 'rain'] as const;
+export const TWIST_STYLES = ['throw', 'lob', 'roll', 'slam', 'rain', 'boomerang', 'burst', 'trap'] as const;
 export const TWIST_FX = ['burn', 'freeze', 'glue', 'slow', 'launch', 'pull', 'heal'] as const;
 /** The word a twisted weapon gets in its name (by effect, or by style when it has no effect). */
 export const TWIST_WORD: Record<string, string> = {
   burn: 'Scorching', freeze: 'Frosty', glue: 'Sticky', slow: 'Syrupy', launch: 'Bouncy', pull: 'Grabby', heal: 'Hearty',
-  throw: 'Flinging', lob: 'Lobbing', roll: 'Tumbling', slam: 'Slamming', rain: 'Showering',
+  throw: 'Flinging', lob: 'Lobbing', roll: 'Tumbling', slam: 'Slamming', rain: 'Showering', boomerang: 'Returning', burst: 'Bursting', trap: 'Snapping',
 };
 /** How often a (non-legendary) weapon drop rolls a twist. */
 export const TWIST_CHANCE = 0.65;
@@ -118,6 +118,48 @@ export const BASES: Record<string, BaseDef> = {
   'a-blob1': AR('Paper Cup Vest', 'a-blob1', 3, [{ k: 'def', v: 3 }, { k: 'hp', v: 22 }], 1), 'a-blob2': AR('Jelly Cube Mail', 'a-blob2', 3, [{ k: 'def', v: 4 }, { k: 'hp', v: 30 }], 2), 'a-blob3': AR('Golden Mould Plate', 'a-blob3', 3, [{ k: 'def', v: 5 }, { k: 'hp', v: 36 }, { k: 'vit', v: 2 }], 3), 'k-blob': CH('Cherry Charm', 'k-blob', 3, [{ k: 'cdr', v: 0.04 }, { k: 'hp', v: 18 }]),
   'w-fish1': W('Fin Blade', 'w-fish1', 14, 1, [{ k: 'atk', v: 4 }, { k: 'crit', v: 2 }]), 'w-fish2': W('Rowing Oar', 'w-fish2', 14, 2, [{ k: 'atk', v: 5 }, { k: 'hp', v: 14 }]), 'w-fish3': W('Lemon Trident', 'w-fish3', 14, 3, [{ k: 'atk', v: 6 }, { k: 'str', v: 2 }, { k: 'critDmg', v: 0.1 }]),
   'a-fish1': AR('Rain Slicker', 'a-fish1', 14, [{ k: 'def', v: 3 }, { k: 'hp', v: 18 }, { k: 'dex', v: 1 }], 1), 'a-fish2': AR('Fishnet Mail', 'a-fish2', 14, [{ k: 'def', v: 4 }, { k: 'hp', v: 24 }, { k: 'str', v: 1 }], 2), 'a-fish3': AR('Silver Scale Armour', 'a-fish3', 14, [{ k: 'def', v: 5 }, { k: 'hp', v: 30 }, { k: 'str', v: 2 }], 3), 'k-fish': CH('Lemon Charm', 'k-fish', 14, [{ k: 'atk', v: 3 }, { k: 'crit', v: 2 }]),
+  // ----- new weapon types: a second kaiju weapon from the start (a) and one more from item level 6 (b), each with its own
+  // gear skill (mostly the boomerang / burst / trap styles). Icons: scripts/weapons2-jobs.mjs -----
+  'w-goba': W('Seed Slingshot', 'w-goba', 0, 1, [{ k: 'atk', v: 4 }, { k: 'crit', v: 3 }]),
+  'w-gobb': W('Stem Boomerang', 'w-gobb', 0, 2, [{ k: 'atk', v: 5 }, { k: 'dex', v: 1 }]),
+  'w-bluea': W('Muffin Tin Shield', 'w-bluea', 10, 1, [{ k: 'atk', v: 3 }, { k: 'hp', v: 18 }]),
+  'w-blueb': W('Honeycomb Club', 'w-blueb', 10, 2, [{ k: 'atk', v: 5 }, { k: 'hp', v: 20 }]),
+  'w-pizzaa': W('Pepperoni Chakram', 'w-pizzaa', 11, 1, [{ k: 'atk', v: 3 }, { k: 'crit', v: 3 }]),
+  'w-pizzab': W('Crust Sabre', 'w-pizzab', 11, 2, [{ k: 'atk', v: 4 }, { k: 'crit', v: 4 }]),
+  'w-motha': W('Lantern Staff', 'w-motha', 4, 1, [{ k: 'atk', v: 3 }, { k: 'skillDmg', v: 0.05 }]),
+  'w-mothb': W('S\'more Scepter', 'w-mothb', 4, 2, [{ k: 'atk', v: 4 }, { k: 'skillDmg', v: 0.06 }]),
+  'w-squida': W('Test Tube Slinger', 'w-squida', 1, 1, [{ k: 'atk', v: 3 }, { k: 'skillDmg', v: 0.05 }]),
+  'w-squidb': W('Coral Boomerang', 'w-squidb', 1, 2, [{ k: 'atk', v: 4 }, { k: 'crit', v: 3 }]),
+  'w-craba': W('Cheese Wheel Buckler', 'w-craba', 2, 1, [{ k: 'atk', v: 3 }, { k: 'hp', v: 18 }]),
+  'w-crabb': W('Cabbage Flail', 'w-crabb', 2, 2, [{ k: 'atk', v: 5 }, { k: 'hp', v: 15 }]),
+  'w-toasta': W('Breadstick Darts', 'w-toasta', 5, 1, [{ k: 'atk', v: 3 }, { k: 'crit', v: 4 }]),
+  'w-toastb': W('Jam Knife', 'w-toastb', 5, 2, [{ k: 'atk', v: 4 }, { k: 'critDmg', v: 0.08 }]),
+  'w-dumpa': W('Soup Spoon Staff', 'w-dumpa', 6, 1, [{ k: 'atk', v: 3 }, { k: 'skillDmg', v: 0.05 }]),
+  'w-dumpb': W('Bao Bun Mace', 'w-dumpb', 6, 2, [{ k: 'atk', v: 4 }, { k: 'hp', v: 15 }]),
+  'w-noria': W('Chopstick Boomerang', 'w-noria', 7, 1, [{ k: 'atk', v: 3 }, { k: 'skillDmg', v: 0.05 }]),
+  'w-norib': W('Soy Sauce Staff', 'w-norib', 7, 2, [{ k: 'atk', v: 4 }, { k: 'skillDmg', v: 0.06 }]),
+  'w-chocoa': W('Cocoa Pod Club', 'w-chocoa', 8, 1, [{ k: 'atk', v: 5 }, { k: 'str', v: 1 }]),
+  'w-chocob': W('Truffle Flail', 'w-chocob', 8, 2, [{ k: 'atk', v: 6 }]),
+  'w-hoga': W('Mustard Bottle', 'w-hoga', 15, 1, [{ k: 'atk', v: 4 }, { k: 'crit', v: 2 }]),
+  'w-hogb': W('Bun Boomerang', 'w-hogb', 15, 2, [{ k: 'atk', v: 5 }, { k: 'hp', v: 10 }]),
+  'w-penga': W('Ice Skate Blade', 'w-penga', 17, 1, [{ k: 'atk', v: 3 }, { k: 'crit', v: 3 }]),
+  'w-pengb': W('Wafer Fan', 'w-pengb', 17, 2, [{ k: 'atk', v: 4 }, { k: 'skillDmg', v: 0.06 }]),
+  'w-avoa': W('Tortilla Shield', 'w-avoa', 13, 1, [{ k: 'atk', v: 3 }, { k: 'hp', v: 18 }]),
+  'w-avob': W('Lime Boomerang', 'w-avob', 13, 2, [{ k: 'atk', v: 5 }, { k: 'hp', v: 10 }]),
+  'w-owla': W('Salsa Shaker', 'w-owla', 19, 1, [{ k: 'atk', v: 3 }, { k: 'crit', v: 3 }]),
+  'w-owlb': W('Feather Fan Blade', 'w-owlb', 19, 2, [{ k: 'atk', v: 4 }, { k: 'crit', v: 4 }]),
+  'w-guma': W('Gum Wrapper Whip', 'w-guma', 9, 1, [{ k: 'atk', v: 3 }, { k: 'hp', v: 18 }]),
+  'w-gumb': W('Jawbreaker Flail', 'w-gumb', 9, 2, [{ k: 'atk', v: 5 }, { k: 'hp', v: 15 }]),
+  'w-rooa': W('Cake Boxing Mitt', 'w-rooa', 18, 1, [{ k: 'atk', v: 5 }]),
+  'w-roob': W('Red Velvet Boomerang', 'w-roob', 18, 2, [{ k: 'atk', v: 5 }, { k: 'crit', v: 3 }]),
+  'w-sloa': W('Pillow Mace', 'w-sloa', 12, 1, [{ k: 'atk', v: 3 }, { k: 'hp', v: 15 }]),
+  'w-slob': W('Bamboo Boomerang', 'w-slob', 12, 2, [{ k: 'atk', v: 4 }, { k: 'skillDmg', v: 0.05 }]),
+  'w-minta': W('Waffle Cone Shield', 'w-minta', 16, 1, [{ k: 'atk', v: 3 }, { k: 'hp', v: 18 }]),
+  'w-mintb': W('Choc-Chip Flail', 'w-mintb', 16, 2, [{ k: 'atk', v: 5 }]),
+  'w-bloba': W('Jelly Spoon', 'w-bloba', 3, 1, [{ k: 'atk', v: 3 }, { k: 'skillDmg', v: 0.05 }]),
+  'w-blobb': W('Gummy Ring', 'w-blobb', 3, 2, [{ k: 'atk', v: 4 }, { k: 'hp', v: 15 }]),
+  'w-fisha': W('Fishing Rod', 'w-fisha', 14, 1, [{ k: 'atk', v: 4 }, { k: 'crit', v: 3 }]),
+  'w-fishb': W('Roe Bomb Pouch', 'w-fishb', 14, 2, [{ k: 'atk', v: 5 }]),
   // ----- generic armor (one per world + the lid) -----
   apron: { slot: 'armor', name: 'Checkered Apron', icon: 'eq-apron', main: [{ k: 'hp', v: 20 }, { k: 'def', v: 2 }] },
   lid: { slot: 'armor', name: 'Pot Lid', icon: 'eq-lid', main: [{ k: 'def', v: 4 }] },

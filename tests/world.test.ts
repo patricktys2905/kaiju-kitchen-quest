@@ -414,7 +414,7 @@ describe('kaiju-specific gear', () => {
     const { OWNERS, canWear, rollBase } = await import('../src/sim/items');
     for (const c of CLASSES) {
       const ws = Object.values(BASES).filter(b => b.slot === 'weapon' && b.for === c.species);
-      expect(ws.map(w => w.tier).sort(), c.name).toEqual([1, 2, 3]);
+      expect(ws.map(w => w.tier).sort(), c.name).toEqual([1, 1, 2, 2, 3]); // 3 tiers + an extra weapon type at tiers 1 and 2
       expect(Object.values(BASES).some(b => b.slot === 'armor' && b.for === c.species), c.name).toBe(true);
     }
     expect(OWNERS.length).toBe(CLASSES.length);
