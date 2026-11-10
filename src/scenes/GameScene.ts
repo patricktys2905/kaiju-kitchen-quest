@@ -19,6 +19,8 @@ import { addXp, finishStage, hero, quickBag, save, syncQuickBag } from '../save'
 import { checkUnlocks, track, trackHero, trackKey } from '../quests';
 import { STORIES, beatAfter } from '../story/stories';
 import { playStory } from '../ui/story';
+import { type QuipKind, TAUNTS } from '../story/banter';
+import { QUIPS } from '../story/more';
 import { CLASSES } from '../sim/classes';
 import { setSkillUi, setTouchVisible, setUltUi } from '../touch';
 import { hideCamp, runGacha, showCamp, showResult, stageUnlocked } from '../ui/camp';
@@ -78,6 +80,11 @@ export class GameScene extends Phaser.Scene {
   private cookerViews = new Map<number, Phaser.GameObjects.Image>();
   private npcView?: { img: Phaser.GameObjects.Image; bar: Phaser.GameObjects.Rectangle; bg: Phaser.GameObjects.Rectangle };
   private scrollView?: { img: Phaser.GameObjects.Image; glow: Phaser.GameObjects.Arc };
+  /** speech bubbles: monsters taunt the first time each kind appears, your kaiju quips at big moments */
+  private bubbles: { c: Phaser.GameObjects.Container; who: number | 'hero'; t: number }[] = [];
+  private taunted = new Set<string>();
+  private quipT = 0; private tauntT = 0; private lastQuip = '';
+  private lowWarned = false; private comboQuipped = 0;
   /** Hard mode is open for a world once its boss is beaten. */
   private hardOk(): boolean { return !!hero().cleared[`${this.stage.world}-10`]; }
 
@@ -143,6 +150,7 @@ export class GameScene extends Phaser.Scene {
       board: this.has('plat-board') ? this.add.image(pl.x + pl.w / 2, pl.y - 6, 'plat-board').setOrigin(0.5, 0.08).setDisplaySize(pl.w + 28, 38).setDepth(-5).setTint(pl.secret ? 0xffe8a0 : pl.move ? 0xd8e8f8 : st.platTint) : undefined,
     }));
     this.propViews.clear(); this.cookerViews.clear(); this.npcView = undefined; this.scrollView = undefined;
+    this.bubbles = []; this.taunted.clear(); this.quipT = 2; this.tauntT = 1; this.lowWarned = false; this.comboQuipped = 0;
     if (this.world.npc && this.has('npc-crumblet')) {
       const img = this.add.image(0, 0, 'npc-crumblet').setOrigin(0.5, 1).setDepth(4); img.setScale(46 / img.height);
       this.npcView = { img, bg: this.add.rectangle(0, 0, 40, 5, 0x000000, 0.6).setDepth(9), bar: this.add.rectangle(0, 0, 40, 5, 0x7ae87a).setOrigin(0, 0.5).setDepth(9) };
@@ -248,7 +256,7 @@ export class GameScene extends Phaser.Scene {
         case 'jump': sfx('jump'); break;
         case 'skill': trackHero(hero().species, `skill:${e.id}`); this.skillFx(e.kind); sfx(e.kind === 'heal' ? 'heal' : 'skill'); break;
         case 'shock': sfx('boom'); this.ring(e.x, e.y, e.r, 0xffe0a0); this.shake = Math.max(this.shake, 7); break;
-        case 'boom': sfx('boom'); this.burst(e.x, e.y - 10, 0x4a6cff, 14); this.ring(e.x, e.y, 70, 0x7a9aff); break;
+        case 'boom': if (w.cookers.some(c => Math.abs(c.x - e.x) < 4 && c.gone > 5.9)) this.time.delayedCall(500, () => this.quip('boom')); sfx('boom'); this.burst(e.x, e.y - 10, 0x4a6cff, 14); this.ring(e.x, e.y, 70, 0x7a9aff); break;
         case 'mobDie':
           sfx('kill');
           track('kills');
@@ -266,7 +274,7 @@ export class GameScene extends Phaser.Scene {
             this.levels += ups;
             w.setDerived(derive(hero()));
             w.hero.hp = w.hero.d.maxHp;
-            toast(`LEVEL UP! Lv ${hero().level}`, { color: '#ffe27a' });
+            toast(`LEVEL UP! Lv ${hero().level}`, { color: '#ffe27a' }); this.quip('levelup', true);
             this.burst(w.hero.x, w.hero.y - 40, 0xffe27a, 24);
             this.ring(w.hero.x, w.hero.y - 30, 60, 0xffe27a);
           }
@@ -276,6 +284,7 @@ export class GameScene extends Phaser.Scene {
         case 'drop': sfx('drop'); toast(`${TIER_NAMES[e.tier]} dropped!`, { tier: e.tier }); break;
         case 'summon': toast(w.boss ? `The ${MOBS[w.boss.kind].name} calls for help!` : 'More little ones!', { color: '#ff9a6a' }); break;
         case 'perfect': {
+          this.quip('perfect');
           sfx('crit'); track('perfects');
           this.callout(e.x, e.y - 20, 'PERFECT!', '#9fe8ff', 22);
           this.ring(e.x, e.y + 20, 90, 0x9fe8ff); this.burst(e.x, e.y, 0x9fe8ff, 18);
@@ -290,18 +299,18 @@ export class GameScene extends Phaser.Scene {
         case 'steal': sfx('hurt'); toast(`Your ${e.name} was snatched! Beat the thief to get it back`, { color: '#ff9a6a' }); break;
         case 'recover': sfx('pickup'); toast(`Got your ${e.name} back!`, { color: '#a8f0a8' }); break;
         case 'nemesisMove': this.callout(w.hero.x, w.hero.y - 150, e.move.toUpperCase() + '!', '#ff9ad8', 13); break;
-        case 'objective': sfx(e.done ? 'reveal3' : 'portal'); toast(e.text, { big: !!e.done, color: '#a8f0a8' }); break;
+        case 'objective': if (e.done) this.quip('objective', true); sfx(e.done ? 'reveal3' : 'portal'); toast(e.text, { big: !!e.done, color: '#a8f0a8' }); break;
         case 'objFail': toast(e.why, { big: true, color: '#ff8a8a' }); break;
         case 'prop': {
           sfx(e.kind === 'chest' ? 'reveal3' : 'hit'); this.burst(e.x, e.y - 20, e.kind === 'jar' ? 0xff8af4 : e.kind === 'chest' ? 0xffd23c : 0xc8a070, 14);
           const v = [...this.propViews.entries()].find(([id]) => !w.props.find(p => p.id === id && p.hp > 0));
           if (v) { this.tweens.add({ targets: v[1], alpha: 0, scaleY: 0.2, duration: 220, onComplete: () => v[1].destroy() }); this.propViews.delete(v[0]); }
-          if (e.kind === 'chest') toast('Secret chest!', { color: '#ffd27a' });
+          if (e.kind === 'chest') { toast('Secret chest!', { color: '#ffd27a' }); this.quip('secret', true); }
           break;
         }
         case 'bounce': sfx('jump'); this.ring(e.x, e.y, 40, 0xf0e060); break;
         case 'lever': {
-          sfx('boom'); this.shake = 10;
+          sfx('boom'); this.shake = 10; this.time.delayedCall(500, () => this.quip('boom'));
           const pin = this.add.rectangle(e.x, w.stage.groundY - 300, 240, 34, 0xc89a60).setStrokeStyle(4, 0x6a4a20).setDepth(8);
           this.tweens.add({ targets: pin, y: w.stage.groundY - 18, duration: 180, ease: 'Quad.easeIn', onComplete: () => this.tweens.add({ targets: pin, alpha: 0, delay: 400, duration: 300, onComplete: () => pin.destroy() }) });
           toast('Rolling pin away!', { color: '#ffd27a' });
@@ -314,7 +323,7 @@ export class GameScene extends Phaser.Scene {
           toast(`🗝 WORLD ${e.world} KEY! A secret stage has opened on the map`, { big: true, color: '#ffd27a' });
           break;
         }
-        case 'mimic': sfx('boss'); toast('It\'s a MIMIC!', { color: '#ff9a6a' }); break;
+        case 'mimic': this.time.delayedCall(400, () => this.quip('mimic', true)); sfx('boss'); toast('It\'s a MIMIC!', { color: '#ff9a6a' }); break;
         case 'style': if (e.rank === 'S' || e.rank === 'A') toast(`STYLE ${e.rank}!`, { color: e.rank === 'S' ? '#ffd23c' : '#9fe8ff' }); break;
         case 'hazard': if (e.on && w.hazards[e.i]?.kind === 'drop') { sfx('boom'); } break;
         case 'stagger': sfx('stagger'); toast('STAGGERED!', { color: '#ffe27a' }); this.shake = 8; break;
@@ -402,6 +411,65 @@ export class GameScene extends Phaser.Scene {
         else if (a === 'boxes') { this.scene.restart({}); setTimeout(() => { showCamp('boxes'); runGacha(save.boxes.map((_, i) => i)); }, 50); }
         else this.scene.restart({});
       })));
+  }
+
+  // ---------- banter ----------
+  private bubble(text: string, who: number | 'hero', color = '#2a1030'): void {
+    const old = this.bubbles.find(b => b.who === who); if (old) { old.c.destroy(); this.bubbles.splice(this.bubbles.indexOf(old), 1); }
+    const txt = this.add.text(0, 0, text, { fontFamily: 'Nunito', fontStyle: '900', fontSize: '10px', color, align: 'center', wordWrap: { width: 150 } }).setOrigin(0.5).setResolution(3);
+    const w = txt.width + 12, h = txt.height + 8;
+    const g = this.add.graphics();
+    g.fillStyle(0xfffaf0, 0.96); g.lineStyle(2, who === 'hero' ? 0xffb347 : 0x8a3a5a, 1);
+    g.fillRoundedRect(-w / 2, -h / 2, w, h, 7); g.strokeRoundedRect(-w / 2, -h / 2, w, h, 7);
+    g.fillTriangle(-5, h / 2 - 1, 5, h / 2 - 1, 0, h / 2 + 7); g.lineBetween(-5, h / 2, 0, h / 2 + 7); g.lineBetween(5, h / 2, 0, h / 2 + 7);
+    const c = this.add.container(0, 0, [g, txt]).setDepth(32).setScale(0.6);
+    this.tweens.add({ targets: c, scale: 1, duration: 140, ease: 'Back.easeOut' });
+    this.bubbles.push({ c, who, t: 2.8 });
+  }
+
+  /** Your kaiju says something about the moment (not too often, never the same line twice in a row). */
+  private quip(kind: QuipKind, force = false): void {
+    if (!force && this.quipT > 0) return;
+    const lines = QUIPS[hero().species]?.[kind];
+    if (!lines?.length) return;
+    const pick = lines.filter(l => l !== this.lastQuip);
+    this.lastQuip = pick[Math.floor(Math.random() * pick.length)] ?? lines[0];
+    this.quipT = 5;
+    this.bubble(this.lastQuip, 'hero');
+  }
+
+  private stepBanter(dt: number): void {
+    const w = this.world!, h = w.hero;
+    this.quipT -= dt; this.tauntT -= dt;
+    // monsters: the first of each kind on screen says its line
+    if (this.tauntT <= 0) {
+      for (const m of w.mobs) {
+        if (m.state === 'dead' || m.disguised || m.under || this.taunted.has(m.kind) || Math.abs(m.x - this.cx) > VW / 2 - 30 || Math.abs(m.y - this.cy) > VH / 2) continue;
+        const lines = TAUNTS[m.kind];
+        this.taunted.add(m.kind);
+        if (!lines) continue;
+        this.bubble(lines[Math.floor(Math.random() * lines.length)], m.id, '#5a1030');
+        this.tauntT = 3;
+        break;
+      }
+    }
+    if (w.combo >= 15 && w.combo >= this.comboQuipped + 15) { this.comboQuipped = w.combo; this.quip('combo'); }
+    if (w.combo < 3) this.comboQuipped = 0;
+    if (h.hp < h.d.maxHp * 0.3 && h.hp > 0 && !this.lowWarned) { this.lowWarned = true; this.quip('lowhp', true); }
+    if (h.hp > h.d.maxHp * 0.6) this.lowWarned = false;
+    const placed: { x: number; y: number; w: number; h: number }[] = [];
+    for (const b of [...this.bubbles]) {
+      b.t -= dt;
+      const m = b.who === 'hero' ? null : w.mobs.find(x => x.id === b.who);
+      if (b.t <= 0 || (b.who !== 'hero' && (!m || m.state === 'dead'))) { b.c.destroy(); this.bubbles.splice(this.bubbles.indexOf(b), 1); continue; }
+      const x = m ? m.x : h.x;
+      let y = m ? m.y - MOBS[m.kind].h * (m.elite ? ELITE.scale : 1) - 30 : h.y - 108;
+      const bw = b.c.getBounds().width, bh = b.c.getBounds().height;
+      // two bubbles side by side would overlap: lift this one above the other
+      for (const r of placed) if (Math.abs(r.x - x) < (r.w + bw) / 2 + 4 && Math.abs(r.y - y) < (r.h + bh) / 2 + 2) y = r.y - (r.h + bh) / 2 - 4;
+      placed.push({ x, y, w: bw, h: bh });
+      b.c.setPosition(x, y).setAlpha(Math.min(1, b.t / 0.3));
+    }
   }
 
   // ---------- effects ----------
@@ -557,6 +625,8 @@ export class GameScene extends Phaser.Scene {
     this.heroShadow.setPosition(h.x, fy - 1).setScale(1 - lift * 0.5).setAlpha(h.state === 'climb' ? 0 : 1);
     this.hero.flash(h.state === 'hurt' && h.t < 0.08);
     this.aura.setFillStyle(h.counter > 0 ? 0xffd23c : 0x9fe0ff, 0.25).setVisible(!!h.buff || h.counter > 0).setPosition(h.x, h.y - 40).setScale(1 + Math.sin(t * 6) * 0.06).setAlpha(0.18 + Math.sin(t * 6) * 0.06);
+
+    this.stepBanter(dt);
 
     // objective bits
     if (this.npcView && w.npc) {

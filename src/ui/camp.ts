@@ -18,7 +18,7 @@ import {
 } from '../save';
 import { UI_CSS } from './style';
 import { ACHIEVEMENTS, DAILY_BONUS, achievements, checkUnlocks, claimAch, claimBonus, claimKaijuQuest, claimQuest, claimable, dailyQuests, kaijuQuestState, rewardText, track, unlockProgress } from '../quests';
-import { STORIES, VARIANT_INFO, beatBefore } from '../story/stories';
+import { STORIES, VARIANT_INFO, beatBefore, isMinorBeat } from '../story/stories';
 import { playStory } from './story';
 import { fsButton } from './title';
 import { isMuted, sfx, toggleMute } from '../audio';
@@ -166,7 +166,7 @@ function mapPage(): string {
       <div class="lv">Clear: ${rewardLine(sel)}</div>
       ${sel.objective ? `<div class="lv" style="color:#ffd27a">${({ escort: '🧁 Objective: escort the lost Crumblet to the exit', fetch: `📜 Objective: grab the Recipe Scroll within ${sel.objective.t}s, then hold out`, survive: `⏱ Objective: hold out for ${sel.objective.t}s` })[sel.objective.kind]} (+ bonus Bento)</div>` : ''}
       ${STORIES[p.species]?.variants[sel.id] ? (() => { const v = VARIANT_INFO[STORIES[p.species].variants[sel.id]]; return `<div class="lv vtx">${v.icon} Story twist: <b>${v.name}</b> — ${v.desc}</div>`; })() : ''}
-      <div class="lv">📖 ${STORIES[p.species]?.title ?? ''}${beatBefore(sel.id, sel.id === '1-1').some(b => p.seen.includes(b)) || (sel.boss && p.seen.includes(`w${sel.world}-after`)) ? ` <button class="pill" data-replay="${sel.id}" style="font-size:1.6vmin;padding:0.3vmin 1vmin">REPLAY</button>` : ''}</div>
+      <div class="lv">📖 ${STORIES[p.species]?.title ?? ''}${beatBefore(sel.id, sel.id === '1-1').some(b => p.seen.includes(b)) || (sel.boss && p.seen.includes(`w${sel.world}-after`)) ? ` <button class="pill" data-replay="${sel.id}" style="font-size:1.6vmin;padding:0.3vmin 1vmin">REPLAY</button>` : ''} <button class="pill" data-act="storymode" style="font-size:1.6vmin;padding:0.3vmin 1vmin">${save.storyMode === 'key' ? 'KEY SCENES ONLY' : 'FULL STORY'}</button></div>
       ${rank ? `<div class="lv">Best: <b style="color:${RANK_CSS[rank]}">${rank}</b></div>` : ''}
       ${(save.keys ?? []).includes(sel.world) ? (() => { const b = BONUS_STAGES[sel.world - 1]; return `<button class="pill big secret" data-play="${b.id}">🗝 ${b.name} <small>Lv ${b.lv[0]}–${b.lv[1]}</small></button>`; })() : sel.id.endsWith('-7') ? '<div class="lv" style="color:#ffd27a">🗝 A secret chest here hides this world\'s key</div>' : ''}
       <button class="pill go big" data-play="${sel.id}" ${stageUnlocked(sel) ? '' : 'disabled'}>${stageUnlocked(sel) ? '▶ PLAY' : '🔒 LOCKED'}</button>
@@ -364,7 +364,7 @@ function onClick(e: MouseEvent): void {
     const s = stageById(ds.play);
     if (!stageUnlocked(s)) return;
     const p = hero();
-    const beats = beatBefore(s.id, !p.seen.includes('intro')).filter(b => !p.seen.includes(b));
+    const beats = beatBefore(s.id, !p.seen.includes('intro')).filter(b => !p.seen.includes(b) && !(save.storyMode === 'key' && isMinorBeat(b)));
     p.seen.push(...beats); persist();
     playStory(p.species, beats, () => { hideCamp(); onPlay(s.id); });
     return;
@@ -417,6 +417,7 @@ function onClick(e: MouseEvent): void {
       case 'best': { const n = equipBest(sp); flash = n ? `Equipped ${n} better item${n > 1 ? 's' : ''}` : 'Already wearing the best gear in your bag'; break; }
       case 'scroll': if (useScroll(sp)) flash = 'Skill points refunded!'; break;
       case 'hard': save.hard = !save.hard; persist(); break;
+      case 'storymode': save.storyMode = save.storyMode === 'key' ? 'full' : 'key'; persist(); flash = save.storyMode === 'key' ? 'Story: only the big scenes (stage 1, your nemesis, the boss)' : 'Story: a short scene before every stage'; break;
       case 'mine': bagMine = !bagMine; selItem = null; break;
       case 'bonus': { const r = claimBonus(); if (r) { flash = 'Daily bonus: ' + r; sfx('reveal5'); } break; }
       case 'mute': toggleMute(); break;

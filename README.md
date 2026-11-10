@@ -82,3 +82,9 @@ Checks: tests/props.test.ts, `node scripts/props-shot.mjs`.
 Objectives (stage.objective, world.ts stepObjective): stage 4 escort the lost Crumblet (follows you, monsters hurt it,
 the exit needs it there), stage 6 fetch the Recipe Scroll within 75 s then hold out 25 s, stage 8 survive 45 s of waves.
 Completing one adds a bonus Bento. Checks: tests/objectives.test.ts, `node scripts/objective-shot.mjs`.
+
+## More story (src/story/more/k<species>.ts, src/story/banter.ts)
+A short punny scene before every stage that has none (beats w{N}-s{2,3,4,6,7,8,9}, 336 in all), skippable with the
+"FULL STORY / KEY SCENES ONLY" toggle on the stage card (save.storyMode). In stages, speech bubbles that don't pause play:
+each monster kind taunts the first time it's on screen (TAUNTS), your kaiju quips on big combos, low HP, perfect dodges,
+level-ups, secrets, explosions, mimics and objectives (QUIPS). Checks: tests/banter.test.ts, `node scripts/banter-shot.mjs`.

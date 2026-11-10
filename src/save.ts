@@ -35,6 +35,8 @@ export interface Save {
   spicy?: Spicy[];
   /** World Keys found in secret chests (open that world's secret bonus stage) */
   keys?: number[];
+  /** 'full' = a scene before every stage, 'key' = only the big ones (stage 1, nemesis, boss) */
+  storyMode?: 'full' | 'key';
 }
 
 // v2: per-kaiju progress, 4 starters, story (older v1 saves are not carried over)

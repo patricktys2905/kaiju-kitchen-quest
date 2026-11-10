@@ -5,6 +5,7 @@
 // w{N}-boss (before N-10), w{N}-after (after N-10), ending (after the last world). Bosses stay the same for everyone.
 
 import { NEMESIS_BEATS } from './nemesis';
+import { MORE_BEATS } from './more';
 
 export type Speaker = 'me' | 'boss' | 'n' | 'mold' | 'foe' | number;
 export type StoryLine = [Speaker, string];
@@ -310,8 +311,11 @@ export function beatBefore(stageId: string, firstEver: boolean): string[] {
   if (n === 1) out.push(`w${w}-open`);
   if (n === 5) out.push(`w${w}-elite`);
   if (n === 10) out.push(`w${w}-boss`);
+  if ([2, 3, 4, 6, 7, 8, 9].includes(n)) out.push(`w${w}-s${n}`); // short scene before every other stage
   return out;
 }
+/** Short between-stage scenes (skipped when the story setting is "key scenes only"). */
+export const isMinorBeat = (b: string) => /^w\d-s\d$/.test(b);
 export function beatAfter(stageId: string): string[] {
   const [w, n] = stageId.split('-').map(Number);
   return n === 10 ? [`w${w}-after`] : [];
@@ -319,6 +323,8 @@ export function beatAfter(stageId: string): string[] {
 
 // each kaiju's stage-5 beats are its own nemesis's (src/story/nemesis.ts)
 for (const [sp, b] of Object.entries(NEMESIS_BEATS)) if (STORIES[Number(sp)]) Object.assign(STORIES[Number(sp)].beats, b);
+// and a short scene before every other stage (src/story/more/k<species>.ts)
+for (const [sp, b] of Object.entries(MORE_BEATS)) if (STORIES[Number(sp)]) Object.assign(STORIES[Number(sp)].beats, b);
 
 /** Painted still behind a story line (art name in public/art), or null for the plain background + portraits.
  *  Per kaiju: the intro and the World 4 cliffhanger (from the Mold's first line on). Shared, since bosses are the
