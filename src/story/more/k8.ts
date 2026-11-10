@@ -67,6 +67,14 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w8-s7": [[16, "Whoa, a chocolate dude. Stay frosty. Psst, is it just me, or is the sun kinda melty?"], ["me", "YOU scared of melt too?! Me hold your flipper. We stay in shade together!"], [16, "Cool, cool, cool. Key chest's up on the ledge. You go boing, I guard the shade."]],
   "w8-s8": [["me", "Scarecrow! Me no scared of scarecrow. Me scared of HOT. Scarecrow not hot. Hehe!"], ["me", "Forty-five seconds. This one for Cubey! And Cubey Two! And new turtle friend!"]],
   "w8-s9": [["n", "From the greenhouse, a lumpy voice mumbles: \"Huh, is that a toy wheel in me? WHO AM I?\""], ["me", "Greenhouse warm like Oven. *gulp* Me scared AND me climb! Chef is friend!"]],
+  // World 9: The Supermarket.
+  "w9-s2": [["me", "Trolley! Me push trolley! Me no need trolley. Me just like push. Wheee!"], ["n", "RUMBLE! A giant rolling pin comes thundering down the Trolley Track!"], ["me", "PIN?! Pin follow me SHOPPING now?! Me RUN!"]],
+  "w9-s3": [["me", "Cereal Aisle! Ooh, Choco Puffs! Me on box! Me FAMOUS!"], ["me", "Gate lock. Me pull lever, pin go BONK! Bad guys go soggy like cereal!"]],
+  "w9-s4": [[10, "Hmph. Chocomunch. This Crumblet's never seen fruit and veg. Walk it to the exit. No snacking on grapes."], ["me", "Me walk muffin! Banana cartwheel at muffin? Me punch banana. Banana SPLIT!"]],
+  "w9-s6": [["me", "Bakery! Ooh, chocolate cake! You me cousin? Hi, cousin!"], ["me", "No. Focus. Me grab scroll, me hold line, THEN me say hi to cake family."]],
+  "w9-s7": [[14, "Let's GOOO! Big choco dude! Key chest's on the high ledge! I swim UP to it. Against the current!"], ["me", "Me no swim. Me sink like rock. Me go BOING instead!"], [14, "O-fish-ally awesome! Race ya!"]],
+  "w9-s8": [["lo2", "Hold out at the checkout, varlet? Thou shalt be scanned, bagged and SOLD!"], ["me", "Me no for sale! Me no on sale! Forty-five seconds. Me count all the way!"]],
+  "w9-s9": [["me", "FREEZER AISLE! Me LOVE freezer aisle! Me firm! Me crunchy! Me happiest golem!"], ["n", "Uh-oh! From the dark, a spooky voice wails: \"Woooo! Who's in my aisle?\""], ["me", "GHOST! *gulp* Me scared. Me still go. Me ALWAYS still go!"]],
 };
 
 export const QUIPS: Record<QuipKind, string[]> = {

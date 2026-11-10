@@ -21,6 +21,8 @@ const LIMBS = {
   10: 'IMPORTANT BODY RULE: Bluebeary has NO arms, NO hands and NO paws at all. It is only a round blueberry-bear head and body sitting in a paper muffin cup. Show the emotion ONLY with the face, the ears and by tilting, squashing or stretching the body.',
   2: 'IMPORTANT BODY RULE: Crabbage has exactly TWO big claws (both raised at the sides) and a few short pointed crab legs, exactly like the reference: never extra claws, arms or hands. Its ONLY two eyes sit on top of its two long eye stalks; its round body has NO eyes and NO eyebrows on it, only a mouth. Show the emotion with the mouth, the eyes and eyelids on the stalks, and the two claws, which are always crab pincers with two jaws (never fists or fingers).',
   5: 'IMPORTANT BODY RULE: Toastbat has NO arms and NO hands at all. Its only limbs are its two toast-slice wings on its back and tiny stubby feet, exactly like the reference. Show the emotion with the face, the ears and the wings.',
+  3: 'IMPORTANT BODY RULE: Bloblin has NO legs and NO real arms, only two tiny stubby jelly nubs, exactly like the reference.',
+  14: 'IMPORTANT BODY RULE: Salmonster has NO arms, NO hands and NO legs. Its only limbs are two side fins and its tail fin, exactly like the reference.',
   16: 'IMPORTANT BODY RULE: Minturtle has NO arms and NO hands. Its only limbs are four stubby turtle legs and a little tail, exactly like the reference.',
   9: 'IMPORTANT BODY RULE: Bubblegumbo has NO arms and NO hands. Its only limbs are four stubby elephant legs, a trunk and a tiny tail, exactly like the reference.',
   13: 'IMPORTANT BODY RULE: Avocadrake has NO arms and NO hands. Its only limbs are two small bat-like dragon wings and two tiny stubby feet, exactly like the reference.',

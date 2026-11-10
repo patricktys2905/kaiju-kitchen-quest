@@ -721,6 +721,27 @@ export class World {
       case 'firefloor':
         for (const m of this.targetsNear(h.x, h.y, sk.reach, 300)) this.zones.push({ id: nextId++, x: m.x, y: m.y, w: 120, t: 3, tick: 0.4, next: 0, dmg: atk * sk.dmg, kind: 'fire' });
         break;
+      case 'clones':
+        for (let i = 0; i < (sk.n ?? 2); i++) this.shots.push({ id: nextId++, x: h.x + h.face * 30, y: h.y - 30, vx: h.face * (300 + i * 80), vy: -300, t: -0.12 * i, dmg: atk * sk.dmg, hit: new Set(), from: 'hero', kx: sk.kx, ky: sk.ky, pierce: true, g: 1400, kind: 'minijelly', r: 18, bounces: 0, tx: 6 });
+        break;
+      case 'wobble':
+        h.buff = { atk: 0, def: 0.4, speed: 0, armor: false, t: 4, reflect: true };
+        this.events.push({ t: 'shock', x: h.x, y: h.y - 30, r: sk.reach });
+        for (const m of this.targetsNear(h.x, h.y, sk.reach, sk.h)) this.damageMob(m, atk * sk.dmg, Math.sign(m.x - h.x) || 1, { kx: sk.kx, ky: sk.ky, stun: 0.5 }, true);
+        break;
+      case 'jellyquake':
+        this.events.push({ t: 'shock', x: h.x, y: h.y, r: 320 });
+        for (const m of this.targetsNear(h.x, h.y, sk.reach, sk.h)) { this.damageMob(m, atk * sk.dmg, Math.sign(m.x - h.x) || 1, { kx: sk.kx, ky: sk.ky, stun: 0.8 }, true); if (MOBS[m.kind].brain !== 'boss') this.glue(m); }
+        break;
+      case 'tide':
+        this.shots.push({ id: nextId++, x: h.x + h.face * 50, y: h.y - 24, vx: h.face * 420, vy: 0, t: 0, dmg: atk * sk.dmg, hit: new Set(), from: 'hero', kx: sk.kx, ky: sk.ky, pierce: true, kind: 'tide', r: 50 });
+        break;
+      case 'salmon':
+        for (let i = 0; i < (sk.n ?? 4); i++) this.shots.push({ id: nextId++, x: h.x + h.face * 30, y: h.y - 50, vx: h.face * 520, vy: 0, t: -0.08 * i, dmg: atk * sk.dmg, hit: new Set(), from: 'hero', kx: sk.kx, ky: sk.ky, pierce: true, kind: 'salmon', r: 16, tx: h.y - 50 });
+        break;
+      case 'salmonrun':
+        for (let i = 0; i < (sk.n ?? 16); i++) { const x0 = h.x - h.face * 340 + (this.rand() - 0.5) * 120; this.shots.push({ id: nextId++, x: x0, y: h.y + 10, vx: h.face * (520 + this.rand() * 160), vy: -620 - this.rand() * 200, t: -i * 0.06, dmg: atk * sk.dmg, hit: new Set(), from: 'hero', kx: sk.kx, ky: sk.ky, pierce: true, g: 1300, kind: 'salmon', r: 18 }); }
+        break;
       case 'slowtime':
         this.events.push({ t: 'shock', x: h.x, y: h.y - 30, r: sk.reach });
         for (const m of this.targetsNear(h.x, h.y, sk.reach, sk.h)) { m.slow = Math.max(m.slow, 4); this.damageMob(m, atk * sk.dmg, Math.sign(m.x - h.x) || 1, { kx: sk.kx, ky: sk.ky, stun: 0.2 }, true); }
@@ -1173,6 +1194,16 @@ export class World {
           const before = this.dealt; mk(h.x, sk.reach * 2, sk.h, h.y + sk.h / 3);
           const heal = (this.dealt - before) * (sk.leech ?? 0.3); h.hp = Math.min(h.d.maxHp, h.hp + heal);
         }
+        break;
+      case 'jiggle': // boing up, splat down: glue everything nearby
+        if (!h.ticks) { h.ticks = 1; h.vy = -700; h.ground = false; h.on = null; }
+        h.vx = approach(h.vx, h.face * 160, 2000 * dt);
+        if (h.ticks === 1 && h.ground && h.t > 0.15) { h.ticks = 2; this.events.push({ t: 'shock', x: h.x, y: h.y, r: sk.reach }); mk(h.x, sk.reach * 2, sk.h); for (const m of this.targetsNear(h.x, h.y, sk.reach, 70)) if (MOBS[m.kind].brain !== 'boss') this.glue(m); }
+        break;
+      case 'upstream': // a salmon leap forward and up
+        if (!h.ticks) { h.ticks = 1; h.vy = -600; h.ground = false; h.on = null; }
+        h.vx = q < 0.9 ? h.face * 640 : approach(h.vx, 0, 3000 * dt);
+        mk(h.x + h.face * 20, sk.reach, sk.h, h.y + 20);
         break;
       case 'swing': // up and over, then a sticky slam on landing
         if (!h.ticks) { h.ticks = 1; h.vy = -560; h.ground = false; h.on = null; }
@@ -1721,6 +1752,7 @@ export class World {
         case 'yank': return ad > 110 && ad < 340;
         case 'scurry': return ad < 320;
         case 'zip': return ad < 360;
+        case 'swipe': return ad < 200;
         case 'boomhop': return ad < 420;
         case 'haymaker': return ad < 190;
         case 'vanish': return ad > 120;
@@ -1836,6 +1868,8 @@ export class World {
         break;
       case 'shell': m.shellT = 4; break;
       case 'scurry': m.vx = m.face * 720; m.hitDone = false; break;
+      case 'drip': for (const off of [-70, 0, 70]) this.puddles.push({ x: clamp(h.x + off, 30, this.stage.width - 30), y: h.y, t: 4, kind: 'slick', w: 60 }); this.events.push({ t: 'shock', x: h.x, y: h.y, r: 60 }); break;
+      case 'swipe': m.aimY = 0; break;
       case 'zip': m.vx = m.face * 880; m.hitDone = false; m.aimY = 0; break;
       case 'boomhop': m.vy = -820; m.vx = clamp((h.x - m.x) * 1.3, -520, 520); m.ground = false; m.on = null; m.hitDone = false; break;
       case 'haymaker': m.hitDone = false; break;
@@ -1904,6 +1938,14 @@ export class World {
     switch (m.move) {
       case 'heal': case 'call': case 'snipe': case 'lob': case 'fanshot': case 'rootspike': case 'heatwave': case 'puddle': case 'trap': case 'summon': case 'boomerang': case 'roar': case 'shell': case 'yank': case 'stingers':
         if (m.t > 0.5) this.endAttack(m);
+        break;
+      case 'drip': // Grey Gelato: three snooty drips land around you (slippery)
+        if (m.t > 0.5) this.endAttack(m);
+        break;
+      case 'swipe': // Grizzly Grizzle: two big swipes
+        if (m.aimY < 1 && m.t > 0.1) { m.aimY = 1; if (touch(def.range + 50, 100)) this.hurtHero(Math.round(m.atk * 0.8), m.face, m); }
+        if (m.aimY < 2 && m.t > 0.34) { m.aimY = 2; if (touch(def.range + 50, 100)) this.hurtHero(Math.round(m.atk * 0.9), m.face, m); }
+        if (m.t > 0.55) this.endAttack(m);
         break;
       case 'zip': // Jitters zips past you and straight back again
         if (!m.hitDone && touch(40, 80)) { m.hitDone = true; this.hurtHero(Math.round(m.atk * 0.7), Math.sign(m.vx) || m.face, m); }
@@ -2134,6 +2176,8 @@ export class World {
         if (Math.floor(s.t / 0.25) !== Math.floor((s.t - sdt) / 0.25)) s.hit = new Set();
         for (const m of this.targetsNear(s.x, s.y + 30, 140, 90)) if (MOBS[m.kind].brain !== 'boss') m.x += Math.sign(s.x - m.x) * 160 * sdt;
       }
+      if (s.kind === 'tide') for (const m of this.targetsNear(s.x, s.y + 20, 60, 70)) if (MOBS[m.kind].brain !== 'boss') m.x = clamp(m.x + Math.sign(s.vx) * 380 * sdt, 20, this.stage.width - 20);
+      if (s.kind === 'salmon' && !s.g && s.tx !== undefined) s.y = s.tx + Math.sin(s.t * 14) * 26;
       if (s.kind === 'gumball') { s.vy += 500 * sdt; const fl = s.vy > 0 ? this.floorBelow(s.x, s.y - s.vy * sdt, s.y, false) : null; if (fl) { s.y = fl.y - 2; s.vy = -Math.abs(s.vy) * 0.7; } }
       if (s.kind === 'gearroll' && Math.floor(s.t / 0.3) !== Math.floor((s.t - sdt) / 0.3)) s.hit = new Set(); // bumps again
       if (s.kind === 'snowball') { s.r = (s.r ?? 14) + 22 * sdt; s.dmg *= 1 + 0.5 * sdt; }
@@ -2144,6 +2188,7 @@ export class World {
         if (f) {
           if (s.kind === 'berry') this.mines.push({ id: nextId++, x: s.x, y: f.y, t: 0.2, dmg: s.dmg, kx: s.kx, ky: s.ky });
           else if (s.kind === 'goo') this.zones.push({ id: nextId++, x: s.x, y: f.y, w: 80, t: 4, tick: 0.1, next: 0, dmg: s.dmg, kind: 'goo', hit: new Set() });
+          else if (s.kind === 'minijelly' && (s.bounces ?? 0) < (s.tx ?? 6)) { s.bounces = (s.bounces ?? 0) + 1; s.y = f.y - 2; s.vy = -360; s.hit = new Set(); this.events.push({ t: 'bounce', x: s.x, y: f.y }); continue; }
           else if (s.kind === 'pit' && (s.bounces ?? 0) < (s.tx ?? 3)) { s.bounces = (s.bounces ?? 0) + 1; s.y = f.y - 2; s.vy = -440 * Math.pow(0.78, s.bounces); s.hit = new Set(); this.events.push({ t: 'bounce', x: s.x, y: f.y }); continue; }
           else if (s.kind === 'scoop') { this.events.push({ t: 'boom', x: s.x, y: f.y }); for (const m of this.targetsNear(s.x, f.y, 90, 70)) { this.damageMob(m, s.dmg, Math.sign(m.x - s.x) || 1, { kx: s.kx, ky: s.ky, stun: 0.6 }, true); this.applyFx(m, ['freeze'], h); } }
           else if (s.kind === 'sundae') { this.events.push({ t: 'shock', x: s.x, y: f.y, r: 170 }); for (const m of this.targetsNear(s.x, f.y, 170, 120)) this.damageMob(m, s.dmg, Math.sign(m.x - s.x) || 1, { kx: s.kx, ky: s.ky, stun: 1 }, true); this.zones.push({ id: nextId++, x: s.x, y: f.y, w: 300, t: 5, tick: 0.4, next: 0, dmg: 0, kind: 'ice', owner: h.idx }); }
@@ -2186,12 +2231,13 @@ export class World {
       else { const c = (this.time + z.offset) % z.period; st = c < z.on ? 'on' : c > z.period - 0.9 ? 'warn' : 'off'; }
       if (st !== z.state) { if (st === 'on') z.hit.clear(); z.state = st; if (z.kind !== 'ice') this.events.push({ t: 'hazard', i, on: st === 'on' }); }
       if (st !== 'on' || z.kind === 'ice') return;
+      if (z.kind === 'chill' && z.hit.size === 0 && !this.puddles.some(p => Math.abs(p.x - z.x) < 10)) this.puddles.push({ x: z.x, y: G, t: 3, kind: 'slick', w: 120 });
       if (z.kind === 'pollen' && z.hit.size === 0 && !this.puddles.some(p => Math.abs(p.x - z.x) < 10)) this.puddles.push({ x: z.x, y: G, t: 3, kind: 'slow', w: 110 });
       if (z.kind === 'sprinkler' && z.hit.size === 0 && !this.puddles.some(p => Math.abs(p.x - z.x) < 10)) this.puddles.push({ x: z.x, y: G, t: 3, kind: 'slick', w: 90 });
-      const reachUp = z.kind === 'vent' || z.kind === 'sprinkler' ? 110 : z.kind === 'pollen' ? 150 : z.kind === 'drop' || z.kind === 'wax' ? 70 : z.kind === 'tap' ? 900 : 60;
+      const reachUp = z.kind === 'vent' || z.kind === 'sprinkler' ? 110 : z.kind === 'pollen' || z.kind === 'chill' ? 150 : z.kind === 'drop' || z.kind === 'wax' ? 70 : z.kind === 'tap' ? 900 : 60;
       if (z.kind === 'wax' && z.hit.size === 0 && !this.puddles.some(p => Math.abs(p.x - z.x) < 10)) this.puddles.push({ x: z.x, y: G, t: 3, kind: 'slow', w: 70 });
       const inZone = (x: number, y: number) => Math.abs(x - z.x) < z.w / 2 && y >= G - reachUp;
-      const pct = (z.kind === 'burner' ? 0.12 : z.kind === 'vent' ? 0.06 : z.kind === 'tap' ? 0.07 : z.kind === 'wax' ? 0.11 : z.kind === 'sprinkler' ? 0.05 : z.kind === 'pollen' ? 0.05 : 0.15) * (z.phase2 ? 0.5 : 1);
+      const pct = (z.kind === 'burner' ? 0.12 : z.kind === 'vent' ? 0.06 : z.kind === 'tap' ? 0.07 : z.kind === 'wax' ? 0.11 : z.kind === 'sprinkler' ? 0.05 : z.kind === 'pollen' ? 0.05 : z.kind === 'chill' ? 0.06 : 0.15) * (z.phase2 ? 0.5 : 1);
       for (const h of this.heroes) {
         this.cur = h;
         const key = -1 - h.idx;
@@ -2199,6 +2245,7 @@ export class World {
           z.hit.add(key);
           this.hurtHero(h.d.maxHp * pct, Math.sign(h.x - z.x) || 1, undefined, true);
           if ((z.kind === 'vent' || z.kind === 'sprinkler') && (h.state as string) !== 'down') { h.vy = z.kind === 'sprinkler' ? -760 : -900; h.ground = false; h.on = null; }
+          if (z.kind === 'chill' && (h.state as string) !== 'down') { h.vx = (Math.sign(h.x - z.x) || 1) * 380; }
           if (z.kind === 'tap' && (h.state as string) !== 'down') { h.vx = (Math.sign(h.x - z.x) || 1) * 300; h.vy = Math.max(h.vy, 200); }
         }
       }
@@ -2318,7 +2365,7 @@ export function rankOf(run: RunStats, par: number): { rank: 'S' | 'A' | 'B' | 'C
 /** hero projectiles that live longer than a bolt */
 /** Bosses shrug off thrown kitchenware a bit (gear skills deal 40% to them). */
 const gearVs = (m: Mob) => (MOBS[m.kind].brain === 'boss' ? 0.4 : 1);
-const LONG_SHOTS = new Set(['gumball', 'trumpet', 'guacwave', 'gearroll', 'boomerang', 'homing', 'twister', 'snowball', 'wave', 'reflect']);
+const LONG_SHOTS = new Set(['minijelly', 'tide', 'salmon', 'gumball', 'trumpet', 'guacwave', 'gearroll', 'boomerang', 'homing', 'twister', 'snowball', 'wave', 'reflect']);
 const NEW_BRAINS = new Set(['healer', 'summoner', 'charger', 'sniper', 'turret', 'burrower', 'mimic']);
 
 const gbCache = new WeakMap<AttackDef[], AttackDef>(), lnCache = new WeakMap<AttackDef[], AttackDef>();

@@ -67,6 +67,14 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w8-s7": [["me", "Compost Keep! Rotting peels, worm tunnels, and a WHIFF of science! My tentacles are tingling!"], ["me", "Secret chest on a high ledge! Bouncy sponge, launch the squid! EUREKA, I'm airborne AGAIN!"]],
   "w8-s8": [[12, "Heyyy, duuude. *yaaawn* Nice helmet. Is it for straining boba?"], ["me", "It's for SCIENCE! Help me hold the Scarecrow Stand forty-five seconds? Sloba? Hellooo?"], [12, "Zzz... I'm steeped in it, dude. Zzz..."]],
   "w8-s9": [["n", "From the old Greenhouse, a voice mumbles: \"Who's out there? Want seconds? Nobody EVER wants seconds!\""], ["me", "Seconds? I want a SAMPLE! Spore-o-meter says ninety percent mystery! Up the steps we go!"]],
+  // World 9: The Supermarket.
+  "w9-s2": [["me", "Trolley Track! Note to self: shopping trolley plus jelly equals one very FAST squid! Wheee!"], ["n", "Uh-oh! A giant rolling pin comes rumbling down the aisle!"], ["me", "In a SUPERMARKET?! New hypothesis, same as always: RUN RIGHT! Very, VERY right!"]],
+  "w9-s3": [["me", "Cereal Aisle! Every box says \"part of a balanced breakfast\". I tested that. Results: CRUNCHY!"], ["me", "Gates locked? Lever, rolling pin, SPLAT! My favourite experiment, now on special offer!"]],
+  "w9-s4": [[10, "Hmph. Jelly. My Crumblet got lost by the bananas. Walk it out of Fruit and Veg. No squeezing the peaches."], ["me", "Assistant number nine! Rules one to seven still apply! Rule eight: no riding the trolleys! ...Okay, ONE ride."]],
+  "w9-s6": [["me", "Bakery Bluff! A Recipe Scroll on the bread shelf! Please say antidote. Please DON'T say garlic bread!"], ["lo2", "Hah! Unhand yon scroll, jelly! This bakery is VINTAGE, like me!"], ["me", "Vintage? Your best-before date says LAST TUESDAY! Grab it and hold on, GO!"]],
+  "w9-s7": [["me", "Canned Goods Keep! Tins are teeny time capsules! Fascinating! Also dented. VERY dented."], ["me", "Secret chest on a high ledge! Bouncy sponge, launch the squid! Clean-up on aisle EUREKA!"]],
+  "w9-s8": [[3, "Wibble wobble! Ooh, another jelly! Are you invited to the dessert table? I never am!"], ["me", "I'm a jelly SCIENTIST! Hold Checkout Chaos forty-five seconds with me and I'll write you an invite!"], [3, "Eeee! I'm set for success! That's the jiggle of it!"]],
+  "w9-s9": [["n", "From the frosty Frozen Aisle, a voice wails: \"Woooo! Who goes there? Don't you DARE throw me out!\""], ["me", "Spore-o-meter says ninety percent leftovers and ten percent spooky! Brrr! Into the cold we go!"]],
 };
 
 export const QUIPS: Record<QuipKind, string[]> = {

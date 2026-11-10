@@ -75,7 +75,7 @@ describe('props', () => {
       const evs = swing(w, 4);
       expect(evs.some(e => e.t === 'key' && e.world === wd.id), `world ${wd.id}`).toBe(true);
     }
-    expect(BONUS_STAGES.map(s => s.id)).toEqual(['S-1', 'S-2', 'S-3', 'S-4', 'S-5', 'S-6', 'S-7', 'S-8']);
+    expect(BONUS_STAGES.map(s => s.id)).toEqual(['S-1', 'S-2', 'S-3', 'S-4', 'S-5', 'S-6', 'S-7', 'S-8', 'S-9']);
     for (const b of BONUS_STAGES) expect(b.mobs.some(m => m.elite)).toBe(true);
   });
   it('the world\'s own platforms are not changed by a moving tray (each run has its own copy)', () => {

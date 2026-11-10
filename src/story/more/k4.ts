@@ -67,6 +67,14 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w8-s7": [["me", "Compost Keep! Ooh, warm and glowy with fireflies! And a chest on a high ledge!"], [12, "Heyyy, little light. *yaaawn* Moon's comin' up soon. No rush. Moon's never in a rush."], ["me", "Ooh, Sloba, that's so wise! Boing! Keys open doors, doors have windows, windows have MOONS!"]],
   "w8-s8": [["me", "Scarecrow Stand! Ooh, the sun's almost down! Forty-five seconds, then it's moon o'clock!"], [16, "Stay frosty, moth. Sun's leaving? Cool, cool, cool. I was NOT melting. Totally fine."], ["me", "Hee! I'll glow nice and cool for you, Minturtle! Here come the monsters!"]],
   "w8-s9": [["me", "Greenhouse Steps! Ooooh, glass all the way up! The moon's gonna look SO pretty through it!"], ["n", "From the Mystery Heap, a voice rumbles: \"A moon? Is there a MOON in me?! Hold on, lemme check!\""], ["me", "Nuh-uh! The moon lives in the sky! Flap flap!"]],
+  // World 9: The Supermarket.
+  "w9-s2": [["me", "Trolley Track! Ooh, a big round thing rolling down the aisle, all shiny under the lights. Moon?"], ["n", "Uh-oh! It's a giant rolling pin, rumbling down the aisle!"], ["me", "Nope! STILL not the moon! Clean-up on aisle EEP! Flap flap FLAP!"]],
+  "w9-s3": [["me", "Cereal Aisle! Ooh, Moon Puffs! A whole box of tiny moons! Hellooo, tiny moons!"], ["me", "Eep, the boxes are growling again! Ooh, a lever! One pull and the rolling pin gives 'em a big flat hug!"]],
+  "w9-s4": [[10, "Hmph. Moth. Stray Crumblet in Fruit and Veg. Lights are dim back there. Light it home, would ya?"], ["me", "Hi, little one! Snuggle into my glow. Ooh, a big round melon! Not the moon. See? I'm learning!"]],
+  "w9-s6": [["me", "Bakery Bluff! A Recipe Scroll at the end. Is it moon pie this time? Please, please be moon pie!"], ["lo2", "Hah! 'Tis a recipe for STALE crumpets, moth! Best before last Tuesday!"], ["me", "Aw, crumpets! Grabbing it anyway! Flap flap!"]],
+  "w9-s7": [["me", "Canned Goods Keep! A chest on a high ledge and a bouncy sponge below. Sponges are STILL so nice!"], [3, "Wibble wobble! Ooh, you glow like a dessert table candle! Is there a dessert table? Am I invited?"], ["me", "Hee! Come to my moon party, Bloblin! Boing! Keys open doors, doors have windows, windows have MOONS!"]],
+  "w9-s8": [["me", "Checkout Chaos! Ooh, the scanner glows red and goes beep! Hi, scanner! Forty-five seconds, go!"], [14, "Let's GOOO, moth! Fly against the breeze! That's o-fish-ally how champions do it!"], ["me", "Ooh, okay! Flap flap FLAP! Wheee, I'm going backwards!"]],
+  "w9-s9": [["me", "The Frozen Aisle! Ooh, every freezer door has its own little light! Brrr, chilly moons!"], ["n", "From the Back Aisle, a spooky voice wails: \"Woooo! Turn off that glow! I like it DARK back here!\""], ["me", "Aww, that's just 'cause you've never had a nightlight! I'm coming!"]],
 };
 
 export const QUIPS: Record<QuipKind, string[]> = {

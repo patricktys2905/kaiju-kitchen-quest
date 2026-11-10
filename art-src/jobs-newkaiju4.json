@@ -1,0 +1,296 @@
+[
+ {
+  "name": "parts-3",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-3.png"
+  ],
+  "prompt": "Generate an image. This is a character from my 2D side-scrolling game (a wobbly lime jelly blob (Bloblin): a glossy bright green lime jelly mould with a happy face, a dollop of whipped cream and a cherry on top, a lime wedge stuck in its side, two tiny stubby jelly nubs for arms and no legs). I need it as a CUTOUT PUPPET PARTS SHEET so I can animate it. Draw the exact same character, same colours, outlines and shading style, but in a STRICT SIDE PROFILE facing RIGHT like a 2D platformer character (face looking right, one eye visible). Split it into SEPARATE parts laid out apart from each other with big empty gaps (no part touching another): 1) the BODY (the whole jelly with face, cream, cherry and lime wedge) with NO nubs on its sides, 2) one tiny stubby jelly NUB arm, 3) a second NUB arm. IMPORTANT: the body piece must have NO arms, legs, wings or feet drawn on it. Each limb has a rounded complete joint end. IMPORTANT BODY RULE: Bloblin has NO legs and NO real arms. It is a jelly blob that wobbles and hops; it has only two tiny stubby jelly nubs on its sides, exactly like the reference. Solid flat magenta (#FF00FF) background, no shadows, no labels, no text. Square 1:1 image."
+ },
+ {
+  "name": "w-blob1",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-peng3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading). A WEAPON themed for my hero a wobbly lime jelly blob (Bloblin): a wobbly jelly spoon with a cherry on the end (Jelly Spoon). Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT, centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "w-blob2",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-peng3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading). A WEAPON themed for my hero a wobbly lime jelly blob (Bloblin): a lime-wedge boomerang blade (Lime Slicer). Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT, centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "w-blob3",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-peng3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading). A WEAPON themed for my hero a wobbly lime jelly blob (Bloblin): a royal staff topped with a glowing jelly crown mould (Jelly Mould Sceptre). Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT, centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "a-blob1",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/a-peng3.png"
+  ],
+  "prompt": "Generate an image. The reference is an armour icon from my cute 2D kitchen action RPG. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading). ARMOR themed for my hero a wobbly lime jelly blob (Bloblin): a little paper cupcake-cup vest (Paper Cup Vest), shown flat and centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "a-blob2",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/a-peng3.png"
+  ],
+  "prompt": "Generate an image. The reference is an armour icon from my cute 2D kitchen action RPG. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading). ARMOR themed for my hero a wobbly lime jelly blob (Bloblin): armour made of clear jelly cubes (Jelly Cube Mail), shown flat and centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "a-blob3",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/a-peng3.png"
+  ],
+  "prompt": "Generate an image. The reference is an armour icon from my cute 2D kitchen action RPG. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading). ARMOR themed for my hero a wobbly lime jelly blob (Bloblin): a gleaming lime-and-gold jelly mould armour (Golden Mould Plate), shown flat and centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "k-blob",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/k-peng.png"
+  ],
+  "prompt": "Generate an image. The reference is a charm icon from my cute 2D kitchen action RPG. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading). A CHARM themed for my hero a wobbly lime jelly blob (Bloblin): a little cherry-stem charm (Cherry Charm), centred, filling 75% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "u-wobble-crown",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/a-peng3.png"
+  ],
+  "prompt": "Generate an image. The reference is an item icon from my cute 2D kitchen action RPG. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY ARMOR themed for my hero a wobbly lime jelly blob (Bloblin), called \"Wobble Crown\": a jiggly jelly crown armour with glowing cherries and lime gems. Make it look special and magical (a faint golden glow, sparkles), clearly fancier than the reference. Shown flat and centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "u-cherry-bomb-spoon",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-peng3.png"
+  ],
+  "prompt": "Generate an image. The reference is an item icon from my cute 2D kitchen action RPG. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY WEAPON themed for my hero a wobbly lime jelly blob (Bloblin), called \"Cherry Bomb Spoon\": a giant golden spoon holding a glowing explosive cherry. Make it look special and magical (a faint golden glow, sparkles), clearly fancier than the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT, centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "face-3-happy",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-3.png"
+  ],
+  "prompt": "Generate an image. The reference is my game character, a wobbly lime jelly blob (Bloblin): a glossy bright green lime jelly mould with a happy face, a dollop of whipped cream and a cherry on top, a lime wedge stuck in its side, two tiny stubby jelly nubs for arms and no legs. Draw THIS SAME character as a cartoon story portrait showing a strong, funny, very readable emotion: laughing with joy: eyes squeezed into happy arcs, a huge open-mouthed grin, bouncing with delight, little sparkles around it. IMPORTANT BODY RULE: Bloblin has NO legs and NO real arms. It is a jelly blob that wobbles and hops; it has only two tiny stubby jelly nubs on its sides, exactly like the reference. Keep it EXACTLY on-model: same body shape and proportions, same colours, same face design, same thick dark outlines and glossy cel shading as the reference. Do not add any clothes, props, extra limbs or extra characters. Same three-quarter view and facing direction as the reference, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Portrait 4:5 image."
+ },
+ {
+  "name": "face-3-angry",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-3.png"
+  ],
+  "prompt": "Generate an image. The reference is my game character, a wobbly lime jelly blob (Bloblin): a glossy bright green lime jelly mould with a happy face, a dollop of whipped cream and a cherry on top, a lime wedge stuck in its side, two tiny stubby jelly nubs for arms and no legs. Draw THIS SAME character as a cartoon story portrait showing a strong, funny, very readable emotion: furious and fired up: deep scowling brows, gritted teeth, leaning forward, a little puff of angry steam above its head. IMPORTANT BODY RULE: Bloblin has NO legs and NO real arms. It is a jelly blob that wobbles and hops; it has only two tiny stubby jelly nubs on its sides, exactly like the reference. Keep it EXACTLY on-model: same body shape and proportions, same colours, same face design, same thick dark outlines and glossy cel shading as the reference. Do not add any clothes, props, extra limbs or extra characters. Same three-quarter view and facing direction as the reference, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Portrait 4:5 image."
+ },
+ {
+  "name": "face-3-shocked",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-3.png"
+  ],
+  "prompt": "Generate an image. The reference is my game character, a wobbly lime jelly blob (Bloblin): a glossy bright green lime jelly mould with a happy face, a dollop of whipped cream and a cherry on top, a lime wedge stuck in its side, two tiny stubby jelly nubs for arms and no legs. Draw THIS SAME character as a cartoon story portrait showing a strong, funny, very readable emotion: totally shocked: eyes wide as saucers with tiny pupils, jaw dropped open, leaning back in surprise, a sweat drop flying off its head. IMPORTANT BODY RULE: Bloblin has NO legs and NO real arms. It is a jelly blob that wobbles and hops; it has only two tiny stubby jelly nubs on its sides, exactly like the reference. Keep it EXACTLY on-model: same body shape and proportions, same colours, same face design, same thick dark outlines and glossy cel shading as the reference. Do not add any clothes, props, extra limbs or extra characters. Same three-quarter view and facing direction as the reference, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Portrait 4:5 image."
+ },
+ {
+  "name": "face-3-sad",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-3.png"
+  ],
+  "prompt": "Generate an image. The reference is my game character, a wobbly lime jelly blob (Bloblin): a glossy bright green lime jelly mould with a happy face, a dollop of whipped cream and a cherry on top, a lime wedge stuck in its side, two tiny stubby jelly nubs for arms and no legs. Draw THIS SAME character as a cartoon story portrait showing a strong, funny, very readable emotion: sad and worried: droopy teary eyes with one wobbly tear, a trembling frown, its whole body drooping. IMPORTANT BODY RULE: Bloblin has NO legs and NO real arms. It is a jelly blob that wobbles and hops; it has only two tiny stubby jelly nubs on its sides, exactly like the reference. Keep it EXACTLY on-model: same body shape and proportions, same colours, same face design, same thick dark outlines and glossy cel shading as the reference. Do not add any clothes, props, extra limbs or extra characters. Same three-quarter view and facing direction as the reference, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Portrait 4:5 image."
+ },
+ {
+  "name": "still-3-intro",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-3.png",
+   "art-src/ref-bg.png"
+  ],
+  "prompt": "Generate an image. The first reference is my character, a wobbly lime jelly blob (Bloblin): a glossy bright green lime jelly mould with a happy face, a dollop of whipped cream and a cherry on top, a lime wedge stuck in its side, two tiny stubby jelly nubs for arms and no legs; the second shows the painted background style. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Cinematic composition, wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. NO text, no letters, no writing on any labels or pages, no speech bubbles, no UI, no border, no signature, no humans. IMPORTANT BODY RULE: Bloblin has NO legs and NO real arms. It is a jelly blob that wobbles and hops; it has only two tiny stubby jelly nubs on its sides, exactly like the reference. Scene: Bloblin wobbles alone on a party plate on a kitchen counter, a tiny \"jelly of the day\" flag next to it (blank, no letters), looking at a row of empty dessert bowls, a little lonely but smiling."
+ },
+ {
+  "name": "still-3-cliff",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-3.png",
+   "art-src/ref-bg.png"
+  ],
+  "prompt": "Generate an image. The first reference is my character, a wobbly lime jelly blob (Bloblin): a glossy bright green lime jelly mould with a happy face, a dollop of whipped cream and a cherry on top, a lime wedge stuck in its side, two tiny stubby jelly nubs for arms and no legs; the second shows the painted background style. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Cinematic composition, wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. NO text, no letters, no writing on any labels or pages, no speech bubbles, no UI, no border, no signature, no humans. IMPORTANT BODY RULE: Bloblin has NO legs and NO real arms. It is a jelly blob that wobbles and hops; it has only two tiny stubby jelly nubs on its sides, exactly like the reference. Scene: Bloblin wobbles bravely at the dark rim of a giant steel kitchen sink at night. Down in the drain a sickly green glow and a fuzzy crown silhouette of mould rise."
+ },
+ {
+  "name": "still-3-end",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-3.png",
+   "art-src/ref-bg.png"
+  ],
+  "prompt": "Generate an image. The first reference is my character, a wobbly lime jelly blob (Bloblin): a glossy bright green lime jelly mould with a happy face, a dollop of whipped cream and a cherry on top, a lime wedge stuck in its side, two tiny stubby jelly nubs for arms and no legs; the second shows the painted background style. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Cinematic composition, wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. NO text, no letters, no writing on any labels or pages, no speech bubbles, no UI, no border, no signature, no humans. IMPORTANT BODY RULE: Bloblin has NO legs and NO real arms. It is a jelly blob that wobbles and hops; it has only two tiny stubby jelly nubs on its sides, exactly like the reference. Scene: Bloblin wobbles happily at the centre of a big dessert table at a party, surrounded by friends and other desserts, a big spoon raised in a toast, confetti."
+ },
+ {
+  "name": "mob-nem-gelatin",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/mob-bun.png"
+  ],
+  "prompt": "Generate an image. The reference is an enemy from my cute 2D side-scrolling action RPG set in a giant kitchen. I need a NEW story mini-boss: GREY GELATO, a smug melting grey gelato scoop in a sharp little cone with a tiny moustache, dripping, snooty, who thinks jelly is \"so last century\". Draw it in exactly the same art style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute but menacing). It is a MINI-BOSS, so a bit more detailed and imposing than a normal enemy, with a strong silhouette, and a few fuzzy green mould spots because the Mold Crown has corrupted it. Side view facing LEFT, whole body visible, centred, filling about 85% of the frame. IMPORTANT: a crisp dark outline all round with NO glow or haze around it. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1 image."
+ },
+ {
+  "name": "parts-14",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-14.png"
+  ],
+  "prompt": "Generate an image. This is a character from my 2D side-scrolling game (a salmon fish monster (Salmonster): a navy-blue salmon standing up on its tail, a bright pink-orange salmon-steak belly with white fat stripes, two side fins like arms, a big toothy friendly grin, a lemon slice on its head like a hat). I need it as a CUTOUT PUPPET PARTS SHEET so I can animate it. Draw the exact same character, same colours, outlines and shading style, but in a STRICT SIDE PROFILE facing RIGHT like a 2D platformer character (face looking right, one eye visible). Split it into SEPARATE parts laid out apart from each other with big empty gaps (no part touching another): 1) the BODY standing on its tail (head, lemon hat, salmon belly and tail fin) with NO side fins drawn on it, 2) one side FIN, 3) a second side FIN. IMPORTANT: the body piece must have NO arms, legs, wings or feet drawn on it. Each limb has a rounded complete joint end. IMPORTANT BODY RULE: Salmonster has NO arms, NO hands and NO legs. Its only limbs are two side fins and its tail fin, exactly like the reference. Solid flat magenta (#FF00FF) background, no shadows, no labels, no text. Square 1:1 image."
+ },
+ {
+  "name": "w-fish1",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-peng3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading). A WEAPON themed for my hero a salmon fish monster (Salmonster): a sushi chef knife shaped like a fish fin (Fin Blade). Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT, centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "w-fish2",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-peng3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading). A WEAPON themed for my hero a salmon fish monster (Salmonster): a big wooden oar (Rowing Oar). Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT, centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "w-fish3",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-peng3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading). A WEAPON themed for my hero a salmon fish monster (Salmonster): a golden trident with lemon-slice prongs (Lemon Trident). Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT, centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "a-fish1",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/a-peng3.png"
+  ],
+  "prompt": "Generate an image. The reference is an armour icon from my cute 2D kitchen action RPG. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading). ARMOR themed for my hero a salmon fish monster (Salmonster): a little rain slicker vest (Rain Slicker), shown flat and centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "a-fish2",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/a-peng3.png"
+  ],
+  "prompt": "Generate an image. The reference is an armour icon from my cute 2D kitchen action RPG. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading). ARMOR themed for my hero a salmon fish monster (Salmonster): a fishing-net armour with corks (Fishnet Mail), shown flat and centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "a-fish3",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/a-peng3.png"
+  ],
+  "prompt": "Generate an image. The reference is an armour icon from my cute 2D kitchen action RPG. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading). ARMOR themed for my hero a salmon fish monster (Salmonster): a gleaming scale armour of silver fish scales (Silver Scale Armour), shown flat and centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "k-fish",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/k-peng.png"
+  ],
+  "prompt": "Generate an image. The reference is a charm icon from my cute 2D kitchen action RPG. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading). A CHARM themed for my hero a salmon fish monster (Salmonster): a little lemon-slice charm (Lemon Charm), centred, filling 75% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "u-upstream-paddle",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-peng3.png"
+  ],
+  "prompt": "Generate an image. The reference is an item icon from my cute 2D kitchen action RPG. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY WEAPON themed for my hero a salmon fish monster (Salmonster), called \"Upstream Paddle\": a magical glowing paddle with river waves swirling around it. Make it look special and magical (a faint golden glow, sparkles), clearly fancier than the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT, centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "u-lucky-lure-vest",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/a-peng3.png"
+  ],
+  "prompt": "Generate an image. The reference is an item icon from my cute 2D kitchen action RPG. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY ARMOR themed for my hero a salmon fish monster (Salmonster), called \"Lucky Lure Vest\": a fishing vest armour covered in shiny glowing fishing lures. Make it look special and magical (a faint golden glow, sparkles), clearly fancier than the reference. Shown flat and centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "face-14-happy",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-14.png"
+  ],
+  "prompt": "Generate an image. The reference is my game character, a salmon fish monster (Salmonster): a navy-blue salmon standing up on its tail, a bright pink-orange salmon-steak belly with white fat stripes, two side fins like arms, a big toothy friendly grin, a lemon slice on its head like a hat. Draw THIS SAME character as a cartoon story portrait showing a strong, funny, very readable emotion: laughing with joy: eyes squeezed into happy arcs, a huge open-mouthed grin, bouncing with delight, little sparkles around it. IMPORTANT BODY RULE: Salmonster has NO arms, NO hands and NO legs. Its only limbs are two side fins and its tail fin, exactly like the reference. Keep it EXACTLY on-model: same body shape and proportions, same colours, same face design, same thick dark outlines and glossy cel shading as the reference. Do not add any clothes, props, extra limbs or extra characters. Same three-quarter view and facing direction as the reference, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Portrait 4:5 image."
+ },
+ {
+  "name": "face-14-angry",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-14.png"
+  ],
+  "prompt": "Generate an image. The reference is my game character, a salmon fish monster (Salmonster): a navy-blue salmon standing up on its tail, a bright pink-orange salmon-steak belly with white fat stripes, two side fins like arms, a big toothy friendly grin, a lemon slice on its head like a hat. Draw THIS SAME character as a cartoon story portrait showing a strong, funny, very readable emotion: furious and fired up: deep scowling brows, gritted teeth, leaning forward, a little puff of angry steam above its head. IMPORTANT BODY RULE: Salmonster has NO arms, NO hands and NO legs. Its only limbs are two side fins and its tail fin, exactly like the reference. Keep it EXACTLY on-model: same body shape and proportions, same colours, same face design, same thick dark outlines and glossy cel shading as the reference. Do not add any clothes, props, extra limbs or extra characters. Same three-quarter view and facing direction as the reference, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Portrait 4:5 image."
+ },
+ {
+  "name": "face-14-shocked",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-14.png"
+  ],
+  "prompt": "Generate an image. The reference is my game character, a salmon fish monster (Salmonster): a navy-blue salmon standing up on its tail, a bright pink-orange salmon-steak belly with white fat stripes, two side fins like arms, a big toothy friendly grin, a lemon slice on its head like a hat. Draw THIS SAME character as a cartoon story portrait showing a strong, funny, very readable emotion: totally shocked: eyes wide as saucers with tiny pupils, jaw dropped open, leaning back in surprise, a sweat drop flying off its head. IMPORTANT BODY RULE: Salmonster has NO arms, NO hands and NO legs. Its only limbs are two side fins and its tail fin, exactly like the reference. Keep it EXACTLY on-model: same body shape and proportions, same colours, same face design, same thick dark outlines and glossy cel shading as the reference. Do not add any clothes, props, extra limbs or extra characters. Same three-quarter view and facing direction as the reference, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Portrait 4:5 image."
+ },
+ {
+  "name": "face-14-sad",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-14.png"
+  ],
+  "prompt": "Generate an image. The reference is my game character, a salmon fish monster (Salmonster): a navy-blue salmon standing up on its tail, a bright pink-orange salmon-steak belly with white fat stripes, two side fins like arms, a big toothy friendly grin, a lemon slice on its head like a hat. Draw THIS SAME character as a cartoon story portrait showing a strong, funny, very readable emotion: sad and worried: droopy teary eyes with one wobbly tear, a trembling frown, its whole body drooping. IMPORTANT BODY RULE: Salmonster has NO arms, NO hands and NO legs. Its only limbs are two side fins and its tail fin, exactly like the reference. Keep it EXACTLY on-model: same body shape and proportions, same colours, same face design, same thick dark outlines and glossy cel shading as the reference. Do not add any clothes, props, extra limbs or extra characters. Same three-quarter view and facing direction as the reference, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Portrait 4:5 image."
+ },
+ {
+  "name": "still-14-intro",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-14.png",
+   "art-src/ref-bg.png"
+  ],
+  "prompt": "Generate an image. The first reference is my character, a salmon fish monster (Salmonster): a navy-blue salmon standing up on its tail, a bright pink-orange salmon-steak belly with white fat stripes, two side fins like arms, a big toothy friendly grin, a lemon slice on its head like a hat; the second shows the painted background style. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Cinematic composition, wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. NO text, no letters, no writing on any labels or pages, no speech bubbles, no UI, no border, no signature, no humans. IMPORTANT BODY RULE: Salmonster has NO arms, NO hands and NO legs. Its only limbs are two side fins and its tail fin, exactly like the reference. Scene: Salmonster leaps out of a sink full of water on a kitchen counter, looking up at a shopping list stuck to the fridge (blank, no letters) with a fish drawn on it, very excited."
+ },
+ {
+  "name": "still-14-cliff",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-14.png",
+   "art-src/ref-bg.png"
+  ],
+  "prompt": "Generate an image. The first reference is my character, a salmon fish monster (Salmonster): a navy-blue salmon standing up on its tail, a bright pink-orange salmon-steak belly with white fat stripes, two side fins like arms, a big toothy friendly grin, a lemon slice on its head like a hat; the second shows the painted background style. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Cinematic composition, wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. NO text, no letters, no writing on any labels or pages, no speech bubbles, no UI, no border, no signature, no humans. IMPORTANT BODY RULE: Salmonster has NO arms, NO hands and NO legs. Its only limbs are two side fins and its tail fin, exactly like the reference. Scene: Salmonster leaps high above the dark rim of a giant steel kitchen sink at night, water splashing. Down in the drain a sickly green glow and a fuzzy crown silhouette of mould rise."
+ },
+ {
+  "name": "still-14-end",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-14.png",
+   "art-src/ref-bg.png"
+  ],
+  "prompt": "Generate an image. The first reference is my character, a salmon fish monster (Salmonster): a navy-blue salmon standing up on its tail, a bright pink-orange salmon-steak belly with white fat stripes, two side fins like arms, a big toothy friendly grin, a lemon slice on its head like a hat; the second shows the painted background style. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Cinematic composition, wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. NO text, no letters, no writing on any labels or pages, no speech bubbles, no UI, no border, no signature, no humans. IMPORTANT BODY RULE: Salmonster has NO arms, NO hands and NO legs. Its only limbs are two side fins and its tail fin, exactly like the reference. Scene: Salmonster swims joyfully upstream in a sparkling river at sunrise, leaping out of the water with a big grin, other fish cheering on the banks."
+ },
+ {
+  "name": "mob-nem-bear",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/mob-bun.png"
+  ],
+  "prompt": "Generate an image. The reference is an enemy from my cute 2D side-scrolling action RPG set in a giant kitchen. I need a NEW story mini-boss: GRIZZLY GRIZZLE, a big hungry grizzly bear made of a giant hamburger bun and charred patties, a fishing rod over its shoulder, licking its lips. Draw it in exactly the same art style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute but menacing). It is a MINI-BOSS, so a bit more detailed and imposing than a normal enemy, with a strong silhouette, and a few fuzzy green mould spots because the Mold Crown has corrupted it. Side view facing LEFT, whole body visible, centred, filling about 85% of the frame. IMPORTANT: a crisp dark outline all round with NO glow or haze around it. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1 image."
+ }
+]

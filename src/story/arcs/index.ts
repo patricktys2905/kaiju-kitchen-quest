@@ -18,6 +18,8 @@ import * as k9 from './k9';
 import * as k18 from './k18';
 import * as k12 from './k12';
 import * as k16 from './k16';
+import * as k3 from './k3';
+import * as k14 from './k14';
 
 export interface Arc { TITLE: string; TAGLINE: string; ARC: Record<string, StoryLine[]>; NEMESIS: Record<string, StoryLine[]> }
-export const ARCS: Record<number, Arc> = { 0: k0, 1: k1, 2: k2, 4: k4, 5: k5, 6: k6, 7: k7, 8: k8, 10: k10, 11: k11, 15: k15, 17: k17, 13: k13, 19: k19, 9: k9, 18: k18, 12: k12, 16: k16 };
+export const ARCS: Record<number, Arc> = { 0: k0, 1: k1, 2: k2, 4: k4, 5: k5, 6: k6, 7: k7, 8: k8, 10: k10, 11: k11, 15: k15, 17: k17, 13: k13, 19: k19, 9: k9, 18: k18, 12: k12, 16: k16, 3: k3, 14: k14 };

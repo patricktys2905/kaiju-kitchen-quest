@@ -66,7 +66,8 @@ export class Bot {
     if (!alive.length) { // go to the exit
       if (h.state === 'climb') { inp.down = true; return inp; } // finished the last monster mid-ladder: climb down first
       if (Math.abs(h.y - w.stage.groundY) > 2 && h.ground) { inp.down = true; inp.jump = (w.time * 10 | 0) % 2 === 0; return inp; }
-      inp[w.exitX > h.x ? 'right' : 'left'] = true;
+      const goal = w.scroll && !w.scroll.got ? w.scroll.x : w.exitX; // fetch stages: the scroll first
+      inp[goal > h.x ? 'right' : 'left'] = true;
       return inp;
     }
     // nearest target, preferring ones on our level

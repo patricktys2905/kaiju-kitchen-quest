@@ -157,6 +157,20 @@ export const CLASSES: HeroClass[] = [
     combo: [A({ dur: 0.36, hit: [0.1, 0.2], reach: 68 }), A({ dur: 0.36, hit: [0.1, 0.2], reach: 70, dmg: 1.15 }), A({ dur: 0.56, hit: [0.2, 0.34], reach: 92, h: 76, dmg: 2.3, kx: 440, ky: -300, lunge: 60, stun: 0.8 })],
     air: A({ dur: 0.36, reach: 70, h: 70, dmg: 1.1, kx: 150, ky: 220 }),
   },
+  {
+    species: 3, name: 'Bloblin', role: 'Jiggly support: sticky splats, jelly clones, a wobble shield',
+    hp: 150, atk: 10, speed: 230, jump: 760,
+    base: { str: 4, dex: 4, int: 6, vit: 7 }, grow: { str: 1, dex: 1, int: 1, vit: 2 },
+    combo: [A({ dur: 0.32, hit: [0.08, 0.18], reach: 66 }), A({ dur: 0.32, hit: [0.08, 0.18], reach: 68, dmg: 1.1 }), A({ dur: 0.5, hit: [0.16, 0.3], reach: 90, h: 80, dmg: 2.1, kx: 420, ky: -340, lunge: 80, stun: 0.7 })],
+    air: A({ dur: 0.32, reach: 72, h: 76, dmg: 1.15, kx: 150, ky: 260 }),
+  },
+  {
+    species: 14, name: 'Salmonster', role: 'River rusher: upstream leaps, tidal waves, salmon swarms',
+    hp: 140, atk: 12, speed: 260, jump: 740,
+    base: { str: 7, dex: 5, int: 3, vit: 5 }, grow: { str: 2, dex: 1, int: 0, vit: 2 },
+    combo: [A({ dur: 0.28, hit: [0.06, 0.15], reach: 70 }), A({ dur: 0.28, hit: [0.06, 0.15], reach: 72, dmg: 1.1 }), A({ dur: 0.46, hit: [0.14, 0.28], reach: 94, dmg: 2.1, kx: 440, ky: -340, lunge: 130, stun: 0.6 })],
+    air: A({ dur: 0.3, reach: 74, h: 74, dmg: 1.15, kx: 160, ky: 260 }),
+  },
 ];
 
 export function classOf(species: number): HeroClass {

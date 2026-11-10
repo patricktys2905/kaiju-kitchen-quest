@@ -1,0 +1,10 @@
+[
+ {
+  "name": "face-3-happy",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-3.png"
+  ],
+  "prompt": "Generate an image. The reference is my game character, a wobbly lime jelly blob (Bloblin): a glossy bright green lime jelly mould with a happy face, a dollop of whipped cream and a cherry on top, a lime wedge stuck in its side, two tiny stubby jelly nubs for arms and no legs. Draw THIS SAME character as a cartoon story portrait showing a strong, funny, very readable emotion: laughing with joy: eyes squeezed into happy arcs, a huge open-mouthed grin, bouncing with delight, little sparkles around it. IMPORTANT BODY RULE: Bloblin has NO legs and NO real arms. It is a jelly blob that wobbles and hops; it has only two tiny stubby jelly nubs on its sides, exactly like the reference. Keep it EXACTLY on-model: same body shape and proportions, same colours, same face design, same thick dark outlines and glossy cel shading as the reference. Do not add any clothes, props, extra limbs or extra characters. Same three-quarter view and facing direction as the reference, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Portrait 4:5 image."
+ }
+]

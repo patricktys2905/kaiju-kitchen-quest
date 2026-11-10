@@ -31,7 +31,7 @@ type Tab = 'map' | 'free' | 'hero' | 'skills' | 'bag' | 'market' | 'boxes' | 'qu
 type BagTab = Slot | 'items';
 const RANK_CSS: Record<Rank, string> = { S: '#ffd23c', A: '#7ee87e', B: '#7ac0ff', C: '#d8c8d8', D: '#a89898' };
 const TIER_CSS: Record<BoxTier, string> = { 1: '#e0c09a', 2: '#7ee87e', 3: '#7ac0ff', 4: '#ffd23c', 5: '#ff8af4' };
-export const SKILL_ICON: Record<SkillKind, string> = { swing: '🌿', nap: '😴', slowtime: '🐌', wall: '🧇', scoop: '🍨', chipstorm: '🍫', snooze: '💤', sundae: '🍨', bubbletrap: '🫧', gumball: '🍬', trumpet: '🎺', hops: '🦘', flurry: '🥊', cakebomb: '🧁', megabubble: '🎈', tko: '💫', pitbounce: '🥑', guac: '🥣', gust: '🌬️', drop: '🌶️', screech: '🦉', volley: '🌮', guacflood: '🌊', fiesta: '🪅', cone: '💥', slam: '🌋', dash: '⚡', bolt: '✨', spin: '🌀', uppercut: '⤴️', mines: '🫐', buff: '🛡️', nova: '🌟', fan: '🎐', heal: '🥟',
+export const SKILL_ICON: Record<SkillKind, string> = { jiggle: '🟢', clones: '👯', wobble: '🫨', upstream: '🐟', tide: '🌊', salmon: '🐠', jellyquake: '💥', salmonrun: '🎏', swing: '🌿', nap: '😴', slowtime: '🐌', wall: '🧇', scoop: '🍨', chipstorm: '🍫', snooze: '💤', sundae: '🍨', bubbletrap: '🫧', gumball: '🍬', trumpet: '🎺', hops: '🦘', flurry: '🥊', cakebomb: '🧁', megabubble: '🎈', tko: '💫', pitbounce: '🥑', guac: '🥣', gust: '🌬️', drop: '🌶️', screech: '🦉', volley: '🌮', guacflood: '🌊', fiesta: '🪅', cone: '💥', slam: '🌋', dash: '⚡', bolt: '✨', spin: '🌀', uppercut: '⤴️', mines: '🫐', buff: '🛡️', nova: '🌟', fan: '🎐', heal: '🥟',
   vortex: '🌪️', boomerang: '🍕', whip: '🦑', pull: '🪝', geyser: '⚗️', counter: '🦀', pounce: '🧀', swoop: '🦇', blink: '👤', rain: '🍞', zone: '♨️', drain: '🍜', breath: '🔥', orbit: '🍙', twister: '🌀', throw: '🤼', bulldoze: '🐂', roll: '🦔', goo: '🌭', radial: '📍', slide: '🐧', snowball: '⛄', freeze: '🧊',
   rampage: '🍓', meteor: '☄️', slashall: '🔪', beam: '🌙', tremor: '🌋', homing: '🎯', wave: '🍫', firefloor: '♨️', blizzard: '🌨️' };
 const SLOT_NAMES: Record<Slot, string> = { weapon: 'Weapon', armor: 'Armor', charm: 'Charm' };
@@ -46,11 +46,12 @@ const MAP_POS: Record<string, [number, number]> = {
   '6-1': [11, 86], '6-2': [23, 80], '6-3': [36, 82], '6-4': [43, 66], '6-5': [53, 56], '6-6': [62, 56], '6-7': [70, 52], '6-8': [74, 38], '6-9': [81, 33], '6-10': [87, 22],
   '7-1': [5, 92], '7-2': [15, 85], '7-3': [28, 84], '7-4': [40, 82], '7-5': [50, 72], '7-6': [62, 70], '7-7': [79, 64], '7-8': [82, 48], '7-9': [77, 36], '7-10': [86, 28],
   '8-1': [12, 88], '8-2': [24, 80], '8-3': [33, 68], '8-4': [46, 62], '8-5': [54, 54], '8-6': [48, 42], '8-7': [56, 32], '8-8': [66, 30], '8-9': [72, 22], '8-10': [79, 14],
+  '9-1': [28, 74], '9-2': [40, 70], '9-3': [62, 72], '9-4': [72, 58], '9-5': [60, 47], '9-6': [50, 30], '9-7': [36, 46], '9-8': [24, 40], '9-9': [28, 22], '9-10': [75, 20],
   '2-1': [52, 77], '2-2': [61, 67], '2-3': [69, 61], '2-4': [75, 54], '2-5': [79, 46], '2-6': [77, 38], '2-7': [81, 30], '2-8': [79, 22], '2-9': [83, 15], '2-10': [85, 7],
 };
 
 /** Map pages: which painted map shows which worlds. */
-const MAPS = [{ img: 'map-world', name: 'Kitchen', worlds: [1, 2] }, { img: 'map-oven', name: 'Oven', worlds: [3] }, { img: 'map-pantry', name: 'Pantry', worlds: [4] }, { img: 'map-sink', name: 'Sink', worlds: [5] }, { img: 'map-dining', name: 'Dining Room', worlds: [6] }, { img: 'map-backyard', name: 'Backyard', worlds: [7] }, { img: 'map-garden', name: 'Garden', worlds: [8] }];
+const MAPS = [{ img: 'map-world', name: 'Kitchen', worlds: [1, 2] }, { img: 'map-oven', name: 'Oven', worlds: [3] }, { img: 'map-pantry', name: 'Pantry', worlds: [4] }, { img: 'map-sink', name: 'Sink', worlds: [5] }, { img: 'map-dining', name: 'Dining Room', worlds: [6] }, { img: 'map-backyard', name: 'Backyard', worlds: [7] }, { img: 'map-garden', name: 'Garden', worlds: [8] }, { img: 'map-market', name: 'Supermarket', worlds: [9] }];
 
 let el: HTMLElement;
 let tab: Tab = 'map';

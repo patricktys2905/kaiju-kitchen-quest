@@ -67,6 +67,14 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w8-s7": [[16, "Stay frosty, dragon. Key chest's on the high ledge. I'd go, but it's sunny up there. Cool, cool, cool."], ["me", "Fear not, shell friend! I shall point my fire AWAY from you. Sponge, old pal! Boing!"]],
   "w8-s8": [["lo2", "Hold out amongst the turnips, old dragon? At thy age, thou art practically a vegetable!"], ["me", "Age jokes AGAIN?! Forty-five seconds, breadstick! That's a turnip for the books! FWOOSH!"]],
   "w8-s9": [["n", "From the greenhouse, a lumpy voice mumbles: \"Huh! Is that a SOCK in me? When did I eat a sock?\""], ["me", "A sock in the meatloaf! Proverb: \"Always check inside the meatloaf.\" Hrrm! It begins to make sense!"]],
+  // World 9: The Supermarket.
+  "w9-s2": [["me", "A trolley track! Proverb: \"The wise shopper walks, and never runs, in the aisles.\""], ["n", "RUMBLE! A giant rolling pin comes rolling down the Trolley Track!"], ["me", "Proverb update: \"Unless the pin rolls!\" Clean-up on aisle nine! HUP HUP HUP!"]],
+  "w9-s3": [["me", "The Cereal Aisle! Boxes like temples, and puffed rice everywhere. At last, some respect for rice!"], ["me", "The gates lock! Lever up top, rolling pin waiting. Proverb: \"Breakfast is served, flat.\" BONK!"]],
+  "w9-s4": [[10, "Hmph. Dragon. This Crumblet wants to see the fruit and veg. Walk it to the exit, or else."], ["me", "With honour, papa bear! Little one, those bananas are bruised and grumpy. Do NOT hug them."], [10, "It's wearing a tiny shopping bag hat. Don't look at me. It's the misters, okay?"]],
+  "w9-s6": [["me", "Bakery Bluff! Fresh bread, at last. Sir Stale would hate it here. Hrrm, I love it already."], ["me", "Grab the Recipe Scroll and hold the line! Proverb: \"Rice before bread.\" Sorry, baguettes!"]],
+  "w9-s7": [[14, "Let's GOOO! Old dragon! Key chest's on the high ledge. I'd swim up, but there's no current!"], ["me", "Then ride the sponge, fish friend! Proverb: \"Sushi and salmon are the best of pals.\""], [14, "Wait. SUSHI?! Holy mackerel! Ahem. O-fish-ally fine with it. Go go GO!"]],
+  "w9-s8": [["lo2", "Hold out at the checkout, old dragon? Thou art centuries past thy best-before date!"], ["me", "Age jokes, EXPIRED edition?! Forty-five seconds, breadstick! Then YOU check out! FWOOSH!"]],
+  "w9-s9": [["n", "From the Frozen Aisle, a spooky voice wails: \"Woooo! Don't open me! Nobody remembers what's in meee!\""], ["me", "Hrrm! Proverb: \"Always check behind the Tupperware lid.\" Brrr. I shall check fast, then thaw."]],
 };
 
 export const QUIPS: Record<QuipKind, string[]> = {

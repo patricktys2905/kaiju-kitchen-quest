@@ -198,3 +198,12 @@ Hazards next to bouncy sponges are slid to a free spot (`awayFromSponges`). Slob
 `slowtime`, ult `snooze`; nemesis Jitters (`nbird`, `zip`). Minturtle: aimed freezing `scoop`, `wall` (world.walls block
 monsters and mob shots), `chipstorm`, ult `sundae`; nemesis Hot Fudge Hare (`nhare`, `boomhop`). Briefs: docs/WORLD8-BRIEF.md,
 docs/NEWKAIJU3-BRIEF.md. Art: `node scripts/w8-jobs.mjs [stills]`, `node scripts/newkaiju3-jobs.mjs`. Screens: `node scripts/w8-shot.mjs`.
+
+## World 9: The Supermarket + Bloblin (3) and Salmonster (14)
+WORLDS[8] (Lv 91-100, level cap 100): trolley / bag / scanner / banana / can2 / melon (+ lost lids), freezer-door `chill`
+hazard (push + ice slick), boss **The Tupperwraith** (`tupper`: lid boomerangs, murky puddles, lid summons). The bot now goes
+back for the Recipe Scroll if it rode past it (fetch stages were undercounted). Bloblin: `jiggle` (glue splat), bouncing
+`clones`, `wobble` (burst + 40% DR + reflect), ult `jellyquake`; nemesis Grey Gelato (`ngelato`, `drip`). Salmonster:
+`upstream`, `tide` (carries monsters), wavy `salmon`, ult `salmonrun`; nemesis Grizzly Grizzle (`nbear`, `swipe`). All 20
+Kitchen Kaiju cast are now playable. Briefs: docs/WORLD9-BRIEF.md, docs/NEWKAIJU4-BRIEF.md. Screens: `node scripts/w9-shot.mjs`.
+Note: run one gem-gen at a time (two jobs in the same Gemini tab can swap images).

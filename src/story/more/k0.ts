@@ -74,6 +74,15 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w8-s7": [["me", "Compost Keep! Pee-yew! Smells like big brother's sneakers! Secret chest on a high ledge, too."], [12, "Heyyy, little dude. *yaaawn* Compost is old snacks growin' into new snacks. Pretty rad."], ["me", "Whoa, that's deep! Okay, BOING! World 8 key, you're mine!"]],
   "w8-s8": [["me", "Scarecrow Stand! Forty-five seconds of waves! Hey, Mr. Scarecrow, I'm not scared either!"], [16, "Stay frosty, little dude. Is that sun hot? I'm not melting. Am I melting?"], ["me", "Stand in my shadow! It's LARGE now! RAWR!"]],
   "w8-s9": [["me", "Greenhouse Steps! Whoa, glass everywhere! Lookin' LARGE in that reflection, Gobzilla!"], ["n", "From the Mystery Heap, a voice rumbles: \"Is that a berry? Am I PART berry?! Lemme check!\""], ["me", "Nope! You're not getting any of THIS berry! RAWR!"]],
+
+  // World 9: The Supermarket.
+  "w9-s2": [["me", "Trolley Track! Stomp count: one, two... why are the shopping trolleys rattling?"], ["n", "Uh-oh! A giant rolling pin comes rumbling down the aisle!"], ["me", "Rolling pins aren't even ON the shopping list! Run, berry, RUN!"]],
+  "w9-s3": [["me", "Cereal Aisle! Big brother's Choco Crunch Bombs! These boxes are taller than his whole BED!"], ["me", "Lever up top drops a rolling pin. Squash 'em flat as cornflakes! RAWR!"]],
+  "w9-s4": [[10, "Hmph. Strawberry. Stray Crumblet in Fruit and Veg. Thinks it's a blueberry. Walk it to the exit."], ["me", "Gobzilla Medium, babysitter class, grocery edition! Hold my leaf, little guy. No hiding with the grapes!"], [10, "Large. You're Large now. Don't make me say it twice. Hmph."]],
+  "w9-s6": [["me", "Bakery Bluff! Recipe Scroll at the far end, then hold out! Whoa, these donuts are bigger than ME!"], ["lo2", "Hah! Fresh bread is for PEASANTS, berry! Day-old is VINTAGE!"], ["me", "Day-old? You're like YEAR-old, buddy! RAWR!"]],
+  "w9-s7": [["me", "Canned Goods Keep! Secret chest on a high ledge. High is STILL my worst direction!"], [3, "Wibble wobble! Go, go, little berry! Gimme an S! Gimme a T! Gimme... um, a sponge?"], ["me", "Got one! BOING! World 9 key, check it OUT! Get it? Check out? Hehe!"]],
+  "w9-s8": [["me", "Checkout Chaos! Forty-five seconds of waves on a giant conveyor belt! Beep, beep, BEEP!"], [14, "Let's GOOO, little dude! Stomp against the belt! That's how ya get o-fish-ally strong!"], ["me", "Stomping uphill on a treadmill! Stomp count, here I come! RAWR!"]],
+  "w9-s9": [["me", "The Frozen Aisle! Brrr! My leaves are shivering AGAIN! Anybody got a scarf? Still no?"], ["n", "From the Back Aisle, a spooky voice wails: \"Woooo! Who's there? Has anybody seen my LABEL?\""], ["me", "I'm not scared of a lunch tub! Okay, okay. MEDIUM scared!"]],
 };
 
 export const QUIPS: Record<QuipKind, string[]> = {

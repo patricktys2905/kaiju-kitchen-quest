@@ -67,6 +67,14 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w8-s7": [[12, "Heyyy, duuude... *yaaawn* Key chest's on the high ledge. Boing boing, or whatever."], ["me", "Th-thanks, Sloba! Wanna come to the cookout? There's bubble tea!"], [12, "No pressure, just tea-sure. Zzz."]],
   "w8-s8": [["me", "Scarecrow Stand! Folks, he's wearing a BBQ apron! Now THAT'S a scarecrow with style!"], ["me", "Forty-five seconds, then corn on the cob for everybody! Hold the line!"]],
   "w8-s9": [["n", "From the greenhouse, a lumpy voice mumbles: \"Huh! Is that a PEA in me? Or a button? WHO AM I?\""], ["me", "Mystery meat, folks! The Champion has grilled worse. I think. Here I come!"]],
+  // World 9: The Supermarket.
+  "w9-s2": [["n", "RUMBLE! A giant rolling pin comes rolling down the Trolley Track!"], ["me", "And they're off! The pin in lane one, Hotchog in the trolley lane! Down the aisle they come! RUN!"]],
+  "w9-s3": [["me", "The Cereal Aisle, folks! Crunchy, sugary, and not one bit grillable. Tough crowd!"], ["me", "Gates locked? You know the drill. Lever time! Rolling pin, take it away!"]],
+  "w9-s4": [[10, "Hmph. Hotchog. This Crumblet's never seen fruit and veg. Get it to the exit. Spikes AWAY."], ["me", "One VIP pass to produce, Mr. Bluebeary! Little buddy, grilled pineapple is a thing. Trust me!"]],
+  "w9-s6": [["me", "Bakery Bluff! BUNS, folks! Racks and racks of buns! I-I think I'm gonna cry. Happy cry!"], ["me", "Focus! Grab the Recipe Scroll in time and hold the line! THEN bun shopping!"]],
+  "w9-s7": [[3, "Wibble wobble! Hi, Champ! Key chest's up high! Um, will there be a dessert table at your cookout?"], ["me", "A d-dessert table? Folks, there WILL be one, and you're invited! Front row!"], [3, "EEEE! Invited! That's the jiggle of it! Go boing, Champ!"]],
+  "w9-s8": [["lo2", "Hold out at the checkout, sausage? I shall bag thee and sell thee, two for one!"], ["me", "Two for one? Folks, I'm a PREMIUM sausage! Forty-five seconds! Ring 'em up!"]],
+  "w9-s9": [["n", "From the Frozen Aisle, a spooky voice wails: \"Woooo! Who goes there? Nobody EVER opens meee!\""], ["me", "B-b-brrr! Folks, it's cold in here! Ahem. Freezer burn is no match for a HOT dog! Here I come!"]],
 };
 
 export const QUIPS: Record<QuipKind, string[]> = {

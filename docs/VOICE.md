@@ -42,6 +42,8 @@ If a line wouldn't sound natural shouted by a cartoon character, rewrite it.
 | **Velvaroo** (red velvet kangaroo boxer) | Brash ring announcer of her own life: "In THIS corner!", "Ding ding!", hops when excited, boxing and baking puns ("knead to win", "frosting on top", "hook, line and sinker... I mean, HOOK!"). Big heart. |
 | **Sloba** (bubble-tea sloth) | Sooo slow and sleepy: "Heyyy... duuude...", yawns mid-line (*yaaawn*), falls asleep in scenes, totally unbothered, surprisingly wise. Tea and boba puns ("I'm steeped in it", "no pressure, just tea-sure"). |
 | **Minturtle** (mint choc chip ice-cream turtle) | Ultra-chill cool dude: "Stay frosty.", "Cool, cool, cool.", never panics (except about melting in the heat), shell-and-scoop puns ("I'm in my shell era", "scoop there it is"). |
+| **Bloblin** (lime jelly blob) | Bubbly, wobbly cheerleader: "Wibble wobble!", jiggles when nervous, desperate to be invited to the dessert table, jelly puns ("jelly-ous", "set for success", "that's the jiggle of it"). |
+| **Salmonster** (salmon fish monster) | Gung-ho sporty jock: "Let's GOOO!", always swimming against the current on purpose, fish puns ("o-fish-ally", "just keep swimming", "holy mackerel", "you're on thin ice... I mean water"). |
 | **Narrator** | Cartoon announcer, rare: "Meanwhile...", "Uh-oh!", "Will our hero...?" |
 | **The Mold Crown** (`mold`) | Creepy, giggly, oozy villain. "Hehehe...", "Come closer, little snack...". Short. |
 | **Nemeses** (`foe`) | Classic cartoon rivals: boastful, sneery, catchphrases of their own, cackle, storm off when beaten ("This isn't over!"). |

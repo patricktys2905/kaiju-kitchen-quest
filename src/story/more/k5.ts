@@ -67,6 +67,14 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w8-s7": [["me", "Compost Keep. Peels, rinds and old coffee grounds. Heh, smells like Grandma's place."], ["me", "Secret chest on a high ledge. Sponge, bounce, swipe. Ka-CHING! Still miss the Butter, though."]],
   "w8-s8": [["me", "Scarecrow Stand. Big straw guy, buttons for eyes. Nice try, pal. I'm a bat, not a crow."], ["me", "Forty-five seconds. Stay crunchy, stay sneaky, and keep that pollen off my crust!"]],
   "w8-s9": [["n", "From the old Greenhouse, a voice mumbles: \"Butter? Is THAT what I'm made of? Nobody tells me ANYTHING!\""], ["me", "Heh. Sounds like the vault's having a bad day. Up the steps, before he eats the loot!"]],
+  // World 9: The Supermarket.
+  "w9-s2": [["me", "Trolley Track. Shopping trolleys, the getaway car of the supermarket. Heh."], ["n", "Uh-oh! A giant rolling pin comes rumbling down the aisle!"], ["me", "Every heist needs a chase scene! Run right!"]],
+  "w9-s3": [["me", "Cereal Aisle. Every box has a free prize inside. Heh. Finally, a place that gets me."], ["me", "Gates locked? Lever, rolling pin, BONK. Two for one, today only."]],
+  "w9-s4": [[10, "Hmph. Bat. My Crumblet wandered off in Fruit and Veg. Walk it to the exit. And NO shoplifting."], ["me", "Me? Shoplift? I'm offended. Stick close, kid. Uncle Toastbat's grocery tour, no grapes in pockets!"]],
+  "w9-s6": [["me", "Bakery Bluff. Fresh loaves everywhere. Heh. Distant cousins. LOTS of 'em."], ["lo2", "Unhand yon scroll, varlet! The Tupperwraith keepeth it with all our finest loot!"], ["me", "All the loot in one place, huh? Thanks for the tip, Sir Snitch-a-lot. Grab it, hold the fort!"]],
+  "w9-s7": [["me", "Canned Goods Keep. A fortress of tins, and every one's a teeny safe. Heh. I'm home."], ["me", "Secret chest on a high ledge. Sponge, bounce, swipe. Ka-CHING! Butter's close. I can SMELL it."]],
+  "w9-s8": [[14, "Let's GOOO! Hey, bat! Robbing the place after closing? That's o-fish-ally against the rules!"], ["me", "Heh. Just picking up my stuff, fishface. Help me hold the checkout forty-five seconds?"], [14, "Against the current AND the clock? My favourite! Let's GOOO!"]],
+  "w9-s9": [["n", "From the Frozen Aisle, a voice wails: \"Woooo! Is that a THIEF? Nobody touches my hoard!\""], ["me", "Heh. A ghost AND a hoarder? My favourite kind of mark. Into the cold, wings tucked!"]],
 };
 
 export const QUIPS: Record<QuipKind, string[]> = {

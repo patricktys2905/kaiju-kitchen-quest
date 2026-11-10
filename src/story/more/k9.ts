@@ -67,6 +67,14 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w8-s7": [[16, "Stay frosty, big guy. You're looking a little melty."], ["me", "Minturtle! I'm stretchy, not melty! Wanna stick together in the shade?"], [16, "Cool, cool, cool. Key's up high. Sponge time, dude."]],
   "w8-s8": [["me", "Scarecrow Stand! Hi, Mister Scarecrow! You look like somebody I forgot!"], ["n", "Here they come! Hold out for forty-five seconds!"], ["me", "Let's stick together, scarecrow! You take the left!"]],
   "w8-s9": [["lo2", "Climb, pink beast! The Meatloaf shall mash thee in with his mystery bits!"], ["me", "Mystery bits? Ooh, maybe my party hat's in there! Climbing!"]],
+  // World 9: The Supermarket.
+  "w9-s2": [["me", "Trolley Track! Ooh, a shopping cart! Can I ride in the little seat?"], ["n", "RUMBLE! A giant rolling pin comes rolling down the aisle!"], ["me", "Flat elephant is NEVER on sale! RUN!"]],
+  "w9-s3": [["me", "Cereal Aisle! Cheerios as big as hula hoops! Party rings again!"], ["me", "Leftovers! Lever! Rolling pin goes BONK! Chew on THAT, you expired lot!"]],
+  "w9-s4": [[10, "Hmph. Bubblegumbo. Crumblet's lost in Fruit and Veg. Walk it out. Don't sit on it."], ["me", "I'd never! Ooh, melons! Can I sit on THOSE? No? Okay. Come on, muffin!"]],
+  "w9-s6": [["me", "Bakery Bluff! Cakes everywhere! Is it somebody's birthday? Is it MINE again?"], ["me", "Recipe Scroll first! Then hold the shelf! Then cake! I'll remember. Probably! *POP*"]],
+  "w9-s7": [[14, "Let's GOOO! Big pink guy! Race ya up the cans! I always go the hard way!"], ["me", "Ooh, a race! I forget the rules. Is it the one with the sponge? BOING!"], [14, "Holy mackerel, that works! Key's yours, buddy!"]],
+  "w9-s8": [["me", "Checkout Chaos! Beep! Beep! Hey, they're scanning ME! What's my price?"], ["lo2", "Hah! Bag yon pink beast! Two for one!"], ["me", "Nobody bags the birthday boy! Forty-five seconds! Chew on THIS!"]],
+  "w9-s9": [["me", "The Frozen Aisle! Brrr! My gum's going stiff again! Square bubbles!"], ["n", "From the back aisle, a spooky voice wails: \"Woooo! Forget your wand, little elephant! Forget EVERYTHING! Woooo!\""], ["me", "Hey! Forgetting is MY job! Climbing! *POP*"]],
 };
 
 export const QUIPS: Record<QuipKind, string[]> = {

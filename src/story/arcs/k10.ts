@@ -137,8 +137,27 @@ export const ARC: Record<string, StoryLine[]> = {
     ["me", "A haunted leftovers tub. Hmph. And now Littlest wants to see a supermarket."],
     ["me", "Fine. Ear seat, buckle up. But we nap BEFORE the spooky aisle. Grrr."],
   ],
+  "w9-open": [
+    ["n", "The Supermarket! Littlest squeaks at aisles so tall they disappear into the dark!"],
+    ["me", "Nap's done. Took it in a shopping trolley. Hmph. Comfy, actually. Ear seat, kid. Nobody wanders off in here."],
+    ["lo2", "Hah! Thy crumbs are past their best-before, bear! The Tupperwraith shall SHELVE them!"],
+    ["me", "Best-before THIS, breadstick. Grrr."],
+  ],
+  "w9-boss": [
+    ["boss", "Woooo! A muffin! Into the tub with you! I'll keep you forever and ever! Wooooo!"],
+    ["me", "Keep? Like the back of the fridge keeps stuff? You're a hoarder, ya soggy lunchbox."],
+    ["boss", "Don't you DARE say \"just throw it out\"! Woooo! I don't know what I am, but I'm IMPORTANT!"],
+    ["me", "Littlest, cover your ears. Papa's about to say it. GRRRAAAH!"],
+  ],
+  "w9-after": [
+    ["n", "POP! The lid flies off, and out tumbles a whole hoard of stolen treasure!"],
+    ["me", "Cabbage. Golden Butter. A thermostat knob. And Littlest's BLANKIE?! So THAT'S why nobody can nap!"],
+    ["boss", "Woooo! It was so soft! Fine, keep it! I'm floating home to Old Fruitcake! The Feast is coming! Hmph!"],
+    ["lo", "Bring the muffins to the House, bear. Every forgotten crumb gets a seat at my Feast."],
+    ["me", "Littlest's got a blankie and a papa. Hmph. Nap first. Then we crash your Feast, Fruitcake. GRRR."],
+  ],
 };
-export const NEMESIS: Record<"w1-elite" | "w2-elite" | "w3-elite" | "w4-elite" | "w5-elite" | "w6-elite" | "w7-elite" | "w8-elite", StoryLine[]> = {
+export const NEMESIS: Record<"w1-elite" | "w2-elite" | "w3-elite" | "w4-elite" | "w5-elite" | "w6-elite" | "w7-elite" | "w8-elite" | "w9-elite", StoryLine[]> = {
   "w1-elite": [
     ["foe", "Caw! Shiny crumbs, crumbly crumbs! Finders keepers, caw-caw!"],
     ["me", "Those \"crumbs\" are my Crumblets, bird."],
@@ -178,5 +197,10 @@ export const NEMESIS: Record<"w1-elite" | "w2-elite" | "w3-elite" | "w4-elite" |
     ["foe", "Caw! Fuzzy! Pumpkin Brute up at Gourd Guard. Big, orange, and it rolls like a bowling ball!"],
     ["me", "Bird. Who's on nap duty this time?"],
     ["foe", "Velvaroo! She counts 'em down like a boxing match. One, two, three, they're OUT cold! Caw!"],
+  ],
+  "w9-elite": [
+    ["foe", "Caw! Fuzzy! Watermelon Brute on Melon Mountain. Big, stripy, and it spits seeds! I caught nine. Shiny ones!"],
+    ["me", "Bird. Who's on nap duty?"],
+    ["foe", "Bloblin! She jiggles 'em to sleep like a waterbed! Wibble wobble, they're OUT! Caw!"],
   ],
 };

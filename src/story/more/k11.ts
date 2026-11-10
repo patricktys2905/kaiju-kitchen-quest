@@ -74,6 +74,15 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w8-s7": [["me", "Compost Keep! Pee-yew! Who left all these leftovers out? One star for the fridge!"], [12, "Heyyy, delivery dude. *yaaawn* Did I order a pizza? Like, last week?"], ["me", "Not from me, buddy! Boing! World 8 key, delivered to MY pocket!"]],
   "w8-s8": [["me", "Scarecrow Stand! Forty-five seconds of waves. Hey, Mr. Scarecrow, you look like my old manager!"], [16, "Stay frosty, raptor. Got anything cold in that box? Asking for a turtle. Is it hot out here?"], ["me", "Sorry, pal, HOT deliveries only! Shade's free, though!"]],
   "w8-s9": [["me", "Greenhouse Steps! Glass everywhere. Customer's up top. Keep the box level!"], ["n", "From the Mystery Heap, a voice rumbles: \"Is that PIZZA? Is there pizza in ME?! I gotta check!\""], ["me", "Nobody's checking ANYTHING till they tip! Beep beep!"]],
+
+  // World 9: The Supermarket.
+  "w9-s2": [["me", "Minute forty-two! Trolley Track! Smooth aisles and a whole trolley lane! Love it!"], ["n", "Uh-oh! A giant rolling pin comes rumbling down the aisle!"], ["me", "Tailgater AGAIN?! Is it the same pin? Get your own route! Beep beep, VROOM!"]],
+  "w9-s3": [["me", "Cereal Aisle! Breakfast boxes at pizza o'clock? My schedule's still a mess!"], ["me", "Lever up top. Special delivery: one rolling pin, aisle three, no coupon needed!"]],
+  "w9-s4": [[10, "Hmph. Raptor. Lost Crumblet in Fruit and Veg. Bus it to the exit."], ["me", "Passenger number nine! Ooh, Bluebeary, they sell trolleys! That's basically a bus with a basket!"], [10, "Bus fund's up to two crumbs, a button, a seed and a grape. Hmph."]],
+  "w9-s6": [["me", "Bakery Bluff! Pick-up: one Recipe Scroll, then hold out. Ooh, garlic bread! Focus, raptor!"], ["lo2", "Hah! Thy pizza shall be day-old ere it arriveth, courier!"], ["me", "Day-old pizza is still PIZZA, pal! Beep beep!"]],
+  "w9-s7": [["me", "Canned Goods Keep! Secret chest on a high ledge. Bouncy sponge? Raptor Express elevator, going UP!"], [3, "Wibble wobble! Is that pizza for the dessert table? Am I invited? Please say I'm invited!"], ["me", "Wrong menu, jelly! Here, have a coupon! Boing! World 9 key, delivered!"]],
+  "w9-s8": [["me", "Checkout Chaos! Forty-five seconds on the conveyor. Finally, a road that moves FOR me!"], [14, "Let's GOOO, raptor! Run against the belt! It's o-fish-ally the best workout!"], ["me", "Against traffic?! That's a ticket, buddy! Beep beep!"]],
+  "w9-s9": [["me", "The Frozen Aisle! Brrr! Pizza box, stay warm! Think warm thoughts! Think toasty ovens!"], ["n", "From the Back Aisle, a spooky voice wails: \"Woooo! Is that PIZZA? Into the tub it goes!\""], ["me", "Nope! Hot deliveries only! No tub, no tip, NO way!"]],
 };
 
 export const QUIPS: Record<QuipKind, string[]> = {

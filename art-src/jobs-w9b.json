@@ -1,0 +1,20 @@
+[
+ {
+  "name": "still-w9-boss",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/boss-tupper.png",
+   "art-src/ref-bg.png"
+  ],
+  "prompt": "Generate an image. The first reference is my boss, THE TUPPERWRAITH of the Leftovers: draw exactly ONE of it, EXACTLY like this reference (same shape, lid, face, colours). The second shows the painted background style. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Cinematic composition, wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. NO text, no letters, no writing on any labels or signs, no speech bubbles, no UI, no border, no signature, no humans. Scene: a dramatic boss reveal: the Tupperwraith rises from a tower of forgotten food tubs in a dusty dark back aisle of a supermarket, its lid floating high, murky leftovers swirling, cold mist everywhere. Spooky but still cute, no other characters."
+ },
+ {
+  "name": "still-w9-cure",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/boss-tupper.png",
+   "art-src/ref-bg.png"
+  ],
+  "prompt": "Generate an image. The first reference is my boss, THE TUPPERWRAITH of the Leftovers: draw exactly ONE of it (only one in the whole picture), EXACTLY like this reference. The second shows the painted background style. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Cinematic composition, wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. NO text, no letters, no writing on any labels or signs, no speech bubbles, no UI, no border, no signature, no humans. Scene: after the battle: the Tupperwraith, its lid knocked crooked, floats away in a huff out of the supermarket's back door into the night, towards the lit-up window of a big house far away where a crooked crown shape waits in the shadows. Some treasures it held are left on the floor: a fresh cabbage, a glowing golden butter pat and a thermostat knob. Funny, defeated but defiant, no other characters."
+ }
+]

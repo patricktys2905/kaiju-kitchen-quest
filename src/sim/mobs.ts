@@ -45,7 +45,7 @@ export interface MobDef {
 /** Nemesis moves. Shared basics: slash leap charge rain breath fanshot lob spin roar puddle trap.
  *  Signatures (one nemesis each): slimesurge summon rootspike dive snatch boomerang beam lure vanish shell burrow heatwave skewer finslide. */
 export type NemMove = 'slash' | 'leap' | 'charge' | 'rain' | 'breath' | 'fanshot' | 'lob' | 'spin' | 'roar' | 'puddle' | 'trap' | 'summon'
-  | 'slimesurge' | 'rootspike' | 'dive' | 'snatch' | 'boomerang' | 'beam' | 'lure' | 'vanish' | 'shell' | 'burrow' | 'heatwave' | 'skewer' | 'finslide' | 'yank' | 'stingers' | 'scurry' | 'haymaker' | 'zip' | 'boomhop';
+  | 'slimesurge' | 'rootspike' | 'dive' | 'snatch' | 'boomerang' | 'beam' | 'lure' | 'vanish' | 'shell' | 'burrow' | 'heatwave' | 'skewer' | 'finslide' | 'yank' | 'stingers' | 'scurry' | 'haymaker' | 'zip' | 'boomhop' | 'drip' | 'swipe';
 export interface NemesisDef {
   /** whose story it belongs to */
   species: number;
@@ -96,6 +96,15 @@ export const MOBS: Record<MobKind, MobDef> = {
   scrub: { name: 'Scrub Brute', brain: 'brute', art: 'mob-scrub', hp: 215, atk: 16, speed: 50, w: 72, h: 76, knock: 0.45, aggro: 280, range: 90, windup: 0.8, patrol: 90, xp: 30, dropChance: 0.6, armor: true },
   sporeling: { name: 'Sporeling', brain: 'hopper', art: 'mob-sporeling', hp: 26, atk: 7, speed: 100, w: 30, h: 28, knock: 1.3, aggro: 340, range: 180, windup: 0.35, patrol: 120, xp: 3, dropChance: 0.04 },
   moldking: { name: 'The Mold Crown', brain: 'boss', art: 'boss-mold', hp: 1850, atk: 18, speed: 80, w: 140, h: 190, knock: 0.2, aggro: 2000, range: 150, windup: 0.75, patrol: 0, xp: 420, dropChance: 1, armor: true, moves: ['slash', 'leap', 'rain', 'charge'], calls: 'sporeling' },
+  // ---- World 9: The Supermarket ----
+  trolley: { name: 'Trolley Rammer', brain: 'charger', art: 'mob-trolley', hp: 108, atk: 10, speed: 70, w: 66, h: 56, knock: 0.6, aggro: 400, range: 380, windup: 0.7, patrol: 110, xp: 18, dropChance: 0.4 },
+  bag: { name: 'Plastic Bag Ghost', brain: 'flyer', art: 'mob-bag', hp: 40, atk: 7, speed: 120, w: 44, h: 46, knock: 1.1, aggro: 340, range: 230, windup: 0.5, patrol: 160, xp: 13, dropChance: 0.3 },
+  scanner: { name: 'Barcode Sniper', brain: 'sniper', art: 'mob-scanner', hp: 60, atk: 14, speed: 60, w: 40, h: 52, knock: 1.1, aggro: 560, range: 540, windup: 1.0, patrol: 80, xp: 18, dropChance: 0.35 },
+  banana: { name: 'Bruised Banana Bunch', brain: 'hopper', art: 'mob-banana', hp: 62, atk: 9, speed: 95, w: 50, h: 46, knock: 1.1, aggro: 320, range: 210, windup: 0.4, patrol: 150, xp: 14, dropChance: 0.3 },
+  can2: { name: 'Dented Can Turret', brain: 'turret', art: 'mob-can2', hp: 85, atk: 8, speed: 0, w: 56, h: 48, knock: 0, aggro: 400, range: 400, windup: 0.9, patrol: 0, xp: 16, dropChance: 0.4 },
+  melon: { name: 'Watermelon Brute', brain: 'brute', art: 'mob-melon', hp: 235, atk: 16, speed: 48, w: 82, h: 80, knock: 0.45, aggro: 280, range: 92, windup: 0.8, patrol: 90, xp: 33, dropChance: 0.6, armor: true },
+  lid: { name: 'Lost Lid', brain: 'hopper', art: 'mob-lid', hp: 26, atk: 7, speed: 100, w: 30, h: 26, knock: 1.3, aggro: 340, range: 180, windup: 0.35, patrol: 120, xp: 3, dropChance: 0.04 },
+  tupper: { name: 'The Tupperwraith', brain: 'boss', art: 'boss-tupper', hp: 1850, atk: 19, speed: 85, w: 120, h: 170, knock: 0.2, aggro: 2000, range: 150, windup: 0.75, patrol: 0, xp: 580, dropChance: 1, armor: true, moves: ['slash', 'leap', 'charge', 'rain'], calls: 'lid' },
   // ---- World 8: The Garden ----
   snail: { name: 'Lettuce Snail', brain: 'walker', art: 'mob-snail', hp: 130, atk: 12, speed: 45, w: 58, h: 52, knock: 0.6, aggro: 280, range: 70, windup: 0.65, patrol: 80, xp: 19, dropChance: 0.4, shield: true },
   ladybug: { name: 'Ladybug Glider', brain: 'flyer', art: 'mob-ladybug', hp: 40, atk: 7, speed: 125, w: 42, h: 40, knock: 1.1, aggro: 340, range: 230, windup: 0.5, patrol: 160, xp: 13, dropChance: 0.3 },
@@ -175,6 +184,10 @@ export const MOBS: Record<MobKind, MobDef> = {
     nem: { species: 12, moves: ['zip', 'fanshot', 'rain', 'trap'], names: ['Espresso Zip', 'Bean Spray', 'Caffeine Rain', 'Sugar Trap'], shot: 'crumb' } },
   nhare: { name: 'Hot Fudge Hare', brain: 'nemesis', art: 'mob-nem-hare', hp: 200, atk: 16, speed: 100, w: 64, h: 76, knock: 0.4, aggro: 900, range: 130, windup: 0.6, patrol: 80, xp: 32, dropChance: 1, armor: true,
     nem: { species: 16, moves: ['boomhop', 'charge', 'puddle', 'roar'], names: ['Boom Hop', 'Fudge Dash', 'Fudge Puddle', 'Smug Laugh'], puddle: 'slow' } },
+  ngelato: { name: 'Grey Gelato', brain: 'nemesis', art: 'mob-nem-gelatin', hp: 185, atk: 15, speed: 80, w: 56, h: 84, knock: 0.45, aggro: 900, range: 130, windup: 0.65, patrol: 80, xp: 32, dropChance: 1, armor: true,
+    nem: { species: 3, moves: ['drip', 'fanshot', 'slash', 'leap'], names: ['Snooty Drip', 'Sprinkle Spray', 'Cone Poke', 'Scoop Drop'], shot: 'crumb' } },
+  nbear: { name: 'Grizzly Grizzle', brain: 'nemesis', art: 'mob-nem-bear', hp: 225, atk: 16, speed: 70, w: 92, h: 104, knock: 0.35, aggro: 900, range: 150, windup: 0.75, patrol: 60, xp: 32, dropChance: 1, armor: true,
+    nem: { species: 14, moves: ['swipe', 'charge', 'lob', 'leap'], names: ['Double Swipe', 'Bear Rush', 'Patty Toss', 'Big Bear Belly Flop'] } },
   golem: { name: 'Freezer Golem', brain: 'boss', art: 'boss-golem', hp: 1900, atk: 18, speed: 80, w: 130, h: 180, knock: 0.2, aggro: 2000, range: 150, windup: 0.75, patrol: 0, xp: 320, dropChance: 1, armor: true, moves: ['slash', 'leap', 'rain', 'charge'] },
 };
 
@@ -208,6 +221,12 @@ export const BOSS_PATTERNS: Partial<Record<MobKind, { near: string[][]; far: str
     { near: [['slash', 'breath'], ['slash', 'slash']], far: [['breath'], ['charge']] },
     { near: [['slash', 'breath', 'leap'], ['slash', 'charge']], far: [['rain', 'breath'], ['charge', 'leap']] },
     { near: [['breath', 'heatwave', 'slash'], ['leap', 'breath']], far: [['heatwave', 'rain', 'charge'], ['breath', 'breath']] },
+  ],
+  // the Tupperwraith: lid frisbees, murky puddles, lost lids, a cold wail
+  tupper: [
+    { near: [['slash', 'slash'], ['slash', 'boomerang']], far: [['boomerang'], ['summon']] },
+    { near: [['slash', 'puddle', 'slash'], ['leap', 'boomerang']], far: [['rain', 'boomerang'], ['summon', 'charge']] },
+    { near: [['roar', 'slash', 'puddle'], ['leap', 'boomerang', 'slash']], far: [['rain', 'boomerang', 'charge'], ['summon', 'rain', 'boomerang']] },
   ],
   // the Mystery Meatloaf: nobody knows what's in him, so he borrows everybody's moves
   meatloaf: [

@@ -67,6 +67,14 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w8-s7": [["me", "Compost Keep! Peels, worms and the good stinky stuff. It's a spa for dirt! Ahh!"], ["me", "Key chest on a high ledge. Sponge bounce! Eight worlds a pro now. Don't tell ANYBODY!"]],
   "w8-s8": [[16, "Yo, crab. Stay frosty. Is it, like, super sunny out here? Asking for a shell."], ["me", "It's SUNSET, kid! You're fine! Now hold the Scarecrow Stand forty-five seconds with me!"], [16, "Cool, cool. Sooo not melting. Scoop there it is!"]],
   "w8-s9": [["n", "From the old Greenhouse, a voice mumbles: \"Your cabbage? Huh. Maybe I ATE it? Maybe I AM it?\""], ["me", "If you're made of my cabbage, I'm takin' ya back leaf by leaf! Up the steps, SIDEWAYS!"]],
+  // World 9: The Supermarket.
+  "w9-s2": [["me", "Trolley Track! Who leaves shopping trolleys lying around like this? Kids these days!"], ["n", "Uh-oh! A giant rolling pin comes rumbling down the aisle!"], ["me", "Even in the SHOPS?! Run right! Sideways right! MOVE, legs!"]],
+  "w9-s3": [["me", "Cereal Aisle. Grains stuck in boxes AGAIN. Poor things never even met a field!"], ["me", "Gates locked? Lever, rolling pin, weeded. Hmph! Two for the price of one!"]],
+  "w9-s4": [[10, "Hmph. Crab. My Crumblet's lost in Fruit and Veg. Walk it to the exit. Mind the bruised bananas."], ["me", "Fruit and Veg! My kinda neighbourhood! Stick to my shell, small fry, and DON'T squeeze the tomatoes!"]],
+  "w9-s6": [["me", "Bakery Bluff! Bread, bread and more bread. Not one single veggie! Hmph!"], ["lo2", "Hah! Thy cabbage sits in the Tupperwraith's hoard, crab! 'Tis well past its best before!"], ["me", "She's FRESH, buster! Grab the scroll and hold on, legs!"]],
+  "w9-s7": [["me", "Canned Goods Keep! Peas in a CAN? Who does that to a veggie?! Key chest up on that ledge, too."], ["n", "Seed count: twelve! Cabbage count: STILL zero!"], ["me", "Quit counting, narrator! Sponge bounce, then the back aisle. Hang on, sweetheart!"]],
+  "w9-s8": [[14, "Let's GOOO! Hey, crab! I'm swimming the WRONG way down the checkout belt! On purpose!"], ["me", "Wrong way? I go SIDEWAYS, fishface! Hold Checkout Chaos forty-five seconds with me!"], [14, "O-fish-ally the grumpiest crab I ever met! Let's GOOO!"]],
+  "w9-s9": [["n", "From the Frozen Aisle, a voice wails: \"Woooo! A cabbage? Is THAT what's in me? I forget!\""], ["me", "She's not IN ya, she's stuck WITH ya, ya spooky tub! Hang on, sweetheart! Down the aisle, SIDEWAYS!"]],
 };
 
 export const QUIPS: Record<QuipKind, string[]> = {

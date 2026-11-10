@@ -67,6 +67,14 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w8-s7": [["me", "Compost Keep! Pee-yew! A castle made of old peels! We are NOT keeping this one."], ["me", "Secret chest on a high ledge! Sponge, our most loyal subject, launch the king! BOING!"]],
   "w8-s8": [[9, "Hello, little king! *POP* Elephants never forget! Um, who are you again?"], ["me", "Dumplord, Lord of All Leftovers! Hold the Scarecrow Stand forty-five seconds with us and you shall be a duke!"], [9, "A duke? Ooh! Let's stick together! Wait, what are we doing?"]],
   "w8-s9": [["n", "From the old Greenhouse, a voice mumbles: \"A king? Coming for ME? Nobody EVER comes for me!\""], ["me", "Decree Number Thirty-Two: somebody's coming for you NOW! Up the steps! Royally!"]],
+  // World 9: The Supermarket.
+  "w9-s2": [["me", "Trolley Track! A royal carriage, at LAST! Wait, why is that rolling pin doing the shopping too?!"], ["n", "Uh-oh! It's your biggest fan, Your Majesty! It even follows you to the shops!"], ["me", "Royal retreat! To the RIGHT! Gracefully! Okay, QUICKLY!"]],
+  "w9-s3": [["me", "Cereal Aisle! Decree Number Thirty-Six: every cereal box must have a free prize, and the prize is US!"], ["me", "Pull the lever! Royal rolling pin, clean-up on aisle nine! Nice and flat!"]],
+  "w9-s4": [[10, "Hmph. Dumpling. My Crumblet got lost in Fruit and Veg. Walk it to the exit. Don't let anybody bag it."], ["me", "Heir number nine! Behold, small one, the royal greengrocer! Stay behind the royal belly! Boing!"]],
+  "w9-s6": [["me", "Bakery Bluff! Buns, rolls AND a Recipe Scroll! Ooh, our royal cousins!"], ["lo2", "Fie! Thou art not invited to the bakery, dumpling! Thou art well past thy best before!"], ["me", "Decree Number Thirty-Seven: dumplings NEVER expire! Grab the scroll and hold the bakery!"]],
+  "w9-s7": [["me", "Canned Goods Keep! So many tins, and nobody's opened them either! Fear not, little cans! Later!"], ["me", "Secret chest on a high ledge! Sponge, our most loyal subject, launch the king! BOING!"]],
+  "w9-s8": [[3, "Wibble wobble! A king! Your Majesty, is there a dessert table at your court? I'm never invited!"], ["me", "Never invited?! Hold Checkout Chaos forty-five seconds with us and you get the FRONT row!"], [3, "Eeee! I'm all a-jiggle! Let's check 'em OUT!"]],
+  "w9-s9": [["n", "From the Frozen Aisle, a voice wails: \"Woooo! A king? Coming to open ME? Nobody opens me!\""], ["me", "Somebody's opening you NOW! Into the frosty aisle! Royally! Brrr, royally and QUICKLY!"]],
 };
 
 export const QUIPS: Record<QuipKind, string[]> = {

@@ -86,8 +86,26 @@ export const ARC: Record<string, StoryLine[]> = {
     ["me", "A ghost in a tub, all alone in the dark? Aww, he needs a nightlight! I'll bring one!"],
     ["me", "Ooh, look! The moon's up over the greenhouse! Hi, moon! Wanna come to the supermarket?"],
   ],
+  "w9-open": [
+    ["me", "Ooooh! The Supermarket! Rows and rows of glowy lights! Are you all moons? Are you, are you?"],
+    ["n", "They're buzzy ceiling lights! And every one hums a little tune!"],
+    ["me", "Hi, ceiling lights! I bet the Tupperwraith's back aisle is super dark. I'll bring him a nightlight! Flap flap!"],
+  ],
+  "w9-boss": [
+    ["boss", "Woooo! Who's glowing in MY back aisle?! I like it dark and forgotten! Wooooo!"],
+    ["me", "Ooh, you're so cloudy and swirly, like a foggy night! What's inside you?"],
+    ["boss", "Nobody remembers! Not even ME! And don't you DARE say \"just throw it out\"! Woooo!"],
+    ["me", "I'd never! But you could really use some light! FWOOSH!"],
+  ],
+  "w9-after": [
+    ["n", "POP! The lid flies off, and out spills a whole hoard of stolen treasure!"],
+    ["me", "Cabbage! Butter! And ooooh, a teeny round moon nightlight! The one from the upstairs hallway!"],
+    ["boss", "Woooo! It was SO pretty! Fine! I'm floating home to Old Fruitcake! Hmph!"],
+    ["lo", "Come to the House, moth. At my Feast of the Forgotten, every light goes OUT."],
+    ["me", "Nuh-uh! Lights ON, Fruitcake! And Mr. Wraith, wait up! We can SHARE the nightlight! Flap flap!"],
+  ],
 };
-export const NEMESIS: Record<"w1-elite" | "w2-elite" | "w3-elite" | "w4-elite" | "w5-elite" | "w6-elite" | "w7-elite" | "w8-elite", StoryLine[]> = {
+export const NEMESIS: Record<"w1-elite" | "w2-elite" | "w3-elite" | "w4-elite" | "w5-elite" | "w6-elite" | "w7-elite" | "w8-elite" | "w9-elite", StoryLine[]> = {
   "w1-elite": [["foe", "Bzzzt! Hey there, little moth! Come to the light! MY light! Only my light!"], ["me", "Ooooh, you're so bright! But, um, you're not the moon."], ["foe", "I can BE your moon! Closer, closerrrr... BZZZZT!"], ["me", "Yikes! My fuzz! Okay, no thank you!"]],
   "w2-elite": [["foe", "Bzzt! Even in the cold, moths come to Zapsy! They ALWAYS come!"], ["me", "Not this moth! I know the difference now. The moon doesn't go ZAP!"]],
   "w3-elite": [["foe", "Bzzt! The oven glows, but I glow BRIGHTER! Look at me, moth! LOOK AT ME!"], ["me", "La la la, not looking! I'm daydreaming about moonlight!"]],
@@ -96,4 +114,5 @@ export const NEMESIS: Record<"w1-elite" | "w2-elite" | "w3-elite" | "w4-elite" |
   "w6-elite": [["foe", "Bzzt! Moth! Roast Brute on the ridge. I lit it up so you can see it coming. Nightlight duty!"], ["me", "Zapsy! You came! And you're glowing all friendly!"], ["foe", "Bzz, don't tell anybody. I've got a reputation. ZAP! Er, I mean, good luck."]],
   "w7-elite": [["foe", "Bzzt! Moth! Burger Brute up on Patty Plateau. Big, beefy, and it keeps trying to grill ME!"], ["me", "Zapsy! You came outside too! Ooh, you glow just like the string lights!"], ["foe", "Bzz, I'm brighter. Okay, same. Go get it, I'll light the way!"]],
   "w8-elite": [["foe", "Bzzt! Moth! Pumpkin Brute at Gourd Guard. It's got a scary carved face, and it's not even Halloween!"], ["me", "Zapsy! Ooh, look, the fireflies keep blinking at you!"], ["foe", "Bzz, they think I'm their big brother! I'm not crying, it's POLLEN! Go, I'll light the way!"]],
+  "w9-elite": [["foe", "Bzzt! Moth! Watermelon Brute on Melon Mountain. Big, round and stripy, and it's NOT the moon. I checked!"], ["me", "Zapsy! Ooh, the freezer lights make you all frosty and sparkly!"], ["foe", "Bzz, I'm glowing for the shoppers! Nobody shops at night, but STILL! Go, I'll light the way!"]],
 };

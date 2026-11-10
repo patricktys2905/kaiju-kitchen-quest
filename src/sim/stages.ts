@@ -68,6 +68,11 @@ export const WORLDS: WorldDef[] = [
     baseLv: 81, power: 4.2, pool: [[1, 'snail'], [1, 'ladybug'], [2, 'peapod'], [3, 'mole'], [4, 'tomato'], [5, 'radish'], [7, 'pumpkin']], hazard: 'pollen', mimic: 'mimic', elite: 'pumpkin', boss: 'meatloaf',
     names: ['Seedling Lane', 'Watering Can Run', 'Sunflower Grove', 'Pumpkin Patch Path', 'Gourd Guard', 'Beanstalk Heights', 'Compost Keep', 'Scarecrow Stand', 'Greenhouse Steps', 'The Mystery Heap'],
   },
+  {
+    id: 9, name: 'The Supermarket', blurb: 'Open late. Very, very late.', bg: 'bg-far-market', mid: 'bg-mid-market', tile: 'tile-market', platTint: 0xd8e0e8, bossBg: 'bg-far-freezer2',
+    baseLv: 91, power: 4.6, pool: [[1, 'trolley'], [1, 'bag'], [2, 'banana'], [3, 'scanner'], [4, 'can2'], [7, 'melon']], hazard: 'chill', mimic: 'mimic', elite: 'melon', boss: 'tupper',
+    names: ['Sliding Doors', 'Trolley Track', 'Cereal Aisle', 'Fruit and Veg', 'Melon Mountain', 'Bakery Bluff', 'Canned Goods Keep', 'Checkout Chaos', 'The Frozen Aisle', 'The Back Aisle'],
+  },
 ];
 
 /** Small seeded RNG so a stage is always laid out the same way. */
@@ -280,6 +285,7 @@ function hazardAt(kind: HazardKind, x: number, offset: number): Hazard {
     case 'wax': return { kind, x, w: 80, period: 3.6, on: 0.4, offset };
     case 'sprinkler': return { kind, x, w: 80, period: 3.4, on: 0.7, offset };
     case 'pollen': return { kind, x, w: 100, period: 3.8, on: 1.2, offset };
+    case 'chill': return { kind, x, w: 90, period: 3.6, on: 0.9, offset };
   }
 }
 

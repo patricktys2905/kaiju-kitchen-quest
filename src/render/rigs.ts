@@ -36,6 +36,30 @@ export interface RigDef {
 }
 
 export const RIGS: Record<number, RigDef> = {
+  // Salmonster: body standing on its tail 278x428@194,21 (no legs: it hops); fins 82x73@32,78 / 84x69@132,74 (root at the oval end).
+  14: {
+    gear: { hand: [0.2, 0.5], chest: [370, 260], neck: [380, 150], back: [250, 200], size: 0.95 },
+    root: [312, 449],
+    scale: 0.2,
+    legs: 'none',
+    parts: [
+      { piece: 1, role: 'armBack', joint: [300, 210], pivot: [0.85, 0.3], depth: -3, tint: 0xa8b8d8, rest: 0.3 },
+      { piece: 0, role: 'body', joint: [312, 449], pivot: [0.45, 1], depth: 0 },
+      { piece: 2, role: 'arm', joint: [330, 230], pivot: [0.15, 0.3], depth: 1, rest: 0.4 },
+    ],
+  },
+  // Bloblin: body 287x310@62,89 (no legs: it hops); nubs 72x68@386,311 / 79x50@376,209.
+  3: {
+    gear: { hand: [0.7, 0.6], chest: [250, 300], neck: [270, 220], back: [140, 260], size: 0.95 },
+    root: [205, 399],
+    scale: 0.25,
+    legs: 'none',
+    parts: [
+      { piece: 2, role: 'armBack', joint: [120, 300], pivot: [0.9, 0.5], depth: -3, tint: 0xb8d8a0, rest: 0.4 },
+      { piece: 0, role: 'body', joint: [205, 399], pivot: [0.5, 1], depth: 0 },
+      { piece: 1, role: 'arm', joint: [292, 356], pivot: [0.15, 0.35], depth: 1, rest: 0.5 },
+    ],
+  },
   // Minturtle: body (shell, scoop, head, tail, far legs) 414x310@53,18; near legs 89x133@66,334 (front) / 75x131@363,335 (back). Holds its weapon in a front foot.
   16: {
     gear: { hand: [0.5, 0.85], chest: [330, 220], neck: [400, 150], back: [200, 60], size: 1.05 },

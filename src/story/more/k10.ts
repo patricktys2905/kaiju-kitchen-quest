@@ -74,6 +74,15 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w8-s7": [["me", "Compost Keep. Pee-yew. Smells like the bottom of the muffin tin. Key chest on a high ledge."], [12, "Heyyy, papa bear. *yaaawn* Wanna nap on the compost? It's warm. Super chill."], ["me", "Hmph. Key first. BOING! Littlest says do it again. Bears STILL don't bounce."]],
   "w8-s8": [["me", "Scarecrow Stand. Forty-five seconds. Littlest is scared of the scarecrow. It's a hat on a stick, kid."], [16, "Stay frosty, little muffin. Cool, cool, cool. Is that sun hot? I'm fine. Totally not melting."], ["me", "You're dripping mint, turtle. Stand behind the bear. Hmph."]],
   "w8-s9": [["me", "Greenhouse Steps. Glass house. Littlest, no tapping on the glass."], ["n", "From the Mystery Heap, a voice rumbles: \"Is that a MUFFIN? Am I part muffin?! I could be!\""], ["me", "Nope. You're a no-eat food. GRRR."]],
+
+  // World 9: The Supermarket.
+  "w9-s2": [["me", "Trolley Track. Littlest wants a trolley ride. We had one, kid. You slept through it."], ["n", "Uh-oh! A giant rolling pin comes rumbling down the aisle!"], ["me", "Bears JOG! Hold the ear! Clean-up on aisle FAST! GRRR!"]],
+  "w9-s3": [["me", "Cereal Aisle. Boxes taller than trees. Never trusted a box. Never will."], ["me", "Lever up top drops the pin. Monsters get flat. Bear gets the free toy inside."]],
+  "w9-s4": [["n", "Fruit and Veg! A tiny Crumblet is hiding in the blueberry punnets. Sneaky camouflage!"], ["me", "Strays walked home: nine. C'mon out, kiddo. No, Littlest, we're NOT buying it a grape."], ["me", "Okay, ONE grape. Stay close. Bruised Bananas cartwheel outta nowhere. Hmph."]],
+  "w9-s6": [["me", "Bakery Bluff. Recipe Scroll's at the far end. Smells like muffins. Littlest says it smells like cousins."], ["lo2", "Hah! The day-old shelf awaits thy crumbs, bear! Half price!"], ["me", "My crumbs are priceless, breadstick. Grrr."]],
+  "w9-s7": [["me", "Canned Goods Keep. Key chest on a high ledge. Bouncy sponge. Bears STILL don't bounce."], [14, "Let's GOOO, papa bear! Bounce against gravity! That's how I swim upstream!"], ["me", "Hmph. BOING! Littlest says do it again. Fine. ONE more."]],
+  "w9-s8": [["me", "Checkout Chaos. Forty-five seconds. A conveyor belt full of monsters. Somebody ring 'em up."], [11, "Beep beep! Express lane, Bluebeary! Ten monsters or less! Wait, that's like fifty!"], ["me", "Hmph. You bag 'em, raptor. I'll do the scanning. With my paws."]],
+  "w9-s9": [["me", "Frozen Aisle. Brrr. Littlest, under the fur. Blueberries go hard in the cold."], ["n", "From the Back Aisle, a spooky voice wails: \"Woooo! Is that a muffin? I'll keep it in a TUB!\""], ["me", "Nobody keeps my muffins but me. GRRR."]],
 };
 
 export const QUIPS: Record<QuipKind, string[]> = {

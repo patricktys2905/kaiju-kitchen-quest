@@ -67,6 +67,14 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w8-s7": [[12, "Heyyy, duuude. Nice gloves. *yaaawn*"], ["me", "Sloba! Wanna be my sparring partner?"], [12, "Nah. I'm sparring with this nap. Sponge is over there... zzz."]],
   "w8-s8": [["me", "Scarecrow Stand! A scarecrow! Perfect punching bag! Sorry, buddy!"], ["lo2", "Hold out all thou likest! The Meatloaf hath NO weight class!"], ["me", "Then he's in mine! Forty-five seconds! Gloves up!"]],
   "w8-s9": [["n", "From the greenhouse, a lumpy voice rambles: \"Am I a heavyweight? A lightweight? A MYSTERY weight?\""], ["me", "Greenhouse Steps! Hot glass, big climb. Main event, here I come! Ding ding!"]],
+  // World 9: The Supermarket.
+  "w9-s2": [["me", "Trolley Track! Roadwork, supermarket edition! Mind the carts!"], ["n", "RUMBLE! A giant rolling pin comes rolling down the aisle!"], ["me", "Clean-up on aisle FLAT KANGAROO?! Not today! HOP!"]],
+  "w9-s3": [["me", "Cereal Aisle! Big boxes all round. It's a ring! A crunchy, crunchy ring!"], ["me", "Lever! The pin drops! Down for the count, you expired lot! Ding ding!"]],
+  "w9-s4": [[10, "Hmph. Velvaroo. Crumblet's lost in Fruit and Veg. It cried for you."], ["me", "Into the pouch, champ-in-training! Ooh, bananas! Perfect snack between rounds!"], [10, "Hmph. Snack later. Walk now."]],
+  "w9-s6": [["me", "Bakery Bluff! Cakes and buns everywhere! Hi, cousins!"], ["me", "Grab the Recipe Scroll, then hold the shelf! Knead to win! Get it? KNEAD?"]],
+  "w9-s7": [["me", "Canned Goods Keep! Look at all these dented cans. Somebody's been sparring in here!"], ["me", "Key chest on the high shelf! Sponge! BOING! Top rope, baby!"]],
+  "w9-s8": [[3, "Wibble wobble! Gimme a V! Gimme an E! Gimme a, uh, how many letters ARE there?"], ["me", "A cheerleader! Bloblin, you're hired! Forty-five seconds, for the crowd! Ding ding!"]],
+  "w9-s9": [["foe", "Welcome to MY turf, Champ! The Frozen Aisle! Ahh, finally not melting!"], ["n", "From the back aisle, a spooky voice wails: \"Woooo! Nobody opens me! Nobody BEATS me! Woooo!\""], ["me", "Nobody opened you YET! Main event, here I come! Ding ding!"]],
 };
 
 export const QUIPS: Record<QuipKind, string[]> = {

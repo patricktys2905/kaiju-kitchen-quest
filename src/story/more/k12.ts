@@ -67,6 +67,14 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w8-s7": [["me", "Compost Keep. Pee-yew. Old peels and stale leaves. The Leftovers love this stuff."], ["me", "Key chest on the high ledge. Sponge! BOING! Smells way better up here."]],
   "w8-s8": [["lo2", "Ha! The Meatloaf shall stale every leaf in thy Garden, sloth! Thou reapest what thou sowest!"], ["me", "I sow naps, dude. I reap naps. Forty-five seconds, then nap."]],
   "w8-s9": [["me", "Greenhouse Steps. Warm, foggy and green. My tea bushes are in there."], ["n", "From the heap, a voice rambles: \"Who goes there?! Wait, is that a PEA in me? Since WHEN?\""], ["me", "Somebody's having a weird day. Climbing. Fast. For me."]],
+  // World 9: The Supermarket.
+  "w9-s2": [["me", "Trolley Track. Heyyy, a shopping trolley. A bed with wheels. Hop in, nap on the go."], ["n", "RUMBLE! A giant rolling pin comes rolling down the aisle!"], ["me", "Clean-up on aisle nine! That's, like, me. Run, sloth, run!"]],
+  "w9-s3": [["me", "Cereal Aisle. Boxes as big as buildings. Crunchy pillows as far as the eye can see."], ["me", "Lever! Rolling pin goes BONK. Those guys were way past their best before anyway."]],
+  "w9-s4": [[10, "Hmph. Sloth. My Crumblet got lost in the fruit and veg. Walk it to the exit."], ["me", "Hop on, little muffin. We're taking the slow lane. It's the comfy one."]],
+  "w9-s6": [["me", "Bakery Bluff. Warm bread smell. Like a big fluffy blanket. Gotta stay awake."], ["me", "Grab the scroll, hold the shelf. Then a loaf nap. Get it? Loaf? Like loafing around?"]],
+  "w9-s7": [[14, "Let's GOOO! Up the canned goods, against the current! Race ya, sloth!"], ["me", "Heyyy, Salmonster. You swim. I'll take the sponge. BOING!"], ["me", "Key chest on the ledge. Two for one: a key AND a nap spot."]],
+  "w9-s8": [["lo2", "Forsooth! Thy time is up, sloth! Check out NOW!"], ["me", "Checkout? I'm in the slow lane, dude. Forty-five seconds. Bag it."]],
+  "w9-s9": [["me", "Frozen Aisle. Brrr. Frosty fur again. Heyyy, it's Minturtle's dream house."], ["n", "From the back aisle, a voice wails: \"Woooo! Nobody throws ME out! Nobody even OPENS me!\""], ["me", "Spooky. I'll open ya, dude. Gently. Climbing."]],
 };
 
 export const QUIPS: Record<QuipKind, string[]> = {

@@ -7,6 +7,14 @@ export type QuipKind = 'combo' | 'lowhp' | 'perfect' | 'levelup' | 'secret' | 'b
 
 /** What each monster says when it first appears in a stage (one is picked at random). */
 export const TAUNTS: Partial<Record<MobKind, string[]>> = {
+  // World 9: The Supermarket
+  trolley: ["Clean-up on aisle YOU!", "Squeak squeak, comin' through!", "No returns, no refunds!"],
+  bag: ["Paper or PLASTIC? Plastic! Wooo!", "I'm bag-ging you up!", "Floatin' in the breeze, baby!"],
+  scanner: ["Beep! Price check on a hero!", "Scanning... you're EXPIRED!", "Hold still, I'm reading your barcode!"],
+  banana: ["We're going BANANAS!", "Bruised but not beaten!", "A bunch of trouble, comin' up!"],
+  can2: ["Beans away! FWOOMP!", "Dented and dangerous!", "Can't touch this! Get it? CAN'T?"],
+  melon: ["One in a MELON, baby!", "I'm the whole fruit salad!", "Watermelon crush time!"],
+  lid: ["Has anyone seen my tub?!", "I don't fit ANYTHING! Charge!", "Pop! Lid attack!"],
   // World 8: The Garden
   snail: ["Slow and steady... CRUSHES you!", "My shell's crisper than yours!", "Lettuce introduce myself. Nope, too slow."],
   ladybug: ["Spot ya! Hehe!", "I'm a lady, and I'm a BUG!", "Bzzt! Tomato incoming!"],

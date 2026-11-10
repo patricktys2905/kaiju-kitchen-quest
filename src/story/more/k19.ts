@@ -67,6 +67,14 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w8-s7": [[12, "Heyyy, duuude. Nice party. *yaaawn*"], ["me", "Sloba! Wise owl says: a guest who naps at your party is a guest who never leaves!"], [12, "Mmhm. Key's up there. Bounce, dude... zzz."]],
   "w8-s8": [["me", "Scarecrow Stand! Ooh, that scarecrow's got a great party hat!"], ["me", "Forty-five seconds! Mixtape Track forty-five: \"Scared Crow, Brave Owl!\" Hoo-hoo!"]],
   "w8-s9": [["lo2", "Climb, feathered taco! The Meatloaf shall stuff thee with mystery filling!"], ["n", "From the greenhouse, a lumpy voice mutters: \"Am I pork? Am I beans? Would a taco even WANT me?\""], ["me", "Sorry, buddy, the menu's set! WHOOO's climbing? This owl!"]],
+  // World 9: The Supermarket.
+  "w9-s2": [["me", "Trolley Track! Shopping carts! It's like a taco truck, but tiny! Hoo-hoo!"], ["n", "RUMBLE! A giant rolling pin comes bowling down the aisle!"], ["me", "New dance! The Express Lane! Flap, flap, FLAP!"]],
+  "w9-s3": [["me", "Cereal Aisle! Corn flakes as big as surfboards! Tortillas are corn! I'm home again!"], ["me", "Lever! Rolling pin, drop the beat! Clean-up on aisle nine! Hoo-hoo!"]],
+  "w9-s4": [[10, "Hmph. Owl. Crumblet's lost in Fruit and Veg. Walk it out. No loud music."], ["me", "Not even a little supermarket muzak? Fine. Stick close, little muffin! Hoo-hoo-hmm!"]],
+  "w9-s6": [["me", "Bakery Bluff! Fresh tortillas! Grab the Recipe Scroll, then grab ALL the tortillas!"], ["me", "Wise owl says: the bread aisle is the best aisle. Hold the shelf!"]],
+  "w9-s7": [[14, "Let's GOOO! Taco bird! Race ya up the soup cans! Against the current!"], ["me", "Salmonster! Wanna headline my Fish Taco Friday?"], [14, "Holy mackerel, NO! Key chest's up top! Sponge! GOOO!"]],
+  "w9-s8": [["me", "Checkout Chaos! Beep, beep, beep! Those scanners have a BEAT!"], ["me", "Forty-five seconds! Mixtape Track forty-seven: \"Beep Beep Checkout!\" It's a two-for-one banger!"]],
+  "w9-s9": [["me", "The Frozen Aisle! Brrr! Owls aren't built for this! My cheese is going stiff!"], ["n", "From the back aisle, a spooky voice wails: \"Woooo! Leftovers Night, every night! Woooo!\""], ["me", "Over my crunchy shell! WHOOO's climbing? This owl!"]],
 };
 
 export const QUIPS: Record<QuipKind, string[]> = {

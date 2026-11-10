@@ -4,7 +4,7 @@ import { type Item, SETS, type SkillMod, type Slot, UNIQUES, itemIcon, itemLines
 import { type HeroGear, gearOf } from './gear';
 import { MAX_SKILL, PASSIVE_UNLOCK, skillScale, skillsOf } from './skills';
 
-export const MAX_LEVEL = 90; // Act 2 (Worlds 6+) goes past 60
+export const MAX_LEVEL = 100; // Act 2 (Worlds 6+) goes past 60
 export const STAT_PTS_PER_LEVEL = 3;
 export const STATS: Stat[] = ['str', 'dex', 'int', 'vit'];
 export const STAT_INFO: Record<Stat, string> = {

@@ -67,6 +67,14 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w8-s7": [["me", "Compost Keep. Warm, squishy, smells like old salad."], ["me", "You reap what you sow, Leftovers! BOING! Key's mine. Knob? Still no knob. Of course."]],
   "w8-s8": [["lo2", "Hold out, frosty knave! The Meatloaf hath turned the heat up to TWELVE!"], ["me", "Twelve? That's not even a setting! Forty-five seconds. Waffle Wall, up!"]],
   "w8-s9": [["n", "From the greenhouse, a voice rambles: \"Is this a pea? Is this a button? Am I a BUTTON?!\""], ["me", "Greenhouses are hot on purpose. Drip number fifty. Climbing anyway, dude."]],
+  // World 9: The Supermarket.
+  "w9-s2": [["me", "Trolley Track. A shopping trolley! Finally, a ride that doesn't need arms."], ["n", "RUMBLE! A giant rolling pin comes barrelling down the aisle!"], ["me", "Clean-up on aisle me! Okay, running!"]],
+  "w9-s3": [["me", "Cereal Aisle. Boxes as tall as buildings. Frosted flakes, though? My kinda people."], ["me", "Shell bump, lever down, pin drops. Those monsters just got their shelf life cut short."]],
+  "w9-s4": [[10, "Hmph. Turtle. My Crumblet wandered into the fruit and veg. Walk it out. Mind the bananas."], ["me", "Shell ride through the produce! Hold on, little muffin. Stay frosty, stay fresh."]],
+  "w9-s6": [[3, "Wibble wobble! Hi hi hi! Are you going to the dessert table?! Can I come?!"], ["me", "Ice cream and jelly? Dude, that's a party. Help me grab that scroll, Bloblin."]],
+  "w9-s7": [["me", "Canned Goods Keep. Cold tins everywhere. Ahhh, nice and chilly on the shell."], ["me", "Bouncy sponge! BOING! Key's mine. Knob? Nope. Two for one on bummers."]],
+  "w9-s8": [["lo2", "Hold out, frosty knave! The Tupperwraith shall BAG thee at the checkout!"], ["me", "Paper or plastic? Neither, dude. Forty-five seconds. Waffle Wall, up!"]],
+  "w9-s9": [["me", "THE FROZEN AISLE! Biggest freezer in the world! Drip count: below zero! Is that a thing?!"], ["n", "From the back aisle, a ghostly voice wails: \"Woooo! The knob is MINE! I keep EVERYTHING!\""], ["me", "Cool, cool, cool. Not for long, dude."]],
 };
 
 export const QUIPS: Record<QuipKind, string[]> = {

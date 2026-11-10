@@ -67,6 +67,14 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w8-s7": [["me", "Compost Keep. Everything here is BROWN! Don't look at me, compost!"], [16, "Stay frosty, little dude. Scared of the sun? Same. Scoot into my shade."], ["me", "Shade buddies! Now, sponge! BOING! Treasure for the hoard!"]],
   "w8-s8": [["lo2", "Hah! Hold out all thou likest, dip! The Meatloaf shall MASH thee in!"], ["me", "Mash ME? Only guac gets mashed! Wait. I AM guac. Forty-five seconds, GO!"]],
   "w8-s9": [["me", "The Greenhouse! Glass walls, hot sun. It's a browning OVEN with plants!"], ["n", "From the top, a lumpy voice mumbles: \"Guac? In ME? Huh. Might be some in here already. Who knows!\""], ["me", "Nobody puts the guac in the loaf! Climbing!"]],
+  // World 9: The Supermarket.
+  "w9-s2": [["me", "Trolley Track! Ooh, little carts! Can a dragon ride one? Wheee!"], ["n", "RUMBLE! A giant rolling pin comes rolling down the aisle right behind him!"], ["me", "Clean-up on aisle MASHED AVOCADO?! Nope! RUN!"]],
+  "w9-s3": [["me", "Cereal Aisle! Boxes as tall as castles! Behold my new kingdom! Hey, who let Leftovers in my kingdom?"], ["me", "Lever! Rolling pin, BONK! Your shelf life is OVER!"]],
+  "w9-s4": [[10, "Hmph. Dragon. Crumblet wandered off in Fruit and Veg. Walk it to the exit."], ["me", "Behold, little muffin! Ooh, AVOCADOS! My cousins! Wait, why are some of them BROWN?!"], [10, "Hmph. Don't look. Just walk."]],
+  "w9-s6": [["me", "Bakery Bluff! Grab the Recipe Scroll, dragon! Ooh, is it a guac recipe?"], ["me", "Nope, croissants. Still mine! Hold the shelf! Pit Hurl! BONK!"]],
+  "w9-s7": [[3, "Wibble wobble! A dragon! Are you going to the dessert table? Can I come?"], ["me", "Guac isn't dessert, Bloblin. But it SHOULD be! Ooh, a chest up high! Sponge! BOING!"]],
+  "w9-s8": [["me", "Checkout Chaos! Beep! Beep! Hey, nobody scans the dragon!"], ["lo2", "Hah! Bag yon dip, my troops! Two for one!"], ["me", "Forty-five seconds, crusty! Then YOU'RE checked out! Guac and roll!"]],
+  "w9-s9": [["me", "The Frozen Aisle! Cold and frosty! Perfect for guac! Brrr, maybe TOO perfect!"], ["n", "From the back aisle, a spooky voice wails: \"Woooo! Your dip will keep in my tub way past its best before! Woooo!\""], ["me", "Past its BEST BEFORE?! Hang on, hoard! Climbing!"]],
 };
 
 export const QUIPS: Record<QuipKind, string[]> = {

@@ -56,7 +56,15 @@ export type SkillKind =
   | 'wall'       // a waffle wall: blocks monsters and their shots
   | 'scoop'      // a lobbed scoop that bursts and freezes
   | 'chipstorm'  // choc chips rain down all around you
-  | 'snooze' | 'sundae';
+  | 'snooze' | 'sundae'
+  // Bloblin / Salmonster
+  | 'jiggle'     // bounces up and lands in a jelly splat that glues
+  | 'clones'     // little jelly clones bounce along the floor
+  | 'wobble'     // a wobble shield: less damage, shots bounce back
+  | 'upstream'   // leaps forward and up through monsters
+  | 'tide'       // a wave that pushes monsters along
+  | 'salmon'     // salmon swim out in a wavy line
+  | 'jellyquake' | 'salmonrun';
 
 export interface SkillDef {
   id: string;
@@ -188,6 +196,22 @@ export const SKILLS: Record<number, { actives: SkillDef[]; passive: PassiveDef }
     ],
     passive: { id: 'spiky', name: 'Extra Spiky', desc: 'Monsters that hurt you take 12% of it back per level', unlock: PASSIVE_UNLOCK, per: { thorns: 0.12 } },
   },
+  3: { // Bloblin — jiggly support
+    actives: [
+      S({ id: 'jiggle', name: 'Jiggle Splat', kind: 'jiggle', desc: 'Bounces up high and lands in a jelly splat that glues monsters', cd: 3.4, dur: 0.8, dmg: 2, reach: 110, h: 80, kx: 200, ky: -320 }),
+      S({ id: 'clones', name: 'Jelly Clones', kind: 'clones', desc: 'Two little jelly clones bounce along the floor, hitting everything they bump', unlock: 4, cd: 8, dur: 0.4, dmg: 1.1, reach: 30, h: 30, kx: 160, ky: -220, n: 2 }),
+      S({ id: 'wobble', name: 'Wobble Shield', kind: 'wobble', desc: 'A wobble burst knocks monsters back, then 4 s extra wobbly: 40% less damage and shots bounce back', unlock: 8, cd: 12, dur: 0.4, dmg: 1.2, reach: 120, h: 100, kx: 300, ky: -200 }),
+    ],
+    passive: { id: 'setjelly', name: 'Set Jelly', desc: '+4% max HP and +4% ultimate charge per level', unlock: PASSIVE_UNLOCK, per: { hpPct: 0.04, ultGain: 0.04 } },
+  },
+  14: { // Salmonster — river rusher
+    actives: [
+      S({ id: 'upstream', name: 'Upstream Leap', kind: 'upstream', desc: 'Leaps forward and up through monsters like a salmon up a waterfall', cd: 3, dur: 0.55, dmg: 1.8, reach: 80, h: 90, kx: 260, ky: -420 }),
+      S({ id: 'tide', name: 'Tidal Push', kind: 'tide', desc: 'A rolling wave that carries monsters along and slams them', unlock: 4, cd: 8, dur: 0.5, dmg: 1.4, reach: 60, h: 60, kx: 320, ky: -200 }),
+      S({ id: 'salmonswarm', name: 'Salmon Swarm', kind: 'salmon', desc: 'Four salmon swim out in a wavy line, nibbling everything', unlock: 8, cd: 6, dur: 0.4, dmg: 1.1, reach: 30, h: 30, kx: 140, ky: -140, n: 4 }),
+    ],
+    passive: { id: 'current', name: 'Strong Current', desc: '+4% attack and +2% move speed per level', unlock: PASSIVE_UNLOCK, per: { atkPct: 0.04, dodge: 0.02 } },
+  },
   12: { // Sloba — sleepy swinger
     actives: [
       S({ id: 'vineswing', name: 'Vine Swing', kind: 'swing', desc: 'Swings up and over in an arc through monsters, landing with a sticky boba slam', cd: 3.4, dur: 0.7, dmg: 1.8, reach: 90, h: 80, kx: 260, ky: -300 }),
@@ -262,6 +286,8 @@ export const ULTS: Record<number, SkillDef> = {
   7: S({ id: 'ult7', name: 'Dragon Roll Inferno', kind: 'cone', desc: 'A colossal wasabi fire breath', cd: 0, dur: 0.9, dmg: 9, reach: 400, h: 200, kx: 420, ky: -300 }),
   8: S({ id: 'ult8', name: 'Fondue Flood', kind: 'wave', desc: 'A wave of molten chocolate rolls across the whole floor', cd: 0, dur: 0.8, dmg: 8, reach: 120, h: 90, kx: 420, ky: -400 }),
   15: S({ id: 'ult15', name: 'Grand Grill', kind: 'firefloor', desc: 'Lights the floor under every monster on screen', cd: 0, dur: 0.8, dmg: 1.0, reach: 600, h: 80, kx: 60, ky: -120 }),
+  3: S({ id: 'ult3', name: 'Jelly Quake', kind: 'jellyquake', desc: 'A giant wobble shakes the whole screen: every monster is hit and glued', cd: 0, dur: 0.9, dmg: 4, reach: 620, h: 300, kx: 100, ky: -300 }),
+  14: S({ id: 'ult14', name: 'Salmon Run', kind: 'salmonrun', desc: 'A huge school of salmon leaps across the screen, over and over', cd: 0, dur: 1, dmg: 1.4, reach: 620, h: 200, kx: 160, ky: -260, n: 16 }),
   12: S({ id: 'ult12', name: 'Mega Snooze', kind: 'snooze', desc: 'A giant yawn: every monster on screen falls asleep for 3 s', cd: 0, dur: 0.9, dmg: 2.5, reach: 620, h: 300, kx: 20, ky: -80 }),
   16: S({ id: 'ult16', name: 'Sundae Drop', kind: 'sundae', desc: 'A colossal sundae falls from the sky: a huge impact and a freezing puddle', cd: 0, dur: 0.9, dmg: 9, reach: 170, h: 120, kx: 300, ky: -500 }),
   9: S({ id: 'ult9', name: 'Mega Bubble', kind: 'megabubble', desc: 'Blows a giant bubble that seals every monster on screen for 3 s, then POP!', cd: 0, dur: 0.9, dmg: 5, reach: 620, h: 300, kx: 160, ky: -520 }),
@@ -278,6 +304,7 @@ export const POSE_OF: Partial<Record<SkillKind, SkillKind>> = {
   geyser: 'nova', drain: 'nova', freeze: 'nova', radial: 'nova', firefloor: 'nova', blizzard: 'nova', orbit: 'buff', counter: 'buff',
   pounce: 'slam', tremor: 'slam', wave: 'slam', meteor: 'slam', swoop: 'dash', blink: 'dash', bulldoze: 'dash', slide: 'dash', rampage: 'dash', slashall: 'dash',
   throw: 'uppercut',
+  jiggle: 'slam', clones: 'cone', wobble: 'buff', upstream: 'dash', tide: 'cone', salmon: 'cone', jellyquake: 'nova', salmonrun: 'nova',
   swing: 'dash', nap: 'buff', slowtime: 'nova', wall: 'slam', scoop: 'cone', chipstorm: 'nova', snooze: 'nova', sundae: 'slam',
   bubbletrap: 'nova', gumball: 'cone', trumpet: 'slam', hops: 'dash', flurry: 'cone', cakebomb: 'cone', megabubble: 'nova', tko: 'uppercut',
   pitbounce: 'cone', guac: 'nova', gust: 'cone', drop: 'cone', screech: 'buff', volley: 'cone', guacflood: 'slam', fiesta: 'nova',

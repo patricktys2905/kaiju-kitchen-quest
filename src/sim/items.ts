@@ -100,6 +100,10 @@ export const BASES: Record<string, BaseDef> = {
   'a-slo1': AR('Cup Sleeve Vest', 'a-slo1', 12, [{ k: 'def', v: 3 }, { k: 'hp', v: 20 }], 1), 'a-slo2': AR('Pajama Plate', 'a-slo2', 12, [{ k: 'def', v: 4 }, { k: 'hp', v: 26 }, { k: 'int', v: 1 }], 2), 'a-slo3': AR('Jade Tea Armour', 'a-slo3', 12, [{ k: 'def', v: 5 }, { k: 'hp', v: 32 }, { k: 'int', v: 2 }], 3), 'k-slo': CH('Lucky Pearl Drop', 'k-slo', 12, [{ k: 'cdr', v: 0.04 }, { k: 'hp', v: 16 }]),
   'w-mint1': W('Waffle Lance', 'w-mint1', 16, 1, [{ k: 'atk', v: 4 }, { k: 'def', v: 1 }]), 'w-mint2': W('Scooper Mace', 'w-mint2', 16, 2, [{ k: 'atk', v: 5 }, { k: 'hp', v: 18 }]), 'w-mint3': W('Mint Crystal Staff', 'w-mint3', 16, 3, [{ k: 'atk', v: 6 }, { k: 'vit', v: 2 }, { k: 'skillDmg', v: 0.06 }]),
   'a-mint1': AR('Waffle Guard', 'a-mint1', 16, [{ k: 'def', v: 4 }, { k: 'hp', v: 24 }], 1), 'a-mint2': AR('Choc Dip Plate', 'a-mint2', 16, [{ k: 'def', v: 5 }, { k: 'hp', v: 32 }], 2), 'a-mint3': AR('Sundae Shell Armour', 'a-mint3', 16, [{ k: 'def', v: 7 }, { k: 'hp', v: 38 }, { k: 'vit', v: 2 }], 3), 'k-mint': CH('Choc Chip Charm', 'k-mint', 16, [{ k: 'def', v: 3 }, { k: 'skillDmg', v: 0.04 }]),
+  'w-blob1': W('Jelly Spoon', 'w-blob1', 3, 1, [{ k: 'atk', v: 3 }, { k: 'hp', v: 10 }]), 'w-blob2': W('Lime Slicer', 'w-blob2', 3, 2, [{ k: 'atk', v: 4 }, { k: 'skillDmg', v: 0.06 }]), 'w-blob3': W('Jelly Mould Sceptre', 'w-blob3', 3, 3, [{ k: 'atk', v: 5 }, { k: 'int', v: 2 }, { k: 'skillDmg', v: 0.08 }]),
+  'a-blob1': AR('Paper Cup Vest', 'a-blob1', 3, [{ k: 'def', v: 3 }, { k: 'hp', v: 22 }], 1), 'a-blob2': AR('Jelly Cube Mail', 'a-blob2', 3, [{ k: 'def', v: 4 }, { k: 'hp', v: 30 }], 2), 'a-blob3': AR('Golden Mould Plate', 'a-blob3', 3, [{ k: 'def', v: 5 }, { k: 'hp', v: 36 }, { k: 'vit', v: 2 }], 3), 'k-blob': CH('Cherry Charm', 'k-blob', 3, [{ k: 'cdr', v: 0.04 }, { k: 'hp', v: 18 }]),
+  'w-fish1': W('Fin Blade', 'w-fish1', 14, 1, [{ k: 'atk', v: 4 }, { k: 'crit', v: 2 }]), 'w-fish2': W('Rowing Oar', 'w-fish2', 14, 2, [{ k: 'atk', v: 5 }, { k: 'hp', v: 14 }]), 'w-fish3': W('Lemon Trident', 'w-fish3', 14, 3, [{ k: 'atk', v: 6 }, { k: 'str', v: 2 }, { k: 'critDmg', v: 0.1 }]),
+  'a-fish1': AR('Rain Slicker', 'a-fish1', 14, [{ k: 'def', v: 3 }, { k: 'hp', v: 18 }, { k: 'dex', v: 1 }], 1), 'a-fish2': AR('Fishnet Mail', 'a-fish2', 14, [{ k: 'def', v: 4 }, { k: 'hp', v: 24 }, { k: 'str', v: 1 }], 2), 'a-fish3': AR('Silver Scale Armour', 'a-fish3', 14, [{ k: 'def', v: 5 }, { k: 'hp', v: 30 }, { k: 'str', v: 2 }], 3), 'k-fish': CH('Lemon Charm', 'k-fish', 14, [{ k: 'atk', v: 3 }, { k: 'crit', v: 2 }]),
   // ----- generic armor (one per world + the lid) -----
   apron: { slot: 'armor', name: 'Checkered Apron', icon: 'eq-apron', main: [{ k: 'hp', v: 20 }, { k: 'def', v: 2 }] },
   lid: { slot: 'armor', name: 'Pot Lid', icon: 'eq-lid', main: [{ k: 'def', v: 4 }] },
@@ -285,16 +289,17 @@ export const SETS: Record<string, SetDef> = {
   champ: { name: 'Countertop Champion', world: 1, two: '+8% attack', three: '+25% crit damage, +8% speed', b2: { atkPct: 0.08 }, b3: { critDmg: 0.25, speed: 0.08 } },
   frost: { name: 'Frostbite Guard', world: 2, two: '+12% max HP', three: '-15% damage taken, +10% skill damage', b2: { hpPct: 0.12 }, b3: { dr: 0.15, skillDmg: 0.1 } },
   pantry: { name: 'Pantry Raider', world: 4, two: '+12% attack', three: '+15% max HP, -10% cooldowns', b2: { atkPct: 0.12 }, b3: { hpPct: 0.15, cdr: 0.1 } },
-  ...Object.fromEntries(([[0, 'Gobzilla'], [10, 'Bluebeary'], [11, 'Pizzaraptor'], [4, 'Mothball'], [1, 'Squidgeon'], [2, 'Crabbage'], [5, 'Toastbat'], [6, 'Dumplord'], [7, 'Norigon'], [8, 'Chocomunch'], [15, 'Hotchog'], [17, 'Pengwhip'], [13, 'Avocadrake'], [19, 'Tacowl'], [9, 'Bubblegumbo'], [18, 'Velvaroo'], [12, 'Sloba'], [16, 'Minturtle']] as [number, string][]).map(([sp, n]) => [`sig${sp}`, {
+  ...Object.fromEntries(([[0, 'Gobzilla'], [10, 'Bluebeary'], [11, 'Pizzaraptor'], [4, 'Mothball'], [1, 'Squidgeon'], [2, 'Crabbage'], [5, 'Toastbat'], [6, 'Dumplord'], [7, 'Norigon'], [8, 'Chocomunch'], [15, 'Hotchog'], [17, 'Pengwhip'], [13, 'Avocadrake'], [19, 'Tacowl'], [9, 'Bubblegumbo'], [18, 'Velvaroo'], [12, 'Sloba'], [16, 'Minturtle'], [3, 'Bloblin'], [14, 'Salmonster']] as [number, string][]).map(([sp, n]) => [`sig${sp}`, {
     name: `${n}'s Regalia`, world: 0, two: '+15% skill damage', three: 'Ultimate charges 50% faster and hits 25% harder',
     b2: { skillDmg: 0.15 }, b3: { ultGain: 0.5, ultDmg: 0.25 } } as SetDef])),
+  market: { name: 'Best Before', world: 9, two: '+15% attack, +8% speed', three: '+25% crit damage, -12% damage taken', b2: { atkPct: 0.15, speed: 0.08 }, b3: { critDmg: 0.25, dr: 0.12 } },
   garden: { name: 'Green Thumb', world: 8, two: '+12% max HP, -10% cooldowns', three: '+20% skill damage, -10% damage taken', b2: { hpPct: 0.12, cdr: 0.1 }, b3: { skillDmg: 0.2, dr: 0.1 } },
   bbq: { name: 'Pitmaster', world: 7, two: '+15% crit damage, +10% max HP', three: '+20% attack, +15% skill damage', b2: { critDmg: 0.15, hpPct: 0.1 }, b3: { atkPct: 0.2, skillDmg: 0.15 } },
   dining: { name: 'Fine Dining', world: 6, two: '+15% skill damage, +8% speed', three: '+20% attack, -10% cooldowns', b2: { skillDmg: 0.15, speed: 0.08 }, b3: { atkPct: 0.2, cdr: 0.1 } },
   sink: { name: 'Deep Clean', world: 5, two: '+15% attack', three: '+20% max HP, -15% damage taken', b2: { atkPct: 0.15 }, b3: { hpPct: 0.2, dr: 0.15 } },
   inferno: { name: 'Inferno Chef', world: 3, two: '+10% skill damage', three: '-12% cooldowns, +12% attack', b2: { skillDmg: 0.1 }, b3: { cdr: 0.12, atkPct: 0.12 } },
 };
-export function setForLevel(ilvl: number): string { return ilvl >= 85 ? 'garden' : ilvl >= 73 ? 'bbq' : ilvl >= 61 ? 'dining' : ilvl >= 49 ? 'sink' : ilvl >= 37 ? 'pantry' : ilvl >= 25 ? 'inferno' : ilvl >= 13 ? 'frost' : 'champ'; }
+export function setForLevel(ilvl: number): string { return ilvl >= 97 ? 'market' : ilvl >= 85 ? 'garden' : ilvl >= 73 ? 'bbq' : ilvl >= 61 ? 'dining' : ilvl >= 49 ? 'sink' : ilvl >= 37 ? 'pantry' : ilvl >= 25 ? 'inferno' : ilvl >= 13 ? 'frost' : 'champ'; }
 
 // ---------- named legendaries ----------
 // Signature legendaries: two per kaiju (a weapon and an armour), each upgrading one of that kaiju's skills.
@@ -323,6 +328,10 @@ const SIGS: Record<string, UniqueDef> = {
   picnicnet: SIG('Picnic Net Launcher', 'weapon', 15, 'mustard', { n: 2, dmg: 1.3 }, 'Mustard Glue fires 5 blobs instead of 3'),
   grillmaster: SIG('Grillmaster Apron', 'armor', 15, 'grillspin', { n: 6, burn: 2 }, 'Quill Burst fires 16 red-hot quills'),
   sundae: SIG('Sundae Scepter', 'weapon', 17, 'snowball', { dmg: 1.4, freeze: true }, 'Rolling Snowball hits 40% harder and freezes'),
+  wobblecrown: SIG('Wobble Crown', 'armor', 3, 'wobble', { cd: 0.65 }, 'Wobble Shield comes back 35% sooner'),
+  cherryspoon: SIG('Cherry Bomb Spoon', 'weapon', 3, 'clones', { n: 2, dmg: 1.3 }, 'Jelly Clones makes four clones that hit 30% harder'),
+  paddle: SIG('Upstream Paddle', 'weapon', 14, 'upstream', { dmg: 1.4, cd: 0.75 }, 'Upstream Leap hits 40% harder and comes back sooner'),
+  lurevest: SIG('Lucky Lure Vest', 'armor', 14, 'salmonswarm', { n: 3, burn: 2 }, 'Salmon Swarm sends seven grilled-hot salmon'),
   dreamstraw: SIG('Dream Catcher Straw', 'weapon', 12, 'nap', { reach: 1.5, dmg: 1.4 }, 'Power Nap wakes up with a shockwave 50% bigger and 40% stronger'),
   snuggle: SIG('Snuggle Hammock Mail', 'armor', 12, 'vineswing', { cd: 0.7, glue: true }, 'Vine Swing comes back sooner and glues everything it swings through'),
   triplescoop: SIG('Triple Scoop Shield', 'armor', 16, 'scoop', { n: 2 }, 'Scoop Lob throws three scoops at once'),

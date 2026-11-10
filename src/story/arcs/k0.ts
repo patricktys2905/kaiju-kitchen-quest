@@ -146,8 +146,27 @@ export const ARC: Record<string, StoryLine[]> = {
     ["me", "A ghost?! In a TUB?! I'm not scared! ...Okay, medium scared."],
     ["me", "Big brother, look! My shadow on the greenhouse goes all the way to the roof! Gobzilla LARGE! Almost! RAWR!"],
   ],
+  "w9-open": [
+    ["me", "The Supermarket! Whoa, the cereal boxes are like skyscrapers! Stomp count, back to zero. AGAIN!"],
+    ["me", "Big brother says the supermarket's where grown-ups get BIG stuff. Gobzilla Large is on the shopping list!"],
+    ["lo2", "Hah! The Tupperwraith awaits thee in the Back Aisle, berry! Thou art past thy sell-by date!"],
+    ["me", "Strawberries are FRESH, ya crusty breadstick! Clean-up on aisle YOU! RAWR!"],
+  ],
+  "w9-boss": [
+    ["boss", "Woooo! Who disturbs the BACK AISLE?! I am THE TUPPERWRAITH! Woooo!"],
+    ["me", "A g-g-ghost! In a tub! Um, what's inside you, anyway?"],
+    ["boss", "Nobody remembers! Not even ME! And don't you DARE say \"just throw it out\"! Wooooo!"],
+    ["me", "Wasn't gonna! I was gonna say STOMP! Stomp count: THREE! RAWR!"],
+  ],
+  "w9-after": [
+    ["n", "POP! The Tupperwraith's lid flies off, and out spills a whole hoard of stolen treasure!"],
+    ["me", "Crabbage's cabbage! Toastbat's Golden Butter! And a teeny bib?! It says \"GOBZILLA JR.\" on it!"],
+    ["boss", "Woooo! That's the big one's old bib! He was a Junior once too, ya know! Hmph! I'm floating HOME!"],
+    ["lo", "Bring the little berry to the House, wraith. The Feast of the Forgotten is about to begin. Hehehe..."],
+    ["me", "Big brother was a JUNIOR?! *sniff* Then Juniors get BIG! See ya at the House, Fruitcake! RAWR!"],
+  ],
 };
-export const NEMESIS: Record<"w1-elite" | "w2-elite" | "w3-elite" | "w4-elite" | "w5-elite" | "w6-elite" | "w7-elite" | "w8-elite", StoryLine[]> = {
+export const NEMESIS: Record<"w1-elite" | "w2-elite" | "w3-elite" | "w4-elite" | "w5-elite" | "w6-elite" | "w7-elite" | "w8-elite" | "w9-elite", StoryLine[]> = {
   "w1-elite": [
     ["foe", "Well, well! If it isn't Gobzilla JUNIOR! Lost your big brother, shrimp?"],
     ["me", "Brutus Beetroot! I'm a STRAWBERRY, ya big turnip!"],
@@ -187,5 +206,10 @@ export const NEMESIS: Record<"w1-elite" | "w2-elite" | "w3-elite" | "w4-elite" |
     ["foe", "Psst, Gobzilla! Welcome to MY patch! Pumpkin Brute up ahead. Rounder than me. Orange-er too."],
     ["me", "Brutus! Is THIS where beets come from?!"],
     ["foe", "Born and raised in that dirt right there! Go squash it. Okay, FINE, I'm rooting for ya. I'm a ROOT! Hmph!"],
+  ],
+  "w9-elite": [
+    ["foe", "Psst, Gobzilla! Watermelon Brute up on Melon Mountain. Big, green, and it spits SEEDS!"],
+    ["me", "Brutus! What are YOU doing in a supermarket?!"],
+    ["foe", "Beets are on sale, two for one! Go squash it before it spits on ME! Not that I'm worried! Hmph!"],
   ],
 };

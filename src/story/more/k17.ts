@@ -67,6 +67,14 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w8-s7": [[16, "Whoa. A penguin. Stay frosty, little dude. Is it hot, or is it me? It's hot, right?"], ["me", "Another ice cream?! You're melting too! Quick, stand in my shade!"], [16, "Cool, cool, cool. Key chest's up on the high ledge. Scoop there it is."]],
   "w8-s8": [["me", "A scarecrow! Hi, Mr. Scarecrow! You look so chilly out here. I'm jealous!"], ["me", "Forty-five seconds? Round and round the scarecrow! Circles STILL count! Wheee!"]],
   "w8-s9": [["n", "From the greenhouse, a lumpy voice mumbles: \"Huh! Is that a sock in me? WHO AM I?\""], ["me", "A greenhouse is just a glass oven for plants! Eek! Okay, slide fast! Wheee!"]],
+  // World 9: The Supermarket.
+  "w9-s2": [["me", "A trolley track! Shiny wheels, shiny floor! Wheee!"], ["n", "RUMBLE! A giant rolling pin comes rolling down the Trolley Track!"], ["me", "Another race?! Clean-up on aisle nine! That's ME! Wheeee!"]],
+  "w9-s3": [["me", "The Cereal Aisle! Frosted flakes! FROSTED! Ooh, I feel at home already!"], ["me", "Gates locked! Yank the lever! Penguin bowling, supermarket edition!"]],
+  "w9-s4": [[10, "Hmph. Penguin. This Crumblet's never seen fruit and veg. Walk it to the exit. Slowly."], ["me", "Slowly! Brakes on! *skrrrt* Oops, misty lettuce is slippery! Hang on, little buddy!"]],
+  "w9-s6": [["me", "Bakery Bluff! Mmm, warm bread smell! Eek, WARM! Grab the scroll fast!"], ["me", "Then hold out! Stay cool, Pengwhip! You're SO cool! Cooler than a baguette, anyway!"]],
+  "w9-s7": [[3, "Wibble wobble! A penguin! Are you dessert? Are you going to the dessert table?"], ["me", "I'm cookies AND cream! I'm basically a dessert table! Wanna come to my freezer for a sleepover?"], [3, "Eee! A frosty jelly sleepover! That's the jiggle of it! Key chest's up high! Go boing!"]],
+  "w9-s8": [["lo2", "The checkout, bird! I shall scan thee, bag thee and pop thee in the freezer section!"], ["me", "Ooh, yes please! Wait, nope! Forty-five seconds! Circles STILL count! Wheee!"]],
+  "w9-s9": [["me", "THE FROZEN AISLE! Frost! Freezers all the way down! Is this home? Aw, it's not home, is it?"], ["n", "Uh-oh! A freezer door swings open, and a spooky voice wails: \"Woooo! Get out of my aisle!\""], ["me", "YOUR aisle?! Brrr, that's a cold welcome! I love it! Long way home, part six and a half! Wheee!"]],
 };
 
 export const QUIPS: Record<QuipKind, string[]> = {

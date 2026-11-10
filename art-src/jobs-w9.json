@@ -1,0 +1,114 @@
+[
+ {
+  "name": "bg-far-market",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-bg.png"
+  ],
+  "prompt": "Generate an image. This is the background of the first area of my cute 2D side-scrolling action RPG (tiny food monsters in a giant kitchen). I need the FAR BACKGROUND for a new world, The Supermarket, in exactly the same painted fantasy MMORPG side-scroller style: straight-on side view of a giant supermarket at night after closing, seen from tiny-creature height: towering shelf aisles full of colourful boxes and cans like skyscrapers, hanging aisle signs (blank, no letters), a few flickering fluorescent lights, a glowing freezer aisle in the distance, shopping trolleys like giant metal cages. Spooky-fun and mysterious. The bottom quarter calm and darker. No characters, no text, no letters, no UI. Wide 16:9 landscape image."
+ },
+ {
+  "name": "bg-mid-market",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-bg.png"
+  ],
+  "prompt": "Generate an image. This is the background of the first area of my cute 2D side-scrolling action RPG (tiny food monsters in a giant kitchen). I need a MIDDLE PARALLAX LAYER for the supermarket world in the same painted style: a row of giant supermarket objects standing along the bottom of the image, seen from the side: a shopping basket, a stack of cans, a cereal box, a bunch of bananas, a milk jug, a price-tag stand (blank, no letters), with gaps between them. They fill only the bottom 60 percent. Everything else (the whole upper area and the gaps) must be solid flat magenta (#FF00FF). No shadows on the magenta, no characters, no text, no letters. Wide 16:9 landscape image."
+ },
+ {
+  "name": "tile-market",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-bg.png"
+  ],
+  "prompt": "Generate an image. This is the background of the first area of my cute 2D side-scrolling action RPG (tiny food monsters in a giant kitchen). I need a GROUND TILE in the same painted style for the walkable floor in the supermarket world: straight-on side view of a thick shiny supermarket floor slab: a polished white-and-grey checkered tile top edge with a little shine, then a grey-blue speckled front face, darker towards the bottom. It must tile SEAMLESSLY left-to-right. Fill the whole square, no background, no objects, no text. Square 1:1 image."
+ },
+ {
+  "name": "bg-far-freezer2",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-bg.png"
+  ],
+  "prompt": "Generate an image. This is the background of the first area of my cute 2D side-scrolling action RPG (tiny food monsters in a giant kitchen). I need the FAR BACKGROUND for a BOSS ARENA, The Back Aisle, same painted style: straight-on side view of the forgotten back aisle of a supermarket at night: dusty old shelves with forgotten plastic food tubs, a broken flickering light, cobwebs, ghostly blue-green glow, a stack of old containers like a tower, cold mist on the floor. The bottom quarter calm and darker. No characters, no text, no letters, no UI. Wide 16:9 landscape image."
+ },
+ {
+  "name": "map-market",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-bg.png"
+  ],
+  "prompt": "Generate an image. This is a background from my cute painted fantasy 2D action RPG where tiny food monsters adventure through a giant world. I need another WORLD MAP in the same painted style: a whimsical illustrated fantasy adventure map of a GIANT SUPERMARKET seen from above at an angle, like a storybook RPG map: rows of aisles like city blocks, a fruit and veg section like a market garden, a frozen aisle like a snowy land, a checkout conveyor like a river, and a winding dotted path from the bottom-left entrance to a dark dusty back aisle at the top-right. Plenty of open space around the path. No characters, no text, no labels, no letters, no numbers, no UI. Wide 16:9 landscape image."
+ },
+ {
+  "name": "mob-trolley",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/mob-bun.png"
+  ],
+  "prompt": "Generate an image. The reference is an enemy from my cute 2D side-scrolling action RPG set in a giant world. Draw a NEW enemy for the world THE SUPERMARKET, in exactly the same art style (clean dark outlines, saturated colours, glossy cel shading, cute but menacing). It serves THE LEFTOVERS, forgotten old foods, so it looks a bit dusty, past its sell-by date. A TROLLEY RAMMER: a little rusty shopping trolley creature with angry headlight eyes on the front, squeaky wheels, ready to charge. Side view facing LEFT, whole body visible, centred, filling about 85% of the frame. IMPORTANT: a crisp dark outline all round with NO glow, haze or cloud around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no letters on any label. Square 1:1 image."
+ },
+ {
+  "name": "mob-bag",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/mob-bun.png"
+  ],
+  "prompt": "Generate an image. The reference is an enemy from my cute 2D side-scrolling action RPG set in a giant world. Draw a NEW enemy for the world THE SUPERMARKET, in exactly the same art style (clean dark outlines, saturated colours, glossy cel shading, cute but menacing). It serves THE LEFTOVERS, forgotten old foods, so it looks a bit dusty, past its sell-by date. A PLASTIC BAG GHOST: a floating crinkly plastic shopping bag with handles like ears, a sneaky grin, drifting through the air. Side view facing LEFT, whole body visible, centred, filling about 85% of the frame. IMPORTANT: a crisp dark outline all round with NO glow, haze or cloud around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no letters on any label. Square 1:1 image."
+ },
+ {
+  "name": "mob-scanner",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/mob-bun.png"
+  ],
+  "prompt": "Generate an image. The reference is an enemy from my cute 2D side-scrolling action RPG set in a giant world. Draw a NEW enemy for the world THE SUPERMARKET, in exactly the same art style (clean dark outlines, saturated colours, glossy cel shading, cute but menacing). It serves THE LEFTOVERS, forgotten old foods, so it looks a bit dusty, past its sell-by date. A BARCODE SCANNER SNIPER: a handheld barcode scanner creature on two little legs with a glowing red laser eye, a cable tail, squinting. Side view facing LEFT, whole body visible, centred, filling about 85% of the frame. IMPORTANT: a crisp dark outline all round with NO glow, haze or cloud around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no letters on any label. Square 1:1 image."
+ },
+ {
+  "name": "mob-banana",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/mob-bun.png"
+  ],
+  "prompt": "Generate an image. The reference is an enemy from my cute 2D side-scrolling action RPG set in a giant world. Draw a NEW enemy for the world THE SUPERMARKET, in exactly the same art style (clean dark outlines, saturated colours, glossy cel shading, cute but menacing). It serves THE LEFTOVERS, forgotten old foods, so it looks a bit dusty, past its sell-by date. A BRUISED BANANA BUNCH: three overripe brown-spotted bananas stuck together that cartwheel along, grumpy faces, peel flapping. Side view facing LEFT, whole body visible, centred, filling about 85% of the frame. IMPORTANT: a crisp dark outline all round with NO glow, haze or cloud around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no letters on any label. Square 1:1 image."
+ },
+ {
+  "name": "mob-can2",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/mob-bun.png"
+  ],
+  "prompt": "Generate an image. The reference is an enemy from my cute 2D side-scrolling action RPG set in a giant world. Draw a NEW enemy for the world THE SUPERMARKET, in exactly the same art style (clean dark outlines, saturated colours, glossy cel shading, cute but menacing). It serves THE LEFTOVERS, forgotten old foods, so it looks a bit dusty, past its sell-by date. A DENTED CAN TURRET: a big dented tin can sitting on its side like a cannon with its lid open like a mouth, ready to spit beans. Side view facing LEFT, whole body visible, centred, filling about 85% of the frame. IMPORTANT: a crisp dark outline all round with NO glow, haze or cloud around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no letters on any label. Square 1:1 image."
+ },
+ {
+  "name": "mob-melon",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/mob-bun.png"
+  ],
+  "prompt": "Generate an image. The reference is an enemy from my cute 2D side-scrolling action RPG set in a giant world. Draw a NEW enemy for the world THE SUPERMARKET, in exactly the same art style (clean dark outlines, saturated colours, glossy cel shading, cute but menacing). It serves THE LEFTOVERS, forgotten old foods, so it looks a bit dusty, past its sell-by date. A WATERMELON BRUTE: a hulking whole watermelon with a striped green rind body, a sliced-open grin showing red flesh and black seed teeth, thick stubby arms. It is a tough BRUTE, bigger and chunkier than normal enemies. Side view facing LEFT, whole body visible, centred, filling about 85% of the frame. IMPORTANT: a crisp dark outline all round with NO glow, haze or cloud around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no letters on any label. Square 1:1 image."
+ },
+ {
+  "name": "mob-lid",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/mob-bun.png"
+  ],
+  "prompt": "Generate an image. The reference is an enemy from my cute 2D side-scrolling action RPG set in a giant world. Draw a NEW enemy for the world THE SUPERMARKET, in exactly the same art style (clean dark outlines, saturated colours, glossy cel shading, cute but menacing). It serves THE LEFTOVERS, forgotten old foods, so it looks a bit dusty, past its sell-by date. A LOST LID: a tiny round plastic container lid with googly eyes that rolls and hops around on its edge, looking for its tub. Small and silly. Side view facing LEFT, whole body visible, centred, filling about 85% of the frame. IMPORTANT: a crisp dark outline all round with NO glow, haze or cloud around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no letters on any label. Square 1:1 image."
+ },
+ {
+  "name": "boss-tupper",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/boss-mold.png"
+  ],
+  "prompt": "Generate an image. The reference is a boss from my cute 2D side-scrolling action RPG set in a giant world. Same style (clean dark outlines, saturated colours, glossy cel shading). I need a NEW BOSS: THE TUPPERWRAITH, a spooky but cute ghost made of an old forgotten plastic food container: a cloudy translucent tub body with a floating ghostly lid hovering above like a hat, mysterious murky leftovers swirling inside, glowing eyes, a wispy ghost tail instead of legs, two wispy ghost arms. Spooky and funny but still in the cute game style. Side view facing LEFT, whole body visible, centred, filling about 90% of the frame. IMPORTANT: a crisp dark outline all round with NO big glow or haze around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no letters. Square 1:1 image."
+ },
+ {
+  "name": "still-w9-open",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-bg.png"
+  ],
+  "prompt": "Generate an image. The reference shows the painted background style. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Cinematic composition, wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. NO text, no letters, no writing on any labels or signs, no speech bubbles, no UI, no border, no signature, no humans. Scene: an establishing wide vista with no characters. The Supermarket at night after closing seen from tiny-creature height as a vast landscape: towering aisles like a city, colourful boxes like buildings, a frosty freezer aisle glowing far away, a shopping trolley like a giant cage, a ghostly glow coming from a forgotten back aisle."
+ }
+]

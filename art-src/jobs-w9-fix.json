@@ -1,0 +1,10 @@
+[
+ {
+  "name": "tile-market",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-bg.png"
+  ],
+  "prompt": "Generate an image. This is the background of the first area of my cute 2D side-scrolling action RPG (tiny food monsters in a giant kitchen). I need a GROUND TILE in the same painted style for the walkable floor in the supermarket world: straight-on side view of a thick shiny supermarket floor slab: a polished white-and-grey checkered tile top edge with a little shine, then a grey-blue speckled front face, darker towards the bottom. IMPORTANT: a flat straight-on front view, NOT a 3D block, no perspective, no background colour around it: the floor texture must fill the ENTIRE square edge to edge (top quarter the checkered tile edge, the rest the speckled front face). It must tile SEAMLESSLY left-to-right. Fill the whole square, no background, no objects, no text. Square 1:1 image."
+ }
+]

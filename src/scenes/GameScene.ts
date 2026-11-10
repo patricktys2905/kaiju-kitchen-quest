@@ -273,7 +273,7 @@ export class GameScene extends Phaser.Scene {
     cam.centerOn(this.cx, this.cy);
     if (w.variant === 'night') { this.add.rectangle(SX, SY, VW * 2, VH * 2, 0x0a0a30, 0.42).setOrigin(0, 0).setScrollFactor(0).setDepth(15); }
     setTouchVisible(true); showHud(true);
-    playMusic(st.boss ? 'boss' : st.world === 2 || st.world === 4 ? 'world2' : st.world === 3 || st.world === 5 ? 'world3' : st.world === 6 ? 'world2' : st.world === 8 ? 'world3' : 'world1');
+    playMusic(st.boss ? 'boss' : st.world === 2 || st.world === 4 ? 'world2' : st.world === 3 || st.world === 5 ? 'world3' : st.world === 6 ? 'world2' : st.world === 8 ? 'world3' : st.world === 9 ? 'world2' : 'world1');
     if (st.boss) this.time.delayedCall(900, () => sfx('boss'));
     if (w.variant) this.time.delayedCall(900, () => toast(`${{ swarm: '🐜 SWARM', ambush: '⚔️ AMBUSH', night: '🌙 NIGHT' }[w.variant!]}!`, { color: '#c8a8ff' }));
     toast(`${st.num} ${st.name}${this.nightmare ? ' · 💀 NIGHTMARE' : this.hard ? ' · HARD' : ''}${w.spicy.length ? ' · ' + '🌶'.repeat(w.spicy.length) : ''}`, { big: true, color: this.hard ? '#ff7a6a' : undefined });
@@ -711,7 +711,11 @@ export class GameScene extends Phaser.Scene {
   /** Hazard look: burner ring / steam grate / shelf shadow / ice sheet (no art needed). */
   private buildHazard(kind: string, x: number, w: number, gy: number): Phaser.GameObjects.Container {
     const parts: Phaser.GameObjects.GameObject[] = [];
-    if (kind === 'pollen') { // a big flower; a cloud of pollen puffs up when it's on
+    if (kind === 'chill') { // a freezer door; a cold blast puffs out when it's on
+      parts.push(this.add.rectangle(0, -60, 70, 120, 0xd8e8f0, 0.9).setStrokeStyle(3, 0x6a8090), this.add.rectangle(24, -60, 6, 40, 0x8aa0b0));
+      parts.push(this.add.container(0, -40, [this.add.ellipse(0, -10, w * 1.4, 90, 0xd0f0ff, 0.5), this.add.ellipse(w * 0.4, 0, w * 0.6, 50, 0xffffff, 0.45)]).setName('fx'));
+      parts.push(this.add.ellipse(0, -2, w + 30, 10, 0xc8f0ff, 0.45).setName('glow'));
+    } else if (kind === 'pollen') { // a big flower; a cloud of pollen puffs up when it's on
       parts.push(this.add.ellipse(0, -10, 30, 20, 0xff8ad8).setStrokeStyle(2, 0xa83a8a), this.add.circle(0, -12, 7, 0xffd23c));
       parts.push(this.add.container(0, -10, [this.add.ellipse(0, -60, w * 0.9, 110, 0xffe070, 0.45), this.add.ellipse(-w * 0.2, -50, w * 0.4, 70, 0xfff0a0, 0.5), this.add.ellipse(w * 0.25, -70, w * 0.35, 60, 0xfff0a0, 0.5)]).setName('fx'));
       parts.push(this.add.ellipse(0, -2, w, 10, 0xffe070, 0.4).setName('glow'));
@@ -1035,7 +1039,10 @@ export class GameScene extends Phaser.Scene {
       }
       let c = this.shotImgs.get(s.id);
       if (!c) {
-        c = s.kind === 'scoop' ? this.add.circle(0, 0, 13, 0x9ae8c8).setStrokeStyle(3, 0x3a2a1a)
+        c = s.kind === 'minijelly' ? this.add.ellipse(0, 0, 26, 22, 0x8ae83a, 0.9).setStrokeStyle(3, 0x3a8a1a)
+          : s.kind === 'tide' ? this.add.ellipse(0, -10, 110, 70, 0x4ab8f0, 0.75).setStrokeStyle(4, 0xffffff)
+          : s.kind === 'salmon' ? this.add.ellipse(0, 0, 34, 16, 0xff8a6a).setStrokeStyle(3, 0x2a4a8a)
+          : s.kind === 'scoop' ? this.add.circle(0, 0, 13, 0x9ae8c8).setStrokeStyle(3, 0x3a2a1a)
           : s.kind === 'chocchip' ? this.add.triangle(0, 0, 0, 12, 7, -6, 14, 12, 0x4a2a14).setStrokeStyle(2, 0x2a1408)
           : s.kind === 'sundae' ? this.add.ellipse(0, 0, 90, 110, 0xf8f0e0).setStrokeStyle(5, 0xd83050)
           : s.kind === 'gumball' ? this.add.circle(0, 0, 12, [0xff6ad8, 0x6ad8ff, 0xffe24a][s.id % 3]).setStrokeStyle(3, 0xffffff)
@@ -1070,6 +1077,7 @@ export class GameScene extends Phaser.Scene {
           : s.kind === 'reflect' ? this.add.circle(0, 0, 9, 0x8ae07a).setStrokeStyle(2, 0xffffff)
           : s.from === 'hero'
           ? this.add.circle(0, 0, 9, 0xe8c8ff).setStrokeStyle(3, 0xffffff).setBlendMode(Phaser.BlendModes.ADD)
+          : s.kind === 'icicle' && worldOf(this.stage).id === 9 ? this.add.circle(0, 0, 9, 0xb05a2a).setStrokeStyle(2, 0x5a2a10)
           : s.kind === 'icicle' && worldOf(this.stage).id === 8 ? this.add.circle(0, 0, 10, 0xd83020).setStrokeStyle(2, 0x5a8a2a)
           : s.kind === 'icicle' && worldOf(this.stage).id === 7 ? this.add.rectangle(0, 0, 14, 12, 0x2a2222).setStrokeStyle(2, 0xff8a2a)
           : s.kind === 'icicle' && worldOf(this.stage).id === 6 ? this.add.rectangle(0, 0, 14, 12, 0xd8a050).setStrokeStyle(2, 0x7a4a20)

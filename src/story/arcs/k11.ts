@@ -135,8 +135,27 @@ export const ARC: Record<string, StoryLine[]> = {
     ["me", "A ghost in a leftovers tub? Spooky. But hey, airtight lid. Respect."],
     ["me", "New delivery address: the Supermarket! Minute forty-ish. That's basically on time! Beep beep!"],
   ],
+  "w9-open": [
+    ["me", "Minute forty-one! The Supermarket! A whole store full of toppings and nobody at the till!"],
+    ["me", "Order still says \"Head of the Table\". Customer's in here somewhere. Aisle by aisle, beep beep!"],
+    ["lo2", "Hah! Thy pizza's best-before hath PASSED, courier! The Tupperwraith shall shelve it forever!"],
+    ["me", "Best-before?! It's fresh outta the oven! Well, fresh-ISH! Vroom!"],
+  ],
+  "w9-boss": [
+    ["boss", "Woooo! A pizza box! Gimme! I'll pop it in a tub and keep it FOREVER! Wooooo!"],
+    ["me", "Are you the customer? Got ID? Wait, what's even IN you?!"],
+    ["boss", "Nobody remembers! Not even ME! And don't you DARE say \"just throw it out\"! Woooo!"],
+    ["me", "Didn't say it! But that's ONE star for storage! Beep beep, Raptor Express coming THROUGH!"],
+  ],
+  "w9-after": [
+    ["n", "POP! The Tupperwraith's lid flies off, and out spills a whole hoard of stolen stuff!"],
+    ["me", "Cabbage, butter, a knob, and the ORIGINAL order slip! \"Feast of the Forgotten. Deliver to: OLD FRUITCAKE, the House.\""],
+    ["boss", "Woooo! You weren't supposed to read that! I'm floating home to tattle! Hmph!"],
+    ["lo", "Hehe. Bring my pizza home, lizard. The Feast is set. And I NEVER tip."],
+    ["me", "Never tips?! Oh, it's ON! New delivery address: the House! Last stop on the route! Beep beep!"],
+  ],
 };
-export const NEMESIS: Record<"w1-elite" | "w2-elite" | "w3-elite" | "w4-elite" | "w5-elite" | "w6-elite" | "w7-elite" | "w8-elite", StoryLine[]> = {
+export const NEMESIS: Record<"w1-elite" | "w2-elite" | "w3-elite" | "w4-elite" | "w5-elite" | "w6-elite" | "w7-elite" | "w8-elite" | "w9-elite", StoryLine[]> = {
   "w1-elite": [
     ["foe", "Pineapple Pete Express! Fastest wheels in the kitchen! That pizza's MINE to deliver!"],
     ["me", "Raptor Express doesn't share routes, Pete! Beep beep, outta my way!"],
@@ -174,5 +193,10 @@ export const NEMESIS: Record<"w1-elite" | "w2-elite" | "w3-elite" | "w4-elite" |
     ["foe", "Raptor! Traffic alert! Pumpkin Brute at Gourd Guard. Big, round, and parked in BOTH lanes!"],
     ["me", "Pete! Your traffic reports get five stars from me!"],
     ["foe", "Go, go! I'm off to the pineapple patch. Wait, pineapples don't grow here?! Aw, nuts!"],
+  ],
+  "w9-elite": [
+    ["foe", "Raptor! Traffic alert! Watermelon Brute on Melon Mountain. Big, stripy, and spitting seeds across ALL lanes!"],
+    ["me", "Pete! What're you doing here, shopping?"],
+    ["foe", "Found the pineapples! Fruit and Veg, two for one! Now go, go! I'm timing ya!"],
   ],
 };
