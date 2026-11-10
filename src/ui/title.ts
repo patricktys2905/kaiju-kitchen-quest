@@ -73,6 +73,7 @@ const CSS = `
 @keyframes tpulse { to { transform: scale(1.06); box-shadow: 0 1vmin 0 #8a3a10, 0 0 7vmin #ffd27acc; } }
 #title .fsb { font-size: 3vmin; padding: 1vmin 3vmin; background: #2a1a30d8; color: #ffd27a; border: 2px solid #ffd27a99; }
 #title .hint { font-size: 2.4vmin; font-weight: 800; color: #d8c8d8; text-align: center; text-shadow: 0 0.3vmin 0.6vmin #000; }
+#title .over.bug { left: auto; right: calc(2vmin + env(safe-area-inset-right)); bottom: calc(5vmin + env(safe-area-inset-bottom)); }
 #title .over { position: absolute; z-index: 2; left: calc(2vmin + env(safe-area-inset-left)); bottom: calc(1.6vmin + env(safe-area-inset-bottom)); font-size: 3vmin; padding: 1vmin 2.6vmin; background: #2a1a30e0; color: #ffd0c8; border: 2px solid #e8a0a0aa; }
 #title .ask { position: absolute; inset: 0; z-index: 3; display: none; align-items: center; justify-content: center; background: #120a18d8; }
 #title .ask.on { display: flex; }
@@ -102,7 +103,7 @@ export function showTitle(onStart: () => void = () => {}): void {
     <div class="logo"><h1><span>Kaiju</span>Kitchen<em>Quest</em></h1><div class="tag">The Head Chef is missing. The Mold Crown is rising.</div></div>
     <div class="btns"><button class="play">▶ PLAY</button>${canFullscreen() ? `<button class="fsb" data-fs="long">${fsIcon()} ${isFullscreen() ? 'EXIT FULL SCREEN' : 'FULL SCREEN'}</button>` : ''}${hint}</div>
     <div class="ver">v${__APP_VERSION__}</div>
-    <button class="over">↺ START OVER</button>
+    <button class="over">↺ START OVER</button><button class="over bug" data-report>🐞 REPORT A BUG</button>
     <div class="ask"><div><h2>START OVER?</h2><p>This erases ALL progress in this browser: every kaiju, level, item, box and story scene.</p><p>Other phones and computers keep their own saves. This can't be undone.</p>
       <div class="row2"><button class="no">KEEP MY SAVE</button><button class="yes">ERASE &amp; START OVER</button></div></div></div>`;
   document.body.appendChild(el);

@@ -20,6 +20,7 @@ import { UI_CSS } from './style';
 import { freePage, startFree } from './free';
 import type { FreeMode } from '../sim/free';
 import { gearSkillOf, gearText } from '../sim/gear';
+import { logError } from './report';
 import { isTouchDevice } from '../touch';
 import { ACHIEVEMENTS, DAILY_BONUS, achievements, checkUnlocks, claimAch, claimBonus, claimKaijuQuest, claimQuest, claimable, dailyQuests, kaijuQuestState, rewardText, track, unlockProgress } from '../quests';
 import { STORIES, VARIANT_INFO, beatBefore, isMinorBeat } from '../story/stories';
@@ -115,7 +116,7 @@ function render(): void {
   el.innerHTML = `
     <div class="side">${CLASSES.map(c => { const h = save.heroes[c.species], open = save.unlocked.includes(c.species); return `<button class="hp ${c.species === save.selected ? 'on' : ''} ${open && h.statPts + h.skillPts ? 'pts' : ''} ${open ? '' : 'lockd'}" data-hero="${c.species}" title="${c.name}" style="background-image:url(art/kaiju-${c.species}.webp)"><i></i>${open ? `<b>${h.level}</b>` : '<u>🔒</u>'}</button>`; }).join('')}</div>
     <div class="main">
-      <div class="top"><h1>Kaiju Kitchen Quest</h1><span class="chip"><img src="art/icon-crumb.webp"> ${save.crumbs}</span><span class="chip">🎁 ${save.boxes.length}</span><button class="chip" data-act="mute">${isMuted() ? '🔇' : '🔊'}</button>${fsButton()}</div>
+      <div class="top"><h1>Kaiju Kitchen Quest</h1><span class="chip"><img src="art/icon-crumb.webp"> ${save.crumbs}</span><span class="chip">🎁 ${save.boxes.length}</span><button class="chip" data-act="mute">${isMuted() ? '🔇' : '🔊'}</button><button class="chip" data-report title="Report a bug">🐞</button>${fsButton()}</div>
       <div class="tabs">${tabs.map(([k, n, c]) => `<button class="${tab === k ? 'on' : ''}" data-tab="${k}">${n}${c ? `<em>${c}</em>` : ''}</button>`).join('')}</div>
       <div class="page ${tab === 'map' ? 'mappage' : ''}">${safePage()}</div>
     </div>
@@ -126,7 +127,7 @@ function render(): void {
 /** A tab that fails to draw shows what went wrong (to screenshot) instead of silently doing nothing. */
 function safePage(): string {
   try { return page(); } catch (e) {
-    console.error(e);
+    console.error(e); logError(`tab ${tab}: ${(e as Error)?.message ?? e}`);
     const err = e instanceof Error ? `${e.name}: ${e.message} @ ${(e.stack ?? '').split('\n')[1]?.trim() ?? ''}` : String(e);
     return `<div class="freeinfo">😵 This tab hit a snag and couldn't open.<br><small style="color:#ff9a8a">${err.replace(/[<>&]/g, '')}</small><br><small>Version ${__APP_VERSION__} · tab ${tab} · kaiju ${save.selected}</small><br>Please send a screenshot of this message.</div>`;
   }

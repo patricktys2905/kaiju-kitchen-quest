@@ -3,6 +3,7 @@
 import * as Phaser from 'phaser';
 import { playMusic, sfx, toggleMute } from '../audio';
 import { initHud, setEmotes, setMateNames, showHud, showPause, toast, updateHud } from '../hud';
+import { setReportContext } from '../ui/report';
 import { EMOTES } from '../net/net';
 import type { Derived } from '../sim/stats';
 import { readInput, takeTaps } from '../input';
@@ -158,6 +159,7 @@ export class GameScene extends Phaser.Scene {
     this.world = null; this.done = false; this.paused = false; this.xpGained = 0; this.levels = 0; this.acc = 0;
     if (!data?.stage) {
       // camp: the HTML menus cover the screen
+      setReportContext(null);
       setTouchVisible(false); showHud(false);
       this.cameras.main.setBackgroundColor('#1a1020');
       showCamp();
@@ -174,6 +176,11 @@ export class GameScene extends Phaser.Scene {
     this.stage = this.free ? this.free.stage : stageById(data.stage);
     this.hookNet();
     this.buildStage();
+    setReportContext(() => {
+      const w = this.world, st = this.stage; if (!w) return `stage ${st.id} (loading)`;
+      const h = w.hero, alive = w.mobs.filter(m => m.state !== 'dead');
+      return `stage ${st.id} ${st.name}${this.free ? ' (free play ' + this.free.mode + ' floor ' + this.free.floor + ')' : ''}${this.online ? ' (online ' + this.online.role + ', ' + this.online.kits.length + ' players)' : ''} · t ${w.time.toFixed(1)}s · hero x${Math.round(h.x)} y${Math.round(h.y)} ${h.state}${h.skill ? '/' + h.skill.id : ''} ground=${h.ground} on=${h.on} hp ${Math.round(h.hp)}/${h.d.maxHp} · ${alive.length} monsters left${w.boss ? ' · boss ' + Math.round(w.boss.hp / w.boss.maxHp * 100) + '%' : ''}`;
+    });
   }
 
   private buildStage(): void {

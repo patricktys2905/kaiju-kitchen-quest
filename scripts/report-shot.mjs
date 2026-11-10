@@ -1,0 +1,25 @@
+// The bug reporter: from the pause menu mid-stage, after a thrown error. node scripts/report-shot.mjs → shots/report.png
+import { spawn } from 'node:child_process';
+import { chromium } from 'playwright-core';
+const PORT = 5339, base = `http://localhost:${PORT}/?touch`;
+const server = spawn(process.execPath, ['node_modules/vite/bin/vite.js', '--port', String(PORT), '--strictPort'], { stdio: 'pipe' });
+const wait = ms => new Promise(r => setTimeout(r, ms));
+await wait(3000);
+const b = await chromium.launch({ executablePath: 'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe', headless: true });
+const ctx = await b.newContext({ viewport: { width: 852, height: 393 }, isMobile: true, hasTouch: true, deviceScaleFactor: 2 });
+await ctx.grantPermissions(['clipboard-read', 'clipboard-write']);
+const p = await ctx.newPage();
+await p.goto(base); await p.evaluate(() => localStorage.clear()); await p.reload();
+for (let i = 0; i < 60 && !await p.evaluate(() => !!window.__kkq); i++) await wait(250);
+await p.evaluate(() => document.querySelector('#title .play')?.click()); await wait(1000);
+await p.evaluate(() => { const s = window.__kkq.save; s.storyMode = 'key'; s.heroes[0].seen.push('intro', 'w1-open'); window.__kkq.play('1-2'); }); await wait(2500);
+await p.evaluate(() => setTimeout(() => { throw new Error('test error from report-shot'); }, 0)); await wait(500);
+const nudge = await p.evaluate(() => !!document.querySelector('.report-nudge'));
+await p.evaluate(() => document.querySelector('#hud .menu')?.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true }))); await wait(300);
+await p.evaluate(() => document.querySelector('#pause [data-report]')?.click()); await wait(300);
+await p.fill('#report [data-r=note]', 'Testing the reporter');
+await p.evaluate(() => document.querySelector('#report [data-r=copy]')?.click()); await wait(300);
+const text = await p.evaluate(() => navigator.clipboard.readText()).catch(() => '(clipboard unavailable)');
+await p.screenshot({ path: 'shots/report.png' });
+console.log('nudge shown:', nudge); console.log(text);
+await b.close(); server.kill();

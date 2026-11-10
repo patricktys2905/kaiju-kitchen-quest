@@ -125,7 +125,7 @@ export function initHud(onMenu: () => void, onResume: () => void, onLeave: () =>
   });
   const p = document.createElement('div');
   p.id = 'pause'; p.className = 'kq';
-  p.innerHTML = `<h2>PAUSED</h2><button class="pill go" data-a="resume">▶ RESUME</button><button class="pill" data-a="mute">🔊 SOUND ON / OFF</button>${canFullscreen() ? `<button class="pill" data-fs="long">${fsIcon()} ${isFullscreen() ? 'EXIT FULL SCREEN' : 'FULL SCREEN'}</button>` : ''}<button class="pill" data-a="leave">⟵ RETREAT TO CAMP</button>`;
+  p.innerHTML = `<h2>PAUSED</h2><button class="pill go" data-a="resume">▶ RESUME</button><button class="pill" data-a="mute">🔊 SOUND ON / OFF</button>${canFullscreen() ? `<button class="pill" data-fs="long">${fsIcon()} ${isFullscreen() ? 'EXIT FULL SCREEN' : 'FULL SCREEN'}</button>` : ''}<button class="pill" data-report>🐞 REPORT A BUG</button><button class="pill" data-a="leave">⟵ RETREAT TO CAMP</button>`;
   document.body.appendChild(p);
   p.querySelector('[data-a=resume]')!.addEventListener('click', onResume);
   p.querySelector('[data-a=leave]')!.addEventListener('click', onLeave);

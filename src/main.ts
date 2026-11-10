@@ -7,6 +7,7 @@ import { initCamp, showCamp } from './ui/camp';
 import { initOnline, showOnline } from './ui/online';
 import { initFree } from './ui/free';
 import { showTitle } from './ui/title';
+import './ui/report'; // catches uncaught errors from the start; [data-report] buttons open it
 
 initInput(unlockAudio);
 addEventListener('pointerdown', unlockAudio);
