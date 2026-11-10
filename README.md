@@ -64,7 +64,7 @@ an ultimate kind, a passive stat or a skill name. Skill ids never change (saves 
 New mechanics live in world.ts startSkill/stepSkill (+ zones, orbs, burn/freeze status, special projectiles);
 POSE_OF maps them to existing animations. Preview: `node scripts/skill-shot.mjs [species...]` → shots/skills-sheet.png.
 
-## Story nemeses (mobs.ts `nem`, src/story/nemesis.ts)
+## Story nemeses (mobs.ts `nem`, scenes in src/story/arcs/k<species>.ts NEMESIS)
 Each kaiju has one rival (brain 'nemesis') who replaces the elite at stage 5 of every world in that kaiju's story only
 (World(..., nemesis)). It uses 2 / 3 / 4 / 4 of its moves in worlds 1–4 (nemesisMoves) and enrages at half HP.
 Shared basics (slash, leap, charge, rain, breath, fanshot, lob, spin, roar, puddle, trap) + one signature move each
@@ -88,3 +88,8 @@ A short punny scene before every stage that has none (beats w{N}-s{2,3,4,6,7,8,9
 "FULL STORY / KEY SCENES ONLY" toggle on the stage card (save.storyMode). In stages, speech bubbles that don't pause play:
 each monster kind taunts the first time it's on screen (TAUNTS), your kaiju quips on big combos, low HP, perfect dodges,
 level-ups, secrets, explosions, mimics and objectives (QUIPS). Checks: tests/banter.test.ts, `node scripts/banter-shot.mjs`.
+
+## Story voice
+All dialogue follows docs/VOICE.md (cartoon characters talking: interjections, sound effects, catchphrases, ham-fisted
+puns; no em dashes, dry narrator punchlines or explained morals). Each kaiju's arc + nemesis scenes: src/story/arcs/k<sp>.ts;
+between-stage scenes + quips: src/story/more/k<sp>.ts; monster taunts: src/story/banter.ts. tests/voice.test.ts guards it.
