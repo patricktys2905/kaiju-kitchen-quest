@@ -266,3 +266,26 @@ were thrown from (`Shot.fromY`) and fall through ledges above it, so they land a
   resumable). Review with `node scripts/icon-sheet.mjs <jobs.json> --wide`. Prompts must not name characters (Gemini drew a
   famous cartoon for "Finn") or places (it paints the name as text). Screens: `node scripts/story-shot.mjs`.
 - A scene whose painting is missing falls back to portraits (the story player reads art/manifest.json).
+
+## Testing tools (see docs/PLAYTEST.md)
+- Chaos: `src/sim/chaos.ts` (random-input bot + rules), `npx vite-node scripts/chaos.ts [world-] [s] [seeds]`, replay one report with
+  `scripts/chaos-trace.ts <stage> <species> <seed>`; tests/chaos.test.ts runs a slice on every push. Runs are deterministic
+  (entity ids restart per World).
+- Saves: `npx vite-node scripts/save-fuzz-gen.ts` + `node scripts/save-fuzz.mjs` (every screen x 60 random/odd saves).
+  Loading repairs saves (unknown item types dropped, broken levels fixed).
+- Visual: `node scripts/visual-check.mjs [--update]` against tests/visual-baseline/.
+- Performance: `node scripts/perf-check.mjs [cpuSlowdown]`, `node scripts/perf-profile.mjs [stage]`.
+- In game: 🐞 REPORT A BUG (camp, pause, title) copies a report (version, kaiju, stage position, last errors); every uncaught
+  error is logged (src/ui/report.ts).
+
+## Settings and tips
+- `src/ui/settings.ts` (⚙ in camp and pause, stored in 'kkq-settings' so START OVER keeps them): sound and music volume,
+  screen shake, flashes, text size, touch button size, story scenes, tips, low effects (fewer particles, damage numbers only for
+  crits and hits on you).
+- `src/ui/tips.ts`: a guided start on a kaiju's first 1-1 (move, jump, attack, dodge, skill, gear) and one-time tips (ladder,
+  dropping through, arena, hazard, sponge, low health, Crumblet, Recipe Scroll, boss, exit), remembered in save.tips.
+
+## Gear variety 2
+8 more armour/charm effects in PROCS (Meringue Guard, Popcorn Burst, Syrup Slide, Pepper Breath, Second Scoop, Quick Draw,
+Snack Bite, Crumb Magnet; tests/procs2.test.ts), a kaiju armour each with a built-in effect (`a-<ref>x`, item level 6+) and 8
+charms with a built-in effect (`BaseDef.proc`). Icons: `node scripts/gear2-jobs.mjs`.

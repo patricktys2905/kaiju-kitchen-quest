@@ -1,0 +1,226 @@
+[
+ {
+  "name": "a-gobx",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/a-gob3.png"
+  ],
+  "prompt": "Generate an image. The reference is an armour icon from my cute 2D kitchen action RPG. Draw a NEW armour icon called \"Seed Spike Vest\": a red strawberry-skin vest covered in pointy golden seed spikes. Same style (clean dark outlines, saturated colours, glossy cel shading). A normal (not legendary) item: no glow or sparkles. Shown flat and centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody wearing it. Square 1:1 image."
+ },
+ {
+  "name": "a-bluex",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/a-blue3.png"
+  ],
+  "prompt": "Generate an image. The reference is an armour icon from my cute 2D kitchen action RPG. Draw a NEW armour icon called \"Honey Glaze Coat\": a glossy coat of dripping golden honey glaze with a little honeycomb pattern. Same style (clean dark outlines, saturated colours, glossy cel shading). A normal (not legendary) item: no glow or sparkles. Shown flat and centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody wearing it. Square 1:1 image."
+ },
+ {
+  "name": "a-pizzax",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/a-pizza3.png"
+  ],
+  "prompt": "Generate an image. The reference is an armour icon from my cute 2D kitchen action RPG. Draw a NEW armour icon called \"Pizza Box Plate\": a chest plate made from a folded cardboard pizza box with a red-checkered lining. Same style (clean dark outlines, saturated colours, glossy cel shading). A normal (not legendary) item: no glow or sparkles. Shown flat and centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody wearing it. Square 1:1 image."
+ },
+ {
+  "name": "a-mothx",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/a-moth3.png"
+  ],
+  "prompt": "Generate an image. The reference is an armour icon from my cute 2D kitchen action RPG. Draw a NEW armour icon called \"Silk Cocoon Cloak\": a soft pale-lilac cloak spun from fluffy silk threads like a cocoon. Same style (clean dark outlines, saturated colours, glossy cel shading). A normal (not legendary) item: no glow or sparkles. Shown flat and centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody wearing it. Square 1:1 image."
+ },
+ {
+  "name": "a-squidx",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/a-squid3.png"
+  ],
+  "prompt": "Generate an image. The reference is an armour icon from my cute 2D kitchen action RPG. Draw a NEW armour icon called \"Lab Coat of Pockets\": a little white lab coat with lots of pockets holding test tubes and tools. Same style (clean dark outlines, saturated colours, glossy cel shading). A normal (not legendary) item: no glow or sparkles. Shown flat and centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody wearing it. Square 1:1 image."
+ },
+ {
+  "name": "a-crabx",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/a-crab3.png"
+  ],
+  "prompt": "Generate an image. The reference is an armour icon from my cute 2D kitchen action RPG. Draw a NEW armour icon called \"Rind Shell Armour\": a sturdy armour made of thick yellow cheese rind with a red wax trim. Same style (clean dark outlines, saturated colours, glossy cel shading). A normal (not legendary) item: no glow or sparkles. Shown flat and centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody wearing it. Square 1:1 image."
+ },
+ {
+  "name": "a-toastx",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/a-toast3.png"
+  ],
+  "prompt": "Generate an image. The reference is an armour icon from my cute 2D kitchen action RPG. Draw a NEW armour icon called \"Crust Wing Cape\": a short cape made of golden toast crust shaped like bat wings. Same style (clean dark outlines, saturated colours, glossy cel shading). A normal (not legendary) item: no glow or sparkles. Shown flat and centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody wearing it. Square 1:1 image."
+ },
+ {
+  "name": "a-dumpx",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/a-dump3.png"
+  ],
+  "prompt": "Generate an image. The reference is an armour icon from my cute 2D kitchen action RPG. Draw a NEW armour icon called \"Bamboo Steamer Vest\": a vest made of woven bamboo like a dumpling steamer basket, a puff of steam. Same style (clean dark outlines, saturated colours, glossy cel shading). A normal (not legendary) item: no glow or sparkles. Shown flat and centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody wearing it. Square 1:1 image."
+ },
+ {
+  "name": "a-norix",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/a-nori3.png"
+  ],
+  "prompt": "Generate an image. The reference is an armour icon from my cute 2D kitchen action RPG. Draw a NEW armour icon called \"Nori Wrap Mail\": a scale-mail armour made of dark green nori seaweed sheets with rice-grain studs. Same style (clean dark outlines, saturated colours, glossy cel shading). A normal (not legendary) item: no glow or sparkles. Shown flat and centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody wearing it. Square 1:1 image."
+ },
+ {
+  "name": "a-chocox",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/a-choco3.png"
+  ],
+  "prompt": "Generate an image. The reference is an armour icon from my cute 2D kitchen action RPG. Draw a NEW armour icon called \"Waffle Plate Armour\": a chunky chest plate shaped like a golden waffle with a chocolate drizzle. Same style (clean dark outlines, saturated colours, glossy cel shading). A normal (not legendary) item: no glow or sparkles. Shown flat and centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody wearing it. Square 1:1 image."
+ },
+ {
+  "name": "a-hogx",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/a-hog3.png"
+  ],
+  "prompt": "Generate an image. The reference is an armour icon from my cute 2D kitchen action RPG. Draw a NEW armour icon called \"Bun Bomber Jacket\": a puffy bomber jacket made of soft hot-dog bun with a mustard zigzag stripe. Same style (clean dark outlines, saturated colours, glossy cel shading). A normal (not legendary) item: no glow or sparkles. Shown flat and centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody wearing it. Square 1:1 image."
+ },
+ {
+  "name": "a-pengx",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/a-peng3.png"
+  ],
+  "prompt": "Generate an image. The reference is an armour icon from my cute 2D kitchen action RPG. Draw a NEW armour icon called \"Wafer Tux\": a tiny smart tuxedo made of crisp vanilla wafer with a cookie bow tie. Same style (clean dark outlines, saturated colours, glossy cel shading). A normal (not legendary) item: no glow or sparkles. Shown flat and centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody wearing it. Square 1:1 image."
+ },
+ {
+  "name": "a-avox",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/a-avo3.png"
+  ],
+  "prompt": "Generate an image. The reference is an armour icon from my cute 2D kitchen action RPG. Draw a NEW armour icon called \"Guac Shell Vest\": a vest made of a hard avocado-skin shell with a creamy green guacamole lining. Same style (clean dark outlines, saturated colours, glossy cel shading). A normal (not legendary) item: no glow or sparkles. Shown flat and centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody wearing it. Square 1:1 image."
+ },
+ {
+  "name": "a-owlx",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/a-owl3.png"
+  ],
+  "prompt": "Generate an image. The reference is an armour icon from my cute 2D kitchen action RPG. Draw a NEW armour icon called \"Taco Shell Mantle\": a shoulder mantle made of a crunchy yellow taco shell with lettuce trim. Same style (clean dark outlines, saturated colours, glossy cel shading). A normal (not legendary) item: no glow or sparkles. Shown flat and centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody wearing it. Square 1:1 image."
+ },
+ {
+  "name": "a-gumx",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/a-gum3.png"
+  ],
+  "prompt": "Generate an image. The reference is an armour icon from my cute 2D kitchen action RPG. Draw a NEW armour icon called \"Gum Bubble Vest\": a round pink bubblegum vest with a big shiny bubble on the chest. Same style (clean dark outlines, saturated colours, glossy cel shading). A normal (not legendary) item: no glow or sparkles. Shown flat and centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody wearing it. Square 1:1 image."
+ },
+ {
+  "name": "a-roox",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/a-roo3.png"
+  ],
+  "prompt": "Generate an image. The reference is an armour icon from my cute 2D kitchen action RPG. Draw a NEW armour icon called \"Frosting Robe\": a boxer's robe made of red velvet cake with white cream-cheese frosting trim. Same style (clean dark outlines, saturated colours, glossy cel shading). A normal (not legendary) item: no glow or sparkles. Shown flat and centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody wearing it. Square 1:1 image."
+ },
+ {
+  "name": "a-slox",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/a-slo3.png"
+  ],
+  "prompt": "Generate an image. The reference is an armour icon from my cute 2D kitchen action RPG. Draw a NEW armour icon called \"Cozy Boba Hoodie\": a cozy tan hoodie with tapioca-pearl polka dots and a straw-shaped drawstring. Same style (clean dark outlines, saturated colours, glossy cel shading). A normal (not legendary) item: no glow or sparkles. Shown flat and centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody wearing it. Square 1:1 image."
+ },
+ {
+  "name": "a-mintx",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/a-mint3.png"
+  ],
+  "prompt": "Generate an image. The reference is an armour icon from my cute 2D kitchen action RPG. Draw a NEW armour icon called \"Cone Shell Armour\": a round armour made of a crispy waffle cone with a swirl of mint ice cream on top. Same style (clean dark outlines, saturated colours, glossy cel shading). A normal (not legendary) item: no glow or sparkles. Shown flat and centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody wearing it. Square 1:1 image."
+ },
+ {
+  "name": "a-blobx",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/a-blob3.png"
+  ],
+  "prompt": "Generate an image. The reference is an armour icon from my cute 2D kitchen action RPG. Draw a NEW armour icon called \"Jelly Armour\": a wobbly translucent green jelly breastplate with a cherry emblem. Same style (clean dark outlines, saturated colours, glossy cel shading). A normal (not legendary) item: no glow or sparkles. Shown flat and centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody wearing it. Square 1:1 image."
+ },
+ {
+  "name": "a-fishx",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/a-fish3.png"
+  ],
+  "prompt": "Generate an image. The reference is an armour icon from my cute 2D kitchen action RPG. Draw a NEW armour icon called \"River Scale Mail\": a scale-mail armour made of shiny pink salmon scales with a seaweed belt. Same style (clean dark outlines, saturated colours, glossy cel shading). A normal (not legendary) item: no glow or sparkles. Shown flat and centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody wearing it. Square 1:1 image."
+ },
+ {
+  "name": "eq-kernel",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/eq-cookie.png"
+  ],
+  "prompt": "Generate an image. The reference is a charm icon from my cute 2D kitchen action RPG. Draw a NEW charm icon called \"Popcorn Kernel\": a charm made of one big fluffy popped popcorn kernel on a little string loop. Same style (clean dark outlines, saturated colours, glossy cel shading). A normal (not legendary) item: no glow or sparkles. Shown flat and centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody wearing it. Square 1:1 image."
+ },
+ {
+  "name": "eq-meringue",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/eq-cookie.png"
+  ],
+  "prompt": "Generate an image. The reference is a charm icon from my cute 2D kitchen action RPG. Draw a NEW charm icon called \"Meringue Kiss\": a charm made of a swirled white meringue kiss with a pink tip, on a ribbon. Same style (clean dark outlines, saturated colours, glossy cel shading). A normal (not legendary) item: no glow or sparkles. Shown flat and centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody wearing it. Square 1:1 image."
+ },
+ {
+  "name": "eq-maple",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/eq-cookie.png"
+  ],
+  "prompt": "Generate an image. The reference is a charm icon from my cute 2D kitchen action RPG. Draw a NEW charm icon called \"Maple Leaf\": a charm shaped like a golden maple leaf dripping a bead of syrup. Same style (clean dark outlines, saturated colours, glossy cel shading). A normal (not legendary) item: no glow or sparkles. Shown flat and centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody wearing it. Square 1:1 image."
+ },
+ {
+  "name": "eq-chili",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/eq-cookie.png"
+  ],
+  "prompt": "Generate an image. The reference is a charm icon from my cute 2D kitchen action RPG. Draw a NEW charm icon called \"Chili Charm\": a charm made of a little red chili pepper with a curly green stem, glowing warm. Same style (clean dark outlines, saturated colours, glossy cel shading). A normal (not legendary) item: no glow or sparkles. Shown flat and centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody wearing it. Square 1:1 image."
+ },
+ {
+  "name": "eq-scoop",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/eq-cookie.png"
+  ],
+  "prompt": "Generate an image. The reference is a charm icon from my cute 2D kitchen action RPG. Draw a NEW charm icon called \"Ice Cream Scoop\": a charm shaped like a tiny silver ice-cream scoop holding a pink scoop. Same style (clean dark outlines, saturated colours, glossy cel shading). A normal (not legendary) item: no glow or sparkles. Shown flat and centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody wearing it. Square 1:1 image."
+ },
+ {
+  "name": "eq-watch",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/eq-cookie.png"
+  ],
+  "prompt": "Generate an image. The reference is a charm icon from my cute 2D kitchen action RPG. Draw a NEW charm icon called \"Pocket Watch\": a charm made of a little brass pocket watch with a cookie for its face. Same style (clean dark outlines, saturated colours, glossy cel shading). A normal (not legendary) item: no glow or sparkles. Shown flat and centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody wearing it. Square 1:1 image."
+ },
+ {
+  "name": "eq-cherry",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/eq-cookie.png"
+  ],
+  "prompt": "Generate an image. The reference is a charm icon from my cute 2D kitchen action RPG. Draw a NEW charm icon called \"Cherry Pit\": a charm made of a shiny red cherry with a heart-shaped pit showing, on a stem loop. Same style (clean dark outlines, saturated colours, glossy cel shading). A normal (not legendary) item: no glow or sparkles. Shown flat and centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody wearing it. Square 1:1 image."
+ },
+ {
+  "name": "eq-magnet",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/eq-cookie.png"
+  ],
+  "prompt": "Generate an image. The reference is a charm icon from my cute 2D kitchen action RPG. Draw a NEW charm icon called \"Crumb Magnet\": a charm shaped like a red horseshoe magnet with crumbs stuck to its tips. Same style (clean dark outlines, saturated colours, glossy cel shading). A normal (not legendary) item: no glow or sparkles. Shown flat and centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody wearing it. Square 1:1 image."
+ }
+]

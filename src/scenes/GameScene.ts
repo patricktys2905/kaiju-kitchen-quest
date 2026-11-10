@@ -4,6 +4,8 @@ import * as Phaser from 'phaser';
 import { playMusic, sfx, toggleMute } from '../audio';
 import { initHud, setEmotes, setMateNames, showHud, showPause, toast, updateHud } from '../hud';
 import { setReportContext } from '../ui/report';
+import { settings } from '../ui/settings';
+import { Coach } from '../ui/tips';
 import { EMOTES } from '../net/net';
 import type { Derived } from '../sim/stats';
 import { readInput, takeTaps } from '../input';
@@ -92,6 +94,9 @@ export class GameScene extends Phaser.Scene {
   private mates: { i: number; view: HeroView; shadow: Phaser.GameObjects.Ellipse; tag: Phaser.GameObjects.Text; name: string; bot?: Bot; emo?: string; emoT?: number }[] = [];
   /** free mode run in progress (null = story) */
   private free: FreeRun | null = null;
+  /** first-time tips for this stage */
+  private coach: Coach | null = null;
+  private hudTick = 0;
   /** online co-op: who we are and who's playing (null = offline) */
   private online: NetPlay | null = null;
   /** which hero is ours (0 offline / host, the seat for a guest) */
@@ -159,7 +164,7 @@ export class GameScene extends Phaser.Scene {
     this.world = null; this.done = false; this.paused = false; this.xpGained = 0; this.levels = 0; this.acc = 0;
     if (!data?.stage) {
       // camp: the HTML menus cover the screen
-      setReportContext(null);
+      setReportContext(null); this.coach?.hide(); this.coach = null;
       setTouchVisible(false); showHud(false);
       this.cameras.main.setBackgroundColor('#1a1020');
       showCamp();
@@ -175,6 +180,12 @@ export class GameScene extends Phaser.Scene {
     this.netAcc = 0; this.netEvents = []; this.inbox = []; this.latch = { ...NO_INPUT };
     this.stage = this.free ? this.free.stage : stageById(data.stage);
     this.hookNet();
+    this.coach?.hide();
+    this.coach = new Coach(this.stage.id === '1-1' && !hero().cleared['1-1']);
+    // Settings: no screen flashes
+    const cam = this.cameras.main as Phaser.Cameras.Scene2D.Camera & { realFlash?: Phaser.Cameras.Scene2D.Camera['flash'] };
+    cam.realFlash ??= cam.flash.bind(cam);
+    cam.flash = settings.flash ? cam.realFlash : ((() => cam) as typeof cam.flash);
     this.buildStage();
     setReportContext(() => {
       const w = this.world, st = this.stage; if (!w) return `stage ${st.id} (loading)`;
@@ -538,9 +549,10 @@ export class GameScene extends Phaser.Scene {
       switch (e.t) {
         case 'hit': {
           const col = e.target === 'hero' ? '#ff5a6a' : e.crit ? '#ffd23c' : '#ffffff';
+          if (settings.lowFx && e.target === 'mob' && !e.crit) { sfx('hit'); this.burst(e.x, e.y, 0xffffff, 6); this.hitStop = Math.max(this.hitStop, 0.035); this.shake = Math.max(this.shake, 2.5); break; } // low effects: only crits and hits on you get numbers
           const txt = this.add.text(e.x + Phaser.Math.Between(-10, 10), e.y, String(e.dmg), {
             fontFamily: 'Luckiest Guy', fontSize: e.crit ? '26px' : '19px', color: col, stroke: '#3a1020', strokeThickness: 5,
-          }).setOrigin(0.5).setDepth(30).setResolution(3);
+          }).setOrigin(0.5).setDepth(30).setResolution(settings.lowFx ? 1.5 : 3);
           this.tweens.add({ targets: txt, y: e.y - 46, duration: 700, ease: 'Cubic.easeOut' });
           this.tweens.add({ targets: txt, alpha: 0, delay: 450, duration: 300, onComplete: () => txt.destroy() });
           sfx(e.target === 'hero' ? 'hurt' : e.crit ? 'crit' : 'hit');
@@ -856,6 +868,7 @@ export class GameScene extends Phaser.Scene {
     return this.add.container(x, gy, parts).setDepth(kind === 'ice' ? -8 : 6);
   }
   private burst(x: number, y: number, color: number, n: number): void {
+    if (settings.lowFx) n = Math.ceil(n * 0.35); // Settings: low effects
     for (let i = 0; i < n; i++) {
       const a = Math.random() * Math.PI * 2, d = 18 + Math.random() * 26;
       const dot = this.add.circle(x, y, 2 + Math.random() * 3, color).setDepth(25);
@@ -959,7 +972,8 @@ export class GameScene extends Phaser.Scene {
     this.cx = Phaser.Math.Clamp(this.cx, VW / 2, st.width - VW / 2);
     this.cy = Phaser.Math.Clamp(this.cy, VH / 2 - 80, st.groundY + 90 - VH / 2);
     this.shake = Math.max(0, this.shake - dt * 30);
-    this.cameras.main.centerOn(this.cx + (Math.random() - 0.5) * this.shake, this.cy + (Math.random() - 0.5) * this.shake);
+    const sh = this.shake * settings.shake; // Settings: screen shake on / less / off
+    this.cameras.main.centerOn(this.cx + (Math.random() - 0.5) * sh, this.cy + (Math.random() - 0.5) * sh);
 
     const fx = (this.cx - VW / 2) / Math.max(1, st.width - VW);
     if (this.far) {
@@ -995,6 +1009,7 @@ export class GameScene extends Phaser.Scene {
     this.aura.setFillStyle(h.counter > 0 ? 0xffd23c : 0x9fe0ff, 0.25).setVisible(!!h.buff || h.counter > 0).setPosition(h.x, h.y - 40).setScale(1 + Math.sin(t * 6) * 0.06).setAlpha(0.18 + Math.sin(t * 6) * 0.06);
 
     this.stepBanter(dt);
+    if (!this.done) this.coach?.step(w, dt); else this.coach?.hide();
 
     // arenas, rolling pin, belts
     w.arenas.forEach((a, i) => { const g = this.gateViews[i]; if (g) g.setAlpha(a.done ? 0 : a.locked ? 1 : 0.3).setY(a.locked ? Math.sin(t * 20) * 0.6 : 0); });
@@ -1224,7 +1239,7 @@ export class GameScene extends Phaser.Scene {
     for (const [id, c] of this.gearImgs) if (!seenS.has(id)) { this.burst(c.x, c.y, 0xffe8b0, 6); c.destroy(); this.gearImgs.delete(id); }
     this.bubbleView?.setVisible(h.shield > 0).setPosition(h.x, h.y - 44).setScale(1 + Math.sin(t * 5) * 0.04);
 
-    updateHud(w, hero(), st);
+    if ((this.hudTick = (this.hudTick + 1) % 2) === 0 || this.done) updateHud(w, hero(), st); // the HTML HUD at 30 Hz: plenty, and half the page work
     setUltUi(h.d.level >= ULT_LV, h.ult);
     const sk = skillsOf(h.d.cls.species).actives;
     for (let i = 0; i < 3; i++) {

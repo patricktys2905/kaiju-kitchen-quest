@@ -90,6 +90,8 @@ export interface Hero {
   echo: { sk: SkillDef; t: number } | null;
   /** procs: shield bubble (HP it soaks, seconds left, cooldown), spike / zap counters, highest point of the current fall */
   shield: number; shieldT: number; bubbleCd: number; spikeCd: number; zapN: number; peakY: number;
+  /** Meringue Guard / Popcorn Burst cooldowns, Pepper Breath skill count */
+  guardCd: number; popCd: number; skillN: number;
   /** how far the last landing dropped (px): a sponge only bounces you if you jumped or walked onto it, not fell from the ledge */
   lastFall: number;
 }
@@ -248,7 +250,7 @@ export class World {
       boosts: {}, bag: b.map(q => q && { ...q }), revives: rv, quickCd: 0, lastTap: { dir: 0, t: -9 }, dodgeCd: 0, ult: 0, phoenixUsed: false,
       counter: 0, perfectDone: false, spikyT: 0, orbs: null, skillFace: 1, targets: [], bounced: false,
       idx, cpu: idx >= this.humans, revT: 0, landed: false,
-      echo: null, shield: 0, shieldT: 0, bubbleCd: 0, spikeCd: 0, zapN: 0, peakY: stage.groundY, lastFall: 0,
+      echo: null, shield: 0, shieldT: 0, bubbleCd: 0, spikeCd: 0, zapN: 0, peakY: stage.groundY, lastFall: 0, guardCd: 0, popCd: 0, skillN: 0,
     });
     this.heroes = [mk(d, 0, 100, bag, revives), ...party.map((pd, i) => mk(pd, i + 1, 60 - i * 30, partyBags[i]?.bag ?? [], partyBags[i]?.revives ?? 0))];
     this.cur = this.heroes[0];
@@ -425,6 +427,7 @@ export class World {
       if (canDodge && h.lastTap.dir === tapDir && this.time - h.lastTap.t < DOUBLE_TAP) {
         h.face = tapDir as 1 | -1;
         this.enter(h, 'dodge'); h.perfectDone = false;
+        if (h.d.procs.includes('syrup')) for (const o of this.targetsNear(h.x + h.face * 60, h.y, 130, 80)) o.slow = Math.max(o.slow, 3);
         h.inv = Math.max(h.inv, DODGE_INV); h.dodgeCd = DODGE_CD * (1 - h.d.dodge); h.lastTap = { dir: 0, t: -9 };
         this.events.push({ t: 'dodge' });
       } else h.lastTap = { dir: tapDir, t: this.time };
@@ -467,6 +470,7 @@ export class World {
       h.hitIds = new Set();
       h.inv = Math.max(h.inv, ultDef.dur + 0.4);
       this.events.push({ t: 'ult', name: ultDef.name });
+      if (h.d.procs.includes('scoop')) h.ult = 30;
       this.events.push({ t: 'skill', slot: 3, kind: ultDef.kind, id: ultDef.id });
       this.startSkill(h, ultDef);
     }
@@ -560,6 +564,11 @@ export class World {
   private startSkill(h: Hero, sk: SkillDef): void {
     const s0 = this.shots.length;
     this.startSkillInner(h, sk);
+    // Pepper Breath: every 5th skill also breathes fire ahead
+    if (h.d.procs.includes('pepper') && ++h.skillN >= 5) {
+      h.skillN = 0; this.events.push({ t: 'proc', name: 'Pepper Breath!', x: h.x, y: h.y - 90 }); this.events.push({ t: 'shock', x: h.x + h.face * 90, y: h.y - 20, r: 90 });
+      for (const o of this.targetsNear(h.x + h.face * 90, h.y, 110, 80)) { this.damageMob(o, h.d.atk * 1.4, h.face, { kx: 140, ky: -200, stun: 0.3 }, true); this.applyFx(o, ['burn'], h); }
+    }
     const fx = [sk.burn ? 'burn' : '', sk.freeze ? 'freeze' : '', sk.glue ? 'glue' : '', sk.slow ? 'slow' : ''].filter(Boolean);
     if (fx.length) for (let i = s0; i < this.shots.length; i++) this.shots[i].fx = fx;
   }
@@ -622,7 +631,7 @@ export class World {
       h.echo.t -= dt;
       if (h.echo.t <= 0 && h.state !== 'down') { const mul = h.skillMul; h.skillMul *= 0.6; this.startSkill(h, { ...h.echo.sk, echo: false }); h.skillMul = mul; h.echo = null; }
     }
-    h.bubbleCd = Math.max(0, h.bubbleCd - dt); h.spikeCd = Math.max(0, h.spikeCd - dt);
+    h.bubbleCd = Math.max(0, h.bubbleCd - dt); h.spikeCd = Math.max(0, h.spikeCd - dt); h.guardCd = Math.max(0, h.guardCd - dt); h.popCd = Math.max(0, h.popCd - dt);
     if (h.shieldT > 0) { h.shieldT -= dt; if (h.shieldT <= 0) h.shield = 0; }
     if (!h.ground) h.peakY = Math.min(h.peakY, h.y);
     else {
@@ -887,7 +896,8 @@ export class World {
     this.events.push({ t: 'prop', kind: p.kind, x: p.x, y: p.y });
     const lv = this.stage.lv[1];
     const cr = Math.round((p.kind === 'chest' ? 40 : 4) + lv * (p.kind === 'chest' ? 4 : 0.8));
-    this.run.crumbs += cr; this.events.push({ t: 'crumbs', n: cr, x: p.x, y: p.y - 40 });
+    const crm = h.d.procs.includes('magnet') ? Math.round(cr * 1.25) : cr;
+    this.run.crumbs += crm; this.events.push({ t: 'crumbs', n: crm, x: p.x, y: p.y - 40 });
     if (p.kind === 'jar') { const n = Math.round(h.d.maxHp * 0.08); h.hp = Math.min(h.d.maxHp, h.hp + n); this.events.push({ t: 'heal', x: h.x, y: h.y - 70, n, hero: true }); }
     const drops = p.kind === 'chest' ? 2 : p.kind === 'crate' && this.rand() < 0.3 ? 1 : 0;
     for (let i = 0; i < drops; i++) {
@@ -1483,6 +1493,7 @@ export class World {
       if (h.skill.leech && h.skill.kind !== 'drain') h.hp = Math.min(h.d.maxHp, h.hp + dmg * h.skill.leech);
     }
     if (crit && h.d.procs.includes('frosty') && def.brain !== 'boss') { m.frozen = Math.max(m.frozen, 0.8); m.vx = 0; }
+    if (crit && h.d.procs.includes('bite')) h.hp = Math.min(h.d.maxHp, h.hp + h.d.maxHp * 0.01);
     if (h.d.procs.includes('zap') && !this.procLock && ++h.zapN >= 6) {
       h.zapN = 0; this.procLock = true;
       const pts: [number, number][] = [[m.x, m.y - def.h * 0.6]];
@@ -1553,8 +1564,9 @@ export class World {
     const cr = Math.round(mobCrumbs(m.lv, def.brain) * (m.elite ? 4 : 1) * (0.8 + this.rand() * 0.4) * (h.d.uniques.includes('lucky') ? 1.5 : 1));
     if (h.d.uniques.includes('hourglass')) for (let i = 0; i < 4; i++) h.cds[i] = Math.max(0, h.cds[i] - 1);
     if (h.d.procs.includes('snack') && h.state !== 'down') h.hp = Math.min(h.d.maxHp, h.hp + h.d.maxHp * 0.03);
-    this.run.crumbs += cr;
-    this.events.push({ t: 'crumbs', n: cr, x: m.x, y: m.y - def.h });
+    const crm = h.d.procs.includes('magnet') ? Math.round(cr * 1.25) : cr;
+    this.run.crumbs += crm;
+    this.events.push({ t: 'crumbs', n: crm, x: m.x, y: m.y - def.h });
     const st = def.brain === 'boss' ? 3 : m.elite ? 2 : this.rand() < 0.07 ? 1 : 0;
     if (st) { this.run.stones += st; this.events.push({ t: 'stone', n: st, x: m.x, y: m.y - def.h - 14 }); }
     if (h.d.lifeOnKill > 0) h.hp = Math.min(h.d.maxHp, h.hp + h.d.maxHp * h.d.lifeOnKill);
@@ -2121,6 +2133,7 @@ export class World {
     this.slowmo = SLOWMO_T;
     if (h === this.heroes[0]) { this.run.perfects++; this.addStyle('perfect', 18); }
     this.events.push({ t: 'perfect', x: h.x, y: h.y - 60 });
+    if (h.d.procs.includes('quickdraw') && h.d.gear) { h.cds[3] = 0; this.events.push({ t: 'proc', name: 'Quick Draw!', x: h.x, y: h.y - 90 }); }
     if (h.d.procs.includes('jamtrap')) { const fl = this.floorBelow(h.x, h.y - 2, h.y + 400, false); this.mines.push({ id: nextId++, x: h.x, y: fl ? fl.y : h.y, t: 0, dmg: h.d.atk * 1.2, kx: 80, ky: -200, owner: h.idx, glue: true }); }
   }
 
@@ -2144,7 +2157,12 @@ export class World {
       if (h.shield <= 0) { h.shieldT = 0; this.events.push({ t: 'proc', name: 'Pop!', x: h.x, y: h.y - 90 }); }
       if (dmg <= 0) { h.inv = 0.5; this.events.push({ t: 'block', x: h.x, y: h.y - 50 }); return; }
     }
+    if (h.d.procs.includes('meringue') && h.guardCd <= 0) { h.guardCd = 10; dmg = Math.max(1, Math.round(dmg / 2)); this.events.push({ t: 'proc', name: 'Meringue Guard!', x: h.x, y: h.y - 90 }); }
     h.hp -= dmg; h.inv = 0.9;
+    if (h.d.procs.includes('popcorn') && h.popCd <= 0) {
+      h.popCd = 4; this.events.push({ t: 'shock', x: h.x, y: h.y - 30, r: 110 }); this.events.push({ t: 'proc', name: 'Popcorn Burst!', x: h.x, y: h.y - 90 });
+      for (const o of this.targetsNear(h.x, h.y, 110, 90)) this.damageMob(o, h.d.atk * 1.2, Math.sign(o.x - h.x) || 1, { kx: 180, ky: -260, stun: 0.4 }, true);
+    }
     if (h.d.procs.includes('spikes') && h.spikeCd <= 0) {
       h.spikeCd = 3;
       for (let i = 0; i < 8; i++) { const a = (i / 8) * Math.PI * 2; this.shots.push({ id: nextId++, x: h.x, y: h.y - 40, vx: Math.cos(a) * 480, vy: Math.sin(a) * 480, t: 0, dmg: h.d.atk * 0.7, hit: new Set(), from: 'hero', kx: 120, ky: -120, pierce: false, kind: 'quill', owner: h.idx }); }

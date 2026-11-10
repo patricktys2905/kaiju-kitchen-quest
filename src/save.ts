@@ -43,6 +43,8 @@ export interface Save {
   buddy?: number | null;
   /** name shown to friends in online co-op */
   netName?: string;
+  /** first-time tips already shown (src/ui/tips.ts) */
+  tips?: string[];
   /** free mode: day of the last Daily Dungeon bonus, best Endless floor and Boss Rush time (seconds) per kaiju */
   free?: { daily?: number; endless: Record<number, number>; rush: Record<number, number> };
 }

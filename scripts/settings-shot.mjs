@@ -1,0 +1,27 @@
+// The settings menu, and that its choices stick and reach the game. node scripts/settings-shot.mjs → shots/settings*.png
+import { spawn } from 'node:child_process';
+import { chromium } from 'playwright-core';
+const PORT = 5391, base = `http://localhost:${PORT}/?touch`;
+const server = spawn(process.execPath, ['node_modules/vite/bin/vite.js', '--port', String(PORT), '--strictPort'], { stdio: 'pipe' });
+const wait = ms => new Promise(r => setTimeout(r, ms));
+await wait(3000);
+const b = await chromium.launch({ executablePath: 'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe', headless: true });
+const p = await (await b.newContext({ viewport: { width: 852, height: 393 }, isMobile: true, hasTouch: true, deviceScaleFactor: 2 })).newPage();
+const errs = []; p.on('pageerror', e => errs.push(e.message));
+await p.goto(base); await p.evaluate(() => localStorage.clear()); await p.reload();
+for (let i = 0; i < 60 && !await p.evaluate(() => !!window.__kkq); i++) await wait(250);
+await p.evaluate(() => document.querySelector('#title .play')?.click()); await wait(1000);
+await p.evaluate(() => document.querySelector('[data-settings]')?.click()); await wait(300);
+await p.screenshot({ path: 'shots/settings.png' });
+for (const [key, v] of [['text', '1.4'], ['buttons', '1.2'], ['shake', '0'], ['lowFx', 'true']]) await p.evaluate(([k, v]) => document.querySelector(`#settings .seg[data-key="${k}"] [data-v="${v}"]`)?.click(), [key, v]);
+await p.evaluate(() => { const r = document.querySelector('#settings input[data-key="music"]'); r.value = '30'; r.dispatchEvent(new Event('input', { bubbles: true })); });
+await p.evaluate(() => document.querySelector('#settings [data-close]')?.click());
+const stored = await p.evaluate(() => localStorage.getItem('kkq-settings'));
+await p.reload(); for (let i = 0; i < 60 && !await p.evaluate(() => !!window.__kkq); i++) await wait(250);
+const after = await p.evaluate(() => ({ ts: document.body.style.getPropertyValue('--ts'), bs: document.body.style.getPropertyValue('--bs'), lowfx: document.body.classList.contains('lowfx') }));
+await p.evaluate(() => document.querySelector('#title .play')?.click()); await wait(800);
+await p.evaluate(() => { const s = window.__kkq.save; s.storyMode = 'key'; s.heroes[0].seen.push('intro', 'w1-open'); window.__kkq.play('1-2'); }); await wait(2500);
+await p.screenshot({ path: 'shots/settings-stage.png' });
+console.log('stored', stored); console.log('after reload', JSON.stringify(after));
+console.log(errs.length ? errs : 'no errors');
+await b.close(); server.kill();

@@ -6,12 +6,21 @@ let master: GainNode | null = null;
 let musicBus: GainNode | null = null;
 let muted = localStorage.getItem('kkq-mute') === '1';
 
+/** Volumes from the settings menu (0..1). */
+let soundVol = 1, musicVol = 1;
+const masterLevel = () => (muted ? 0 : 0.5 * soundVol);
+export function setVolumes(sound: number, music: number): void {
+  soundVol = sound; musicVol = music;
+  if (master && ctx) master.gain.setTargetAtTime(masterLevel(), ctx.currentTime, 0.05);
+  if (musicBus && ctx) musicBus.gain.setTargetAtTime(0.32 * musicVol, ctx.currentTime, 0.05);
+}
+
 export function unlockAudio(): void {
   if (ctx) { if (ctx.state === 'suspended') void ctx.resume(); return; }
   try {
     ctx = new AudioContext();
-    master = ctx.createGain(); master.gain.value = muted ? 0 : 0.5; master.connect(ctx.destination);
-    musicBus = ctx.createGain(); musicBus.gain.value = 0.32; musicBus.connect(master);
+    master = ctx.createGain(); master.gain.value = masterLevel(); master.connect(ctx.destination);
+    musicBus = ctx.createGain(); musicBus.gain.value = 0.32 * musicVol; musicBus.connect(master);
     if (wanted) playMusic(wanted, true);
   } catch { ctx = null; }
 }
@@ -20,7 +29,7 @@ export function isMuted(): boolean { return muted; }
 export function toggleMute(): boolean {
   muted = !muted;
   localStorage.setItem('kkq-mute', muted ? '1' : '0');
-  if (master && ctx) master.gain.setTargetAtTime(muted ? 0 : 0.5, ctx.currentTime, 0.05);
+  if (master && ctx) master.gain.setTargetAtTime(masterLevel(), ctx.currentTime, 0.05);
   return muted;
 }
 

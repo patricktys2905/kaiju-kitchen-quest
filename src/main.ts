@@ -8,6 +8,7 @@ import { initOnline, showOnline } from './ui/online';
 import { initFree } from './ui/free';
 import { showTitle } from './ui/title';
 import './ui/report'; // catches uncaught errors from the start; [data-report] buttons open it
+import './ui/settings'; // applies saved settings; [data-settings] buttons open the menu
 
 initInput(unlockAudio);
 addEventListener('pointerdown', unlockAudio);

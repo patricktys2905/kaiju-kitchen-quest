@@ -1,0 +1,26 @@
+// CPU profile of a crowded fight (CPU slowed 4x): the functions taking the most time. node scripts/perf-profile.mjs [stage=3-7]
+import { spawn } from 'node:child_process';
+import { chromium } from 'playwright-core';
+const stage = process.argv[2] ?? '3-7';
+const PORT = 5394, base = `http://localhost:${PORT}/?touch`;
+const server = spawn(process.execPath, ['node_modules/vite/bin/vite.js', '--port', String(PORT), '--strictPort'], { stdio: 'pipe' });
+const wait = ms => new Promise(r => setTimeout(r, ms));
+await wait(3000);
+const b = await chromium.launch({ executablePath: 'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe', headless: true });
+const p = await (await b.newContext({ viewport: { width: 852, height: 393 }, isMobile: true, hasTouch: true, deviceScaleFactor: 2 })).newPage();
+await p.goto(base); await p.evaluate(() => { localStorage.clear(); localStorage.setItem('kkq-settings', JSON.stringify({ tips: false })); }); await p.reload();
+for (let i = 0; i < 60 && !await p.evaluate(() => !!window.__kkq); i++) await wait(250);
+await p.evaluate(() => document.querySelector('#title .play')?.click()); await wait(800);
+await p.evaluate(stage => { const s = window.__kkq.save; s.storyMode = 'key'; const h = s.heroes[0]; h.level = 100; h.seen.push('intro', 'w3-open', 'w3-s7'); window.__kkq.play(stage); }, stage);
+await wait(3000);
+await p.evaluate(() => { const w = window.__kkq.world(); w.hero.inv = 9999; for (const m of w.mobs) m.x = w.hero.x + 120 + (m.id % 7) * 30; setInterval(() => { const w = window.__kkq.world(); if (w) { w.hero.inv = 9999; w.hero.hp = w.hero.d.maxHp; } dispatchEvent(new KeyboardEvent('keydown', { code: 'KeyJ' })); setTimeout(() => dispatchEvent(new KeyboardEvent('keyup', { code: 'KeyJ' })), 50); }, 110); });
+const cdp = await p.context().newCDPSession(p);
+await cdp.send('Emulation.setCPUThrottlingRate', { rate: 4 });
+await cdp.send('Profiler.enable'); await cdp.send('Profiler.setSamplingInterval', { interval: 500 }); await cdp.send('Profiler.start');
+await wait(5000);
+const { profile } = await cdp.send('Profiler.stop');
+const self = new Map(); const dt = profile.timeDeltas; const byId = new Map(profile.nodes.map(n => [n.id, n]));
+profile.samples.forEach((id, i) => { const n = byId.get(id); const f = n.callFrame; const key = `${f.functionName || '(anon)'} ${(f.url.split('/').pop() || '').split('?')[0]}:${f.lineNumber + 1}`; self.set(key, (self.get(key) ?? 0) + (dt[i] ?? 0)); });
+const total = [...self.values()].reduce((a, b) => a + b, 0);
+console.log([...self.entries()].sort((a, b) => b[1] - a[1]).slice(0, 18).map(([k, v]) => `${(v / total * 100).toFixed(1).padStart(5)}%  ${k}`).join('\n'));
+await b.close(); server.kill();

@@ -42,7 +42,7 @@ export const TWIST_WORD: Record<string, string> = {
 /** How often a (non-legendary) weapon drop rolls a twist. */
 export const TWIST_CHANCE = 0.65;
 
-export interface BaseDef { slot: Slot; name: string; icon: string; main: Line[]; minLv?: number; /** only this kaiju can wear it */ for?: number; tier?: number; /** no longer drops */ retired?: boolean; /** always part of this set */ set?: string }
+export interface BaseDef { /** a built-in effect (PROCS key) every copy carries */ proc?: string; slot: Slot; name: string; icon: string; main: Line[]; minLv?: number; /** only this kaiju can wear it */ for?: number; tier?: number; /** no longer drops */ retired?: boolean; /** always part of this set */ set?: string }
 /** main = guaranteed stat at ilvl 1 (scaled by ilvl and rarity) */
 const TIER_LV = [0, 6, 14]; // item level each gear tier starts dropping at
 const W = (name: string, icon: string, owner: number, tier: number, main: Line[]): BaseDef => ({ slot: 'weapon', name, icon, main, for: owner, minLv: TIER_LV[tier - 1], tier, set: tier === 3 ? `sig${owner}` : undefined });
@@ -160,6 +160,35 @@ export const BASES: Record<string, BaseDef> = {
   'w-blobb': W('Gummy Ring', 'w-blobb', 3, 2, [{ k: 'atk', v: 4 }, { k: 'hp', v: 15 }]),
   'w-fisha': W('Fishing Rod', 'w-fisha', 14, 1, [{ k: 'atk', v: 4 }, { k: 'crit', v: 3 }]),
   'w-fishb': W('Roe Bomb Pouch', 'w-fishb', 14, 2, [{ k: 'atk', v: 5 }]),
+  // ----- gear variety 2: a kaiju armour with a built-in effect (item level 6+), and charms with a built-in effect -----
+  'a-gobx': { ...AR('Seed Spike Vest', 'a-gobx', 0, [{ k: 'def', v: 4 }, { k: 'hp', v: 18 }], 2), proc: 'popcorn' },
+  'a-bluex': { ...AR('Honey Glaze Coat', 'a-bluex', 10, [{ k: 'def', v: 4 }, { k: 'hp', v: 18 }], 2), proc: 'meringue' },
+  'a-pizzax': { ...AR('Pizza Box Plate', 'a-pizzax', 11, [{ k: 'def', v: 4 }, { k: 'hp', v: 18 }], 2), proc: 'pepper' },
+  'a-mothx': { ...AR('Silk Cocoon Cloak', 'a-mothx', 4, [{ k: 'def', v: 4 }, { k: 'hp', v: 18 }], 2), proc: 'syrup' },
+  'a-squidx': { ...AR('Lab Coat of Pockets', 'a-squidx', 1, [{ k: 'def', v: 4 }, { k: 'hp', v: 18 }], 2), proc: 'quickdraw' },
+  'a-crabx': { ...AR('Rind Shell Armour', 'a-crabx', 2, [{ k: 'def', v: 4 }, { k: 'hp', v: 18 }], 2), proc: 'meringue' },
+  'a-toastx': { ...AR('Crust Wing Cape', 'a-toastx', 5, [{ k: 'def', v: 4 }, { k: 'hp', v: 18 }], 2), proc: 'bite' },
+  'a-dumpx': { ...AR('Bamboo Steamer Vest', 'a-dumpx', 6, [{ k: 'def', v: 4 }, { k: 'hp', v: 18 }], 2), proc: 'scoop' },
+  'a-norix': { ...AR('Nori Wrap Mail', 'a-norix', 7, [{ k: 'def', v: 4 }, { k: 'hp', v: 18 }], 2), proc: 'pepper' },
+  'a-chocox': { ...AR('Waffle Plate Armour', 'a-chocox', 8, [{ k: 'def', v: 4 }, { k: 'hp', v: 18 }], 2), proc: 'popcorn' },
+  'a-hogx': { ...AR('Bun Bomber Jacket', 'a-hogx', 15, [{ k: 'def', v: 4 }, { k: 'hp', v: 18 }], 2), proc: 'pepper' },
+  'a-pengx': { ...AR('Wafer Tux', 'a-pengx', 17, [{ k: 'def', v: 4 }, { k: 'hp', v: 18 }], 2), proc: 'syrup' },
+  'a-avox': { ...AR('Guac Shell Vest', 'a-avox', 13, [{ k: 'def', v: 4 }, { k: 'hp', v: 18 }], 2), proc: 'meringue' },
+  'a-owlx': { ...AR('Taco Shell Mantle', 'a-owlx', 19, [{ k: 'def', v: 4 }, { k: 'hp', v: 18 }], 2), proc: 'quickdraw' },
+  'a-gumx': { ...AR('Gum Bubble Vest', 'a-gumx', 9, [{ k: 'def', v: 4 }, { k: 'hp', v: 18 }], 2), proc: 'scoop' },
+  'a-roox': { ...AR('Frosting Robe', 'a-roox', 18, [{ k: 'def', v: 4 }, { k: 'hp', v: 18 }], 2), proc: 'bite' },
+  'a-slox': { ...AR('Cozy Boba Hoodie', 'a-slox', 12, [{ k: 'def', v: 4 }, { k: 'hp', v: 18 }], 2), proc: 'scoop' },
+  'a-mintx': { ...AR('Cone Shell Armour', 'a-mintx', 16, [{ k: 'def', v: 4 }, { k: 'hp', v: 18 }], 2), proc: 'meringue' },
+  'a-blobx': { ...AR('Jelly Armour', 'a-blobx', 3, [{ k: 'def', v: 4 }, { k: 'hp', v: 18 }], 2), proc: 'syrup' },
+  'a-fishx': { ...AR('River Scale Mail', 'a-fishx', 14, [{ k: 'def', v: 4 }, { k: 'hp', v: 18 }], 2), proc: 'magnet' },
+  'kernel': { slot: 'charm', name: 'Popcorn Kernel', icon: 'eq-kernel', main: [{ k: 'hp', v: 12 }], minLv: 6, proc: 'popcorn' },
+  'meringue': { slot: 'charm', name: 'Meringue Kiss', icon: 'eq-meringue', main: [{ k: 'def', v: 2 }], minLv: 6, proc: 'meringue' },
+  'maple': { slot: 'charm', name: 'Maple Leaf', icon: 'eq-maple', main: [{ k: 'speed', v: 0.03 }], minLv: 6, proc: 'syrup' },
+  'chili': { slot: 'charm', name: 'Chili Charm', icon: 'eq-chili', main: [{ k: 'skillDmg', v: 0.05 }], minLv: 6, proc: 'pepper' },
+  'scoop': { slot: 'charm', name: 'Ice Cream Scoop', icon: 'eq-scoop', main: [{ k: 'cdr', v: 0.03 }], minLv: 6, proc: 'scoop' },
+  'watch': { slot: 'charm', name: 'Pocket Watch', icon: 'eq-watch', main: [{ k: 'cdr', v: 0.04 }], minLv: 6, proc: 'quickdraw' },
+  'cherry': { slot: 'charm', name: 'Cherry Pit', icon: 'eq-cherry', main: [{ k: 'crit', v: 3 }], minLv: 6, proc: 'bite' },
+  'magnet': { slot: 'charm', name: 'Crumb Magnet', icon: 'eq-magnet', main: [{ k: 'crit', v: 2 }], minLv: 6, proc: 'magnet' },
   // ----- generic armor (one per world + the lid) -----
   apron: { slot: 'armor', name: 'Checkered Apron', icon: 'eq-apron', main: [{ k: 'hp', v: 20 }, { k: 'def', v: 2 }] },
   lid: { slot: 'armor', name: 'Pot Lid', icon: 'eq-lid', main: [{ k: 'def', v: 4 }] },
@@ -292,6 +321,7 @@ export function rollItem(id: number, tier: BoxTier, ilvl: number, rand: () => nu
   }
   // trigger effects on armour and charms
   if (BASES[base].slot !== 'weapon' && rand() < [0, 0, 0.2, 0.5, 0.8][rarity - 1]) it.proc = pick(Object.keys(PROCS), rand);
+  if (BASES[base].proc) it.proc = BASES[base].proc; // built-in effect
   // weapons: most drops twist their gear skill (a new style and/or effect), so the same weapon can play many ways
   if (BASES[base].slot === 'weapon' && !it.unique && rand() < TWIST_CHANCE) {
     const style = TWIST_STYLES[Math.floor(rand() * TWIST_STYLES.length)];
@@ -441,4 +471,12 @@ export const PROCS: Record<string, ProcDef> = {
   rush: { name: 'Sugar High', effect: 'Every 25-hit combo: +25% attack and speed for 5s' },
   frosty: { name: 'Brain Freeze', effect: 'Critical hits freeze monsters for a moment' },
   quake: { name: 'Belly Flop', effect: 'Landing from a big fall makes a shockwave' },
+  meringue: { name: 'Meringue Guard', effect: 'Every 10s, the next hit you take is halved' },
+  popcorn: { name: 'Popcorn Burst', effect: 'Getting hit pops kernels that hurt monsters around you (every 4s at most)' },
+  syrup: { name: 'Syrup Slide', effect: 'Dodging through monsters slows them down' },
+  pepper: { name: 'Pepper Breath', effect: 'Every 5th skill also breathes fire ahead' },
+  scoop: { name: 'Second Scoop', effect: 'Using your ultimate refunds 30% of the meter' },
+  quickdraw: { name: 'Quick Draw', effect: 'A perfect dodge recharges your gear skill' },
+  bite: { name: 'Snack Bite', effect: 'Critical hits heal 1% max HP' },
+  magnet: { name: 'Crumb Magnet', effect: '+25% crumbs from monsters, crates and chests' },
 };
