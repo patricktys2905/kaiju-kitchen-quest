@@ -120,8 +120,25 @@ export const ARC: Record<string, StoryLine[]> = {
     ["me", "Mystery meat. Hmph. Littlest, that's a no-eat food."],
     ["me", "Littlest wants to see the Garden now. Fine. Ear seat, buckle up. Nap after. Okay, nap DURING."],
   ],
+  "w8-open": [
+    ["n", "The Garden! Fireflies blink on, and Littlest squeaks like it found a whole sky full of night-lights!"],
+    ["me", "Fireflies, kid. Bugs with glowy tails. No touching. Okay, ONE touch."],
+    ["me", "Mystery Meatloaf's out here somewhere. Littlest, that's still a no-eat food. Hmph."],
+  ],
+  "w8-boss": [
+    ["boss", "Hey! A muffin! Is there muffin in ME? Hold on, lemme check... huh, a BUTTON?"],
+    ["me", "Littlest, that's what happens when ya don't wash your paws before cooking."],
+    ["boss", "Am I beef? Am I lentils? WHO AM I?! Nobody ever came back for SECONDS!"],
+    ["me", "Here's seconds. And thirds. GRRRAAAH!"],
+  ],
+  "w8-after": [
+    ["n", "SPLORT! The Mystery Meatloaf wobbles off the heap, shedding peas and one very confused sock!"],
+    ["boss", "Retreat! To the SUPERMARKET! The Tupperwraith haunts the back aisles, bear! Nobody's opened HIM in years!"],
+    ["me", "A haunted leftovers tub. Hmph. And now Littlest wants to see a supermarket."],
+    ["me", "Fine. Ear seat, buckle up. But we nap BEFORE the spooky aisle. Grrr."],
+  ],
 };
-export const NEMESIS: Record<"w1-elite" | "w2-elite" | "w3-elite" | "w4-elite" | "w5-elite" | "w6-elite" | "w7-elite", StoryLine[]> = {
+export const NEMESIS: Record<"w1-elite" | "w2-elite" | "w3-elite" | "w4-elite" | "w5-elite" | "w6-elite" | "w7-elite" | "w8-elite", StoryLine[]> = {
   "w1-elite": [
     ["foe", "Caw! Shiny crumbs, crumbly crumbs! Finders keepers, caw-caw!"],
     ["me", "Those \"crumbs\" are my Crumblets, bird."],
@@ -156,5 +173,10 @@ export const NEMESIS: Record<"w1-elite" | "w2-elite" | "w3-elite" | "w4-elite" |
     ["foe", "Caw! Fuzzy! Burger Brute on the plateau. Three patties, extra cheese, ZERO manners!"],
     ["me", "Bird. Who's watching the kids?"],
     ["foe", "Chocomunch is on nap duty! He keeps saying \"Me watch.\" It's working! Caw! Now go!"],
+  ],
+  "w8-elite": [
+    ["foe", "Caw! Fuzzy! Pumpkin Brute up at Gourd Guard. Big, orange, and it rolls like a bowling ball!"],
+    ["me", "Bird. Who's on nap duty this time?"],
+    ["foe", "Velvaroo! She counts 'em down like a boxing match. One, two, three, they're OUT cold! Caw!"],
   ],
 };

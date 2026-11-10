@@ -40,6 +40,8 @@ If a line wouldn't sound natural shouted by a cartoon character, rewrite it.
 | **Tacowl** (taco owl) | Night-owl party host and DJ: "WHOOO's ready to party?!", hoots mid-sentence, fiesta energy, "Taco 'bout it!". Obsessed with Taco Tuesday. Wise-owl lines that turn out to be about snacks. |
 | **Bubblegumbo** (bubblegum elephant) | Big, sweet, slow-talking gentle giant. "Elephants never forget!" (he forgets everything). Pops bubbles mid-sentence (*POP*), stretchy-gum puns ("let's stick together", "chew on that"). |
 | **Velvaroo** (red velvet kangaroo boxer) | Brash ring announcer of her own life: "In THIS corner!", "Ding ding!", hops when excited, boxing and baking puns ("knead to win", "frosting on top", "hook, line and sinker... I mean, HOOK!"). Big heart. |
+| **Sloba** (bubble-tea sloth) | Sooo slow and sleepy: "Heyyy... duuude...", yawns mid-line (*yaaawn*), falls asleep in scenes, totally unbothered, surprisingly wise. Tea and boba puns ("I'm steeped in it", "no pressure, just tea-sure"). |
+| **Minturtle** (mint choc chip ice-cream turtle) | Ultra-chill cool dude: "Stay frosty.", "Cool, cool, cool.", never panics (except about melting in the heat), shell-and-scoop puns ("I'm in my shell era", "scoop there it is"). |
 | **Narrator** | Cartoon announcer, rare: "Meanwhile...", "Uh-oh!", "Will our hero...?" |
 | **The Mold Crown** (`mold`) | Creepy, giggly, oozy villain. "Hehehe...", "Come closer, little snack...". Short. |
 | **Nemeses** (`foe`) | Classic cartoon rivals: boastful, sneery, catchphrases of their own, cackle, storm off when beaten ("This isn't over!"). |

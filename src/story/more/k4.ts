@@ -59,6 +59,14 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w7-s7": [["me", "Flowerpot Fort! A chest on a high ledge and a bouncy sponge below. Sponges are STILL so nice!"], [9, "Ooh, pretty glow! Is that my birthday candle? I lost my party somewhere. *POP*"], ["me", "Aww! I'll watch for it, Bubblegumbo! Boing! Keys open doors, doors have windows, windows have MOONS!"]],
   "w7-s8": [["me", "Cooler Canyon! Ooh, the sun's going down! Forty-five seconds, then it's moon o'clock!"], ["me", "Eep, Picnic Wasps! Those are NOT fireflies! Shoo, shoo!"]],
   "w7-s9": [["me", "Charcoal Climb! The coals glow orange, like a hundred tiny sunsets. Ooooh, shiny..."], ["n", "From the Grill Summit, a voice booms: \"ATTEN-TION! More smoke! Hide that SKY!\""], ["me", "Hey! The moon's coming out tonight, and you're NOT gonna smoke it! Flap flap!"]],
+  // World 8: The Garden.
+  "w8-s2": [["me", "Watering Can Run! Ooh, a big round thing rolling this way, all orange in the sunset. Moon?"], ["n", "Uh-oh! It's a giant rolling pin, tumbling off the watering can!"], ["me", "Nope! STILL not the moon! It's never the moon! Flap flap FLAP!"]],
+  "w8-s3": [["me", "Sunflower Grove! Ooh, they all face the sunset. Do they turn to look at the moon too?"], ["me", "Ah-CHOO! Eep, pollen! Ooh, a lever! One pull and the rolling pin gives 'em a big flat hug!"]],
+  "w8-s4": [[10, "Hmph. Moth. Stray Crumblet in the Pumpkin Patch. Gettin' dark. Light it home, would ya?"], ["me", "Hi, little pumpkin! Er, little muffin! Snuggle into my glow. The fireflies will help too!"]],
+  "w8-s6": [["me", "Beanstalk Heights! Up, up, up! Is the moon at the top? Like in the bedtime story?"], ["lo2", "Hah! 'Tis a Recipe Scroll up there, moth! For MYSTERY MEATLOAF!"], ["me", "Ew! Then I'll turnip the speed and grab it first! Flap flap!"]],
+  "w8-s7": [["me", "Compost Keep! Ooh, warm and glowy with fireflies! And a chest on a high ledge!"], [12, "Heyyy, little light. *yaaawn* Moon's comin' up soon. No rush. Moon's never in a rush."], ["me", "Ooh, Sloba, that's so wise! Boing! Keys open doors, doors have windows, windows have MOONS!"]],
+  "w8-s8": [["me", "Scarecrow Stand! Ooh, the sun's almost down! Forty-five seconds, then it's moon o'clock!"], [16, "Stay frosty, moth. Sun's leaving? Cool, cool, cool. I was NOT melting. Totally fine."], ["me", "Hee! I'll glow nice and cool for you, Minturtle! Here come the monsters!"]],
+  "w8-s9": [["me", "Greenhouse Steps! Ooooh, glass all the way up! The moon's gonna look SO pretty through it!"], ["n", "From the Mystery Heap, a voice rumbles: \"A moon? Is there a MOON in me?! Hold on, lemme check!\""], ["me", "Nuh-uh! The moon lives in the sky! Flap flap!"]],
 };
 
 export const QUIPS: Record<QuipKind, string[]> = {

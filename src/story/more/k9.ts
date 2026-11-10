@@ -59,6 +59,14 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w7-s7": [[18, "In THIS corner! The pink heavyweight! Bubble-GUMBO! Ding ding!"], ["me", "Velvaroo! You remembered my name! I forgot yours. Kidding! Hi, Velvaroo!"], ["me", "Key chest on the flowerpot! Sponge! BOING! Ding ding!"]],
   "w7-s8": [["me", "Cooler Canyon! Ooh, nice and chilly! My gum's back to perfect chewiness!"], ["lo2", "Forsooth! The Baron shall grill thee well done, beast!"], ["me", "Well done? I'm just getting started! Forty-five seconds, go!"]],
   "w7-s9": [["me", "Charcoal Climb! Hot coals! Smoky! Ooh, I smell a stinky sprout up top."], ["n", "From the grill, a voice booms: \"ATTEN-TION, elephant! You'll be SIZZLED!\""], ["me", "Sizzled? I'll be STICKY! Sticky beats sizzly! Climbing!"]],
+  // World 8: The Garden.
+  "w8-s2": [["me", "Watering Can Run! Big drippy can! Ooh, is that a bath for elephants?"], ["n", "RUMBLE! A giant rolling pin comes rolling round the watering can!"], ["me", "Flat elephant is STILL not a party look! RUN!"]],
+  "w8-s3": [["me", "Sunflower Grove! They're taller than me! That NEVER happens!"], ["me", "Ah... AH-CHOO! *POP* Pollen up my trunk! Lever! Rolling pin goes BONK!"]],
+  "w8-s4": [[10, "Hmph. Bubblegumbo. Crumblet's lost in the Pumpkin Patch. Walk it out. Don't sit on it."], ["me", "I'd never! I sat on a pumpkin once. Did I? I forget. Come on, muffin!"]],
+  "w8-s6": [["me", "Beanstalk Heights! Recipe Scroll at the top! Climb, trunk, climb!"], ["me", "Peapod Snipers! Ow! Bubble Trap! Chew on THAT, peas!"]],
+  "w8-s7": [[16, "Stay frosty, big guy. You're looking a little melty."], ["me", "Minturtle! I'm stretchy, not melty! Wanna stick together in the shade?"], [16, "Cool, cool, cool. Key's up high. Sponge time, dude."]],
+  "w8-s8": [["me", "Scarecrow Stand! Hi, Mister Scarecrow! You look like somebody I forgot!"], ["n", "Here they come! Hold out for forty-five seconds!"], ["me", "Let's stick together, scarecrow! You take the left!"]],
+  "w8-s9": [["lo2", "Climb, pink beast! The Meatloaf shall mash thee in with his mystery bits!"], ["me", "Mystery bits? Ooh, maybe my party hat's in there! Climbing!"]],
 };
 
 export const QUIPS: Record<QuipKind, string[]> = {

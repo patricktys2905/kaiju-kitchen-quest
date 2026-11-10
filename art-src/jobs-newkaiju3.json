@@ -1,0 +1,296 @@
+[
+ {
+  "name": "parts-12",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-12.png"
+  ],
+  "prompt": "Generate an image. This is a character from my 2D side-scrolling game (a bubble-tea sloth (Sloba): a sleepy smiling sloth whose fur is milky brown bubble tea dotted with black tapioca pearls, a cream-coloured face mask, long curved claws on two arms and two legs, often hanging from a big pink bubble-tea straw). I need it as a CUTOUT PUPPET PARTS SHEET so I can animate it. Draw the exact same character, same colours, outlines and shading style, but in a STRICT SIDE PROFILE facing RIGHT like a 2D platformer character (face looking right, one eye visible). Split it into SEPARATE parts laid out apart from each other with big empty gaps (no part touching another): 1) the BODY with head and face but NO arms or legs drawn on it, 2) one long ARM with its claws, 3) a second ARM with claws, 4) one short LEG with claws, 5) a second LEG. IMPORTANT: the body piece must have NO arms, legs, wings or feet drawn on it. Each limb has a rounded complete joint end. IMPORTANT BODY RULE: Sloba has exactly two long arms with curved claws and two short legs with claws, exactly like the reference. Solid flat magenta (#FF00FF) background, no shadows, no labels, no text. Square 1:1 image."
+ },
+ {
+  "name": "w-slo1",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-peng3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading). A WEAPON themed for my hero a bubble-tea sloth (Sloba): a giant pink bubble-tea straw used like a staff (Big Straw). Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT, centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "w-slo2",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-peng3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading). A WEAPON themed for my hero a bubble-tea sloth (Sloba): a hammock net on a stick full of tapioca pearls (Pearl Net). Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT, centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "w-slo3",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-peng3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading). A WEAPON themed for my hero a bubble-tea sloth (Sloba): a golden tea whisk sceptre with a sleepy moon charm (Golden Tea Whisk). Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT, centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "a-slo1",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/a-peng3.png"
+  ],
+  "prompt": "Generate an image. The reference is an armour icon from my cute 2D kitchen action RPG. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading). ARMOR themed for my hero a bubble-tea sloth (Sloba): a cosy knitted cup sleeve worn as a vest (Cup Sleeve Vest), shown flat and centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "a-slo2",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/a-peng3.png"
+  ],
+  "prompt": "Generate an image. The reference is an armour icon from my cute 2D kitchen action RPG. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading). ARMOR themed for my hero a bubble-tea sloth (Sloba): a pajama armour with a sleep mask on the shoulder (Pajama Plate), shown flat and centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "a-slo3",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/a-peng3.png"
+  ],
+  "prompt": "Generate an image. The reference is an armour icon from my cute 2D kitchen action RPG. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading). ARMOR themed for my hero a bubble-tea sloth (Sloba): a golden tea-cup armour with jade pearls (Jade Tea Armour), shown flat and centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "k-slo",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/k-peng.png"
+  ],
+  "prompt": "Generate an image. The reference is a charm icon from my cute 2D kitchen action RPG. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading). A CHARM themed for my hero a bubble-tea sloth (Sloba): a little lucky tapioca pearl charm (Lucky Pearl Drop), centred, filling 75% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "u-dream-catcher-straw",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-peng3.png"
+  ],
+  "prompt": "Generate an image. The reference is an item icon from my cute 2D kitchen action RPG. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY WEAPON themed for my hero a bubble-tea sloth (Sloba), called \"Dream Catcher Straw\": a magical golden bubble-tea straw wrapped with a glowing dream-catcher web and floating pearls. Make it look special and magical (a faint golden glow, sparkles), clearly fancier than the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT, centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "u-snuggle-hammock-mail",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/a-peng3.png"
+  ],
+  "prompt": "Generate an image. The reference is an item icon from my cute 2D kitchen action RPG. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY ARMOR themed for my hero a bubble-tea sloth (Sloba), called \"Snuggle Hammock Mail\": a cosy hammock-weave armour glowing softly with stars and a sleep mask emblem. Make it look special and magical (a faint golden glow, sparkles), clearly fancier than the reference. Shown flat and centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "face-12-happy",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-12.png"
+  ],
+  "prompt": "Generate an image. The reference is my game character, a bubble-tea sloth (Sloba): a sleepy smiling sloth whose fur is milky brown bubble tea dotted with black tapioca pearls, a cream-coloured face mask, long curved claws on two arms and two legs, often hanging from a big pink bubble-tea straw. Draw THIS SAME character as a cartoon story portrait showing a strong, funny, very readable emotion: laughing with joy: eyes squeezed into happy arcs, a huge open-mouthed grin, bouncing with delight, little sparkles around it. IMPORTANT BODY RULE: Sloba has exactly two long arms with curved claws and two short legs with claws, exactly like the reference. Keep it EXACTLY on-model: same body shape and proportions, same colours, same face design, same thick dark outlines and glossy cel shading as the reference. Do not add any clothes, props, extra limbs or extra characters. Same three-quarter view and facing direction as the reference, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Portrait 4:5 image."
+ },
+ {
+  "name": "face-12-angry",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-12.png"
+  ],
+  "prompt": "Generate an image. The reference is my game character, a bubble-tea sloth (Sloba): a sleepy smiling sloth whose fur is milky brown bubble tea dotted with black tapioca pearls, a cream-coloured face mask, long curved claws on two arms and two legs, often hanging from a big pink bubble-tea straw. Draw THIS SAME character as a cartoon story portrait showing a strong, funny, very readable emotion: furious and fired up: deep scowling brows, gritted teeth, leaning forward, a little puff of angry steam above its head. IMPORTANT BODY RULE: Sloba has exactly two long arms with curved claws and two short legs with claws, exactly like the reference. Keep it EXACTLY on-model: same body shape and proportions, same colours, same face design, same thick dark outlines and glossy cel shading as the reference. Do not add any clothes, props, extra limbs or extra characters. Same three-quarter view and facing direction as the reference, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Portrait 4:5 image."
+ },
+ {
+  "name": "face-12-shocked",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-12.png"
+  ],
+  "prompt": "Generate an image. The reference is my game character, a bubble-tea sloth (Sloba): a sleepy smiling sloth whose fur is milky brown bubble tea dotted with black tapioca pearls, a cream-coloured face mask, long curved claws on two arms and two legs, often hanging from a big pink bubble-tea straw. Draw THIS SAME character as a cartoon story portrait showing a strong, funny, very readable emotion: totally shocked: eyes wide as saucers with tiny pupils, jaw dropped open, leaning back in surprise, a sweat drop flying off its head. IMPORTANT BODY RULE: Sloba has exactly two long arms with curved claws and two short legs with claws, exactly like the reference. Keep it EXACTLY on-model: same body shape and proportions, same colours, same face design, same thick dark outlines and glossy cel shading as the reference. Do not add any clothes, props, extra limbs or extra characters. Same three-quarter view and facing direction as the reference, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Portrait 4:5 image."
+ },
+ {
+  "name": "face-12-sad",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-12.png"
+  ],
+  "prompt": "Generate an image. The reference is my game character, a bubble-tea sloth (Sloba): a sleepy smiling sloth whose fur is milky brown bubble tea dotted with black tapioca pearls, a cream-coloured face mask, long curved claws on two arms and two legs, often hanging from a big pink bubble-tea straw. Draw THIS SAME character as a cartoon story portrait showing a strong, funny, very readable emotion: sad and worried: droopy teary eyes with one wobbly tear, a trembling frown, its whole body drooping. IMPORTANT BODY RULE: Sloba has exactly two long arms with curved claws and two short legs with claws, exactly like the reference. Keep it EXACTLY on-model: same body shape and proportions, same colours, same face design, same thick dark outlines and glossy cel shading as the reference. Do not add any clothes, props, extra limbs or extra characters. Same three-quarter view and facing direction as the reference, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Portrait 4:5 image."
+ },
+ {
+  "name": "still-12-intro",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-12.png",
+   "art-src/ref-bg.png"
+  ],
+  "prompt": "Generate an image. The first reference is my character, a bubble-tea sloth (Sloba): a sleepy smiling sloth whose fur is milky brown bubble tea dotted with black tapioca pearls, a cream-coloured face mask, long curved claws on two arms and two legs, often hanging from a big pink bubble-tea straw; the second shows the painted background style. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Cinematic composition, wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. NO text, no letters, no writing on any labels or pages, no speech bubbles, no UI, no border, no signature, no humans. IMPORTANT BODY RULE: Sloba has exactly two long arms with curved claws and two short legs with claws, exactly like the reference. Scene: Sloba hangs upside down from a giant bubble-tea straw on a kitchen counter, fast asleep and smiling, while the kitchen clock spins wildly behind her and an empty tea cup sits below."
+ },
+ {
+  "name": "still-12-cliff",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-12.png",
+   "art-src/ref-bg.png"
+  ],
+  "prompt": "Generate an image. The first reference is my character, a bubble-tea sloth (Sloba): a sleepy smiling sloth whose fur is milky brown bubble tea dotted with black tapioca pearls, a cream-coloured face mask, long curved claws on two arms and two legs, often hanging from a big pink bubble-tea straw; the second shows the painted background style. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Cinematic composition, wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. NO text, no letters, no writing on any labels or pages, no speech bubbles, no UI, no border, no signature, no humans. IMPORTANT BODY RULE: Sloba has exactly two long arms with curved claws and two short legs with claws, exactly like the reference. Scene: Sloba hangs from the dark rim of a giant steel kitchen sink at night, eyes open wide for once. Down in the drain a sickly green glow and a fuzzy crown silhouette of mould rise."
+ },
+ {
+  "name": "still-12-end",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-12.png",
+   "art-src/ref-bg.png"
+  ],
+  "prompt": "Generate an image. The first reference is my character, a bubble-tea sloth (Sloba): a sleepy smiling sloth whose fur is milky brown bubble tea dotted with black tapioca pearls, a cream-coloured face mask, long curved claws on two arms and two legs, often hanging from a big pink bubble-tea straw; the second shows the painted background style. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Cinematic composition, wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. NO text, no letters, no writing on any labels or pages, no speech bubbles, no UI, no border, no signature, no humans. IMPORTANT BODY RULE: Sloba has exactly two long arms with curved claws and two short legs with claws, exactly like the reference. Scene: Sloba naps blissfully in a hammock strung between two tea cups in a sunny garden, a fresh bubble tea in her claws, friends tiptoeing past smiling."
+ },
+ {
+  "name": "mob-nem-bird",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/mob-bun.png"
+  ],
+  "prompt": "Generate an image. The reference is an enemy from my cute 2D side-scrolling action RPG set in a giant kitchen. I need a NEW story mini-boss: JITTERS, a hyperactive espresso-bean hummingbird with buzzing wings, twitchy wide eyes, a tiny coffee-cup hat, vibrating with too much caffeine. Draw it in exactly the same art style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute but menacing). It is a MINI-BOSS, so a bit more detailed and imposing than a normal enemy, with a strong silhouette, and a few fuzzy green mould spots because the Mold Crown has corrupted it. Side view facing LEFT, whole body visible, centred, filling about 85% of the frame. IMPORTANT: a crisp dark outline all round with NO glow or haze around it. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1 image."
+ },
+ {
+  "name": "parts-16",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-16.png"
+  ],
+  "prompt": "Generate an image. This is a character from my 2D side-scrolling game (a mint-chocolate-chip ice cream turtle (Minturtle): a teal turtle with a big scoop of mint choc chip ice cream on top of a waffle-cone shell, a cool half-lidded smile, four stubby legs and a little tail). I need it as a CUTOUT PUPPET PARTS SHEET so I can animate it. Draw the exact same character, same colours, outlines and shading style, but in a STRICT SIDE PROFILE facing RIGHT like a 2D platformer character (face looking right, one eye visible). Split it into SEPARATE parts laid out apart from each other with big empty gaps (no part touching another): 1) the BODY with head, the waffle-cone shell, the ice cream scoop, tail and the two FAR-side legs drawn on it, but WITHOUT the two near-side legs, 2) the near-side FRONT LEG, 3) the near-side BACK LEG. IMPORTANT: the body piece must have NO arms, legs, wings or feet drawn on it. Each limb has a rounded complete joint end. IMPORTANT BODY RULE: Minturtle has NO arms and NO hands. Its only limbs are four stubby turtle legs and a little tail, exactly like the reference. Solid flat magenta (#FF00FF) background, no shadows, no labels, no text. Square 1:1 image."
+ },
+ {
+  "name": "w-mint1",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-peng3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading). A WEAPON themed for my hero a mint-chocolate-chip ice cream turtle (Minturtle): a waffle-cone lance (Waffle Lance). Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT, centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "w-mint2",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-peng3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading). A WEAPON themed for my hero a mint-chocolate-chip ice cream turtle (Minturtle): a big ice-cream scoop used as a mace (Scooper Mace). Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT, centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "w-mint3",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-peng3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading). A WEAPON themed for my hero a mint-chocolate-chip ice cream turtle (Minturtle): a frosty mint crystal staff with a chocolate chip core (Mint Crystal Staff). Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT, centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "a-mint1",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/a-peng3.png"
+  ],
+  "prompt": "Generate an image. The reference is an armour icon from my cute 2D kitchen action RPG. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading). ARMOR themed for my hero a mint-chocolate-chip ice cream turtle (Minturtle): a waffle-pattern shell guard (Waffle Guard), shown flat and centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "a-mint2",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/a-peng3.png"
+  ],
+  "prompt": "Generate an image. The reference is an armour icon from my cute 2D kitchen action RPG. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading). ARMOR themed for my hero a mint-chocolate-chip ice cream turtle (Minturtle): a chocolate-dipped shell plate (Choc Dip Plate), shown flat and centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "a-mint3",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/a-peng3.png"
+  ],
+  "prompt": "Generate an image. The reference is an armour icon from my cute 2D kitchen action RPG. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading). ARMOR themed for my hero a mint-chocolate-chip ice cream turtle (Minturtle): a gleaming mint-and-gold sundae armour (Sundae Shell Armour), shown flat and centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "k-mint",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/k-peng.png"
+  ],
+  "prompt": "Generate an image. The reference is a charm icon from my cute 2D kitchen action RPG. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading). A CHARM themed for my hero a mint-chocolate-chip ice cream turtle (Minturtle): a little chocolate-chip charm (Choc Chip Charm), centred, filling 75% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "u-triple-scoop-shield",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/a-peng3.png"
+  ],
+  "prompt": "Generate an image. The reference is an item icon from my cute 2D kitchen action RPG. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY ARMOR themed for my hero a mint-chocolate-chip ice cream turtle (Minturtle), called \"Triple Scoop Shield\": a waffle-cone shell armour topped with three glowing scoops of ice cream. Make it look special and magical (a faint golden glow, sparkles), clearly fancier than the reference. Shown flat and centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "u-brain-freeze-cone",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-peng3.png"
+  ],
+  "prompt": "Generate an image. The reference is an item icon from my cute 2D kitchen action RPG. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY WEAPON themed for my hero a mint-chocolate-chip ice cream turtle (Minturtle), called \"Brain Freeze Cone\": a frosty crystal waffle cone weapon crackling with icy mint energy. Make it look special and magical (a faint golden glow, sparkles), clearly fancier than the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT, centred, filling 80% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "face-16-happy",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-16.png"
+  ],
+  "prompt": "Generate an image. The reference is my game character, a mint-chocolate-chip ice cream turtle (Minturtle): a teal turtle with a big scoop of mint choc chip ice cream on top of a waffle-cone shell, a cool half-lidded smile, four stubby legs and a little tail. Draw THIS SAME character as a cartoon story portrait showing a strong, funny, very readable emotion: laughing with joy: eyes squeezed into happy arcs, a huge open-mouthed grin, bouncing with delight, little sparkles around it. IMPORTANT BODY RULE: Minturtle has NO arms and NO hands. Its only limbs are four stubby turtle legs and a little tail, exactly like the reference. Keep it EXACTLY on-model: same body shape and proportions, same colours, same face design, same thick dark outlines and glossy cel shading as the reference. Do not add any clothes, props, extra limbs or extra characters. Same three-quarter view and facing direction as the reference, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Portrait 4:5 image."
+ },
+ {
+  "name": "face-16-angry",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-16.png"
+  ],
+  "prompt": "Generate an image. The reference is my game character, a mint-chocolate-chip ice cream turtle (Minturtle): a teal turtle with a big scoop of mint choc chip ice cream on top of a waffle-cone shell, a cool half-lidded smile, four stubby legs and a little tail. Draw THIS SAME character as a cartoon story portrait showing a strong, funny, very readable emotion: furious and fired up: deep scowling brows, gritted teeth, leaning forward, a little puff of angry steam above its head. IMPORTANT BODY RULE: Minturtle has NO arms and NO hands. Its only limbs are four stubby turtle legs and a little tail, exactly like the reference. Keep it EXACTLY on-model: same body shape and proportions, same colours, same face design, same thick dark outlines and glossy cel shading as the reference. Do not add any clothes, props, extra limbs or extra characters. Same three-quarter view and facing direction as the reference, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Portrait 4:5 image."
+ },
+ {
+  "name": "face-16-shocked",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-16.png"
+  ],
+  "prompt": "Generate an image. The reference is my game character, a mint-chocolate-chip ice cream turtle (Minturtle): a teal turtle with a big scoop of mint choc chip ice cream on top of a waffle-cone shell, a cool half-lidded smile, four stubby legs and a little tail. Draw THIS SAME character as a cartoon story portrait showing a strong, funny, very readable emotion: totally shocked: eyes wide as saucers with tiny pupils, jaw dropped open, leaning back in surprise, a sweat drop flying off its head. IMPORTANT BODY RULE: Minturtle has NO arms and NO hands. Its only limbs are four stubby turtle legs and a little tail, exactly like the reference. Keep it EXACTLY on-model: same body shape and proportions, same colours, same face design, same thick dark outlines and glossy cel shading as the reference. Do not add any clothes, props, extra limbs or extra characters. Same three-quarter view and facing direction as the reference, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Portrait 4:5 image."
+ },
+ {
+  "name": "face-16-sad",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-16.png"
+  ],
+  "prompt": "Generate an image. The reference is my game character, a mint-chocolate-chip ice cream turtle (Minturtle): a teal turtle with a big scoop of mint choc chip ice cream on top of a waffle-cone shell, a cool half-lidded smile, four stubby legs and a little tail. Draw THIS SAME character as a cartoon story portrait showing a strong, funny, very readable emotion: sad and worried: droopy teary eyes with one wobbly tear, a trembling frown, its whole body drooping. IMPORTANT BODY RULE: Minturtle has NO arms and NO hands. Its only limbs are four stubby turtle legs and a little tail, exactly like the reference. Keep it EXACTLY on-model: same body shape and proportions, same colours, same face design, same thick dark outlines and glossy cel shading as the reference. Do not add any clothes, props, extra limbs or extra characters. Same three-quarter view and facing direction as the reference, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Portrait 4:5 image."
+ },
+ {
+  "name": "still-16-intro",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-16.png",
+   "art-src/ref-bg.png"
+  ],
+  "prompt": "Generate an image. The first reference is my character, a mint-chocolate-chip ice cream turtle (Minturtle): a teal turtle with a big scoop of mint choc chip ice cream on top of a waffle-cone shell, a cool half-lidded smile, four stubby legs and a little tail; the second shows the painted background style. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Cinematic composition, wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. NO text, no letters, no writing on any labels or pages, no speech bubbles, no UI, no border, no signature, no humans. IMPORTANT BODY RULE: Minturtle has NO arms and NO hands. Its only limbs are four stubby turtle legs and a little tail, exactly like the reference. Scene: Minturtle stands at the edge of a kitchen counter looking down at a tiny puddle where its ice cream is starting to drip, sweating nervously, an empty freezer door ajar far behind."
+ },
+ {
+  "name": "still-16-cliff",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-16.png",
+   "art-src/ref-bg.png"
+  ],
+  "prompt": "Generate an image. The first reference is my character, a mint-chocolate-chip ice cream turtle (Minturtle): a teal turtle with a big scoop of mint choc chip ice cream on top of a waffle-cone shell, a cool half-lidded smile, four stubby legs and a little tail; the second shows the painted background style. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Cinematic composition, wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. NO text, no letters, no writing on any labels or pages, no speech bubbles, no UI, no border, no signature, no humans. IMPORTANT BODY RULE: Minturtle has NO arms and NO hands. Its only limbs are four stubby turtle legs and a little tail, exactly like the reference. Scene: Minturtle stands at the dark rim of a giant steel kitchen sink at night, calm and brave, ice cream shell glowing faintly. Down in the drain a sickly green glow and a fuzzy crown silhouette of mould rise."
+ },
+ {
+  "name": "still-16-end",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-16.png",
+   "art-src/ref-bg.png"
+  ],
+  "prompt": "Generate an image. The first reference is my character, a mint-chocolate-chip ice cream turtle (Minturtle): a teal turtle with a big scoop of mint choc chip ice cream on top of a waffle-cone shell, a cool half-lidded smile, four stubby legs and a little tail; the second shows the painted background style. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Cinematic composition, wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. NO text, no letters, no writing on any labels or pages, no speech bubbles, no UI, no border, no signature, no humans. IMPORTANT BODY RULE: Minturtle has NO arms and NO hands. Its only limbs are four stubby turtle legs and a little tail, exactly like the reference. Scene: Minturtle chills in the cool shade of a giant garden leaf on a hot summer day, its ice cream perfectly frozen, sipping a cold drink, friends relaxing around it."
+ },
+ {
+  "name": "mob-nem-hare",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/mob-bun.png"
+  ],
+  "prompt": "Generate an image. The reference is an enemy from my cute 2D side-scrolling action RPG set in a giant kitchen. I need a NEW story mini-boss: HOT FUDGE HARE, a cocky speedy rabbit made of chocolate brownie with hot fudge dripping, racing stripes and a stopwatch. Draw it in exactly the same art style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute but menacing). It is a MINI-BOSS, so a bit more detailed and imposing than a normal enemy, with a strong silhouette, and a few fuzzy green mould spots because the Mold Crown has corrupted it. Side view facing LEFT, whole body visible, centred, filling about 85% of the frame. IMPORTANT: a crisp dark outline all round with NO glow or haze around it. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1 image."
+ }
+]

@@ -1,0 +1,20 @@
+[
+ {
+  "name": "still-w8-boss",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/boss-meatloaf.png",
+   "art-src/ref-bg.png"
+  ],
+  "prompt": "Generate an image. The first reference is my boss, THE MYSTERY MEATLOAF of the Leftovers: draw exactly ONE of him, EXACTLY like this reference (same shape, face, glaze, colours). The second shows the painted background style. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Cinematic composition, wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. NO text, no letters, no writing on any labels, no speech bubbles, no UI, no border, no signature, no humans. Scene: a dramatic low-angle boss reveal: the Mystery Meatloaf rises out of a big compost heap inside a moonlit old greenhouse, ketchup glaze shining, mystery bits flying, grinning madly. Weird and menacing but still cute, no other characters."
+ },
+ {
+  "name": "still-w8-cure",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/boss-meatloaf.png",
+   "art-src/ref-bg.png"
+  ],
+  "prompt": "Generate an image. The first reference is my boss, THE MYSTERY MEATLOAF of the Leftovers: draw exactly ONE of him (only one in the whole picture), EXACTLY like this reference. The second shows the painted background style. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Cinematic composition, wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. NO text, no letters, no writing on any labels, no speech bubbles, no UI, no border, no signature, no humans. Scene: after the battle: the Mystery Meatloaf, battered and missing a few mystery bits, wobbles away in a huff out of the greenhouse towards a big glowing supermarket in the distance at night, dropping a pea and a button behind him. Funny, defeated but defiant, no other characters."
+ }
+]

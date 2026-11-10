@@ -59,6 +59,14 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w7-s7": [["me", "Flowerpot Fort! My ancestors were wrapped in leaves too. The seaweed kind. Less pointy."], ["me", "Key chest on the high ledge. Sponge, old friend, you even came outside! Boing!"]],
   "w7-s8": [["lo2", "Hold out, old dragon? At thy age, I'd be amazed if thou could hold a CHOPSTICK!"], ["me", "Age jokes again! Forty-five seconds, breadstick, then I toast your OTHER side!"]],
   "w7-s9": [["n", "From the smoky summit, a voice booms: \"ATTEN-TION! Sprouts, prepare to grill the lizard!\""], ["me", "Lizard?! I am a DRAGON! And pee-yew, who is boiling cabbage up there? Hup hup!"]],
+  // World 8: The Garden.
+  "w8-s2": [["me", "A watering can as tall as a pagoda! Proverb: \"The patient gardener waits for the rain.\""], ["n", "RUMBLE! A giant rolling pin comes tumbling down the Watering Can Run!"], ["me", "Proverb update: \"The impatient dragon RUNS!\" HUP HUP HUP!"]],
+  "w8-s3": [["me", "Sunflower Grove! Every flower faces the sun. Hrrm, just like my grandmother at the beach."], ["n", "POOF! A big flower puffs pollen right up the dragon's nose!"], ["me", "Gates locked! Lever time! ACHOO! FWOOSH! Oops. Even my sneezes breathe fire now."]],
+  "w8-s4": [[10, "Hmph. Dragon. This Crumblet wants to see a real pumpkin patch. Walk it to the exit, or else."], ["me", "With honour, papa bear! Little one, pumpkins are NOT bouncy castles. Mostly."], [10, "It's wearing tiny wellies. Don't look at me. It's the pollen, okay?"]],
+  "w8-s6": [["me", "Beanstalk Heights! The Recipe Scroll waits at the top. Proverb: \"Climb the bean, find the giant.\""], ["me", "Hrrm. Wait, that is a different story. Grab the scroll and hold the line! Hup hup!"]],
+  "w8-s7": [[16, "Stay frosty, dragon. Key chest's on the high ledge. I'd go, but it's sunny up there. Cool, cool, cool."], ["me", "Fear not, shell friend! I shall point my fire AWAY from you. Sponge, old pal! Boing!"]],
+  "w8-s8": [["lo2", "Hold out amongst the turnips, old dragon? At thy age, thou art practically a vegetable!"], ["me", "Age jokes AGAIN?! Forty-five seconds, breadstick! That's a turnip for the books! FWOOSH!"]],
+  "w8-s9": [["n", "From the greenhouse, a lumpy voice mumbles: \"Huh! Is that a SOCK in me? When did I eat a sock?\""], ["me", "A sock in the meatloaf! Proverb: \"Always check inside the meatloaf.\" Hrrm! It begins to make sense!"]],
 };
 
 export const QUIPS: Record<QuipKind, string[]> = {

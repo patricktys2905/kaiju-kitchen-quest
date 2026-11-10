@@ -59,6 +59,14 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w7-s7": [["me", "Flowerpot Fort! Flowers smell nice. Way nicer than that stinky Baron."], [9, "*POP* Hi, little penguin! Elephants never forget! The key chest is up on the, um, the..."], ["me", "The high ledge? Thanks, Bubblegumbo! Sponge, my old pal! Boing!"]],
   "w7-s8": [["me", "A COOLER! Ice cubes! Frost! It smells like HOME! *sniff* I'm not crying, it's condensation!"], ["me", "Forty-five seconds in here? Best spot in the whole backyard! Circles STILL count! Wheee!"]],
   "w7-s9": [["me", "Charcoal Climb! The rocks are glowing! Why is EVERYTHING out here so hot?!"], ["lo2", "Climb on, bird! The Baron shall serve thee as a summer slushie! Hahaha!"], ["me", "Slushie?! I'm cookies AND cream! Get it right! Wheee!"]],
+  // World 8: The Garden.
+  "w8-s2": [["me", "A giant watering can! A shower AND a slide! Wheee!"], ["n", "RUMBLE! A giant rolling pin comes bouncing down the Watering Can Run!"], ["me", "Race you, pin! Wait, I still can't stop at the finish! Wheeee!"]],
+  "w8-s3": [["n", "POOF! A giant flower puffs pollen all over Sunflower Grove!"], ["me", "Ah... ACHOO! Eek, now I'm cookies and cream and POLLEN!"], ["me", "Gates locked! Yank the lever! Penguin bowling, garden edition!"]],
+  "w8-s4": [[10, "Hmph. Penguin. This Crumblet's never seen a pumpkin patch. Walk it to the exit. Slowly."], ["me", "Slowly! Brakes on! *skrrrt* Little buddy, pumpkins are NOT ice rinks. I checked!"]],
+  "w8-s6": [["me", "Beanstalk Heights! Climbing is just sliding, but UP! Ooh, that's harder."], ["me", "Grab the scroll quick, then hold out! Up, up, Pengwhip! Don't slide back down!"]],
+  "w8-s7": [[16, "Whoa. A penguin. Stay frosty, little dude. Is it hot, or is it me? It's hot, right?"], ["me", "Another ice cream?! You're melting too! Quick, stand in my shade!"], [16, "Cool, cool, cool. Key chest's up on the high ledge. Scoop there it is."]],
+  "w8-s8": [["me", "A scarecrow! Hi, Mr. Scarecrow! You look so chilly out here. I'm jealous!"], ["me", "Forty-five seconds? Round and round the scarecrow! Circles STILL count! Wheee!"]],
+  "w8-s9": [["n", "From the greenhouse, a lumpy voice mumbles: \"Huh! Is that a sock in me? WHO AM I?\""], ["me", "A greenhouse is just a glass oven for plants! Eek! Okay, slide fast! Wheee!"]],
 };
 
 export const QUIPS: Record<QuipKind, string[]> = {

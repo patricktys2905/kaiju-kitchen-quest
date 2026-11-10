@@ -63,6 +63,11 @@ export const WORLDS: WorldDef[] = [
     baseLv: 71, power: 3.8, pool: [[1, 'beetle'], [1, 'wasp'], [2, 'ketchup'], [3, 'charcoal'], [4, 'corn'], [7, 'patty']], hazard: 'sprinkler', mimic: 'mimic', elite: 'patty', boss: 'brussels',
     names: ['Lawn Launch', 'Hose Highway', 'Sprinkler Springs', 'Paddling Pool Pier', 'Patty Plateau', 'Picnic Table Peak', 'Flowerpot Fort', 'Cooler Canyon', 'Charcoal Climb', 'The Grill Summit'],
   },
+  {
+    id: 8, name: 'The Garden', blurb: 'Overgrown, untended and up to something.', bg: 'bg-far-garden', mid: 'bg-mid-garden', tile: 'tile-garden', platTint: 0xd8e8c0, bossBg: 'bg-far-greenhouse',
+    baseLv: 81, power: 4.2, pool: [[1, 'snail'], [1, 'ladybug'], [2, 'peapod'], [3, 'mole'], [4, 'tomato'], [5, 'radish'], [7, 'pumpkin']], hazard: 'pollen', mimic: 'mimic', elite: 'pumpkin', boss: 'meatloaf',
+    names: ['Seedling Lane', 'Watering Can Run', 'Sunflower Grove', 'Pumpkin Patch Path', 'Gourd Guard', 'Beanstalk Heights', 'Compost Keep', 'Scarecrow Stand', 'Greenhouse Steps', 'The Mystery Heap'],
+  },
 ];
 
 /** Small seeded RNG so a stage is always laid out the same way. */
@@ -144,7 +149,7 @@ export function genStage(w: WorldDef, n: number, o: { seed?: number; lv?: number
   return {
     id, world: w.id, num: id, name: o.name ?? w.names[n - 1], bg: w.bg, mid: w.mid, tile: w.tile, platTint: w.platTint, width, groundY: G,
     lv: [lvLo, n === 5 ? lvHi + 1 : lvHi], par: Math.round(25 + count * 5 + width / 70), rec: lvLo,
-    platforms, ladders, mobs, ...inter, hazards: hazards.filter(h => !(inter.props ?? []).some(p => p.kind === 'sponge' && Math.abs(p.x - h.x) < 200)), // never a hazard by a bouncy sponge (it can loop you up to the ledge forever)
+    platforms, ladders, mobs, ...inter, hazards: awayFromSponges(hazards, inter.props ?? [], ladders, width), // never a hazard by a bouncy sponge (it can loop you up to the ledge forever)
     ...setPieces(w, n, width, platforms, mobs, lvLo, lvHi),
     // a goal on stages 4 / 6 / 8 of every world
     objective: n === 4 ? { kind: 'escort' } : n === 6 ? { kind: 'fetch', t: w.id >= 7 ? 100 : w.id >= 5 ? 90 : 75, x: width - 260 } : n === 8 ? { kind: 'survive', t: 45 } : undefined,
@@ -251,6 +256,20 @@ function genBonus(w: WorldDef): StageDef {
   };
 }
 
+/** Slides any hazard sitting by a bouncy sponge to a free spot nearby (keeps the count, so every stage keeps its hazards). */
+function awayFromSponges(hz: Hazard[], props: { kind: string; x: number }[], ladders: Ladder[], width: number): Hazard[] {
+  const sponges = props.filter(p => p.kind === 'sponge').map(p => p.x);
+  const bad = (x: number, self: Hazard) => sponges.some(sx => Math.abs(sx - x) < 200) || ladders.some(l => Math.abs(l.x - x) < 90) || hz.some(o => o !== self && Math.abs(o.x - x) < 300) || x < 500 || x > width - 500;
+  const out = hz.map(h => {
+    if (!sponges.some(sx => Math.abs(sx - h.x) < 200)) return h;
+    for (const d of [260, -260, 420, -420, 600, -600, 800, -800]) if (!bad(h.x + d, h)) return { ...h, x: h.x + d };
+    return h;
+  });
+  // still stuck by a sponge: drop it, as long as the stage keeps at least one hazard
+  const ok = out.filter(h => !sponges.some(sx => Math.abs(sx - h.x) < 200));
+  return ok.length ? ok : out;
+}
+
 function hazardAt(kind: HazardKind, x: number, offset: number): Hazard {
   switch (kind) {
     case 'burner': return { kind, x, w: 90, period: 3.6, on: 1.2, offset };
@@ -260,6 +279,7 @@ function hazardAt(kind: HazardKind, x: number, offset: number): Hazard {
     case 'tap': return { kind, x, w: 70, period: 3.4, on: 1.1, offset };
     case 'wax': return { kind, x, w: 80, period: 3.6, on: 0.4, offset };
     case 'sprinkler': return { kind, x, w: 80, period: 3.4, on: 0.7, offset };
+    case 'pollen': return { kind, x, w: 100, period: 3.8, on: 1.2, offset };
   }
 }
 

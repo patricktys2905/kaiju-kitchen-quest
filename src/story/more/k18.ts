@@ -59,6 +59,14 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w7-s7": [[9, "Hiya, Velvaroo! Elephants never forget! Um, who are you again? *POP*"], ["me", "Bubblegumbo! We trained here! You held my punching bag!"], [9, "Ooh! I remember the bag! The bag was nice. Sponge is over there!"]],
   "w7-s8": [["me", "Cooler Canyon! Nice and cold. Rocky would love it here!"], ["lo2", "Hold out all thou likest, marsupial! The Baron shall roast thee rare!"], ["me", "Rare? I'm a red velvet champ! I'm always WELL DONE! Forty-five seconds!"]],
   "w7-s9": [["n", "From the smoky grill above, a big voice booms: \"ATTEN-TION! Sprout Soldiers, FORM UP!\""], ["me", "Charcoal Climb! Hot, smoky and stinky. Pee-yew! Main event, here I come! Ding ding!"]],
+  // World 8: The Garden.
+  "w8-s2": [["me", "Watering Can Run! Garden roadwork! Smells WAY better than sprouts!"], ["n", "RUMBLE! A giant rolling pin comes rolling round the watering can!"], ["me", "Every gym needs a chaser! HOP!"]],
+  "w8-s3": [["me", "Sunflower Grove! A whole crowd of big yellow faces, and they're all watching ME!"], ["n", "PUFF! A flower blasts a cloud of pollen!"], ["me", "Ah... CHOO! Lever! Pin drops! Down for the count, weeds!"]],
+  "w8-s4": [[10, "Hmph. Velvaroo. This Crumblet got lost in the Pumpkin Patch. It asked for you."], ["me", "Into the pouch, champ-in-training! Mind the squash. Get it? SQUASH?"], [10, "Hmph. Just walk."]],
+  "w8-s6": [["me", "Beanstalk Heights! A climbing rope the size of a TREE! Grab the scroll, hop hop!"], ["me", "Peapod Snipers? Duck, weave, and serve 'em a knuckle sandwich! Hold the vine!"]],
+  "w8-s7": [[12, "Heyyy, duuude. Nice gloves. *yaaawn*"], ["me", "Sloba! Wanna be my sparring partner?"], [12, "Nah. I'm sparring with this nap. Sponge is over there... zzz."]],
+  "w8-s8": [["me", "Scarecrow Stand! A scarecrow! Perfect punching bag! Sorry, buddy!"], ["lo2", "Hold out all thou likest! The Meatloaf hath NO weight class!"], ["me", "Then he's in mine! Forty-five seconds! Gloves up!"]],
+  "w8-s9": [["n", "From the greenhouse, a lumpy voice rambles: \"Am I a heavyweight? A lightweight? A MYSTERY weight?\""], ["me", "Greenhouse Steps! Hot glass, big climb. Main event, here I come! Ding ding!"]],
 };
 
 export const QUIPS: Record<QuipKind, string[]> = {

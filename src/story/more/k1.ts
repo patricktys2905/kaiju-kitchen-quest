@@ -59,6 +59,14 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w7-s7": [["me", "Flowerpot Fort! Soil samples EVERYWHERE! Ooh, a worm! Hi, worm! Fascinating!"], ["me", "Secret chest on a high ledge! Bouncy sponge, launch the squid! EUREKA, I'm airborne again!"]],
   "w7-s8": [[9, "Hello, little squid! Have you seen my birthday party? *POP* Elephants never forget, but I forgot where I left it."], ["me", "A lost party? Fascinating! Note to self: find it right after forty-five seconds of monsters!"]],
   "w7-s9": [["n", "From the smoky Grill Summit, a voice booms: \"ATTEN-TION! No jellies past this point!\""], ["me", "My spore-o-meter says ninety percent sprout and ten percent STINK! Pee-yew! Up the coals we go!"]],
+  // World 8: The Garden.
+  "w8-s2": [["me", "Watering Can Run! Note to self: jelly plus watering can equals one EXTRA wobbly squid!"], ["n", "Uh-oh! A giant rolling pin comes rumbling between the veggie rows!"], ["me", "In a GARDEN?! New hypothesis, same as always: RUN RIGHT! Very, VERY right!"]],
+  "w8-s3": [["me", "Sunflower Grove! Giant flowers puffing pollen! Fascinating! Ah... ah... AH-CHOO!"], ["me", "Gates locked? Lever, rolling pin, SPLAT! My favourite experiment, now organically grown!"]],
+  "w8-s4": [[10, "Hmph. Jelly. My Crumblet wants to see where veggies come from. Walk it through the Pumpkin Patch."], ["me", "Assistant number eight! Rules one to six still apply! Rule seven: no licking the pumpkins!"]],
+  "w8-s6": [["me", "Beanstalk Heights! A Recipe Scroll up a bean pole! Please say antidote. Please DON'T say garlic!"], ["lo2", "Hah! Thou shalt never climb so high, jelly! Thou art a wobbly salad dressing!"], ["me", "Beans are climbers, and so is SCIENCE! Grab it and hold on, GO!"]],
+  "w8-s7": [["me", "Compost Keep! Rotting peels, worm tunnels, and a WHIFF of science! My tentacles are tingling!"], ["me", "Secret chest on a high ledge! Bouncy sponge, launch the squid! EUREKA, I'm airborne AGAIN!"]],
+  "w8-s8": [[12, "Heyyy, duuude. *yaaawn* Nice helmet. Is it for straining boba?"], ["me", "It's for SCIENCE! Help me hold the Scarecrow Stand forty-five seconds? Sloba? Hellooo?"], [12, "Zzz... I'm steeped in it, dude. Zzz..."]],
+  "w8-s9": [["n", "From the old Greenhouse, a voice mumbles: \"Who's out there? Want seconds? Nobody EVER wants seconds!\""], ["me", "Seconds? I want a SAMPLE! Spore-o-meter says ninety percent mystery! Up the steps we go!"]],
 };
 
 export const QUIPS: Record<QuipKind, string[]> = {

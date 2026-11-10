@@ -59,6 +59,14 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w7-s7": [["me", "Flowerpot Fort! Real dirt! Real pots! Ahh, now THIS is a fort a gardener can respect!"], ["me", "Key chest on a high ledge. Sponge bounce! Still a pro. STILL don't tell anybody!"]],
   "w7-s8": [["me", "Cooler Canyon! Nice and chilly. Keeps my cheese from sweating. Forty-five seconds, pinch everything!"], ["n", "Seed count: twelve! Cabbage count: still zero!"], ["me", "Quit counting, narrator! It's on that grill up there. I can SMELL it!"]],
   "w7-s9": [["n", "From the Grill Summit, a voice booms: \"Sprout Soldiers, FORM UP! The cabbage is almost well done!\""], ["me", "Almost well done?! Hang on, sweetheart, I'm comin'! Up the coals, SIDEWAYS!"]],
+  // World 8: The Garden.
+  "w8-s2": [["me", "Watering Can Run! Finally, somebody's watering this garden! With a GIANT can, but still!"], ["n", "Uh-oh! A giant rolling pin comes rumbling between the rows!"], ["me", "Not on my veggies, ya don't! Run right! Sideways right! MOVE, legs!"]],
+  "w8-s3": [["me", "Sunflower Grove. Lovely blooms! Ahh... AH-CHOO! Hmph! Pollen in my shell!"], ["me", "Gates locked? Lever, rolling pin, weeded. In a REAL garden this time! Hmph! Bliss."]],
+  "w8-s4": [[10, "Hmph. Crab. My Crumblet wants to see where veggies come from. Walk it through the Pumpkin Patch."], ["me", "Finally, a kid with taste! Stick to my shell, small fry, and DON'T step on the vines!"]],
+  "w8-s6": [["me", "Beanstalk Heights! Beans climbing poles like they own the place. Hmph! Good for them."], ["lo2", "Hah! Thou shalt never reach yon Recipe Scroll, crab! Crabs climb not beanstalks!"], ["me", "Watch me, crumb-bum! Grab the scroll and hold on, legs! UP is just sideways tipped over!"]],
+  "w8-s7": [["me", "Compost Keep! Peels, worms and the good stinky stuff. It's a spa for dirt! Ahh!"], ["me", "Key chest on a high ledge. Sponge bounce! Eight worlds a pro now. Don't tell ANYBODY!"]],
+  "w8-s8": [[16, "Yo, crab. Stay frosty. Is it, like, super sunny out here? Asking for a shell."], ["me", "It's SUNSET, kid! You're fine! Now hold the Scarecrow Stand forty-five seconds with me!"], [16, "Cool, cool. Sooo not melting. Scoop there it is!"]],
+  "w8-s9": [["n", "From the old Greenhouse, a voice mumbles: \"Your cabbage? Huh. Maybe I ATE it? Maybe I AM it?\""], ["me", "If you're made of my cabbage, I'm takin' ya back leaf by leaf! Up the steps, SIDEWAYS!"]],
 };
 
 export const QUIPS: Record<QuipKind, string[]> = {

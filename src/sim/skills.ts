@@ -48,7 +48,15 @@ export type SkillKind =
   | 'hops'       // three big hops forward, a shockwave at every landing
   | 'flurry'     // a rapid flurry of punches
   | 'cakebomb'   // a lobbed cupcake that bursts into a slowing frosting patch
-  | 'megabubble' | 'tko';
+  | 'megabubble' | 'tko'
+  // Sloba / Minturtle
+  | 'swing'      // swings up and over in an arc, landing with a sticky slam
+  | 'nap'        // a power nap: heals while dozing, wakes with a shockwave
+  | 'slowtime'   // everything nearby slows right down, and you speed up
+  | 'wall'       // a waffle wall: blocks monsters and their shots
+  | 'scoop'      // a lobbed scoop that bursts and freezes
+  | 'chipstorm'  // choc chips rain down all around you
+  | 'snooze' | 'sundae';
 
 export interface SkillDef {
   id: string;
@@ -180,6 +188,22 @@ export const SKILLS: Record<number, { actives: SkillDef[]; passive: PassiveDef }
     ],
     passive: { id: 'spiky', name: 'Extra Spiky', desc: 'Monsters that hurt you take 12% of it back per level', unlock: PASSIVE_UNLOCK, per: { thorns: 0.12 } },
   },
+  12: { // Sloba — sleepy swinger
+    actives: [
+      S({ id: 'vineswing', name: 'Vine Swing', kind: 'swing', desc: 'Swings up and over in an arc through monsters, landing with a sticky boba slam', cd: 3.4, dur: 0.7, dmg: 1.8, reach: 90, h: 80, kx: 260, ky: -300 }),
+      S({ id: 'nap', name: 'Power Nap', kind: 'nap', desc: 'Dozes off for a moment: heals as it sleeps, then wakes up with a shockwave', unlock: 4, cd: 11, dur: 1.4, dmg: 2.4, reach: 120, h: 90, kx: 360, ky: -420 }),
+      S({ id: 'slothtime', name: 'Sloth Time', kind: 'slowtime', desc: 'Everything nearby slows right down for 4 s, and Sloba speeds up', unlock: 8, cd: 12, dur: 0.5, dmg: 1, reach: 340, h: 200, kx: 40, ky: 0 }),
+    ],
+    passive: { id: 'easy', name: 'Easy Does It', desc: '+0.15% max HP regained per second and +6% ultimate charge per level', unlock: PASSIVE_UNLOCK, per: { regen: 0.0015, ultGain: 0.06 } },
+  },
+  16: { // Minturtle — chill wall
+    actives: [
+      S({ id: 'scoop', name: 'Scoop Lob', kind: 'scoop', desc: 'Lobs a scoop of mint ice cream that bursts and freezes monsters', cd: 3.6, dur: 0.4, dmg: 2, reach: 90, h: 70, kx: 160, ky: -260, n: 1 }),
+      S({ id: 'wafflewall', name: 'Waffle Wall', kind: 'wall', desc: 'Plants a waffle wall for 4 s: monsters and their shots can\'t get through', unlock: 4, cd: 12, dur: 0.5, dmg: 1, reach: 90, h: 140, kx: 260, ky: -160 }),
+      S({ id: 'chipstorm', name: 'Chip Storm', kind: 'chipstorm', desc: 'Choc chips rain down all around Minturtle', unlock: 8, cd: 7, dur: 0.5, dmg: 1, reach: 240, h: 40, kx: 120, ky: -200, n: 10 }),
+    ],
+    passive: { id: 'coolshell', name: 'Cool Shell', desc: '-1.5% damage taken and +3% max HP per level', unlock: PASSIVE_UNLOCK, per: { dr: 0.015, hpPct: 0.03 } },
+  },
   9: { // Bubblegumbo — gum tank
     actives: [
       S({ id: 'bubbletrap', name: 'Bubble Trap', kind: 'bubbletrap', desc: 'Seals the two nearest monsters in gum bubbles: helpless for 2.5 s, then POP for big damage', cd: 7, dur: 0.5, dmg: 2.6, reach: 320, h: 160, kx: 140, ky: -420, n: 2 }),
@@ -238,6 +262,8 @@ export const ULTS: Record<number, SkillDef> = {
   7: S({ id: 'ult7', name: 'Dragon Roll Inferno', kind: 'cone', desc: 'A colossal wasabi fire breath', cd: 0, dur: 0.9, dmg: 9, reach: 400, h: 200, kx: 420, ky: -300 }),
   8: S({ id: 'ult8', name: 'Fondue Flood', kind: 'wave', desc: 'A wave of molten chocolate rolls across the whole floor', cd: 0, dur: 0.8, dmg: 8, reach: 120, h: 90, kx: 420, ky: -400 }),
   15: S({ id: 'ult15', name: 'Grand Grill', kind: 'firefloor', desc: 'Lights the floor under every monster on screen', cd: 0, dur: 0.8, dmg: 1.0, reach: 600, h: 80, kx: 60, ky: -120 }),
+  12: S({ id: 'ult12', name: 'Mega Snooze', kind: 'snooze', desc: 'A giant yawn: every monster on screen falls asleep for 3 s', cd: 0, dur: 0.9, dmg: 2.5, reach: 620, h: 300, kx: 20, ky: -80 }),
+  16: S({ id: 'ult16', name: 'Sundae Drop', kind: 'sundae', desc: 'A colossal sundae falls from the sky: a huge impact and a freezing puddle', cd: 0, dur: 0.9, dmg: 9, reach: 170, h: 120, kx: 300, ky: -500 }),
   9: S({ id: 'ult9', name: 'Mega Bubble', kind: 'megabubble', desc: 'Blows a giant bubble that seals every monster on screen for 3 s, then POP!', cd: 0, dur: 0.9, dmg: 5, reach: 620, h: 300, kx: 160, ky: -520 }),
   18: S({ id: 'ult18', name: 'Knockout Punch', kind: 'tko', desc: 'Leaps to the toughest monster around and lands a colossal uppercut', cd: 0, dur: 0.8, dmg: 14, reach: 640, h: 300, kx: 300, ky: -900 }),
   13: S({ id: 'ult13', name: 'Holy Guacamole', kind: 'guacflood', desc: 'A rolling wave of guacamole that leaves healing guac pools behind it', cd: 0, dur: 0.9, dmg: 5, reach: 520, h: 120, kx: 420, ky: -340 }),
@@ -252,6 +278,7 @@ export const POSE_OF: Partial<Record<SkillKind, SkillKind>> = {
   geyser: 'nova', drain: 'nova', freeze: 'nova', radial: 'nova', firefloor: 'nova', blizzard: 'nova', orbit: 'buff', counter: 'buff',
   pounce: 'slam', tremor: 'slam', wave: 'slam', meteor: 'slam', swoop: 'dash', blink: 'dash', bulldoze: 'dash', slide: 'dash', rampage: 'dash', slashall: 'dash',
   throw: 'uppercut',
+  swing: 'dash', nap: 'buff', slowtime: 'nova', wall: 'slam', scoop: 'cone', chipstorm: 'nova', snooze: 'nova', sundae: 'slam',
   bubbletrap: 'nova', gumball: 'cone', trumpet: 'slam', hops: 'dash', flurry: 'cone', cakebomb: 'cone', megabubble: 'nova', tko: 'uppercut',
   pitbounce: 'cone', guac: 'nova', gust: 'cone', drop: 'cone', screech: 'buff', volley: 'cone', guacflood: 'slam', fiesta: 'nova',
 };

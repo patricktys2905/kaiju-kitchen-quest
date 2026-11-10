@@ -7,6 +7,15 @@ export type QuipKind = 'combo' | 'lowhp' | 'perfect' | 'levelup' | 'secret' | 'b
 
 /** What each monster says when it first appears in a stage (one is picked at random). */
 export const TAUNTS: Partial<Record<MobKind, string[]>> = {
+  // World 8: The Garden
+  snail: ["Slow and steady... CRUSHES you!", "My shell's crisper than yours!", "Lettuce introduce myself. Nope, too slow."],
+  ladybug: ["Spot ya! Hehe!", "I'm a lady, and I'm a BUG!", "Bzzt! Tomato incoming!"],
+  peapod: ["Pea-kaboo, gotcha!", "I never miss... much!", "Three peas, three chances!"],
+  mole: ["Dig it! Surprise!", "Potatoes can't see? I can SMELL ya!", "Tunnel time!"],
+  tomato: ["Splat attack, fresh from the vine!", "Catch! It's ripe!", "Ketchup with THIS, pal!"],
+  radish: ["Lit fuse! LIT FUSE! Hehehe!", "I'm RAD-ish and I'm RAD-ICAL!", "Here comes the boom-root!"],
+  pumpkin: ["You're about to get SQUASHED!", "Gourd job getting this far. Bye!", "Patch is MINE!"],
+  chunk: ["What am I? Who knows! CHARGE!", "Mystery meat attack!", "I'm a bit of everything! Mostly anger!"],
   // World 7: The Backyard BBQ
   wasp: ["Bzzz! Is that a sandwich? Is that YOU?", "Picnic's over, pal! Bzzzt!", "I'm on a sugar rush, buddy!"],
   corn: ["Pop pop! Here comes the kernel!", "I'm a-MAIZE-ing at this!", "Ears up! Fire!"],

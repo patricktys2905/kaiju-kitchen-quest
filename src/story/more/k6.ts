@@ -59,6 +59,14 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w7-s7": [["me", "Flowerpot Fort! A castle of flowerpots, and every tower has a daisy on top! We LOVE it!"], ["me", "Secret chest on a high ledge! Sponge, our most loyal subject, launch the king! BOING!"]],
   "w7-s8": [[18, "In THIS corner, a teeny dumpling king! Ding ding! Need a sparring partner, Your Shortness?"], ["me", "Your SHORTNESS?! Decree Number Twenty-Six: hold the canyon forty-five seconds, THEN you may bow!"], [18, "Bow? I'll HOP! Let's go, champ! We knead to win!"]],
   "w7-s9": [["n", "From the Grill Summit, a voice booms: \"Sprout Soldiers, FORM UP! The dumpling goes on the grill!\""], ["me", "The GRILL? We're steamed, not grilled! Decree Number... oh, never mind, just CLIMB!"]],
+  // World 8: The Garden.
+  "w8-s2": [["me", "Watering Can Run! A royal fountain! Wait, why is that rolling pin in the GARDEN now?!"], ["n", "Uh-oh! It's your biggest fan, Your Majesty! It follows you everywhere!"], ["me", "Royal retreat! To the RIGHT! Gracefully! Okay, QUICKLY!"]],
+  "w8-s3": [["me", "Sunflower Grove! Decree Number Thirty: flowers may NOT sneeze on the king! AH-CHOO! Hmph. That was us."], ["me", "Pull the lever! Royal rolling pin, flatten the flowerbeds! Er, just the monsters, please!"]],
+  "w8-s4": [[10, "Hmph. Dumpling. This Crumblet wants to see a garden. Walk it through the Pumpkin Patch. Don't lose it."], ["me", "Heir number eight! Behold, small one, the royal pumpkins! Stay behind the royal belly! Boing!"]],
+  "w8-s6": [["me", "Beanstalk Heights! A Recipe Scroll at the very top! Good. A king belongs up high anyway!"], ["lo2", "Fie! Nobody invited thee to the Garden, dumpling! The Meatloaf wanteth thee not!"], ["me", "Decree Number Thirty-One: the king invites HIMSELF! Grab the scroll and hold the beanstalk!"]],
+  "w8-s7": [["me", "Compost Keep! Pee-yew! A castle made of old peels! We are NOT keeping this one."], ["me", "Secret chest on a high ledge! Sponge, our most loyal subject, launch the king! BOING!"]],
+  "w8-s8": [[9, "Hello, little king! *POP* Elephants never forget! Um, who are you again?"], ["me", "Dumplord, Lord of All Leftovers! Hold the Scarecrow Stand forty-five seconds with us and you shall be a duke!"], [9, "A duke? Ooh! Let's stick together! Wait, what are we doing?"]],
+  "w8-s9": [["n", "From the old Greenhouse, a voice mumbles: \"A king? Coming for ME? Nobody EVER comes for me!\""], ["me", "Decree Number Thirty-Two: somebody's coming for you NOW! Up the steps! Royally!"]],
 };
 
 export const QUIPS: Record<QuipKind, string[]> = {

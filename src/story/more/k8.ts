@@ -59,6 +59,14 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w7-s7": [["me", "Flowerpots! Me like dirt. Dirt cool. Dirt no melt nobody."], ["me", "Chest way up high. Sponge! BOING! Me no drop Chef note!"]],
   "w7-s8": [["me", "COOLER! Ice inside! Me hug ice. Hi, new friend! Me name you Cubey Two!"], ["me", "Forty-five seconds. This one for Cubey. BOTH Cubeys!"]],
   "w7-s9": [["me", "Charcoal hot. Grill up top even hotter. Me feet go sizzle! *gulp*"], [15, "Chocomunch! Grill tip from a champ: keep moving and you never stick! Go go go!"], ["me", "Me keep moving! Me scared AND me climb! Chef is friend!"]],
+  // World 8: The Garden.
+  "w8-s2": [["me", "Big watering can. Water cool! Me like this place!"], ["n", "RUMBLE! A giant rolling pin comes bouncing down the Watering Can Run!"], ["me", "Pin AGAIN?! Pin follow me EVERYWHERE! Me RUN!"]],
+  "w8-s3": [["n", "POOF! A giant flower puffs a pollen cloud right at Chocomunch!"], ["me", "AH-CHOO! Ow, sticky! Me now chocolate with sprinkles!"], ["me", "Gate lock. Me pull lever, pin go BONK! Bad guys flat like pancake!"]],
+  "w8-s4": [[10, "Hmph. Chocomunch. This Crumblet wants to see a pumpkin patch. Walk it to the exit. Keep it out of the dirt."], ["me", "Me walk muffin! Pumpkins big like house. Muffin no climb pumpkin! Okay, ONE pumpkin."]],
+  "w8-s6": [["me", "Beanstalk go up, up, UP! Scroll at top. Me climb! Me no look down."], ["me", "Me look down. Uh-oh. Me grab scroll and hold on tight. Me VERY good hugger!"]],
+  "w8-s7": [[16, "Whoa, a chocolate dude. Stay frosty. Psst, is it just me, or is the sun kinda melty?"], ["me", "YOU scared of melt too?! Me hold your flipper. We stay in shade together!"], [16, "Cool, cool, cool. Key chest's up on the ledge. You go boing, I guard the shade."]],
+  "w8-s8": [["me", "Scarecrow! Me no scared of scarecrow. Me scared of HOT. Scarecrow not hot. Hehe!"], ["me", "Forty-five seconds. This one for Cubey! And Cubey Two! And new turtle friend!"]],
+  "w8-s9": [["n", "From the greenhouse, a lumpy voice mumbles: \"Huh, is that a toy wheel in me? WHO AM I?\""], ["me", "Greenhouse warm like Oven. *gulp* Me scared AND me climb! Chef is friend!"]],
 };
 
 export const QUIPS: Record<QuipKind, string[]> = {

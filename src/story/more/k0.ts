@@ -65,6 +65,15 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w7-s7": [["me", "Flowerpot Fort! Secret chest on a high ledge. High is STILL my worst direction!"], [9, "Ooh, a little strawberry! Elephants never forget a face! *POP* Um, have we met?"], ["me", "Not yet! I'm Gobzilla Large! Almost! Boing! World 7 key, you're mine!"]],
   "w7-s8": [["me", "Cooler Canyon! Forty-five seconds of monster waves. Brrr, it's like the Fridge all over again!"], [18, "In THIS corner, the teeny strawberry with the great big RAWR! Ding ding! Give 'em the old one-two!"], ["me", "One-two STOMP! Stomp count, here I come!"]],
   "w7-s9": [["me", "Charcoal Climb! Ow ow, hot rocks! Charcoal Imps keep popping up like toast!"], ["n", "From the Grill Summit, a voice booms: \"ATTEN-TION, berry! Report for sprout inspection!\""], ["me", "Nope! Big brother says strawberries are DESSERT! RAWR!"]],
+
+  // World 8: The Garden.
+  "w8-s2": [["me", "Watering Can Run! Stomp count: one, two... why's the ground going rumble-rumble?"], ["n", "Uh-oh! A giant rolling pin comes tumbling off the watering can!"], ["me", "Who brings a rolling pin to a GARDEN?! Run, berry, RUN!"]],
+  "w8-s3": [["me", "Sunflower Grove! ACHOO! These flowers keep sneezing pollen on me! Bless YOU! Wait, bless ME!"], ["me", "Lever up top drops a rolling pin. Squash 'em flat as pressed flowers! RAWR!"]],
+  "w8-s4": [[10, "Hmph. Strawberry. Stray Crumblet hiding in the Pumpkin Patch. Walk it to the exit."], ["me", "Gobzilla Medium, babysitter class, garden edition! Hold my leaf, little guy. Watch out for Potato Moles!"], [10, "Medium? Looks more like Large to me. Don't let it go to your leaves. Hmph."]],
+  "w8-s6": [["me", "Beanstalk Heights! Recipe Scroll way up top. High is STILL my worst direction!"], ["lo2", "Hah! Climb, berry! The Meatloaf shall serve thee as a GARNISH!"], ["me", "Garnish is the teeny leaf on the side! I'm a WHOLE berry! RAWR!"]],
+  "w8-s7": [["me", "Compost Keep! Pee-yew! Smells like big brother's sneakers! Secret chest on a high ledge, too."], [12, "Heyyy, little dude. *yaaawn* Compost is old snacks growin' into new snacks. Pretty rad."], ["me", "Whoa, that's deep! Okay, BOING! World 8 key, you're mine!"]],
+  "w8-s8": [["me", "Scarecrow Stand! Forty-five seconds of waves! Hey, Mr. Scarecrow, I'm not scared either!"], [16, "Stay frosty, little dude. Is that sun hot? I'm not melting. Am I melting?"], ["me", "Stand in my shadow! It's LARGE now! RAWR!"]],
+  "w8-s9": [["me", "Greenhouse Steps! Whoa, glass everywhere! Lookin' LARGE in that reflection, Gobzilla!"], ["n", "From the Mystery Heap, a voice rumbles: \"Is that a berry? Am I PART berry?! Lemme check!\""], ["me", "Nope! You're not getting any of THIS berry! RAWR!"]],
 };
 
 export const QUIPS: Record<QuipKind, string[]> = {

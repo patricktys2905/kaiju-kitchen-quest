@@ -59,6 +59,14 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w7-s7": [["me", "Flowerpot Fort. Every pot's a hidey-hole. Heh, my kinda neighbourhood."], ["me", "Secret chest on a high ledge. Sponge, bounce, swipe. Ka-CHING! Still miss the Butter, though."]],
   "w7-s8": [["me", "Cooler Canyon. Ice, sodas, and maybe a chilled butter dish? Nope. Pickles. Always pickles."], ["me", "Forty-five seconds. Ketchup Squirters on every ledge. Stay crunchy, stay sneaky, keep moving!"]],
   "w7-s9": [["n", "From the Grill Summit, a voice booms: \"ATTEN-TION! The Golden Butter goes on the corn at SUNDOWN!\""], ["me", "Sundown? Heh. That's my favourite time to work. Up the coals we go!"]],
+  // World 8: The Garden.
+  "w8-s2": [["me", "Watering Can Run. Neat rows of veggies, nowhere to hide. Lousy for sneaking, great for a getaway."], ["n", "Uh-oh! A giant rolling pin comes rumbling between the veggie rows!"], ["me", "Every heist needs a chase scene! Run right!"]],
+  "w8-s3": [["me", "Sunflower Grove. Big flowers, big pollen. Ah... AH-CHOO! Great. A thief who sneezes."], ["me", "Gates locked? Lever, rolling pin, BONK. Locally grown, too. Heh."]],
+  "w8-s4": [[10, "Hmph. Bat. My Crumblet wants to see a real pumpkin. Walk it through the Pumpkin Patch. Gently."], ["me", "Uncle Toastbat's garden tour! Stick close, kid. And no swiping pumpkins. They're heavier than they look."]],
+  "w8-s6": [["me", "Beanstalk Heights. A Recipe Scroll at the top of a beanstalk? Heh. A classic fairytale heist."], ["lo2", "Unhand yon scroll, varlet! The Meatloaf guardeth it! He knoweth not why, but he guardeth it!"], ["me", "A guard who doesn't know what he's guarding? Easiest mark ever. Grab it, hold the fort!"]],
+  "w8-s7": [["me", "Compost Keep. Peels, rinds and old coffee grounds. Heh, smells like Grandma's place."], ["me", "Secret chest on a high ledge. Sponge, bounce, swipe. Ka-CHING! Still miss the Butter, though."]],
+  "w8-s8": [["me", "Scarecrow Stand. Big straw guy, buttons for eyes. Nice try, pal. I'm a bat, not a crow."], ["me", "Forty-five seconds. Stay crunchy, stay sneaky, and keep that pollen off my crust!"]],
+  "w8-s9": [["n", "From the old Greenhouse, a voice mumbles: \"Butter? Is THAT what I'm made of? Nobody tells me ANYTHING!\""], ["me", "Heh. Sounds like the vault's having a bad day. Up the steps, before he eats the loot!"]],
 };
 
 export const QUIPS: Record<QuipKind, string[]> = {

@@ -128,8 +128,26 @@ export const ARC: Record<string, StoryLine[]> = {
     ["boss", "Nobody knows! Not even HIM! Sprout Soldiers, forward MARCH! Hmph!"],
     ["me", "A mystery?! Gobzilla Large cracks mysteries! Okay, ALMOST large. But look at my shadow in the sunset! RAWR!"],
   ],
+  "w8-open": [
+    ["me", "The Garden! Whoa, these sunflowers are taller than big brother standing on big brother! Stomp count, back to zero. AGAIN!"],
+    ["me", "Sniff sniff. Ah-ah-ACHOO! Pollen! Real kaiju don't sneeze! ACHOO! Okay, they do."],
+    ["lo2", "Hah! The Mystery Meatloaf awaits thee on the Mystery Heap, berry! Even HE knoweth not what he is!"],
+    ["me", "A mystery? Then Gobzilla Large, kaiju detective, is on the case! RAWR!"],
+  ],
+  "w8-boss": [
+    ["boss", "Who goes there?! I'm THE MYSTERY MEATLOAF! Made of, uh... huh, a TOY WHEEL?"],
+    ["me", "You don't know what you're made of? I'm made of strawberry and RAWR!"],
+    ["boss", "Am I beef? Am I lentils? WHO AM I?! Nobody EVER wanted seconds!"],
+    ["me", "I'll give ya seconds! Second STOMP! Stomp count: TWO! RAWR!"],
+  ],
+  "w8-after": [
+    ["n", "SPLORT! The Mystery Meatloaf wobbles off the heap, dropping peas everywhere!"],
+    ["boss", "Huh, a SOCK? Hmph! To the Supermarket! The Tupperwraith haunts the back aisles. Nobody's opened HIM in years!"],
+    ["me", "A ghost?! In a TUB?! I'm not scared! ...Okay, medium scared."],
+    ["me", "Big brother, look! My shadow on the greenhouse goes all the way to the roof! Gobzilla LARGE! Almost! RAWR!"],
+  ],
 };
-export const NEMESIS: Record<"w1-elite" | "w2-elite" | "w3-elite" | "w4-elite" | "w5-elite" | "w6-elite" | "w7-elite", StoryLine[]> = {
+export const NEMESIS: Record<"w1-elite" | "w2-elite" | "w3-elite" | "w4-elite" | "w5-elite" | "w6-elite" | "w7-elite" | "w8-elite", StoryLine[]> = {
   "w1-elite": [
     ["foe", "Well, well! If it isn't Gobzilla JUNIOR! Lost your big brother, shrimp?"],
     ["me", "Brutus Beetroot! I'm a STRAWBERRY, ya big turnip!"],
@@ -164,5 +182,10 @@ export const NEMESIS: Record<"w1-elite" | "w2-elite" | "w3-elite" | "w4-elite" |
     ["foe", "Psst, Gobzilla! Burger Brute up on the plateau. Three patties tall! I counted. Twice."],
     ["me", "Brutus! You came to the BBQ too?!"],
     ["foe", "Beets never get invited to BBQs. Just squash it, okay? Not that I'm ROOTING for ya. Hmph!"],
+  ],
+  "w8-elite": [
+    ["foe", "Psst, Gobzilla! Welcome to MY patch! Pumpkin Brute up ahead. Rounder than me. Orange-er too."],
+    ["me", "Brutus! Is THIS where beets come from?!"],
+    ["foe", "Born and raised in that dirt right there! Go squash it. Okay, FINE, I'm rooting for ya. I'm a ROOT! Hmph!"],
   ],
 };

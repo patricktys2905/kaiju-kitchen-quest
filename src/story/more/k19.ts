@@ -59,6 +59,14 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w7-s7": [[18, "In THIS corner! A tiny taco with wings! Ding ding! Wanna spar?"], ["me", "Spar? I'm a party host, not a boxer! But I throw a mean salsa bomb!"], [18, "Ha! I like ya, feathers! Key's up on that ledge. Bounce on the sponge, champ!"]],
   "w7-s8": [["me", "Cooler Canyon! Ice, sodas and a cold breeze. Ahhh, night owl weather!"], ["me", "Forty-five seconds! Mixtape Track forty-four: \"Chill Out, Grill Out!\" Hoo-hoo!"]],
   "w7-s9": [["me", "Charcoal Climb! Hot coals, big smoke. My feathers are getting toasty!"], ["lo2", "Hah! The Baron shall grill thee, owl! Well done and extra crunchy!"], ["me", "Extra crunchy is my BEST look! WHOOO's climbing? This owl!"]],
+  // World 8: The Garden.
+  "w8-s2": [["me", "Watering Can Run! Ooh, a misty spout! Free fog machine for the dance floor!"], ["n", "RUMBLE! A giant rolling pin comes rolling round the watering can!"], ["me", "New dance! The Rolling Pin Run! Flap, flap, FLAP!"]],
+  "w8-s3": [["me", "Sunflower Grove! Tall flowers all facing the stage. Best crowd I ever had!"], ["n", "PUFF! A big flower blasts a cloud of pollen!"], ["me", "Ah... AH-CHOO! Lever! Rolling pin, drop the beat! BONK!"]],
+  "w8-s4": [[10, "Hmph. Owl. Crumblet's lost in the pumpkins. Walk it out. No loud music."], ["me", "Not even a little garden groove? Fine. Stick close, little muffin! Hoo-hoo-hmm!"]],
+  "w8-s6": [["me", "Beanstalk Heights! Beans! Every taco needs beans!"], ["me", "Grab the Recipe Scroll and hold the vine! Wise owl says: never let go of the beans!"]],
+  "w8-s7": [[12, "Heyyy, duuude. Nice party. *yaaawn*"], ["me", "Sloba! Wise owl says: a guest who naps at your party is a guest who never leaves!"], [12, "Mmhm. Key's up there. Bounce, dude... zzz."]],
+  "w8-s8": [["me", "Scarecrow Stand! Ooh, that scarecrow's got a great party hat!"], ["me", "Forty-five seconds! Mixtape Track forty-five: \"Scared Crow, Brave Owl!\" Hoo-hoo!"]],
+  "w8-s9": [["lo2", "Climb, feathered taco! The Meatloaf shall stuff thee with mystery filling!"], ["n", "From the greenhouse, a lumpy voice mutters: \"Am I pork? Am I beans? Would a taco even WANT me?\""], ["me", "Sorry, buddy, the menu's set! WHOOO's climbing? This owl!"]],
 };
 
 export const QUIPS: Record<QuipKind, string[]> = {

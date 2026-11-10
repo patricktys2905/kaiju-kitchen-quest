@@ -65,6 +65,15 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w7-s7": [["me", "Flowerpot Fort. Key chest on a high ledge. Bouncy sponge. Bears STILL don't bounce."], [9, "Ooh, a bear! Have we met? Elephants never forget! *POP* Who are you again?"], ["me", "Hmph. Bluebeary. Again. Hold the sponge still, big guy. BOING!"]],
   "w7-s8": [["me", "Cooler Canyon. Forty-five seconds of waves. Cold box, hot tempers. Mostly mine."], [18, "In THIS corner, the grumpy papa bear! Ding ding! Swing for the muffin top!"], ["me", "Hmph. Already swinging."]],
   "w7-s9": [["me", "Charcoal Climb. Hot rocks. Littlest, stay up on the ear. Paws are for walking on lava."], ["n", "From the Grill Summit, a voice booms: \"ATTEN-TION! That muffin will make a FINE Sprout Soldier!\""], ["me", "My muffin's already got a job. Being little. GRRR."]],
+
+  // World 8: The Garden.
+  "w8-s2": [["me", "Watering Can Run. Littlest says the can's a giant teapot. Hmph. Kinda is."], ["n", "Uh-oh! A giant rolling pin comes rumbling off the watering can!"], ["me", "Bears JOG! Hold the ear! Faster jog! GRRR!"]],
+  "w8-s3": [["me", "Sunflower Grove. Ah... ACHOO! Pollen in the fur. Littlest thinks it's hilarious. Hmph. It's a little funny."], ["me", "Lever up top drops the pin. Monsters get flat. Bear gets a tissue."]],
+  "w8-s4": [["n", "Pumpkin Patch Path! A tiny Crumblet is hiding inside a hollow pumpkin!"], ["me", "Strays walked home: eight. C'mon out, kiddo. Littlest, no, we're NOT keeping the pumpkin."], ["me", "Okay, ONE pumpkin seed. Stay close. Potato Moles pop up outta nowhere. Hmph."]],
+  "w8-s6": [["me", "Beanstalk Heights. Recipe Scroll's up top. Bears don't climb beans. Bears climb TREES."], ["lo2", "Hah! The Meatloaf shall stuff thee, bear! Thou art the mystery ingredient!"], ["me", "Only mystery here is how many teeth you'll keep. Grrr."]],
+  "w8-s7": [["me", "Compost Keep. Pee-yew. Smells like the bottom of the muffin tin. Key chest on a high ledge."], [12, "Heyyy, papa bear. *yaaawn* Wanna nap on the compost? It's warm. Super chill."], ["me", "Hmph. Key first. BOING! Littlest says do it again. Bears STILL don't bounce."]],
+  "w8-s8": [["me", "Scarecrow Stand. Forty-five seconds. Littlest is scared of the scarecrow. It's a hat on a stick, kid."], [16, "Stay frosty, little muffin. Cool, cool, cool. Is that sun hot? I'm fine. Totally not melting."], ["me", "You're dripping mint, turtle. Stand behind the bear. Hmph."]],
+  "w8-s9": [["me", "Greenhouse Steps. Glass house. Littlest, no tapping on the glass."], ["n", "From the Mystery Heap, a voice rumbles: \"Is that a MUFFIN? Am I part muffin?! I could be!\""], ["me", "Nope. You're a no-eat food. GRRR."]],
 };
 
 export const QUIPS: Record<QuipKind, string[]> = {

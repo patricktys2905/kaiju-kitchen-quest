@@ -143,6 +143,20 @@ export const CLASSES: HeroClass[] = [
     combo: [A({ dur: 0.24, hit: [0.05, 0.13], reach: 64 }), A({ dur: 0.24, hit: [0.05, 0.13], reach: 66 }), A({ dur: 0.42, hit: [0.12, 0.24], reach: 90, dmg: 2, kx: 420, ky: -380, lunge: 120, stun: 0.6 })],
     air: A({ dur: 0.28, reach: 70, h: 74, dmg: 1.15, kx: 160, ky: 300 }),
   },
+  {
+    species: 12, name: 'Sloba', role: 'Sleepy swinger: vine swings, power naps, slowing time',
+    hp: 132, atk: 11, speed: 215, jump: 720,
+    base: { str: 5, dex: 4, int: 6, vit: 6 }, grow: { str: 1, dex: 1, int: 1, vit: 2 },
+    combo: [A({ dur: 0.36, hit: [0.1, 0.2], reach: 74 }), A({ dur: 0.36, hit: [0.1, 0.2], reach: 76, dmg: 1.1 }), A({ dur: 0.56, hit: [0.2, 0.34], reach: 98, h: 80, dmg: 2.2, kx: 420, ky: -300, lunge: 90, stun: 0.7 })],
+    air: A({ dur: 0.34, reach: 76, h: 76, dmg: 1.15, kx: 150, ky: 220 }),
+  },
+  {
+    species: 16, name: 'Minturtle', role: 'Chill wall: waffle walls, freezing scoops, choc-chip storms',
+    hp: 168, atk: 10, speed: 205, jump: 640,
+    base: { str: 5, dex: 2, int: 5, vit: 8 }, grow: { str: 1, dex: 0, int: 1, vit: 3 },
+    combo: [A({ dur: 0.36, hit: [0.1, 0.2], reach: 68 }), A({ dur: 0.36, hit: [0.1, 0.2], reach: 70, dmg: 1.15 }), A({ dur: 0.56, hit: [0.2, 0.34], reach: 92, h: 76, dmg: 2.3, kx: 440, ky: -300, lunge: 60, stun: 0.8 })],
+    air: A({ dur: 0.36, reach: 70, h: 70, dmg: 1.1, kx: 150, ky: 220 }),
+  },
 ];
 
 export function classOf(species: number): HeroClass {

@@ -65,6 +65,15 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w7-s7": [["me", "Flowerpot Fort! Secret chest on a high ledge. Bouncy sponge? Raptor Express elevator, going UP!"], [9, "Ooh, pizza! Did I order that? Elephants never forget! *POP* Wait, did I order that?"], ["me", "Sorry, big guy, it's spoken for! Here, have a coupon!"]],
   "w7-s8": [["me", "Cooler Canyon! Forty-five seconds. A cooler? Great for drinks, TERRIBLE for pizza!"], [18, "In THIS corner, the fastest dino in the yard! Ding ding! Deliver a knockout!"], ["me", "Special delivery: one knuckle sandwich! Beep beep!"]],
   "w7-s9": [["me", "Charcoal Climb! Hot rocks, hot box, hot raptor! Customer's up top!"], ["n", "A voice booms from the Grill Summit: \"ATTEN-TION, courier! Prepare to be SPROUTED!\""], ["me", "Sorry! Raptor Express doesn't do sprouts! Beep beep!"]],
+
+  // World 8: The Garden.
+  "w8-s2": [["me", "Minute thirty-six! Watering Can Run! Smooth road, zero traffic, nice breeze!"], ["n", "Uh-oh! A giant rolling pin comes barreling off the watering can!"], ["me", "Tailgater AGAIN?! Get your own route, pal! Beep beep, VROOM!"]],
+  "w8-s3": [["me", "Sunflower Grove! Ah-CHOO! Keep the pollen OFF the cheese, people!"], ["me", "Lever up top. Special delivery: one rolling pin, farm to table!"]],
+  "w8-s4": [[10, "Hmph. Raptor. Lost Crumblet in the Pumpkin Patch. Bus it to the exit."], ["me", "Passenger number eight! Ooh, Bluebeary, a big pumpkin! That's basically a bus with a stem!"], [10, "Bus fund's up to two crumbs, a button and a pumpkin seed. Hmph."]],
+  "w8-s6": [["me", "Beanstalk Heights! Pick-up: one Recipe Scroll, way up top! Express elevator, going UP!"], ["lo2", "Hah! The Meatloaf shall gobble thy pizza AND thy scroll, courier!"], ["me", "Not without a receipt, he won't! Beep beep!"]],
+  "w8-s7": [["me", "Compost Keep! Pee-yew! Who left all these leftovers out? One star for the fridge!"], [12, "Heyyy, delivery dude. *yaaawn* Did I order a pizza? Like, last week?"], ["me", "Not from me, buddy! Boing! World 8 key, delivered to MY pocket!"]],
+  "w8-s8": [["me", "Scarecrow Stand! Forty-five seconds of waves. Hey, Mr. Scarecrow, you look like my old manager!"], [16, "Stay frosty, raptor. Got anything cold in that box? Asking for a turtle. Is it hot out here?"], ["me", "Sorry, pal, HOT deliveries only! Shade's free, though!"]],
+  "w8-s9": [["me", "Greenhouse Steps! Glass everywhere. Customer's up top. Keep the box level!"], ["n", "From the Mystery Heap, a voice rumbles: \"Is that PIZZA? Is there pizza in ME?! I gotta check!\""], ["me", "Nobody's checking ANYTHING till they tip! Beep beep!"]],
 };
 
 export const QUIPS: Record<QuipKind, string[]> = {

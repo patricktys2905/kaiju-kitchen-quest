@@ -26,7 +26,7 @@ export interface Ladder { x: number; top: number; bottom: number }
 export interface MobSpawn { kind: MobKind; x: number; y?: number; lv: number; elite?: boolean }
 /** Stage hazard on the ground floor. burner = flame pillar, vent = steam launch, drop = falling can, ice = slippery.
  *  Timed hazards cycle: on for `on` s, off, then glow a warning for the last 0.9 s before the next burst. */
-export type HazardKind = 'burner' | 'vent' | 'drop' | 'ice' | 'tap' | 'wax' | 'sprinkler';
+export type HazardKind = 'burner' | 'vent' | 'drop' | 'ice' | 'tap' | 'wax' | 'sprinkler' | 'pollen';
 export interface Hazard { kind: HazardKind; x: number; w: number; period: number; on: number; offset: number; /** boss arenas: only after the boss enrages */ phase2?: boolean }
 export interface Arena { x0: number; x1: number; waves: MobSpawn[][] }
 export interface Objective { kind: 'escort' | 'fetch' | 'survive'; /** seconds: survive length, or fetch time limit */ t?: number; /** fetch: where the scroll is */ x?: number }
@@ -80,8 +80,10 @@ export type MobKind = 'bun' | 'worm' | 'pepper' | 'egg' | 'toast' | 'pea' | 'yog
   | 'fork' | 'napkin' | 'candle' | 'gravy' | 'teapot' | 'roast' | 'crouton' | 'stale'
   // World 7: The Backyard BBQ (boss: Baron Brussels)
   | 'wasp' | 'corn' | 'ketchup' | 'beetle' | 'charcoal' | 'patty' | 'sprout' | 'brussels'
+  // World 8: The Garden (boss: the Mystery Meatloaf)
+  | 'snail' | 'ladybug' | 'peapod' | 'mole' | 'tomato' | 'radish' | 'pumpkin' | 'chunk' | 'meatloaf'
   // story nemeses (one per kaiju, stage 5 of every world)
-  | 'nbeet' | 'ncrow' | 'npine' | 'nlamp' | 'nshroom' | 'nslug' | 'nrat' | 'ncookie' | 'nginger' | 'nbrulee' | 'nkebab' | 'nshark' | 'nnacho' | 'nhornet' | 'nmouse' | 'ngorilla';
+  | 'nbeet' | 'ncrow' | 'npine' | 'nlamp' | 'nshroom' | 'nslug' | 'nrat' | 'ncookie' | 'nginger' | 'nbrulee' | 'nkebab' | 'nshark' | 'nnacho' | 'nhornet' | 'nmouse' | 'ngorilla' | 'nbird' | 'nhare';
 
 export type BoxTier = 1 | 2 | 3 | 4 | 5;
 export interface LootBox { tier: BoxTier; ilvl: number }

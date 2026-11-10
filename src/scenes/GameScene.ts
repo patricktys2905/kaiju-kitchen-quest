@@ -273,7 +273,7 @@ export class GameScene extends Phaser.Scene {
     cam.centerOn(this.cx, this.cy);
     if (w.variant === 'night') { this.add.rectangle(SX, SY, VW * 2, VH * 2, 0x0a0a30, 0.42).setOrigin(0, 0).setScrollFactor(0).setDepth(15); }
     setTouchVisible(true); showHud(true);
-    playMusic(st.boss ? 'boss' : st.world === 2 || st.world === 4 ? 'world2' : st.world === 3 || st.world === 5 ? 'world3' : st.world === 6 ? 'world2' : 'world1');
+    playMusic(st.boss ? 'boss' : st.world === 2 || st.world === 4 ? 'world2' : st.world === 3 || st.world === 5 ? 'world3' : st.world === 6 ? 'world2' : st.world === 8 ? 'world3' : 'world1');
     if (st.boss) this.time.delayedCall(900, () => sfx('boss'));
     if (w.variant) this.time.delayedCall(900, () => toast(`${{ swarm: '🐜 SWARM', ambush: '⚔️ AMBUSH', night: '🌙 NIGHT' }[w.variant!]}!`, { color: '#c8a8ff' }));
     toast(`${st.num} ${st.name}${this.nightmare ? ' · 💀 NIGHTMARE' : this.hard ? ' · HARD' : ''}${w.spicy.length ? ' · ' + '🌶'.repeat(w.spicy.length) : ''}`, { big: true, color: this.hard ? '#ff7a6a' : undefined });
@@ -711,7 +711,11 @@ export class GameScene extends Phaser.Scene {
   /** Hazard look: burner ring / steam grate / shelf shadow / ice sheet (no art needed). */
   private buildHazard(kind: string, x: number, w: number, gy: number): Phaser.GameObjects.Container {
     const parts: Phaser.GameObjects.GameObject[] = [];
-    if (kind === 'sprinkler') { // a lawn sprinkler head; a fountain of water when it's on
+    if (kind === 'pollen') { // a big flower; a cloud of pollen puffs up when it's on
+      parts.push(this.add.ellipse(0, -10, 30, 20, 0xff8ad8).setStrokeStyle(2, 0xa83a8a), this.add.circle(0, -12, 7, 0xffd23c));
+      parts.push(this.add.container(0, -10, [this.add.ellipse(0, -60, w * 0.9, 110, 0xffe070, 0.45), this.add.ellipse(-w * 0.2, -50, w * 0.4, 70, 0xfff0a0, 0.5), this.add.ellipse(w * 0.25, -70, w * 0.35, 60, 0xfff0a0, 0.5)]).setName('fx'));
+      parts.push(this.add.ellipse(0, -2, w, 10, 0xffe070, 0.4).setName('glow'));
+    } else if (kind === 'sprinkler') { // a lawn sprinkler head; a fountain of water when it's on
       parts.push(this.add.rectangle(0, -6, 26, 12, 0x6a7a8a).setStrokeStyle(2, 0x2a3a4a));
       parts.push(this.add.container(0, -6, [this.add.ellipse(0, -60, w * 0.6, 120, 0x9ad8ff, 0.55), this.add.ellipse(-w * 0.3, -40, 18, 80, 0xc8f0ff, 0.6).setAngle(-25), this.add.ellipse(w * 0.3, -40, 18, 80, 0xc8f0ff, 0.6).setAngle(25)]).setName('fx'));
       parts.push(this.add.ellipse(0, -2, w, 10, 0x9ad8ff, 0.5).setName('glow'));
@@ -948,7 +952,13 @@ export class GameScene extends Phaser.Scene {
     for (const p of w.puddles) {
       const col = ({ slow: 0xa83a6a, slick: 0xf0d040, burn: 0xff7a2a, poison: 0x7ab8c8, trap: 0x6a6a72 } as Record<string, number>)[p.kind ?? ''] ?? 0x6ac04a;
       if (p.kind === 'trap') { g.fillStyle(col, 1); g.fillRect(p.x - 14, p.y - 6, 28, 6); g.lineStyle(2, 0xd8d8e0, 1); g.lineBetween(p.x - 12, p.y - 6, p.x + 12, p.y - 14); continue; }
-      g.fillStyle(p.kind === 'slow' && st.world === 7 ? 0x9ad06a : p.kind === 'slow' && st.world === 6 ? 0xfff0c8 : p.kind === 'slow' && (w.nemesis === 'nslug' || st.world === 5) ? 0x7ab85a : col, Math.min(p.kind === 'burn' ? 0.5 + Math.sin(t * 18) * 0.15 : 0.55, p.t / 2)); g.fillEllipse(p.x, p.y - 1, p.w ?? 70, 10);
+      g.fillStyle(p.kind === 'slow' && st.world === 8 ? 0xf0e070 : p.kind === 'slow' && st.world === 7 ? 0x9ad06a : p.kind === 'slow' && st.world === 6 ? 0xfff0c8 : p.kind === 'slow' && (w.nemesis === 'nslug' || st.world === 5) ? 0x7ab85a : col, Math.min(p.kind === 'burn' ? 0.5 + Math.sin(t * 18) * 0.15 : 0.55, p.t / 2)); g.fillEllipse(p.x, p.y - 1, p.w ?? 70, 10);
+    }
+    for (const wl of w.walls) { // waffle walls
+      const a = Math.min(1, wl.t * 2);
+      this.topFx!.fillStyle(0xd8a050, 0.95 * a); this.topFx!.fillRoundedRect(wl.x - 14, wl.y - 140, 28, 140, 6);
+      this.topFx!.lineStyle(2, 0x8a5a20, a); for (let yy = wl.y - 130; yy < wl.y; yy += 18) this.topFx!.lineBetween(wl.x - 14, yy, wl.x + 14, yy + 10);
+      this.topFx!.strokeRoundedRect(wl.x - 14, wl.y - 140, 28, 140, 6);
     }
     for (const b of w.bubbles) { // gum bubbles around sealed monsters
       const m = w.mobs.find(o => o.id === b.id); if (!m) continue;
@@ -1025,7 +1035,10 @@ export class GameScene extends Phaser.Scene {
       }
       let c = this.shotImgs.get(s.id);
       if (!c) {
-        c = s.kind === 'gumball' ? this.add.circle(0, 0, 12, [0xff6ad8, 0x6ad8ff, 0xffe24a][s.id % 3]).setStrokeStyle(3, 0xffffff)
+        c = s.kind === 'scoop' ? this.add.circle(0, 0, 13, 0x9ae8c8).setStrokeStyle(3, 0x3a2a1a)
+          : s.kind === 'chocchip' ? this.add.triangle(0, 0, 0, 12, 7, -6, 14, 12, 0x4a2a14).setStrokeStyle(2, 0x2a1408)
+          : s.kind === 'sundae' ? this.add.ellipse(0, 0, 90, 110, 0xf8f0e0).setStrokeStyle(5, 0xd83050)
+          : s.kind === 'gumball' ? this.add.circle(0, 0, 12, [0xff6ad8, 0x6ad8ff, 0xffe24a][s.id % 3]).setStrokeStyle(3, 0xffffff)
           : s.kind === 'trumpet' ? this.add.ellipse(0, 0, 70, 50, 0xffc8f0, 0.7).setStrokeStyle(3, 0xff6ad8)
           : s.kind === 'cupcake' ? this.add.circle(0, 0, 11, 0xb0203a).setStrokeStyle(4, 0xfff4e0)
           : s.kind === 'pit' ? this.add.circle(0, 0, 12, 0x7a4a24).setStrokeStyle(3, 0x3a1e0c)
@@ -1057,6 +1070,7 @@ export class GameScene extends Phaser.Scene {
           : s.kind === 'reflect' ? this.add.circle(0, 0, 9, 0x8ae07a).setStrokeStyle(2, 0xffffff)
           : s.from === 'hero'
           ? this.add.circle(0, 0, 9, 0xe8c8ff).setStrokeStyle(3, 0xffffff).setBlendMode(Phaser.BlendModes.ADD)
+          : s.kind === 'icicle' && worldOf(this.stage).id === 8 ? this.add.circle(0, 0, 10, 0xd83020).setStrokeStyle(2, 0x5a8a2a)
           : s.kind === 'icicle' && worldOf(this.stage).id === 7 ? this.add.rectangle(0, 0, 14, 12, 0x2a2222).setStrokeStyle(2, 0xff8a2a)
           : s.kind === 'icicle' && worldOf(this.stage).id === 6 ? this.add.rectangle(0, 0, 14, 12, 0xd8a050).setStrokeStyle(2, 0x7a4a20)
           : s.kind === 'icicle' && worldOf(this.stage).id === 5 ? this.add.circle(0, 0, 10, 0x8ac06a, 0.9).setStrokeStyle(3, 0x3a6a2a)

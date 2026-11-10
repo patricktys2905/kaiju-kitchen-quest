@@ -36,6 +36,34 @@ export interface RigDef {
 }
 
 export const RIGS: Record<number, RigDef> = {
+  // Minturtle: body (shell, scoop, head, tail, far legs) 414x310@53,18; near legs 89x133@66,334 (front) / 75x131@363,335 (back). Holds its weapon in a front foot.
+  16: {
+    gear: { hand: [0.5, 0.85], chest: [330, 220], neck: [400, 150], back: [200, 60], size: 1.05 },
+    holder: 'legA',
+    root: [270, 328],
+    scale: 0.23,
+    legs: 'swing',
+    parts: [
+      { piece: 0, role: 'body', joint: [260, 328], pivot: [0.5, 1], depth: 0 },
+      { piece: 2, role: 'legB', joint: [150, 212], pivot: [0.5, 0.08], depth: 0.5, tint: 0xa8c8c8 },
+      { piece: 1, role: 'legA', joint: [318, 210], pivot: [0.5, 0.14], depth: 1 },
+    ],
+  },
+  // Sloba: body 159x220@175,147 (neck stump on top, shoulder/hip knobs); head 143x120@219,22; arms 161x224@26,43 / 104x239@385,47; legs 107x161@52,317 / 116x151@351,320.
+  12: {
+    gear: { hand: [0.5, 0.88], chest: [262, 260], neck: [270, 165], back: [200, 230], size: 0.95 },
+    root: [262, 492],
+    scale: 0.22,
+    legs: 'swing',
+    parts: [
+      { piece: 1, role: 'armBack', joint: [208, 196], pivot: [0.88, 0.06], depth: -3, tint: 0xc8a888, rest: 0.25 },
+      { piece: 4, role: 'legB', joint: [222, 348], pivot: [0.8, 0.06], depth: -2, tint: 0xc8a888 },
+      { piece: 0, role: 'body', joint: [255, 367], pivot: [0.5, 1], depth: 0 },
+      { piece: 5, role: 'legA', joint: [300, 348], pivot: [0.3, 0.06], depth: 0.5 },
+      { piece: 3, role: 'head', joint: [262, 160], pivot: [0.32, 0.92], depth: 0.6 },
+      { piece: 2, role: 'arm', joint: [318, 200], pivot: [0.3, 0.05], depth: 1, rest: -0.1 },
+    ],
+  },
   // Velvaroo: body (with tail) 202x268@21,17; hind legs 120x172@94,318 / 117x172@330,318 (hip at top); arms 102x63@264,147 / 102x65@390,150 (shoulder top-left, glove right).
   18: {
     gear: { hand: [0.85, 0.55], chest: [175, 160], neck: [180, 90], back: [90, 120], size: 0.95 },

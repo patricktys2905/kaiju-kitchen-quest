@@ -59,6 +59,14 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w7-s7": [[18, "In THIS corner! Hey, Champ! Key chest's on the high ledge. Ding ding, go get it!"], ["me", "W-wow, Velvaroo! Wanna come to the cookout?"], [18, "Is there a bake sale? Kidding! I'll bring cupcakes! HOP!"]],
   "w7-s8": [["me", "Cooler Canyon! Every cookout needs drinks on ice. The Freezer Golem would LOVE it here!"], ["me", "Forty-five seconds, folks! Same as a good burger needs per side. Let's sear it!"]],
   "w7-s9": [["n", "From the summit, a voice booms: \"ATTEN-TION! Sprouts, turn the grill to MAXIMUM!\""], ["me", "MAXIMUM?! You'll burn everything! Folks, this is a grilling emergency! Here I come!"]],
+  // World 8: The Garden.
+  "w8-s2": [["n", "RUMBLE! A giant rolling pin comes bouncing down the Watering Can Run!"], ["me", "And they're off! The pin takes the spout, Hotchog takes the handle! It's neck and neck, folks! RUN!"]],
+  "w8-s3": [["n", "POOF! The sunflowers puff pollen all over the arena!"], ["me", "Ah-CHOO! Folks, that's a pollen penalty! Gates locked! Lever time! Rolling pin, take it away!"]],
+  "w8-s4": [[10, "Hmph. Hotchog. This Crumblet's never seen a pumpkin patch. Get it to the exit. Spikes AWAY."], ["me", "One VIP pass to the Garden, Mr. Bluebeary! Little buddy, pumpkins are for pie, not for climbing!"]],
+  "w8-s6": [["me", "Beanstalk Heights! Green beans, folks, the perfect cookout side! The scroll's at the top!"], ["me", "Grab it in time, then hold the line! Let's go, Champion. Beans mean business!"]],
+  "w8-s7": [[12, "Heyyy, duuude... *yaaawn* Key chest's on the high ledge. Boing boing, or whatever."], ["me", "Th-thanks, Sloba! Wanna come to the cookout? There's bubble tea!"], [12, "No pressure, just tea-sure. Zzz."]],
+  "w8-s8": [["me", "Scarecrow Stand! Folks, he's wearing a BBQ apron! Now THAT'S a scarecrow with style!"], ["me", "Forty-five seconds, then corn on the cob for everybody! Hold the line!"]],
+  "w8-s9": [["n", "From the greenhouse, a lumpy voice mumbles: \"Huh! Is that a PEA in me? Or a button? WHO AM I?\""], ["me", "Mystery meat, folks! The Champion has grilled worse. I think. Here I come!"]],
 };
 
 export const QUIPS: Record<QuipKind, string[]> = {

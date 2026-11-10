@@ -18,6 +18,8 @@ export const UNLOCKS: { species: number; text: string; key: string; goal: number
   { species: 19, text: 'Defeat Sir Stale in the Dining Room', key: 'kill:stale', goal: 1 },
   { species: 9, text: 'Defeat Baron Brussels in the Backyard', key: 'kill:brussels', goal: 1 },
   { species: 18, text: 'Defeat 25 Burger Brutes', key: 'kill:patty', goal: 25 },
+  { species: 12, text: 'Defeat 30 Lettuce Snails (slowly)', key: 'kill:snail', goal: 30 },
+  { species: 16, text: 'Defeat the Mystery Meatloaf in the Garden', key: 'kill:meatloaf', goal: 1 },
 ];
 
 export interface KQuest { id: string; title: string; text: string; key: string; goal: number; reward: { crumbs?: number; fstone?: number; gstone?: number; ggstone?: number; box?: 1 | 2 | 3 | 4 | 5; sigCharm?: boolean } }
@@ -35,6 +37,8 @@ const FLAVOUR: Record<number, { foe: MobKind; titles: string[] }> = {
   7: { foe: 'imp', titles: ['Fire Against Fire', 'Wasabi Breath', 'The Old Road', 'Dragon Dance', 'Unscorched Scales', 'Frozen Shrine', 'Inferno Roll', 'Flame Reborn'] },
   8: { foe: 'popcorn', titles: ['Pop Goes the Corn', 'Chocolate Fists', 'Me Strong', 'Punch Punch Punch', 'Me Not Melt', 'Me Like Fridge', 'Fondue Fall', 'Bravest Chocolate'] },
   15: { foe: 'can', titles: ['Can Opener', 'Spiky Roller', 'Practice Round', 'Grill Marks', 'Clean Plate', 'Cold Cookout', 'Spin Dog', 'Grill Champion'] },
+  12: { foe: 'pepper', titles: ['Spicy Wake-Up Call', 'Swing Shift', 'Slow and Steady', 'Lazy Combo', 'Hammock Mode', 'Chill Out', 'Mega Snooze', 'Queen of the Nap'] },
+  16: { foe: 'milk', titles: ['Milk Run', 'Waffle Wall', 'Stay Frosty', 'Scoop There It Is', 'Hard Shell', 'Brain Freeze', 'Sundae Best', 'Coolest in the Garden'] },
   9: { foe: 'pea', titles: ['Pea Popper', 'Bubble Trouble', 'Never Forget', 'Gumball Wizard', 'Thick Skinned', 'Big Chill Bubble', 'Mega Bubble', 'The Elephant Who Remembered'] },
   18: { foe: 'carrot', titles: ['Carrot Sparring', 'Hop To It', 'Float Like a Cupcake', 'Flurry of Fists', 'Can\'t Touch This', 'Cold Ring', 'Knockout', 'Champion of the Bake Sale'] },
   13: { foe: 'garlic', titles: ['Garlic Breath', 'Pit Stop', 'Holy Guacamole', 'Guac and Roll', 'Fresh, Not Brown', 'Chill Avocado', 'Guac Tsunami', 'Guardian of the Guac'] },

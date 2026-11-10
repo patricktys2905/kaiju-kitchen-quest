@@ -59,6 +59,14 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w7-s7": [[9, "Hello there, little lizard! Elephants never forget! *POP* Uh, what was I saying?"], ["me", "DRAGON! And you forgot already! Ooh, is that a treasure chest up there?"], [9, "Bounce on the sponge, buddy! Let's stick together! *POP* Wait, who are you?"]],
   "w7-s8": [["me", "A cooler! Cold and dark! The perfect spot for guac! Remember this, dragon!"], ["n", "Here they come! Hold out for forty-five seconds!"], ["me", "Chill out, monsters! Get it? COOLER? Holy guacamole!"]],
   "w7-s9": [["n", "From the grill, a big pompous voice booms: \"ATTEN-TION! Dip on the grill, soldiers! Make it WELL DONE!\""], ["lo2", "Hah! Well done, guacamole! VERY well done! Brown all over!"], ["me", "Grilled guac?! That's the PITS! Hang on, hoard! Climbing!"]],
+  // World 8: The Garden.
+  "w8-s2": [["me", "Watering Can Run! A little sprinkle keeps a dragon fresh! Ahh!"], ["n", "RUMBLE! A giant rolling pin comes rolling round the watering can!"], ["me", "Mashed avocado on a garden path? That's the PITS! RUN!"]],
+  "w8-s3": [["me", "Sunflowers! Big yellow faces, all staring at me. Am I browning? Don't all answer at once!"], ["n", "PUFF! A flower blasts a cloud of pollen!"], ["me", "Ah... ACHOO! Lever! Rolling pin, BONK! You reap what you sow, weeds!"]],
+  "w8-s4": [[10, "Hmph. Dragon. This Crumblet got lost in the Pumpkin Patch. Walk it out."], ["me", "Behold, little muffin! Stay under my mighty wings! Small but mighty. You know the drill."], [10, "Hmph. Still small."]],
+  "w8-s6": [["me", "Beanstalk Heights! A dragon climbing a beanstalk? Fee-fi-fo-GUAC!"], ["me", "Grab the Recipe Scroll and hold the vine! Peapod Snipers? Pit Hurl! BONK!"]],
+  "w8-s7": [["me", "Compost Keep. Everything here is BROWN! Don't look at me, compost!"], [16, "Stay frosty, little dude. Scared of the sun? Same. Scoot into my shade."], ["me", "Shade buddies! Now, sponge! BOING! Treasure for the hoard!"]],
+  "w8-s8": [["lo2", "Hah! Hold out all thou likest, dip! The Meatloaf shall MASH thee in!"], ["me", "Mash ME? Only guac gets mashed! Wait. I AM guac. Forty-five seconds, GO!"]],
+  "w8-s9": [["me", "The Greenhouse! Glass walls, hot sun. It's a browning OVEN with plants!"], ["n", "From the top, a lumpy voice mumbles: \"Guac? In ME? Huh. Might be some in here already. Who knows!\""], ["me", "Nobody puts the guac in the loaf! Climbing!"]],
 };
 
 export const QUIPS: Record<QuipKind, string[]> = {

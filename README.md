@@ -190,3 +190,11 @@ Bubblegumbo: `bubbletrap` (world.bubbles: sealed monsters are helpless, then pop
 aimed `cakebomb` (frosting slow patch), ult `tko`; nemesis Rocky Road (`ngorilla`, signature `haymaker`, a danger move).
 Unlocks: Baron Brussels / 25 Burger Brutes. Briefs: docs/WORLD7-BRIEF.md, docs/NEWKAIJU2-BRIEF.md. Art: `node scripts/w7-jobs.mjs [stills]`,
 `node scripts/newkaiju2-jobs.mjs`. Screens: `node scripts/w7-shot.mjs`.
+
+## World 8: The Garden + Sloba (12) and Minturtle (16)
+WORLDS[7] (Lv 81-90, level cap 90): snail / ladybug / peapod / mole / tomato / radish / pumpkin (+ mystery chunks), `pollen`
+hazard (sting + sticky patch), boss **The Mystery Meatloaf** (`meatloaf`: borrows breath / spores / crumbs, chunk summons).
+Hazards next to bouncy sponges are slid to a free spot (`awayFromSponges`). Sloba: `swing`, `nap` (heals then shockwave),
+`slowtime`, ult `snooze`; nemesis Jitters (`nbird`, `zip`). Minturtle: aimed freezing `scoop`, `wall` (world.walls block
+monsters and mob shots), `chipstorm`, ult `sundae`; nemesis Hot Fudge Hare (`nhare`, `boomhop`). Briefs: docs/WORLD8-BRIEF.md,
+docs/NEWKAIJU3-BRIEF.md. Art: `node scripts/w8-jobs.mjs [stills]`, `node scripts/newkaiju3-jobs.mjs`. Screens: `node scripts/w8-shot.mjs`.

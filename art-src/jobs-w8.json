@@ -1,0 +1,122 @@
+[
+ {
+  "name": "bg-far-garden",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-bg.png"
+  ],
+  "prompt": "Generate an image. This is the background of the first area of my cute 2D side-scrolling action RPG (tiny food monsters in a giant kitchen). I need the FAR BACKGROUND for a new world, The Garden, in exactly the same painted fantasy MMORPG side-scroller style: straight-on side view of a giant vegetable garden seen from tiny-creature height at sunset: towering sunflowers and corn stalks like a forest, huge cabbages and pumpkins like hills, a watering can like a tower, a wooden trellis with climbing beans, fireflies, a greenhouse glowing in the distance. Lush and magical but a bit overgrown and wild. The bottom quarter calm and darker. No characters, no text, no UI. Wide 16:9 landscape image."
+ },
+ {
+  "name": "bg-mid-garden",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-bg.png"
+  ],
+  "prompt": "Generate an image. This is the background of the first area of my cute 2D side-scrolling action RPG (tiny food monsters in a giant kitchen). I need a MIDDLE PARALLAX LAYER for the garden world in the same painted style, rich green and earthy colours: a row of giant garden objects standing along the bottom of the image, seen from the side: a big cabbage, a terracotta flower pot, a garden gnome-free stone, a watering can, a pumpkin, tall carrot tops, with gaps between them. They fill only the bottom 60 percent. Everything else (the whole upper area and the gaps) must be solid flat magenta (#FF00FF). No shadows on the magenta, no characters, no text. Wide 16:9 landscape image."
+ },
+ {
+  "name": "tile-garden",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-bg.png"
+  ],
+  "prompt": "Generate an image. This is the background of the first area of my cute 2D side-scrolling action RPG (tiny food monsters in a giant kitchen). I need a GROUND TILE in the same painted style for the walkable floor in the garden world: straight-on side view of rich garden soil: a grassy, mossy top edge with tiny clover leaves, then dark brown earth with small pebbles and roots, darker towards the bottom. It must tile SEAMLESSLY left-to-right. Fill the whole square, no background, no objects, no text. Square 1:1 image."
+ },
+ {
+  "name": "bg-far-greenhouse",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-bg.png"
+  ],
+  "prompt": "Generate an image. This is the background of the first area of my cute 2D side-scrolling action RPG (tiny food monsters in a giant kitchen). I need the FAR BACKGROUND for a BOSS ARENA, The Greenhouse, same painted style: straight-on side view inside a giant old glass greenhouse at night: tall dusty glass panes with moonlight, overgrown tangled vines, flower pots on shelves, a big compost heap with mysterious lumps, eerie green-gold glow, steam in the air. The bottom quarter calm and darker. No characters, no text, no UI. Wide 16:9 landscape image."
+ },
+ {
+  "name": "map-garden",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-bg.png"
+  ],
+  "prompt": "Generate an image. This is a background from my cute painted fantasy 2D action RPG where tiny food monsters adventure through a giant house. I need another WORLD MAP in the same painted style: a whimsical illustrated fantasy adventure map of a GIANT VEGETABLE GARDEN seen from above at an angle, like a storybook RPG map: neat vegetable rows, a sunflower forest, a pumpkin patch, a little pond, a compost heap, and a winding dotted path from the bottom-left to a big old glass greenhouse at the top-right. Plenty of open space around the path. No characters, no text, no labels, no numbers, no UI. Wide 16:9 landscape image."
+ },
+ {
+  "name": "mob-snail",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/mob-bun.png"
+  ],
+  "prompt": "Generate an image. The reference is an enemy from my cute 2D side-scrolling action RPG set in a giant house. Draw a NEW enemy for the world THE GARDEN, in exactly the same art style (clean dark outlines, saturated colours, glossy cel shading, cute but menacing). It serves THE LEFTOVERS, forgotten old foods, so it looks a little wilted and scruffy. A LETTUCE SNAIL: a chubby snail whose shell is a tight head of lettuce, grumpy face, slimy trail, holding a leaf up in front like a shield. Side view facing LEFT, whole body visible, centred, filling about 85% of the frame. IMPORTANT: a crisp dark outline all round with NO glow, haze or cloud around it. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1 image."
+ },
+ {
+  "name": "mob-ladybug",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/mob-bun.png"
+  ],
+  "prompt": "Generate an image. The reference is an enemy from my cute 2D side-scrolling action RPG set in a giant house. Draw a NEW enemy for the world THE GARDEN, in exactly the same art style (clean dark outlines, saturated colours, glossy cel shading, cute but menacing). It serves THE LEFTOVERS, forgotten old foods, so it looks a little wilted and scruffy. A LADYBUG GLIDER: a round ladybug whose wing case is a cherry tomato with black seed spots, wings buzzing, a cheeky grin, flying. Side view facing LEFT, whole body visible, centred, filling about 85% of the frame. IMPORTANT: a crisp dark outline all round with NO glow, haze or cloud around it. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1 image."
+ },
+ {
+  "name": "mob-peapod",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/mob-bun.png"
+  ],
+  "prompt": "Generate an image. The reference is an enemy from my cute 2D side-scrolling action RPG set in a giant house. Draw a NEW enemy for the world THE GARDEN, in exactly the same art style (clean dark outlines, saturated colours, glossy cel shading, cute but menacing). It serves THE LEFTOVERS, forgotten old foods, so it looks a little wilted and scruffy. A PEAPOD SNIPER: a green pea pod creature standing upright on two little legs, cracked open with three peas inside like bullets, one eye squinting down a long stalk like a sniper scope. Side view facing LEFT, whole body visible, centred, filling about 85% of the frame. IMPORTANT: a crisp dark outline all round with NO glow, haze or cloud around it. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1 image."
+ },
+ {
+  "name": "mob-mole",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/mob-bun.png"
+  ],
+  "prompt": "Generate an image. The reference is an enemy from my cute 2D side-scrolling action RPG set in a giant house. Draw a NEW enemy for the world THE GARDEN, in exactly the same art style (clean dark outlines, saturated colours, glossy cel shading, cute but menacing). It serves THE LEFTOVERS, forgotten old foods, so it looks a little wilted and scruffy. A POTATO MOLE: a lumpy potato mole with little sprout eyes, big digging claws and a pink nose, popping up out of a pile of dirt. Side view facing LEFT, whole body visible, centred, filling about 85% of the frame. IMPORTANT: a crisp dark outline all round with NO glow, haze or cloud around it. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1 image."
+ },
+ {
+  "name": "mob-tomato",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/mob-bun.png"
+  ],
+  "prompt": "Generate an image. The reference is an enemy from my cute 2D side-scrolling action RPG set in a giant house. Draw a NEW enemy for the world THE GARDEN, in exactly the same art style (clean dark outlines, saturated colours, glossy cel shading, cute but menacing). It serves THE LEFTOVERS, forgotten old foods, so it looks a little wilted and scruffy. A TOMATO LOBBER: a big ripe tomato sitting in a little clay flower pot like a mortar, a determined face, a cherry tomato ready to fling from its leafy top. Side view facing LEFT, whole body visible, centred, filling about 85% of the frame. IMPORTANT: a crisp dark outline all round with NO glow, haze or cloud around it. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1 image."
+ },
+ {
+  "name": "mob-radish",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/mob-bun.png"
+  ],
+  "prompt": "Generate an image. The reference is an enemy from my cute 2D side-scrolling action RPG set in a giant house. Draw a NEW enemy for the world THE GARDEN, in exactly the same art style (clean dark outlines, saturated colours, glossy cel shading, cute but menacing). It serves THE LEFTOVERS, forgotten old foods, so it looks a little wilted and scruffy. A RADISH BOMBER: a small red radish with a leafy fuse on top that is lit and sparking, crazy excited eyes, tiny legs running. Side view facing LEFT, whole body visible, centred, filling about 85% of the frame. IMPORTANT: a crisp dark outline all round with NO glow, haze or cloud around it. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1 image."
+ },
+ {
+  "name": "mob-pumpkin",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/mob-bun.png"
+  ],
+  "prompt": "Generate an image. The reference is an enemy from my cute 2D side-scrolling action RPG set in a giant house. Draw a NEW enemy for the world THE GARDEN, in exactly the same art style (clean dark outlines, saturated colours, glossy cel shading, cute but menacing). It serves THE LEFTOVERS, forgotten old foods, so it looks a little wilted and scruffy. A PUMPKIN BRUTE: a hulking orange pumpkin with a carved angry face, thick vine arms like ropes, leaves on its shoulders, heavy and strong. It is a tough BRUTE, bigger and chunkier than normal enemies. Side view facing LEFT, whole body visible, centred, filling about 85% of the frame. IMPORTANT: a crisp dark outline all round with NO glow, haze or cloud around it. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1 image."
+ },
+ {
+  "name": "mob-chunk",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/mob-bun.png"
+  ],
+  "prompt": "Generate an image. The reference is an enemy from my cute 2D side-scrolling action RPG set in a giant house. Draw a NEW enemy for the world THE GARDEN, in exactly the same art style (clean dark outlines, saturated colours, glossy cel shading, cute but menacing). It serves THE LEFTOVERS, forgotten old foods, so it looks a little wilted and scruffy. A MYSTERY CHUNK: a tiny grey-brown lump of meatloaf with a dab of ketchup on its head and one random pea stuck in it, googly eyes, little stubby feet. Small and silly. Side view facing LEFT, whole body visible, centred, filling about 85% of the frame. IMPORTANT: a crisp dark outline all round with NO glow, haze or cloud around it. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1 image."
+ },
+ {
+  "name": "boss-meatloaf",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/boss-mold.png"
+  ],
+  "prompt": "Generate an image. The reference is a boss from my cute 2D side-scrolling action RPG set in a giant house. Same style (clean dark outlines, saturated colours, glossy cel shading). I need a NEW BOSS: THE MYSTERY MEATLOAF, a big lumpy grey-brown meatloaf monster with a shiny red ketchup glaze on top, odd mystery bits poking out of him (a pea, a carrot coin, a button, a little toy wheel), shifty googly eyes, a wobbly grin, stubby legs and two stubby arms. Weird, funny and a bit gross but still in the cute game style. Side view facing LEFT, whole body visible, centred, filling about 90% of the frame. IMPORTANT: a crisp dark outline all round with NO glow, haze or steam around it. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1 image."
+ },
+ {
+  "name": "still-w8-open",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-bg.png"
+  ],
+  "prompt": "Generate an image. The reference shows the painted background style. Painted storybook illustration for a cutscene in my cute 2D side-scrolling kitchen adventure game. Use the same soft painterly, warmly lit, cel-shaded style as the background reference, and draw any character EXACTLY like its reference (same shape, colours, face, outlines, same number of limbs). Cinematic composition, wide 16:9 landscape, characters small-to-medium in the frame with plenty of scenery. NO text, no letters, no writing on any labels, no speech bubbles, no UI, no border, no signature, no humans. Scene: an establishing wide vista with no characters. The Garden: a giant vegetable garden at sunset seen from tiny-creature height as a vast landscape, sunflower forests, pumpkin hills, a watering-can tower, fireflies, and far away an old glass greenhouse glowing eerie green-gold on a hill."
+ }
+]
