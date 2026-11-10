@@ -2,7 +2,7 @@
 import type { Spicy } from './sim/types';
 import { CLASSES, type Stat } from './sim/classes';
 import { CONSUMABLES, type ConsumableId } from './sim/consumables';
-import { type Item, MAX_PLUS, type Slot, BASES, canWear, fortChance, fortCost, fortRisky, gradeOf, rollGrade, rollItem, salvageValue } from './sim/items';
+import { type Item, MAX_PLUS, type Slot, BASES, PROCS, SETS, UNIQUES, canWear, fortChance, fortCost, fortRisky, gradeOf, rollGrade, rollItem, salvageValue } from './sim/items';
 import { clearRewards } from './sim/loot';
 import { MAX_SKILL, SKILLS } from './sim/skills';
 import { type Derived, type HeroProfile, canLevelSkill, derive, gainXp, newProfile } from './sim/stats';
@@ -68,10 +68,14 @@ export let save: Save = load();
 function repairItems(s: Save): void {
   const ok = (v: unknown) => typeof v === 'number' && Number.isFinite(v) && v >= 1;
   const fix = (it: { ilvl: number } | null | undefined) => { if (it && !ok(it.ilvl)) it.ilvl = 1; };
-  s.boxes?.forEach(fix);
-  s.bag?.forEach(fix);
-  for (const h of Object.values(s.heroes)) for (const it of Object.values(h.equip ?? {})) fix(it);
-  if (s.shop?.stock) s.shop.stock = s.shop.stock.filter(it => it && BASES[it.base]).map(it => (fix(it), it));
+  // an item whose type no longer exists (renamed or removed in an update) is dropped; unknown extras are stripped
+  const real = (it: Item | null | undefined): it is Item => !!it && !!BASES[it.base];
+  const tidy = (it: Item) => { fix(it); if (it.unique && !UNIQUES[it.unique]) delete it.unique; if (it.set && !SETS[it.set]) delete it.set; if (it.proc && !PROCS[it.proc]) delete it.proc; if (!Array.isArray(it.lines)) it.lines = []; return it; };
+  s.boxes = (s.boxes ?? []).filter(b => b && b.tier >= 1 && b.tier <= 5); s.boxes.forEach(fix);
+  s.bag = (s.bag ?? []).filter(real).map(tidy);
+  for (const h of Object.values(s.heroes)) for (const slot of Object.keys(h.equip ?? {}) as Slot[]) { const it = h.equip[slot]; if (!real(it)) delete h.equip[slot]; else tidy(it); }
+  if (s.shop?.stock) s.shop.stock = s.shop.stock.filter(real).map(tidy);
+  s.quick = (s.quick ?? []).map(q => (q && CONSUMABLES[q] ? q : null));
 }
 
 function load(): Save {
