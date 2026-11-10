@@ -147,12 +147,12 @@ export function updateHud(w: World, p: HeroProfile, st: StageDef): void {
   });
   q('.stage .t').textContent = `${st.num} ${st.name}${w.spicy.length ? ' ' + '🌶'.repeat(w.spicy.length) : ''}`;
   const clock = w.spicy.includes('clock') && !w.portal ? ` · ⏱ ${Math.max(0, Math.ceil(st.par - w.run.time))}s` : '';
-  const mate = w.heroes[1];
+  const mate = w.heroes.find(o => o !== w.hero);
   const mc = q('.mate'); mc.classList.toggle('on', !!mate);
   if (mate) {
     const img = `url(art/kaiju-${mate.d.cls.species}.webp)`;
     const mi = q<HTMLElement>('.mate i'); if (mi.style.backgroundImage !== img) mi.style.backgroundImage = img;
-    q('.mate b').textContent = `CPU ${mate.d.cls.name}${mate.state === 'down' ? ' (DOWN)' : ''}`;
+    q('.mate b').textContent = `${mate.cpu ? 'CPU ' : ''}${mate.d.cls.name}${mate.state === 'down' ? ' (DOWN)' : ''}`;
     q<HTMLElement>('.mate .bar u').style.transform = `scaleX(${Math.max(0, mate.hp / mate.d.maxHp)})`;
   }
   const ob = st.objective;

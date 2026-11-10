@@ -25,6 +25,9 @@ import { QUIPS } from '../story/more';
 import { CLASSES } from '../sim/classes';
 import { setSkillUi, setTouchVisible, setUltUi } from '../touch';
 import { hideCamp, runGacha, showCamp, showResult, stageUnlocked } from '../ui/camp';
+import { type NetPlay, inGame, kitOf, leaveOnline, net, showOnline } from '../ui/online';
+import { applySnapshot, makeSnapshot, type Snapshot } from '../net/snapshot';
+import { type Input, NO_INPUT } from '../sim/types';
 
 /** Equipped items → what to draw on the kaiju. */
 export function lookOf(p: HeroProfile): GearLook {
@@ -72,8 +75,17 @@ export class GameScene extends Phaser.Scene {
   private done = false;
   private hard = false;
   private nightmare = false;
-  /** CPU buddy: its puppet, shadow, name tag and the bot that plays it */
-  private buddy?: { view: HeroView; shadow: Phaser.GameObjects.Ellipse; tag: Phaser.GameObjects.Text; bot: Bot };
+  /** teammates (CPU buddy or online friends): puppet, shadow, name tag, and a bot when the CPU plays them */
+  private mates: { i: number; view: HeroView; shadow: Phaser.GameObjects.Ellipse; tag: Phaser.GameObjects.Text; name: string; bot?: Bot }[] = [];
+  /** online co-op: who we are and who's playing (null = offline) */
+  private online: NetPlay | null = null;
+  /** which hero is ours (0 offline / host, the seat for a guest) */
+  private me = 0;
+  private netAcc = 0;
+  private netEvents: SimEvent[] = [];
+  private inbox: { s: Snapshot; ev: SimEvent[] }[] = [];
+  /** guest: buttons pressed since the last input we sent (so quick taps aren't lost between sends) */
+  private latch: Input = { ...NO_INPUT };
   private downWarned = false;
   /** hazard visuals (one container per hazard) + one graphics layer for lasers / mould puddles / burrow mounds */
   private hazardViews: Phaser.GameObjects.Container[] = [];
@@ -114,7 +126,7 @@ export class GameScene extends Phaser.Scene {
 
   private has(k: string): boolean { return manifest.includes(k) && this.textures.exists(k); }
 
-  create(data: { stage?: string }): void {
+  create(data: { stage?: string; online?: NetPlay }): void {
     measure(this.scale.width);
     this.scale.off('resize');
     this.scale.on('resize', (g: Phaser.Structs.Size) => { measure(g.width); this.mid?.setSize(VW, 1080 * MID); });
@@ -137,15 +149,26 @@ export class GameScene extends Phaser.Scene {
       return;
     }
     hideCamp();
+    this.online = data.online ?? null;
+    this.me = this.online?.seat ?? 0;
+    this.netAcc = 0; this.netEvents = []; this.inbox = []; this.latch = { ...NO_INPUT };
     this.stage = stageById(data.stage);
+    this.hookNet();
     this.buildStage();
   }
 
   private buildStage(): void {
     const st = this.stage, p = hero();
-    this.hard = save.hard && this.hardOk();
-    this.nightmare = this.hard && !!save.nightmare && !!hero().hardCleared[`${st.world}-10`];
-    this.world = new World(st, derive(p), (Date.now() & 0xffff) + 1, quickBag(), save.items.revive ?? 0, this.hard, STORIES[p.species]?.variants[st.id], [...(save.spicy ?? [])], nemesisOf(p.species), this.nightmare,
+    const on = this.online;
+    this.hard = on ? on.hard : save.hard && this.hardOk();
+    this.nightmare = on ? on.nightmare : this.hard && !!save.nightmare && !!hero().hardCleared[`${st.world}-10`];
+    if (on) {
+      // online: the same stage for everyone (no story twists, nemesis or spicy rules); only the host keeps potions
+      const host = on.role === 'host';
+      this.world = new World(st, derive(on.kits[0].profile), on.seed, host ? quickBag() : [], host ? save.items.revive ?? 0 : 0, this.hard, undefined, [], undefined, this.nightmare,
+        on.kits.slice(1).map(k => derive(k.profile)), on.kits.length);
+      this.world.view(this.me);
+    } else this.world = new World(st, derive(p), (Date.now() & 0xffff) + 1, quickBag(), save.items.revive ?? 0, this.hard, STORIES[p.species]?.variants[st.id], [...(save.spicy ?? [])], nemesisOf(p.species), this.nightmare,
       this.buddySpecies() !== null ? [derive(buddyProfile(this.buddySpecies()!, p.level))] : []);
     const cam = this.cameras.main.setZoom(ZOOM).setBackgroundColor('#f6dcb4');
     const bg = this.has(st.bg) ? st.bg : 'bg-far';
@@ -213,16 +236,19 @@ export class GameScene extends Phaser.Scene {
     this.slowTint = this.add.rectangle(SX, SY, VW * 2, VH * 2, 0x6a8aff, 0).setOrigin(0, 0).setScrollFactor(0).setDepth(16);
     this.heroShadow = this.add.ellipse(0, 0, 54, 12, 0x000000, 0.22).setDepth(-2);
     this.aura = this.add.ellipse(0, 0, 80, 100, 0x9fe0ff, 0.25).setDepth(4).setBlendMode(Phaser.BlendModes.ADD).setVisible(false);
-    this.hero = new HeroView(this, p.species, k => this.has(k), 84, lookOf(p));
+    const myKit = this.online?.kits[this.me].profile ?? p;
+    this.hero = new HeroView(this, myKit.species, k => this.has(k), 84, lookOf(myKit));
     this.hero.root.setDepth(5);
-    this.buddy = undefined; this.downWarned = false;
+    this.mates = []; this.downWarned = false;
     const bsp = this.buddySpecies();
-    if (bsp !== null && w.heroes[1]) {
-      const view = new HeroView(this, bsp, k => this.has(k), 84, lookOf(save.heroes[bsp]));
-      view.root.setDepth(4.5);
-      const tag = this.add.text(0, 0, 'CPU', { fontFamily: 'Luckiest Guy', fontSize: '11px', color: '#a8e8ff', stroke: '#1a2a40', strokeThickness: 4 }).setOrigin(0.5).setDepth(9).setResolution(3);
-      this.buddy = { view, tag, shadow: this.add.ellipse(0, 0, 54, 12, 0x000000, 0.18).setDepth(-2), bot: new Bot(w, AVERAGE, (Date.now() & 0xff) + 5, 1) };
-    }
+    const addMate = (i: number, prof: HeroProfile, name: string, bot?: Bot) => {
+      const view = new HeroView(this, prof.species, k => this.has(k), 84, lookOf(prof));
+      view.root.setDepth(4.5 - i * 0.01);
+      const tag = this.add.text(0, 0, name, { fontFamily: 'Luckiest Guy', fontSize: '11px', color: '#a8e8ff', stroke: '#1a2a40', strokeThickness: 4 }).setOrigin(0.5).setDepth(9).setResolution(3);
+      this.mates.push({ i, view, tag, name, bot, shadow: this.add.ellipse(0, 0, 54, 12, 0x000000, 0.18).setDepth(-2) });
+    };
+    if (this.online) this.online.kits.forEach((k, i) => { if (i !== this.me) addMate(i, k.profile, k.name); });
+    else if (bsp !== null && w.heroes[1]) addMate(1, save.heroes[bsp], 'CPU', new Bot(w, AVERAGE, (Date.now() & 0xff) + 5, 1));
     this.cx = w.hero.x; this.cy = st.groundY - 100;
     cam.centerOn(this.cx, this.cy);
     if (w.variant === 'night') { this.add.rectangle(SX, SY, VW * 2, VH * 2, 0x0a0a30, 0.42).setOrigin(0, 0).setScrollFactor(0).setDepth(15); }
@@ -252,7 +278,69 @@ export class GameScene extends Phaser.Scene {
     this.paused = on; showPause(on); setTouchVisible(!on);
   }
 
-  private leave(): void { showPause(false); this.scene.restart({}); }
+  private leave(): void {
+    showPause(false);
+    if (this.online) { this.unhookNet(); leaveOnline(); }
+    this.scene.restart({});
+  }
+
+  // ---------- online co-op ----------
+  private hookNet(): void {
+    const on = this.online;
+    if (!on) { this.unhookNet(); return; }
+    inGame.snap = m => { if (on.role === 'guest') this.inbox.push({ s: m.s, ev: m.ev }); };
+    inGame.left = g => {
+      const i = on.guests.indexOf(g) + 1, w = this.world;
+      if (i <= 0 || !w || this.done) return;
+      const m = this.mates.find(x => x.i === i);
+      if (m && !m.bot) { m.bot = new Bot(w, AVERAGE, i * 31 + 7, i); m.name = 'CPU'; toast(`${on.kits[i].name} left: the CPU takes over their kaiju`, { color: '#a8e8ff' }); }
+    };
+    inGame.kit = (g, kit) => { const i = on.guests.indexOf(g) + 1; if (i > 0 && this.world && !this.done) this.world.setDerivedOf(i, derive(kit.profile)); };
+  }
+  private unhookNet(): void { inGame.snap = inGame.left = inGame.kit = null; }
+
+  /** Host: send the stage to friends ~15 times a second (~8 when someone is on the slower backup route). */
+  private hostBroadcast(dt: number): void {
+    const h = this.online?.role === 'host' ? net.host : null;
+    if (!h || !this.world) return;
+    if (this.done && !this.netEvents.length) return;
+    this.netAcc += dt;
+    if (this.netAcc < (h.hasBackupGuests ? 0.12 : 0.066) && !this.done) return;
+    this.netAcc = 0;
+    h.broadcast({ t: 'snap', s: makeSnapshot(this.world), ev: this.netEvents });
+    this.netEvents = [];
+  }
+
+  /** Guest: send my buttons, copy in the host's stage, play its events. Between snapshots things keep sliding. */
+  private guestFrame(dt: number): void {
+    const w = this.world!, g = net.guest;
+    if (!g) return;
+    const inp = this.paused || this.done ? NO_INPUT : readInput();
+    for (const k of Object.keys(inp) as (keyof Input)[]) this.latch[k] ||= inp[k];
+    this.netAcc += dt;
+    if (this.netAcc >= (g.route === 'backup' ? 1 / 15 : 1 / 30)) {
+      this.netAcc = 0;
+      g.send({ t: 'in', i: this.latch });
+      this.latch = { ...inp };
+    }
+    if (this.inbox.length) {
+      for (const m of this.inbox.splice(0)) { applySnapshot(w, m.s); w.view(this.me); if (!this.done) this.onEvents(m.ev); }
+    } else {
+      for (const h of w.heroes) if (h.state !== 'down' && h.state !== 'climb') { h.x += h.vx * dt; if (!h.ground) h.y += h.vy * dt; }
+      for (const m of w.mobs) if (m.state === 'walk') m.x += m.vx * dt;
+      for (const s of w.shots) { s.x += s.vx * dt; s.y += s.vy * dt; }
+    }
+  }
+
+  /** After an online stage: everyone goes back to the room (the host picks the next stage there). */
+  private backToRoom(boxes: boolean): void {
+    this.unhookNet();
+    this.scene.restart({});
+    setTimeout(() => {
+      if (boxes && save.boxes.length) { showCamp('boxes'); runGacha(save.boxes.map((_, i) => i)); }
+      else if (net.host || net.guest) showOnline();
+    }, 50);
+  }
 
   update(_time: number, deltaMs: number): void {
     for (const k of takeTaps()) {
@@ -260,23 +348,31 @@ export class GameScene extends Phaser.Scene {
       if (k === 'KeyM') toast(toggleMute() ? 'Sound off' : 'Sound on');
     }
     const w = this.world;
-    if (!w || this.paused) return;
+    if (!w || (this.paused && !this.online)) return;
     const dt = Math.min(0.05, deltaMs / 1000);
-    if (this.hitStop > 0) this.hitStop -= dt;
+    if (this.online?.role === 'guest') { this.guestFrame(dt); this.draw(dt); return; }
+    if (this.hitStop > 0 && !this.online) this.hitStop -= dt;
     else if (!this.done) {
+      this.hitStop = 0;
       this.acc += dt;
-      while (this.acc >= DT) {
+      let steps = 0;
+      while (this.acc >= DT && steps++ < 8) {
         this.acc -= DT;
-        this.onEvents(w.step(this.buddy ? [readInput(), this.buddy.bot.think()] : [readInput()]));
+        const inputs = w.heroes.map((_, i) => i === 0 ? (this.paused ? NO_INPUT : readInput()) : this.mates.find(m => m.i === i)?.bot?.think() ?? (this.online ? net.host?.inputOf(this.online.guests[i - 1]) ?? NO_INPUT : NO_INPUT));
+        const evs = w.step(inputs);
+        if (this.online) this.netEvents.push(...evs);
+        this.onEvents(evs);
       }
+      if (steps > 8) this.acc = 0;
     }
+    this.hostBroadcast(dt);
     this.draw(dt);
   }
 
   private onEvents(evs: SimEvent[]): void {
     const w = this.world!;
     for (const e of evs) {
-      if ((e as { hi?: number }).hi && ['swing', 'skill', 'jump', 'land', 'dodge', 'use', 'ult', 'perfect'].includes(e.t)) continue; // the buddy's own moves
+      if (((e as { hi?: number }).hi ?? 0) !== this.me && ['swing', 'skill', 'jump', 'land', 'dodge', 'use', 'ult', 'perfect'].includes(e.t)) continue; // a teammate's own moves
       switch (e.t) {
         case 'hit': {
           const col = e.target === 'hero' ? '#ff5a6a' : e.crit ? '#ffd23c' : '#ffffff';
@@ -315,6 +411,7 @@ export class GameScene extends Phaser.Scene {
             this.levels += ups;
             w.setDerived(derive(hero()));
             w.hero.hp = w.hero.d.maxHp;
+            if (this.online?.role === 'guest') net.guest?.send({ t: 'kit', kit: kitOf() });
             toast(`LEVEL UP! Lv ${hero().level}`, { color: '#ffe27a' }); this.quip('levelup', true);
             this.burst(w.hero.x, w.hero.y - 40, 0xffe27a, 24);
             this.ring(w.hero.x, w.hero.y - 30, 60, 0xffe27a);
@@ -431,13 +528,13 @@ export class GameScene extends Phaser.Scene {
     setTouchVisible(false);
     sfx(failed ? 'fail' : 'clear');
     playMusic(null);
-    syncQuickBag(w.hero.bag, w.hero.revives);
+    if (this.online?.role !== 'guest') syncQuickBag(w.hero.bag, w.hero.revives);
     const chillies = w.spicy.length;
     if (!failed && chillies) w.run.crumbs = Math.round(w.run.crumbs * (1 + 0.25 * chillies));
     save.crumbs += w.run.crumbs;
     save.items.fstone = (save.items.fstone ?? 0) + w.run.stones;
     if (w.run.crumbs) track('crumbs', w.run.crumbs);
-    const res = failed ? null : finishStage(st.id, rankOf(w.run, st.par).rank, w.loot, st.lv[1] + (this.hard ? HARD_LV : 0), !!st.boss, this.hard, chillies, this.nightmare);
+    const res = failed ? null : finishStage(st.id, rankOf(w.run, st.par).rank, w.lootOf[Math.min(this.me, w.lootOf.length - 1)], st.lv[1] + (this.hard ? HARD_LV : 0), !!st.boss, this.hard, chillies, this.nightmare);
     const sp = hero().species;
     trackHero(sp, 'combo', w.run.maxCombo, true);
     if (res) {
@@ -450,11 +547,12 @@ export class GameScene extends Phaser.Scene {
       if (res.rank === 'S') track('rankS');
     }
     const newKaiju = checkUnlocks();
-    const after = res ? beatAfter(st.id).filter(b => !hero().seen.includes(b)) : [];
+    const after = res && !this.online ? beatAfter(st.id).filter(b => !hero().seen.includes(b)) : [];
     for (const b of after) hero().seen.push(b);
     this.time.delayedCall(failed ? 600 : 300, () => playStory(sp, after, () => showResult(
-      { stage: st, res, time: w.run.time, hits: w.run.hitsTaken, combo: w.run.maxCombo, xp: this.xpGained, levels: this.levels, failed, crumbs: w.run.crumbs, hard: this.hard, unlocked: newKaiju.map(s => CLASSES.find(c => c.species === s)!.name) },
+      { stage: st, res, time: w.run.time, hits: w.run.hitsTaken, combo: w.run.maxCombo, xp: this.xpGained, levels: this.levels, failed, crumbs: w.run.crumbs, hard: this.hard, unlocked: newKaiju.map(s => CLASSES.find(c => c.species === s)!.name), online: !!this.online },
       a => {
+        if (this.online) { this.backToRoom(a === 'boxes'); return; }
         if (a === 'retry') this.scene.restart({ stage: st.id });
         else if (a === 'next') { const ix = STAGES.indexOf(st), n = ix >= 0 ? STAGES[ix + 1] : undefined; this.scene.restart(n && stageUnlocked(n) ? { stage: n.id } : {}); }
         else if (a === 'boxes') { this.scene.restart({}); setTimeout(() => { showCamp('boxes'); runGacha(save.boxes.map((_, i) => i)); }, 50); }
@@ -651,8 +749,8 @@ export class GameScene extends Phaser.Scene {
   // ---------- drawing ----------
   private draw(dt: number): void {
     const w = this.world!, st = w.stage, h = w.hero, t = this.time.now / 1000;
-    const mate = w.heroes[1];
-    const tx = (mate && mate.state !== 'down' ? h.x * 0.75 + mate.x * 0.25 : h.x) + h.face * 40, ty = Math.min(h.y - 70, st.groundY + 90 - VH / 2);
+    const mate = w.heroes.filter(o => o !== h && o.state !== 'down').sort((a, b) => Math.abs(a.x - h.x) - Math.abs(b.x - h.x))[0];
+    const tx = (mate && h.state !== 'down' ? h.x * 0.75 + mate.x * 0.25 : mate && h.state === 'down' ? mate.x : h.x) + h.face * 40, ty = Math.min(h.y - 70, st.groundY + 90 - VH / 2);
     this.cx += (tx - this.cx) * Math.min(1, dt * 5);
     this.cy += (ty - this.cy) * Math.min(1, dt * 3);
     this.cx = Phaser.Math.Clamp(this.cx, VW / 2, st.width - VW / 2);
@@ -674,14 +772,15 @@ export class GameScene extends Phaser.Scene {
     const lift = Math.min(1, (fy - h.y) / 200);
     this.heroShadow.setPosition(h.x, fy - 1).setScale(1 - lift * 0.5).setAlpha(h.state === 'climb' ? 0 : 1);
     this.hero.flash(h.state === 'hurt' && h.t < 0.08);
-    if (this.buddy && mate) {
-      this.buddy.view.update(mate, t, dt); this.buddy.view.flash(mate.state === 'hurt' && mate.t < 0.08);
-      const bf = w.floorBelow(mate.x, mate.y, mate.y + 2000, false);
-      this.buddy.shadow.setPosition(mate.x, (bf ? bf.y : st.groundY) - 1).setAlpha(mate.state === 'climb' ? 0 : 1);
-      this.buddy.tag.setPosition(mate.x, mate.y - 100).setText(mate.state === 'down' ? (mate.revT > 0 ? `REVIVING ${Math.round(mate.revT / 2 * 100)}%` : 'DOWN! Stand by me') : 'CPU');
+    for (const m of this.mates) {
+      const o = w.heroes[m.i]; if (!o) continue;
+      m.view.update(o, t, dt); m.view.flash(o.state === 'hurt' && o.t < 0.08);
+      const bf = w.floorBelow(o.x, o.y, o.y + 2000, false);
+      m.shadow.setPosition(o.x, (bf ? bf.y : st.groundY) - 1).setAlpha(o.state === 'climb' ? 0 : 1);
+      m.tag.setPosition(o.x, o.y - 100).setText(o.state === 'down' ? (o.revT > 0 ? `REVIVING ${Math.round(o.revT / 2 * 100)}%` : 'DOWN! Stand by me') : m.name);
     }
-    // you're down but your buddy isn't: hang on
-    if (h.state === 'down' && mate && mate.state !== 'down' && !this.downWarned) { this.downWarned = true; toast('You\'re down! Your buddy is coming to pick you up', { color: '#a8e8ff' }); }
+    // you're down but a teammate isn't: hang on
+    if (h.state === 'down' && mate && !this.downWarned) { this.downWarned = true; toast(this.online ? 'You\'re down! Wait for a friend to stand next to you' : 'You\'re down! Your buddy is coming to pick you up', { color: '#a8e8ff' }); }
     if (h.state !== 'down') this.downWarned = false;
     this.aura.setFillStyle(h.counter > 0 ? 0xffd23c : 0x9fe0ff, 0.25).setVisible(!!h.buff || h.counter > 0).setPosition(h.x, h.y - 40).setScale(1 + Math.sin(t * 6) * 0.06).setAlpha(0.18 + Math.sin(t * 6) * 0.06);
 

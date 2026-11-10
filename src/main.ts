@@ -3,7 +3,8 @@ import { unlockAudio } from './audio';
 import { initInput } from './input';
 import { CANVAS, GameScene } from './scenes/GameScene';
 import { initTouch } from './touch';
-import { initCamp } from './ui/camp';
+import { initCamp, showCamp } from './ui/camp';
+import { initOnline, showOnline } from './ui/online';
 import { showTitle } from './ui/title';
 
 initInput(unlockAudio);
@@ -11,7 +12,8 @@ addEventListener('pointerdown', unlockAudio);
 initTouch();
 showTitle();
 let game: Phaser.Game;
-initCamp(stageId => game.scene.getScene('game').scene.restart({ stage: stageId }));
+initCamp(stageId => game.scene.getScene('game').scene.restart({ stage: stageId }), showOnline);
+initOnline((stage, online) => game.scene.getScene('game').scene.restart({ stage, online }), () => { game.scene.getScene('game').scene.restart({}); showCamp(); });
 
 game = new Phaser.Game({
   type: Phaser.AUTO,

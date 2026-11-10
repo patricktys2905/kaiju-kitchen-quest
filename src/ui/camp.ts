@@ -51,12 +51,13 @@ let selItem: number | null = null;
 let selStage: string | null = null;
 let selConsumable: ConsumableId | null = null;
 let onPlay: (stageId: string) => void = () => {};
+let onOnline: () => void = () => {};
 let flash = '';
 let useSafety = true;
 let bagMine = true;
 
-export function initCamp(play: (stageId: string) => void): void {
-  onPlay = play;
+export function initCamp(play: (stageId: string) => void, online: () => void = () => {}): void {
+  onPlay = play; onOnline = online;
   const st = document.createElement('style');
   st.textContent = UI_CSS + CAMP_CSS;
   document.head.appendChild(st);
@@ -171,7 +172,7 @@ function mapPage(): string {
       ${rank ? `<div class="lv">Best: <b style="color:${RANK_CSS[rank]}">${rank}</b></div>` : ''}
       ${(save.keys ?? []).includes(sel.world) ? (() => { const b = BONUS_STAGES[sel.world - 1]; return `<button class="pill big secret" data-play="${b.id}">🗝 ${b.name} <small>Lv ${b.lv[0]}–${b.lv[1]}</small></button>`; })() : sel.id.endsWith('-7') ? '<div class="lv" style="color:#ffd27a">🗝 A secret chest here hides this world\'s key</div>' : ''}
       <div class="lv buddy">🤝 CPU BUDDY: <button class="pill" data-act="buddy">${save.buddy != null && save.buddy !== p.species && save.unlocked.includes(save.buddy) ? `<img src="art/kaiju-${save.buddy}.webp"> ${CLASSES.find(c => c.species === save.buddy)!.name}` : 'None'} ▸</button></div>
-      <button class="pill go big" data-play="${sel.id}" ${stageUnlocked(sel) ? '' : 'disabled'}>${stageUnlocked(sel) ? '▶ PLAY' : '🔒 LOCKED'}</button>
+      <div class="playrow"><button class="pill go big" data-play="${sel.id}" ${stageUnlocked(sel) ? '' : 'disabled'}>${stageUnlocked(sel) ? '▶ PLAY' : '🔒 LOCKED'}</button><button class="pill online" data-act="online">🌐 ONLINE</button></div>
       <div class="spicy">🌶 SPICY ${SPICY_LIST.map(([k, ic, nm, ds]) => `<button class="chili ${(save.spicy ?? []).includes(k) ? 'on' : ''}" data-spicy="${k}" title="${ds}">${ic} ${nm}</button>`).join('')}
         <small>${(save.spicy ?? []).length ? `+${(save.spicy ?? []).length} bonus box${(save.spicy ?? []).length > 1 ? 'es' : ''}, +${25 * (save.spicy ?? []).length}% crumbs` : 'extra loot for extra pain'}</small></div>
       <label class="hard ${hardOk ? '' : 'off'}"><input type="checkbox" data-act="hard" ${save.hard ? 'checked' : ''} ${hardOk ? '' : 'disabled'}> HARD ${hardOk ? `(+${HARD_LV} levels, better boxes)` : '— beat this world\'s boss'}</label>
@@ -421,6 +422,7 @@ function onClick(e: MouseEvent): void {
       case 'scroll': if (useScroll(sp)) flash = 'Skill points refunded!'; break;
       case 'hard': save.hard = !save.hard; if (!save.hard) save.nightmare = false; persist(); break;
       case 'nightmare': save.nightmare = !save.nightmare; if (save.nightmare) save.hard = true; persist(); break;
+      case 'online': hideCamp(); onOnline(); return;
       case 'buddy': { // cycle: none → each unlocked kaiju except the one you're playing → none
         const opts: (number | null)[] = [null, ...save.unlocked.filter(s => s !== save.selected)];
         const i = opts.indexOf(save.buddy ?? null);
@@ -485,7 +487,7 @@ export function runGacha(indices: number[]): void {
 }
 
 // ---------- stage result ----------
-export function showResult(o: { stage: StageDef; res: ClearResult | null; time: number; hits: number; combo: number; xp: number; levels: number; failed: boolean; crumbs: number; hard: boolean; unlocked?: string[] },
+export function showResult(o: { stage: StageDef; res: ClearResult | null; time: number; hits: number; combo: number; xp: number; levels: number; failed: boolean; crumbs: number; hard: boolean; unlocked?: string[]; online?: boolean },
   act: (a: 'boxes' | 'next' | 'camp' | 'retry') => void): void {
   const r = document.getElementById('result')!;
   const nextStage = STAGES[STAGES.indexOf(o.stage) + 1];
@@ -499,11 +501,11 @@ export function showResult(o: { stage: StageDef; res: ClearResult | null; time: 
     ${o.levels ? `<div class="note">LEVEL UP ×${o.levels}! Spend your new stat and skill points at camp.</div>` : '<div class="note"></div>'}
     ${res ? `<div class="gots">${res.boxes.map((b: LootBox, i) => `<img src="art/box-${b.tier}.webp" title="${TIER_NAMES[b.tier]}" class="${i < res.upgraded ? 'up' : ''}">`).join('')}</div>
     <div class="note">${res.upgraded ? `Rank ${res.rank} upgraded ${res.upgraded} box${res.upgraded > 1 ? 'es' : ''}! ` : ''}${res.firstClear ? 'First clear bonus box!' : ''}${res.firstClear && o.stage.boss ? ' +1 Golden Sugar Cube!' : ''}</div>` : '<div class="note">Boxes you found are lost (crumbs are kept). Level up, gear up, bring Jam Jars and try again!</div>'}
-    <div class="btns">
+    <div class="btns">${o.online ? `${res && save.boxes.length ? `<button class="pill" data-r="boxes">OPEN BOXES (${save.boxes.length})</button>` : ''}<button class="pill go" data-r="camp">BACK TO ROOM</button>` : `
       ${res ? `<button class="pill go" data-r="boxes">OPEN BOXES (${save.boxes.length})</button>` : `<button class="pill go" data-r="retry">RETRY</button>`}
       ${res && nextStage && stageUnlocked(nextStage) ? `<button class="pill" data-r="next">NEXT: ${nextStage.num} ▶</button>` : ''}
       ${res ? '<button class="pill" data-r="retry">REPLAY</button>' : ''}
-      <button class="pill" data-r="camp">CAMP</button>
+      <button class="pill" data-r="camp">CAMP</button>`}
     </div></div>`;
   r.querySelectorAll<HTMLElement>('[data-r]').forEach(b => b.addEventListener('click', () => { r.className = 'kq'; act(b.dataset.r as 'boxes'); }));
 }
@@ -511,6 +513,8 @@ export function showResult(o: { stage: StageDef; res: ClearResult | null; time: 
 export function rankBetter(a: Rank, b: Rank): boolean { return RANK_ORDER.indexOf(a) > RANK_ORDER.indexOf(b); }
 
 const CAMP_CSS = `
+.kq .playrow { display: flex; gap: 1.2vmin; flex-wrap: wrap; align-items: center; }
+.kq .pill.online { background: linear-gradient(#5a8aff, #3a5ad8); color: #fff; }
 #camp .side { width: 11vmin; overflow-y: auto; gap: 1vmin; }
 #camp .side .hp { width: 9.4vmin; height: 9.4vmin; flex-shrink: 0; }
 #camp .chip img { width: 2.6vmin; height: 2.6vmin; vertical-align: -0.4vmin; }

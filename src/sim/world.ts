@@ -150,6 +150,10 @@ export class World {
    *  Between steps it is always the player (heroes[0]). */
   private cur!: Hero;
   get hero(): Hero { return this.cur; }
+  /** Online guests: draw the stage from this hero's point of view (a guest's World never steps). */
+  view(i: number): void { this.cur = this.heroes[i] ?? this.heroes[0]; }
+  /** A teammate's stats changed (an online friend levelled up mid-stage). */
+  setDerivedOf(i: number, d: Derived): void { const c = this.cur; this.cur = this.heroes[i] ?? c; this.setDerived(d); this.cur = c; }
   /** how many players collect loot (each gets their own drops); CPU buddies loot for the player */
   humans = 1;
   /** per-player loot (lootOf[0] is the player's, also `loot`) */

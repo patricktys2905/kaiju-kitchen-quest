@@ -41,6 +41,8 @@ export interface Save {
   nightmare?: boolean;
   /** CPU buddy kaiju that fights alongside you (null = solo) */
   buddy?: number | null;
+  /** name shown to friends in online co-op */
+  netName?: string;
 }
 
 // v2: per-kaiju progress, 4 starters, story (older v1 saves are not carried over)
