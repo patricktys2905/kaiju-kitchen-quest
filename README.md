@@ -131,9 +131,16 @@ Camp map → 🌐 ONLINE: host a room (4-letter code) or join one; up to 4 playe
 route if that fails (`?net=backup` forces it). The host runs the only real World (`party` = friends' kits,
 `humans` = player count) and feeds friends' inputs into `step([...])`; ~15 snapshots/s (8 on the backup route) via
 `makeSnapshot`; guests copy them into a drawing-only World with `applySnapshot` + `world.view(seat)`.
-Online stages skip story twists, nemesis and spicy rules (same stage for everyone); only the host has potions.
+Online stages skip story twists, nemesis and spicy rules (same stage for everyone). Everyone brings their own quick bag
+and Second Helpings (`Kit.bag`/`revives`, World `partyBags`; snapshot `bg` sends the counts back, each device writes its own).
 A friend who drops mid-stage is handed to the CPU; a friend who levels up sends a new kit (`setDerivedOf`).
 After a stage everyone gets their own loot and goes back to the room. Test: `node scripts/online-shot.mjs [backup]`.
+FREE PLAY ONLINE: the host picks Daily Dungeon / Endless Pantry / Boss Rush in the room ("Play"); monsters scale to the
+average party level. The host generates each stage and sends it whole (`NetFree`, `launch()`), health carries over by player;
+in Endless the host picks the perk for the whole team (friends see `waitPerk`), `freeEnd` when the host banks. Each device
+banks its own boxes and records its own bests. QUICK CHAT: 💬 button or keys 7 8 9 0 (`EMOTES`, msg `emo`, the host relays).
+The HUD lists every teammate (red when down); a teammate's name tag sticks to the screen edge with an arrow when off screen.
+Tests: tests/coop.test.ts, `node scripts/online-free-shot.mjs` (Endless 2 floors + Boss Rush, two browsers).
 
 ## Gear that plays (src/sim/gear.ts, items.ts PROCS / SIGS, tests/gear.test.ts)
 - GEAR SKILL: every weapon has its own move on a 4th button (touch GEAR, keys F / H): throw / lob (aims at the nearest

@@ -216,7 +216,7 @@ export class World {
   /** story twist on this stage */
   variant: 'swarm' | 'ambush' | 'night' | undefined;
 
-  constructor(public stage: StageDef, d: Derived, seed = 1, bag: Hero['bag'] = [], revives = 0, hard = false, variant?: 'swarm' | 'ambush' | 'night', spicy: Spicy[] = [], public nemesis?: MobKind, nightmare = false, party: Derived[] = [], humans = 1) {
+  constructor(public stage: StageDef, d: Derived, seed = 1, bag: Hero['bag'] = [], revives = 0, hard = false, variant?: 'swarm' | 'ambush' | 'night', spicy: Spicy[] = [], public nemesis?: MobKind, nightmare = false, party: Derived[] = [], humans = 1, partyBags: { bag: Hero['bag']; revives: number }[] = []) {
     this.humans = Math.max(1, humans); this.lootOf = Array.from({ length: this.humans }, () => []);
     this.nightmare = nightmare; if (nightmare) hard = true;
     this.stage = stage = { ...stage, platforms: stage.platforms.map(p => ({ ...p })) };
@@ -243,7 +243,7 @@ export class World {
       idx, cpu: idx >= this.humans, revT: 0, landed: false,
       echo: null, shield: 0, shieldT: 0, bubbleCd: 0, spikeCd: 0, zapN: 0, peakY: stage.groundY,
     });
-    this.heroes = [mk(d, 0, 100, bag, revives), ...party.map((pd, i) => mk(pd, i + 1, 60 - i * 30, [], 0))];
+    this.heroes = [mk(d, 0, 100, bag, revives), ...party.map((pd, i) => mk(pd, i + 1, 60 - i * 30, partyBags[i]?.bag ?? [], partyBags[i]?.revives ?? 0))];
     this.cur = this.heroes[0];
     // Hard mode: every monster +HARD_LV levels
     this.variant = stage.boss ? undefined : variant; // bosses are never changed by the story

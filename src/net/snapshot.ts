@@ -35,6 +35,7 @@ export interface Snapshot {
   ch: number[] | null;  // chase [x, on, done]
   lo: number[][][];     // each player's loot [tier, ilvl]
   run: number[];        // RunStats values (RUN_KEYS order)
+  bg?: number[][];      // each hero's quick-bag counts, then Second Helpings left
 }
 
 export function makeSnapshot(w: World): Snapshot {
@@ -59,6 +60,7 @@ export function makeSnapshot(w: World): Snapshot {
     ch: w.chase ? [r(w.chase.x), b(w.chase.on), b(w.chase.done)] : null,
     lo: w.lootOf.map(l => l.map(x => [x.tier, x.ilvl])),
     run: RUN_KEYS.map(k => r1(w.run[k])),
+    bg: w.heroes.map(h => [...h.bag.map(q => q?.n ?? 0), h.revives]),
   };
 }
 
@@ -115,4 +117,9 @@ export function applySnapshot(w: World, s: Snapshot): void {
   if (w.chase && s.ch) { const [x, on, done] = s.ch; Object.assign(w.chase, { x, on: !!on, done: !!done }); }
   s.lo.forEach((l, i) => { if (w.lootOf[i]) w.lootOf[i] = l.map(([tier, ilvl]) => ({ tier: tier as BoxTier, ilvl })); });
   RUN_KEYS.forEach((k, i) => { w.run[k] = s.run[i] ?? 0; });
+  s.bg?.forEach((a, i) => {
+    const h = w.heroes[i]; if (!h) return;
+    h.bag.forEach((q, k) => { if (q) q.n = a[k] ?? q.n; });
+    h.revives = a[a.length - 1] ?? h.revives;
+  });
 }

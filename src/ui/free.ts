@@ -34,7 +34,7 @@ export function initFree(fn: (run: FreeRun) => void): void {
 
 export function freeData(): NonNullable<typeof save.free> { return (save.free ??= { endless: {}, rush: {} }); }
 export const freeUnlocked = () => !!hero().cleared['1-10'];
-const beatenBosses = () => WORLDS.filter(w => hero().cleared[`${w.id}-10`]).map(w => w.id);
+export const beatenBosses = () => WORLDS.filter(w => hero().cleared[`${w.id}-10`]).map(w => w.id);
 const mmss = (t: number) => `${Math.floor(t / 60)}:${String(Math.floor(t % 60)).padStart(2, '0')}`;
 
 /** The FREE PLAY tab. */
@@ -72,6 +72,7 @@ function panel(html: string): HTMLElement {
   return el;
 }
 const close = () => el?.classList.remove('on');
+export const closeFree = close;
 const boxesHtml = (b: LootBox[]) => b.length ? `<div class="gots">${b.map(x => `<img src="art/box-${x.tier}.webp" title="${TIER_NAMES[x.tier]}">`).join('')}</div>` : '';
 
 /** Endless: pick one of three perks (or bank your boxes and stop). */
@@ -82,6 +83,15 @@ export function pickPerk(floor: number, choices: Perk[], got: LootBox[], onPick:
     <div class="btns"><button class="pill" data-stop="1">BANK IT &amp; STOP</button></div>`);
   p.querySelectorAll<HTMLElement>('[data-i]').forEach(b => b.addEventListener('click', () => { close(); sfx('click'); onPick(choices[Number(b.dataset.i)]); }));
   p.querySelector('[data-stop]')!.addEventListener('click', () => { close(); onStop(); });
+}
+
+/** Online Endless, for friends: the host is choosing the next perk (it goes to everyone). */
+export function waitPerk(floor: number, choices: Perk[], got: LootBox[], onLeave: () => void): void {
+  sfx('reveal3');
+  const p = panel(`<h2>FLOOR ${floor} CLEAR!</h2>${boxesHtml(got)}<p>The host is picking a perk for everyone…</p>
+    <div class="perks">${choices.map(c => `<div class="perk wait"><i>${c.icon}</i><b>${c.name}</b><span>${c.text}</span></div>`).join('')}</div>
+    <div class="btns"><button class="pill" data-leave="1">LEAVE ROOM</button></div>`);
+  p.querySelector('[data-leave]')!.addEventListener('click', () => { close(); onLeave(); });
 }
 
 /** End of a free run. */
@@ -104,7 +114,7 @@ const CSS = `
 #freepanel .gots img { height: 7vmin; margin: 0 0.4vmin; }
 #freepanel .perks { display: flex; gap: 1.6vmin; justify-content: center; margin: 1.4vmin 0; }
 #freepanel .perk { width: 24vmin; padding: 1.6vmin 1vmin; border-radius: 2vmin; border: 2px solid #ffd27a88; background: #1a1020; color: #ffe9c7; display: flex; flex-direction: column; align-items: center; gap: 0.6vmin; font: inherit; }
-#freepanel .perk:active { transform: scale(0.96); }
+#freepanel .perk:active { transform: scale(0.96); } #freepanel .perk.wait { opacity: 0.75; }
 #freepanel .perk i { font-style: normal; font-size: 6vmin; } #freepanel .perk b { font-family: 'Luckiest Guy', sans-serif; font-size: 2.8vmin; color: #ffd27a; } #freepanel .perk span { font-size: 2.1vmin; }
 #freepanel .btns { display: flex; gap: 2vmin; justify-content: center; margin-top: 1.4vmin; }
 .kq .free { display: flex; flex-direction: column; gap: 1.4vmin; }

@@ -2,7 +2,9 @@
 // the boss, loot boxes, skill effects, the exit. Started from the camp; reports results back to the save.
 import * as Phaser from 'phaser';
 import { playMusic, sfx, toggleMute } from '../audio';
-import { initHud, showHud, showPause, toast, updateHud } from '../hud';
+import { initHud, setEmotes, setMateNames, showHud, showPause, toast, updateHud } from '../hud';
+import { EMOTES } from '../net/net';
+import type { Derived } from '../sim/stats';
 import { readInput, takeTaps } from '../input';
 import { TIER_COLORS, TIER_NAMES } from '../sim/loot';
 import { CONSUMABLES } from '../sim/consumables';
@@ -25,9 +27,9 @@ import { QUIPS } from '../story/more';
 import { CLASSES } from '../sim/classes';
 import { setGearUi, setSkillUi, setTouchVisible, setUltUi } from '../touch';
 import { hideCamp, runGacha, showCamp, showResult, stageUnlocked } from '../ui/camp';
-import { type NetPlay, inGame, kitOf, leaveOnline, net, showOnline } from '../ui/online';
-import { type FreeRun, bossName, freeData, freeSummary, mmss, pickPerk } from '../ui/free';
-import { endlessFloor, endlessReward, perkChoices, withPerks } from '../sim/free';
+import { type NetPlay, inGame, kitOf, launch, leaveOnline, net, netRunBoxes, showOnline } from '../ui/online';
+import { type FreeRun, beatenBosses, bossName, freeData, freeSummary, mmss, pickPerk, waitPerk } from '../ui/free';
+import { endlessFloor, endlessReward, perkChoices, rushStages, withPerks } from '../sim/free';
 import type { LootBox } from '../sim/types';
 import { applySnapshot, makeSnapshot, type Snapshot } from '../net/snapshot';
 import { type Input, NO_INPUT } from '../sim/types';
@@ -86,7 +88,7 @@ export class GameScene extends Phaser.Scene {
   private hard = false;
   private nightmare = false;
   /** teammates (CPU buddy or online friends): puppet, shadow, name tag, and a bot when the CPU plays them */
-  private mates: { i: number; view: HeroView; shadow: Phaser.GameObjects.Ellipse; tag: Phaser.GameObjects.Text; name: string; bot?: Bot }[] = [];
+  private mates: { i: number; view: HeroView; shadow: Phaser.GameObjects.Ellipse; tag: Phaser.GameObjects.Text; name: string; bot?: Bot; emo?: string; emoT?: number }[] = [];
   /** free mode run in progress (null = story) */
   private free: FreeRun | null = null;
   /** online co-op: who we are and who's playing (null = offline) */
@@ -164,8 +166,10 @@ export class GameScene extends Phaser.Scene {
     }
     hideCamp();
     this.online = data.online ?? null;
-    this.free = data.free ?? null;
+    const nf = this.online?.free;
     this.me = this.online?.seat ?? 0;
+    // online Free Play: the run as this device sees it (its own boxes, its own health)
+    this.free = data.free ?? (nf ? { mode: nf.mode, stage: nf.stage, floor: nf.floor, seed: nf.seed, perks: nf.perks, hpFrac: nf.hp[this.me] ?? 1, time: nf.time, boxes: netRunBoxes } : null);
     this.netAcc = 0; this.netEvents = []; this.inbox = []; this.latch = { ...NO_INPUT };
     this.stage = this.free ? this.free.stage : stageById(data.stage);
     this.hookNet();
@@ -178,16 +182,19 @@ export class GameScene extends Phaser.Scene {
     this.hard = on ? on.hard : save.hard && this.hardOk() && !this.free;
     this.nightmare = on ? on.nightmare : this.hard && !!save.nightmare && !!hero().hardCleared[`${st.world}-10`];
     const fr = this.free;
-    if (fr) {
+    if (fr && !on) {
       // free mode: your stats plus the run's perks, health carried over, no story rules
       this.world = new World(st, withPerks(derive(p), fr.perks), fr.seed + fr.floor * 101, quickBag(), save.items.revive ?? 0, false, undefined, [], undefined, false,
         this.buddySpecies() !== null ? [derive(buddyProfile(this.buddySpecies()!, p.level))] : []);
       this.world.hero.hp = Math.max(1, Math.round(this.world.hero.d.maxHp * fr.hpFrac));
     } else if (on) {
       // online: the same stage for everyone (no story twists, nemesis or spicy rules); only the host keeps potions
-      const host = on.role === 'host';
-      this.world = new World(st, derive(on.kits[0].profile), on.seed, host ? quickBag() : [], host ? save.items.revive ?? 0 : 0, this.hard, undefined, [], undefined, this.nightmare,
-        on.kits.slice(1).map(k => derive(k.profile)), on.kits.length);
+      // everyone brings their own quick bag and Second Helpings; in Free Play the run's perks go to the whole team
+      const host = on.role === 'host', pk = (d: Derived) => fr ? withPerks(d, fr.perks) : d;
+      const k0 = on.kits[0];
+      this.world = new World(st, pk(derive(k0.profile)), on.seed, k0.bag ?? (host ? quickBag() : []), k0.revives ?? (host ? save.items.revive ?? 0 : 0), this.hard, undefined, [], undefined, this.nightmare,
+        on.kits.slice(1).map(k => pk(derive(k.profile))), on.kits.length, on.kits.slice(1).map(k => ({ bag: k.bag ?? [], revives: k.revives ?? 0 })));
+      if (on.free) this.world.heroes.forEach((h, i) => { h.hp = Math.max(1, Math.round(h.d.maxHp * (on.free!.hp[i] ?? 1))); });
       this.world.view(this.me);
     } else this.world = new World(st, derive(p), (Date.now() & 0xffff) + 1, quickBag(), save.items.revive ?? 0, this.hard, STORIES[p.species]?.variants[st.id], [...(save.spicy ?? [])], nemesisOf(p.species), this.nightmare,
       this.buddySpecies() !== null ? [derive(buddyProfile(this.buddySpecies()!, p.level))] : []);
@@ -272,6 +279,9 @@ export class GameScene extends Phaser.Scene {
     };
     if (this.online) this.online.kits.forEach((k, i) => { if (i !== this.me) addMate(i, k.profile, k.name); });
     else if (bsp !== null && w.heroes[1]) addMate(1, save.heroes[bsp], 'CPU', new Bot(w, AVERAGE, (Date.now() & 0xff) + 5, 1));
+    this.nameMates();
+    setEmotes(this.online ? EMOTES : null, this.online ? e => this.sendEmote(e) : null);
+    if (this.online?.free?.picked) this.time.delayedCall(1800, () => toast(`Perk for the team: ${this.online!.free!.picked}`, { color: '#a8f0a8' }));
     this.cx = w.hero.x; this.cy = st.groundY - 100;
     cam.centerOn(this.cx, this.cy);
     if (w.variant === 'night') { this.add.rectangle(SX, SY, VW * 2, VH * 2, 0x0a0a30, 0.42).setOrigin(0, 0).setScrollFactor(0).setDepth(15); }
@@ -299,6 +309,24 @@ export class GameScene extends Phaser.Scene {
   private pause(on: boolean): void {
     if (!this.world || this.done) return;
     this.paused = on; showPause(on); setTouchVisible(!on);
+  }
+
+  /** HUD names for teammates (online friends by name, or CPU). */
+  private nameMates(): void { setMateNames(Object.fromEntries(this.mates.map(m => [m.i, m.bot ? `CPU ${this.world?.heroes[m.i]?.d.cls.name ?? ''}` : m.name]))); }
+
+  // ---------- quick chat ----------
+  private sendEmote(e: number): void {
+    if (!this.online || !EMOTES[e] || this.done) return;
+    this.showEmote(this.me, e);
+    if (this.online.role === 'host') net.host?.broadcast({ t: 'emo', e, seat: 0 });
+    else net.guest?.send({ t: 'emo', e });
+  }
+  private showEmote(seat: number, e: number): void {
+    const line = EMOTES[e]; if (!line || !this.world) return;
+    sfx('click');
+    if (seat === this.me) { this.bubble(line, 'hero', '#1a4060'); return; }
+    const m = this.mates.find(x => x.i === seat);
+    if (m) { m.emo = line; m.emoT = 3; }
   }
 
   private leave(): void {
@@ -353,6 +381,59 @@ export class GameScene extends Phaser.Scene {
     later(() => freeSummary('BOSS RUSH CLEAR!', [`${run.floor} bosses in ${mmss(time)}${best ? ' · NEW BEST!' : ` (best ${mmss(f.rush[sp])})`}`], run.boxes, toCamp));
   }
 
+/** After an online Free Play stage. Everyone banks their own boxes and records their own bests; the host picks the
+   *  Endless perk for the team and sends everyone on to the next floor or boss. */
+  private finishFreeOnline(failed: boolean): void {
+    const w = this.world!, run = this.free!, on = this.online!, nf = on.free!, sp = hero().species, f = freeData();
+    const host = on.role === 'host';
+    const found: LootBox[] = failed ? [] : (w.lootOf[this.me] ?? []).map(b => ({ ...b }));
+    const bank = (b: LootBox[]) => { save.boxes.push(...b); run.boxes.push(...b); persist(); };
+    const room = () => this.backToRoom(false);
+    const later = (fn: () => void) => this.time.delayedCall(failed ? 700 : 500, fn);
+    // health left by host-side id (0 = the host), so it follows each player even if someone leaves
+    const hpBy = (add: number) => new Map(w.heroes.map((h, i) => [i === 0 ? 0 : on.guests[i - 1], Math.min(1, h.hp / h.d.maxHp + add)] as [number, number]));
+    const next = (n: typeof nf) => { if (!launch(n, hpBy(n.mode === 'rush' ? 0.5 : 0))) room(); };
+    if (run.mode === 'daily') {
+      const extra: LootBox[] = !failed && f.daily !== run.seed ? [{ tier: 4, ilvl: hero().level }] : [];
+      if (extra.length) f.daily = run.seed;
+      bank([...found, ...extra]);
+      later(() => freeSummary(failed ? 'KNOCKED OUT!' : 'DAILY DUNGEON CLEAR!', [failed ? 'Everyone is down. Try again from the room!' : `Time ${mmss(w.run.time)}${extra.length ? ' · Today\'s bonus box claimed!' : ''}`], run.boxes, room));
+      return;
+    }
+    if (run.mode === 'endless') {
+      if (failed) { later(() => freeSummary('THE PANTRY WINS!', [`Your team reached floor ${run.floor}.`, `Your best: floor ${f.endless[sp] ?? 0}`], run.boxes, room)); return; }
+      const got = [...found, { tier: endlessReward(run.floor), ilvl: w.stage.lv[1] }];
+      bank(got);
+      f.endless[sp] = Math.max(f.endless[sp] ?? 0, run.floor); persist();
+      const choices = perkChoices(run.floor, run.seed);
+      const banked = () => freeSummary('BANKED!', [`Your team cleared ${run.floor} floor${run.floor > 1 ? 's' : ''}.`, `Your best: floor ${f.endless[sp]}`], run.boxes, room);
+      if (host) {
+        later(() => pickPerk(run.floor, choices, got, perk => {
+          const fl = run.floor + 1, hp = hpBy(perk.id === 'heal' ? 0.6 : 0.1);
+          if (!launch({ ...nf, floor: fl, stage: endlessFloor(fl, nf.lv, nf.seed), perks: [...nf.perks, perk.id], picked: `${perk.icon} ${perk.name}` }, hp)) room();
+        }, () => { net.host?.broadcast({ t: 'freeEnd' }); banked(); }));
+      } else {
+        inGame.freeEnd = banked;
+        later(() => waitPerk(run.floor, choices, got, () => { leaveOnline(); this.scene.restart({}); }));
+      }
+      return;
+    }
+    // Boss Rush
+    if (failed) { later(() => freeSummary('BOSS RUSH OVER', [`${bossName(run.stage)} got your team on fight ${run.floor}.`, f.rush[sp] ? `Your best time: ${mmss(f.rush[sp])}` : ''], run.boxes, room)); return; }
+    bank(found);
+    const time = run.time + w.run.time;
+    if (run.floor < (nf.total ?? 0)) {
+      const up = host ? rushStages(beatenBosses(), nf.lv)[run.floor] : undefined;
+      toast(`${bossName(run.stage)} down!${up ? ` Next up: ${bossName(up)}` : ' Next boss coming up…'}`, { big: true, color: '#ffd27a' });
+      if (host && up) this.time.delayedCall(1600, () => next({ ...nf, floor: run.floor + 1, stage: up, time, picked: undefined }));
+      return;
+    }
+    const best = !f.rush[sp] || time < f.rush[sp];
+    if (best) f.rush[sp] = Math.round(time);
+    bank([{ tier: 5, ilvl: hero().level }]);
+    later(() => freeSummary('BOSS RUSH CLEAR!', [`${run.floor} bosses in ${mmss(time)}${best ? ' · NEW BEST!' : ` (your best ${mmss(f.rush[sp])})`}`], run.boxes, room));
+  }
+
   // ---------- online co-op ----------
   private hookNet(): void {
     const on = this.online;
@@ -362,11 +443,14 @@ export class GameScene extends Phaser.Scene {
       const i = on.guests.indexOf(g) + 1, w = this.world;
       if (i <= 0 || !w || this.done) return;
       const m = this.mates.find(x => x.i === i);
-      if (m && !m.bot) { m.bot = new Bot(w, AVERAGE, i * 31 + 7, i); m.name = 'CPU'; toast(`${on.kits[i].name} left: the CPU takes over their kaiju`, { color: '#a8e8ff' }); }
+      if (m && !m.bot) { m.bot = new Bot(w, AVERAGE, i * 31 + 7, i); m.name = 'CPU'; this.nameMates(); toast(`${on.kits[i].name} left: the CPU takes over their kaiju`, { color: '#a8e8ff' }); }
     };
-    inGame.kit = (g, kit) => { const i = on.guests.indexOf(g) + 1; if (i > 0 && this.world && !this.done) this.world.setDerivedOf(i, derive(kit.profile)); };
+    inGame.kit = (g, kit) => { const i = on.guests.indexOf(g) + 1; if (i > 0 && this.world && !this.done) this.world.setDerivedOf(i, this.free ? withPerks(derive(kit.profile), this.free.perks) : derive(kit.profile)); };
+    inGame.emo = (seat, e) => { if (seat !== this.me) this.showEmote(seat, e); };
+    inGame.emoFrom = (g, e) => { const seat = on.guests.indexOf(g) + 1; if (seat > 0) { this.showEmote(seat, e); net.host?.broadcast({ t: 'emo', e, seat }); } };
+    inGame.freeEnd = null;
   }
-  private unhookNet(): void { inGame.snap = inGame.left = inGame.kit = null; }
+  private unhookNet(): void { inGame.snap = inGame.left = inGame.kit = inGame.emo = inGame.emoFrom = inGame.freeEnd = null; setEmotes(null, null); }
 
   /** Host: send the stage to friends ~15 times a second (~8 when someone is on the slower backup route). */
   private hostBroadcast(dt: number): void {
@@ -415,6 +499,8 @@ export class GameScene extends Phaser.Scene {
     for (const k of takeTaps()) {
       if (k === 'Escape' && this.world && !this.done) this.pause(!this.paused);
       if (k === 'KeyM') toast(toggleMute() ? 'Sound off' : 'Sound on');
+      const ei = ['Digit7', 'Digit8', 'Digit9', 'Digit0'].indexOf(k);
+      if (ei >= 0 && this.online && this.world) this.sendEmote(ei);
     }
     const w = this.world;
     if (!w || (this.paused && !this.online)) return;
@@ -612,12 +698,14 @@ export class GameScene extends Phaser.Scene {
     setTouchVisible(false);
     sfx(failed ? 'fail' : 'clear');
     playMusic(null);
-    if (this.online?.role !== 'guest') syncQuickBag(w.hero.bag, w.hero.revives);
+    syncQuickBag(w.hero.bag, w.hero.revives); // online, w.hero is this player's own kaiju
+    if (this.online?.role === 'guest') net.guest?.send({ t: 'kit', kit: kitOf() });
     const chillies = w.spicy.length;
     if (!failed && chillies) w.run.crumbs = Math.round(w.run.crumbs * (1 + 0.25 * chillies));
     save.crumbs += w.run.crumbs;
     save.items.fstone = (save.items.fstone ?? 0) + w.run.stones;
     if (w.run.crumbs) track('crumbs', w.run.crumbs);
+    if (this.free && this.online) { this.finishFreeOnline(failed); return; }
     if (this.free) { this.finishFree(failed); return; }
     const res = failed ? null : finishStage(st.id, rankOf(w.run, st.par).rank, w.lootOf[Math.min(this.me, w.lootOf.length - 1)], st.lv[1] + (this.hard ? HARD_LV : 0), !!st.boss, this.hard, chillies, this.nightmare);
     const sp = hero().species;
@@ -885,7 +973,14 @@ export class GameScene extends Phaser.Scene {
       m.view.update(o, t, dt); m.view.flash(o.state === 'hurt' && o.t < 0.08);
       const bf = w.floorBelow(o.x, o.y, o.y + 2000, false);
       m.shadow.setPosition(o.x, (bf ? bf.y : st.groundY) - 1).setAlpha(o.state === 'climb' ? 0 : 1);
-      m.tag.setPosition(o.x, o.y - 100).setText(o.state === 'down' ? (o.revT > 0 ? `REVIVING ${Math.round(o.revT / 2 * 100)}%` : 'DOWN! Stand by me') : m.name);
+      if (m.emoT && m.emoT > 0) m.emoT -= dt;
+      const label = o.state === 'down' ? (o.revT > 0 ? `REVIVING ${Math.round(o.revT / 2 * 100)}%` : 'DOWN! Stand by me') : m.name;
+      const wv = this.cameras.main.worldView;
+      const off = o.x < wv.x || o.x > wv.right || o.y - 60 < wv.y || o.y - 20 > wv.bottom;
+      const tx = Phaser.Math.Clamp(o.x, wv.x + 34, wv.right - 34), ty = Phaser.Math.Clamp(o.y - 100, wv.y + 16, wv.bottom - 30);
+      const arrow = !off ? '' : o.x < wv.x ? '◀ ' : o.x > wv.right ? '' : o.y - 60 < wv.y ? '▲ ' : '▼ ';
+      m.tag.setPosition(tx, ty).setText(`${m.emoT && m.emoT > 0 ? m.emo + '\n' : ''}${arrow}${label}${off && o.x > wv.right ? ' ▶' : ''}`).setAlign('center')
+        .setColor(o.state === 'down' ? '#ff9a8a' : '#a8e8ff').setScale(off ? 0.9 : 1);
     }
     // you're down but a teammate isn't: hang on
     if (h.state === 'down' && mate && !this.downWarned) { this.downWarned = true; toast(this.online ? 'You\'re down! Wait for a friend to stand next to you' : 'You\'re down! Your buddy is coming to pick you up', { color: '#a8e8ff' }); }

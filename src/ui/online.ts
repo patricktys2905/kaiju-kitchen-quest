@@ -1,11 +1,14 @@
 // Online co-op lobby (HTML overlay): host a room or join one by its 4-letter code, see who's in, the host picks the
 // stage and starts. The room stays open between stages: after each result everyone comes back here.
 // The connections live in this module so they survive the game scene restarting between stages.
-import { type Kit, type LobbySeat, MAX_GUESTS, NetGuest, NetHost, type NetMsg } from '../net/net';
+import { type Kit, type LobbySeat, MAX_GUESTS, NetGuest, NetHost, type NetFree, type NetMsg } from '../net/net';
+import { dailyStage, dayKey, endlessFloor, rushStages } from '../sim/free';
+import { beatenBosses, closeFree, freeUnlocked } from './free';
+import type { LootBox } from '../sim/types';
 import type { HeroProfile } from '../sim/stats';
 import { BONUS_STAGES, STAGES, stageById } from '../sim/stages';
 import { CLASSES } from '../sim/classes';
-import { hero, persist, save } from '../save';
+import { hero, persist, quickBag, save } from '../save';
 import { hardUnlocked, stageUnlocked } from './camp';
 import { sfx } from '../audio';
 
@@ -18,7 +21,15 @@ export interface NetPlay {
   hard: boolean;
   nightmare: boolean;
   guests: number[];
+  /** a Free Play run (Daily / Endless / Boss Rush) instead of a story stage */
+  free?: NetFree;
 }
+
+/** Room mode: a story stage, or one of the Free Play runs. */
+type Mode = 'story' | NetFree['mode'];
+const MODE_NAMES: Record<Mode, string> = { story: 'Story stage', daily: '📅 Daily Dungeon', endless: '🥫 Endless Pantry', rush: '👑 Boss Rush' };
+/** Boxes this device banked during the current online Free Play run (for the summary). */
+export const netRunBoxes: LootBox[] = [];
 
 export const net: { host: NetHost | null; guest: NetGuest | null } = { host: null, guest: null };
 /** Set by the game scene while a stage runs (snapshots, a friend leaving, a friend levelling up). */
@@ -26,7 +37,12 @@ export const inGame: {
   snap: ((m: Extract<NetMsg, { t: 'snap' }>) => void) | null;
   left: ((guest: number) => void) | null;
   kit: ((guest: number, kit: Kit) => void) | null;
-} = { snap: null, left: null, kit: null };
+  /** a quick-chat line: from a seat (guests hear it from the host), or from a guest id (the host relays it) */
+  emo: ((seat: number, e: number) => void) | null;
+  emoFrom: ((guest: number, e: number) => void) | null;
+  /** online Endless: the host banked the run */
+  freeEnd: (() => void) | null;
+} = { snap: null, left: null, kit: null, emo: null, emoFrom: null, freeEnd: null };
 
 let el: HTMLElement;
 let startGame: (stage: string, play: NetPlay) => void = () => {};
@@ -34,13 +50,14 @@ let toCamp: () => void = () => {};
 let status = '', statusOk = true;
 /** host: who's in (host-side guest id → their kit + route) */
 const guests = new Map<number, { kit: Kit; route: 'direct' | 'backup' }>();
-let stage = '1-1', hard = false, nightmare = false;
+let stage = '1-1', hard = false, nightmare = false, mode: Mode = 'story';
 /** guest: the latest lobby from the host */
 let lobby: Extract<NetMsg, { t: 'lobby' }> | null = null;
 
 /** Only what the host needs to build your kaiju (no quest counters or story flags). */
 export function kitOf(p: HeroProfile = hero()): Kit {
-  return { name: save.netName || 'Player', profile: { species: p.species, level: p.level, xp: 0, statPts: 0, alloc: p.alloc, skillPts: 0, skills: p.skills, equip: p.equip, branch: p.branch, cleared: {}, hardCleared: {}, stats: {}, kq: [], seen: [] } };
+  return { name: save.netName || 'Player', profile: { species: p.species, level: p.level, xp: 0, statPts: 0, alloc: p.alloc, skillPts: 0, skills: p.skills, equip: p.equip, branch: p.branch, cleared: {}, hardCleared: {}, stats: {}, kq: [], seen: [] },
+    bag: quickBag(), revives: save.items.revive ?? 0 };
 }
 
 export function initOnline(start: (stage: string, play: NetPlay) => void, camp: () => void): void {
@@ -71,21 +88,22 @@ function seats(): LobbySeat[] {
 
 function broadcastLobby(): void {
   const h = net.host; if (!h) return;
-  const s = seats(), nm = stageById(stage).name;
-  s.forEach((_, i) => { if (i > 0) h.send(s[i].guest!, { t: 'lobby', seats: s, you: i, stage, stageName: `${stageById(stage).num} ${nm}`, hard, nightmare }); });
+  const s = seats(), nm = mode === 'story' ? `${stageById(stage).num} ${stageById(stage).name}` : MODE_NAMES[mode];
+  s.forEach((_, i) => { if (i > 0) h.send(s[i].guest!, { t: 'lobby', seats: s, you: i, stage, stageName: nm, hard: mode === 'story' && hard, nightmare: mode === 'story' && nightmare }); });
 }
 
 function host(): void {
   const h = new NetHost();
   net.host = h; guests.clear();
   const open = [...STAGES].reverse().find(stageUnlocked);
-  stage = open?.id ?? '1-1'; hard = false; nightmare = false;
+  stage = open?.id ?? '1-1'; hard = false; nightmare = false; mode = 'story';
   h.onStatus = (t, ok) => { status = t; statusOk = ok; render(); };
   h.onGuestJoin = (g, name, route, kit) => {
     if (inGame.snap || guests.size >= MAX_GUESTS) { h.send(g, { t: 'bye', reason: guests.size >= MAX_GUESTS ? 'That room is full (4 players).' : 'They\'re in the middle of a stage. Try again in a minute.' }); return; }
     guests.set(g, { kit: { ...kit, name: (name || kit.name).slice(0, 14) }, route }); sfx('pickup'); broadcastLobby(); render();
   };
   h.onKit = (g, kit) => { const v = guests.get(g); if (v) v.kit = { ...kit, name: v.kit.name }; inGame.kit?.(g, kit); if (!inGame.snap) { broadcastLobby(); render(); } };
+  h.onEmote = (g, e) => inGame.emoFrom?.(g, e);
   h.onGuestLeave = g => { guests.delete(g); inGame.left?.(g); if (!inGame.snap) { broadcastLobby(); render(); } };
   h.open();
   status = 'Opening a room…'; statusOk = true;
@@ -99,15 +117,18 @@ function join(code: string): void {
   g.onClosed = reason => {
     net.guest = null; lobby = null;
     status = reason; statusOk = false;
-    if (inGame.snap) { toCamp(); setTimeout(showOnline, 60); } else render();
+    if (inGame.snap) { closeFree(); toCamp(); setTimeout(showOnline, 60); } else render();
   };
   g.onMsg = m => {
     if (m.t === 'snap') inGame.snap?.(m);
+    else if (m.t === 'emo') inGame.emo?.(m.seat ?? 0, m.e);
+    else if (m.t === 'freeEnd') inGame.freeEnd?.();
     else if (m.t === 'lobby') { lobby = m; if (el.classList.contains('on')) render(); }
     else if (m.t === 'start') {
       document.getElementById('result')?.classList.remove('on');
-      hide();
-      startGame(m.stage, { role: 'guest', seat: m.seat, kits: m.kits, seed: m.seed, hard: m.hard, nightmare: m.nightmare, guests: [] });
+      closeFree(); hide();
+      if (m.free?.floor === 1) netRunBoxes.length = 0;
+      startGame(m.stage, { role: 'guest', seat: m.seat, kits: m.kits, seed: m.seed, hard: m.hard, nightmare: m.nightmare, guests: [], free: m.free });
     }
   };
   g.join(code, save.netName || 'Player');
@@ -116,19 +137,50 @@ function join(code: string): void {
 export function leaveOnline(): void {
   net.host?.close(); net.guest?.close();
   net.host = null; net.guest = null; guests.clear(); lobby = null;
-  inGame.snap = inGame.left = inGame.kit = null;
+  inGame.snap = inGame.left = inGame.kit = inGame.emo = inGame.emoFrom = inGame.freeEnd = null;
   status = '';
 }
 
-function start(): void {
-  const h = net.host; if (!h || !guests.size) return;
+/** Average level of everyone in the room (Free Play monsters scale to it). */
+export function partyLevel(): number {
+  const lv = [hero().level, ...[...guests.values()].map(v => v.kit.profile.level)];
+  return Math.round(lv.reduce((a, b) => a + b, 0) / lv.length);
+}
+
+/** The first stage of an online Free Play run. */
+function firstFree(m: NetFree['mode']): NetFree | null {
+  const lv = partyLevel(), seed = (Date.now() & 0xffff) + 1;
+  const base = { mode: m, floor: 1, seed, perks: [], time: 0, hp: [], lv };
+  if (m === 'daily') return { ...base, seed: dayKey(), stage: dailyStage(dayKey(), lv) };
+  if (m === 'endless') return { ...base, stage: endlessFloor(1, lv, seed) };
+  const q = rushStages(beatenBosses(), lv);
+  return q.length ? { ...base, stage: q[0], total: q.length } : null;
+}
+
+/** Host: send everyone into a stage (a story stage, or the next stage of a Free Play run; then health carries over,
+ *  looked up by host-side guest id with 0 for the host). Free Play goes on even if every friend has left. */
+export function launch(free?: NetFree, hpBy?: Map<number, number>): boolean {
+  const h = net.host; if (!h || (!guests.size && !free)) return false;
   const order = [...guests.keys()];
   const kits = [kitOf(), ...order.map(g => guests.get(g)!.kit)];
   kits[0].name = save.netName || 'Host';
   const seed = (Date.now() & 0xffff) + 1;
-  order.forEach((g, i) => h.send(g, { t: 'start', stage, seed, kits, seat: i + 1, hard, nightmare }));
+  const hd = !free && hard, nm = !free && nightmare, id = free ? free.stage.id : stage;
+  if (free) {
+    free = { ...free, hp: [0, ...order].map(g => hpBy?.get(g) ?? 1) };
+    if (free.floor === 1) netRunBoxes.length = 0;
+  }
+  order.forEach((g, i) => h.send(g, { t: 'start', stage: id, seed, kits, seat: i + 1, hard: hd, nightmare: nm, free }));
   hide();
-  startGame(stage, { role: 'host', seat: 0, kits, seed, hard, nightmare, guests: order });
+  startGame(id, { role: 'host', seat: 0, kits, seed, hard: hd, nightmare: nm, guests: order, free });
+  return true;
+}
+
+function start(): void {
+  if (!guests.size) return;
+  if (mode === 'story') { launch(); return; }
+  const f = firstFree(mode);
+  if (f) launch(f);
 }
 
 const esc = (s: string) => s.replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]!));
@@ -139,15 +191,22 @@ function render(): void {
   let body: string;
   if (net.host) {
     const all = [...STAGES, ...BONUS_STAGES].filter(stageUnlocked);
+    const fOk = freeUnlocked(), nb = beatenBosses().length;
+    if (!fOk || (mode === 'rush' && !nb)) mode = 'story';
+    const modes = (Object.keys(MODE_NAMES) as Mode[]).filter(m => m === 'story' || (fOk && (m !== 'rush' || nb > 0)));
     const sel = stageById(stage), hOk = hardUnlocked(sel.world), nOk = !!hero().hardCleared[`${sel.world}-10`];
+    const modeInfo: Record<Mode, string> = { story: '', daily: `Today's stage, monsters at your average level (Lv ${partyLevel()}). Everyone can claim their own daily bonus box.`,
+      endless: `Arena floors that keep getting tougher (start Lv ${partyLevel()}). You pick a perk for the whole team after each floor.`,
+      rush: `All ${nb} bosses you've beaten, back to back. Health carries over.` };
     if (!hOk) hard = false;
     if (!hard || !nOk) nightmare = false;
     body = `<h2>ROOM <span class="code">${net.host.code || '····'}</span></h2>
       <p class="hint">Friends tap <b>ONLINE CO-OP → JOIN</b> and type this code. Up to 4 players.</p>
       <div class="seats">${seats().map((s, i) => seatHtml(s, i === 0)).join('')}${Array.from({ length: MAX_GUESTS - guests.size }, () => '<div class="seat empty">waiting…</div>').join('')}</div>
-      <div class="row"><label>Stage <select data-f="stage">${all.map(s => `<option value="${s.id}" ${s.id === stage ? 'selected' : ''}>${s.num} ${esc(s.name)} (Lv ${s.lv[0]}–${s.lv[1]})</option>`).join('')}</select></label>
+      <div class="row"><label>Play <select data-f="mode">${modes.map(m => `<option value="${m}" ${m === mode ? 'selected' : ''}>${MODE_NAMES[m]}${m === 'rush' ? ` (${nb})` : ''}</option>`).join('')}</select></label></div>
+      ${mode !== 'story' ? `<p class="hint">${modeInfo[mode]}</p>` : `<div class="row"><label>Stage <select data-f="stage">${all.map(s => `<option value="${s.id}" ${s.id === stage ? 'selected' : ''}>${s.num} ${esc(s.name)} (Lv ${s.lv[0]}–${s.lv[1]})</option>`).join('')}</select></label>
         <label class="${hOk ? '' : 'off'}"><input type="checkbox" data-f="hard" ${hard ? 'checked' : ''} ${hOk ? '' : 'disabled'}> HARD</label>
-        <label class="${nOk && hard ? '' : 'off'}"><input type="checkbox" data-f="nightmare" ${nightmare ? 'checked' : ''} ${nOk && hard ? '' : 'disabled'}> 💀 NIGHTMARE</label></div>
+        <label class="${nOk && hard ? '' : 'off'}"><input type="checkbox" data-f="nightmare" ${nightmare ? 'checked' : ''} ${nOk && hard ? '' : 'disabled'}> 💀 NIGHTMARE</label></div>`}
       <p class="hint">Monsters get tougher for each friend. Stand next to a downed friend to pick them up. Everyone gets their own loot.</p>
       ${st}
       <div class="btns"><button class="pill go big" data-o="start" ${guests.size ? '' : 'disabled'}>▶ START${guests.size ? '' : ' (waiting for friends)'}</button><button class="pill" data-o="leave">CLOSE ROOM</button></div>`;
@@ -171,6 +230,7 @@ function render(): void {
     const f = i.dataset.f;
     if (f === 'name') { save.netName = i.value.trim().slice(0, 14); persist(); }
     else if (f === 'stage') { stage = i.value; render(); broadcastLobby(); }
+    else if (f === 'mode') { mode = i.value as Mode; render(); broadcastLobby(); }
     else if (f === 'hard') { hard = (i as HTMLInputElement).checked; render(); broadcastLobby(); }
     else if (f === 'nightmare') { nightmare = (i as HTMLInputElement).checked; render(); broadcastLobby(); }
   }));

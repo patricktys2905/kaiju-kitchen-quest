@@ -5,7 +5,8 @@
 import type { MqttClient } from 'mqtt';
 import { Peer, type DataConnection } from 'peerjs';
 import type { HeroProfile } from '../sim/stats';
-import type { Input as PlayerInput, SimEvent as GameEvent } from '../sim/types';
+import type { Input as PlayerInput, SimEvent as GameEvent, StageDef } from '../sim/types';
+import type { ConsumableId } from '../sim/consumables';
 import { connectRelay, decode, encode, relayTopics } from './relay';
 import type { Snapshot } from './snapshot';
 export type { Snapshot };
@@ -25,14 +26,23 @@ export interface LobbySeat {
   route?: 'direct' | 'backup';
 }
 
-/** What each player brings: their kaiju's profile (level, stats, skills, gear) so the host can build its hero. */
-export interface Kit { name: string; profile: HeroProfile }
+/** What each player brings: their kaiju's profile (level, stats, skills, gear) so the host can build its hero,
+ *  plus their own quick bag and Second Helpings (used up on their own device). */
+export interface Kit { name: string; profile: HeroProfile; bag?: ({ id: ConsumableId; n: number } | null)[]; revives?: number }
+
+/** A Free Play run played online: the host generates each stage and sends it whole. hp is health left by seat (0-1). */
+export interface NetFree { mode: 'daily' | 'endless' | 'rush'; stage: StageDef; floor: number; seed: number; perks: string[]; time: number; hp: number[]; picked?: string; lv: number; total?: number }
+
+/** Quick chat lines (index = what goes over the wire). */
+export const EMOTES = ['👍 Nice!', '🆘 Help!', '➜ This way!', '😂 Haha!'] as const;
 
 export type NetMsg =
   | { t: 'hello'; name: string; kit: Kit }
   | { t: 'kit'; kit: Kit }
   | { t: 'lobby'; seats: LobbySeat[]; you: number; stage: string; stageName: string; hard: boolean; nightmare: boolean }
-  | { t: 'start'; stage: string; seed: number; kits: Kit[]; seat: number; hard: boolean; nightmare: boolean }
+  | { t: 'start'; stage: string; seed: number; kits: Kit[]; seat: number; hard: boolean; nightmare: boolean; free?: NetFree }
+  | { t: 'freeEnd' }
+  | { t: 'emo'; e: number; seat?: number }
   | { t: 'in'; i: PlayerInput }
   | { t: 'snap'; s: Snapshot; ev: GameEvent[] }
   | { t: 'end'; cleared: boolean; rank: string; loot: { tier: number; ilvl: number }[]; crumbs: number; xp: number; stones: number }
@@ -72,6 +82,7 @@ export class NetHost {
   private backupReady = false;
   onGuestJoin: (guest: number, name: string, route: 'direct' | 'backup', kit: Kit) => void = () => {};
   onKit: (guest: number, kit: Kit) => void = () => {};
+  onEmote: (guest: number, e: number) => void = () => {};
   onGuestLeave: (guest: number) => void = () => {};
   onStatus: (text: string, ok: boolean) => void = () => {};
 
@@ -143,6 +154,7 @@ export class NetHost {
   private handle(g: number, m: NetMsg): void {
     if (m.t === 'in') this.inputs.set(g, m.i);
     else if (m.t === 'kit') this.onKit(g, m.kit);
+    else if (m.t === 'emo') this.onEmote(g, m.e);
     else if (m.t === 'bye') this.drop(g);
   }
 

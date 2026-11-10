@@ -23,7 +23,15 @@ const CSS = `
 #hud .bar b { position: absolute; inset: 0; font-size: 1.5vmin; line-height: 1.9vmin; text-align: center; text-shadow: 0 1px 0 #000; }
 #hud .bar.ult { height: 0.9vmin; display: none; } #hud .bar.ult.on { display: block; } #hud .bar.ult i { background: linear-gradient(90deg, #ffb347, #ff5af0); } #hud .bar.ult.full i { animation: ultf 0.5s infinite alternate; } @keyframes ultf { to { filter: brightness(1.6); } }
 #hud .buff { font-size: 1.6vmin; color: #9fe0ff; min-height: 1.8vmin; }
-#hud .mate { position: absolute; left: calc(1.5vmin + env(safe-area-inset-left)); top: 25vmin; display: none; align-items: center; gap: 0.8vmin; background: #1a1020b0; border-radius: 1.4vmin; padding: 0.5vmin 1vmin; }
+#hud .mates { position: absolute; left: calc(1.5vmin + env(safe-area-inset-left)); top: 25vmin; display: flex; flex-direction: column; gap: 0.8vmin; }
+#hud .mate { display: none; align-items: center; gap: 0.8vmin; background: #1a1020b0; border-radius: 1.4vmin; padding: 0.5vmin 1vmin; }
+#hud .mate.down { background: #5a1020c0; animation: matedown 0.8s infinite alternate; }
+@keyframes matedown { to { background: #8a2030c0; } }
+#hud .emo { pointer-events: auto; width: 7vmin; height: 7vmin; border-radius: 1.6vmin; background: #24142ad0; border: 2px solid #a8e8ff; color: #a8e8ff; font-size: 3.4vmin; display: none; align-items: center; justify-content: center; }
+#hud .emo.on { display: flex; }
+#hud .emos { position: absolute; right: calc(1.5vmin + env(safe-area-inset-right)); top: 10vmin; display: none; flex-direction: column; gap: 0.8vmin; }
+#hud .emos.on { display: flex; }
+#hud .emos button { pointer-events: auto; font: inherit; font-size: 2.4vmin; padding: 1vmin 1.6vmin; border-radius: 1.4vmin; background: #24142ae6; border: 2px solid #a8e8ff; color: #fff; text-align: left; }
 #hud .mate.on { display: flex; }
 #hud .mate i { width: 4.6vmin; height: 4.6vmin; background: center/contain no-repeat; }
 #hud .mate b { font-size: 1.6vmin; color: #a8e8ff; }
@@ -92,10 +100,11 @@ export function initHud(onMenu: () => void, onResume: () => void, onLeave: () =>
   root.innerHTML = `
     <div class="card"><div class="face"></div><div><div><span class="nm"></span><span class="lv"></span></div>
       <div class="bar hp"><i></i><b></b></div><div class="bar xp"><i></i></div><div class="bar ult"><i></i></div><div class="buff"></div><div class="boosts"></div></div></div>
-    <div class="mate"><i></i><div><b></b><div class="bar"><u></u></div></div></div>
+    <div class="mates"><div class="mate"><i></i><div><b></b><div class="bar"><u></u></div></div></div><div class="mate"><i></i><div><b></b><div class="bar"><u></u></div></div></div><div class="mate"><i></i><div><b></b><div class="bar"><u></u></div></div></div></div>
+    <div class="emos"></div>
     <div class="stage"><div class="t"></div><div class="s"></div></div>
     <div class="boss"><div class="t"></div><div class="bar"><i></i><u></u></div></div>
-    <div class="right"><div class="loot"><img src="art/box-3.webp"><span>0</span></div><button class="menu">☰</button></div>
+    <div class="right"><div class="loot"><img src="art/box-3.webp"><span>0</span></div><button class="emo" title="Quick chat (keys 7 8 9 0)">💬</button><button class="menu">☰</button></div>
     <div class="combo"><b>0</b><span>HITS</span></div>
     <div class="style"><b>D</b><div class="sbar"><i></i></div><span>STYLE</span></div>
     <div class="quick">${[0, 1, 2, 3].map(i => `<div class="q" data-q="${i}"><i>${i + 1}</i><b></b><u></u></div>`).join('')}</div>
@@ -104,6 +113,11 @@ export function initHud(onMenu: () => void, onResume: () => void, onLeave: () =>
   document.body.appendChild(root);
   q = <T extends HTMLElement>(s: string) => root.querySelector<T>(s)!;
   q('.menu').addEventListener('pointerdown', e => { e.preventDefault(); onMenu(); });
+  q('.emo').addEventListener('pointerdown', e => { e.preventDefault(); q('.emos').classList.toggle('on'); });
+  q('.emos').addEventListener('pointerdown', e => {
+    const b = (e.target as HTMLElement).closest<HTMLElement>('[data-e]'); if (!b) return;
+    e.preventDefault(); q('.emos').classList.remove('on'); emoteFn?.(Number(b.dataset.e));
+  });
   root.querySelectorAll<HTMLElement>('.quick .q').forEach(el => {
     el.addEventListener('pointerdown', e => { e.preventDefault(); quickLatch[Number(el.dataset.q)] = true; el.classList.add('down'); });
     const up = () => el.classList.remove('down');
@@ -119,7 +133,21 @@ export function initHud(onMenu: () => void, onResume: () => void, onLeave: () =>
 }
 
 export function showHud(v: boolean): void { root?.classList.toggle('on', v); }
+
+let emoteFn: ((e: number) => void) | null = null;
+/** Online only: show the quick-chat button with these lines (null hides it). */
+export function setEmotes(lines: readonly string[] | null, fn: ((e: number) => void) | null): void {
+  emoteFn = fn;
+  if (!root) return;
+  q('.emo').classList.toggle('on', !!lines);
+  q('.emos').classList.remove('on');
+  q('.emos').innerHTML = (lines ?? []).map((l, i) => `<button data-e="${i}">${l} <small>${[7, 8, 9, 0][i]}</small></button>`).join('');
+}
 export function showPause(v: boolean): void { document.getElementById('pause')?.classList.toggle('on', v); }
+
+/** Teammates' names by hero index (online friends' names, or "CPU"). */
+let mateNames: Record<number, string> = {};
+export function setMateNames(n: Record<number, string>): void { mateNames = n; }
 
 export function updateHud(w: World, p: HeroProfile, st: StageDef): void {
   if (!root) return;
@@ -147,14 +175,17 @@ export function updateHud(w: World, p: HeroProfile, st: StageDef): void {
   });
   q('.stage .t').textContent = `${st.num} ${st.name}${w.spicy.length ? ' ' + '🌶'.repeat(w.spicy.length) : ''}`;
   const clock = w.spicy.includes('clock') && !w.portal ? ` · ⏱ ${Math.max(0, Math.ceil(st.par - w.run.time))}s` : '';
-  const mate = w.heroes.find(o => o !== w.hero);
-  const mc = q('.mate'); mc.classList.toggle('on', !!mate);
-  if (mate) {
+  const others = w.heroes.filter(o => o !== w.hero);
+  root.querySelectorAll<HTMLElement>('.mates .mate').forEach((mc, k) => {
+    const mate = others[k];
+    mc.classList.toggle('on', !!mate);
+    mc.classList.toggle('down', mate?.state === 'down');
+    if (!mate) return;
     const img = `url(art/kaiju-${mate.d.cls.species}.webp)`;
-    const mi = q<HTMLElement>('.mate i'); if (mi.style.backgroundImage !== img) mi.style.backgroundImage = img;
-    q('.mate b').textContent = `${mate.cpu ? 'CPU ' : ''}${mate.d.cls.name}${mate.state === 'down' ? ' (DOWN)' : ''}`;
-    q<HTMLElement>('.mate .bar u').style.transform = `scaleX(${Math.max(0, mate.hp / mate.d.maxHp)})`;
-  }
+    const mi = mc.querySelector<HTMLElement>('i')!; if (mi.style.backgroundImage !== img) mi.style.backgroundImage = img;
+    mc.querySelector('b')!.textContent = `${mateNames[mate.idx] ?? (mate.cpu ? 'CPU ' + mate.d.cls.name : mate.d.cls.name)}${mate.state === 'down' ? ' (DOWN)' : ''}`;
+    mc.querySelector<HTMLElement>('.bar u')!.style.transform = `scaleX(${Math.max(0, mate.hp / mate.d.maxHp)})`;
+  });
   const ob = st.objective;
   const goal = !ob || w.objDone ? '' : ob.kind === 'escort' && w.npc ? ` · 🧁 ${Math.ceil(w.npc.hp / w.npc.maxHp * 100)}%`
     : ob.kind === 'fetch' && w.scroll && !w.scroll.got ? ` · 📜 ${Math.max(0, Math.ceil(w.objTimer))}s`
