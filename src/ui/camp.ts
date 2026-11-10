@@ -334,11 +334,12 @@ function detail(it: Item, equipped: boolean): string {
 function marketPage(): string {
   const stock = shopStock();
   return `<div class="market">
-    <div><div class="h3">Pantry Market <small style="color:#b8a8b8;font-family:Nunito;font-size:1.8vmin">Monsters drop crumbs 🍪. Gear restocks every day.</small></div>
-      <div class="clist">${SHOP_ITEMS.map(id => { const c = CONSUMABLES[id]; return `<div class="citem"><img src="${cIcon(id)}"><div><b>${c.name}</b> <small>(own ${save.items[id] ?? 0})</small><span>${c.desc}</span></div><button class="pill ${save.crumbs >= c.price ? 'go' : ''}" data-buy="${id}" ${save.crumbs >= c.price ? '' : 'disabled'}>🍪 ${c.price}</button></div>`; }).join('')}
-      ${SHOP_BOXES.map((b, i) => `<div class="citem"><img src="art/box-${b.tier}.webp"><div><b>${TIER_NAMES[b.tier]}</b><span>Loot box (gear at your progress level)</span></div><button class="pill ${save.crumbs >= b.price ? 'go' : ''}" data-buybox="${i}" ${save.crumbs >= b.price ? '' : 'disabled'}>🍪 ${b.price}</button></div>`).join('')}</div></div>
+    <div><div class="h3">Pantry Market <small style="color:#b8a8b8;font-family:Nunito;font-size:1.8vmin">Gear restocks every day.</small></div>
+      <div class="purse">You have <b>🍪 ${save.crumbs}</b> crumbs. Earn more by beating monsters, clearing stages and salvaging gear.</div>
+      <div class="clist">${SHOP_ITEMS.map(id => { const c = CONSUMABLES[id]; return `<div class="citem"><img src="${cIcon(id)}"><div><b>${c.name}</b> <small>(own ${save.items[id] ?? 0})</small><span>${c.desc}</span></div><button class="pill ${save.crumbs >= c.price ? 'go' : ''}" data-buy="${id}" data-price="${c.price}">🍪 ${c.price}</button></div>`; }).join('')}
+      ${SHOP_BOXES.map((b, i) => `<div class="citem"><img src="art/box-${b.tier}.webp"><div><b>${TIER_NAMES[b.tier]}</b><span>Loot box (gear at your progress level)</span></div><button class="pill ${save.crumbs >= b.price ? 'go' : ''}" data-buybox="${i}" data-price="${b.price}">🍪 ${b.price}</button></div>`).join('')}</div></div>
     <div><div class="h3">Today's gear</div>
-      ${stock.length ? stock.map(it => { const c = compare(save.selected, it); const price = gearPrice(it); return `<div class="gearoffer">${iconHtml(it, '', badgeFor(it))}<div class="t"><b style="color:${RARITY_CSS[it.rarity]}">${esc(itemName(it))}</b><span>${RARITY_NAMES[it.rarity]} ${SLOT_NAMES[BASES[it.base].slot]} · iLv ${it.ilvl}</span><span class="ln">${itemLines(it).map(lineText).join(' · ')}${it.skill ? ` · ⭐ ${skillText(it)}` : ''}</span>${c.pct === -Infinity ? `<span class="for">For ${ownerName(it)}</span>` : `<span class="${c.pct >= 0 ? 'up' : 'dn'}">${c.pct >= 0 ? '+' : ''}${c.pct.toFixed(1)}% for ${CLASSES.find(x => x.species === save.selected)!.name}</span>`}</div><button class="pill ${save.crumbs >= price ? 'go' : ''}" data-buygear="${it.id}" ${save.crumbs >= price ? '' : 'disabled'}>🍪 ${price}</button></div>`; }).join('') : '<div class="empty">Sold out! Come back tomorrow.</div>'}
+      ${stock.length ? stock.map(it => { const c = compare(save.selected, it); const price = gearPrice(it); return `<div class="gearoffer">${iconHtml(it, '', badgeFor(it))}<div class="t"><b style="color:${RARITY_CSS[it.rarity]}">${esc(itemName(it))}</b><span>${RARITY_NAMES[it.rarity]} ${SLOT_NAMES[BASES[it.base].slot]} · iLv ${it.ilvl}</span><span class="ln">${itemLines(it).map(lineText).join(' · ')}${it.skill ? ` · ⭐ ${skillText(it)}` : ''}</span>${c.pct === -Infinity ? `<span class="for">For ${ownerName(it)}</span>` : `<span class="${c.pct >= 0 ? 'up' : 'dn'}">${c.pct >= 0 ? '+' : ''}${c.pct.toFixed(1)}% for ${CLASSES.find(x => x.species === save.selected)!.name}</span>`}</div><button class="pill ${save.crumbs >= price ? 'go' : ''}" data-buygear="${it.id}" data-price="${price}">🍪 ${price}</button></div>`; }).join('') : '<div class="empty">Sold out! Come back tomorrow.</div>'}
     </div></div>`;
 }
 
@@ -416,6 +417,7 @@ function onClick(e: MouseEvent): void {
   }
   else if (ds.eqslot) { const it = hero().equip[ds.eqslot as Slot]; selItem = it ? it.id : null; if (!it) { tab = 'bag'; bagTab = ds.eqslot as Slot; } }
   else if (ds.box) { const i = save.boxes.findIndex(b => b.tier === Number(ds.box)); if (i >= 0) runGacha([i]); return; }
+  else if ((ds.buy || ds.buybox || ds.buygear) && save.crumbs < Number(ds.price ?? 0)) flash = `Not enough crumbs: need 🍪 ${Number(ds.price) - save.crumbs} more. Beat monsters and clear stages to earn them.`;
   else if (ds.buy) { if (buyConsumable(ds.buy as ConsumableId)) flash = `Bought ${CONSUMABLES[ds.buy as ConsumableId].name}`; }
   else if (ds.buybox) { if (buyBox(Number(ds.buybox))) flash = 'Box bought! Open it in Boxes'; }
   else if (ds.buygear) { if (buyGear(Number(ds.buygear))) flash = 'Bought! It is in your Bag'; }
@@ -552,6 +554,8 @@ export function rankBetter(a: Rank, b: Rank): boolean { return RANK_ORDER.indexO
 const CAMP_CSS = `
 .kq .gs { color: #ffd27a; font-size: 1.9vmin; margin-top: 0.6vmin; } .kq .gs small { color: #b8a8b8; }
 .kq .pr { color: #9fe8ff; font-size: 1.9vmin; margin-top: 0.4vmin; }
+.kq .purse { font-size: 2vmin; color: #ffe9c7; background: #2a1a30; border-radius: 1.2vmin; padding: 0.6vmin 1.2vmin; margin: 0.4vmin 0 0.8vmin; }
+.kq .purse b { color: #ffd27a; }
 .kq .playrow { display: flex; gap: 1.2vmin; flex-wrap: wrap; align-items: center; }
 .kq .pill.online { background: linear-gradient(#5a8aff, #3a5ad8); color: #fff; }
 #camp .side { width: 11vmin; overflow-y: auto; gap: 1vmin; }
