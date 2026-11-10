@@ -222,3 +222,12 @@ storm). After 10-10: `w10-after` (still-w10-cure while he speaks, then the share
 (`credits2` → showCredits(sp, done, 2)), then the teaser `w10-hook` (src/story/finale.ts HOOK2, still-w10-hook: an invite to
 the Great Food Festival). World numbers can be two digits now (beat regexes use \d+). Brief: docs/WORLD10-BRIEF.md.
 Screens: `node scripts/w10-shot.mjs`.
+
+## Kaiju balance (src/sim/stats.ts SCALE, scripts/kaiju-diag.ts, scripts/bal-sum.mjs)
+Main stats scale evenly into the late game: INT's skill bonus is measured against the level (`SCALE.int / (1 + intLv·(lv-1))`),
+STR also multiplies attack a little (`SCALE.str`), DEX past the 75% crit cap becomes crit damage (`dexOver`), every kaiju gets
+`hpLv` HP per level, and damage reduction past 70% counts for less (`drSoft`/`drOver`). The escorted Crumblet shares most of
+your damage reduction. The balance bot steps out of (and waits at) firing hazards like a player would.
+Full sweep: `for w in 1 2 3 4 5 6 7 8 9 10; do npx vite-node scripts/balance.ts $w- 3 > shots/bal/w$w.txt & done`, then
+`node scripts/bal-sum.mjs` (per-kaiju clear % by world, stages outside target, bot timeouts). Why is a kaiju weak:
+`npx vite-node scripts/kaiju-diag.ts [stages] [bosses] [runs]` (DPS, HP lost per minute, boss kill time). Stats: `scripts/stat-table.ts`.

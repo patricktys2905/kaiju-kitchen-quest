@@ -47,15 +47,15 @@ export const CLASSES: HeroClass[] = [
   },
   {
     species: 11, name: 'Pizzaraptor', role: 'Slasher: fast, long combos',
-    hp: 132, atk: 8, speed: 280, jump: 740,
-    base: { str: 5, dex: 8, int: 3, vit: 4 }, grow: { str: 1, dex: 3, int: 0, vit: 1 },
+    hp: 145, atk: 10, speed: 280, jump: 740,
+    base: { str: 5, dex: 8, int: 3, vit: 4 }, grow: { str: 1, dex: 3, int: 0, vit: 2 },
     combo: [A({ dur: 0.24, hit: [0.05, 0.13] }), A({ dur: 0.24, hit: [0.05, 0.13], dmg: 1 }), A({ dur: 0.38, hit: [0.1, 0.22], reach: 84, dmg: 1.7, kx: 360, ky: -380, lunge: 220, stun: 0.55 })],
     air: A({ dur: 0.26, reach: 66, dmg: 1, kx: 100, ky: -160 }),
   },
   {
     species: 4, name: 'Mothball', role: 'Caster: ranged bolts, glides',
     hp: 108, atk: 11, speed: 220, jump: 680, glide: true,
-    base: { str: 3, dex: 4, int: 9, vit: 4 }, grow: { str: 0, dex: 1, int: 3, vit: 1 },
+    base: { str: 3, dex: 4, int: 9, vit: 4 }, grow: { str: 0, dex: 1, int: 3, vit: 2 },
     combo: [A({ reach: 100, dmg: 0.9, lunge: 0 }), A({ reach: 110, dmg: 1, lunge: 0 }), A({ dur: 0.45, hit: [0.15, 0.27], reach: 140, h: 80, dmg: 1.6, kx: 300, ky: -300, lunge: 0, stun: 0.6 })],
     air: A({ dur: 0.3, reach: 100, h: 80, dmg: 0.9, lunge: 0 }),
   },
@@ -76,7 +76,7 @@ export const CLASSES: HeroClass[] = [
   {
     species: 5, name: 'Toastbat', role: 'Assassin: flies, air combos, crits',
     hp: 115, atk: 10, speed: 265, jump: 760, glide: true,
-    base: { str: 5, dex: 8, int: 3, vit: 3 }, grow: { str: 1, dex: 3, int: 0, vit: 1 },
+    base: { str: 5, dex: 8, int: 3, vit: 3 }, grow: { str: 1, dex: 3, int: 0, vit: 2 },
     combo: [A({ dur: 0.24, hit: [0.05, 0.13] }), A({ dur: 0.24, hit: [0.05, 0.13] }), A({ dur: 0.36, hit: [0.1, 0.2], reach: 80, dmg: 1.6, kx: 300, ky: -420, lunge: 200, stun: 0.55 })],
     air: A({ dur: 0.22, hit: [0.04, 0.14], reach: 70, h: 80, dmg: 1.15, kx: 90, ky: -200 }),
   },
@@ -90,7 +90,7 @@ export const CLASSES: HeroClass[] = [
   {
     species: 7, name: 'Norigon', role: 'Dragon mage: wasabi breath, big area skills',
     hp: 115, atk: 10, speed: 220, jump: 690,
-    base: { str: 4, dex: 4, int: 8, vit: 5 }, grow: { str: 0, dex: 1, int: 3, vit: 1 },
+    base: { str: 4, dex: 4, int: 8, vit: 5 }, grow: { str: 0, dex: 1, int: 3, vit: 2 },
     combo: [A({ reach: 74, dmg: 0.95 }), A({ reach: 78, dmg: 1.05 }), A({ dur: 0.46, hit: [0.14, 0.28], reach: 110, h: 80, dmg: 1.7, kx: 320, ky: -340, stun: 0.6, lunge: 50 })],
     air: A({ dur: 0.3, reach: 70, h: 70, dmg: 0.95 }),
   },
@@ -110,8 +110,8 @@ export const CLASSES: HeroClass[] = [
   },
   {
     species: 17, name: 'Pengwhip', role: 'Ice skater: fast slides, frosty ranged skills',
-    hp: 118, atk: 10, speed: 265, jump: 720,
-    base: { str: 4, dex: 7, int: 6, vit: 4 }, grow: { str: 1, dex: 2, int: 2, vit: 1 },
+    hp: 135, atk: 10, speed: 265, jump: 720,
+    base: { str: 4, dex: 7, int: 6, vit: 4 }, grow: { str: 1, dex: 2, int: 2, vit: 2 },
     combo: [A({ dur: 0.26, hit: [0.06, 0.14], reach: 66 }), A({ dur: 0.26, hit: [0.06, 0.14], reach: 70 }), A({ dur: 0.4, hit: [0.1, 0.24], reach: 96, dmg: 1.7, kx: 340, ky: -320, lunge: 200, stun: 0.55 })],
     air: A({ dur: 0.28, reach: 70, h: 70, dmg: 1 }),
   },

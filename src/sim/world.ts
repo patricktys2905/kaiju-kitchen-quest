@@ -988,9 +988,11 @@ export class World {
       this.events.push({ t: 'objFail', why }); for (const p of this.heroes) { p.hp = 0; this.enter(p, 'down'); }
       this.failed = true; this.events.push({ t: 'down' });
     };
-    // the Crumblet follows a step behind you along the floor and gets hurt by attacks and shots near it
+    // the Crumblet follows a step behind you along the floor and gets hurt by attacks and shots near it;
+    // it shares most of your toughness (so it stays about 70% as sturdy as you, early and late)
     const n = this.npc;
     if (n && n.hp > 0) {
+      const nk = 0.6 * (1 - h.d.dr * 0.75);
       n.hurt = Math.max(0, n.hurt - dt);
       const tx = this.portal ? this.exitX : h.x - h.face * 70;
       if (Math.abs(tx - n.x) > 8) { n.face = tx > n.x ? 1 : -1; n.x += n.face * Math.min(Math.abs(tx - n.x), 130 * dt); }
@@ -998,13 +1000,13 @@ export class World {
         if (m.state === 'dead' || m.under || n.hurt > 0) continue;
         const d = MOBS[m.kind];
         if ((m.state === 'attack' || (m.state === 'walk' && d.brain === 'hopper' && !m.ground)) && Math.abs(m.x - n.x) < d.w / 2 + 18 && Math.abs(m.y - n.y) < 50) {
-          n.hp -= Math.round(m.atk * 0.6); n.hurt = 0.8;
-          this.events.push({ t: 'hit', x: n.x, y: n.y - 40, dmg: Math.round(m.atk * 0.6), crit: false, target: 'hero' });
+          n.hp -= Math.round(m.atk * nk); n.hurt = 0.8;
+          this.events.push({ t: 'hit', x: n.x, y: n.y - 40, dmg: Math.round(m.atk * nk), crit: false, target: 'hero' });
         }
       }
       for (const s of this.shots) if (s.from === 'mob' && s.t >= 0 && Math.abs(s.x - n.x) < 18 && s.y > n.y - 44 && s.y < n.y + 4 && n.hurt <= 0) {
-        n.hp -= Math.round(s.dmg * 0.6); n.hurt = 0.8; s.t = 99;
-        this.events.push({ t: 'hit', x: n.x, y: n.y - 40, dmg: Math.round(s.dmg * 0.6), crit: false, target: 'hero' });
+        n.hp -= Math.round(s.dmg * nk); n.hurt = 0.8; s.t = 99;
+        this.events.push({ t: 'hit', x: n.x, y: n.y - 40, dmg: Math.round(s.dmg * nk), crit: false, target: 'hero' });
       }
       if (n.hp <= 0) { n.hp = 0; fail('The Crumblet got hurt too badly!'); return; }
     }
@@ -2059,7 +2061,7 @@ export class World {
         if (m.t > 0.9) this.endAttack(m);
         break;
       case 'slash':
-        if (!m.hitDone && m.t > 0.08) { m.hitDone = true; if (touch(def.range + 20, 120)) this.hurtHero(Math.round(m.atk * 1.1), m.face, m); }
+        if (!m.hitDone && m.t > 0.08) { m.hitDone = true; if (touch(def.range + 20, 120)) this.hurtHero(Math.round(m.atk * 0.9), m.face, m); }
         if (m.t > 0.7) this.endAttack(m);
         break;
     }

@@ -226,7 +226,7 @@ describe('progression', () => {
     expect(derive(p2).skillLv.mines).toBe(1);
     const base = derive(p2).maxHp;
     p2.skills.thick = 3;
-    expect(derive(p2).maxHp).toBeGreaterThan(base * 1.1);
+    expect(derive(p2).maxHp).toBeGreaterThan(base * 1.06); // Thick Frosting: +4% max HP per level
   });
 
   it('gear adds stats, and skill-boost gear raises skill level', () => {

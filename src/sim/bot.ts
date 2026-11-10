@@ -20,7 +20,25 @@ export class Bot {
     this.r = () => { s = (s * 16807) % 2147483647; return s / 2147483647; };
   }
 
-  think(): Input {
+  think(): Input { return this.mindHazards(this.decide()); }
+
+  /** Like a player watching the floor: step out of a hazard that is firing or about to, and wait at its edge instead
+   *  of walking into it (ice is always on and only slippery, so it is ignored). */
+  private mindHazards(inp: Input): Input {
+    const w = this.w, h = w.heroes[this.hi] ?? w.heroes[0], G = w.stage.groundY;
+    if (h.state === 'down' || h.state === 'climb' || this.tap > 0 || (w.chase?.on && w.chase.x > h.x - 520)) return inp;
+    for (const z of w.hazards) {
+      if (z.kind === 'ice' || z.state === 'off') continue;
+      const up = ({ vent: 110, sprinkler: 110, pollen: 150, chill: 150, drop: 70, wax: 70, tap: 900 } as Record<string, number>)[z.kind] ?? 60;
+      if (h.y < G - up - 10) continue;
+      const half = z.w / 2 + 12, d = h.x - z.x;
+      if (Math.abs(d) < half) return { ...NO_INPUT, [d >= 0 ? 'right' : 'left']: true }; // get out, the short way
+      if (Math.abs(d) < half + 26 && ((inp.right && d < 0) || (inp.left && d > 0))) return { ...inp, left: false, right: false, jump: false }; // wait
+    }
+    return inp;
+  }
+
+  private decide(): Input {
     const w = this.w, h = w.heroes[this.hi] ?? w.heroes[0], inp: Input = { ...NO_INPUT };
     const lead = w.heroes[0];
     const pulse = (w.time * 6 | 0) % 2 === 0; // jump presses must be fresh: pulse the button

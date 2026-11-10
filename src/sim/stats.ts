@@ -85,6 +85,12 @@ export interface Derived {
   gear: HeroGear | null; procs: string[]; mods: Record<string, SkillMod>;
 }
 
+/** Main-stat scaling (tuned with scripts/kaiju-diag.ts and scripts/balance.ts). INT's skill bonus is measured against the
+ *  level (so casters don't run away late), STR also multiplies attack a little, and DEX past the crit cap adds crit damage. */
+export const SCALE = { int: 0.025, intLv: 0.024, str: 0.0017, critCap: 75, dexOver: 0.006, hpLv: 14, drSoft: 0.7, drOver: 0.4 };
+/** Damage reduction past drSoft counts for less (so the sturdiest kaiju still feel boss hits). */
+const softDr = (dr: number) => dr <= SCALE.drSoft ? dr : SCALE.drSoft + (dr - SCALE.drSoft) * SCALE.drOver;
+
 export function derive(p: HeroProfile): Derived {
   const cls = classOf(p.species);
   const sk = skillsOf(p.species);
@@ -120,15 +126,16 @@ export function derive(p: HeroProfile): Derived {
   const per = (k: keyof typeof pas.per) => (pas.per[k] ?? 0) * pl;
 
   const def = prim.vit * 0.6 + (eq.def ?? 0);
+  const critRaw = 5 + prim.dex * 0.5 + (eq.crit ?? 0) + per('crit');
   return {
     cls, level: p.level, prim,
-    maxHp: Math.round((cls.hp + prim.vit * 9 + p.level * 8 + (eq.hp ?? 0)) * (1 + per('hpPct') + sb.hpPct)),
-    atk: Math.round((cls.atk + prim.str * 1.2 + p.level + (eq.atk ?? 0)) * (1 + per('atkPct') + sb.atkPct)),
+    maxHp: Math.round((cls.hp + prim.vit * 9 + p.level * SCALE.hpLv + (eq.hp ?? 0)) * (1 + per('hpPct') + sb.hpPct)),
+    atk: Math.round((cls.atk + prim.str * 1.2 + p.level + (eq.atk ?? 0)) * (1 + SCALE.str * prim.str) * (1 + per('atkPct') + sb.atkPct)),
     def: Math.round(def),
-    dr: 1 - (1 - def / (def + 80)) * (1 - sb.dr) * (1 - per('dr')),
-    crit: Math.min(75, 5 + prim.dex * 0.5 + (eq.crit ?? 0) + per('crit')),
-    critDmg: 1.5 + (eq.critDmg ?? 0) + sb.critDmg + per('critDmg'),
-    skillDmg: 1 + prim.int * 0.025 + (eq.skillDmg ?? 0) + per('skillDmg') + sb.skillDmg,
+    dr: softDr(1 - (1 - def / (def + 80)) * (1 - sb.dr) * (1 - per('dr'))),
+    crit: Math.min(SCALE.critCap, critRaw),
+    critDmg: 1.5 + (eq.critDmg ?? 0) + sb.critDmg + per('critDmg') + Math.max(0, critRaw - SCALE.critCap) * SCALE.dexOver,
+    skillDmg: 1 + prim.int * SCALE.int / (1 + SCALE.intLv * (p.level - 1)) + (eq.skillDmg ?? 0) + per('skillDmg') + sb.skillDmg,
     cdr: Math.min(0.5, prim.int * 0.004 + (eq.cdr ?? 0) + per('cdr') + sb.cdr),
     speed: 1 + Math.min(0.35, prim.dex * 0.004 + (eq.speed ?? 0) + sb.speed),
     uniques, sets, ultGain: 1 + sb.ultGain + per('ultGain'), ultDmg: 1 + sb.ultDmg,

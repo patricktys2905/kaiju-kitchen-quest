@@ -118,16 +118,16 @@ export const SKILLS: Record<number, { actives: SkillDef[]; passive: PassiveDef }
   },
   10: { // Bluebeary — tank
     actives: [
-      S({ id: 'quake', name: 'Muffin Quake', kind: 'slam', desc: 'Belly-flops for a shockwave', cd: 4, dur: 0.6, dmg: 3, reach: 190, h: 70, kx: 200, ky: -520 }),
+      S({ id: 'quake', name: 'Muffin Quake', kind: 'slam', desc: 'Belly-flops for a shockwave', cd: 5, dur: 0.6, dmg: 2.4, reach: 190, h: 70, kx: 200, ky: -520 }),
       S({ id: 'mines', name: 'Berry Mines', kind: 'mines', desc: 'Lobs three blueberries: they burst on enemies, or lie in wait as mines', unlock: 4, cd: 7, dur: 0.4, dmg: 2.6, reach: 50, h: 60, kx: 260, ky: -460, n: 3, toss: true }),
       S({ id: 'frost', name: 'Frosting Shield', kind: 'buff', desc: 'Hardens: -40% damage taken, no flinching, +20% attack', unlock: 8, cd: 16, dur: 0.5, dmg: 0, buff: { def: 0.4, atk: 0.2, armor: true, t: 8 } }),
     ],
-    passive: { id: 'thick', name: 'Thick Frosting', desc: '+6% max HP per level', unlock: PASSIVE_UNLOCK, per: { hpPct: 0.06 } },
+    passive: { id: 'thick', name: 'Thick Frosting', desc: '+4% max HP per level', unlock: PASSIVE_UNLOCK, per: { hpPct: 0.04 } },
   },
   11: { // Pizzaraptor — slasher
     actives: [
-      S({ id: 'slice', name: 'Slice Dash', kind: 'dash', desc: 'Dashes through enemies', cd: 2.5, dur: 0.32, dmg: 2.2, reach: 60, h: 70, kx: 260, ky: -260 }),
-      S({ id: 'pspin', name: 'Pizza Cutter Toss', kind: 'boomerang', desc: 'Hurls a spinning pizza cutter that flies out and comes back, hitting twice', unlock: 4, cd: 5, dur: 0.35, dmg: 1.8, reach: 50, h: 50, kx: 200, ky: -160 }),
+      S({ id: 'slice', name: 'Slice Dash', kind: 'dash', desc: 'Dashes through enemies', cd: 2.5, dur: 0.32, dmg: 2.8, reach: 60, h: 70, kx: 260, ky: -260 }),
+      S({ id: 'pspin', name: 'Pizza Cutter Toss', kind: 'boomerang', desc: 'Hurls a spinning pizza cutter that flies out and comes back, hitting twice', unlock: 4, cd: 5, dur: 0.35, dmg: 2.3, reach: 50, h: 50, kx: 200, ky: -160 }),
       S({ id: 'frenzy', name: 'Extra Cheese', kind: 'buff', desc: 'Frenzy: +35% attack and +25% speed', unlock: 8, cd: 15, dur: 0.4, dmg: 0, buff: { atk: 0.35, speed: 0.25, t: 7 } }),
     ],
     passive: { id: 'hot', name: 'Hot Slice', desc: '+3% critical chance per level', unlock: PASSIVE_UNLOCK, per: { crit: 3 } },
