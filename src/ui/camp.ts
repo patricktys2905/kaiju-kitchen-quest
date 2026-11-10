@@ -174,24 +174,32 @@ function mapPage(): string {
     <div class="info">
       <div class="num">${sel.num}${sel.boss ? ' · BOSS' : sel.id.endsWith('-5') && sel.world <= 5 && nemesisOf(p.species) ? ` · NEMESIS: ${MOB_DEFS[nemesisOf(p.species)!].name}` : sel.id.endsWith('-5') ? ' · ELITE' : ''}</div>
       <div class="nm">${sel.name}</div>
-      <div class="lv">Monsters Lv ${lv(sel.lv[0])}${sel.lv[1] !== sel.lv[0] ? '–' + lv(sel.lv[1]) : ''}</div>
-      <div class="lv" style="color:${low ? '#ff8a8a' : '#a8f0a8'}">Recommended Lv ${lv(sel.rec)} (you: ${p.level})</div>
-      <div class="lv">Clear: ${rewardLine(sel)}</div>
-      ${sel.objective ? `<div class="lv" style="color:#ffd27a">${({ escort: '🧁 Objective: escort the lost Crumblet to the exit', fetch: `📜 Objective: grab the Recipe Scroll within ${sel.objective.t}s, then hold out`, survive: `⏱ Objective: hold out for ${sel.objective.t}s` })[sel.objective.kind]} (+ bonus Bento)</div>` : ''}
+      <div class="lv">Monsters Lv ${lv(sel.lv[0])}${sel.lv[1] !== sel.lv[0] ? '–' + lv(sel.lv[1]) : ''} · <span style="color:${low ? '#ff8a8a' : '#a8f0a8'}">you Lv ${p.level}${low ? ' (low!)' : ''}</span></div>
+      <div class="lv">Reward: ${rewardLine(sel)}</div>
+      ${sel.objective ? `<div class="lv" style="color:#ffd27a">${({ escort: '🧁 Escort the lost Crumblet', fetch: `📜 Grab the Recipe Scroll in ${sel.objective.t}s`, survive: `⏱ Hold out for ${sel.objective.t}s` })[sel.objective.kind]} · bonus box</div>` : ''}
       ${STORIES[p.species]?.variants[sel.id] ? (() => { const v = VARIANT_INFO[STORIES[p.species].variants[sel.id]]; return `<div class="lv vtx">${v.icon} Story twist: <b>${v.name}</b> — ${v.desc}</div>`; })() : ''}
-      <div class="lv">📖 ${STORIES[p.species]?.title ?? ''}${beatBefore(sel.id, sel.id === '1-1').some(b => p.seen.includes(b)) || (sel.boss && p.seen.includes(`w${sel.world}-after`)) ? ` <button class="pill" data-replay="${sel.id}" style="font-size:1.6vmin;padding:0.3vmin 1vmin">REPLAY</button>` : ''} <button class="pill" data-act="storymode" style="font-size:1.6vmin;padding:0.3vmin 1vmin">${save.storyMode === 'key' ? 'KEY SCENES ONLY' : 'FULL STORY'}</button></div>
+      <div class="lv story">📖 ${STORIES[p.species]?.title ?? ''}${beatBefore(sel.id, sel.id === '1-1').some(b => p.seen.includes(b)) || (sel.boss && p.seen.includes(`w${sel.world}-after`)) ? ` <button class="mini" data-replay="${sel.id}" title="Replay this stage's scenes">↻</button>` : ''} <button class="mini" data-act="storymode" title="Story scenes: every stage, or only the big ones">${save.storyMode === 'key' ? 'Key scenes' : 'All scenes'}</button></div>
       ${rank ? `<div class="lv">Best: <b style="color:${RANK_CSS[rank]}">${rank}</b></div>` : ''}
       ${(save.keys ?? []).includes(sel.world) ? (() => { const b = BONUS_STAGES[sel.world - 1]; return `<button class="pill big secret" data-play="${b.id}">🗝 ${b.name} <small>Lv ${b.lv[0]}–${b.lv[1]}</small></button>`; })() : sel.id.endsWith('-7') ? '<div class="lv" style="color:#ffd27a">🗝 A secret chest here hides this world\'s key</div>' : ''}
-      <div class="lv buddy">🤝 CPU BUDDY: <button class="pill" data-act="buddy">${save.buddy != null && save.buddy !== p.species && save.unlocked.includes(save.buddy) ? `<img src="art/kaiju-${save.buddy}.webp"> ${CLASSES.find(c => c.species === save.buddy)!.name}` : 'None'} ▸</button></div>
+      <div class="lv buddy">🤝 Buddy <button class="pill" data-act="buddy">${save.buddy != null && save.buddy !== p.species && save.unlocked.includes(save.buddy) ? `<img src="art/kaiju-${save.buddy}.webp"> ${CLASSES.find(c => c.species === save.buddy)!.name}` : 'None'} ▸</button></div>
       <div class="playrow"><button class="pill go big" data-play="${sel.id}" ${stageUnlocked(sel) ? '' : 'disabled'}>${stageUnlocked(sel) ? '▶ PLAY' : '🔒 LOCKED'}</button><button class="pill online" data-act="online">🌐 ONLINE</button></div>
-      <div class="spicy">🌶 SPICY ${SPICY_LIST.map(([k, ic, nm, ds]) => `<button class="chili ${(save.spicy ?? []).includes(k) ? 'on' : ''}" data-spicy="${k}" title="${ds}">${ic} ${nm}</button>`).join('')}
-        <small>${(save.spicy ?? []).length ? `+${(save.spicy ?? []).length} bonus box${(save.spicy ?? []).length > 1 ? 'es' : ''}, +${25 * (save.spicy ?? []).length}% crumbs` : 'extra loot for extra pain'}</small></div>
-      <label class="hard ${hardOk ? '' : 'off'}"><input type="checkbox" data-act="hard" ${save.hard ? 'checked' : ''} ${hardOk ? '' : 'disabled'}> HARD ${hardOk ? `(+${HARD_LV} levels, better boxes)` : '— beat this world\'s boss'}</label>
-      <label class="hard nm ${nightmareOk ? '' : 'off'}"><input type="checkbox" data-act="nightmare" ${save.nightmare && nightmareOk ? 'checked' : ''} ${nightmareOk ? '' : 'disabled'}> 💀 NIGHTMARE ${nightmareOk ? '(smarter, tougher, a Golden Cloche every clear)' : '— beat this world\'s boss on Hard'}</label>
+      ${(() => {
+        const mode = save.nightmare && nightmareOk ? 'nm' : save.hard ? 'hard' : 'normal';
+        return `<div class="diff"><button class="${mode === 'normal' ? 'on' : ''}" data-act="diff-normal">Normal</button><button class="${mode === 'hard' ? 'on' : ''} ${hardOk ? '' : 'locked'}" data-act="diff-hard">${hardOk ? '' : '🔒 '}Hard</button><button class="nmb ${mode === 'nm' ? 'on' : ''} ${nightmareOk ? '' : 'locked'}" data-act="diff-nm">${nightmareOk ? '💀' : '🔒'} Nightmare</button></div>`
+          + (mode === 'hard' ? `<div class="lv dnote">Monsters +${HARD_LV} levels · better boxes</div>` : mode === 'nm' ? '<div class="lv dnote">Smarter, tougher monsters · a Golden Cloche every clear</div>' : '');
+      })()}
+      ${hero().cleared['1-10'] || (save.spicy ?? []).length ? (() => {
+        const n = (save.spicy ?? []).length;
+        return `<button class="mini chal ${n ? 'on' : ''}" data-act="spicyopen">🌶 Challenges${n ? ` (${n} on: +${n} box${n > 1 ? 'es' : ''}, +${25 * n}% crumbs)` : ''} ${spicyOpen ? '▾' : '▸'}</button>`
+          + (spicyOpen ? `<div class="spicy">${SPICY_LIST.map(([k, ic, nm, ds]) => `<button class="chili ${(save.spicy ?? []).includes(k) ? 'on' : ''}" data-spicy="${k}" title="${ds}">${ic} ${nm}</button>`).join('')}<small>Optional: make a stage harder for an extra box and crumbs each.</small></div>` : '');
+      })() : ''}
     </div>
   </div>
   <p class="hint">Tip: double-tap ← or → to <b>dodge roll</b> through attacks. Beat every monster, then walk to the EXIT. Stage 5 has an elite, stage 10 the world boss.</p>`;
 }
+
+/** Challenges (spicy) row folded open in the stage panel? */
+let spicyOpen = false;
 
 const SPICY_LIST: [Spicy, string, string, string][] = [
   ['nopots', '🚫', 'No potions', 'The quick bag is locked for this stage'],
@@ -438,6 +446,18 @@ function onClick(e: MouseEvent): void {
       case 'best': { const n = equipBest(sp); flash = n ? `Equipped ${n} better item${n > 1 ? 's' : ''}` : 'Already wearing the best gear in your bag'; break; }
       case 'scroll': if (useScroll(sp)) flash = 'Skill points refunded!'; break;
       case 'hard': save.hard = !save.hard; if (!save.hard) save.nightmare = false; persist(); break;
+      case 'diff-normal': save.hard = false; save.nightmare = false; persist(); break;
+      case 'diff-hard': {
+        const w = stageById(selStage ?? '1-1').world;
+        if (!hardUnlocked(w)) { flash = `🔒 Hard: beat World ${w}'s boss first`; break; }
+        save.hard = true; save.nightmare = false; persist(); break;
+      }
+      case 'diff-nm': {
+        const w = stageById(selStage ?? '1-1').world;
+        if (!hero().hardCleared[`${w}-10`]) { flash = `🔒 Nightmare: beat World ${w}'s boss on Hard first`; break; }
+        save.hard = true; save.nightmare = true; persist(); break;
+      }
+      case 'spicyopen': spicyOpen = !spicyOpen; break;
       case 'nightmare': save.nightmare = !save.nightmare; if (save.nightmare) save.hard = true; persist(); break;
       case 'online': hideCamp(); onOnline(); return;
       case 'buddy': { // cycle: none → each unlocked kaiju except the one you're playing → none
@@ -566,6 +586,16 @@ const CAMP_CSS = `
 .kq .spicy .chili { font: inherit; font-weight: 800; padding: 0.4vmin 1vmin; border-radius: 1.2vmin; border: 2px solid #ff7a4a66; background: #2a1a20; color: #d8b0a0; cursor: pointer; }
 .kq .spicy .chili.on { background: #c8401a; color: #fff4e4; border-color: #ffb347; box-shadow: 0 0 1.2vmin #ff6a2a; }
 .kq .spicy small { width: 100%; color: #b89888; }
+.kq .diff { display: flex; gap: 0.5vmin; margin-top: 0.6vmin; }
+.kq .diff button { flex: 1 1 auto; font: inherit; font-weight: 800; font-size: 1.6vmin; padding: 0.7vmin 0.5vmin; border-radius: 1.2vmin; border: 2px solid #ffd27a44; background: #1a1020; color: #d8c8d8; cursor: pointer; white-space: nowrap; }
+.kq .diff button.on { background: #ff9a3a; color: #3a1408; border-color: #ffe0a0; }
+.kq .diff button.nmb.on { background: #7a4ad8; color: #fff; border-color: #c8a8ff; }
+.kq .diff button.locked { opacity: 0.5; }
+.kq .dnote { font-size: 1.7vmin; color: #ffb38a; }
+.kq .mini { font: inherit; font-weight: 800; font-size: 1.6vmin; padding: 0.3vmin 1vmin; border-radius: 1vmin; border: 2px solid #ffd27a55; background: #2a1a30; color: #ffd27a; cursor: pointer; }
+.kq .mini.chal { align-self: flex-start; color: #ffb38a; border-color: #ff7a4a55; margin-top: 0.4vmin; }
+.kq .mini.chal.on { background: #5a1a10; color: #ffd0b0; }
+.kq .story { display: flex; flex-wrap: wrap; align-items: center; gap: 0.6vmin; }
 .kq .hard { font-size: 1.8vmin; color: #ff9a8a; display: flex; gap: 0.6vmin; align-items: center; }
 .kq .hard.off { color: #8a7a8a; }
 .kq .hard.nm { color: #c8a8ff; }

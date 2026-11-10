@@ -27,12 +27,16 @@ export async function setFullscreen(on: boolean): Promise<void> {
 export const toggleFullscreen = () => setFullscreen(!isFullscreen());
 
 /** Button markup; every [data-fs] button on the page updates its label when fullscreen changes. */
+/** Four corner brackets (outward = go full screen, inward = leave it), drawn so every phone shows it. */
+export function fsIcon(exit = isFullscreen()): string {
+  const d = exit ? 'M9 3v6H3M15 3v6h6M9 21v-6H3M15 21v-6h6' : 'M3 9V3h6M21 9V3h-6M3 15v6h6M21 15v6h-6';
+  return `<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.12em" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="${d}"/></svg>`;
+}
 export function fsButton(cls = 'chip'): string {
-  return canFullscreen() ? `<button class="${cls}" data-fs title="Full screen">${isFullscreen() ? '🗗' : '⛶'}</button>` : '';
+  return canFullscreen() ? `<button class="${cls}" data-fs title="Full screen">${fsIcon()}</button>` : '';
 }
 const syncButtons = () => document.querySelectorAll<HTMLElement>('[data-fs]').forEach(b => {
-  const t = b.dataset.fs ? `${isFullscreen() ? '🗗 EXIT FULL SCREEN' : '⛶ FULL SCREEN'}` : isFullscreen() ? '🗗' : '⛶';
-  b.textContent = t;
+  b.innerHTML = b.dataset.fs ? `${fsIcon()} ${isFullscreen() ? 'EXIT FULL SCREEN' : 'FULL SCREEN'}` : fsIcon();
 });
 document.addEventListener('fullscreenchange', syncButtons);
 document.addEventListener('webkitfullscreenchange', syncButtons);
@@ -96,7 +100,7 @@ export function showTitle(onStart: () => void = () => {}): void {
     + `<img class="fly" src="art/kaiju-4.webp" alt="" style="--h:${hgt(4, 26)}">`;
   el.innerHTML = `<div class="art"></div><div class="heroes">${heroes}</div>
     <div class="logo"><h1><span>Kaiju</span>Kitchen<em>Quest</em></h1><div class="tag">The Head Chef is missing. The Mold Crown is rising.</div></div>
-    <div class="btns"><button class="play">▶ PLAY</button>${canFullscreen() ? `<button class="fsb" data-fs="long">${isFullscreen() ? '🗗 EXIT FULL SCREEN' : '⛶ FULL SCREEN'}</button>` : ''}${hint}</div>
+    <div class="btns"><button class="play">▶ PLAY</button>${canFullscreen() ? `<button class="fsb" data-fs="long">${fsIcon()} ${isFullscreen() ? 'EXIT FULL SCREEN' : 'FULL SCREEN'}</button>` : ''}${hint}</div>
     <div class="ver">v${__APP_VERSION__}</div>
     ${hasProgress() ? '<button class="over">↺ START OVER</button>' : ''}
     <div class="ask"><div><h2>START OVER?</h2><p>This erases ALL progress in this browser: every kaiju, level, item, box and story scene.</p><p>Other phones and computers keep their own saves. This can't be undone.</p>
