@@ -15,7 +15,7 @@ import { DT, HARD_LV, type Mob, World, guardBreakOf, launcherOf, rankOf } from '
 import { type GearLook, HeroView } from '../render/rig';
 import { itemIcon } from '../sim/items';
 import type { HeroProfile } from '../sim/stats';
-import { addXp, buddyProfile, finishStage, hero, quickBag, save, syncQuickBag } from '../save';
+import { addXp, buddyProfile, finishStage, hero, persist, quickBag, save, syncQuickBag } from '../save';
 import { AVERAGE, Bot } from '../sim/bot';
 import { checkUnlocks, track, trackHero, trackKey } from '../quests';
 import { STORIES, beatAfter } from '../story/stories';
@@ -26,6 +26,9 @@ import { CLASSES } from '../sim/classes';
 import { setGearUi, setSkillUi, setTouchVisible, setUltUi } from '../touch';
 import { hideCamp, runGacha, showCamp, showResult, stageUnlocked } from '../ui/camp';
 import { type NetPlay, inGame, kitOf, leaveOnline, net, showOnline } from '../ui/online';
+import { type FreeRun, bossName, freeData, freeSummary, mmss, pickPerk } from '../ui/free';
+import { endlessFloor, endlessReward, perkChoices, withPerks } from '../sim/free';
+import type { LootBox } from '../sim/types';
 import { applySnapshot, makeSnapshot, type Snapshot } from '../net/snapshot';
 import { type Input, NO_INPUT } from '../sim/types';
 
@@ -81,6 +84,8 @@ export class GameScene extends Phaser.Scene {
   private nightmare = false;
   /** teammates (CPU buddy or online friends): puppet, shadow, name tag, and a bot when the CPU plays them */
   private mates: { i: number; view: HeroView; shadow: Phaser.GameObjects.Ellipse; tag: Phaser.GameObjects.Text; name: string; bot?: Bot }[] = [];
+  /** free mode run in progress (null = story) */
+  private free: FreeRun | null = null;
   /** online co-op: who we are and who's playing (null = offline) */
   private online: NetPlay | null = null;
   /** which hero is ours (0 offline / host, the seat for a guest) */
@@ -130,7 +135,7 @@ export class GameScene extends Phaser.Scene {
 
   private has(k: string): boolean { return manifest.includes(k) && this.textures.exists(k); }
 
-  create(data: { stage?: string; online?: NetPlay }): void {
+  create(data: { stage?: string; online?: NetPlay; free?: FreeRun }): void {
     measure(this.scale.width);
     this.scale.off('resize');
     this.scale.on('resize', (g: Phaser.Structs.Size) => { measure(g.width); this.mid?.setSize(VW, 1080 * MID); });
@@ -154,9 +159,10 @@ export class GameScene extends Phaser.Scene {
     }
     hideCamp();
     this.online = data.online ?? null;
+    this.free = data.free ?? null;
     this.me = this.online?.seat ?? 0;
     this.netAcc = 0; this.netEvents = []; this.inbox = []; this.latch = { ...NO_INPUT };
-    this.stage = stageById(data.stage);
+    this.stage = this.free ? this.free.stage : stageById(data.stage);
     this.hookNet();
     this.buildStage();
   }
@@ -164,9 +170,15 @@ export class GameScene extends Phaser.Scene {
   private buildStage(): void {
     const st = this.stage, p = hero();
     const on = this.online;
-    this.hard = on ? on.hard : save.hard && this.hardOk();
+    this.hard = on ? on.hard : save.hard && this.hardOk() && !this.free;
     this.nightmare = on ? on.nightmare : this.hard && !!save.nightmare && !!hero().hardCleared[`${st.world}-10`];
-    if (on) {
+    const fr = this.free;
+    if (fr) {
+      // free mode: your stats plus the run's perks, health carried over, no story rules
+      this.world = new World(st, withPerks(derive(p), fr.perks), fr.seed + fr.floor * 101, quickBag(), save.items.revive ?? 0, false, undefined, [], undefined, false,
+        this.buddySpecies() !== null ? [derive(buddyProfile(this.buddySpecies()!, p.level))] : []);
+      this.world.hero.hp = Math.max(1, Math.round(this.world.hero.d.maxHp * fr.hpFrac));
+    } else if (on) {
       // online: the same stage for everyone (no story twists, nemesis or spicy rules); only the host keeps potions
       const host = on.role === 'host';
       this.world = new World(st, derive(on.kits[0].profile), on.seed, host ? quickBag() : [], host ? save.items.revive ?? 0 : 0, this.hard, undefined, [], undefined, this.nightmare,
@@ -287,6 +299,52 @@ export class GameScene extends Phaser.Scene {
     showPause(false);
     if (this.online) { this.unhookNet(); leaveOnline(); }
     this.scene.restart({});
+  }
+
+  // ---------- free mode ----------
+  /** After a free-mode stage: bank the boxes, then the next floor / boss, or the run summary. */
+  private finishFree(failed: boolean): void {
+    const w = this.world!, run = this.free!, lv = hero().level, sp = hero().species, f = freeData();
+    const found: LootBox[] = failed ? [] : w.loot.map(b => ({ ...b }));
+    const bank = (b: LootBox[]) => { save.boxes.push(...b); run.boxes.push(...b); persist(); };
+    const toCamp = () => this.scene.restart({});
+    const hpFrac = w.hero.hp / w.hero.d.maxHp;
+    const later = (fn: () => void) => this.time.delayedCall(failed ? 700 : 500, fn);
+    if (run.mode === 'daily') {
+      const extra: LootBox[] = !failed && f.daily !== run.seed ? [{ tier: 4, ilvl: lv }] : [];
+      if (extra.length) f.daily = run.seed;
+      bank([...found, ...extra]);
+      later(() => freeSummary(failed ? 'KNOCKED OUT!' : 'DAILY DUNGEON CLEAR!', [failed ? 'The dungeon resets tomorrow, but you can try again today.' : `Time ${mmss(w.run.time)}${extra.length ? ' · Today\'s bonus box claimed!' : ''}`], run.boxes, toCamp));
+      return;
+    }
+    if (run.mode === 'endless') {
+      if (failed) {
+        later(() => freeSummary('THE PANTRY WINS!', [`You reached floor ${run.floor}.`, `Best: floor ${f.endless[sp] ?? 0}`], run.boxes, toCamp));
+        return;
+      }
+      const got = [...found, { tier: endlessReward(run.floor), ilvl: w.stage.lv[1] }];
+      bank(got);
+      f.endless[sp] = Math.max(f.endless[sp] ?? 0, run.floor); persist();
+      later(() => pickPerk(run.floor, perkChoices(run.floor, run.seed), got, perk => {
+        const next = run.floor + 1;
+        this.scene.restart({ stage: `E-${next}`, free: { ...run, floor: next, stage: endlessFloor(next, lv, run.seed), perks: [...run.perks, perk.id], hpFrac: Math.min(1, hpFrac + (perk.id === 'heal' ? 0.6 : 0.1)) } });
+      }, () => freeSummary('BANKED!', [`You cleared ${run.floor} floor${run.floor > 1 ? 's' : ''}.`, `Best: floor ${f.endless[sp]}`], run.boxes, toCamp)));
+      return;
+    }
+    // Boss Rush
+    if (failed) { later(() => freeSummary('BOSS RUSH OVER', [`${bossName(run.stage)} got you on fight ${run.floor}.`, f.rush[sp] ? `Best time: ${mmss(f.rush[sp])}` : ''], run.boxes, toCamp)); return; }
+    bank(found);
+    const time = run.time + w.run.time;
+    const [next, ...rest] = run.queue ?? [];
+    if (next) {
+      toast(`${bossName(run.stage)} down! Next up: ${bossName(next)}`, { big: true, color: '#ffd27a' });
+      this.time.delayedCall(1600, () => this.scene.restart({ stage: next.id, free: { ...run, floor: run.floor + 1, stage: next, queue: rest, time, hpFrac: Math.min(1, hpFrac + 0.5) } }));
+      return;
+    }
+    const best = !f.rush[sp] || time < f.rush[sp];
+    if (best) f.rush[sp] = Math.round(time);
+    bank([{ tier: 5, ilvl: lv }]);
+    later(() => freeSummary('BOSS RUSH CLEAR!', [`${run.floor} bosses in ${mmss(time)}${best ? ' · NEW BEST!' : ` (best ${mmss(f.rush[sp])})`}`], run.boxes, toCamp));
   }
 
   // ---------- online co-op ----------
@@ -554,6 +612,7 @@ export class GameScene extends Phaser.Scene {
     save.crumbs += w.run.crumbs;
     save.items.fstone = (save.items.fstone ?? 0) + w.run.stones;
     if (w.run.crumbs) track('crumbs', w.run.crumbs);
+    if (this.free) { this.finishFree(failed); return; }
     const res = failed ? null : finishStage(st.id, rankOf(w.run, st.par).rank, w.lootOf[Math.min(this.me, w.lootOf.length - 1)], st.lv[1] + (this.hard ? HARD_LV : 0), !!st.boss, this.hard, chillies, this.nightmare);
     const sp = hero().species;
     trackHero(sp, 'combo', w.run.maxCombo, true);

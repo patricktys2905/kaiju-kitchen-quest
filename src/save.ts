@@ -43,6 +43,8 @@ export interface Save {
   buddy?: number | null;
   /** name shown to friends in online co-op */
   netName?: string;
+  /** free mode: day of the last Daily Dungeon bonus, best Endless floor and Boss Rush time (seconds) per kaiju */
+  free?: { daily?: number; endless: Record<number, number>; rush: Record<number, number> };
 }
 
 // v2: per-kaiju progress, 4 starters, story (older v1 saves are not carried over)

@@ -153,3 +153,14 @@ After 5-10: the kaiju's ending (`w5-after`: still-w5-cure then still-<sp>-end), 
 then the post-credits tease of Act 2's villains, THE LEFTOVERS (src/story/finale.ts, speakers 'lo'/'lo2', still-w5-hook).
 Deep Clean set (ilvl 49+), S-5 bonus stage. Story brief for writers: docs/WORLD5-BRIEF.md. Art: `node scripts/w5-jobs.mjs`.
 Screens: `node scripts/w5-shot.mjs`. Damage diagnosis: `npx vite-node scripts/dmg-diag.ts 5-6 11`.
+
+## Free Play (src/sim/free.ts, src/ui/free.ts, camp tab "Free Play", opens after 1-10)
+- **Daily Dungeon**: `dailyStage(dayKey, heroLv)`: a world theme and stage shape picked by the date (same for everyone),
+  monsters at your level (`StageDef.power` = `powerFor(lv)`, the story curve), no World Keys. Bonus Golden Cloche once a day.
+- **Endless Pantry**: `endlessFloor(floor, heroLv, seed)`: an arena room per floor (elite every 5th, a world boss every 10th),
+  +0.8 level and +2% power per floor; pick 1 of 3 `PERKS` after each floor (`withPerks`), health carries over; a box per floor
+  (banked at once), "bank it & stop" any time. Best floor per kaiju in `save.free.endless`.
+- **Boss Rush**: `rushStages(beaten, heroLv)`: every boss this kaiju has beaten, back to back, half your health back between
+  fights; best time in `save.free.rush`; a Legendary box for finishing.
+GameScene runs it from `data.free` (`FreeRun`) and `finishFree()` chains the stages. Balance: `npx vite-node scripts/free-balance.ts`
+(bot: daily 59-83% clears, Endless median 9 floors, Boss Rush 29-38%). Screens: `node scripts/free-shot.mjs`.

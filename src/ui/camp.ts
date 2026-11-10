@@ -17,6 +17,8 @@ import {
   unequip, useScroll, useSugar,
 } from '../save';
 import { UI_CSS } from './style';
+import { freePage, startFree } from './free';
+import type { FreeMode } from '../sim/free';
 import { GEAR, gearText } from '../sim/gear';
 import { isTouchDevice } from '../touch';
 import { ACHIEVEMENTS, DAILY_BONUS, achievements, checkUnlocks, claimAch, claimBonus, claimKaijuQuest, claimQuest, claimable, dailyQuests, kaijuQuestState, rewardText, track, unlockProgress } from '../quests';
@@ -25,7 +27,7 @@ import { playStory } from './story';
 import { fsButton } from './title';
 import { isMuted, sfx, toggleMute } from '../audio';
 
-type Tab = 'map' | 'hero' | 'skills' | 'bag' | 'market' | 'boxes' | 'quests';
+type Tab = 'map' | 'free' | 'hero' | 'skills' | 'bag' | 'market' | 'boxes' | 'quests';
 type BagTab = Slot | 'items';
 const RANK_CSS: Record<Rank, string> = { S: '#ffd23c', A: '#7ee87e', B: '#7ac0ff', C: '#d8c8d8', D: '#a89898' };
 const TIER_CSS: Record<BoxTier, string> = { 1: '#e0c09a', 2: '#7ee87e', 3: '#7ac0ff', 4: '#ffd23c', 5: '#ff8af4' };
@@ -104,7 +106,7 @@ export function hardUnlocked(world: number): boolean { return !!hero().cleared[`
 
 function render(): void {
   const p = hero();
-  const tabs: [Tab, string, number][] = [['map', 'Map', 0], ['hero', 'Hero', p.statPts], ['skills', 'Skills', p.skillPts], ['bag', 'Bag', 0], ['market', 'Market', 0], ['boxes', 'Boxes', save.boxes.length], ['quests', 'Quests', claimable()]];
+  const tabs: [Tab, string, number][] = [['map', 'Map', 0], ['free', 'Free Play', 0], ['hero', 'Hero', p.statPts], ['skills', 'Skills', p.skillPts], ['bag', 'Bag', 0], ['market', 'Market', 0], ['boxes', 'Boxes', save.boxes.length], ['quests', 'Quests', claimable()]];
   el.innerHTML = `
     <div class="side">${CLASSES.map(c => { const h = save.heroes[c.species], open = save.unlocked.includes(c.species); return `<button class="hp ${c.species === save.selected ? 'on' : ''} ${open && h.statPts + h.skillPts ? 'pts' : ''} ${open ? '' : 'lockd'}" data-hero="${c.species}" title="${c.name}" style="background-image:url(art/kaiju-${c.species}.webp)"><i></i>${open ? `<b>${h.level}</b>` : '<u>🔒</u>'}</button>`; }).join('')}</div>
     <div class="main">
@@ -119,6 +121,7 @@ function render(): void {
 function page(): string {
   switch (tab) {
     case 'map': return mapPage();
+    case 'free': return freePage();
     case 'hero': return heroPage();
     case 'skills': return skillsPage();
     case 'bag': return bagPage();
@@ -357,7 +360,7 @@ function boxesPage(): string {
 }
 
 function onClick(e: MouseEvent): void {
-  const t = (e.target as HTMLElement).closest<HTMLElement>('[data-tab],[data-hero],[data-node],[data-play],[data-stat],[data-sugar],[data-skill],[data-item],[data-act],[data-box],[data-eqslot],[data-bag],[data-cons],[data-qslot],[data-buy],[data-buybox],[data-buygear],[data-branch],[data-mappage],[data-claimq],[data-claima],[data-replay],[data-claimk]');
+  const t = (e.target as HTMLElement).closest<HTMLElement>('[data-tab],[data-hero],[data-node],[data-play],[data-stat],[data-sugar],[data-skill],[data-item],[data-act],[data-box],[data-eqslot],[data-bag],[data-cons],[data-qslot],[data-buy],[data-buybox],[data-buygear],[data-branch],[data-mappage],[data-claimq],[data-claima],[data-replay],[data-claimk],[data-free]');
   if (!t || (t as HTMLButtonElement).disabled) return;
   sfx('click');
   const sp = save.selected;
@@ -370,6 +373,7 @@ function onClick(e: MouseEvent): void {
   }
   else if (ds.claimq) { const r = claimQuest(Number(ds.claimq)); if (r) { flash = 'Quest reward: ' + r; sfx('levelup'); } }
   else if (ds.claima) { const r = claimAch(ds.claima); if (r) { flash = 'Achievement reward: ' + r; sfx('reveal3'); } }
+  else if (ds.free) { hideCamp(); startFree(ds.free as FreeMode); return; }
   else if (ds.node) selStage = ds.node;
   else if (ds.mappage) { const m = MAPS[Number(ds.mappage)]; selStage = [...STAGES].reverse().find(x => m.worlds.includes(x.world) && stageUnlocked(x))?.id ?? `${m.worlds[0]}-1`; }
   else if (ds.play) {

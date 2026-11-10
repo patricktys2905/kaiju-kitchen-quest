@@ -292,7 +292,7 @@ export class World {
   }
 
   spawnMob(kind: MobKind, x: number, lv: number, y?: number, elite = false): Mob {
-    const pow = WORLDS.find(x => x.id === this.stage.world)?.power ?? 1;
+    const pow = this.stage.power ?? WORLDS.find(x => x.id === this.stage.world)?.power ?? 1;
     const nm = this.nightmare ? NIGHTMARE : { hp: 1, atk: 1 };
     // more heroes, tougher monsters: +60% HP per extra player, +35% per CPU buddy (it isn't as sharp as a person)
     const party = 1 + this.heroes.slice(1).reduce((a, h) => a + (h.cpu ? 0.35 : 0.6), 0);

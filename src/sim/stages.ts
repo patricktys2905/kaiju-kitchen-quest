@@ -60,12 +60,13 @@ function rng(seed: number): () => number {
   return () => { s ^= s << 13; s ^= s >>> 17; s ^= s << 5; return ((s >>> 0) % 100000) / 100000; };
 }
 
-function genStage(w: WorldDef, n: number): StageDef {
-  const id = `${w.id}-${n}`;
-  const lvLo = w.baseLv + n - 1, lvHi = lvLo + 1;
+/** A world's stage n. Free mode passes its own seed / level / id to get fresh layouts at any level. */
+export function genStage(w: WorldDef, n: number, o: { seed?: number; lv?: number; id?: string; name?: string } = {}): StageDef {
+  const id = o.id ?? `${w.id}-${n}`;
+  const lvLo = o.lv ?? w.baseLv + n - 1, lvHi = lvLo + 1;
   if (n === 10) {
     return {
-      id, world: w.id, num: id, name: w.names[9], bg: w.bossBg, mid: '', tile: w.tile, platTint: w.platTint, width: 1500, groundY: G,
+      id, world: w.id, num: id, name: o.name ?? w.names[9], bg: w.bossBg, mid: '', tile: w.tile, platTint: w.platTint, width: 1500, groundY: G,
       lv: [lvLo + 2, lvLo + 2], par: 130, rec: lvLo, boss: true,
       platforms: [{ x: 180, y: 382, w: 240 }, { x: 1080, y: 382, w: 240 }, { x: 520, y: 294, w: 460 }],
       ladders: [], mobs: [{ kind: w.boss, x: 1150, lv: lvLo + 2 }],
@@ -73,7 +74,7 @@ function genStage(w: WorldDef, n: number): StageDef {
       hazards: [hazardAt(w.hazard, 470, 1), hazardAt(w.hazard, 1030, 2.2)].map(h => ({ ...h, phase2: true })),
     };
   }
-  const r = rng(w.id * 1000 + n * 37 + 11);
+  const r = rng(o.seed ?? w.id * 1000 + n * 37 + 11);
   const width = 2200 + n * 140;
   const platforms: Platform[] = [];
   const ladders: Ladder[] = [];
@@ -129,7 +130,7 @@ function genStage(w: WorldDef, n: number): StageDef {
     }
   }
   return {
-    id, world: w.id, num: id, name: w.names[n - 1], bg: w.bg, mid: w.mid, tile: w.tile, platTint: w.platTint, width, groundY: G,
+    id, world: w.id, num: id, name: o.name ?? w.names[n - 1], bg: w.bg, mid: w.mid, tile: w.tile, platTint: w.platTint, width, groundY: G,
     lv: [lvLo, n === 5 ? lvHi + 1 : lvHi], par: Math.round(25 + count * 5 + width / 70), rec: lvLo,
     platforms, ladders, mobs, hazards, ...interactive(w, n, width, platforms, ladders, r),
     ...setPieces(w, n, width, platforms, mobs, lvLo, lvHi),

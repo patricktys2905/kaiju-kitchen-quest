@@ -34,6 +34,8 @@ export interface Objective { kind: 'escort' | 'fetch' | 'survive'; /** seconds: 
 export type Spicy = 'nopots' | 'glass' | 'clock';
 
 export interface StageDef {
+  /** free mode: monster strength set by level instead of by world */
+  power?: number;
   id: string;
   world: number;
   num: string;       // "1-1"
