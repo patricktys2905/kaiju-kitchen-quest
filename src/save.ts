@@ -63,6 +63,17 @@ export const STARTERS = [0, 10, 11, 4];
 
 export let save: Save = load();
 
+/** Older builds could store a broken item level (a bonus-stage clear made it NaN, saved as null): give those a sane level,
+ *  and drop shop gear whose type no longer exists, so no screen trips over them. */
+function repairItems(s: Save): void {
+  const ok = (v: unknown) => typeof v === 'number' && Number.isFinite(v) && v >= 1;
+  const fix = (it: { ilvl: number } | null | undefined) => { if (it && !ok(it.ilvl)) it.ilvl = 1; };
+  s.boxes?.forEach(fix);
+  s.bag?.forEach(fix);
+  for (const h of Object.values(s.heroes)) for (const it of Object.values(h.equip ?? {})) fix(it);
+  if (s.shop?.stock) s.shop.stock = s.shop.stock.filter(it => it && BASES[it.base]).map(it => (fix(it), it));
+}
+
 function load(): Save {
   try {
     const raw = localStorage.getItem(KEY);
@@ -73,6 +84,7 @@ function load(): Save {
       const out = { ...f, ...s };
       for (const c of CLASSES) out.heroes[c.species] = { ...newProfile(c.species), ...out.heroes[c.species] };
       if (!out.unlocked.includes(out.selected)) out.selected = STARTERS[0];
+      repairItems(out);
       return out;
     }
   } catch { /* corrupted: start fresh */ }
@@ -333,7 +345,12 @@ export function today(): string { const d = new Date(); return `${d.getFullYear(
 /** Furthest stage level cleared → item level of shop stock and bought boxes. */
 export function progressLv(): number {
   let lv = 1;
-  for (const h of Object.values(save.heroes)) for (const id of Object.keys(h.cleared ?? {})) { const [w, n] = id.split('-').map(Number); lv = Math.max(lv, (w - 1) * 12 + n + 1); }
+  for (const h of Object.values(save.heroes)) for (const id of Object.keys(h.cleared ?? {})) {
+    // story stages 'W-N'; secret bonus stages 'S-W' count as late in their world
+    const m = /^(\d+)-(\d+)$/.exec(id), b = /^S-(\d+)$/.exec(id);
+    const v = m ? (Number(m[1]) - 1) * 12 + Number(m[2]) + 1 : b ? (Number(b[1]) - 1) * 12 + 9 : 0;
+    if (Number.isFinite(v)) lv = Math.max(lv, v);
+  }
   return lv;
 }
 export function gearPrice(it: Item): number { return Math.round((40 + it.ilvl * 12) * [1, 1.6, 3, 6, 12][it.rarity - 1]); }

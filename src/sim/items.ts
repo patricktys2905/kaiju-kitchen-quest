@@ -210,10 +210,12 @@ export function rollBase(ilvl: number, rand: () => number, prefer = -1): string 
     pool = Object.keys(BASES).filter(k => ok(k) && BASES[k].slot === 'charm' && BASES[k].for === o);
     if (!pool.length) pool = Object.keys(BASES).filter(k => ok(k) && BASES[k].slot === 'charm' && BASES[k].for === undefined);
   }
+  if (!pool.length) pool = Object.keys(BASES).filter(k => !BASES[k].retired && !BASES[k].minLv); // safety net: a starter piece
   return pick(pool, rand);
 }
 
 export function rollItem(id: number, tier: BoxTier, ilvl: number, rand: () => number, skillIds: string[], prefer = -1): Item {
+  if (!Number.isFinite(ilvl) || ilvl < 1) ilvl = 1; // never roll from a broken item level (no gear would qualify)
   const rarity = rarityFor(tier, rand);
   const base = rollBase(ilvl, rand, prefer);
   // skill-boost lines on kaiju gear only name that kaiju's skills

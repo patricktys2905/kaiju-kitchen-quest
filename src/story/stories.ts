@@ -133,6 +133,7 @@ export const STORIES: Record<number, Story> = {
 export function beatBefore(stageId: string, firstEver: boolean): string[] {
   const [w, n] = stageId.split('-').map(Number);
   const out: string[] = [];
+  if (!Number.isFinite(w)) return out; // secret bonus stages (S-1...) have no story scenes
   if (stageId === '1-1' && firstEver) out.push('intro');
   if (n === 1) out.push(`w${w}-open`);
   if (n === 5) out.push(`w${w}-elite`);
@@ -144,6 +145,7 @@ export function beatBefore(stageId: string, firstEver: boolean): string[] {
 export const isMinorBeat = (b: string) => /^w\d+-s\d$/.test(b);
 export function beatAfter(stageId: string): string[] {
   const [w, n] = stageId.split('-').map(Number);
+  if (!Number.isFinite(w)) return [];
   if (stageId === '5-10') return ['w5-after', 'credits', 'w5-hook']; // the end of Act 1
   if (stageId === '10-10') return ['w10-after', 'credits2', 'w10-hook']; // the end of Act 2
   return n === 10 ? [`w${w}-after`] : [];
