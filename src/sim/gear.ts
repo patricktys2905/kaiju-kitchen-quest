@@ -85,11 +85,23 @@ export const GEAR: Record<string, GearSkill> = {
   'w-owl3': { name: 'Piñata Smash', style: 'slam', fx: 'launch' },
 };
 
+/** Gear skill names for a twist: the effect word + the style's noun, e.g. 'Frosty Lob'. */
+const STYLE_NOUN: Record<GearStyle, string> = { throw: 'Fling', lob: 'Lob', roll: 'Roll', slam: 'Slam', rain: 'Shower' };
+const FX_WORD: Record<GearFx, string> = { burn: 'Scorching', freeze: 'Frosty', glue: 'Sticky', slow: 'Syrupy', launch: 'Bouncy', pull: 'Grabby', heal: 'Hearty' };
+/** The gear skill a weapon item gives: its rolled twist, or its base weapon's own skill. */
+export function gearSkillOf(weapon: Item): GearSkill | undefined {
+  const base = GEAR[weapon.base];
+  const t = weapon.twist;
+  if (!t || !(t.style in STYLE)) return base;
+  const style = t.style as GearStyle, fx = t.fx && t.fx in FX_TEXT ? t.fx as GearFx : undefined;
+  return { name: `${fx ? FX_WORD[fx] : 'Mighty'} ${base?.name.split(' ')[0] ?? ''} ${STYLE_NOUN[style]}`.replace(/\s+/g, ' ').trim(), style, fx };
+}
+
 /** The gear skill a hero gets from its weapon (null = no weapon). power scales damage with rarity, fortification and grade. */
 export interface HeroGear extends GearSkill { base: string; icon: string; power: number; dmg: number; cd: number }
 export function gearOf(weapon: Item | undefined, icon?: string): HeroGear | null {
   if (!weapon) return null;
-  const g = GEAR[weapon.base];
+  const g = gearSkillOf(weapon);
   if (!g) return null;
   const power = [1, 1.15, 1.3, 1.5, 1.75][weapon.rarity - 1] * fortMul(weapon.plus) * GRADE_MUL[gradeOf(weapon)];
   return { ...g, base: weapon.base, icon: icon ?? BASES[weapon.base].icon, power, dmg: STYLE[g.style].dmg, cd: STYLE[g.style].cd };

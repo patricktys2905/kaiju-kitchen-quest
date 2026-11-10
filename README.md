@@ -242,3 +242,9 @@ HARD / NIGHTMARE CHECKS: `npx vite-node scripts/balance.ts <world>- 3 hard|night
 `LV_GAP.free` (4) levels over you take `LV_GAP.per` (6%) less damage per level. Bosses on Nightmare get NIGHTMARE_BOSS (×1.1 HP,
 ×1.12 damage) instead of NIGHTMARE (×1.2 / ×1.25). Targets used: Hard stages ~75-90% / bosses ~30-50%; Nightmare stages
 ~55-75% / bosses ~20-40%.
+
+## Weapon twists (items.ts TWIST_*, gear.ts gearSkillOf)
+Most weapon drops (65%, not signature legendaries) roll a twist: a new gear-skill style (throw / lob / roll / slam / rain)
+and usually an effect (burn / freeze / glue / slow / launch / pull / heal). The weapon is named for it ("Frosty Rolling Pin")
+and its gear skill becomes e.g. "Frosty Pin Lob". Each kaiju's 2nd / 3rd weapon tier now drops from item level 6 / 14
+(was 12 / 24). Screen: `node scripts/twist-shot.mjs`.

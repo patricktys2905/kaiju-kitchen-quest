@@ -19,7 +19,7 @@ import {
 import { UI_CSS } from './style';
 import { freePage, startFree } from './free';
 import type { FreeMode } from '../sim/free';
-import { GEAR, gearText } from '../sim/gear';
+import { gearSkillOf, gearText } from '../sim/gear';
 import { isTouchDevice } from '../touch';
 import { ACHIEVEMENTS, DAILY_BONUS, achievements, checkUnlocks, claimAch, claimBonus, claimKaijuQuest, claimQuest, claimable, dailyQuests, kaijuQuestState, rewardText, track, unlockProgress } from '../quests';
 import { STORIES, VARIANT_INFO, beatBefore, isMinorBeat } from '../story/stories';
@@ -252,7 +252,7 @@ function heroPage(): string {
 /** Set and named-legendary lines for an item. */
 function specialHtml(it: Item): string {
   let out = '';
-  const g = BASES[it.base].slot === 'weapon' ? GEAR[it.base] : undefined;
+  const g = BASES[it.base].slot === 'weapon' ? gearSkillOf(it) : undefined;
   if (g) out += `<div class="gs">🗡 Gear skill <b>${g.name}</b>: ${gearText(g)}</div>`;
   if (it.unique) { const u = UNIQUES[it.unique]; out += `<div class="uq">✦ ${u.for !== undefined ? `${CLASSES.find(c => c.species === u.for)?.name ?? ''} signature: ` : ''}${u.effect}</div>`; }
   if (it.proc) out += `<div class="pr">⚡ ${PROCS[it.proc].name}: ${PROCS[it.proc].effect}</div>`;

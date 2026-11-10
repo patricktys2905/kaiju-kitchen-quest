@@ -1,0 +1,23 @@
+// A twisted weapon in the bag and the hero page: node scripts/twist-shot.mjs → shots/twist-*.png
+import { spawn } from 'node:child_process';
+import { chromium } from 'playwright-core';
+const PORT = 5335, base = `http://localhost:${PORT}/?touch`;
+const server = spawn(process.execPath, ['node_modules/vite/bin/vite.js', '--port', String(PORT), '--strictPort'], { stdio: 'pipe' });
+const wait = ms => new Promise(r => setTimeout(r, ms));
+await wait(3000);
+const b = await chromium.launch({ executablePath: 'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe', headless: true });
+const p = await (await b.newContext({ viewport: { width: 852, height: 393 }, isMobile: true, hasTouch: true, deviceScaleFactor: 2 })).newPage();
+const errs = []; p.on('pageerror', e => errs.push(e.message));
+await p.goto(base); await p.evaluate(() => localStorage.clear()); await p.reload();
+for (let i = 0; i < 60 && !await p.evaluate(() => !!window.__kkq); i++) await wait(250);
+await p.evaluate(() => document.querySelector('#title .play')?.click()); await wait(1200);
+await p.evaluate(() => { const s = window.__kkq.save; s.selected = 10; const id = s.nextId++;
+  const it = { id, base: 'pin', rarity: 3, ilvl: 5, plus: 0, lines: [{ k: 'atk', v: 9 }, { k: 'hp', v: 30 }, { k: 'crit', v: 4 }], grade: 2, twist: { style: 'lob', fx: 'freeze' } };
+  s.bag.push(it); window.__kkq.scene.scene.restart({}); });
+await wait(700);
+await p.tap('[data-tab="bag"]'); await wait(400);
+await p.evaluate(() => { const b = [...document.querySelectorAll('[data-item]')].pop(); b?.click(); }); await wait(400);
+await p.screenshot({ path: 'shots/twist-bag.png' });
+console.log(await p.evaluate(() => (document.body.innerText.match(/Frosty[^\n]*\n?[^\n]*Gear skill[^\n]*/) ?? document.body.innerText.match(/Gear skill[^\n]*/))?.[0]));
+console.log(errs.length ? errs : 'no errors');
+await b.close(); server.kill();

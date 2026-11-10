@@ -27,15 +27,29 @@ export interface Item {
   unique?: string;
   /** trigger effect (PROCS key), armour and charms only */
   proc?: string;
+  /** weapons: a rolled twist on the weapon's gear skill (style + effect; see gear.ts gearSkillOf) */
+  twist?: { style: string; fx?: string };
 }
+
+/** Weapon twists: the throwing styles and effects a weapon's gear skill can roll (kept in step with gear.ts STYLE / FX_TEXT). */
+export const TWIST_STYLES = ['throw', 'lob', 'roll', 'slam', 'rain'] as const;
+export const TWIST_FX = ['burn', 'freeze', 'glue', 'slow', 'launch', 'pull', 'heal'] as const;
+/** The word a twisted weapon gets in its name (by effect, or by style when it has no effect). */
+export const TWIST_WORD: Record<string, string> = {
+  burn: 'Scorching', freeze: 'Frosty', glue: 'Sticky', slow: 'Syrupy', launch: 'Bouncy', pull: 'Grabby', heal: 'Hearty',
+  throw: 'Flinging', lob: 'Lobbing', roll: 'Tumbling', slam: 'Slamming', rain: 'Showering',
+};
+/** How often a (non-legendary) weapon drop rolls a twist. */
+export const TWIST_CHANCE = 0.65;
 
 export interface BaseDef { slot: Slot; name: string; icon: string; main: Line[]; minLv?: number; /** only this kaiju can wear it */ for?: number; tier?: number; /** no longer drops */ retired?: boolean; /** always part of this set */ set?: string }
 /** main = guaranteed stat at ilvl 1 (scaled by ilvl and rarity) */
-const W = (name: string, icon: string, owner: number, tier: number, main: Line[]): BaseDef => ({ slot: 'weapon', name, icon, main, for: owner, minLv: [0, 12, 24][tier - 1], tier, set: tier === 3 ? `sig${owner}` : undefined });
-const AR = (name: string, icon: string, owner: number, main: Line[], tier = 1): BaseDef => ({ slot: 'armor', name, icon, main, for: owner, minLv: [0, 12, 24][tier - 1], tier, set: tier === 3 ? `sig${owner}` : undefined });
+const TIER_LV = [0, 6, 14]; // item level each gear tier starts dropping at
+const W = (name: string, icon: string, owner: number, tier: number, main: Line[]): BaseDef => ({ slot: 'weapon', name, icon, main, for: owner, minLv: TIER_LV[tier - 1], tier, set: tier === 3 ? `sig${owner}` : undefined });
+const AR = (name: string, icon: string, owner: number, main: Line[], tier = 1): BaseDef => ({ slot: 'armor', name, icon, main, for: owner, minLv: TIER_LV[tier - 1], tier, set: tier === 3 ? `sig${owner}` : undefined });
 const CH = (name: string, icon: string, owner: number, main: Line[]): BaseDef => ({ slot: 'charm', name, icon, main, for: owner, minLv: 12, set: `sig${owner}` });
 export const BASES: Record<string, BaseDef> = {
-  // ----- kaiju weapons: 3 tiers each (tier 2 from item level 12, tier 3 from 24) -----
+  // ----- kaiju weapons: 3 tiers each (tier 2 from item level 6, tier 3 from 14); every drop may roll a twist -----
   spoon: W('Wooden Spoon', 'eq-spoon', 0, 1, [{ k: 'atk', v: 4 }]),
   'w-gob2': W('Vine Whip', 'w-gob2', 0, 2, [{ k: 'atk', v: 5 }, { k: 'critDmg', v: 0.08 }]),
   'w-gob3': W('Berry Basher', 'w-gob3', 0, 3, [{ k: 'atk', v: 6 }, { k: 'str', v: 2 }, { k: 'critDmg', v: 0.1 }]),
@@ -234,12 +248,18 @@ export function rollItem(id: number, tier: BoxTier, ilvl: number, rand: () => nu
   }
   // trigger effects on armour and charms
   if (BASES[base].slot !== 'weapon' && rand() < [0, 0, 0.2, 0.5, 0.8][rarity - 1]) it.proc = pick(Object.keys(PROCS), rand);
+  // weapons: most drops twist their gear skill (a new style and/or effect), so the same weapon can play many ways
+  if (BASES[base].slot === 'weapon' && !it.unique && rand() < TWIST_CHANCE) {
+    const style = TWIST_STYLES[Math.floor(rand() * TWIST_STYLES.length)];
+    const fx = rand() < 0.85 ? TWIST_FX[Math.floor(rand() * TWIST_FX.length)] : undefined;
+    it.twist = { style, ...(fx ? { fx } : {}) };
+  }
   return it;
 }
 
 export function itemName(it: Item): string {
   if (it.unique) return `${UNIQUES[it.unique].name}${it.plus ? ` +${it.plus}` : ''}`;
-  const pre = PREFIX[it.rarity][it.id % PREFIX[it.rarity].length];
+  const pre = it.twist ? TWIST_WORD[it.twist.fx ?? it.twist.style] ?? PREFIX[it.rarity][0] : PREFIX[it.rarity][it.id % PREFIX[it.rarity].length];
   return `${pre} ${BASES[it.base].name}${it.plus ? ` +${it.plus}` : ''}`;
 }
 
