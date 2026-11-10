@@ -101,3 +101,9 @@ in a row (two on Nightmare) make nearby monsters raise their guard (guardT: plai
 launcher, Guard Break, air attack or skill). Nightmare (per world, after its boss on Hard): Hard's levels, ×1.2 HP,
 ×1.25 damage (NIGHTMARE), 28% shorter telegraphs, extra modifiers, a Golden Cloche every clear.
 `npx vite-node scripts/balance.ts 3- 2 nightmare`. Tests: tests/ai.test.ts.
+
+## Learnable bosses (mobs.ts BOSS_PATTERNS / BOSS_ARMOR)
+World bosses fight in fixed strings (a close one or a far one, by where you stand), then are TIRED for 1.6 s (+25%
+damage). Phases at 50% and 25% (new moves, "FINAL PHASE!"). Armour (HUD bar under its HP) softens hits until it breaks
+(heavy hits ×2.5): stagger + 5 s weak (+50%), then it grows back. Nemeses cycle their moves in order and tire after each
+round. Tests: tests/boss.test.ts. `node scripts/boss-shot.mjs 2-10`.

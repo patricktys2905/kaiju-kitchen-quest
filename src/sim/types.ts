@@ -121,4 +121,8 @@ export type SimEvent =
   | { t: 'objFail'; why: string }
   /** monsters near you read your button-mashing and raise their guard */
   | { t: 'guardUp'; x: number; y: number }
+  /** a boss (or nemesis) finished its string and is catching its breath: hit it! */
+  | { t: 'tired'; x: number; y: number }
+  | { t: 'armorBreak'; x: number; y: number }
+  | { t: 'phase'; name: string; n: number }
   | { t: 'heal'; x: number; y: number; n: number; hero: true };

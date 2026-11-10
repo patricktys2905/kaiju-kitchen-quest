@@ -4,7 +4,7 @@
 import type { AttackDef } from './classes';
 import { rollTier } from './loot';
 import { type BoostKind, CONSUMABLES, type ConsumableId, QUICK_CD } from './consumables';
-import { DANGER_MOVES, ELITE, ELITE_MODS, type EliteMod, MOBS, type NemMove, TUNE, nemesisMoves, dropLevel, mobAtk, mobCrumbs, mobHp, mobXp } from './mobs';
+import { BOSS_ARMOR, BOSS_PATTERNS, DANGER_MOVES, ELITE, ELITE_MODS, type EliteMod, MOBS, type NemMove, TUNE, nemesisMoves, dropLevel, mobAtk, mobCrumbs, mobHp, mobXp } from './mobs';
 import { type SkillDef, ULTS, ULT_LV, applyBranch, skillScale, skillsOf } from './skills';
 import { WORLDS } from './stages';
 import type { Derived } from './stats';
@@ -125,6 +125,8 @@ export interface Mob {
   guardT: number;
   /** which side of you this monster tries to stand on (flanking) */
   flank: 1 | -1;
+  /** learnable bosses: the moves left in the current string, which string is next, tired / armour / weak timers, phase */
+  queue: string[]; patI: number; tired: number; armor: number; weak: number; bossPhase: number;
 }
 
 export interface Box { id: number; tier: BoxTier; ilvl: number; x: number; y: number; vy: number; ground: boolean; t: number }
@@ -265,7 +267,7 @@ export class World {
       id: nextId++, kind, lv, x, y: y ?? this.stage.groundY, vx: 0, vy: 0, face: -1, hp, maxHp: hp, atk: Math.round(mobAtk(kind, lv) * (elite ? ELITE.atk : 1) * pow * nm.atk),
       state: 'walk', move: '', t: this.rand() * 2, ground: true, on: y === undefined ? -1 : null, home: x, deadT: 0, flash: 0,
       hurtShown: 0, stagger: 0, summoned: 0, hitDone: false, elite, homeY: y ?? this.stage.groundY, slow: 0,
-      mods: [], under: MOBS[kind].brain === 'burrower', disguised: MOBS[kind].brain === 'mimic', aimX: 0, aimY: 0, enraged: false, parent: 0, dropT: 0, surfT: 0, burn: 0, burnT: 0, burnDmg: 0, frozen: 0, glued: 0, phase: this.stage.world, shellT: 0, stolen: -1, guardT: 0, flank: 1,
+      mods: [], under: MOBS[kind].brain === 'burrower', disguised: MOBS[kind].brain === 'mimic', aimX: 0, aimY: 0, enraged: false, parent: 0, dropT: 0, surfT: 0, burn: 0, burnT: 0, burnDmg: 0, frozen: 0, glued: 0, phase: this.stage.world, shellT: 0, stolen: -1, guardT: 0, flank: 1, queue: [], patI: 0, tired: 0, armor: 1, weak: 0, bossPhase: 1,
     };
     if (y !== undefined) { m.on = this.platformAt(x, y); m.ground = m.on !== null; }
     this.mobs.push(m);
@@ -1003,6 +1005,8 @@ export class World {
     if (m.frozen > 0) raw *= 1.3;
     if (m.glued > 0 && h.state === 'skill' && h.skill?.kind === 'roll') raw *= 2; // Mustard Glue + Spike Roll combo
     if (guardBreak || (h.state === 'attack' && h.step === 2)) raw *= 1 + h.d.heavyDmg;
+    if (isBoss) raw *= (m.armor > 0 ? BOSS_ARMOR.take : 1) * (m.weak > 0 ? BOSS_ARMOR.weakMul : 1);
+    if (m.tired > 0) raw *= BOSS_ARMOR.tiredMul;
     const counter = h.counter > 0;
     const crit = counter || this.rand() * 100 < h.d.crit;
     const gap = m.lv - h.d.level; // fighting above your level hurts
@@ -1024,6 +1028,10 @@ export class World {
     else this.addStyle('hit', 2);
     // boss phase 2 at half HP (the same for every kaiju): faster, and the arena hazards switch on
     if ((isBoss || def.brain === 'nemesis') && !m.enraged && m.hp > 0 && m.hp < m.maxHp / 2) { m.enraged = true; this.events.push({ t: 'enrage', name: def.name }); }
+    if (isBoss || def.brain === 'nemesis') {
+      const ph = m.hp < m.maxHp * 0.25 ? 3 : m.hp < m.maxHp * 0.5 ? 2 : 1;
+      if (ph > m.bossPhase && m.hp > 0) { m.bossPhase = ph; m.queue = []; m.armor = 1; m.weak = 0; if (ph === 3) this.events.push({ t: 'phase', name: def.name, n: 3 }); }
+    }
     // interrupt: hitting a wind-up cancels it, unless it's a red (danger) attack or the monster is armoured and the hit is light
     const danger = this.isDanger(m);
     if (m.state === 'windup' && !isBoss && !danger && m.hp > 0 && (!(def.armor || m.elite) || heavy || k.stun >= 0.6)) {
@@ -1035,9 +1043,12 @@ export class World {
     }
 
     const flinch = (!(def.armor || m.elite) || (def.brain !== 'boss' && (heavy || k.stun >= 0.6)) || m.state === 'stagger') && !danger && def.brain !== 'turret';
-    if (def.brain === 'boss' && m.state !== 'stagger' && m.hp > 0) {
-      m.stagger += dmg;
-      if (m.stagger > m.maxHp * 0.12) { m.stagger = 0; m.state = 'stagger'; m.t = 0; m.vx = 0; this.events.push({ t: 'stagger' }); }
+    if (def.brain === 'boss' && m.armor > 0 && m.hp > 0) {
+      m.armor -= dmg / (m.maxHp * BOSS_ARMOR.pool) * (heavy || guardBreak ? BOSS_ARMOR.heavy : 1);
+      if (m.armor <= 0) { // armour cracks: stagger, then weak for a while
+        m.armor = 0; m.weak = BOSS_ARMOR.weak; m.state = 'stagger'; m.t = 0; m.vx = 0; m.queue = [];
+        this.events.push({ t: 'stagger' }, { t: 'armorBreak', x: m.x, y: m.y - def.h * 0.7 });
+      }
     }
     if (flinch && m.hp > 0 && m.frozen <= 0) {
       m.vx = dir * k.kx * def.knock;
@@ -1080,7 +1091,8 @@ export class World {
     const def = MOBS[m.kind], h = this.hero;
     m.t += dt; m.flash = Math.max(0, m.flash - dt); m.hurtShown = Math.max(0, m.hurtShown - dt); m.slow = Math.max(0, m.slow - dt);
     if (m.state === 'dead') { m.deadT += dt; m.vx *= 0.96; this.physics(m, dt, MAX_FALL, false); return; }
-    m.shellT = Math.max(0, m.shellT - dt); m.guardT = Math.max(0, m.guardT - dt);
+    m.shellT = Math.max(0, m.shellT - dt); m.guardT = Math.max(0, m.guardT - dt); m.tired = Math.max(0, m.tired - dt);
+    if (m.weak > 0 && (m.weak -= dt) <= 0) { m.weak = 0; m.armor = 1; } // armour grows back
     if (m.burn > 0) {
       m.burn -= dt; m.burnT -= dt;
       if (m.burnT <= 0) {
@@ -1138,7 +1150,7 @@ export class World {
           const p = this.stage.platforms[m.on];
           if ((dir < 0 && m.x - 20 < p.x) || (dir > 0 && m.x + 20 > p.x + p.w)) dir = 0;
         }
-        if (def.brain === 'turret') dir = 0;
+        if (def.brain === 'turret' || m.tired > 0) dir = 0;
         m.vx = approach(m.vx, dir * (chase ? def.speed * (def.brain === 'bomber' ? 1.6 : m.under ? 1.5 : 1.4) : def.speed) * (m.slow > 0 ? 0.6 : 1) * fast, 800 * dt);
         if (chase) m.face = dx > 0 ? 1 : -1; else if (dir) m.face = dir > 0 ? 1 : -1;
         const onMySide = !melee || Math.sign(m.x - h.x) === m.flank || m.t > 2.5; // flankers get round you before attacking
@@ -1216,14 +1228,23 @@ export class World {
   }
 
   private bossThink(m: Mob, dx: number): void {
-    const r = this.rand();
-    const moves = MOBS[m.kind].moves ?? ['slash'];
-    const close = Math.abs(dx) < 150;
-    let move = close ? (r < 0.6 ? 'slash' : 'leap') : r < 0.45 ? 'charge' : r < 0.85 ? 'leap' : 'slash';
-    if (moves.includes('rain') && this.rand() < (m.hp < m.maxHp / 2 ? 0.4 : 0.25)) move = 'rain';
-    else if (moves.includes('breath') && Math.abs(dx) < 380 && this.rand() < 0.35) move = 'breath';
-    if (!moves.includes(move)) move = moves[Math.floor(this.rand() * moves.length)];
-    if (move === 'slash' && Math.abs(dx) > 170) return; // walk closer first
+    const pats = BOSS_PATTERNS[m.kind];
+    let move: string;
+    if (pats) {
+      // a fixed string of moves: close or far one depending on where you stand, taking turns between the two of each
+      if (!m.queue.length) {
+        const p = pats[Math.min(pats.length, m.bossPhase) - 1];
+        const list = Math.abs(dx) < 170 ? p.near : p.far;
+        m.queue = [...list[m.patI++ % list.length]];
+      }
+      move = m.queue[0];
+      if (move === 'slash' && Math.abs(dx) > 170) return; // walk closer first
+      m.queue.shift();
+    } else {
+      const moves = MOBS[m.kind].moves ?? ['slash'];
+      move = Math.abs(dx) < 150 ? 'slash' : moves[Math.floor(this.rand() * moves.length)];
+      if (move === 'slash' && Math.abs(dx) > 170) return;
+    }
     m.state = 'windup'; m.t = 0; m.vx = 0; m.move = move;
     m.face = dx > 0 ? 1 : -1;
     this.events.push({ t: 'mobAttack', id: m.id, kind: move });
@@ -1283,9 +1304,13 @@ export class World {
         default: return true;
       }
     };
-    const moves = nemesisMoves(m.kind, m.phase).filter(ok);
-    if (!moves.length) return; // walk closer
-    const mv = moves[Math.floor(this.rand() * moves.length)];
+    const all = nemesisMoves(m.kind, m.phase);
+    // learnable: goes through its moves in order (skipping ones that don't fit the distance), then catches its breath
+    if (m.patI > 0 && m.patI % all.length === 0 && m.queue[0] !== 'rested') { m.queue = ['rested']; this.tire(m, m.bossPhase === 3 ? 0.9 : 1.4); return; }
+    m.queue = [];
+    let mv: NemMove | undefined;
+    for (let k = 0; k < all.length && !mv; k++) { const c = all[(m.patI + k) % all.length]; if (ok(c)) { mv = c; m.patI += k + 1; } }
+    if (!mv) return; // walk closer
     m.state = 'windup'; m.t = 0; m.vx = 0; m.move = mv; m.face = dx > 0 ? 1 : -1;
     const i = def.nem!.moves.indexOf(mv);
     this.events.push({ t: 'mobAttack', id: m.id, kind: mv });
@@ -1541,7 +1566,19 @@ export class World {
     }
   }
 
-  private endAttack(m: Mob): void { m.state = 'walk'; m.t = 0; m.move = ''; }
+  private endAttack(m: Mob): void {
+    m.state = 'walk'; m.t = 0; m.move = '';
+    const brain = MOBS[m.kind].brain;
+    if (brain === 'boss' && BOSS_PATTERNS[m.kind]) {
+      if (m.queue.length) m.t = 0.3; // next move of the string comes quickly
+      else this.tire(m, BOSS_ARMOR.tired);
+    }
+  }
+  /** Out of breath: stands still, takes extra damage. */
+  private tire(m: Mob, s: number): void {
+    m.tired = s; m.t = -s + 0.4; m.vx = 0;
+    this.events.push({ t: 'tired', x: m.x, y: m.y - MOBS[m.kind].h - 10 });
+  }
 
 /** A hit arriving early in a dodge roll counts as a perfect dodge (once per roll). */
   canPerfect(): boolean { const h = this.hero; return h.state === 'dodge' && !h.perfectDone && h.t < PERFECT_WIN + Math.min(0.08, h.d.dodge * 0.25); }

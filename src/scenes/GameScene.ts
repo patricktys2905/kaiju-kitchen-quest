@@ -325,6 +325,9 @@ export class GameScene extends Phaser.Scene {
           toast(`🗝 WORLD ${e.world} KEY! A secret stage has opened on the map`, { big: true, color: '#ffd27a' });
           break;
         }
+        case 'tired': this.callout(e.x, e.y, 'TIRED! HIT IT!', '#a8f0a8', 13); break;
+        case 'armorBreak': sfx('boom'); this.shake = 12; this.callout(e.x, e.y - 34, 'ARMOUR BROKEN!', '#ffd27a', 18); this.burst(e.x, e.y, 0xd8d8e8, 24); break;
+        case 'phase': sfx('boss'); this.shake = 16; this.cameras.main.flash(300, 255, 60, 60); toast(`${e.name.toUpperCase()}: FINAL PHASE!`, { big: true, color: '#ff4a4a' }); break;
         case 'guardUp': sfx('click'); this.callout(e.x, e.y, 'GUARD UP!', '#c8d8e8', 13); { const near = w.mobs.find(m => m.guardT > 0 && m.state !== 'dead'); if (near && Math.random() < 0.7) this.bubble(['Hah! Same old moves!', 'We\'ve seen THAT before!', 'Try something new, pal!'][Math.floor(Math.random() * 3)], near.id, '#5a1030'); } break;
         case 'mimic': this.time.delayedCall(400, () => this.quip('mimic', true)); sfx('boss'); toast('It\'s a MIMIC!', { color: '#ff9a6a' }); break;
         case 'style': if (e.rank === 'S' || e.rank === 'A') toast(`STYLE ${e.rank}!`, { color: e.rank === 'S' ? '#ffd23c' : '#9fe8ff' }); break;
@@ -848,6 +851,8 @@ export class GameScene extends Phaser.Scene {
     else if (m.burn > 0 && Math.floor(t * 10) % 2 === 0) v.img.setTint(0xffa060).setTintMode(Phaser.TintModes.MULTIPLY);
     else if (this.world!.isDanger(m)) v.img.setTint(Math.floor(t * 14) % 2 ? 0xff3030 : 0xff8080).setTintMode(Phaser.TintModes.MULTIPLY); // red: can't interrupt, dodge it!
     else if (m.state === 'windup' && Math.floor(t * 12) % 2 === 0) v.img.setTint(0xffc070).setTintMode(Phaser.TintModes.MULTIPLY);
+    else if (m.weak > 0) v.img.setTint(Math.floor(t * 6) % 2 ? 0xc8c8ff : 0xffffff).setTintMode(Phaser.TintModes.MULTIPLY);
+    else if (m.tired > 0) v.img.setTint(0xb8e8b8).setTintMode(Phaser.TintModes.MULTIPLY);
     else if (m.enraged && Math.floor(t * 4) % 2 === 0) v.img.setTint(0xff9a8a).setTintMode(Phaser.TintModes.MULTIPLY);
     else if (m.state === 'stagger') v.img.setTint(0xfff0a0).setTintMode(Phaser.TintModes.MULTIPLY);
     else v.img.clearTint().setTintMode(Phaser.TintModes.MULTIPLY);

@@ -154,7 +154,7 @@ export function updateHud(w: World, p: HeroProfile, st: StageDef): void {
   if (boss) {
     q('.boss .t').textContent = `Lv ${boss.lv} ${MOBS[boss.kind].name.toUpperCase()}`;
     q('.boss .bar i').style.transform = `scaleX(${Math.max(0, boss.hp / boss.maxHp)})`;
-    q<HTMLElement>('.boss .bar u').style.transform = `scaleX(${boss.state === 'stagger' ? 1 : boss.stagger / (boss.maxHp * 0.12)})`;
+    q<HTMLElement>('.boss .bar u').style.transform = `scaleX(${boss.weak > 0 ? 0 : boss.armor})`; // armour left
   }
   q('.loot span').textContent = String(w.loot.length);
   const combo = q('.combo');

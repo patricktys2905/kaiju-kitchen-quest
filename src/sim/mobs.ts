@@ -79,14 +79,14 @@ export const MOBS: Record<MobKind, MobDef> = {
   imp: { name: 'Hot Sauce Imp', brain: 'ranged', art: 'mob-imp', hp: 55, atk: 10, speed: 75, w: 40, h: 56, knock: 1, aggro: 380, range: 330, windup: 0.5, patrol: 110, xp: 12, dropChance: 0.35 },
   bacon: { name: 'Sizzle Bacon', brain: 'walker', art: 'mob-bacon', hp: 70, atk: 10, speed: 110, w: 60, h: 40, knock: 1, aggro: 300, range: 70, windup: 0.4, patrol: 160, xp: 11, dropChance: 0.3 },
   meatball: { name: 'Meatball Brute', brain: 'brute', art: 'mob-meatball', hp: 210, atk: 16, speed: 50, w: 72, h: 76, knock: 0.45, aggro: 280, range: 90, windup: 0.8, patrol: 90, xp: 30, dropChance: 0.6, armor: true },
-  dragon: { name: 'Grease Dragon', brain: 'boss', art: 'boss-dragon', hp: 1800, atk: 19, speed: 95, w: 150, h: 170, knock: 0.2, aggro: 2000, range: 160, windup: 0.75, patrol: 0, xp: 340, dropChance: 1, armor: true, moves: ['slash', 'leap', 'breath', 'charge', 'rain'] },
+  dragon: { name: 'Grease Dragon', brain: 'boss', art: 'boss-dragon', hp: 2000, atk: 19, speed: 95, w: 150, h: 170, knock: 0.2, aggro: 2000, range: 160, windup: 0.75, patrol: 0, xp: 340, dropChance: 1, armor: true, moves: ['slash', 'leap', 'breath', 'charge', 'rain'] },
   // World 4: The Pantry
   can: { name: 'Can Crusher', brain: 'walker', art: 'mob-can', hp: 110, atk: 12, speed: 55, w: 52, h: 60, knock: 0.6, aggro: 280, range: 70, windup: 0.6, patrol: 100, xp: 18, dropChance: 0.4, shield: true },
   cheerio: { name: 'Cheerio Blob', brain: 'walker', art: 'mob-cheerio', hp: 90, atk: 11, speed: 70, w: 58, h: 52, knock: 0.9, aggro: 280, range: 66, windup: 0.5, patrol: 130, xp: 14, dropChance: 0.3, split: 'minicheerio' },
   minicheerio: { name: 'Cheerio Bit', brain: 'hopper', art: 'mob-cheerio', hp: 28, atk: 7, speed: 100, w: 30, h: 28, knock: 1.3, aggro: 320, range: 180, windup: 0.3, patrol: 120, xp: 4, dropChance: 0.08, scale: 0.55 },
   soda: { name: 'Baking Soda Bomb', brain: 'bomber', art: 'mob-soda', hp: 40, atk: 22, speed: 150, w: 40, h: 46, knock: 1.2, aggro: 340, range: 60, windup: 0.7, patrol: 140, xp: 12, dropChance: 0.25 },
   flour: { name: 'Flour Ghost', brain: 'flyer', art: 'mob-flour', hp: 55, atk: 11, speed: 110, w: 46, h: 50, knock: 1.1, aggro: 340, range: 230, windup: 0.5, patrol: 160, xp: 13, dropChance: 0.3 },
-  jar: { name: 'Cookie Jar Mimic', brain: 'boss', art: 'boss-jar', hp: 1650, atk: 19, speed: 85, w: 130, h: 170, knock: 0.2, aggro: 2000, range: 150, windup: 0.75, patrol: 0, xp: 360, dropChance: 1, armor: true, moves: ['slash', 'leap', 'rain', 'charge'] },
+  jar: { name: 'Cookie Jar Mimic', brain: 'boss', art: 'boss-jar', hp: 1400, atk: 19, speed: 85, w: 130, h: 170, knock: 0.2, aggro: 2000, range: 150, windup: 0.75, patrol: 0, xp: 360, dropChance: 1, armor: true, moves: ['slash', 'leap', 'rain', 'charge'] },
   // ---- new monsters, 3 per world ----
   garlic: { name: 'Garlic Cleric', brain: 'healer', art: 'mob-garlic', hp: 55, atk: 7, speed: 60, w: 44, h: 56, knock: 1, aggro: 320, range: 260, windup: 0.9, patrol: 100, xp: 14, dropChance: 0.4 },
   ant: { name: 'Sugar Ant Digger', brain: 'burrower', art: 'mob-ant', hp: 60, atk: 11, speed: 95, w: 50, h: 42, knock: 1, aggro: 340, range: 40, windup: 0.6, patrol: 120, xp: 13, dropChance: 0.3 },
@@ -126,7 +126,7 @@ export const MOBS: Record<MobKind, MobDef> = {
     nem: { species: 15, moves: ['skewer', 'spin', 'lob', 'charge'], names: ['Skewer Thrust', 'Spit-Roast Spin', 'Marinade Toss', 'Kebab Charge'], shot: 'marinade' } },
   nshark: { name: 'Finn Freezepop', brain: 'nemesis', art: 'mob-nem-shark', hp: 195, atk: 15, speed: 90, w: 90, h: 70, knock: 0.4, aggro: 900, range: 140, windup: 0.7, patrol: 70, xp: 32, dropChance: 1, armor: true,
     nem: { species: 17, moves: ['finslide', 'rain', 'roar', 'leap'], names: ['Fin Slide', 'Icicle Drop', 'Brain Freeze', 'Iceberg Belly-Flop'], shot: 'icicle' } },
-  golem: { name: 'Freezer Golem', brain: 'boss', art: 'boss-golem', hp: 1700, atk: 18, speed: 80, w: 130, h: 180, knock: 0.2, aggro: 2000, range: 150, windup: 0.75, patrol: 0, xp: 320, dropChance: 1, armor: true, moves: ['slash', 'leap', 'rain', 'charge'] },
+  golem: { name: 'Freezer Golem', brain: 'boss', art: 'boss-golem', hp: 1900, atk: 18, speed: 80, w: 130, h: 180, knock: 0.2, aggro: 2000, range: 150, windup: 0.75, patrol: 0, xp: 320, dropChance: 1, armor: true, moves: ['slash', 'leap', 'rain', 'charge'] },
 };
 
 /** Stage-5 mini-boss multipliers. */
@@ -142,6 +142,33 @@ export const ELITE_MODS: Record<EliteMod, { name: string; desc: string; color: s
   moldy: { name: 'Moldy', desc: 'Leaves slowing mould puddles', color: '#7ad04a' },
   splitting: { name: 'Splitting', desc: 'Splits into two smaller copies', color: '#c87aff' },
 };
+/** World bosses fight in learnable strings: a close or far string (by where you stand), then they're tired for a moment.
+ *  Phase 2 at half HP, phase 3 (with a new move) at a quarter. The same for every kaiju. */
+export const BOSS_PATTERNS: Partial<Record<MobKind, { near: string[][]; far: string[][] }[]>> = {
+  toast: [
+    { near: [['slash', 'slash'], ['slash', 'leap']], far: [['charge'], ['leap']] },
+    { near: [['slash', 'slash', 'leap'], ['slash', 'charge']], far: [['charge', 'slash'], ['leap', 'leap']] },
+    { near: [['slash', 'heatwave', 'slash'], ['leap', 'heatwave']], far: [['heatwave', 'charge'], ['charge', 'leap', 'slash']] },
+  ],
+  golem: [
+    { near: [['slash', 'slash'], ['slash', 'rain']], far: [['rain'], ['charge']] },
+    { near: [['slash', 'leap', 'slash'], ['rain', 'slash']], far: [['charge', 'rain'], ['leap', 'leap']] },
+    { near: [['roar', 'slash', 'slash'], ['roar', 'leap']], far: [['rain', 'rain', 'charge'], ['roar', 'rain']] },
+  ],
+  dragon: [
+    { near: [['slash', 'breath'], ['slash', 'slash']], far: [['breath'], ['charge']] },
+    { near: [['slash', 'breath', 'leap'], ['slash', 'charge']], far: [['rain', 'breath'], ['charge', 'leap']] },
+    { near: [['breath', 'heatwave', 'slash'], ['leap', 'breath']], far: [['heatwave', 'rain', 'charge'], ['breath', 'breath']] },
+  ],
+  jar: [
+    { near: [['slash', 'slash'], ['leap']], far: [['rain'], ['charge']] },
+    { near: [['slash', 'rain', 'slash'], ['leap', 'slash']], far: [['charge', 'rain'], ['fanshot', 'charge']] },
+    { near: [['fanshot', 'slash', 'slash'], ['leap', 'fanshot']], far: [['rain', 'fanshot', 'charge'], ['charge', 'leap']] },
+  ],
+};
+/** Boss armour: softens hits until broken (heavy hits break it fastest), then the boss is weak for a while. */
+export const BOSS_ARMOR = { take: 0.7, pool: 0.1, heavy: 2.5, weak: 5, weakMul: 1.5, tired: 1.6, tiredMul: 1.25 };
+
 /** Attacks that glow red: they can't be interrupted, only dodged. */
 export const DANGER_MOVES = new Set(['charge', 'leap', 'rush', 'brute', 'skewer', 'finslide']);
 
@@ -156,7 +183,7 @@ export function nemesisMoves(kind: MobKind, world: number): NemMove[] {
 }
 
 /** Global difficulty knobs (tuned with scripts/balance.ts). */
-export const TUNE = { hp: 2.5, atk: 1.8, bossHp: 1.15, bossAtk: 0.6, windup: 0.85 };
+export const TUNE = { hp: 2.5, atk: 1.8, bossHp: 1.35, bossAtk: 0.6, windup: 0.85 };
 export function mobHp(kind: MobKind, lv: number): number { return Math.round(MOBS[kind].hp * TUNE.hp * (MOBS[kind].brain === 'boss' ? TUNE.bossHp : 1) * (1 + 0.32 * (lv - 1))); }
 export function mobAtk(kind: MobKind, lv: number): number { return Math.round(MOBS[kind].atk * TUNE.atk * (1 + 0.2 * (lv - 1))); }
 export function mobXp(kind: MobKind, lv: number): number { return Math.round(MOBS[kind].xp * (1 + 0.3 * (lv - 1))); }
