@@ -476,7 +476,8 @@ export class World {
           this.enter(h, 'climb');
           h.x = lad.x; h.vx = 0; h.vy = 0; h.ground = false; h.on = null;
           if (inp.down) h.y += 6;
-          break;
+          h.prev = { ...inp };
+          return; // no physics this step (it would drop us straight back onto the floor and leave 'ground' set)
         }
         h.vx = approach(h.vx, dir * speed, (h.ground ? 2400 * grip : 1500) * dt);
         if (dir) h.face = dir > 0 ? 1 : -1;
@@ -527,6 +528,7 @@ export class World {
         if (h.t >= DODGE_T) this.enter(h, h.ground ? 'move' : 'air');
         break;
       case 'climb': {
+        h.ground = false; h.on = null; // on a ladder you stand on nothing (else jumping off it left you walking on air)
         const lad = this.ladderAt(h.x, h.y + 1);
         const vdir = (inp.down ? 1 : 0) - (inp.up ? 1 : 0);
         h.vx = 0; h.vy = 0;

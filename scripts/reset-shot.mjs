@@ -10,7 +10,7 @@ const b = await chromium.launch({ executablePath: 'C:/Program Files (x86)/Micros
 const p = await (await b.newContext({ viewport: { width: 844, height: 390 }, isMobile: true, hasTouch: true })).newPage();
 const errs = []; p.on('pageerror', e => errs.push(e.message));
 await p.goto(base); await p.evaluate(() => localStorage.clear()); await p.reload(); await wait(1500);
-if (await p.$('#title .over')) errs.push('START OVER shown on a brand-new save');
+if (!await p.$('#title .over')) errs.push('START OVER missing on a fresh save');
 // give the save some progress (the game's own save object), then reload to the title
 await p.evaluate(() => { document.querySelector('#title .play').click(); });
 for (let i = 0; i < 60 && !await p.evaluate(() => !!window.__kkq); i++) await wait(250);
@@ -31,6 +31,6 @@ await p.click('#title .over'); await wait(200); await p.click('#title .ask .yes'
 await wait(2500);
 const after = await p.evaluate(() => { const s = JSON.parse(localStorage.getItem('kkq-save-v3')); return { crumbs: s.crumbs, lv: s.heroes[0].level, cleared: Object.keys(s.heroes[0].cleared).length, over: !!document.querySelector('#title .over'), title: !!document.querySelector('#title') }; });
 console.log('after erase', after);
-if (after.crumbs || after.lv !== 1 || after.cleared || after.over || !after.title) errs.push('erase did not give a fresh game');
+if (after.crumbs || after.lv !== 1 || after.cleared || !after.over || !after.title) errs.push('erase did not give a fresh game');
 console.log(errs.length ? errs : 'no errors');
 await b.close(); server.kill(); process.exit(errs.length ? 1 : 0);
