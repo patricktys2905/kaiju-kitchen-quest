@@ -117,10 +117,19 @@ function render(): void {
     <div class="main">
       <div class="top"><h1>Kaiju Kitchen Quest</h1><span class="chip"><img src="art/icon-crumb.webp"> ${save.crumbs}</span><span class="chip">🎁 ${save.boxes.length}</span><button class="chip" data-act="mute">${isMuted() ? '🔇' : '🔊'}</button>${fsButton()}</div>
       <div class="tabs">${tabs.map(([k, n, c]) => `<button class="${tab === k ? 'on' : ''}" data-tab="${k}">${n}${c ? `<em>${c}</em>` : ''}</button>`).join('')}</div>
-      <div class="page ${tab === 'map' ? 'mappage' : ''}">${page()}</div>
+      <div class="page ${tab === 'map' ? 'mappage' : ''}">${safePage()}</div>
     </div>
     ${flash ? `<div class="flashmsg">${flash}</div>` : ''}`;
   flash = '';
+}
+
+/** A tab that fails to draw shows what went wrong (to screenshot) instead of silently doing nothing. */
+function safePage(): string {
+  try { return page(); } catch (e) {
+    console.error(e);
+    const err = e instanceof Error ? `${e.name}: ${e.message} @ ${(e.stack ?? '').split('\n')[1]?.trim() ?? ''}` : String(e);
+    return `<div class="freeinfo">😵 This tab hit a snag and couldn't open.<br><small style="color:#ff9a8a">${err.replace(/[<>&]/g, '')}</small><br><small>Version ${__APP_VERSION__} · tab ${tab} · kaiju ${save.selected}</small><br>Please send a screenshot of this message.</div>`;
+  }
 }
 
 function page(): string {
