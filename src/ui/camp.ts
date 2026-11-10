@@ -4,7 +4,7 @@ import { MOBS as MOB_DEFS, nemesisOf } from '../sim/mobs';
 import type { Spicy } from '../sim/types';
 import { CLASSES, type Stat } from '../sim/classes';
 import { CONSUMABLES, type ConsumableId, QUICK_SLOTS } from '../sim/consumables';
-import { BASES, SETS, UNIQUES, canWear, ownerOf, GRADES, GRADE_CSS, GRADE_MUL, type Item, MAX_PLUS, RARITY_CSS, RARITY_NAMES, type Slot, fortChance, fortCost, fortMul, fortRisky, gradeOf, itemLines, itemName, lineText, salvageValue } from '../sim/items';
+import { BASES, PROCS, SETS, UNIQUES, itemIcon, canWear, ownerOf, GRADES, GRADE_CSS, GRADE_MUL, type Item, MAX_PLUS, RARITY_CSS, RARITY_NAMES, type Slot, fortChance, fortCost, fortMul, fortRisky, gradeOf, itemLines, itemName, lineText, salvageValue } from '../sim/items';
 import { TIER_NAMES, clearCount, likelyTier } from '../sim/loot';
 import { BRANCH_LV, SKILLS, MAX_SKILL, type SkillDef, type SkillKind, ULTS, ULT_LV, branchesFor, skillsOf } from '../sim/skills';
 import { STAGES, WORLDS, BONUS_STAGES, stageById } from '../sim/stages';
@@ -17,6 +17,8 @@ import {
   unequip, useScroll, useSugar,
 } from '../save';
 import { UI_CSS } from './style';
+import { GEAR, gearText } from '../sim/gear';
+import { isTouchDevice } from '../touch';
 import { ACHIEVEMENTS, DAILY_BONUS, achievements, checkUnlocks, claimAch, claimBonus, claimKaijuQuest, claimQuest, claimable, dailyQuests, kaijuQuestState, rewardText, track, unlockProgress } from '../quests';
 import { STORIES, VARIANT_INFO, beatBefore, isMinorBeat } from '../story/stories';
 import { playStory } from './story';
@@ -79,7 +81,7 @@ export function hideCamp(): void { el.classList.remove('on'); }
 
 const esc = (s: string) => s.replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]!));
 const iconHtml = (it: Item | undefined, extra = '', badge = '') => it
-  ? `<div class="icon" style="--rc:${RARITY_CSS[it.rarity]};background-image:url(art/${BASES[it.base].icon}.webp)" ${extra}>${it.skill ? '<span class="sk">⭐</span>' : ''}${it.plus ? `<b>+${it.plus}</b>` : ''}${isLocked(it.id) ? '<span class="lk">🔒</span>' : ''}<span class="gr" style="color:${GRADE_CSS[gradeOf(it)]}">${GRADES[gradeOf(it)]}</span>${it.set ? '<span class="setm">SET</span>' : ''}${it.unique ? '<span class="uqm">✦</span>' : ''}${badge}</div>`
+  ? `<div class="icon" style="--rc:${RARITY_CSS[it.rarity]};background-image:url(art/${itemIcon(it)}.webp)" ${extra}>${it.skill ? '<span class="sk">⭐</span>' : ''}${it.plus ? `<b>+${it.plus}</b>` : ''}${isLocked(it.id) ? '<span class="lk">🔒</span>' : ''}<span class="gr" style="color:${GRADE_CSS[gradeOf(it)]}">${GRADES[gradeOf(it)]}</span>${it.set ? '<span class="setm">SET</span>' : ''}${it.unique ? '<span class="uqm">✦</span>' : ''}${badge}</div>`
   : `<div class="icon" ${extra}></div>`;
 /** ▲ / ▼ versus what the current hero wears. */
 function badgeFor(it: Item): string {
@@ -213,7 +215,9 @@ function heroPage(): string {
       return `<button class="slot" data-eqslot="${s}">${iconHtml(it)}<div class="t">${it ? `<span style="color:${RARITY_CSS[it.rarity]};display:inline;font-size:2.1vmin">${esc(itemName(it))}</span><span>${itemLines(it).map(lineText).join(' · ')}${it.skill ? ` · ⭐ ${skillText(it)}` : ''}</span>` : `${SLOT_NAMES[s]}<span>Empty — tap to pick from the Bag</span>`}</div></button>`;
     }).join('')}</div>
     ${Object.entries(d.sets).filter(([, n]) => n >= 2).map(([k, n]) => `<div class="st" style="margin-top:1vmin"><b>${SETS[k].name}</b> ${n}/3: <span class="on">${SETS[k].two}</span>${n >= 3 ? ` · <span class="on">${SETS[k].three}</span>` : ''}</div>`).join('')}
+    ${d.gear ? `<div class="gs">🗡 GEAR SKILL <b>${d.gear.name}</b>: ${gearText(d.gear)} <small>(${isTouchDevice ? 'GEAR button' : 'F'}, ${d.gear.cd}s)</small></div>` : '<div class="gs">🗡 Equip a weapon to get a GEAR SKILL (its own button)</div>'}
     ${d.uniques.map(u => `<div class="uq">✦ ${UNIQUES[u].name}: ${UNIQUES[u].effect}</div>`).join('')}
+    ${d.procs.map(k => `<div class="pr">⚡ ${PROCS[k].name}: ${PROCS[k].effect}</div>`).join('')}
     <button class="pill go" data-act="best" style="margin-top:1.2vmin">⚡ EQUIP BEST</button>
     ${selItem !== null && Object.values(p.equip).some(i => i?.id === selItem) ? detail(Object.values(p.equip).find(i => i?.id === selItem)!, true) : ''}</div>
   </div>`;
@@ -222,7 +226,10 @@ function heroPage(): string {
 /** Set and named-legendary lines for an item. */
 function specialHtml(it: Item): string {
   let out = '';
-  if (it.unique) out += `<div class="uq">✦ ${UNIQUES[it.unique].effect}</div>`;
+  const g = BASES[it.base].slot === 'weapon' ? GEAR[it.base] : undefined;
+  if (g) out += `<div class="gs">🗡 Gear skill <b>${g.name}</b>: ${gearText(g)}</div>`;
+  if (it.unique) { const u = UNIQUES[it.unique]; out += `<div class="uq">✦ ${u.for !== undefined ? `${CLASSES.find(c => c.species === u.for)?.name ?? ''} signature: ` : ''}${u.effect}</div>`; }
+  if (it.proc) out += `<div class="pr">⚡ ${PROCS[it.proc].name}: ${PROCS[it.proc].effect}</div>`;
   if (it.set) {
     const set = SETS[it.set], worn = derive(hero()).sets[it.set] ?? 0;
     out += `<div class="st"><b>${set.name}</b> set (${worn}/3 worn)<br><span class="${worn >= 2 ? 'on' : ''}">2 pcs: ${set.two}</span><br><span class="${worn >= 3 ? 'on' : ''}">3 pcs: ${set.three}</span></div>`;
@@ -268,7 +275,7 @@ function bagPage(): string {
   const sel = bag.find(i => i.id === selItem) ?? bag[0];
   if (sel) selItem = sel.id;
   return sub + (bag.length ? `<div class="bagwrap"><div><div class="legend">▲ better / ▼ worse than what <b>${CLASSES.find(c => c.species === save.selected)!.name}</b> wears · 🔒 locked items are never salvaged</div>
-    <div class="grid">${bag.map(it => iconHtml(it, `data-item="${it.id}" style="--rc:${RARITY_CSS[it.rarity]};background-image:url(art/${BASES[it.base].icon}.webp);${it.id === selItem ? 'outline:3px solid #fff' : ''}"`, badgeFor(it))).join('')}</div></div>
+    <div class="grid">${bag.map(it => iconHtml(it, `data-item="${it.id}" style="--rc:${RARITY_CSS[it.rarity]};background-image:url(art/${itemIcon(it)}.webp);${it.id === selItem ? 'outline:3px solid #fff' : ''}"`, badgeFor(it))).join('')}</div></div>
     ${sel ? detail(sel, false) : ''}</div>` : `<div class="empty">No ${SLOT_NAMES[bagTab].toLowerCase()}s yet. Open boxes or visit the Market!</div>`);
 }
 
@@ -460,7 +467,7 @@ export function runGacha(indices: number[]): void {
     g.style.setProperty('--gc', rc);
     g.innerHTML = `<div class="rays"></div><div class="left">${left ? `${left} more` : ''}</div>
       <img class="bx shake" src="art/box-${tier}.webp">
-      <div class="card"><div class="icon" style="--rc:${rc};background-image:url(art/${BASES[it.base].icon}.webp)"></div>
+      <div class="card"><div class="icon" style="--rc:${rc};background-image:url(art/${itemIcon(it)}.webp)"></div>
         <div class="rar">${RARITY_NAMES[it.rarity].toUpperCase()} · GRADE <span style="color:${GRADE_CSS[gradeOf(it)]}">${GRADES[gradeOf(it)]}</span></div><h3>${esc(itemName(it))}</h3>
         ${itemLines(it).map(l => `<div class="ln">${lineText(l)}</div>`).join('')}${it.skill ? `<div class="skl">⭐ ${skillText(it)}</div>` : ''}${specialHtml(it)}
         <div class="cr">${ownerOf(it) !== undefined ? `<b style="color:#ffd27a">For ${ownerName(it)}</b> · ` : ''}iLv ${it.ilvl} ${SLOT_NAMES[BASES[it.base].slot]} · +🍪${res.crumbs} crumbs${res.extra.length ? ' · ' + res.extra.join(' · ') : ''}</div>
@@ -513,6 +520,8 @@ export function showResult(o: { stage: StageDef; res: ClearResult | null; time: 
 export function rankBetter(a: Rank, b: Rank): boolean { return RANK_ORDER.indexOf(a) > RANK_ORDER.indexOf(b); }
 
 const CAMP_CSS = `
+.kq .gs { color: #ffd27a; font-size: 1.9vmin; margin-top: 0.6vmin; } .kq .gs small { color: #b8a8b8; }
+.kq .pr { color: #9fe8ff; font-size: 1.9vmin; margin-top: 0.4vmin; }
 .kq .playrow { display: flex; gap: 1.2vmin; flex-wrap: wrap; align-items: center; }
 .kq .pill.online { background: linear-gradient(#5a8aff, #3a5ad8); color: #fff; }
 #camp .side { width: 11vmin; overflow-y: auto; gap: 1vmin; }
@@ -600,7 +609,7 @@ const CAMP_CSS = `
 .kq .skill .brpick { display: flex; gap: 0.8vmin; flex-wrap: wrap; margin-top: 0.4vmin; color: #ffd27a; align-items: center; }
 .kq .skill .brpick .pill { font-size: 1.7vmin; padding: 0.5vmin 1vmin; }
 .kq .skill.ult { grid-column: 1 / -1; border-color: #ffd27a88; background: linear-gradient(90deg, #3a1a30c0, #1a1020c0); }
-.kq .uq { color: #ffb02e; font-weight: 900; }
+.kq .uq { color: #ffb02e; font-weight: 900; font-size: 2vmin; margin-top: 0.4vmin; }
 .kq .st { color: #b8a8b8; font-size: 1.8vmin; }
 .kq .st b { color: #7ee8c8; }
 .kq .st .on { color: #7ee8c8; }

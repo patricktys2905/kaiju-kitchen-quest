@@ -96,6 +96,7 @@ export class Bot {
         if (flyer && dy < -50) inp.jump = pulse;
         // skills when ready
         const keys = ['skill1', 'skill2', 'skill3'] as const;
+        if (h.d.gear && h.cds[3] <= 0 && this.r() < 0.04) inp.gear = true;
         for (let i = 0; i < 3; i++) if (h.cds[i] <= 0 && (h.d.skillLv[Object.keys(h.d.skillLv)[i]] ?? 0) > 0 && this.r() < 0.05) inp[keys[i]] = true;
       }
       return inp;

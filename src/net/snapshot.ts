@@ -40,11 +40,11 @@ export interface Snapshot {
 export function makeSnapshot(w: World): Snapshot {
   return {
     w: [r2(w.time), b(w.portal), b(w.cleared), b(w.failed), w.combo, r(w.style), r2(w.slowmo), r1(w.objTimer), r1(w.holdout), b(w.objDone), r1(w.run.time), w.run.crumbs],
-    h: w.heroes.map(h => [r(h.x), r(h.y), r(h.vx), r(h.vy), h.face, HERO_STATES.indexOf(h.state), r2(h.t), h.step, b(h.ground), h.skill?.id ?? '', b(h.gliding), r2(h.inv), r(h.hp), h.d.maxHp, b(!!h.buff), r2(h.counter), r(h.ult), r2(h.revT), h.orbs ? h.orbs.n : 0, h.on ?? -9, r1(h.cds[0]), r1(h.cds[1]), r1(h.cds[2])]),
+    h: w.heroes.map(h => [r(h.x), r(h.y), r(h.vx), r(h.vy), h.face, HERO_STATES.indexOf(h.state), r2(h.t), h.step, b(h.ground), h.skill?.id ?? '', b(h.gliding), r2(h.inv), r(h.hp), h.d.maxHp, b(!!h.buff), r2(h.counter), r(h.ult), r2(h.revT), h.orbs ? h.orbs.n : 0, h.on ?? -9, r1(h.cds[0]), r1(h.cds[1]), r1(h.cds[2]), r1(h.cds[3] ?? 0), r(h.shield)]),
     m: w.mobs.map(m => [m.id, KINDS.indexOf(m.kind), r(m.x), r(m.y), r(m.vx), m.face, MOB_STATES.indexOf(m.state), r2(m.t), m.move, r(m.hp), m.maxHp, m.lv,
       b(m.elite) | b(m.under) << 1 | b(m.disguised) << 2 | b(m.enraged) << 3 | b(m.frozen > 0) << 4 | b(m.glued > 0) << 5 | b(m.burn > 0) << 6 | b(m.tired > 0) << 7 | b(m.weak > 0) << 8 | b(m.shellT > 0) << 9 | b(m.guardT > 0) << 10,
       m.mods.join(','), r(m.aimX), r(m.aimY), r2(m.flash), r1(m.hurtShown), r2(m.deadT), r2(m.armor), m.arena, m.bossPhase]),
-    s: w.shots.map(s => [s.id, s.kind ?? '', r(s.x), r(s.y), r(s.vx), r(s.vy), s.r ?? 0, s.tx ?? -1, s.ty ?? -1, s.from === 'hero' ? 1 : 0]),
+    s: w.shots.map(s => [s.id, s.kind ?? '', r(s.x), r(s.y), r(s.vx), r(s.vy), s.r ?? 0, s.tx ?? -1, s.ty ?? -1, s.from === 'hero' ? 1 : 0, s.icon ?? '', s.t < 0 ? 1 : 0]),
     bx: w.boxes.map(x => [x.id, x.tier, r(x.x), r(x.y), b(x.ground), x.owner ?? 0]),
     pr: w.props.map(p => [p.hp, b(p.cd > 0)]),
     ck: w.cookers.map(c => [r(c.x), c.face, r2(c.fuse), r1(c.gone)]),
@@ -77,7 +77,8 @@ export function applySnapshot(w: World, s: Snapshot): void {
     h.buff = buff ? (h.buff ?? { atk: 0, def: 0, speed: 0, armor: false, t: 1 }) : null;
     h.orbs = orbs ? (h.orbs ?? { t: 1, n: orbs, dmg: 0, cd: new Map() }) : null;
     if (h.orbs) h.orbs.n = orbs;
-    h.cds = [Number(a[20]) || 0, Number(a[21]) || 0, Number(a[22]) || 0];
+    h.cds = [Number(a[20]) || 0, Number(a[21]) || 0, Number(a[22]) || 0, Number(a[23]) || 0];
+    h.shield = Number(a[24]) || 0;
   });
   // monsters: update by id, create newcomers, drop the gone
   const byId = new Map(w.mobs.map(m => [m.id, m]));
@@ -98,8 +99,8 @@ export function applySnapshot(w: World, s: Snapshot): void {
     next.push(m);
   }
   w.mobs = next;
-  w.shots = s.s.map(a => { const [id, kind, x, y, vx, vy, rr, tx, ty, fromHero] = a as never as [number, string, number, number, number, number, number, number, number, number];
-    return { id, kind: kind || undefined, x, y, vx, vy, r: rr || undefined, tx: tx < 0 ? undefined : tx, ty: ty < 0 ? undefined : ty, from: fromHero ? 'hero' : 'mob', t: 0, dmg: 0, hit: new Set<number>(), kx: 0, ky: 0, pierce: false }; });
+  w.shots = s.s.map(a => { const [id, kind, x, y, vx, vy, rr, tx, ty, fromHero, icon, early] = a as never as [number, string, number, number, number, number, number, number, number, number, string, number];
+    return { id, kind: kind || undefined, x, y, vx, vy, r: rr || undefined, tx: tx < 0 ? undefined : tx, ty: ty < 0 ? undefined : ty, from: fromHero ? 'hero' : 'mob', t: 0, dmg: 0, hit: new Set<number>(), kx: 0, ky: 0, pierce: false, icon: icon || undefined, ...(early ? { t: -1 } : {}) }; });
   w.boxes = s.bx.map(([id, tier, x, y, ground, owner]) => ({ id, tier: tier as BoxTier, x, y, ground: !!ground, owner, vy: 0, t: 1, ilvl: 1 }));
   s.pr.forEach(([hp, cd], i) => { const p = w.props[i]; if (p) { p.hp = hp; p.cd = cd ? 1 : 0; } });
   s.ck.forEach(([x, face, fuse, gone], i) => { const c = w.cookers[i]; if (c) Object.assign(c, { x, face, fuse, gone }); });

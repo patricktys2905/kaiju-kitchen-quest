@@ -25,6 +25,8 @@ export interface Item {
   set?: string;
   /** named legendary (UNIQUES key) */
   unique?: string;
+  /** trigger effect (PROCS key), armour and charms only */
+  proc?: string;
 }
 
 export interface BaseDef { slot: Slot; name: string; icon: string; main: Line[]; minLv?: number; /** only this kaiju can wear it */ for?: number; tier?: number; /** no longer drops */ retired?: boolean; /** always part of this set */ set?: string }
@@ -206,10 +208,15 @@ export function rollItem(id: number, tier: BoxTier, ilvl: number, rand: () => nu
   if (BASES[base].set) it.set = BASES[base].set;
   else if (rarity >= 3 && rand() < 0.25) it.set = setForLevel(ilvl);
   // named legendaries
-  if (rarity === 5 && rand() < 0.35) {
-    const u = Object.keys(UNIQUES).filter(k => UNIQUES[k].slot === BASES[base].slot);
+  // a kaiju's own signature legendaries turn up on its own gear (more often when it's the kaiju you're playing)
+  const sig = own !== undefined ? Object.keys(UNIQUES).filter(k => UNIQUES[k].for === own && UNIQUES[k].slot === BASES[base].slot) : [];
+  if (sig.length && rarity >= 4 && rand() < (rarity === 5 ? 0.45 : 0.12) * (own === prefer ? 1.6 : 0.6)) it.unique = pick(sig, rand);
+  else if (rarity === 5 && rand() < 0.35) {
+    const u = Object.keys(UNIQUES).filter(k => UNIQUES[k].slot === BASES[base].slot && UNIQUES[k].for === undefined);
     if (u.length) it.unique = pick(u, rand);
   }
+  // trigger effects on armour and charms
+  if (BASES[base].slot !== 'weapon' && rand() < [0, 0, 0.2, 0.5, 0.8][rarity - 1]) it.proc = pick(Object.keys(PROCS), rand);
   return it;
 }
 
@@ -273,7 +280,39 @@ export const SETS: Record<string, SetDef> = {
 export function setForLevel(ilvl: number): string { return ilvl >= 37 ? 'pantry' : ilvl >= 25 ? 'inferno' : ilvl >= 13 ? 'frost' : 'champ'; }
 
 // ---------- named legendaries ----------
-export interface UniqueDef { name: string; slot: Slot; effect: string }
+// Signature legendaries: two per kaiju (a weapon and an armour), each upgrading one of that kaiju's skills.
+const SIG = (name: string, slot: Slot, sp: number, skill: string, mod: SkillMod, effect: string): UniqueDef => ({ name, slot, for: sp, skill, mod, effect, icon: `u-${name.toLowerCase().replace(/[^a-z]+/g, '-').replace(/^-|-$/g, '')}` });
+const SIGS: Record<string, UniqueDef> = {
+  jamcrown: SIG('Jam Crown Scepter', 'weapon', 0, 'jamspin', { n: 3, glue: true }, 'Jam Tornado spins longer and glues monsters in place'),
+  seedpod: SIG('Hot Seedpod Shell', 'armor', 0, 'seed', { reach: 1.4, burn: 2 }, 'Seed Spray reaches 40% further and sets monsters on fire'),
+  berrybasket: SIG('Berry Bomb Basket', 'weapon', 10, 'mines', { n: 3, dmg: 1.15 }, 'Berry Mines throws 6 berries instead of 3'),
+  frostquake: SIG('Brain-Freeze Bonnet', 'armor', 10, 'quake', { freeze: true, reach: 1.2 }, 'Muffin Quake freezes everything it hits'),
+  deepdish: SIG('Deep-Dish Disc', 'weapon', 11, 'pspin', { echo: true, burn: 2 }, 'Pizza Cutter Toss throws a second hot cutter right after'),
+  delivery: SIG('Hot Delivery Bag', 'armor', 11, 'slice', { cd: 0.65, burn: 2 }, 'Slice Dash comes back 35% faster and leaves monsters burning'),
+  moonfan: SIG('Moonbeam Fan', 'weapon', 4, 'fan', { n: 4, slow: true }, 'Sugar Fan throws 9 darts that slow monsters'),
+  lantern: SIG('Lantern Heart', 'armor', 4, 'nova', { reach: 1.4, leech: 0.2 }, 'Marshmallow Nova is 40% bigger and heals you for a fifth of its damage'),
+  eightarm: SIG('Eight-Arm Gauntlet', 'weapon', 1, 'ink', { n: 2, glue: true }, 'Tentacle Lash hits twice more and sticks monsters in place'),
+  flaskbelt: SIG('Bubbling Flask Belt', 'armor', 1, 'wave', { n: 3, freeze: true }, 'Bubbling Flasks throws 3 more flasks that freeze'),
+  goudaclaw: SIG('Gouda Grand Claw', 'weapon', 2, 'snap', { dmg: 1.6, ky: 1.6 }, 'Claw Counter hits 60% harder and sends monsters flying'),
+  cabbagecrown: SIG('Cabbage Crown', 'armor', 2, 'crash', { reach: 1.5, glue: true }, 'Cheddar Pounce lands in a 50% bigger cheesy splat that glues'),
+  toasterfang: SIG('Toaster Fangs', 'weapon', 5, 'toastado', { n: 6, burn: 2 }, 'Toast Rain drops 6 more slices, piping hot'),
+  crumbcloak: SIG('Crumb Cloak', 'armor', 5, 'butter', { cd: 0.6, dmg: 1.4 }, 'Shadow Toast comes back 40% faster and hits 40% harder'),
+  steamcrown: SIG('Bamboo Steamer Crown', 'weapon', 6, 'steam', { reach: 1.5, burn: 2 }, 'Steam Cloud is 50% bigger and scalds'),
+  soupladle: SIG('Royal Soup Ladle', 'armor', 6, 'soup', { dmg: 1.4, cd: 0.75 }, 'Soup Slurp slurps 40% harder and comes back sooner'),
+  wasabiheart: SIG('Wasabi Heart Blade', 'weapon', 7, 'wasabi', { n: 3, burn: 3 }, 'Wasabi Breath burns longer and leaves monsters on fire'),
+  onigiri: SIG('Onigiri Halo', 'armor', 7, 'roll', { n: 2, slow: true }, 'Rice Ball Ring adds 2 more rice balls that slow monsters'),
+  goldbar: SIG('Golden Bar Gauntlets', 'weapon', 8, 'chocoslam', { dmg: 1.5, ky: 1.5 }, 'Choco Suplex hits 50% harder and higher'),
+  fudgecore: SIG('Molten Fudge Core', 'armor', 8, 'melt', { reach: 1.3, glue: true }, 'Melt Charge leaves monsters stuck in fudge'),
+  picnicnet: SIG('Picnic Net Launcher', 'weapon', 15, 'mustard', { n: 2, dmg: 1.3 }, 'Mustard Glue fires 5 blobs instead of 3'),
+  grillmaster: SIG('Grillmaster Apron', 'armor', 15, 'grillspin', { n: 6, burn: 2 }, 'Quill Burst fires 16 red-hot quills'),
+  sundae: SIG('Sundae Scepter', 'weapon', 17, 'snowball', { dmg: 1.4, freeze: true }, 'Rolling Snowball hits 40% harder and freezes'),
+  cherrybomb: SIG('Cherry Bomb Vest', 'armor', 17, 'slide', { cd: 0.7, burn: 2 }, 'Belly Slide comes back sooner and leaves a fiery trail of hurt'),
+};
+export interface UniqueDef { name: string; slot: Slot; effect: string;
+  /** signature legendary: only this kaiju's gear, upgrades this skill with these changes, has its own icon */
+  for?: number; skill?: string; mod?: SkillMod; icon?: string }
+/** How a signature legendary changes a skill: × damage / reach / cooldown, + count, + status on hit, cast again (echo). */
+export interface SkillMod { dmg?: number; reach?: number; cd?: number; n?: number; burn?: number; freeze?: boolean; glue?: boolean; slow?: boolean; leech?: number; echo?: boolean; ky?: number }
 export const UNIQUES: Record<string, UniqueDef> = {
   momspoon: { name: "Grandma's Spoon", slot: 'weapon', effect: 'Combo finishers heal 4% max HP' },
   excalifork: { name: 'Excalifork', slot: 'weapon', effect: 'Critical hits fire a bonus seed bolt' },
@@ -282,4 +321,21 @@ export const UNIQUES: Record<string, UniqueDef> = {
   thornlid: { name: 'Thornshell Lid', slot: 'armor', effect: 'Reflects 30% of damage taken back at the attacker' },
   lucky: { name: 'Lucky Fortune Cookie', slot: 'charm', effect: '+50% crumbs from monsters' },
   hourglass: { name: 'Egg-Timer Hourglass', slot: 'charm', effect: 'Each kill cuts skill cooldowns by 1s' },
+  ...SIGS,
+};
+
+/** The icon to draw for an item (signature legendaries have their own). */
+export function itemIcon(it: Item): string { return (it.unique && UNIQUES[it.unique]?.icon) || BASES[it.base].icon; }
+
+// ---------- trigger effects (procs) ----------
+export interface ProcDef { name: string; effect: string }
+export const PROCS: Record<string, ProcDef> = {
+  jamtrap: { name: 'Jam Trap', effect: 'A perfect dodge leaves a sticky jam mine behind' },
+  zap: { name: 'Static Whisk', effect: 'Every 6th hit zaps up to 3 nearby monsters' },
+  bubble: { name: 'Bubble Wrap', effect: 'Dropping below 35% HP blows a shield bubble (once every 25s)' },
+  spikes: { name: 'Pineapple Skin', effect: 'Getting hit fires a ring of spikes (every 3s at most)' },
+  snack: { name: 'Snack Break', effect: 'Every kill heals 3% max HP' },
+  rush: { name: 'Sugar High', effect: 'Every 25-hit combo: +25% attack and speed for 5s' },
+  frosty: { name: 'Brain Freeze', effect: 'Critical hits freeze monsters for a moment' },
+  quake: { name: 'Belly Flop', effect: 'Landing from a big fall makes a shockwave' },
 };

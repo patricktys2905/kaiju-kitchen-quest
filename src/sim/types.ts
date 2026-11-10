@@ -8,8 +8,10 @@ export interface Input {
   /** quick-bag slots 1-4 (held) */
   item1: boolean; item2: boolean; item3: boolean; item4: boolean;
   ult: boolean;
+  /** gear skill (the weapon's own move) */
+  gear: boolean;
 }
-export const NO_INPUT: Input = { left: false, right: false, up: false, down: false, jump: false, attack: false, skill1: false, skill2: false, skill3: false, item1: false, item2: false, item3: false, item4: false, ult: false };
+export const NO_INPUT: Input = { gear: false, left: false, right: false, up: false, down: false, jump: false, attack: false, skill1: false, skill2: false, skill3: false, item1: false, item2: false, item3: false, item4: false, ult: false };
 
 /** One-way platform: you can jump up through it and drop down with DOWN + JUMP. */
 export interface Platform { x: number; y: number; w: number; solid?: boolean;
@@ -78,6 +80,9 @@ export interface LootBox { tier: BoxTier; ilvl: number }
 
 export type SimEvent =
   | { t: 'hit'; x: number; y: number; dmg: number; crit: boolean; target: 'mob' | 'hero' }
+  | { t: 'gear'; name: string; style: string; x: number; y: number }
+  | { t: 'zap'; pts: [number, number][] }
+  | { t: 'proc'; name: string; x: number; y: number }
   | { t: 'swing'; step: number }
   | { t: 'skill'; slot: number; kind: string; id: string }
   | { t: 'jump' }

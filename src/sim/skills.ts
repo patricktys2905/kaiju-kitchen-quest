@@ -1,3 +1,4 @@
+import type { SkillMod } from './items';
 // Skills: every kaiju has 3 actives (unlocking with hero level) and 1 passive. Skill levels 1..MAX_SKILL
 // (gear can push past the max). Damage grows +20% per level, cooldown shrinks 4% per level.
 // Every skill has its OWN behaviour (no two kaiju share a mechanic) — tests/skills.test.ts checks it.
@@ -56,6 +57,8 @@ export interface SkillDef {
   burn?: number;
   /** mines: thrown in an arc as projectiles (burst on a monster, become a mine where they land) */
   toss?: boolean;
+  /** signature-legendary upgrades: statuses on hit, cast twice */
+  freeze?: boolean; glue?: boolean; slow?: boolean; echo?: boolean;
 }
 
 export interface PassiveDef {
@@ -253,6 +256,24 @@ export function applyBranch(s: SkillDef, b: BranchId | undefined): SkillDef {
   if (m.n) out.n = s.kind === 'spin' || s.kind === 'vortex' ? Math.round((s.n ?? 6) * (1 + m.n)) : (s.n ?? 1) + m.n;
   if (m.heal && s.heal) out.heal = s.heal * m.heal;
   if (m.buffT && s.buff) out.buff = { ...s.buff, t: s.buff.t * m.buffT };
+  return out;
+}
+
+/** A signature legendary's upgrade on top of a skill (see items.ts SIGS). */
+export function applyMod(s: SkillDef, m: SkillMod | undefined): SkillDef {
+  if (!m) return s;
+  const out: SkillDef = { ...s };
+  if (m.dmg) out.dmg *= m.dmg;
+  if (m.reach) { out.reach *= m.reach; out.h *= Math.sqrt(m.reach); }
+  if (m.cd) out.cd *= m.cd;
+  if (m.n) out.n = s.kind === 'spin' || s.kind === 'vortex' ? Math.round((s.n ?? 6) * (1 + m.n / 6)) : (s.n ?? 1) + m.n;
+  if (m.ky) { out.ky *= m.ky; out.kx *= Math.sqrt(m.ky); }
+  if (m.burn) out.burn = Math.max(s.burn ?? 0, m.burn);
+  if (m.freeze) out.freeze = true;
+  if (m.glue) out.glue = true;
+  if (m.slow) out.slow = true;
+  if (m.leech) out.leech = (s.leech ?? 0) + m.leech;
+  if (m.echo) out.echo = true;
   return out;
 }
 

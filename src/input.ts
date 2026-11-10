@@ -41,6 +41,7 @@ export function readInput(): Input {
     skill2: any('KeyI', 'KeyC') || t.skill[1],
     skill3: any('KeyO', 'KeyV') || t.skill[2],
     ult: any('KeyU', 'KeyQ') || t.ult,
+    gear: any('KeyF', 'KeyH') || t.gear,
     item1: any('Digit1') || q[0], item2: any('Digit2') || q[1], item3: any('Digit3') || q[2], item4: any('Digit4') || q[3],
   };
   latched.clear();

@@ -1,6 +1,7 @@
 // Hero progression: level, XP, primary stats (STR/DEX/INT/VIT), skill levels and equipment → combat numbers.
 import { type HeroClass, type Stat, type Stats, classOf } from './classes';
-import { type Item, SETS, type Slot, itemLines } from './items';
+import { type Item, SETS, type SkillMod, type Slot, UNIQUES, itemIcon, itemLines } from './items';
+import { type HeroGear, gearOf } from './gear';
 import { MAX_SKILL, PASSIVE_UNLOCK, skillScale, skillsOf } from './skills';
 
 export const MAX_LEVEL = 60;
@@ -80,6 +81,8 @@ export interface Derived {
   ultGain: number; ultDmg: number;
   /** passives: HP regen per second (fraction), damage reflected to attackers, finisher/Guard Break bonus, dodge bonus */
   regen: number; thorns: number; heavyDmg: number; dodge: number;
+  /** the weapon's gear skill (4th button), trigger effects worn, signature-legendary skill upgrades */
+  gear: HeroGear | null; procs: string[]; mods: Record<string, SkillMod>;
 }
 
 export function derive(p: HeroProfile): Derived {
@@ -106,7 +109,12 @@ export function derive(p: HeroProfile): Derived {
   // sets: 2 / 3 pieces
   const sets: Record<string, number> = {};
   const uniques: string[] = [];
-  for (const it of Object.values(p.equip)) { if (it?.set) sets[it.set] = (sets[it.set] ?? 0) + 1; if (it?.unique) uniques.push(it.unique); }
+  const procs: string[] = [], mods: Record<string, SkillMod> = {};
+  for (const it of Object.values(p.equip)) {
+    if (it?.set) sets[it.set] = (sets[it.set] ?? 0) + 1;
+    if (it?.unique) { uniques.push(it.unique); const u = UNIQUES[it.unique]; if (u?.skill && u.mod && u.for === p.species) mods[u.skill] = { ...mods[u.skill], ...u.mod }; }
+    if (it?.proc && !procs.includes(it.proc)) procs.push(it.proc);
+  }
   const sb = { atkPct: 0, hpPct: 0, critDmg: 0, speed: 0, skillDmg: 0, cdr: 0, dr: 0, ultGain: 0, ultDmg: 0 };
   for (const [k, n] of Object.entries(sets)) for (const b of [n >= 2 ? SETS[k].b2 : null, n >= 3 ? SETS[k].b3 : null]) if (b) for (const [bk, bv] of Object.entries(b)) sb[bk as keyof typeof sb] += bv;
   const per = (k: keyof typeof pas.per) => (pas.per[k] ?? 0) * pl;
@@ -126,6 +134,7 @@ export function derive(p: HeroProfile): Derived {
     uniques, sets, ultGain: 1 + sb.ultGain + per('ultGain'), ultDmg: 1 + sb.ultDmg,
     regen: per('regen'), thorns: per('thorns'), heavyDmg: per('heavyDmg'), dodge: per('dodge'),
     lifeOnKill: per('lifeOnKill'),
+    gear: gearOf(p.equip.weapon, p.equip.weapon ? itemIcon(p.equip.weapon) : undefined), procs, mods,
     skillLv,
     branch: { ...(p.branch ?? {}) },
   };

@@ -134,3 +134,14 @@ route if that fails (`?net=backup` forces it). The host runs the only real World
 Online stages skip story twists, nemesis and spicy rules (same stage for everyone); only the host has potions.
 A friend who drops mid-stage is handed to the CPU; a friend who levels up sends a new kit (`setDerivedOf`).
 After a stage everyone gets their own loot and goes back to the room. Test: `node scripts/online-shot.mjs [backup]`.
+
+## Gear that plays (src/sim/gear.ts, items.ts PROCS / SIGS, tests/gear.test.ts)
+- GEAR SKILL: every weapon has its own move on a 4th button (touch GEAR, keys F / H): throw / lob (aims at the nearest
+  monster) / roll / slam / rain your actual weapon icon, plus a twist (burn, freeze, glue, slow, launch, pull, heal).
+  Power scales with rarity × fortification × grade; bosses take 40% from it (balance). `world.castGear`, shots carry `icon` + `fx`.
+- PROCS on Rare+ armour / charms (`Item.proc`): Jam Trap, Static Whisk, Bubble Wrap, Pineapple Skin, Snack Break,
+  Sugar High, Brain Freeze, Belly Flop.
+- SIGNATURE LEGENDARIES: 2 per kaiju (weapon + armour, own `u-*` icons) that upgrade one of its skills via `SkillMod`
+  (`applyMod`: dmg / reach / cd / n / burn / freeze / glue / slow / leech / echo). They roll on that kaiju's gear, more
+  often for the kaiju you play. Art: `node scripts/sig-jobs.mjs`. Screens: `node scripts/gear-shot.mjs`.
+

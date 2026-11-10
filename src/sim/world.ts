@@ -5,7 +5,7 @@ import type { AttackDef } from './classes';
 import { rollTier } from './loot';
 import { type BoostKind, CONSUMABLES, type ConsumableId, QUICK_CD } from './consumables';
 import { BOSS_ARMOR, BOSS_PATTERNS, DANGER_MOVES, ELITE, ELITE_MODS, type EliteMod, MOBS, type NemMove, TUNE, nemesisMoves, dropLevel, mobAtk, mobCrumbs, mobHp, mobXp } from './mobs';
-import { type SkillDef, ULTS, ULT_LV, applyBranch, skillScale, skillsOf } from './skills';
+import { type SkillDef, ULTS, ULT_LV, applyBranch, applyMod, skillScale, skillsOf } from './skills';
 import { WORLDS } from './stages';
 import type { Derived } from './stats';
 import { type BoxTier, type Hazard, type Input, type MobSpawn, type Prop, type LootBox, type MobKind, NO_INPUT, type SimEvent, type Spicy, type StageDef } from './types';
@@ -47,7 +47,8 @@ export interface Hero {
   hitIds: Set<number>;
   hp: number;
   inv: number;
-  cds: [number, number, number];
+  /** cooldowns: skills 1-3, then the gear skill */
+  cds: number[];
   skill: SkillDef | null; // active skill while state === 'skill'
   skillMul: number;
   ticks: number;       // multi-hit counter for spin skills
@@ -81,6 +82,10 @@ export interface Hero {
   /** multi-step skills: facing at the start, queued targets */
   skillFace: 1 | -1;
   targets: number[];
+  /** signature legendary 'echo': the skill fires again shortly after */
+  echo: { sk: SkillDef; t: number } | null;
+  /** procs: shield bubble (HP it soaks, seconds left, cooldown), spike / zap counters, highest point of the current fall */
+  shield: number; shieldT: number; bubbleCd: number; spikeCd: number; zapN: number; peakY: number;
 }
 
 export interface Mob {
@@ -136,8 +141,8 @@ export interface Mob {
 }
 
 export interface Box { id: number; tier: BoxTier; ilvl: number; x: number; y: number; vy: number; ground: boolean; t: number; /** only this player can pick it up (each player gets their own drops) */ owner?: number }
-export interface Shot { id: number; x: number; y: number; vx: number; vy: number; t: number; dmg: number; hit: Set<number>; from: 'hero' | 'mob'; kx: number; ky: number; pierce: boolean; g?: number; kind?: string; /** hit radius (default 14) */ r?: number; back?: boolean; /** lobbed shots: where it will land (drawn as a warning) */ tx?: number; ty?: number; /** hero who fired it */ owner?: number }
-export interface Mine { id: number; x: number; y: number; t: number; dmg: number; kx: number; ky: number; owner?: number }
+export interface Shot { /** extra effects on hit (gear skills, upgraded skills) and the weapon icon a gear shot is drawn as */ fx?: string[]; icon?: string; id: number; x: number; y: number; vx: number; vy: number; t: number; dmg: number; hit: Set<number>; from: 'hero' | 'mob'; kx: number; ky: number; pierce: boolean; g?: number; kind?: string; /** hit radius (default 14) */ r?: number; back?: boolean; /** lobbed shots: where it will land (drawn as a warning) */ tx?: number; ty?: number; /** hero who fired it */ owner?: number }
+export interface Mine { id: number; x: number; y: number; t: number; dmg: number; kx: number; ky: number; owner?: number; /** Jam Trap: glues what it hits */ glue?: boolean }
 
 export interface RunStats { time: number; hitsTaken: number; dmgTaken: number; maxCombo: number; kills: number; crumbs: number; revived: number; stones: number; perfects: number; interrupts: number; styleSum: number; styleTime: number; stylePeak: number }
 
@@ -231,11 +236,12 @@ export class World {
     this.exitX = stage.width - 90;
     const mk = (dd: Derived, idx: number, x: number, b: Hero['bag'], rv: number): Hero => ({
       d: dd, x, y: stage.groundY, vx: 0, vy: 0, face: 1, ground: true, on: -1, state: 'move', t: 0, step: 0, queued: false,
-      hitIds: new Set(), hp: dd.maxHp, inv: 0, cds: [0, 0, 0], skill: null, skillMul: 1, ticks: 0,
+      hitIds: new Set(), hp: dd.maxHp, inv: 0, cds: [0, 0, 0, 0], skill: null, skillMul: 1, ticks: 0,
       coyote: 0, jumpBuf: 0, atkBuf: 0, dropT: 0, prev: { ...NO_INPUT }, gliding: false, buff: null,
       boosts: {}, bag: b.map(q => q && { ...q }), revives: rv, quickCd: 0, lastTap: { dir: 0, t: -9 }, dodgeCd: 0, ult: 0, phoenixUsed: false,
       counter: 0, perfectDone: false, spikyT: 0, orbs: null, skillFace: 1, targets: [], bounced: false,
       idx, cpu: idx >= this.humans, revT: 0, landed: false,
+      echo: null, shield: 0, shieldT: 0, bubbleCd: 0, spikeCd: 0, zapN: 0, peakY: stage.groundY,
     });
     this.heroes = [mk(d, 0, 100, bag, revives), ...party.map((pd, i) => mk(pd, i + 1, 60 - i * 30, [], 0))];
     this.cur = this.heroes[0];
@@ -324,6 +330,7 @@ export class World {
       const e0 = this.events.length;
       h.counter = Math.max(0, h.counter - dt); h.spikyT = Math.max(0, h.spikyT - dt);
       this.stepHero(inputs[h.idx] ?? NO_INPUT, dt);
+      this.stepGearTimers(h, dt);
       this.stepOrbs(dt);
       if (h.d.regen > 0 && h.state !== 'down') h.hp = Math.min(h.d.maxHp, h.hp + h.d.maxHp * h.d.regen * dt);
       this.revive(h, dt);
@@ -379,7 +386,7 @@ export class World {
     h.jumpBuf -= dt; h.atkBuf -= dt;
     h.inv = Math.max(0, h.inv - dt);
     const cdRate = 1 + (h.boosts.speed ? 0.25 : 0);
-    for (let i = 0; i < 3; i++) h.cds[i] = Math.max(0, h.cds[i] - dt * cdRate);
+    for (let i = 0; i < 4; i++) h.cds[i] = Math.max(0, (h.cds[i] ?? 0) - dt * cdRate);
     for (const k of Object.keys(h.boosts) as BoostKind[]) { const b = h.boosts[k]!; if ((b[1] -= dt) <= 0) delete h.boosts[k]; }
     h.quickCd = Math.max(0, h.quickCd - dt);
     h.dodgeCd = Math.max(0, h.dodgeCd - dt);
@@ -421,7 +428,7 @@ export class World {
       if (!pressed(slots[i])) continue;
       const base = skillsOf(c.species).actives[i];
       const lv = h.d.skillLv[base.id] ?? 0;
-      const sk = applyBranch(base, h.d.branch[base.id]);
+      const sk = applyMod(applyBranch(base, h.d.branch[base.id]), h.d.mods[base.id]);
       if (!lv || h.cds[i] > 0) continue;
       if (dir) h.face = dir > 0 ? 1 : -1;
       const sc = skillScale(lv);
@@ -431,7 +438,15 @@ export class World {
       h.hitIds = new Set();
       this.events.push({ t: 'skill', slot: i, kind: sk.kind, id: sk.id });
       this.startSkill(h, sk);
+      if (sk.echo) h.echo = { sk, t: 0.4 };
       break;
+    }
+    // gear skill: whatever weapon you hold (doesn't stop you moving)
+    const gear = h.d.gear;
+    if (gear && pressed('gear') && h.cds[3] <= 0 && free) {
+      if (dir) h.face = dir > 0 ? 1 : -1;
+      h.cds[3] = gear.cd * (1 - h.d.cdr);
+      this.castGear(h);
     }
     // ultimate: full gauge, Lv 15+
     const ultDef = ULTS[c.species];
@@ -532,6 +547,72 @@ export class World {
   }
 
   private startSkill(h: Hero, sk: SkillDef): void {
+    const s0 = this.shots.length;
+    this.startSkillInner(h, sk);
+    const fx = [sk.burn ? 'burn' : '', sk.freeze ? 'freeze' : '', sk.glue ? 'glue' : '', sk.slow ? 'slow' : ''].filter(Boolean);
+    if (fx.length) for (let i = s0; i < this.shots.length; i++) this.shots[i].fx = fx;
+  }
+
+  /** Gear skill: the hero flings / lobs / rolls / slams / rains its own weapon. */
+  private castGear(h: Hero): void {
+    const g = h.d.gear!;
+    const atk = h.d.atk * g.power * g.dmg * (0.6 + 0.4 * h.d.skillDmg);
+    const fx = g.fx ? [g.fx] : [];
+    const ky = g.fx === 'launch' ? -620 : -160;
+    const base = { hit: new Set<number>(), from: 'hero' as const, t: 0, dmg: atk, fx, icon: g.icon, kx: 180, ky, owner: h.idx };
+    switch (g.style) {
+      case 'throw': this.shots.push({ ...base, id: nextId++, x: h.x + h.face * 30, y: h.y - 44, vx: h.face * 720, vy: 0, pierce: true, kind: 'gear', r: 22 }); break;
+      case 'lob': { // lands on the nearest monster in front (or 220px ahead); flight time is ~0.74s
+        const tgt = this.mobs.filter(m => m.state !== 'dead' && !m.under && Math.sign(m.x - h.x) === h.face && Math.abs(m.x - h.x) < 460 && Math.abs(m.y - h.y) < 120).sort((p, q) => Math.abs(p.x - h.x) - Math.abs(q.x - h.x))[0];
+        const dx = tgt ? Math.abs(tgt.x - h.x) - 24 : 220;
+        this.shots.push({ ...base, id: nextId++, x: h.x + h.face * 24, y: h.y - 56, vx: h.face * clamp(dx / 0.74, 100, 600), vy: -440, g: 1300, pierce: false, kind: 'gearlob', r: 18, tx: h.x + h.face * (dx + 24), ty: h.y });
+        break;
+      }
+      case 'roll': this.shots.push({ ...base, id: nextId++, x: h.x + h.face * 30, y: h.y - 20, vx: h.face * 430, vy: 0, pierce: true, kind: 'gearroll', r: 22 }); break;
+      case 'slam':
+        this.events.push({ t: 'shock', x: h.x + h.face * 30, y: h.y, r: 80 });
+        for (const d of [-1, 1]) this.shots.push({ ...base, hit: new Set(), id: nextId++, x: h.x + d * 20, y: h.y - 16, vx: d * 560, vy: 0, pierce: true, kind: 'gearwave', r: 26 });
+        break;
+      case 'rain':
+        for (let i = 0; i < 5; i++) this.shots.push({ ...base, hit: new Set(), id: nextId++, x: h.x + h.face * (70 + i * 55), y: h.y - 330, vx: 0, vy: 120, t: -0.09 * i, g: 1500, pierce: false, kind: 'gearrain', r: 20 });
+        break;
+    }
+    this.events.push({ t: 'gear', name: g.name, style: g.style, x: h.x, y: h.y });
+  }
+
+  /** On-hit extras: burn, freeze, glue, slow, pull, heal. */
+  private applyFx(m: Mob, fx: string[], h: Hero): void {
+    if (m.state === 'dead') return;
+    const boss = MOBS[m.kind].brain === 'boss';
+    for (const e of fx) {
+      if (e === 'burn') { m.burn = Math.max(m.burn, 3); m.burnDmg = Math.max(m.burnDmg, h.d.atk * 0.3); }
+      else if (e === 'freeze') { if (boss) m.slow = Math.max(m.slow, 2); else { m.frozen = Math.max(m.frozen, 1.4); m.vx = 0; } }
+      else if (e === 'glue') { if (!boss) this.glue(m); }
+      else if (e === 'slow') m.slow = Math.max(m.slow, 3);
+      else if (e === 'pull') { if (!boss) m.x += clamp(h.x + h.face * 50 - m.x, -90, 90); }
+      else if (e === 'heal') h.hp = Math.min(h.d.maxHp, h.hp + h.d.maxHp * 0.015);
+    }
+  }
+
+  /** Echo casts, shield bubble timers, Belly Flop landings. */
+  private stepGearTimers(h: Hero, dt: number): void {
+    if (h.echo) {
+      h.echo.t -= dt;
+      if (h.echo.t <= 0 && h.state !== 'down') { const mul = h.skillMul; h.skillMul *= 0.6; this.startSkill(h, { ...h.echo.sk, echo: false }); h.skillMul = mul; h.echo = null; }
+    }
+    h.bubbleCd = Math.max(0, h.bubbleCd - dt); h.spikeCd = Math.max(0, h.spikeCd - dt);
+    if (h.shieldT > 0) { h.shieldT -= dt; if (h.shieldT <= 0) h.shield = 0; }
+    if (!h.ground) h.peakY = Math.min(h.peakY, h.y);
+    else {
+      if (h.landed && h.y - h.peakY > 180 && h.d.procs.includes('quake')) {
+        this.events.push({ t: 'shock', x: h.x, y: h.y, r: 120 });
+        for (const m of this.targetsNear(h.x, h.y, 130, 70)) this.damageMob(m, h.d.atk * 1.5, Math.sign(m.x - h.x) || 1, { kx: 160, ky: -380, stun: 0.7 }, true);
+      }
+      h.peakY = h.y;
+    }
+  }
+
+  private startSkillInner(h: Hero, sk: SkillDef): void {
     const atk = h.d.atk * h.skillMul;
     if (sk.heal) { const lv = h.d.skillLv[sk.id] ?? 1; h.hp = Math.min(h.d.maxHp, h.hp + h.d.maxHp * sk.heal * (1 + 0.2 * (lv - 1))); }
     switch (sk.kind) {
@@ -1124,6 +1205,9 @@ export class World {
   /** total damage dealt to monsters (drain measures a skill's damage with it) */
   dealt = 0;
 
+  /** a proc's own hits don't set off more procs */
+  private procLock = false;
+
   private damageMob(m: Mob, raw: number, dir: number, k: { kx: number; ky: number; stun: number }, heavy: boolean): void {
     // (k may be replaced below: an interrupt lengthens the stun)
     const def = MOBS[m.kind], h = this.hero;
@@ -1171,12 +1255,29 @@ export class World {
     const dmg = Math.max(1, Math.round(raw * buff * lvMul * (crit ? h.d.critDmg : 1) * (counter ? 1.3 : 1) * (m.state === 'stagger' && def.brain === 'charger' ? 1.5 : 1) * (0.9 + this.rand() * 0.2)));
     m.hp -= dmg; m.flash = 0.12; m.hurtShown = 3; this.dealt += dmg;
     if (h.state === 'skill' && h.skill?.burn && heavy) { m.burn = Math.max(m.burn, h.skill.burn); m.burnDmg = Math.max(m.burnDmg, h.d.atk * 0.35 * h.skillMul); }
+    if (h.state === 'skill' && h.skill && heavy) {
+      const fx = [h.skill.freeze ? 'freeze' : '', h.skill.glue ? 'glue' : '', h.skill.slow ? 'slow' : ''].filter(Boolean);
+      if (fx.length) this.applyFx(m, fx, h);
+      if (h.skill.leech && h.skill.kind !== 'drain') h.hp = Math.min(h.d.maxHp, h.hp + dmg * h.skill.leech);
+    }
+    if (crit && h.d.procs.includes('frosty') && def.brain !== 'boss') { m.frozen = Math.max(m.frozen, 0.8); m.vx = 0; }
+    if (h.d.procs.includes('zap') && !this.procLock && ++h.zapN >= 6) {
+      h.zapN = 0; this.procLock = true;
+      const pts: [number, number][] = [[m.x, m.y - def.h * 0.6]];
+      for (const o of this.targetsNear(m.x, m.y, 260, 160).filter(o => o !== m).slice(0, 3)) {
+        pts.push([o.x, o.y - MOBS[o.kind].h * 0.6]);
+        this.damageMob(o, h.d.atk * 0.6, Math.sign(o.x - m.x) || 1, { kx: 60, ky: -120, stun: 0.4 }, false);
+      }
+      this.procLock = false;
+      if (pts.length > 1) this.events.push({ t: 'zap', pts });
+    }
     if (h.buff?.leech) h.hp = Math.min(h.d.maxHp, h.hp + dmg * h.buff.leech);
     if (h.d.uniques.includes('frostfish')) m.slow = 2;
     if (crit && !heavy && h.d.uniques.includes('excalifork')) this.shots.push({ id: nextId++, x: h.x + h.face * 30, y: h.y - 40, vx: h.face * 600, vy: 0, t: 0, dmg: h.d.atk * 0.8, hit: new Set([m.id]), from: 'hero', kx: 120, ky: -100, pierce: false });
     if (h.state !== 'skill' || h.skill?.id.startsWith('ult') === false) h.ult = Math.min(100, h.ult + (MOBS[m.kind].brain === 'boss' ? 1.6 : 1.1) * h.d.ultGain);
     const me = h === this.heroes[0]; // the player's rank, combo and style only count the player's own hits
     if (me) { this.combo++; this.comboT = COMBO_WINDOW; this.run.maxCombo = Math.max(this.run.maxCombo, this.combo); }
+    if (me && this.combo % 25 === 0 && h.d.procs.includes('rush') && !h.buff) { h.buff = { atk: 0.25, def: 0, speed: 0.25, armor: false, t: 5 }; this.events.push({ t: 'proc', name: 'Sugar High!', x: h.x, y: h.y - 90 }); }
     this.events.push({ t: 'hit', x: m.x, y: m.y - def.h * 0.6, dmg, crit, target: 'mob' });
     if (!me) { /* teammates don't feed the player's style meter */ }
     else if (h.state === 'skill') this.addStyle(h.skill?.id.startsWith('ult') ? 'ult' : 'skill', 3);
@@ -1228,7 +1329,8 @@ export class World {
     this.events.push({ t: 'mobDie', x: m.x, y: m.y, boss: def.brain === 'boss', elite: m.elite, kind: m.kind });
     this.events.push({ t: 'xp', n: Math.round(mobXp(m.kind, m.lv) * (m.elite ? ELITE.xp : 1)) });
     const cr = Math.round(mobCrumbs(m.lv, def.brain) * (m.elite ? 4 : 1) * (0.8 + this.rand() * 0.4) * (h.d.uniques.includes('lucky') ? 1.5 : 1));
-    if (h.d.uniques.includes('hourglass')) for (let i = 0; i < 3; i++) h.cds[i] = Math.max(0, h.cds[i] - 1);
+    if (h.d.uniques.includes('hourglass')) for (let i = 0; i < 4; i++) h.cds[i] = Math.max(0, h.cds[i] - 1);
+    if (h.d.procs.includes('snack') && h.state !== 'down') h.hp = Math.min(h.d.maxHp, h.hp + h.d.maxHp * 0.03);
     this.run.crumbs += cr;
     this.events.push({ t: 'crumbs', n: cr, x: m.x, y: m.y - def.h });
     const st = def.brain === 'boss' ? 3 : m.elite ? 2 : this.rand() < 0.07 ? 1 : 0;
@@ -1750,6 +1852,7 @@ export class World {
     this.slowmo = SLOWMO_T;
     if (h === this.heroes[0]) { this.run.perfects++; this.addStyle('perfect', 18); }
     this.events.push({ t: 'perfect', x: h.x, y: h.y - 60 });
+    if (h.d.procs.includes('jamtrap')) { const fl = this.floorBelow(h.x, h.y - 2, h.y + 400, false); this.mines.push({ id: nextId++, x: h.x, y: fl ? fl.y : h.y, t: 0, dmg: h.d.atk * 1.2, kx: 80, ky: -200, owner: h.idx, glue: true }); }
   }
 
   /** fixed = exact damage (hazards), not reduced by defence */
@@ -1766,8 +1869,21 @@ export class World {
       return;
     }
     const dr = fixed ? 0 : 1 - (1 - h.d.dr) * (1 - (h.buff?.def ?? 0)) * (1 - (h.boosts.def?.[0] ?? 0));
-    const dmg = Math.max(1, Math.round(raw * (1 - dr) * (fixed ? 1 : 0.9 + this.rand() * 0.2) * (this.spicy.includes('glass') ? 2 : 1)));
+    let dmg = Math.max(1, Math.round(raw * (1 - dr) * (fixed ? 1 : 0.9 + this.rand() * 0.2) * (this.spicy.includes('glass') ? 2 : 1)));
+    if (h.shield > 0) { // Bubble Wrap soaks it first
+      const soak = Math.min(h.shield, dmg); h.shield -= soak; dmg -= soak;
+      if (h.shield <= 0) { h.shieldT = 0; this.events.push({ t: 'proc', name: 'Pop!', x: h.x, y: h.y - 90 }); }
+      if (dmg <= 0) { h.inv = 0.5; this.events.push({ t: 'block', x: h.x, y: h.y - 50 }); return; }
+    }
     h.hp -= dmg; h.inv = 0.9;
+    if (h.d.procs.includes('spikes') && h.spikeCd <= 0) {
+      h.spikeCd = 3;
+      for (let i = 0; i < 8; i++) { const a = (i / 8) * Math.PI * 2; this.shots.push({ id: nextId++, x: h.x, y: h.y - 40, vx: Math.cos(a) * 480, vy: Math.sin(a) * 480, t: 0, dmg: h.d.atk * 0.7, hit: new Set(), from: 'hero', kx: 120, ky: -120, pierce: false, kind: 'quill', owner: h.idx }); }
+    }
+    if (h.d.procs.includes('bubble') && h.bubbleCd <= 0 && h.hp > 0 && h.hp < h.d.maxHp * 0.35) {
+      h.bubbleCd = 25; h.shield = Math.round(h.d.maxHp * 0.25); h.shieldT = 6;
+      this.events.push({ t: 'proc', name: 'Bubble Wrap!', x: h.x, y: h.y - 90 });
+    }
     if (h === this.heroes[0]) this.style *= 0.5;
     if (from && from.mods.includes('vampiric') && from.state !== 'dead') { from.hp = Math.min(from.maxHp, from.hp + dmg * 3); this.events.push({ t: 'heal', x: from.x, y: from.y - MOBS[from.kind].h, n: dmg * 3 }); }
     if (from && from.state !== 'dead' && h.d.thorns > 0) { from.hp -= Math.max(1, Math.round(dmg * h.d.thorns)); from.flash = 0.1; if (from.hp <= 0) this.killMob(from); }
@@ -1823,6 +1939,7 @@ export class World {
         if (Math.floor(s.t / 0.25) !== Math.floor((s.t - sdt) / 0.25)) s.hit = new Set();
         for (const m of this.targetsNear(s.x, s.y + 30, 140, 90)) if (MOBS[m.kind].brain !== 'boss') m.x += Math.sign(s.x - m.x) * 160 * sdt;
       }
+      if (s.kind === 'gearroll' && Math.floor(s.t / 0.3) !== Math.floor((s.t - sdt) / 0.3)) s.hit = new Set(); // bumps again
       if (s.kind === 'snowball') { s.r = (s.r ?? 14) + 22 * sdt; s.dmg *= 1 + 0.5 * sdt; }
       if (s.g) { // lobbed: falls; berries become mines, mustard becomes goo, meteors burst
         const prevY = s.y - s.vy * sdt;
@@ -1831,6 +1948,7 @@ export class World {
         if (f) {
           if (s.kind === 'berry') this.mines.push({ id: nextId++, x: s.x, y: f.y, t: 0.2, dmg: s.dmg, kx: s.kx, ky: s.ky });
           else if (s.kind === 'goo') this.zones.push({ id: nextId++, x: s.x, y: f.y, w: 80, t: 4, tick: 0.1, next: 0, dmg: s.dmg, kind: 'goo', hit: new Set() });
+          else if (s.kind === 'gearlob') { this.events.push({ t: 'shock', x: s.x, y: f.y, r: 90 }); for (const m of this.targetsNear(s.x, f.y, 90, 70)) { this.damageMob(m, s.dmg * gearVs(m), Math.sign(m.x - s.x) || 1, { kx: s.kx, ky: s.ky, stun: 0.7 }, true); if (s.fx) this.applyFx(m, s.fx, h); } }
           else if (s.kind === 'meteor') { this.events.push({ t: 'shock', x: s.x, y: f.y, r: 70 }); for (const m of this.targetsNear(s.x, f.y, 70, 60)) if (!s.hit.has(m.id)) this.damageMob(m, s.dmg, Math.sign(m.x - s.x) || 1, { kx: s.kx, ky: s.ky, stun: 0.6 }, true); }
           s.t = 99; continue;
         }
@@ -1841,7 +1959,8 @@ export class World {
         const def = MOBS[m.kind];
         if (Math.abs(m.x - s.x) < def.w / 2 + rad && s.y < m.y + 10 + rad - 14 && s.y > m.y - def.h - 10 - (rad - 14)) {
           s.hit.add(m.id);
-          this.damageMob(m, s.dmg, Math.sign(s.vx), { kx: s.kx, ky: s.ky, stun: 0.6 }, true);
+          this.damageMob(m, s.dmg * (s.icon ? gearVs(m) : 1), Math.sign(s.vx) || h.face, { kx: s.kx, ky: s.ky, stun: 0.6 }, true);
+          if (s.fx) this.applyFx(m, s.fx, h);
           if (s.kind === 'berry') this.events.push({ t: 'boom', x: s.x, y: s.y });
           if (s.kind === 'goo') this.glue(m);
           if (!s.pierce) { s.t = 99; break; }
@@ -1902,7 +2021,7 @@ export class World {
         const ids = new Set<number>();
         for (const m of this.mobs) {
           if (m.state === 'dead' || m.under || ids.has(m.id)) continue;
-          if (Math.abs(m.x - mi.x) < 70 && Math.abs(m.y - mi.y) < 60) { ids.add(m.id); this.damageMob(m, mi.dmg, Math.sign(m.x - mi.x) || 1, { kx: mi.kx, ky: mi.ky, stun: 0.7 }, true); }
+          if (Math.abs(m.x - mi.x) < 70 && Math.abs(m.y - mi.y) < 60) { ids.add(m.id); this.damageMob(m, mi.dmg, Math.sign(m.x - mi.x) || 1, { kx: mi.kx, ky: mi.ky, stun: 0.7 }, true); if (mi.glue && MOBS[m.kind].brain !== 'boss') this.glue(m); }
         }
       }
     }
@@ -1990,7 +2109,9 @@ export function rankOf(run: RunStats, par: number): { rank: 'S' | 'A' | 'B' | 'C
 }
 
 /** hero projectiles that live longer than a bolt */
-const LONG_SHOTS = new Set(['boomerang', 'homing', 'twister', 'snowball', 'wave', 'reflect']);
+/** Bosses shrug off thrown kitchenware a bit (gear skills deal 40% to them). */
+const gearVs = (m: Mob) => (MOBS[m.kind].brain === 'boss' ? 0.4 : 1);
+const LONG_SHOTS = new Set(['gearroll', 'boomerang', 'homing', 'twister', 'snowball', 'wave', 'reflect']);
 const NEW_BRAINS = new Set(['healer', 'summoner', 'charger', 'sniper', 'turret', 'burrower', 'mimic']);
 
 const gbCache = new WeakMap<AttackDef[], AttackDef>(), lnCache = new WeakMap<AttackDef[], AttackDef>();

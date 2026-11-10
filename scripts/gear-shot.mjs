@@ -1,34 +1,41 @@
-// Gear look sheet: every hero × 3 gear sets, idle + mid-swing. Usage: node scripts/gear-shot.mjs → shots/gear.png
+// Gear skills / procs / signature legendaries: node scripts/gear-shot.mjs → shots/gear-hero.png, gear-item.png, gear-throw.png, gear-lob.png
 import { spawn } from 'node:child_process';
 import { chromium } from 'playwright-core';
-import sharp from 'sharp';
-const PORT = 5313;
+const PORT = 5329, url = `http://localhost:${PORT}/?touch`;
 const server = spawn(process.execPath, ['node_modules/vite/bin/vite.js', '--port', String(PORT), '--strictPort'], { stdio: 'pipe' });
 const wait = ms => new Promise(r => setTimeout(r, ms));
 await wait(3000);
 const b = await chromium.launch({ executablePath: 'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe', headless: true });
 const p = await (await b.newContext({ viewport: { width: 844, height: 390 }, deviceScaleFactor: 2, isMobile: true, hasTouch: true })).newPage();
 const errs = []; p.on('pageerror', e => errs.push(e.message));
-await p.goto(`http://localhost:${PORT}/?touch`);
+await p.goto(url); await p.evaluate(() => localStorage.clear()); await p.reload();
 for (let i = 0; i < 60; i++) { if (await p.evaluate(() => !!window.__kkq).catch(() => false)) break; await wait(250); }
-await p.evaluate(() => document.querySelector('#title .play')?.click()); await wait(700); // dismiss the title screen
-const OWN = { 0: ['w-gob2', 'w-gob3', 'a-gob'], 10: ['w-blue2', 'w-blue3', 'a-blue'], 11: ['w-pizza2', 'w-pizza3', 'a-pizza'], 4: ['w-moth2', 'w-moth3', 'a-moth'], 1: ['w-squid2', 'w-squid3', 'a-squid'], 2: ['w-crab2', 'w-crab3', 'a-crab'], 5: ['w-toast2', 'w-toast3', 'a-toast'], 6: ['w-dump2', 'w-dump3', 'a-dump'] };
-const setsFor = sp => [{ weapon: [OWN[sp][0], 3], armor: [OWN[sp][2], 3] }, { weapon: [OWN[sp][1], 5], charm: ['bell', 2] }, { weapon: [OWN[sp][1], 2] }];
-const tiles = [];
-for (const [r, sp] of (process.argv[2] ? process.argv[2].split(',').map(Number) : [0, 10, 11, 4]).entries()) for (const [si, set] of setsFor(sp).entries()) for (const [fi, [st, t]] of [['move', 0.3], ['attack', 0.12]].entries()) {
-  await p.evaluate(([sp, set]) => {
-    const s = window.__kkq.save; s.selected = sp; let id = 9000;
-    const eq = {}; for (const [slot, [base, rarity]] of Object.entries(set)) eq[slot] = { id: id++, base, rarity, ilvl: 1, plus: 0, lines: [] };
-    s.heroes[sp].equip = eq; window.__kkq.play('1-1');
-  }, [sp, set]);
-  await wait(700);
-  await p.evaluate(([st, t]) => window.__kkq.setPose(st, t), [st, t]);
-  await wait(60);
-  const pos = await p.evaluate(() => { const s = window.__kkq.scene, h = window.__kkq.world().hero, cam = s.cameras.main; const m = cam.getWorldPoint(0, 0); return { x: (h.x - m.x) * cam.zoom, y: (h.y - m.y) * cam.zoom }; });
-  const k = 390 / 1080;
-  const buf = await p.screenshot({ clip: { x: Math.max(0, pos.x * k - 75), y: Math.max(0, pos.y * k - 125), width: 150, height: 140 } });
-  tiles.push({ input: await sharp(buf).resize(200, 187).toBuffer(), left: (si * 2 + fi) * 200, top: r * 187 });
-}
-await sharp({ create: { width: 1200, height: 748, channels: 3, background: '#222' } }).composite(tiles).png().toFile('shots/gear.png');
-console.log(errs.length ? errs : 'no page errors');
-await b.close(); server.kill();
+await p.evaluate(() => document.querySelector('#title .play')?.click()); await wait(600);
+// Bluebeary, Lv 14, Berry Bomb Basket (sig weapon on the Honey Dipper Mace) + Bubble Wrap armour + Static Whisk charm
+await p.evaluate(() => {
+  const s = window.__kkq.save, sp = 10, h = s.heroes[sp];
+  s.unlocked = [...new Set([...s.unlocked, sp])]; s.selected = sp; h.level = 14; s.storyMode = 'key';
+  for (let n = 1; n <= 6; n++) h.cleared['1-' + n] = 'A';
+  h.seen.push('intro', 'w1-open', 'w1-s2', 'w1-s3', 'w1-s4');
+  h.equip = {
+    weapon: { id: 9001, base: 'w-blue2', rarity: 5, ilvl: 14, plus: 3, grade: 3, lines: [{ k: 'atk', v: 30 }, { k: 'hp', v: 40 }], unique: 'berrybasket' },
+    armor: { id: 9002, base: 'a-blue2', rarity: 4, ilvl: 14, plus: 0, grade: 2, lines: [{ k: 'def', v: 9 }, { k: 'hp', v: 60 }], proc: 'bubble' },
+    charm: { id: 9003, base: 'k-blue', rarity: 3, ilvl: 14, plus: 0, grade: 2, lines: [{ k: 'hp', v: 40 }], proc: 'zap' },
+  };
+  window.__kkq.scene.scene.restart({});
+});
+await wait(900);
+await p.evaluate(() => document.querySelector('[data-tab=hero]')?.click()); await wait(400);
+await p.screenshot({ path: 'shots/gear-hero.png' });
+await p.evaluate(() => document.querySelector('[data-eqslot=weapon]')?.click()); await wait(400);
+await p.screenshot({ path: 'shots/gear-item.png' });
+await p.evaluate(() => window.__kkq.play('1-3')); await wait(1500);
+await p.evaluate(() => { const w = window.__kkq.world(); w.hero.inv = 9999; w.hero.x = 700; w.hero.face = 1; const m = w.spawnMob('bun', 900, 3); m.hp = m.maxHp = 9999; });
+await wait(300);
+await p.keyboard.down('KeyF'); await wait(80); await p.keyboard.up('KeyF'); await wait(380);
+await p.screenshot({ path: 'shots/gear-lob.png' });
+// a thrower: Pizzaraptor's skewer
+await p.evaluate(() => { const w = window.__kkq.world(); w.hero.d.gear = { ...w.hero.d.gear, style: 'throw', icon: 'eq-skewer', name: 'Skewer Toss', fx: undefined }; w.hero.cds[3] = 0; });
+await p.keyboard.down('KeyF'); await wait(80); await p.keyboard.up('KeyF'); await wait(220);
+await p.screenshot({ path: 'shots/gear-throw.png' });
+console.log(errs.length ? errs : 'no errors'); await b.close(); server.kill(); process.exit(0);

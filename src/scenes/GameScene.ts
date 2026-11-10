@@ -7,13 +7,13 @@ import { readInput, takeTaps } from '../input';
 import { TIER_COLORS, TIER_NAMES } from '../sim/loot';
 import { CONSUMABLES } from '../sim/consumables';
 import { ELITE, ELITE_MODS, MOBS, nemesisOf } from '../sim/mobs';
-import { ULT_LV, applyBranch, skillsOf, skillScale } from '../sim/skills';
+import { ULT_LV, applyBranch, applyMod, skillsOf, skillScale } from '../sim/skills';
 import { STAGES, stageById, worldOf } from '../sim/stages';
 import { derive } from '../sim/stats';
 import type { SimEvent, StageDef } from '../sim/types';
 import { DT, HARD_LV, type Mob, World, guardBreakOf, launcherOf, rankOf } from '../sim/world';
 import { type GearLook, HeroView } from '../render/rig';
-import { BASES } from '../sim/items';
+import { itemIcon } from '../sim/items';
 import type { HeroProfile } from '../sim/stats';
 import { addXp, buddyProfile, finishStage, hero, quickBag, save, syncQuickBag } from '../save';
 import { AVERAGE, Bot } from '../sim/bot';
@@ -23,7 +23,7 @@ import { playStory } from '../ui/story';
 import { type QuipKind, TAUNTS } from '../story/banter';
 import { QUIPS } from '../story/more';
 import { CLASSES } from '../sim/classes';
-import { setSkillUi, setTouchVisible, setUltUi } from '../touch';
+import { setGearUi, setSkillUi, setTouchVisible, setUltUi } from '../touch';
 import { hideCamp, runGacha, showCamp, showResult, stageUnlocked } from '../ui/camp';
 import { type NetPlay, inGame, kitOf, leaveOnline, net, showOnline } from '../ui/online';
 import { applySnapshot, makeSnapshot, type Snapshot } from '../net/snapshot';
@@ -31,11 +31,11 @@ import { type Input, NO_INPUT } from '../sim/types';
 
 /** Equipped items → what to draw on the kaiju. */
 export function lookOf(p: HeroProfile): GearLook {
-  const e = p.equip, ic = (b: string) => BASES[b]?.icon ?? '';
+  const e = p.equip;
   return {
-    weapon: e.weapon && { icon: ic(e.weapon.base), base: e.weapon.base, rarity: e.weapon.rarity, plus: e.weapon.plus },
-    armor: e.armor && { icon: ic(e.armor.base), base: e.armor.base, rarity: e.armor.rarity },
-    charm: e.charm && { icon: ic(e.charm.base), rarity: e.charm.rarity },
+    weapon: e.weapon && { icon: itemIcon(e.weapon), base: e.weapon.base, rarity: e.weapon.rarity, plus: e.weapon.plus },
+    armor: e.armor && { icon: itemIcon(e.armor), base: e.armor.base, rarity: e.armor.rarity },
+    charm: e.charm && { icon: itemIcon(e.charm), rarity: e.charm.rarity },
   };
 }
 
@@ -63,6 +63,10 @@ export class GameScene extends Phaser.Scene {
   private mobViews = new Map<number, MobView>();
   private boxImgs = new Map<number, { img: Phaser.GameObjects.Image; glow: Phaser.GameObjects.Arc }>();
   private shotImgs = new Map<number, Phaser.GameObjects.Shape>();
+  /** gear skills: the weapon itself flying about */
+  private gearImgs = new Map<number, Phaser.GameObjects.Image>();
+  /** Bubble Wrap shield around your kaiju */
+  private bubbleView?: Phaser.GameObjects.Ellipse;
   private mineImgs = new Map<number, Phaser.GameObjects.Arc>();
   private heroShadow!: Phaser.GameObjects.Ellipse;
   private aura!: Phaser.GameObjects.Ellipse;
@@ -138,7 +142,7 @@ export class GameScene extends Phaser.Scene {
         play: (id: string) => this.scene.restart({ stage: id }), save,
       };
     }
-    this.mobViews.clear(); this.boxImgs.clear(); this.shotImgs.clear(); this.mineImgs.clear();
+    this.mobViews.clear(); this.boxImgs.clear(); this.shotImgs.clear(); this.mineImgs.clear(); this.gearImgs.clear();
     this.world = null; this.done = false; this.paused = false; this.xpGained = 0; this.levels = 0; this.acc = 0;
     if (!data?.stage) {
       // camp: the HTML menus cover the screen
@@ -235,6 +239,7 @@ export class GameScene extends Phaser.Scene {
     this.overlay = this.add.graphics().setDepth(2);
     this.slowTint = this.add.rectangle(SX, SY, VW * 2, VH * 2, 0x6a8aff, 0).setOrigin(0, 0).setScrollFactor(0).setDepth(16);
     this.heroShadow = this.add.ellipse(0, 0, 54, 12, 0x000000, 0.22).setDepth(-2);
+    this.bubbleView = this.add.ellipse(0, 0, 96, 112, 0xbfe8ff, 0.22).setStrokeStyle(3, 0xffffff, 0.8).setDepth(6).setVisible(false);
     this.aura = this.add.ellipse(0, 0, 80, 100, 0x9fe0ff, 0.25).setDepth(4).setBlendMode(Phaser.BlendModes.ADD).setVisible(false);
     const myKit = this.online?.kits[this.me].profile ?? p;
     this.hero = new HeroView(this, myKit.species, k => this.has(k), 84, lookOf(myKit));
@@ -390,6 +395,21 @@ export class GameScene extends Phaser.Scene {
           break;
         }
         case 'swing': this.slash(e.step); sfx('swing'); break;
+        case 'gear': sfx(e.style === 'slam' ? 'boom' : 'swing'); this.slash(0); this.callout(e.x, e.y - 110, e.name.toUpperCase() + '!', '#ffd27a', 12); break;
+        case 'zap': {
+          sfx('crit');
+          const gz = this.add.graphics().setDepth(9).setBlendMode(Phaser.BlendModes.ADD);
+          gz.lineStyle(3, 0xb8e8ff, 1);
+          for (let i = 1; i < e.pts.length; i++) {
+            const [x0, y0] = e.pts[0], [x1, y1] = e.pts[i];
+            gz.beginPath(); gz.moveTo(x0, y0);
+            for (let k = 1; k < 5; k++) gz.lineTo(x0 + (x1 - x0) * k / 5 + Phaser.Math.Between(-10, 10), y0 + (y1 - y0) * k / 5 + Phaser.Math.Between(-10, 10));
+            gz.lineTo(x1, y1); gz.strokePath();
+          }
+          this.tweens.add({ targets: gz, alpha: 0, duration: 260, onComplete: () => gz.destroy() });
+          break;
+        }
+        case 'proc': sfx('pickup'); this.callout(e.x, e.y, e.name, '#9fe8ff', 13); break;
         case 'jump': sfx('jump'); break;
         case 'skill': trackHero(hero().species, `skill:${e.id}`); this.skillFx(e.kind); sfx(e.kind === 'heal' ? 'heal' : 'skill'); break;
         case 'shock': sfx('boom'); this.ring(e.x, e.y, e.r, 0xffe0a0); this.shake = Math.max(this.shake, 7); break;
@@ -910,6 +930,15 @@ export class GameScene extends Phaser.Scene {
     const seenS = new Set<number>();
     for (const s of w.shots) {
       seenS.add(s.id);
+      if (s.icon) {
+        let gi = this.gearImgs.get(s.id);
+        if (!gi) { gi = this.add.image(0, 0, this.has(s.icon) ? s.icon : '__WHITE').setDepth(8); gi.setScale((s.kind === 'gearrain' ? 34 : 46) / gi.height); this.gearImgs.set(s.id, gi); }
+        const spin = Math.sign(s.vx) || 1;
+        gi.setPosition(s.x, s.y).setVisible(s.t >= 0)
+          .setRotation(s.kind === 'gearrain' ? Math.PI * 0.75 : s.kind === 'gearwave' ? Math.sin(t * 40) * 0.2 : s.kind === 'gearroll' ? s.x / 22 : t * 18 * spin);
+        if (s.kind === 'gearwave' && Math.random() < 0.5) this.burst(s.x, s.y + 10, 0xd8c0a0, 1);
+        continue;
+      }
       let c = this.shotImgs.get(s.id);
       if (!c) {
         c = s.kind === 'berry' ? this.add.circle(0, 0, 8, 0x3a4aa0).setStrokeStyle(2, 0x9ab0ff)
@@ -962,15 +991,19 @@ export class GameScene extends Phaser.Scene {
       c.setPosition(mi.x, mi.y - 8).setScale(1 + (Math.sin(t * 8 + mi.id) > 0.7 ? 0.15 : 0));
     }
     for (const [id, c] of this.mineImgs) if (!seenM.has(id)) { c.destroy(); this.mineImgs.delete(id); }
+    for (const [id, c] of this.gearImgs) if (!seenS.has(id)) { this.burst(c.x, c.y, 0xffe8b0, 6); c.destroy(); this.gearImgs.delete(id); }
+    this.bubbleView?.setVisible(h.shield > 0).setPosition(h.x, h.y - 44).setScale(1 + Math.sin(t * 5) * 0.04);
 
     updateHud(w, hero(), st);
     setUltUi(h.d.level >= ULT_LV, h.ult);
     const sk = skillsOf(h.d.cls.species).actives;
     for (let i = 0; i < 3; i++) {
       const lv = h.d.skillLv[sk[i].id] ?? 0;
-      const full = applyBranch(sk[i], h.d.branch[sk[i].id]).cd * skillScale(lv).cd * (1 - h.d.cdr);
+      const full = applyMod(applyBranch(sk[i], h.d.branch[sk[i].id]), h.d.mods[sk[i].id]).cd * skillScale(lv).cd * (1 - h.d.cdr);
       setSkillUi(i, lv ? sk[i].name : null, lv && full ? h.cds[i] / full : 0, h.cds[i]);
     }
+    const gs = h.d.gear;
+    setGearUi(gs ? gs.icon : null, gs ? (h.cds[3] ?? 0) / (gs.cd * (1 - h.d.cdr)) : 0, h.cds[3] ?? 0);
   }
 
   private drawMob(m: Mob, t: number): void {
