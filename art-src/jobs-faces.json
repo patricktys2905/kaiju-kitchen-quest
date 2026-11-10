@@ -1,0 +1,386 @@
+[
+ {
+  "name": "face-0-happy",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-0.png"
+  ],
+  "prompt": "Generate an image. The reference is my game character, a little strawberry kaiju dinosaur (Gobzilla Jr.). Draw THIS SAME character as a cartoon story portrait showing a strong, funny, very readable emotion: laughing with joy: eyes squeezed into happy arcs, a huge open-mouthed grin, arms or paws (or wings, tentacles, claws) thrown up in celebration. Keep it EXACTLY on-model: same body shape and proportions, same colours, same face design, same thick dark outlines and glossy cel shading as the reference. Do not add any clothes, props, extra limbs or extra characters that are not in the reference. Same three-quarter view and facing direction as the reference, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Portrait 4:5 image."
+ },
+ {
+  "name": "face-0-angry",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-0.png"
+  ],
+  "prompt": "Generate an image. The reference is my game character, a little strawberry kaiju dinosaur (Gobzilla Jr.). Draw THIS SAME character as a cartoon story portrait showing a strong, funny, very readable emotion: furious and fired up: deep scowling brows, gritted teeth, fists or claws clenched and raised, leaning forward, a little puff of angry steam above its head. Keep it EXACTLY on-model: same body shape and proportions, same colours, same face design, same thick dark outlines and glossy cel shading as the reference. Do not add any clothes, props, extra limbs or extra characters that are not in the reference. Same three-quarter view and facing direction as the reference, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Portrait 4:5 image."
+ },
+ {
+  "name": "face-0-shocked",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-0.png"
+  ],
+  "prompt": "Generate an image. The reference is my game character, a little strawberry kaiju dinosaur (Gobzilla Jr.). Draw THIS SAME character as a cartoon story portrait showing a strong, funny, very readable emotion: totally shocked: eyes wide as saucers with tiny pupils, jaw dropped open, leaning back in surprise, a sweat drop flying off its head. Keep it EXACTLY on-model: same body shape and proportions, same colours, same face design, same thick dark outlines and glossy cel shading as the reference. Do not add any clothes, props, extra limbs or extra characters that are not in the reference. Same three-quarter view and facing direction as the reference, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Portrait 4:5 image."
+ },
+ {
+  "name": "face-0-sad",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-0.png"
+  ],
+  "prompt": "Generate an image. The reference is my game character, a little strawberry kaiju dinosaur (Gobzilla Jr.). Draw THIS SAME character as a cartoon story portrait showing a strong, funny, very readable emotion: sad and worried: droopy teary eyes with one wobbly tear, a trembling frown, shoulders slumped and arms hanging down. Keep it EXACTLY on-model: same body shape and proportions, same colours, same face design, same thick dark outlines and glossy cel shading as the reference. Do not add any clothes, props, extra limbs or extra characters that are not in the reference. Same three-quarter view and facing direction as the reference, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Portrait 4:5 image."
+ },
+ {
+  "name": "face-1-happy",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-1.png"
+  ],
+  "prompt": "Generate an image. The reference is my game character, a blue jelly octopus scientist wearing a metal colander as a helmet (Squidgeon). Draw THIS SAME character as a cartoon story portrait showing a strong, funny, very readable emotion: laughing with joy: eyes squeezed into happy arcs, a huge open-mouthed grin, arms or paws (or wings, tentacles, claws) thrown up in celebration. Keep it EXACTLY on-model: same body shape and proportions, same colours, same face design, same thick dark outlines and glossy cel shading as the reference. Do not add any clothes, props, extra limbs or extra characters that are not in the reference. Same three-quarter view and facing direction as the reference, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Portrait 4:5 image."
+ },
+ {
+  "name": "face-1-angry",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-1.png"
+  ],
+  "prompt": "Generate an image. The reference is my game character, a blue jelly octopus scientist wearing a metal colander as a helmet (Squidgeon). Draw THIS SAME character as a cartoon story portrait showing a strong, funny, very readable emotion: furious and fired up: deep scowling brows, gritted teeth, fists or claws clenched and raised, leaning forward, a little puff of angry steam above its head. Keep it EXACTLY on-model: same body shape and proportions, same colours, same face design, same thick dark outlines and glossy cel shading as the reference. Do not add any clothes, props, extra limbs or extra characters that are not in the reference. Same three-quarter view and facing direction as the reference, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Portrait 4:5 image."
+ },
+ {
+  "name": "face-1-shocked",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-1.png"
+  ],
+  "prompt": "Generate an image. The reference is my game character, a blue jelly octopus scientist wearing a metal colander as a helmet (Squidgeon). Draw THIS SAME character as a cartoon story portrait showing a strong, funny, very readable emotion: totally shocked: eyes wide as saucers with tiny pupils, jaw dropped open, leaning back in surprise, a sweat drop flying off its head. Keep it EXACTLY on-model: same body shape and proportions, same colours, same face design, same thick dark outlines and glossy cel shading as the reference. Do not add any clothes, props, extra limbs or extra characters that are not in the reference. Same three-quarter view and facing direction as the reference, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Portrait 4:5 image."
+ },
+ {
+  "name": "face-1-sad",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-1.png"
+  ],
+  "prompt": "Generate an image. The reference is my game character, a blue jelly octopus scientist wearing a metal colander as a helmet (Squidgeon). Draw THIS SAME character as a cartoon story portrait showing a strong, funny, very readable emotion: sad and worried: droopy teary eyes with one wobbly tear, a trembling frown, shoulders slumped and arms hanging down. Keep it EXACTLY on-model: same body shape and proportions, same colours, same face design, same thick dark outlines and glossy cel shading as the reference. Do not add any clothes, props, extra limbs or extra characters that are not in the reference. Same three-quarter view and facing direction as the reference, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Portrait 4:5 image."
+ },
+ {
+  "name": "face-2-happy",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-2.png"
+  ],
+  "prompt": "Generate an image. The reference is my game character, a grumpy cheese crab with a cabbage-leaf shell (Crabbage). Draw THIS SAME character as a cartoon story portrait showing a strong, funny, very readable emotion: laughing with joy: eyes squeezed into happy arcs, a huge open-mouthed grin, arms or paws (or wings, tentacles, claws) thrown up in celebration. Keep it EXACTLY on-model: same body shape and proportions, same colours, same face design, same thick dark outlines and glossy cel shading as the reference. Do not add any clothes, props, extra limbs or extra characters that are not in the reference. Same three-quarter view and facing direction as the reference, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Portrait 4:5 image."
+ },
+ {
+  "name": "face-2-angry",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-2.png"
+  ],
+  "prompt": "Generate an image. The reference is my game character, a grumpy cheese crab with a cabbage-leaf shell (Crabbage). Draw THIS SAME character as a cartoon story portrait showing a strong, funny, very readable emotion: furious and fired up: deep scowling brows, gritted teeth, fists or claws clenched and raised, leaning forward, a little puff of angry steam above its head. Keep it EXACTLY on-model: same body shape and proportions, same colours, same face design, same thick dark outlines and glossy cel shading as the reference. Do not add any clothes, props, extra limbs or extra characters that are not in the reference. Same three-quarter view and facing direction as the reference, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Portrait 4:5 image."
+ },
+ {
+  "name": "face-2-shocked",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-2.png"
+  ],
+  "prompt": "Generate an image. The reference is my game character, a grumpy cheese crab with a cabbage-leaf shell (Crabbage). Draw THIS SAME character as a cartoon story portrait showing a strong, funny, very readable emotion: totally shocked: eyes wide as saucers with tiny pupils, jaw dropped open, leaning back in surprise, a sweat drop flying off its head. Keep it EXACTLY on-model: same body shape and proportions, same colours, same face design, same thick dark outlines and glossy cel shading as the reference. Do not add any clothes, props, extra limbs or extra characters that are not in the reference. Same three-quarter view and facing direction as the reference, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Portrait 4:5 image."
+ },
+ {
+  "name": "face-2-sad",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-2.png"
+  ],
+  "prompt": "Generate an image. The reference is my game character, a grumpy cheese crab with a cabbage-leaf shell (Crabbage). Draw THIS SAME character as a cartoon story portrait showing a strong, funny, very readable emotion: sad and worried: droopy teary eyes with one wobbly tear, a trembling frown, shoulders slumped and arms hanging down. Keep it EXACTLY on-model: same body shape and proportions, same colours, same face design, same thick dark outlines and glossy cel shading as the reference. Do not add any clothes, props, extra limbs or extra characters that are not in the reference. Same three-quarter view and facing direction as the reference, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Portrait 4:5 image."
+ },
+ {
+  "name": "face-4-happy",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-4.png"
+  ],
+  "prompt": "Generate an image. The reference is my game character, a fluffy marshmallow moth (Mothball). Draw THIS SAME character as a cartoon story portrait showing a strong, funny, very readable emotion: laughing with joy: eyes squeezed into happy arcs, a huge open-mouthed grin, arms or paws (or wings, tentacles, claws) thrown up in celebration. Keep it EXACTLY on-model: same body shape and proportions, same colours, same face design, same thick dark outlines and glossy cel shading as the reference. Do not add any clothes, props, extra limbs or extra characters that are not in the reference. Same three-quarter view and facing direction as the reference, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Portrait 4:5 image."
+ },
+ {
+  "name": "face-4-angry",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-4.png"
+  ],
+  "prompt": "Generate an image. The reference is my game character, a fluffy marshmallow moth (Mothball). Draw THIS SAME character as a cartoon story portrait showing a strong, funny, very readable emotion: furious and fired up: deep scowling brows, gritted teeth, fists or claws clenched and raised, leaning forward, a little puff of angry steam above its head. Keep it EXACTLY on-model: same body shape and proportions, same colours, same face design, same thick dark outlines and glossy cel shading as the reference. Do not add any clothes, props, extra limbs or extra characters that are not in the reference. Same three-quarter view and facing direction as the reference, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Portrait 4:5 image."
+ },
+ {
+  "name": "face-4-shocked",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-4.png"
+  ],
+  "prompt": "Generate an image. The reference is my game character, a fluffy marshmallow moth (Mothball). Draw THIS SAME character as a cartoon story portrait showing a strong, funny, very readable emotion: totally shocked: eyes wide as saucers with tiny pupils, jaw dropped open, leaning back in surprise, a sweat drop flying off its head. Keep it EXACTLY on-model: same body shape and proportions, same colours, same face design, same thick dark outlines and glossy cel shading as the reference. Do not add any clothes, props, extra limbs or extra characters that are not in the reference. Same three-quarter view and facing direction as the reference, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Portrait 4:5 image."
+ },
+ {
+  "name": "face-4-sad",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-4.png"
+  ],
+  "prompt": "Generate an image. The reference is my game character, a fluffy marshmallow moth (Mothball). Draw THIS SAME character as a cartoon story portrait showing a strong, funny, very readable emotion: sad and worried: droopy teary eyes with one wobbly tear, a trembling frown, shoulders slumped and arms hanging down. Keep it EXACTLY on-model: same body shape and proportions, same colours, same face design, same thick dark outlines and glossy cel shading as the reference. Do not add any clothes, props, extra limbs or extra characters that are not in the reference. Same three-quarter view and facing direction as the reference, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Portrait 4:5 image."
+ },
+ {
+  "name": "face-5-happy",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-5.png"
+  ],
+  "prompt": "Generate an image. The reference is my game character, a little loaf-bread bat with toast-slice wings and a butter pat on its head (Toastbat). Draw THIS SAME character as a cartoon story portrait showing a strong, funny, very readable emotion: laughing with joy: eyes squeezed into happy arcs, a huge open-mouthed grin, arms or paws (or wings, tentacles, claws) thrown up in celebration. Keep it EXACTLY on-model: same body shape and proportions, same colours, same face design, same thick dark outlines and glossy cel shading as the reference. Do not add any clothes, props, extra limbs or extra characters that are not in the reference. Same three-quarter view and facing direction as the reference, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Portrait 4:5 image."
+ },
+ {
+  "name": "face-5-angry",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-5.png"
+  ],
+  "prompt": "Generate an image. The reference is my game character, a little loaf-bread bat with toast-slice wings and a butter pat on its head (Toastbat). Draw THIS SAME character as a cartoon story portrait showing a strong, funny, very readable emotion: furious and fired up: deep scowling brows, gritted teeth, fists or claws clenched and raised, leaning forward, a little puff of angry steam above its head. Keep it EXACTLY on-model: same body shape and proportions, same colours, same face design, same thick dark outlines and glossy cel shading as the reference. Do not add any clothes, props, extra limbs or extra characters that are not in the reference. Same three-quarter view and facing direction as the reference, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Portrait 4:5 image."
+ },
+ {
+  "name": "face-5-shocked",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-5.png"
+  ],
+  "prompt": "Generate an image. The reference is my game character, a little loaf-bread bat with toast-slice wings and a butter pat on its head (Toastbat). Draw THIS SAME character as a cartoon story portrait showing a strong, funny, very readable emotion: totally shocked: eyes wide as saucers with tiny pupils, jaw dropped open, leaning back in surprise, a sweat drop flying off its head. Keep it EXACTLY on-model: same body shape and proportions, same colours, same face design, same thick dark outlines and glossy cel shading as the reference. Do not add any clothes, props, extra limbs or extra characters that are not in the reference. Same three-quarter view and facing direction as the reference, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Portrait 4:5 image."
+ },
+ {
+  "name": "face-5-sad",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-5.png"
+  ],
+  "prompt": "Generate an image. The reference is my game character, a little loaf-bread bat with toast-slice wings and a butter pat on its head (Toastbat). Draw THIS SAME character as a cartoon story portrait showing a strong, funny, very readable emotion: sad and worried: droopy teary eyes with one wobbly tear, a trembling frown, shoulders slumped and arms hanging down. Keep it EXACTLY on-model: same body shape and proportions, same colours, same face design, same thick dark outlines and glossy cel shading as the reference. Do not add any clothes, props, extra limbs or extra characters that are not in the reference. Same three-quarter view and facing direction as the reference, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Portrait 4:5 image."
+ },
+ {
+  "name": "face-6-happy",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-6.png"
+  ],
+  "prompt": "Generate an image. The reference is my game character, a plump steamed dumpling lord with a little steam curl on top (Dumplord). Draw THIS SAME character as a cartoon story portrait showing a strong, funny, very readable emotion: laughing with joy: eyes squeezed into happy arcs, a huge open-mouthed grin, arms or paws (or wings, tentacles, claws) thrown up in celebration. Keep it EXACTLY on-model: same body shape and proportions, same colours, same face design, same thick dark outlines and glossy cel shading as the reference. Do not add any clothes, props, extra limbs or extra characters that are not in the reference. Same three-quarter view and facing direction as the reference, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Portrait 4:5 image."
+ },
+ {
+  "name": "face-6-angry",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-6.png"
+  ],
+  "prompt": "Generate an image. The reference is my game character, a plump steamed dumpling lord with a little steam curl on top (Dumplord). Draw THIS SAME character as a cartoon story portrait showing a strong, funny, very readable emotion: furious and fired up: deep scowling brows, gritted teeth, fists or claws clenched and raised, leaning forward, a little puff of angry steam above its head. Keep it EXACTLY on-model: same body shape and proportions, same colours, same face design, same thick dark outlines and glossy cel shading as the reference. Do not add any clothes, props, extra limbs or extra characters that are not in the reference. Same three-quarter view and facing direction as the reference, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Portrait 4:5 image."
+ },
+ {
+  "name": "face-6-shocked",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-6.png"
+  ],
+  "prompt": "Generate an image. The reference is my game character, a plump steamed dumpling lord with a little steam curl on top (Dumplord). Draw THIS SAME character as a cartoon story portrait showing a strong, funny, very readable emotion: totally shocked: eyes wide as saucers with tiny pupils, jaw dropped open, leaning back in surprise, a sweat drop flying off its head. Keep it EXACTLY on-model: same body shape and proportions, same colours, same face design, same thick dark outlines and glossy cel shading as the reference. Do not add any clothes, props, extra limbs or extra characters that are not in the reference. Same three-quarter view and facing direction as the reference, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Portrait 4:5 image."
+ },
+ {
+  "name": "face-6-sad",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-6.png"
+  ],
+  "prompt": "Generate an image. The reference is my game character, a plump steamed dumpling lord with a little steam curl on top (Dumplord). Draw THIS SAME character as a cartoon story portrait showing a strong, funny, very readable emotion: sad and worried: droopy teary eyes with one wobbly tear, a trembling frown, shoulders slumped and arms hanging down. Keep it EXACTLY on-model: same body shape and proportions, same colours, same face design, same thick dark outlines and glossy cel shading as the reference. Do not add any clothes, props, extra limbs or extra characters that are not in the reference. Same three-quarter view and facing direction as the reference, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Portrait 4:5 image."
+ },
+ {
+  "name": "face-7-happy",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-7.png"
+  ],
+  "prompt": "Generate an image. The reference is my game character, a teal sushi-roll dragon with pink spikes and a salmon belly (Norigon). Draw THIS SAME character as a cartoon story portrait showing a strong, funny, very readable emotion: laughing with joy: eyes squeezed into happy arcs, a huge open-mouthed grin, arms or paws (or wings, tentacles, claws) thrown up in celebration. Keep it EXACTLY on-model: same body shape and proportions, same colours, same face design, same thick dark outlines and glossy cel shading as the reference. Do not add any clothes, props, extra limbs or extra characters that are not in the reference. Same three-quarter view and facing direction as the reference, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Portrait 4:5 image."
+ },
+ {
+  "name": "face-7-angry",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-7.png"
+  ],
+  "prompt": "Generate an image. The reference is my game character, a teal sushi-roll dragon with pink spikes and a salmon belly (Norigon). Draw THIS SAME character as a cartoon story portrait showing a strong, funny, very readable emotion: furious and fired up: deep scowling brows, gritted teeth, fists or claws clenched and raised, leaning forward, a little puff of angry steam above its head. Keep it EXACTLY on-model: same body shape and proportions, same colours, same face design, same thick dark outlines and glossy cel shading as the reference. Do not add any clothes, props, extra limbs or extra characters that are not in the reference. Same three-quarter view and facing direction as the reference, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Portrait 4:5 image."
+ },
+ {
+  "name": "face-7-shocked",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-7.png"
+  ],
+  "prompt": "Generate an image. The reference is my game character, a teal sushi-roll dragon with pink spikes and a salmon belly (Norigon). Draw THIS SAME character as a cartoon story portrait showing a strong, funny, very readable emotion: totally shocked: eyes wide as saucers with tiny pupils, jaw dropped open, leaning back in surprise, a sweat drop flying off its head. Keep it EXACTLY on-model: same body shape and proportions, same colours, same face design, same thick dark outlines and glossy cel shading as the reference. Do not add any clothes, props, extra limbs or extra characters that are not in the reference. Same three-quarter view and facing direction as the reference, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Portrait 4:5 image."
+ },
+ {
+  "name": "face-7-sad",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-7.png"
+  ],
+  "prompt": "Generate an image. The reference is my game character, a teal sushi-roll dragon with pink spikes and a salmon belly (Norigon). Draw THIS SAME character as a cartoon story portrait showing a strong, funny, very readable emotion: sad and worried: droopy teary eyes with one wobbly tear, a trembling frown, shoulders slumped and arms hanging down. Keep it EXACTLY on-model: same body shape and proportions, same colours, same face design, same thick dark outlines and glossy cel shading as the reference. Do not add any clothes, props, extra limbs or extra characters that are not in the reference. Same three-quarter view and facing direction as the reference, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Portrait 4:5 image."
+ },
+ {
+  "name": "face-8-happy",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-8.png"
+  ],
+  "prompt": "Generate an image. The reference is my game character, a chocolate-bar golem made of chocolate blocks (Chocomunch). Draw THIS SAME character as a cartoon story portrait showing a strong, funny, very readable emotion: laughing with joy: eyes squeezed into happy arcs, a huge open-mouthed grin, arms or paws (or wings, tentacles, claws) thrown up in celebration. Keep it EXACTLY on-model: same body shape and proportions, same colours, same face design, same thick dark outlines and glossy cel shading as the reference. Do not add any clothes, props, extra limbs or extra characters that are not in the reference. Same three-quarter view and facing direction as the reference, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Portrait 4:5 image."
+ },
+ {
+  "name": "face-8-angry",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-8.png"
+  ],
+  "prompt": "Generate an image. The reference is my game character, a chocolate-bar golem made of chocolate blocks (Chocomunch). Draw THIS SAME character as a cartoon story portrait showing a strong, funny, very readable emotion: furious and fired up: deep scowling brows, gritted teeth, fists or claws clenched and raised, leaning forward, a little puff of angry steam above its head. Keep it EXACTLY on-model: same body shape and proportions, same colours, same face design, same thick dark outlines and glossy cel shading as the reference. Do not add any clothes, props, extra limbs or extra characters that are not in the reference. Same three-quarter view and facing direction as the reference, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Portrait 4:5 image."
+ },
+ {
+  "name": "face-8-shocked",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-8.png"
+  ],
+  "prompt": "Generate an image. The reference is my game character, a chocolate-bar golem made of chocolate blocks (Chocomunch). Draw THIS SAME character as a cartoon story portrait showing a strong, funny, very readable emotion: totally shocked: eyes wide as saucers with tiny pupils, jaw dropped open, leaning back in surprise, a sweat drop flying off its head. Keep it EXACTLY on-model: same body shape and proportions, same colours, same face design, same thick dark outlines and glossy cel shading as the reference. Do not add any clothes, props, extra limbs or extra characters that are not in the reference. Same three-quarter view and facing direction as the reference, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Portrait 4:5 image."
+ },
+ {
+  "name": "face-8-sad",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-8.png"
+  ],
+  "prompt": "Generate an image. The reference is my game character, a chocolate-bar golem made of chocolate blocks (Chocomunch). Draw THIS SAME character as a cartoon story portrait showing a strong, funny, very readable emotion: sad and worried: droopy teary eyes with one wobbly tear, a trembling frown, shoulders slumped and arms hanging down. Keep it EXACTLY on-model: same body shape and proportions, same colours, same face design, same thick dark outlines and glossy cel shading as the reference. Do not add any clothes, props, extra limbs or extra characters that are not in the reference. Same three-quarter view and facing direction as the reference, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Portrait 4:5 image."
+ },
+ {
+  "name": "face-10-happy",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-10.png"
+  ],
+  "prompt": "Generate an image. The reference is my game character, a gruff blueberry-muffin bear (Bluebeary). Draw THIS SAME character as a cartoon story portrait showing a strong, funny, very readable emotion: laughing with joy: eyes squeezed into happy arcs, a huge open-mouthed grin, arms or paws (or wings, tentacles, claws) thrown up in celebration. Keep it EXACTLY on-model: same body shape and proportions, same colours, same face design, same thick dark outlines and glossy cel shading as the reference. Do not add any clothes, props, extra limbs or extra characters that are not in the reference. Same three-quarter view and facing direction as the reference, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Portrait 4:5 image."
+ },
+ {
+  "name": "face-10-angry",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-10.png"
+  ],
+  "prompt": "Generate an image. The reference is my game character, a gruff blueberry-muffin bear (Bluebeary). Draw THIS SAME character as a cartoon story portrait showing a strong, funny, very readable emotion: furious and fired up: deep scowling brows, gritted teeth, fists or claws clenched and raised, leaning forward, a little puff of angry steam above its head. Keep it EXACTLY on-model: same body shape and proportions, same colours, same face design, same thick dark outlines and glossy cel shading as the reference. Do not add any clothes, props, extra limbs or extra characters that are not in the reference. Same three-quarter view and facing direction as the reference, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Portrait 4:5 image."
+ },
+ {
+  "name": "face-10-shocked",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-10.png"
+  ],
+  "prompt": "Generate an image. The reference is my game character, a gruff blueberry-muffin bear (Bluebeary). Draw THIS SAME character as a cartoon story portrait showing a strong, funny, very readable emotion: totally shocked: eyes wide as saucers with tiny pupils, jaw dropped open, leaning back in surprise, a sweat drop flying off its head. Keep it EXACTLY on-model: same body shape and proportions, same colours, same face design, same thick dark outlines and glossy cel shading as the reference. Do not add any clothes, props, extra limbs or extra characters that are not in the reference. Same three-quarter view and facing direction as the reference, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Portrait 4:5 image."
+ },
+ {
+  "name": "face-10-sad",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-10.png"
+  ],
+  "prompt": "Generate an image. The reference is my game character, a gruff blueberry-muffin bear (Bluebeary). Draw THIS SAME character as a cartoon story portrait showing a strong, funny, very readable emotion: sad and worried: droopy teary eyes with one wobbly tear, a trembling frown, shoulders slumped and arms hanging down. Keep it EXACTLY on-model: same body shape and proportions, same colours, same face design, same thick dark outlines and glossy cel shading as the reference. Do not add any clothes, props, extra limbs or extra characters that are not in the reference. Same three-quarter view and facing direction as the reference, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Portrait 4:5 image."
+ },
+ {
+  "name": "face-11-happy",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-11.png"
+  ],
+  "prompt": "Generate an image. The reference is my game character, a pizza raptor dinosaur made of melty cheesy pizza with pepperoni (Pizzaraptor). Draw THIS SAME character as a cartoon story portrait showing a strong, funny, very readable emotion: laughing with joy: eyes squeezed into happy arcs, a huge open-mouthed grin, arms or paws (or wings, tentacles, claws) thrown up in celebration. Keep it EXACTLY on-model: same body shape and proportions, same colours, same face design, same thick dark outlines and glossy cel shading as the reference. Do not add any clothes, props, extra limbs or extra characters that are not in the reference. Same three-quarter view and facing direction as the reference, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Portrait 4:5 image."
+ },
+ {
+  "name": "face-11-angry",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-11.png"
+  ],
+  "prompt": "Generate an image. The reference is my game character, a pizza raptor dinosaur made of melty cheesy pizza with pepperoni (Pizzaraptor). Draw THIS SAME character as a cartoon story portrait showing a strong, funny, very readable emotion: furious and fired up: deep scowling brows, gritted teeth, fists or claws clenched and raised, leaning forward, a little puff of angry steam above its head. Keep it EXACTLY on-model: same body shape and proportions, same colours, same face design, same thick dark outlines and glossy cel shading as the reference. Do not add any clothes, props, extra limbs or extra characters that are not in the reference. Same three-quarter view and facing direction as the reference, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Portrait 4:5 image."
+ },
+ {
+  "name": "face-11-shocked",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-11.png"
+  ],
+  "prompt": "Generate an image. The reference is my game character, a pizza raptor dinosaur made of melty cheesy pizza with pepperoni (Pizzaraptor). Draw THIS SAME character as a cartoon story portrait showing a strong, funny, very readable emotion: totally shocked: eyes wide as saucers with tiny pupils, jaw dropped open, leaning back in surprise, a sweat drop flying off its head. Keep it EXACTLY on-model: same body shape and proportions, same colours, same face design, same thick dark outlines and glossy cel shading as the reference. Do not add any clothes, props, extra limbs or extra characters that are not in the reference. Same three-quarter view and facing direction as the reference, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Portrait 4:5 image."
+ },
+ {
+  "name": "face-11-sad",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-11.png"
+  ],
+  "prompt": "Generate an image. The reference is my game character, a pizza raptor dinosaur made of melty cheesy pizza with pepperoni (Pizzaraptor). Draw THIS SAME character as a cartoon story portrait showing a strong, funny, very readable emotion: sad and worried: droopy teary eyes with one wobbly tear, a trembling frown, shoulders slumped and arms hanging down. Keep it EXACTLY on-model: same body shape and proportions, same colours, same face design, same thick dark outlines and glossy cel shading as the reference. Do not add any clothes, props, extra limbs or extra characters that are not in the reference. Same three-quarter view and facing direction as the reference, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Portrait 4:5 image."
+ },
+ {
+  "name": "face-15-happy",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-15.png"
+  ],
+  "prompt": "Generate an image. The reference is my game character, a shy hedgehog sitting in a hot-dog bun with mustard and ketchup on its spikes (Hotchog). Draw THIS SAME character as a cartoon story portrait showing a strong, funny, very readable emotion: laughing with joy: eyes squeezed into happy arcs, a huge open-mouthed grin, arms or paws (or wings, tentacles, claws) thrown up in celebration. Keep it EXACTLY on-model: same body shape and proportions, same colours, same face design, same thick dark outlines and glossy cel shading as the reference. Do not add any clothes, props, extra limbs or extra characters that are not in the reference. Same three-quarter view and facing direction as the reference, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Portrait 4:5 image."
+ },
+ {
+  "name": "face-15-angry",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-15.png"
+  ],
+  "prompt": "Generate an image. The reference is my game character, a shy hedgehog sitting in a hot-dog bun with mustard and ketchup on its spikes (Hotchog). Draw THIS SAME character as a cartoon story portrait showing a strong, funny, very readable emotion: furious and fired up: deep scowling brows, gritted teeth, fists or claws clenched and raised, leaning forward, a little puff of angry steam above its head. Keep it EXACTLY on-model: same body shape and proportions, same colours, same face design, same thick dark outlines and glossy cel shading as the reference. Do not add any clothes, props, extra limbs or extra characters that are not in the reference. Same three-quarter view and facing direction as the reference, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Portrait 4:5 image."
+ },
+ {
+  "name": "face-15-shocked",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-15.png"
+  ],
+  "prompt": "Generate an image. The reference is my game character, a shy hedgehog sitting in a hot-dog bun with mustard and ketchup on its spikes (Hotchog). Draw THIS SAME character as a cartoon story portrait showing a strong, funny, very readable emotion: totally shocked: eyes wide as saucers with tiny pupils, jaw dropped open, leaning back in surprise, a sweat drop flying off its head. Keep it EXACTLY on-model: same body shape and proportions, same colours, same face design, same thick dark outlines and glossy cel shading as the reference. Do not add any clothes, props, extra limbs or extra characters that are not in the reference. Same three-quarter view and facing direction as the reference, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Portrait 4:5 image."
+ },
+ {
+  "name": "face-15-sad",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-15.png"
+  ],
+  "prompt": "Generate an image. The reference is my game character, a shy hedgehog sitting in a hot-dog bun with mustard and ketchup on its spikes (Hotchog). Draw THIS SAME character as a cartoon story portrait showing a strong, funny, very readable emotion: sad and worried: droopy teary eyes with one wobbly tear, a trembling frown, shoulders slumped and arms hanging down. Keep it EXACTLY on-model: same body shape and proportions, same colours, same face design, same thick dark outlines and glossy cel shading as the reference. Do not add any clothes, props, extra limbs or extra characters that are not in the reference. Same three-quarter view and facing direction as the reference, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Portrait 4:5 image."
+ },
+ {
+  "name": "face-17-happy",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-17.png"
+  ],
+  "prompt": "Generate an image. The reference is my game character, a cookies-and-cream penguin with a cherry on its head (Pengwhip). Draw THIS SAME character as a cartoon story portrait showing a strong, funny, very readable emotion: laughing with joy: eyes squeezed into happy arcs, a huge open-mouthed grin, arms or paws (or wings, tentacles, claws) thrown up in celebration. Keep it EXACTLY on-model: same body shape and proportions, same colours, same face design, same thick dark outlines and glossy cel shading as the reference. Do not add any clothes, props, extra limbs or extra characters that are not in the reference. Same three-quarter view and facing direction as the reference, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Portrait 4:5 image."
+ },
+ {
+  "name": "face-17-angry",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-17.png"
+  ],
+  "prompt": "Generate an image. The reference is my game character, a cookies-and-cream penguin with a cherry on its head (Pengwhip). Draw THIS SAME character as a cartoon story portrait showing a strong, funny, very readable emotion: furious and fired up: deep scowling brows, gritted teeth, fists or claws clenched and raised, leaning forward, a little puff of angry steam above its head. Keep it EXACTLY on-model: same body shape and proportions, same colours, same face design, same thick dark outlines and glossy cel shading as the reference. Do not add any clothes, props, extra limbs or extra characters that are not in the reference. Same three-quarter view and facing direction as the reference, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Portrait 4:5 image."
+ },
+ {
+  "name": "face-17-shocked",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-17.png"
+  ],
+  "prompt": "Generate an image. The reference is my game character, a cookies-and-cream penguin with a cherry on its head (Pengwhip). Draw THIS SAME character as a cartoon story portrait showing a strong, funny, very readable emotion: totally shocked: eyes wide as saucers with tiny pupils, jaw dropped open, leaning back in surprise, a sweat drop flying off its head. Keep it EXACTLY on-model: same body shape and proportions, same colours, same face design, same thick dark outlines and glossy cel shading as the reference. Do not add any clothes, props, extra limbs or extra characters that are not in the reference. Same three-quarter view and facing direction as the reference, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Portrait 4:5 image."
+ },
+ {
+  "name": "face-17-sad",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-kaiju-17.png"
+  ],
+  "prompt": "Generate an image. The reference is my game character, a cookies-and-cream penguin with a cherry on its head (Pengwhip). Draw THIS SAME character as a cartoon story portrait showing a strong, funny, very readable emotion: sad and worried: droopy teary eyes with one wobbly tear, a trembling frown, shoulders slumped and arms hanging down. Keep it EXACTLY on-model: same body shape and proportions, same colours, same face design, same thick dark outlines and glossy cel shading as the reference. Do not add any clothes, props, extra limbs or extra characters that are not in the reference. Same three-quarter view and facing direction as the reference, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Portrait 4:5 image."
+ }
+]

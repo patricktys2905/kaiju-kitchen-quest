@@ -4,6 +4,13 @@ import { MOBS, nemesisOf } from '../sim/mobs';
 import { WORLDS } from '../sim/stages';
 import { STORIES, stillFor, type StoryLine } from '../story/stories';
 import { sfx } from '../audio';
+import { moodOf } from '../story/mood';
+
+/** Expression portrait for a kaiju saying this line (the neutral one when no mood shows). */
+export function faceArt(sp: number, text: string): string {
+  const m = moodOf(text);
+  return m === 'neutral' ? `art/kaiju-${sp}.webp` : `art/face-${sp}-${m}.webp`;
+}
 
 const CSS = `
 #story { position: fixed; inset: 0; z-index: 45; display: none; background: #120a18 center/cover no-repeat; font-family: Nunito, Arial, sans-serif; font-weight: 800; color: #fff4e4; }
@@ -16,6 +23,8 @@ const CSS = `
 #story .por.dim { filter: brightness(0.45) drop-shadow(0 1vmin 1.5vmin #000a); }
 #story .por.r.dim { transform: scaleX(-1) scale(0.94); } #story .por.l.dim { transform: scale(0.94); }
 #story .por.mold { background: radial-gradient(circle, #9adf6a 0 18%, #3a7a2a 30%, transparent 62%); filter: blur(0.5vmin) drop-shadow(0 0 4vmin #6ad04a); animation: moldp 2s ease-in-out infinite alternate; }
+#story .por.talk { animation: talk 0.4s ease-out; }
+@keyframes talk { 35% { translate: 0 -2.6vmin; } 65% { translate: 0 0.4vmin; } }
 @keyframes moldp { to { transform: scale(1.12); } }
 #story .box { position: absolute; left: 50%; transform: translateX(-50%); bottom: calc(3vmin + env(safe-area-inset-bottom)); width: min(86vw, 150vmin); min-height: 18vmin; box-sizing: border-box;
   background: #2a1a30f2; border: 3px solid #ffd27a; border-radius: 2.4vmin; padding: 2vmin 3vmin; font-size: 3vmin; line-height: 1.35; box-shadow: 0 1vmin 0 #0008; }
@@ -56,6 +65,7 @@ export function playStory(species: number, beats: string[], done: () => void): v
   }
   if (!story || !lines.length) { done(); return; }
   for (const k of new Set(lines.map(l => l.still))) if (k) new Image().src = `art/${k}.webp`; // preload the paintings
+  for (const { line: [who, text] } of lines) if (who === 'me' || typeof who === 'number') new Image().src = faceArt(who === 'me' ? species : who, text);
   const root = ensure();
   const stillEl = root.querySelector<HTMLElement>('.still')!, cnt = root.querySelector<HTMLElement>('.cnt')!;
   stillEl.innerHTML = '';
@@ -70,7 +80,7 @@ export function playStory(species: number, beats: string[], done: () => void): v
     const isMe = who === 'me', other = typeof who === 'number' ? who : null;
     const foe = nemesisOf(species);
     const name = who === 'me' ? me.name : who === 'boss' ? boss.name : who === 'foe' ? (foe ? MOBS[foe].name : '') : who === 'mold' ? '???' : other !== null ? CLASSES.find(c => c.species === other)?.name ?? '' : '';
-    const rightArt = who === 'boss' ? `art/${boss.art}.webp` : who === 'foe' && foe ? `art/${MOBS[foe].art}.webp` : other !== null ? `art/kaiju-${other}.webp` : '';
+    const rightArt = who === 'boss' ? `art/${boss.art}.webp` : who === 'foe' && foe ? `art/${MOBS[foe].art}.webp` : other !== null ? faceArt(other, text) : '';
     root.style.backgroundImage = `url(art/${w.bg}.webp)`;
     if (still !== curStill) {
       // crossfade: the old painting fades out on top while the new one fades in and slowly zooms
@@ -81,10 +91,10 @@ export function playStory(species: number, beats: string[], done: () => void): v
     // Who is already painted into the still: the kaiju in its own intro / cliffhanger, the boss in the boss and
     // "cured" paintings, nobody in the world vistas. Anyone not in the painting still gets their portrait.
     const painted = new Set(!still ? [] : /-(intro|cliff)$/.test(still) ? ['me'] : /-(boss|cure)$/.test(still) ? ['boss'] : []);
-    const face = who === 'me' ? `art/kaiju-${species}.webp` : rightArt;
+    const face = who === 'me' ? faceArt(species, text) : rightArt;
     const chip = still && face ? `<img src="${face}" alt="">` : '';
-    const left = painted.has('me') ? '' : `<div class="por l ${isMe ? '' : 'dim'}" style="background-image:url(art/kaiju-${species}.webp)"></div>`;
-    const right = who === 'mold' ? '<div class="por r mold"></div>' : rightArt && !(who === 'boss' && painted.has('boss')) ? `<div class="por r" style="background-image:url(${rightArt})"></div>` : '';
+    const left = painted.has('me') ? '' : `<div class="por l ${isMe ? 'talk' : 'dim'}" style="background-image:url(${isMe ? face : `art/kaiju-${species}.webp`})"></div>`;
+    const right = who === 'mold' ? '<div class="por r mold"></div>' : rightArt && !(who === 'boss' && painted.has('boss')) ? `<div class="por r ${isMe || who === 'n' ? 'dim' : 'talk'}" style="background-image:url(${rightArt})"></div>` : '';
     cnt.innerHTML = `<div class="ttl">${story.title}<small>${me.name} · World ${w.id}: ${w.name}</small></div>
       ${left}
       ${right}

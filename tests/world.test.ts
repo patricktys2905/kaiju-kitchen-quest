@@ -403,7 +403,7 @@ describe('art', () => {
     const need = [
       ...Object.values(BASES).map(b => b.icon), ...Object.values(MOBS).map(m => m.art), ...Object.values(CONSUMABLES).map(c => c.icon),
       ...STAGES.flatMap(s => [s.bg, s.tile, ...(s.mid ? [s.mid] : [])]), ...CLASSES.map(c => `kaiju-${c.species}`),
-      ...Object.entries(RIGS).flatMap(([sp, r]) => r.parts.map(p => `parts-${sp}-${p.piece}`)), 'map-world', 'map-oven', 'map-pantry', 'title-key', 'ob-crate', 'ob-jar', 'ob-sponge', 'ob-cooker', 'ob-lever', 'ob-chest', 'icon-key', 'npc-crumblet', ...allStills(),
+      ...Object.entries(RIGS).flatMap(([sp, r]) => r.parts.map(p => `parts-${sp}-${p.piece}`)), 'map-world', 'map-oven', 'map-pantry', 'title-key', 'ob-crate', 'ob-jar', 'ob-sponge', 'ob-cooker', 'ob-lever', 'ob-chest', 'icon-key', 'npc-crumblet', ...allStills(), ...CLASSES.flatMap(c => ['happy', 'angry', 'shocked', 'sad'].map(m => `face-${c.species}-${m}`)),
     ];
     expect(need.filter(k => !have.has(k))).toEqual([]);
   });
