@@ -144,7 +144,9 @@ export function updateHud(w: World, p: HeroProfile, st: StageDef): void {
   const goal = !ob || w.objDone ? '' : ob.kind === 'escort' && w.npc ? ` · 🧁 ${Math.ceil(w.npc.hp / w.npc.maxHp * 100)}%`
     : ob.kind === 'fetch' && w.scroll && !w.scroll.got ? ` · 📜 ${Math.max(0, Math.ceil(w.objTimer))}s`
     : w.holdout > 0 ? ` · ⏱ hold out ${Math.ceil(w.holdout)}s` : '';
-  q('.stage .s').textContent = (w.portal ? '➜ Exit is open! Head right' : `Monsters left: ${w.alive}`) + goal + clock;
+  const arena = w.arenas.find(a => a.locked);
+  const arenaTxt = arena ? ` · ⚔️ wave ${arena.wave + 1}/${arena.waves.length}` : w.portal || !w.arenas.some(a => !a.done) ? '' : ' · ⚔️ arena ahead';
+  q('.stage .s').textContent = (w.portal ? '➜ Exit is open! Head right' : `Monsters left: ${w.alive}`) + goal + arenaTxt + clock;
   const letter = styleRank(w.style), sc = { S: '#ffd23c', A: '#9fe8ff', B: '#a8f0a8', C: '#ffb38a', D: '#c8b8c8' }[letter];
   const sEl = q('.style'); sEl.classList.toggle('on', w.style > 2); sEl.style.setProperty('--sc', sc!);
   q('.style b').textContent = letter; q<HTMLElement>('.style .sbar i').style.transform = `scaleX(${w.style / 100})`;

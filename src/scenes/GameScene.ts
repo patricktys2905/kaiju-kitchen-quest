@@ -82,6 +82,9 @@ export class GameScene extends Phaser.Scene {
   private npcView?: { img: Phaser.GameObjects.Image; bar: Phaser.GameObjects.Rectangle; bg: Phaser.GameObjects.Rectangle };
   private scrollView?: { img: Phaser.GameObjects.Image; glow: Phaser.GameObjects.Arc };
   /** speech bubbles: monsters taunt the first time each kind appears, your kaiju quips at big moments */
+  private gateViews: Phaser.GameObjects.Container[] = [];
+  private pinView?: Phaser.GameObjects.Container;
+  private beltG?: Phaser.GameObjects.Graphics;
   private bubbles: { c: Phaser.GameObjects.Container; who: number | 'hero'; t: number }[] = [];
   private taunted = new Set<string>();
   private quipT = 0; private tauntT = 0; private lastQuip = '';
@@ -151,6 +154,23 @@ export class GameScene extends Phaser.Scene {
       shadow: this.add.ellipse(pl.x + pl.w / 2, st.groundY - 4, pl.w * 0.8, 10, 0x000000, pl.secret ? 0 : 0.1).setDepth(-9),
       board: this.has('plat-board') ? this.add.image(pl.x + pl.w / 2, pl.y - 6, 'plat-board').setOrigin(0.5, 0.08).setDisplaySize(pl.w + 28, 38).setDepth(-5).setTint(pl.secret ? 0xffe8a0 : pl.move ? 0xd8e8f8 : st.platTint) : undefined,
     }));
+    // arena gates (a pair of ladle pillars per room), the rolling pin, conveyor belts
+    this.gateViews = this.world.arenas.map(a => this.add.container(0, 0, [a.x0, a.x1].map(x => {
+      const g = this.add.graphics();
+      g.fillStyle(0x8a5a30, 1); g.fillRoundedRect(x - 9, st.groundY - 190, 18, 190, 6);
+      g.fillStyle(0xd8a060, 1); g.fillCircle(x, st.groundY - 196, 14);
+      g.lineStyle(3, 0x4a2a10, 1); g.strokeRoundedRect(x - 9, st.groundY - 190, 18, 190, 6);
+      return g;
+    })).setDepth(6).setAlpha(0.35));
+    this.pinView = undefined;
+    if (this.world.chase) {
+      // seen end-on as it rolls at you: a big wooden disc with grain spokes and the handle knob in the middle
+      const body = this.add.circle(0, 0, 60, 0xd8a868).setStrokeStyle(6, 0x6a4020);
+      const grain = [0, 60, 120].map(a => this.add.rectangle(0, 0, 112, 6, 0xb8885a).setAngle(a));
+      const knob = this.add.circle(0, 0, 17, 0x8a5a30).setStrokeStyle(4, 0x4a2a10);
+      this.pinView = this.add.container(0, st.groundY - 60, [body, ...grain, knob]).setDepth(7).setVisible(false);
+    }
+    this.beltG = (st.belts ?? []).length ? this.add.graphics().setDepth(-3) : undefined;
     this.propViews.clear(); this.cookerViews.clear(); this.npcView = undefined; this.scrollView = undefined;
     this.bubbles = []; this.taunted.clear(); this.quipT = 2; this.tauntT = 1; this.lowWarned = false; this.comboQuipped = 0;
     if (this.world.npc && this.has('npc-crumblet')) {
@@ -325,6 +345,10 @@ export class GameScene extends Phaser.Scene {
           toast(`🗝 WORLD ${e.world} KEY! A secret stage has opened on the map`, { big: true, color: '#ffd27a' });
           break;
         }
+        case 'arenaLock': sfx('boss'); this.shake = 6; toast(`⚔️ ARENA! Beat ${e.waves} waves to open the gates`, { big: true, color: '#ff9a6a' }); break;
+        case 'arenaWave': if (e.wave > 1) { sfx('stagger'); toast(`WAVE ${e.wave} / ${e.waves}`, { color: '#ffd27a' }); } break;
+        case 'arenaClear': sfx('portal'); toast('Arena cleared! The gates open', { big: true, color: '#a8f0a8' }); this.time.delayedCall(300, () => this.quip('objective')); break;
+        case 'chase': if (e.on) { sfx('boss'); this.shake = 10; toast('RUN! A giant rolling pin!', { big: true, color: '#ff8a5a' }); } else { sfx('boom'); this.shake = 14; toast('Phew! It smashed into the wall', { color: '#a8f0a8' }); } break;
         case 'tired': this.callout(e.x, e.y, 'TIRED! HIT IT!', '#a8f0a8', 13); break;
         case 'armorBreak': sfx('boom'); this.shake = 12; this.callout(e.x, e.y - 34, 'ARMOUR BROKEN!', '#ffd27a', 18); this.burst(e.x, e.y, 0xd8d8e8, 24); break;
         case 'phase': sfx('boss'); this.shake = 16; this.cameras.main.flash(300, 255, 60, 60); toast(`${e.name.toUpperCase()}: FINAL PHASE!`, { big: true, color: '#ff4a4a' }); break;
@@ -633,6 +657,19 @@ export class GameScene extends Phaser.Scene {
     this.aura.setFillStyle(h.counter > 0 ? 0xffd23c : 0x9fe0ff, 0.25).setVisible(!!h.buff || h.counter > 0).setPosition(h.x, h.y - 40).setScale(1 + Math.sin(t * 6) * 0.06).setAlpha(0.18 + Math.sin(t * 6) * 0.06);
 
     this.stepBanter(dt);
+
+    // arenas, rolling pin, belts
+    w.arenas.forEach((a, i) => { const g = this.gateViews[i]; if (g) g.setAlpha(a.done ? 0 : a.locked ? 1 : 0.3).setY(a.locked ? Math.sin(t * 20) * 0.6 : 0); });
+    if (this.pinView && w.chase) { const c = w.chase; this.pinView.setVisible(c.on).setX(c.x).setRotation(c.x / 60); }
+    if (this.beltG) {
+      const g = this.beltG; g.clear();
+      for (const b of st.belts ?? []) {
+        g.fillStyle(0x3a3a44, 0.9); g.fillRect(b.x - b.w / 2, st.groundY - 6, b.w, 8);
+        g.lineStyle(2, 0xffd27a, 0.9);
+        const off = ((t * b.v) % 40 + 40) % 40;
+        for (let x = b.x - b.w / 2 + off; x < b.x + b.w / 2; x += 40) { const d = Math.sign(b.v) * 6; g.lineBetween(x - d, st.groundY - 6, x + d, st.groundY - 2); g.lineBetween(x + d, st.groundY - 2, x - d, st.groundY + 2); }
+      }
+    }
 
     // objective bits
     if (this.npcView && w.npc) {

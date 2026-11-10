@@ -26,6 +26,7 @@ export interface MobSpawn { kind: MobKind; x: number; y?: number; lv: number; el
  *  Timed hazards cycle: on for `on` s, off, then glow a warning for the last 0.9 s before the next burst. */
 export type HazardKind = 'burner' | 'vent' | 'drop' | 'ice';
 export interface Hazard { kind: HazardKind; x: number; w: number; period: number; on: number; offset: number; /** boss arenas: only after the boss enrages */ phase2?: boolean }
+export interface Arena { x0: number; x1: number; waves: MobSpawn[][] }
 export interface Objective { kind: 'escort' | 'fetch' | 'survive'; /** seconds: survive length, or fetch time limit */ t?: number; /** fetch: where the scroll is */ x?: number }
 /** Optional "Spicy" challenges chosen before a stage (each adds loot). */
 export type Spicy = 'nopots' | 'glass' | 'clock';
@@ -50,6 +51,12 @@ export interface StageDef {
   cookers?: number[];
   /** stage goal beyond "beat everything": escort the lost Crumblet, fetch the Recipe Scroll in time, or survive the waves */
   objective?: Objective;
+  /** locked combat rooms: gates close when you walk in, designed waves, gates open when they're all beaten */
+  arenas?: Arena[];
+  /** a giant rolling pin chases you from x0 to x1 */
+  chase?: { x0: number; x1: number };
+  /** conveyor belts on the floor (v px/s, + = rightwards) */
+  belts?: { x: number; w: number; v: number }[];
   /** monster level shown on the map */
   lv: [number, number];
   boss?: boolean;
@@ -125,4 +132,8 @@ export type SimEvent =
   | { t: 'tired'; x: number; y: number }
   | { t: 'armorBreak'; x: number; y: number }
   | { t: 'phase'; name: string; n: number }
+  | { t: 'arenaLock'; i: number; waves: number }
+  | { t: 'arenaWave'; i: number; wave: number; waves: number }
+  | { t: 'arenaClear'; i: number }
+  | { t: 'chase'; on: boolean }
   | { t: 'heal'; x: number; y: number; n: number; hero: true };

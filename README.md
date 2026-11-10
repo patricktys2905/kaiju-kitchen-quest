@@ -107,3 +107,10 @@ World bosses fight in fixed strings (a close one or a far one, by where you stan
 damage). Phases at 50% and 25% (new moves, "FINAL PHASE!"). Armour (HUD bar under its HP) softens hits until it breaks
 (heavy hits ×2.5): stagger + 5 s weak (+50%), then it grows back. Nemeses cycle their moves in order and tire after each
 round. Tests: tests/boss.test.ts. `node scripts/boss-shot.mjs 2-10`.
+
+## Arena rooms + set pieces (stages.ts setPieces, world.ts stepSetPieces)
+Arena rooms on stages 2/3/7/9: ladle gates shut when you walk in, three designed waves (warm-up; a team that needs a plan —
+protected healer, snipers behind a charger, a swarm with a bomber, or everything — then the world's elite with backup),
+gates open + a Bento; the exit needs every arena done. Stage 2: a giant rolling pin chases you (88% of your kaiju's speed,
+flattens monsters). Worlds 2–4 stages 6/9: conveyor belts. Stages 8/9: a moving-tray gauntlet to the secret ledge where
+there's room. Tests: tests/setpieces.test.ts; `node scripts/setpiece-shot.mjs`.

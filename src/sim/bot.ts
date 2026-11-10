@@ -35,7 +35,11 @@ export class Bot {
       const i = h.bag.findIndex(b => b && b.n > 0 && (b.id === 'jam' || b.id === 'bigjam'));
       if (i >= 0) { (inp as unknown as Record<string, boolean>)[`item${i + 1}`] = true; return inp; }
     }
-    const alive = w.mobs.filter(m => m.state !== 'dead');
+    // the rolling pin is coming: run!
+    if (w.chase?.on && w.chase.x > h.x - 520) { inp.right = true; inp.jump = h.ground && w.mobs.some(m => m.state !== 'dead' && m.x > h.x && m.x - h.x < 60) && pulse; return inp; }
+    // locked in an arena: only its own monsters matter (the ones outside the gates can wait)
+    const locked = w.arenas.findIndex(a => a.locked);
+    const alive = w.mobs.filter(m => m.state !== 'dead' && (locked < 0 || m.arena === locked));
     // dodge an attack that is winding up close by
     for (const m of alive) {
       if (m.state !== 'windup' || Math.abs(m.x - h.x) > (MOBS[m.kind].brain === 'boss' ? 200 : 110)) { this.seen.delete(m.id); continue; }

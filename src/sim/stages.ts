@@ -3,7 +3,7 @@
 // Reach: the lowest jumper (Bluebeary) rises ~105 px, so tiers are 90 px apart; the top tier needs a ladder
 // or a lower platform beside it (tests/world.test.ts checks every platform is reachable).
 import { MOBS } from './mobs';
-import type { Hazard, HazardKind, MobKind, MobSpawn, Platform, Ladder, Prop, StageDef } from './types';
+import type { Arena, Hazard, HazardKind, MobKind, MobSpawn, Platform, Ladder, Prop, StageDef } from './types';
 
 const G = 470;
 const SPECIALIST = new Set(['turret', 'sniper', 'healer', 'summoner', 'charger', 'burrower']);
@@ -127,6 +127,7 @@ function genStage(w: WorldDef, n: number): StageDef {
     id, world: w.id, num: id, name: w.names[n - 1], bg: w.bg, mid: w.mid, tile: w.tile, platTint: w.platTint, width, groundY: G,
     lv: [lvLo, n === 5 ? lvHi + 1 : lvHi], par: Math.round(25 + count * 5 + width / 70), rec: lvLo,
     platforms, ladders, mobs, hazards, ...interactive(w, n, width, platforms, ladders, r),
+    ...setPieces(w, n, width, platforms, mobs, lvLo, lvHi),
     // a goal on stages 4 / 6 / 8 of every world
     objective: n === 4 ? { kind: 'escort' } : n === 6 ? { kind: 'fetch', t: 75, x: width - 260 } : n === 8 ? { kind: 'survive', t: 45 } : undefined,
   };
@@ -152,19 +153,70 @@ function interactive(w: WorldDef, n: number, width: number, platforms: Platform[
     // the sponge must have open sky above it (else you'd drop onto it from a platform by accident and get flung up)
     // and no ladder close by; the ledge itself may sit above lower platforms
     const open = (x: number) => !platforms.some(p => p.x - 70 < x + 12 && x + 12 < p.x + p.w + 70) // nothing above the sponge
-      && !platforms.some(p => p.y < 200 && p.x < x + 140 && x < p.x + p.w) && !ladders.some(l => Math.abs(l.x - (x + 12)) < 80) && free(x + 12) && free(x + 80);
+      && !platforms.some(p => p.y < 200 && p.x < x + 140 && x < p.x + p.w) && !ladders.some(l => Math.abs(l.x - (x + 12)) < 80) && free(x + 12) && free(x + 80)
+
+    // the trays climb up to the ledge from its left (side -1) or its right (side 1), wherever there is room
+    const traySide = (x: number): -1 | 1 | 0 => {
+      const clear = (a: number, b: number) => a > 300 && b < width - 200 && !platforms.some(p => p.x < b && a < p.x + p.w) && !ladders.some(l => l.x > a && l.x < b);
+      return clear(x - 260, x + 150) ? -1 : clear(x - 10, x + 420) ? 1 : 0;
+    };
     const spots: number[] = [];
     for (let x = 500; x < width - 600; x += 20) if (open(x)) spots.push(x);
+    const traySpots = n >= 8 ? spots.filter(x => traySide(x) !== 0) : [];
     if (spots.length) {
-      const x = spots[Math.floor(r() * spots.length)];
+      const gauntlet = traySpots.length > 0; // stages 8/9: a tray gauntlet where it fits, else the sponge
+      const pool = gauntlet ? traySpots : spots;
+      const x = pool[Math.floor(r() * pool.length)];
       platforms.push({ x, y: 150, w: 140, secret: true });
-      // the sponge sits under the ledge's left end, so dropping off the middle doesn't bounce you straight back up
-      props.push({ kind: 'sponge', x: x + 12, y: G }, { kind: 'chest', x: x + 80, y: 150, key: n === 7 });
+      if (gauntlet) {
+        // a little platforming gauntlet: two moving trays and a step lead up to the ledge
+        if (traySide(x) < 0) platforms.push({ x: x - 230, y: TIER[0], w: 110, move: { dx: 110, period: 3 } }, { x: x - 120, y: TIER[1], w: 100, move: { dx: -90, period: 2.6 } }, { x: x - 40, y: TIER[2], w: 70 });
+        else platforms.push({ x: x + 260, y: TIER[0], w: 110, move: { dx: -110, period: 3 } }, { x: x + 160, y: TIER[1], w: 100, move: { dx: 90, period: 2.6 } }, { x: x + 110, y: TIER[2], w: 70 });
+        props.push({ kind: 'chest', x: x + 80, y: 150, key: n === 7 });
+      } else {
+        // the sponge sits under the ledge's left end, so dropping off the middle doesn't bounce you straight back up
+        props.push({ kind: 'sponge', x: x + 12, y: G }, { kind: 'chest', x: x + 80, y: 150, key: n === 7 });
+      }
     }
   }
   // runaway pressure cookers: stages 4, 6, 8 and 9
   const cookers = [4, 6, 8, 9].includes(n) ? [Math.round(width * (0.4 + r() * 0.3))] : [];
   return { props, cookers };
+}
+
+/** Arena rooms (stages 2/3/7/9), a rolling-pin chase (stage 2), conveyor belts (worlds 2-4, stages 6/9). */
+function setPieces(w: WorldDef, n: number, width: number, platforms: Platform[], mobs: MobSpawn[], lvLo: number, lvHi: number): { arenas?: Arena[]; chase?: { x0: number; x1: number }; belts?: { x: number; w: number; v: number }[] } {
+  const out: ReturnType<typeof setPieces> = {};
+  if (n === 2) out.chase = { x0: 520, x1: Math.round(width * 0.58) };
+  if ([2, 3, 7, 9].includes(n)) {
+    const x0 = Math.round(width * (n === 2 ? 0.64 : 0.5)), x1 = Math.min(x0 + 640, width - 160);
+    // nothing wanders around inside the room beforehand: it fills up when you walk in
+    for (let i = mobs.length - 1; i >= 0; i--) if (!mobs[i].elite && MOBS[mobs[i].kind].brain !== 'mimic' && mobs[i].x > x0 - 40 && mobs[i].x < x1 + 40 && mobs[i].y === undefined) mobs.splice(i, 1);
+    out.arenas = [{ x0, x1, waves: arenaWaves(w, n, x0, x1, lvLo, lvHi) }];
+  }
+  if (w.id >= 2 && (n === 6 || n === 9)) out.belts = [{ x: Math.round(width * 0.35), w: 340, v: n === 6 ? 90 : -90 }];
+  return out;
+}
+
+/** Three designed waves that change by stage: warm-up, a team that needs a plan, then a heavy hitter with backup.
+ *  Stage 2: a protected healer (or summoner), 3: a sniper behind chargers, 7: a swarm with a bomber, 9: everything at once. */
+function arenaWaves(w: WorldDef, n: number, x0: number, x1: number, lvLo: number, lvHi: number): MobSpawn[][] {
+  const kinds = w.pool.map(([, k]) => k);
+  const by = (...brains: string[]) => kinds.filter(k => brains.includes(MOBS[k].brain));
+  const fighters = by('walker', 'hopper', 'flyer', 'charger').filter(k => !MOBS[k].shield);
+  const f = (i: number) => fighters[(i + n) % fighters.length] ?? kinds[0];
+  const one = (list: MobKind[], fallback: MobKind) => list[0] ?? fallback;
+  const L = (k: MobKind, side: number, i: number, lv = lvLo): MobSpawn => ({ kind: k, lv, x: side < 0 ? x0 + 50 + i * 40 : x1 - 50 - i * 40 });
+  const healer = one(by('healer', 'summoner'), f(3)), sniper = one(by('sniper', 'ranged'), f(4)), charger = one(by('charger'), f(5));
+  const bomber = one(by('bomber', 'hopper'), f(6)), shield = kinds.find(k => MOBS[k].shield) ?? f(7);
+  const warm = [L(f(0), -1, 0), L(f(1), 1, 0), L(f(2), -1, 1)];
+  const team = n === 2 ? [L(healer, 1, 1, lvHi), L(shield, 1, 0, lvHi), L(f(0), -1, 0), L(f(1), -1, 1)]
+    : n === 3 ? [L(sniper, 1, 1), L(sniper, 1, 2), L(charger, -1, 0, lvHi), L(f(2), -1, 1)]
+    : n === 7 ? [L(f(0), -1, 0), L(f(1), -1, 1), L(f(2), 1, 0), L(f(3), 1, 1), L(bomber, 1, 2, lvHi)]
+    : [L(healer, 1, 1), L(sniper, -1, 1), L(charger, 1, 0, lvHi), L(f(4), -1, 0)];
+  const side = n % 2 ? 1 : -1;
+  const heavy = [L(w.elite, side, 0, lvHi), L(sniper, -side, 0), L(f(5), -side, 1)];
+  return [warm, team, heavy];
 }
 
 /** Secret bonus stage of a world (opened with that world's key): crates everywhere and a golden elite. */

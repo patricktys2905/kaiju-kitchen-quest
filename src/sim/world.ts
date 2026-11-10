@@ -8,7 +8,7 @@ import { BOSS_ARMOR, BOSS_PATTERNS, DANGER_MOVES, ELITE, ELITE_MODS, type EliteM
 import { type SkillDef, ULTS, ULT_LV, applyBranch, skillScale, skillsOf } from './skills';
 import { WORLDS } from './stages';
 import type { Derived } from './stats';
-import { type BoxTier, type Hazard, type Input, type Prop, type LootBox, type MobKind, NO_INPUT, type SimEvent, type Spicy, type StageDef } from './types';
+import { type BoxTier, type Hazard, type Input, type MobSpawn, type Prop, type LootBox, type MobKind, NO_INPUT, type SimEvent, type Spicy, type StageDef } from './types';
 
 export const DT = 1 / 60;
 export const GRAVITY = 1900;
@@ -123,6 +123,8 @@ export interface Mob {
   phase: number; shellT: number; stolen: number;
   /** guard raised against a button-masher (blocks plain combo hits) */
   guardT: number;
+  /** spawned by arena room i (-1 = not) */
+  arena: number;
   /** which side of you this monster tries to stand on (flanking) */
   flank: 1 | -1;
   /** learnable bosses: the moves left in the current string, which string is next, tired / armour / weak timers, phase */
@@ -173,6 +175,9 @@ export class World {
   private mash = 0; private mashT = 0;
   /** Nightmare: Hard's levels + smarter, faster monsters */
   nightmare = false;
+  /** arena rooms (gates shut while you're fighting the waves), the rolling-pin chase, conveyor belts */
+  arenas: { x0: number; x1: number; waves: MobSpawn[][]; wave: number; locked: boolean; done: boolean }[] = [];
+  chase: { x0: number; x1: number; x: number; speed: number; on: boolean; done: boolean; cd: number } | null = null;
   /** how many monsters may attack you at once (the rest circle and wait their turn) */
   get maxAttackers(): number { return this.nightmare ? 3 : 2; }
   /** the hero touched down this step (sponges bounce only on landing) */
@@ -198,6 +203,8 @@ export class World {
     this.props = (stage.props ?? []).map(p => ({ id: nextId++, kind: p.kind, x: p.x, y: p.y, hp: p.kind === 'crate' ? 2 : p.kind === 'chest' ? 3 : p.kind === 'jar' ? 1 : 99, cd: 0, key: p.key, tx: p.tx, tw: p.tw }));
     this.cookers = (stage.cookers ?? []).map(x => ({ id: nextId++, x, y: stage.groundY, vx: 0, home: x, face: -1, fuse: 0, gone: 0 }));
     this.spicy = spicy; this.hard = hard;
+    this.arenas = (stage.arenas ?? []).map(a => ({ ...a, wave: -1, locked: false, done: false }));
+    this.chase = stage.chase ? { ...stage.chase, x: 0, speed: 0, on: false, done: false, cd: 0 } : null;
     const ob = stage.objective;
     if (ob?.kind === 'escort') this.npc = { x: 60, y: stage.groundY, hp: 1, maxHp: 1, face: 1, hurt: 0 };
     if (ob?.kind === 'fetch') { this.scroll = { x: ob.x ?? stage.width - 260, y: stage.groundY, got: false }; this.objTimer = ob.t ?? 75; }
@@ -267,7 +274,7 @@ export class World {
       id: nextId++, kind, lv, x, y: y ?? this.stage.groundY, vx: 0, vy: 0, face: -1, hp, maxHp: hp, atk: Math.round(mobAtk(kind, lv) * (elite ? ELITE.atk : 1) * pow * nm.atk),
       state: 'walk', move: '', t: this.rand() * 2, ground: true, on: y === undefined ? -1 : null, home: x, deadT: 0, flash: 0,
       hurtShown: 0, stagger: 0, summoned: 0, hitDone: false, elite, homeY: y ?? this.stage.groundY, slow: 0,
-      mods: [], under: MOBS[kind].brain === 'burrower', disguised: MOBS[kind].brain === 'mimic', aimX: 0, aimY: 0, enraged: false, parent: 0, dropT: 0, surfT: 0, burn: 0, burnT: 0, burnDmg: 0, frozen: 0, glued: 0, phase: this.stage.world, shellT: 0, stolen: -1, guardT: 0, flank: 1, queue: [], patI: 0, tired: 0, armor: 1, weak: 0, bossPhase: 1,
+      mods: [], under: MOBS[kind].brain === 'burrower', disguised: MOBS[kind].brain === 'mimic', aimX: 0, aimY: 0, enraged: false, parent: 0, dropT: 0, surfT: 0, burn: 0, burnT: 0, burnDmg: 0, frozen: 0, glued: 0, phase: this.stage.world, shellT: 0, stolen: -1, guardT: 0, arena: -1, flank: 1, queue: [], patI: 0, tired: 0, armor: 1, weak: 0, bossPhase: 1,
     };
     if (y !== undefined) { m.on = this.platformAt(x, y); m.ground = m.on !== null; }
     this.mobs.push(m);
@@ -308,7 +315,8 @@ export class World {
     this.stepBoxes(dt);
     this.mobs = this.mobs.filter(m => !(m.state === 'dead' && m.deadT > 0.7));
     this.stepObjective(dt);
-    const holding = this.holdout > 0 || (this.scroll !== null && !this.scroll.got);
+    this.stepSetPieces(dt);
+    const holding = this.holdout > 0 || (this.scroll !== null && !this.scroll.got) || this.arenas.some(a => !a.done);
     if (!this.portal && this.alive === 0 && !holding) { this.portal = true; this.events.push({ t: 'portal' }); }
     const h = this.hero;
     const npcHome = !this.npc || Math.abs(this.npc.x - this.exitX) < 140;
@@ -640,6 +648,64 @@ export class World {
       this.boxes.push(b); this.events.push({ t: 'drop', id: b.id, tier, x: b.x, y: b.y });
     }
     if (p.key) this.events.push({ t: 'key', world: this.stage.world });
+  }
+
+  /** Arena rooms, the rolling-pin chase, conveyor belts. */
+  private stepSetPieces(dt: number): void {
+    const h = this.hero, G = this.stage.groundY;
+    this.arenas.forEach((a, i) => {
+      if (a.done) return;
+      if (!a.locked) {
+        if (h.x > a.x0 + 120 && h.x < a.x1 - 120 && h.state !== 'down') { a.locked = true; a.wave = -1; this.events.push({ t: 'arenaLock', i, waves: a.waves.length }); }
+        else return;
+      }
+      // gates: nobody gets out until it's over
+      h.x = clamp(h.x, a.x0 + 24, a.x1 - 24);
+      const mine = this.mobs.filter(m => m.arena === i && m.state !== 'dead');
+      for (const m of mine) m.x = clamp(m.x, a.x0 + 24, a.x1 - 24);
+      if (mine.length) return;
+      if (a.wave + 1 < a.waves.length) {
+        a.wave++;
+        for (const s of a.waves[a.wave]) {
+          const m = this.spawnMob(s.kind, s.x, s.lv + (this.hard ? HARD_LV : 0), undefined, s.elite);
+          m.arena = i; m.under = false; m.disguised = false; m.face = s.x < h.x ? 1 : -1;
+          m.y = G; m.ground = true; m.on = -1; m.vy = 0; m.state = 'hurt'; m.t = -0.2; // they burst in at the gates, on the floor
+        }
+        this.events.push({ t: 'arenaWave', i, wave: a.wave + 1, waves: a.waves.length });
+      } else {
+        a.locked = false; a.done = true;
+        this.events.push({ t: 'arenaClear', i });
+        const b: Box = { id: nextId++, tier: 3, ilvl: this.stage.lv[1], x: (a.x0 + a.x1) / 2, y: G - 80, vy: -300, ground: false, t: 0 };
+        this.boxes.push(b); this.events.push({ t: 'drop', id: b.id, tier: 3, x: b.x, y: b.y });
+      }
+    });
+    // the giant rolling pin: starts behind you at the chase line, a bit slower than you can run
+    const c = this.chase;
+    if (c && !c.done) {
+      if (!c.on && h.x > c.x0) { c.on = true; c.x = c.x0 - 420; c.speed = Math.max(160, h.d.cls.speed * h.d.speed * 0.88); this.events.push({ t: 'chase', on: true }); }
+      if (c.on) {
+        c.x += c.speed * dt; c.cd = Math.max(0, c.cd - dt);
+        if (c.cd <= 0 && Math.abs(h.x - c.x) < 62 && h.y > G - 95 && h.state !== 'down') {
+          c.cd = 1; this.hurtHero(h.d.maxHp * 0.2, 1, undefined, true);
+          if ((h.state as string) !== 'down') { h.vx = 520; h.vy = -420; h.ground = false; h.on = null; }
+        }
+        for (const m of this.mobs) {
+          const d = MOBS[m.kind];
+          if (m.state === 'dead' || m.under || d.brain === 'boss' || d.brain === 'flyer' || Math.abs(m.x - c.x) > 60 || m.y < G - 95 || m.hurtShown > 2.5) continue;
+          const dmg = Math.round(m.maxHp * 0.6); m.hp -= dmg; m.flash = 0.15; m.hurtShown = 3; m.vx = 400; m.vy = -380; m.ground = false; m.on = null;
+          this.events.push({ t: 'hit', x: m.x, y: m.y - d.h * 0.6, dmg, crit: true, target: 'mob' });
+          if (m.hp <= 0) this.killMob(m);
+        }
+        if (c.x >= c.x1) { c.done = true; c.on = false; this.events.push({ t: 'chase', on: false }, { t: 'shock', x: c.x, y: G, r: 120 }); }
+      }
+    }
+    // conveyor belts move whatever stands on the floor over them
+    for (const b of this.stage.belts ?? []) {
+      const on = (x: number) => x > b.x - b.w / 2 && x < b.x + b.w / 2;
+      if (h.ground && h.on === -1 && on(h.x) && h.state !== 'climb') h.x += b.v * dt;
+      for (const m of this.mobs) if (m.ground && m.on === -1 && on(m.x) && m.state !== 'dead') m.x += b.v * dt;
+      for (const k of this.cookers) if (k.gone <= 0 && on(k.x)) k.x += b.v * dt;
+    }
   }
 
   /** Escort / fetch / survive. */
