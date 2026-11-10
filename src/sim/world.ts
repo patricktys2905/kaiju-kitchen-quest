@@ -19,12 +19,16 @@ const BUFFER = 0.12;   // jump / attack input buffer
 const HERO_W = 34;
 const COMBO_WINDOW = 1.6;
 export const HARD_LV = 6; // Hard mode: monsters this many levels higher
+/** Fighting above your level: monsters more than `free` levels over you take `per` less damage per extra level. */
+export const LV_GAP = { free: 4, per: 0.06 };
 const DOUBLE_TAP = 0.28;  // seconds between two taps of a direction for a dodge roll
 const DODGE_T = 0.32, DODGE_INV = 0.3, DODGE_CD = 0.55;
 /** a hit that lands in the first part of a dodge is a PERFECT dodge */
 export const PERFECT_WIN = 0.2;
 /** Nightmare on top of Hard's levels: tougher, harder-hitting monsters (plus shorter telegraphs and smarter tactics) */
 export const NIGHTMARE = { hp: 1.2, atk: 1.25 };
+/** World bosses on Nightmare: a smaller bump (their fights are long and the shorter telegraphs already bite) */
+export const NIGHTMARE_BOSS = { hp: 1.1, atk: 1.12 };
 const SLOWMO_T = 0.55, SLOWMO_RATE = 0.3, COUNTER_T = 1.6;
 /** style meter letters (0..100) */
 export const STYLE_RANKS: [number, string][] = [[80, 'S'], [60, 'A'], [40, 'B'], [20, 'C'], [0, 'D']];
@@ -293,7 +297,7 @@ export class World {
 
   spawnMob(kind: MobKind, x: number, lv: number, y?: number, elite = false): Mob {
     const pow = this.stage.power ?? WORLDS.find(x => x.id === this.stage.world)?.power ?? 1;
-    const nm = this.nightmare ? NIGHTMARE : { hp: 1, atk: 1 };
+    const nm = !this.nightmare ? { hp: 1, atk: 1 } : MOBS[kind].brain === 'boss' ? NIGHTMARE_BOSS : NIGHTMARE;
     // more heroes, tougher monsters: +60% HP per extra player, +35% per CPU buddy (it isn't as sharp as a person)
     const party = 1 + this.heroes.slice(1).reduce((a, h) => a + (h.cpu ? 0.35 : 0.6), 0);
     const hp = Math.round(mobHp(kind, lv) * (elite ? ELITE.hp : 1) * pow * nm.hp * party);
@@ -1442,7 +1446,7 @@ export class World {
     const counter = h.counter > 0;
     const crit = counter || this.rand() * 100 < h.d.crit;
     const gap = m.lv - h.d.level; // fighting above your level hurts
-    const lvMul = gap > 2 ? Math.max(0.4, 1 - 0.07 * (gap - 2)) : 1;
+    const lvMul = gap > LV_GAP.free ? Math.max(0.4, 1 - LV_GAP.per * (gap - LV_GAP.free)) : 1;
     const buff = 1 + (h.buff?.atk ?? 0) + (h.boosts.atk?.[0] ?? 0);
     const dmg = Math.max(1, Math.round(raw * buff * lvMul * (crit ? h.d.critDmg : 1) * (counter ? 1.3 : 1) * (m.state === 'stagger' && def.brain === 'charger' ? 1.5 : 1) * (0.9 + this.rand() * 0.2)));
     m.hp -= dmg; m.flash = 0.12; m.hurtShown = 3; this.dealt += dmg;

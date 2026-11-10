@@ -237,3 +237,8 @@ nine stages ×4, stuck-bot timeouts ignored) and nudges each toward ~55% boss cl
 changing a kaiju's skills or stats. Healing skills only get up to 25% cooldown reduction; Soup Slurp heals at most 12% a cast.
 Stage rules: monsters never start on the top tier, brutes never on ledges; the bot hops off ladders level with its target.
 Probes: `scripts/stage-probe.ts <stage> <species>` (layout + where the bot ends up), `scripts/heal-probe.ts <stage> <species>`.
+HARD / NIGHTMARE CHECKS: `npx vite-node scripts/balance.ts <world>- 3 hard|nightmare` (the hero comes back 3 / 6 levels over),
+`sh scripts/bench-all.sh hard|nightmare [stages]` (all 20 kaiju in parallel). Fighting above your level: monsters more than
+`LV_GAP.free` (4) levels over you take `LV_GAP.per` (6%) less damage per level. Bosses on Nightmare get NIGHTMARE_BOSS (×1.1 HP,
+×1.12 damage) instead of NIGHTMARE (×1.2 / ×1.25). Targets used: Hard stages ~75-90% / bosses ~30-50%; Nightmare stages
+~55-75% / bosses ~20-40%.

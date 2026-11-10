@@ -13,6 +13,8 @@ import { World } from '../src/sim/world';
 const filter = process.argv[2] ?? '';
 const RUNS = Number(process.argv[3] ?? 3);
 const NIGHTMARE = process.argv[4] === 'nightmare'; // npx vite-node scripts/balance.ts 2- 2 nightmare
+const HARD = NIGHTMARE || process.argv[4] === 'hard'; // Hard: monsters +6 levels; the hero comes back a little over-levelled
+const OVER = NIGHTMARE ? 6 : HARD ? 3 : 0;
 
 function heroAt(species: number, level: number, seed: number): HeroProfile {
   const p = newProfile(species);
@@ -41,8 +43,8 @@ for (const st of STAGES.filter(s => s.id.startsWith(filter))) {
   for (const c of CLASSES) {
     let hc = 0;
     for (let r = 0; r < RUNS; r++) {
-      const p = heroAt(c.species, st.rec + (NIGHTMARE ? 6 : 0), r + 1);
-      const w = new World(st, derive(p), 100 + r, [{ id: 'jam', n: 3 }, null, null, null], 0, NIGHTMARE, undefined, [], nemesisOf(c.species), NIGHTMARE);
+      const p = heroAt(c.species, st.rec + OVER, r + 1);
+      const w = new World(st, derive(p), 100 + r, [{ id: 'jam', n: 3 }, null, null, null], 0, HARD, undefined, [], nemesisOf(c.species), NIGHTMARE);
       const bot = new Bot(w, AVERAGE, 7 + r);
       const LIMIT = 60 * 60 * 6;
       let i = 0;
