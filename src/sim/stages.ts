@@ -11,9 +11,6 @@ const TIER = [380, 290, 200];
 /** Story stages are this many times the original short layout (5-10 minutes each); a boss stage's run-up before the boss room. */
 export const STAGE_LEN = 5, BOSS_RUN = 3.2;
 
-/** A zone goal's name (also the zone's name) and, for collecting, what each world's quest item is called. */
-const GOAL_NAME: Record<ZoneGoal['kind'], string> = { collect: 'Hunting Ground', rescue: 'Crumblet Cages', nests: 'Mould Nests', arena: 'The Pit', fetch: 'Scroll Run', survive: 'Last Stand' };
-const QUEST_ITEM = ['Mould Crumbs', 'Frost Shards', 'Ember Coals', 'Pantry Tokens', 'Soap Pearls', 'Silver Spoons', 'Charcoal Chips', 'Seed Pods', 'Price Tags', 'Candied Peels'];
 
 export interface WorldDef {
   id: number; name: string; blurb: string;
@@ -38,27 +35,27 @@ export interface WorldDef {
 export const WORLDS: WorldDef[] = [
   {
     id: 1, name: 'The Countertop', blurb: 'Where the leftovers went bad.', bg: 'bg-far', mid: 'bg-mid', tile: 'tile-ground', platTint: 0xffffff, bossBg: 'bg-far-stove',
-    baseLv: 1, power: 1, mobPow: 1.12, pool: [[1, 'bun'], [3, 'worm'], [4, 'ant'], [6, 'pepper'], [6, 'garlic'], [7, 'egg']], hazard: 'burner', mimic: 'mimic', elite: 'xegg', boss: 'toast',
+    baseLv: 1, power: 1, mobPow: 1, pool: [[1, 'bun'], [3, 'worm'], [4, 'ant'], [6, 'pepper'], [6, 'garlic'], [7, 'egg']], hazard: 'burner', mimic: 'mimic', elite: 'xegg', boss: 'toast',
     names: ['Countertop Meadow', 'Crumb Trail', 'Gummy Gully', 'Toaster Hills', 'Rotten Ridge', 'Spice Shelf', 'Pepper Pass', 'Cutting Board Bluffs', 'Burner Approach', 'Stovetop Throne'],
   },
   {
     id: 2, name: 'The Fridge', blurb: 'Cold, crisp and full of grudges.', bg: 'bg-far-fridge', mid: 'bg-mid-fridge', tile: 'tile-fridge', platTint: 0xc8e4ff, bossBg: 'bg-far-freezer',
-    baseLv: 13, power: 1.3, mobPow: 1.12, pool: [[1, 'pea'], [1, 'yogurt'], [2, 'milk'], [3, 'icebat'], [4, 'carrot'], [6, 'pickle'], [7, 'jelly']], hazard: 'ice', mimic: 'mimic', elite: 'xpickle', boss: 'golem',
+    baseLv: 13, power: 1.3, mobPow: 1, pool: [[1, 'pea'], [1, 'yogurt'], [2, 'milk'], [3, 'icebat'], [4, 'carrot'], [6, 'pickle'], [7, 'jelly']], hazard: 'ice', mimic: 'mimic', elite: 'xpickle', boss: 'golem',
     names: ['Crisper Drawer', 'Dairy Lane', 'Frosty Shelf', 'Pickle Jar Pier', 'Knight of the Brine', 'Egg Carton Cliffs', 'Butter Bridge', 'Ketchup Canyon', 'Ice Tray Steps', 'Freezer Throne'],
   },
   {
     id: 3, name: 'The Oven', blurb: 'Preheated to dangerous.', bg: 'bg-far-oven', mid: 'bg-mid-oven', tile: 'tile-oven', platTint: 0xffc8a0, bossBg: 'bg-far-dragon',
-    baseLv: 25, power: 1.6, mobPow: 1.12, pool: [[1, 'bacon'], [1, 'popcorn'], [2, 'sausage'], [3, 'imp'], [4, 'kettle'], [6, 'meatball'], [7, 'marsh']], hazard: 'vent', mimic: 'cereal', elite: 'xmeatball', boss: 'dragon',
+    baseLv: 25, power: 1.6, mobPow: 1, pool: [[1, 'bacon'], [1, 'popcorn'], [2, 'sausage'], [3, 'imp'], [4, 'kettle'], [6, 'meatball'], [7, 'marsh']], hazard: 'vent', mimic: 'cereal', elite: 'xmeatball', boss: 'dragon',
     names: ['Oven Door Ramp', 'Bottom Rack', 'Muffin Tin Maze', 'Casserole Cliffs', 'Meatball Mountain', 'Cookie Sheet Plains', 'Roasting Pan Pass', 'Pizza Stone Steppe', 'Top Rack Ascent', 'Broiler Peak'],
   },
   {
     id: 4, name: 'The Pantry', blurb: 'Dusty shelves, grumpy groceries.', bg: 'bg-far-pantry', mid: 'bg-mid-pantry', tile: 'tile-pantry', platTint: 0xe8d0b0, bossBg: 'bg-far-jar',
-    baseLv: 37, power: 2.5, mobPow: 1.12, pool: [[1, 'cheerio'], [1, 'flour'], [2, 'noodle'], [3, 'can'], [4, 'raisin'], [5, 'soda']], hazard: 'drop', mimic: 'cereal', elite: 'xcan', boss: 'jar',
+    baseLv: 37, power: 2.5, mobPow: 1, pool: [[1, 'cheerio'], [1, 'flour'], [2, 'noodle'], [3, 'can'], [4, 'raisin'], [5, 'soda']], hazard: 'drop', mimic: 'cereal', elite: 'xcan', boss: 'jar',
     names: ['Cupboard Door', 'Cereal Canyon', 'Flour Drifts', 'Tin Can Alley', 'Shield Wall', 'Spice Rack Ridge', 'Pasta Jar Peaks', 'Honey Hollow', 'Top Shelf Climb', 'Cookie Vault'],
   },
   {
     id: 5, name: 'The Sink', blurb: 'Deep, damp and down the drain.', bg: 'bg-far-sink', mid: 'bg-mid-sink', tile: 'tile-sink', platTint: 0xd0e4f0, bossBg: 'bg-far-drain',
-    baseLv: 49, power: 3.0, mobPow: 1.12, pool: [[1, 'plate'], [1, 'bubble'], [2, 'mug'], [3, 'eel'], [4, 'glove'], [7, 'scrub']], hazard: 'tap', mimic: 'mimic', elite: 'xscrub', boss: 'moldking',
+    baseLv: 49, power: 3.0, mobPow: 0.92, pool: [[1, 'plate'], [1, 'bubble'], [2, 'mug'], [3, 'eel'], [4, 'glove'], [7, 'scrub']], hazard: 'tap', mimic: 'mimic', elite: 'xscrub', boss: 'moldking',
     names: ['Faucet Falls', 'Suds Slide', 'Sponge Shoals', 'Dish Rack Ridge', 'Steel Wool Wall', 'Bubble Bay', 'Plughole Pass', 'Greasy Pan Pits', 'Drain Descent', 'The Mold Throne'],
   },
   // ---- Act 2: Beyond the Kitchen ----
@@ -69,22 +66,22 @@ export const WORLDS: WorldDef[] = [
   },
   {
     id: 7, name: 'The Backyard BBQ', blurb: 'Sizzling, smoky and full of ants.', bg: 'bg-far-backyard', mid: 'bg-mid-backyard', tile: 'tile-backyard', platTint: 0xe8d0a8, bossBg: 'bg-far-grill',
-    baseLv: 71, power: 3.8, mobPow: 1.15, pool: [[1, 'beetle'], [1, 'wasp'], [2, 'ketchup'], [3, 'charcoal'], [4, 'corn'], [7, 'patty']], hazard: 'sprinkler', mimic: 'mimic', elite: 'xpatty', boss: 'brussels',
+    baseLv: 71, power: 3.8, mobPow: 1, pool: [[1, 'beetle'], [1, 'wasp'], [2, 'ketchup'], [3, 'charcoal'], [4, 'corn'], [7, 'patty']], hazard: 'sprinkler', mimic: 'mimic', elite: 'xpatty', boss: 'brussels',
     names: ['Lawn Launch', 'Hose Highway', 'Sprinkler Springs', 'Paddling Pool Pier', 'Patty Plateau', 'Picnic Table Peak', 'Flowerpot Fort', 'Cooler Canyon', 'Charcoal Climb', 'The Grill Summit'],
   },
   {
     id: 8, name: 'The Garden', blurb: 'Overgrown, untended and up to something.', bg: 'bg-far-garden', mid: 'bg-mid-garden', tile: 'tile-garden', platTint: 0xd8e8c0, bossBg: 'bg-far-greenhouse',
-    baseLv: 81, power: 4.2, mobPow: 1.35, pool: [[1, 'snail'], [1, 'ladybug'], [2, 'peapod'], [3, 'mole'], [4, 'tomato'], [5, 'radish'], [7, 'pumpkin']], hazard: 'pollen', mimic: 'mimic', elite: 'xpumpkin', boss: 'meatloaf',
+    baseLv: 81, power: 4.2, mobPow: 1.4, pool: [[1, 'snail'], [1, 'ladybug'], [2, 'peapod'], [3, 'mole'], [4, 'tomato'], [5, 'radish'], [7, 'pumpkin']], hazard: 'pollen', mimic: 'mimic', elite: 'xpumpkin', boss: 'meatloaf',
     names: ['Seedling Lane', 'Watering Can Run', 'Sunflower Grove', 'Pumpkin Patch Path', 'Gourd Guard', 'Beanstalk Heights', 'Compost Keep', 'Scarecrow Stand', 'Greenhouse Steps', 'The Mystery Heap'],
   },
   {
     id: 9, name: 'The Supermarket', blurb: 'Open late. Very, very late.', bg: 'bg-far-market', mid: 'bg-mid-market', tile: 'tile-market', platTint: 0xd8e0e8, bossBg: 'bg-far-freezer2',
-    baseLv: 91, power: 4.6, mobPow: 0.72, pool: [[1, 'trolley'], [1, 'bag'], [2, 'banana'], [3, 'scanner'], [4, 'can2'], [7, 'melon']], hazard: 'chill', mimic: 'mimic', elite: 'xmelon', boss: 'tupper',
+    baseLv: 91, power: 4.6, mobPow: 0.6, pool: [[1, 'trolley'], [1, 'bag'], [2, 'banana'], [3, 'scanner'], [4, 'can2'], [7, 'melon']], hazard: 'chill', mimic: 'mimic', elite: 'xmelon', boss: 'tupper',
     names: ['Sliding Doors', 'Trolley Track', 'Cereal Aisle', 'Fruit and Veg', 'Melon Mountain', 'Bakery Bluff', 'Canned Goods Keep', 'Checkout Chaos', 'The Frozen Aisle', 'The Back Aisle'],
   },
   {
     id: 10, name: 'The Feast of the Forgotten', blurb: 'Where forgotten food goes to sulk.', bg: 'bg-far-fridgeback', mid: 'bg-mid-fridgeback', tile: 'tile-fridgeback', platTint: 0xd0e0f0, bossBg: 'bg-far-feast',
-    baseLv: 101, power: 5.0, mobPow: 0.72, pool: [[1, 'cherrysoldier'], [1, 'peel'], [2, 'fork'], [3, 'beetle'], [4, 'snail'], [5, 'scanner'], [7, 'fruitknight']], hazard: 'chill', mimic: 'mimic', elite: 'xfruitknight', boss: 'fruitcake',
+    baseLv: 101, power: 5.0, mobPow: 0.62, pool: [[1, 'cherrysoldier'], [1, 'peel'], [2, 'fork'], [3, 'beetle'], [4, 'snail'], [5, 'scanner'], [7, 'fruitknight']], hazard: 'chill', mimic: 'mimic', elite: 'xfruitknight', boss: 'fruitcake',
     names: ['The Cold Door', 'Jam Jar Junction', 'Takeaway Towers', 'Frost Drawer Falls', 'Knight of the Fruitcake', 'Paper Chain Pass', 'The Forgotten Shelf', 'The Last Stand', 'The Long Table', 'The Feast of the Forgotten'],
   },
 ];
@@ -482,62 +479,52 @@ function genMaps(w: WorldDef, n: number, o: { seed?: number; id: string; name?: 
   const r = rng(o.seed ?? w.id * 1000 + n * 37 + 11);
   const { b, place, basics, pick, lv, mini } = sectionKit(w, n, lvLo, lvHi, r, boss);
   const GAP = 600, maps: StageMap[] = [];
-  // the camp: a couple of steps, two honey jars, a portal per zone and the boss door
-  const hub: StageMap = { name: 'Camp', kind: 'hub', x0: 0, x1: 1800, portals: [] };
-  b.platforms.push({ x: 200, y: TIER[0], w: 180 }, { x: 1180, y: TIER[0], w: 160 });
-  b.props.push({ kind: 'jar', x: 260, y: TIER[0] }, { kind: 'jar', x: 1250, y: TIER[0] });
-  maps.push(hub);
-  // the three goals: always a hunt; stage 6 has the scroll race, stage 8 the hold-out; the rest from the pool
-  const pool: ZoneGoal['kind'][] = ['rescue', 'nests', 'arena'].sort(() => r() - 0.5) as ZoneGoal['kind'][];
-  const kindsG: ZoneGoal['kind'][] = ['collect', n === 6 && !boss ? 'fetch' : n === 8 && !boss ? 'survive' : pool[0], pool[1]];
+  // three maps, then the boss room. Every map's exit portal wants a number of one monster's drop; the middle map can
+  // also hold the stage's set piece (stage 6: the scroll race, stage 8: the hold-out) or an arena
+  const kindsG: ZoneGoal['kind'][] = boss ? ['collect', r() < 0.5 ? 'arena' : 'collect'] // a world boss: two maps, then the big fight
+    : ['collect', n === 6 ? 'fetch' : n === 8 ? 'survive' : r() < 0.5 ? 'arena' : 'collect', 'collect'];
   const close = basics.filter(k => !['ranged', 'sniper', 'turret', 'flyer'].includes(MOBS[k].brain));
   const light = close.filter(k => MOBS[k].hp <= 120 && !MOBS[k].shield);
   const huntable = light.length ? light : close.length ? close : basics;
-  const target = huntable[Math.floor(r() * huntable.length)];
+  const targets = [...huntable].sort(() => r() - 0.5); // a different quest monster in each map (when the world has enough)
   const EXTRA: Sec[] = ['field', 'swarm', 'snipers', 'heavies', 'tower', ...(w.id === 1 && n === 1 ? [] : ['gauntlet' as Sec]), 'treasure', 'ambush', 'gate', ...(w.id >= 2 ? ['conveyor' as Sec] : []), ...(w.id >= 3 ? ['dark' as Sec] : [])];
-  let x = hub.x1 + GAP, fetchAt: number | undefined, holdAt: number | undefined, scrollX: number | undefined;
+  let x = 0, fetchAt: number | undefined, holdAt: number | undefined, scrollX: number | undefined;
   kindsG.forEach((gk, k) => {
     const z0 = x;
-    let cx = z0 + 260;
+    let cx = z0 + (k === 0 ? 420 : 260);
     const secs: Sec[] = [];
     if (n === 2 && k === 0 && !boss) secs.push('chase');
-    if (gk === 'arena') secs.push(pick(['field', 'snipers', 'heavies'] as Sec[]), pick(EXTRA), 'arena');
+    if (gk === 'arena') secs.push(pick(['field', 'snipers', 'heavies'] as Sec[]), 'arena', pick(EXTRA));
     else if (gk === 'survive') secs.push(pick(['field', 'swarm'] as Sec[]), pick(EXTRA), 'holdout');
     else if (gk === 'fetch') secs.push(pick(['field', 'snipers'] as Sec[]), pick(['tower', 'gauntlet', 'ambush'] as Sec[]), 'field');
     else { const ex = EXTRA.filter(e => !(n === 4 && (e === 'ambush' || e === 'gate'))); const e1 = pick(ex); secs.push(pick(['field', 'swarm', 'snipers', 'heavies'] as Sec[]), e1, pick(ex.filter(e => e !== e1))); }
     if (n === 3 || n === 7) if (k === 1) secs.splice(1, 0, 'lever');
     const mobs0 = b.mobs.length;
     for (const sec of secs) cx += place(sec, cx);
-    let need = 0, goal: ZoneGoal;
-    if (gk === 'collect') {
-      need = 5 + Math.floor(n / 4);
-      goal = { kind: 'collect', mob: target, item: QUEST_ITEM[w.id - 1], need };
-      // plenty of the quest monster about (more come back while you hunt)
-      for (let i = 0; i < need + 2; i++) b.mobs.push({ kind: target, lv: lv(), x: Math.round(z0 + 500 + ((i + 0.5) / (need + 2)) * (cx - z0 - 700)) });
-    } else if (gk === 'rescue') {
-      goal = { kind: 'rescue', need: 3 };
-      const ledges = b.platforms.filter(p => p.x > z0 + 300 && p.x + p.w < cx - 100 && p.y === TIER[0] && !p.move && !p.secret);
-      for (let i = 0; i < 3; i++) { const p = ledges[i * 2]; b.props.push(p ? { kind: 'cage', x: Math.round(p.x + p.w / 2), y: p.y } : { kind: 'cage', x: Math.round(z0 + 600 + i * (cx - z0 - 900) / 2), y: G }); }
-    } else if (gk === 'nests') {
-      goal = { kind: 'nests', need: 3 };
-      for (let i = 0; i < 3; i++) b.props.push({ kind: 'nest', x: Math.round(z0 + 700 + i * (cx - z0 - 1100) / 2), y: G });
-    } else if (gk === 'fetch') {
-      goal = { kind: 'fetch' }; fetchAt = z0 + 200; scrollX = Math.min(cx - 120, z0 + 2800);
-    } else if (gk === 'survive') { goal = { kind: 'survive' }; holdAt = b.holdAt; }
-    else goal = { kind: 'arena' };
+    // every map's exit wants its quest monster's drop (the scroll race / hold-out / arena come on top)
+    const target = targets[k % targets.length];
+    const need = 6 + Math.floor(n / 4);
+    const goal: ZoneGoal = { kind: 'collect', mob: target, item: target, need };
+    // plenty of the quest monster about (more come back while you hunt)
+    for (let i = 0; i < need + 2; i++) b.mobs.push({ kind: target, lv: lv(), x: Math.round(z0 + 500 + ((i + 0.5) / (need + 2)) * (cx - z0 - 700)) });
+    if (gk === 'fetch') { fetchAt = z0 + 200; scrollX = Math.min(cx - 120, z0 + 2800); }
+    else if (gk === 'survive') holdAt = b.holdAt;
     void mobs0;
     // a few breakables to smash (crumbs, and now and then a honey jar)
     for (let i = 0; i < 3; i++) b.props.push({ kind: r() < 0.5 ? 'crate' : 'jar', x: Math.round(z0 + 400 + r() * (cx - z0 - 700)), y: G });
     // stage 7's world key: a secret ledge with a sponge, at the far end of the second zone (open sky above it)
     if ((n === 3 || n === 7 || n === 9) && k === 0) b.mobs.push({ kind: w.mimic, lv: lvHi, x: Math.round(z0 + 600 + r() * (cx - z0 - 1000)) }); // a loot-box mimic lurks
     if (n === 7 && k === 1 && !boss) { const lx = cx + 320; b.platforms.push({ x: lx, y: 150, w: 140, secret: true }); b.props.push({ kind: 'sponge', x: lx + 12, y: G }, { kind: 'chest', x: lx + 80, y: 150, key: true }); cx += 620; }
-    const z1 = cx + 200, hx = 380 + k * 340;
-    maps.push({ name: GOAL_NAME[gk], kind: 'zone', x0: z0, x1: z1, goal, portals: [{ x: z0 + 90, to: 0, tx: hx }] });
-    hub.portals.push({ x: hx, to: maps.length - 1, tx: z0 + 170 });
+    // a breather at the start of every map: two honey jars (8% health each)
+    b.props.push({ kind: 'jar', x: z0 + 140, y: G }, { kind: 'jar', x: z0 + 200, y: G });
+    // the exit portal at the far end (the next map starts past the gap)
+    const z1 = cx + 360;
+    maps.push({ name: `${o.name ?? w.names[n - 1]} ${['I', 'II', 'III'][k]}`, kind: 'zone', x0: z0, x1: z1, goal, portals: [{ x: z1 - 150, to: maps.length + 1, tx: z1 + GAP + 150, need: true }] });
     x = z1 + GAP;
   });
   // the boss room: the world boss on stage 10, else the stage's miniboss (stage 5: the elite, or your nemesis)
   const bx0 = x, room = genStage(w, 10, { lv: lvLo, id: o.id, short: true });
+  b.props.push({ kind: 'jar', x: bx0 + 50, y: G }, { kind: 'jar', x: bx0 + 90, y: G }, { kind: 'jar', x: bx0 + 130, y: G }); // before the boss: three jars
   const mv = <T extends { x: number }>(a: T): T => ({ ...a, x: a.x + bx0 });
   for (const p of room.platforms) b.platforms.push(mv(p));
   const foe: MobSpawn = boss ? { ...mv(room.mobs[0]), wake: bx0 + 320 }
@@ -546,7 +533,6 @@ function genMaps(w: WorldDef, n: number, o: { seed?: number; id: string; name?: 
   if (boss) for (const h of room.hazards ?? []) b.hazards.push(mv(h));
   const bossMap: StageMap = { name: boss ? MOBS[w.boss].name : MOBS[foe.kind].name, kind: 'boss', x0: bx0, x1: bx0 + room.width, portals: [] };
   maps.push(bossMap);
-  hub.portals.push({ x: hub.x1 - 200, to: maps.length - 1, tx: bx0 + 110, boss: true });
   const width = bossMap.x1;
   // hazards on open floor in the zones (not the camp or the boss room)
   for (const m of maps.filter(q => q.kind === 'zone')) for (let tries = 0, got = 0; got < 1 + (n >= 6 ? 1 : 0) && tries < 40 && (w.id >= 2 || n >= 2); tries++) {

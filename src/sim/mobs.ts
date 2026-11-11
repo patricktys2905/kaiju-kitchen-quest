@@ -81,7 +81,7 @@ export const MOBS: Record<MobKind, MobDef> = {
   imp: { name: 'Hot Sauce Imp', brain: 'ranged', art: 'mob-imp', hp: 55, atk: 10, speed: 75, w: 40, h: 56, knock: 1, aggro: 380, range: 330, windup: 0.5, patrol: 110, xp: 12, dropChance: 0.35 },
   bacon: { name: 'Sizzle Bacon', brain: 'walker', art: 'mob-bacon', hp: 70, atk: 10, speed: 110, w: 60, h: 40, knock: 1, aggro: 300, range: 70, windup: 0.4, patrol: 160, xp: 11, dropChance: 0.3 },
   meatball: { name: 'Meatball Brute', brain: 'brute', art: 'mob-meatball', hp: 210, atk: 16, speed: 50, w: 72, h: 76, knock: 0.45, aggro: 280, range: 90, windup: 0.8, patrol: 90, xp: 30, dropChance: 0.6, armor: true },
-  dragon: { name: 'Grease Dragon', brain: 'boss', art: 'boss-dragon', hp: 1800, atk: 26, speed: 95, w: 150, h: 170, knock: 0.2, aggro: 2000, range: 160, windup: 0.75, patrol: 0, xp: 340, dropChance: 1, armor: true, moves: ['slash', 'leap', 'breath', 'charge', 'rain'] },
+  dragon: { name: 'Grease Dragon', brain: 'boss', art: 'boss-dragon', hp: 1500, atk: 26, speed: 95, w: 150, h: 170, knock: 0.2, aggro: 2000, range: 160, windup: 0.75, patrol: 0, xp: 340, dropChance: 1, armor: true, moves: ['slash', 'leap', 'breath', 'charge', 'rain'] },
   // World 4: The Pantry
   can: { name: 'Can Crusher', brain: 'walker', art: 'mob-can', hp: 110, atk: 12, speed: 55, w: 52, h: 60, knock: 0.6, aggro: 280, range: 70, windup: 0.6, patrol: 100, xp: 18, dropChance: 0.4, shield: true },
   cheerio: { name: 'Cheerio Blob', brain: 'walker', art: 'mob-cheerio', hp: 90, atk: 11, speed: 70, w: 58, h: 52, knock: 0.9, aggro: 280, range: 66, windup: 0.5, patrol: 130, xp: 14, dropChance: 0.3, split: 'minicheerio' },
@@ -102,7 +102,7 @@ export const MOBS: Record<MobKind, MobDef> = {
   cherrysoldier: { name: 'Candied Cherry Soldier', brain: 'hopper', art: 'mob-cherrysoldier', hp: 34, atk: 8, speed: 105, w: 32, h: 34, knock: 1.3, aggro: 340, range: 190, windup: 0.35, patrol: 120, xp: 5, dropChance: 0.08 },
   fruitknight: { name: 'Fruitcake Knight', brain: 'brute', art: 'mob-fruitknight', hp: 240, atk: 16, speed: 48, w: 78, h: 84, knock: 0.45, aggro: 280, range: 92, windup: 0.8, patrol: 90, xp: 34, dropChance: 0.6, armor: true, shield: true },
   peel: { name: 'Candied Peel Bat', brain: 'flyer', art: 'mob-peel', hp: 40, atk: 7, speed: 125, w: 44, h: 40, knock: 1.1, aggro: 340, range: 230, windup: 0.5, patrol: 160, xp: 13, dropChance: 0.3 },
-  fruitcake: { name: 'Old Fruitcake', brain: 'boss', art: 'boss-fruitcake', hp: 1050, atk: 18, speed: 75, w: 140, h: 190, knock: 0.15, aggro: 2000, range: 160, windup: 0.75, patrol: 0, xp: 700, dropChance: 1, armor: true, moves: ['slash', 'leap', 'charge', 'rain'], calls: 'cherrysoldier' },
+  fruitcake: { name: 'Old Fruitcake', brain: 'boss', art: 'boss-fruitcake', hp: 940, atk: 18, speed: 75, w: 140, h: 190, knock: 0.15, aggro: 2000, range: 160, windup: 0.75, patrol: 0, xp: 700, dropChance: 1, armor: true, moves: ['slash', 'leap', 'charge', 'rain'], calls: 'cherrysoldier' },
   // ---- World 9: The Supermarket ----
   trolley: { name: 'Trolley Rammer', brain: 'charger', art: 'mob-trolley', hp: 108, atk: 10, speed: 70, w: 66, h: 56, knock: 0.6, aggro: 400, range: 380, windup: 0.7, patrol: 110, xp: 18, dropChance: 0.4 },
   bag: { name: 'Plastic Bag Ghost', brain: 'flyer', art: 'mob-bag', hp: 40, atk: 7, speed: 120, w: 44, h: 46, knock: 1.1, aggro: 340, range: 230, windup: 0.5, patrol: 160, xp: 13, dropChance: 0.3 },
@@ -121,7 +121,7 @@ export const MOBS: Record<MobKind, MobDef> = {
   radish: { name: 'Radish Bomber', brain: 'bomber', art: 'mob-radish', hp: 40, atk: 21, speed: 150, w: 38, h: 46, knock: 1.2, aggro: 340, range: 60, windup: 0.7, patrol: 140, xp: 12, dropChance: 0.25 },
   pumpkin: { name: 'Pumpkin Brute', brain: 'brute', art: 'mob-pumpkin', hp: 230, atk: 16, speed: 48, w: 80, h: 80, knock: 0.45, aggro: 280, range: 92, windup: 0.8, patrol: 90, xp: 32, dropChance: 0.6, armor: true },
   chunk: { name: 'Mystery Chunk', brain: 'hopper', art: 'mob-chunk', hp: 26, atk: 7, speed: 100, w: 30, h: 28, knock: 1.3, aggro: 340, range: 180, windup: 0.35, patrol: 120, xp: 3, dropChance: 0.04 },
-  meatloaf: { name: 'The Mystery Meatloaf', brain: 'boss', art: 'boss-meatloaf', hp: 1150, atk: 19, speed: 75, w: 140, h: 150, knock: 0.2, aggro: 2000, range: 150, windup: 0.75, patrol: 0, xp: 540, dropChance: 1, armor: true, moves: ['slash', 'leap', 'charge', 'rain'], calls: 'chunk' },
+  meatloaf: { name: 'The Mystery Meatloaf', brain: 'boss', art: 'boss-meatloaf', hp: 1050, atk: 19, speed: 75, w: 140, h: 150, knock: 0.2, aggro: 2000, range: 150, windup: 0.75, patrol: 0, xp: 540, dropChance: 1, armor: true, moves: ['slash', 'leap', 'charge', 'rain'], calls: 'chunk' },
   // ---- World 7: The Backyard BBQ ----
   wasp: { name: 'Picnic Wasp', brain: 'flyer', art: 'mob-wasp', hp: 40, atk: 7, speed: 125, w: 44, h: 42, knock: 1.1, aggro: 340, range: 230, windup: 0.5, patrol: 160, xp: 13, dropChance: 0.3 },
   corn: { name: 'Corn Cob Cannon', brain: 'turret', art: 'mob-corn', hp: 85, atk: 8, speed: 0, w: 50, h: 60, knock: 0, aggro: 400, range: 400, windup: 0.9, patrol: 0, xp: 16, dropChance: 0.4 },
@@ -195,7 +195,7 @@ export const MOBS: Record<MobKind, MobDef> = {
     nem: { species: 3, moves: ['drip', 'fanshot', 'slash', 'leap'], names: ['Snooty Drip', 'Sprinkle Spray', 'Cone Poke', 'Scoop Drop'], shot: 'crumb' } },
   nbear: { name: 'Grizzly Grizzle', brain: 'nemesis', art: 'mob-nem-bear', hp: 225, atk: 16, speed: 70, w: 92, h: 104, knock: 0.35, aggro: 900, range: 150, windup: 0.75, patrol: 60, xp: 32, dropChance: 1, armor: true,
     nem: { species: 14, moves: ['swipe', 'charge', 'lob', 'leap'], names: ['Double Swipe', 'Bear Rush', 'Patty Toss', 'Big Bear Belly Flop'] } },
-  golem: { name: 'Freezer Golem', brain: 'boss', art: 'boss-golem', hp: 2050, atk: 25, speed: 80, w: 130, h: 180, knock: 0.2, aggro: 2000, range: 150, windup: 0.75, patrol: 0, xp: 320, dropChance: 1, armor: true, moves: ['slash', 'leap', 'rain', 'charge'] },
+  golem: { name: 'Freezer Golem', brain: 'boss', art: 'boss-golem', hp: 2400, atk: 25, speed: 80, w: 130, h: 180, knock: 0.2, aggro: 2000, range: 150, windup: 0.75, patrol: 0, xp: 320, dropChance: 1, armor: true, moves: ['slash', 'leap', 'rain', 'charge'] },
   // ----- minibosses (2 per world): they guard the miniboss rooms of long stages (art: scripts/minis-jobs.mjs) -----
   m1a: { name: 'Sir Butterknife', brain: 'nemesis', art: 'mob-m1a', hp: 200, atk: 15, speed: 85, w: 70, h: 100, knock: 0.35, aggro: 900, range: 130, windup: 0.7, patrol: 60, xp: 40, dropChance: 1, armor: true, mini: true,
     nem: {species: -1, moves: ['slash','charge','shell','puddle'], names: ['Butter Slash','Knightly Charge','Crumpet Guard','Melted Butter'], puddle: 'slick'} },
@@ -350,7 +350,7 @@ export function nemesisMoves(kind: MobKind, world: number): NemMove[] {
 }
 
 /** Global difficulty knobs (tuned with scripts/balance.ts). */
-export const TUNE = { hp: 2.5, atk: 2.2, bossHp: 1.35, bossAtk: 0.6, windup: 0.85, treeRamp: 0.0055 };
+export const TUNE = { hp: 2.5, atk: 1.8, bossHp: 1.35, bossAtk: 0.6, windup: 0.85, treeRamp: 0.0055 };
 /** Monsters past level 20 grow a little extra per level, in step with the skill-tree points a kaiju has by then. */
 const ramp = (lv: number) => 1 + TUNE.treeRamp * Math.max(0, lv - 20);
 export function mobHp(kind: MobKind, lv: number): number { return Math.round(MOBS[kind].hp * TUNE.hp * (MOBS[kind].brain === 'boss' ? TUNE.bossHp : 1) * (1 + 0.32 * (lv - 1)) * ramp(lv)); }

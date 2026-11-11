@@ -45,7 +45,7 @@ export type ZoneGoal =
 export interface StageMap {
   name: string; kind: 'hub' | 'zone' | 'boss'; x0: number; x1: number; goal?: ZoneGoal;
   /** to = map index, tx = where you come out; boss = the boss door (opens when every zone's goal is done) */
-  portals: { x: number; to: number; tx: number; boss?: boolean }[];
+  portals: { x: number; to: number; tx: number; boss?: boolean; /** the map's exit: opens with the map's goal (drops handed in) */ need?: boolean }[];
 }
 export interface StageDef {
   /** a stage of maps: a hub, zones with goals, and the boss room (see stages.ts genMaps) */
@@ -118,6 +118,8 @@ export type BoxTier = 1 | 2 | 3 | 4 | 5;
 export interface LootBox { tier: BoxTier; ilvl: number }
 
 export type SimEvent =
+  | { t: 'loot'; kind: MobKind; n: number; x: number; y: number }
+  | { t: 'needDrops'; kind: MobKind; have: number; need: number }
   | { t: 'warp'; to: number; hi: number }
   | { t: 'goal'; zone: number; text: string; done: boolean }
   | { t: 'doorLocked'; left: number }

@@ -15,7 +15,7 @@ addEventListener('pointerdown', unlockAudio);
 initTouch();
 showTitle();
 let game: Phaser.Game;
-initCamp(stageId => game.scene.getScene('game').scene.restart({ stage: stageId }), showOnline);
+initCamp((stageId, skip) => game.scene.getScene('game').scene.restart({ stage: stageId, skip }), showOnline);
 initFree(run => game.scene.getScene('game').scene.restart({ stage: run.stage.id, free: run }));
 initOnline((stage, online) => game.scene.getScene('game').scene.restart({ stage, online }), () => { game.scene.getScene('game').scene.restart({}); showCamp(); });
 

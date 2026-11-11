@@ -1,0 +1,33 @@
+// Monster drops (MapleStory style): every monster kind drops its own item, which you pick up and keep in your bag.
+// Each map of a stage asks for a number of one monster's drop to open its exit portal (they're handed in as you go
+// through); holding a stage's whole set lets you skip straight to its boss room. Icons: drop-<kind> (scripts/drops-jobs.mjs).
+import type { MobKind } from './types';
+
+/** monster kind -> [drop name, what the icon shows] */
+export const DROPS: Partial<Record<MobKind, [string, string]>> = {
+  bun: ['Mouldy Crust', 'a chunk of bread crust with fuzzy green mould spots'], worm: ['Sour Gummy Tail', 'the striped tail end of a sugar-dusted sour gummy worm'],
+  ant: ['Sugar Cube', 'a sparkly white sugar cube'], pepper: ['Pepper Seed', 'a few shiny red chilli pepper seeds'], garlic: ['Garlic Clove', 'a single plump garlic clove'],
+  egg: ['Rotten Yolk', 'a wobbly greenish egg yolk'], pea: ['Frozen Pea', 'a frosty green pea with ice crystals'], yogurt: ['Yogurt Blob', 'a dollop of pink yogurt'],
+  milk: ['Carton Horn', 'a little horn made from a folded milk-carton corner'], icebat: ['Frost Wing', 'a small icy blue bat wing'], carrot: ['Carrot Top', 'a leafy green carrot top'],
+  pickle: ['Pickle Brine', 'a tiny corked bottle of green pickle brine'], jelly: ['Jelly Wobble', 'a wobbly cube of lime jelly'], bacon: ['Bacon Strip', 'a crispy curly bacon strip'],
+  popcorn: ['Popped Kernel', 'a fluffy popped popcorn kernel'], sausage: ['Sausage Link', 'a short sizzling sausage link'], imp: ['Hot Sauce Drop', 'a glowing red drop of hot sauce'],
+  kettle: ['Kettle Whistle', 'a little brass kettle whistle'], meatball: ['Meatball Crumb', 'a small saucy meatball'], marsh: ['Toasty Marshmallow', 'a golden toasted marshmallow'],
+  cheerio: ['Cheerio Ring', 'a single golden cereal ring'], flour: ['Flour Puff', 'a soft puff of white flour in a tiny paper twist'], noodle: ['Dry Noodle', 'a small bundle of dry spaghetti'],
+  can: ['Can Tab', 'a shiny bent soda-can pull tab'], raisin: ['Raisin', 'a wrinkly purple raisin'], soda: ['Fizz Crystal', 'a white crystal of baking soda, fizzing'],
+  plate: ['Plate Shard', 'a curved piece of a white china plate with a blue rim'], bubble: ['Soap Bubble', 'a rainbow soap bubble in a little ring'], mug: ['Mug Handle', 'a broken-off mug handle'],
+  eel: ['Drain Eel Fin', 'a slimy grey eel fin'], glove: ['Rubber Finger', 'the yellow fingertip of a rubber kitchen glove'], scrub: ['Steel Wool Tuft', 'a curly tuft of steel wool'],
+  fork: ['Fork Prong', 'a single bent silver fork prong'], napkin: ['Napkin Scrap', 'a folded lace napkin scrap'], candle: ['Candle Wax', 'a drip of warm candle wax'],
+  gravy: ['Gravy Drop', 'a glossy brown gravy droplet'], teapot: ['Tea Leaf', 'a curled green tea leaf'], roast: ['Roast Crackling', 'a crunchy piece of roast crackling'],
+  beetle: ['Kebab Shell', 'a shiny grilled beetle shell plate'], wasp: ['Wasp Stinger', 'a striped yellow-black wasp stinger'], ketchup: ['Ketchup Cap', 'a red ketchup bottle cap'],
+  charcoal: ['Charcoal Chunk', 'a glowing charcoal briquette'], corn: ['Corn Kernel', 'a buttery yellow corn kernel'], patty: ['Bun Top', 'a sesame-seed burger bun top'],
+  snail: ['Lettuce Leaf', 'a crisp green lettuce leaf'], ladybug: ['Ladybug Spot', 'a red shell piece with a black spot'], peapod: ['Pea Pod', 'an empty green pea pod'],
+  mole: ['Potato Peel', 'a curly potato peel'], tomato: ['Tomato Slice', 'a juicy tomato slice'], radish: ['Radish Root', 'a little red radish with its root'],
+  pumpkin: ['Pumpkin Seed', 'a flat cream pumpkin seed'], trolley: ['Trolley Wheel', 'a tiny grey trolley wheel'], bag: ['Bag Handle', 'a plastic shopping-bag handle loop'],
+  banana: ['Banana Peel', 'a spotty banana peel'], scanner: ['Barcode Sticker', 'a small barcode sticker (no readable numbers)'], can2: ['Can Lid', 'a round dented tin-can lid'],
+  melon: ['Melon Seed', 'a shiny black watermelon seed'], cherrysoldier: ['Candied Cherry', 'a glossy red candied cherry'], peel: ['Candied Peel', 'a strip of orange candied peel'],
+  fruitknight: ['Fruitcake Chunk', 'a chunk of dark fruitcake'], mimic: ['Lunchbox Latch', 'a blue plastic lunchbox latch'], cereal: ['Cereal Prize', 'a tiny toy prize from a cereal box'],
+};
+export const dropName = (k: MobKind): string => DROPS[k]?.[0] ?? 'Monster Bit';
+export const dropIcon = (k: MobKind): string => `drop-${k}`;
+/** How often a monster drops its item (the map's quest monster: more, and never 3 misses in a row). */
+export const DROP_CHANCE = 0.2, QUEST_DROP_CHANCE = 0.4;

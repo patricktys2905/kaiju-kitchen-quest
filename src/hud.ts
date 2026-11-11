@@ -7,6 +7,7 @@ import { MOBS } from './sim/mobs';
 import { xpFor, type HeroProfile } from './sim/stats';
 import type { BoxTier, StageDef } from './sim/types';
 import type { World } from './sim/world';
+import { dropName } from './sim/drops';
 import { canFullscreen, fsIcon, isFullscreen } from './ui/title';
 
 const CSS = `
@@ -125,7 +126,7 @@ export function initHud(onMenu: () => void, onResume: () => void, onLeave: () =>
   });
   const p = document.createElement('div');
   p.id = 'pause'; p.className = 'kq';
-  p.innerHTML = `<h2>PAUSED</h2><button class="pill go" data-a="resume">▶ RESUME</button><button class="pill" data-a="mute">🔊 SOUND ON / OFF</button>${canFullscreen() ? `<button class="pill" data-fs="long">${fsIcon()} ${isFullscreen() ? 'EXIT FULL SCREEN' : 'FULL SCREEN'}</button>` : ''}<button class="pill" data-settings>⚙ SETTINGS</button><button class="pill" data-report>🐞 REPORT A BUG</button><button class="pill" data-a="leave">⟵ RETREAT TO CAMP</button>`;
+  p.innerHTML = `<h2>PAUSED</h2><button class="pill go" data-a="resume">▶ RESUME</button><button class="pill" data-a="mute">🔊 SOUND ON / OFF</button>${canFullscreen() ? `<button class="pill" data-fs="long">${fsIcon()} ${isFullscreen() ? 'EXIT FULL SCREEN' : 'FULL SCREEN'}</button>` : ''}<button class="pill" data-settings>⚙ SETTINGS</button><button class="pill" data-report>🐞 REPORT A BUG</button><button class="pill" data-a="leave" title="Leave the stage: you keep the drops you picked up and the crumbs you found (not the boxes); next time you start fresh at full health">⟵ ESCAPE (keep drops &amp; crumbs)</button>`;
   document.body.appendChild(p);
   p.querySelector('[data-a=resume]')!.addEventListener('click', onResume);
   p.querySelector('[data-a=leave]')!.addEventListener('click', onLeave);
@@ -195,11 +196,11 @@ export function updateHud(w: World, p: HeroProfile, st: StageDef): void {
   const maps = st.maps;
   let where = '';
   if (maps && !w.portal) {
-    const mi = w.mapAt(w.hero.x), m = maps[mi], z = w.zones2[mi];
+    const mi = w.mapAt(w.hero.x), m = maps[mi];
     const done = maps.filter((q2, i) => q2.kind === 'zone' && w.zones2[i].done).length, zonesN = maps.filter(q2 => q2.kind === 'zone').length;
-    where = !m ? '' : m.kind === 'hub' ? `Camp · goals ${done}/${zonesN}${done === zonesN ? ' · ☠ boss door open!' : ''}`
-      : m.kind === 'boss' ? m.name
-      : `${m.name}${z?.done ? ' ✓ back to camp' : m.goal && 'need' in m.goal ? ` · ${m.goal.kind === 'collect' ? m.goal.item : m.goal.kind === 'rescue' ? 'Crumblets' : 'nests'} ${z.have}/${m.goal.need}` : ''}`;
+    void done; void zonesN;
+    where = !m ? '' : m.kind === 'boss' ? `☠ ${m.name}`
+      : `${m.name} (${mi + 1}/${maps.length - 1})${m.goal?.kind === 'collect' ? ` · ${dropName(m.goal.mob)} ${Math.min(w.drops[m.goal.mob] ?? 0, m.goal.need)}/${m.goal.need}${(w.drops[m.goal.mob] ?? 0) >= m.goal.need ? ' ✓ → EXIT' : ` from ${MOBS[m.goal.mob].name}s`}` : ''}`;
   }
   q('.stage .s').textContent = (w.portal ? '➜ Exit is open! Head right' : maps ? where : `Monsters left: ${w.alive}`) + goal + arenaTxt + clock;
   const letter = styleRank(w.style), sc = { S: '#ffd23c', A: '#9fe8ff', B: '#a8f0a8', C: '#ffb38a', D: '#c8b8c8' }[letter];

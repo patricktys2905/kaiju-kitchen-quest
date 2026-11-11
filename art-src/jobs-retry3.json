@@ -1,0 +1,18 @@
+[
+ {
+  "name": "drop-teapot",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/c-bean.png"
+  ],
+  "prompt": "Generate an image. The reference is an item icon from my cute 2D kitchen action RPG. Draw a NEW ITEM icon, a monster drop called \"Tea Leaf\": a curled green tea leaf. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute). A small collectible item icon, shown centred, filling about 75% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "drop-cherrysoldier",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/c-bean.png"
+  ],
+  "prompt": "Generate an image. The reference is an item icon from my cute 2D kitchen action RPG. Draw a NEW ITEM icon, a monster drop called \"Candied Cherry\": a glossy red candied cherry. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute). A small collectible item icon, shown centred, filling about 75% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ }
+]

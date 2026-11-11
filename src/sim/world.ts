@@ -8,6 +8,7 @@ import { BOSS_ARMOR, BOSS_PATTERNS, DANGER_MOVES, ELITE, ELITE_MODS, type EliteM
 import { type SkillDef, ULTS, ULT_LV, applyBranch, applyMod, skillScale } from './skills';
 import { WORLDS } from './stages';
 import type { Derived } from './stats';
+import { DROPS, DROP_CHANCE, QUEST_DROP_CHANCE } from './drops';
 import { type BoxTier, type Hazard, type Input, type MobSpawn, type Prop, type LootBox, type MobKind, NO_INPUT, type SimEvent, type Spicy, type StageDef } from './types';
 
 export const DT = 1 / 60;
@@ -28,7 +29,7 @@ export const PERFECT_WIN = 0.2;
 /** Nightmare on top of Hard's levels: tougher, harder-hitting monsters (plus shorter telegraphs and smarter tactics) */
 export const NIGHTMARE = { hp: 1.2, atk: 1.25 };
 /** Boss-room minibosses (map stages) have this much more health than an elite. */
-export const MINI_ROOM_HP = 5;
+export const MINI_ROOM_HP = 4;
 /** World bosses on Nightmare: a smaller bump (their fights are long and the shorter telegraphs already bite) */
 export const NIGHTMARE_BOSS = { hp: 1.1, atk: 1.12 };
 const SLOWMO_T = 0.55, SLOWMO_RATE = 0.3, COUNTER_T = 1.6;
@@ -241,6 +242,12 @@ export class World {
   zones2: { have: number; done: boolean; miss: number; spawnT: number }[] = [];
   /** hits the player took in the boss room (a stage challenge) */
   bossHits = 0;
+  /** monster drops on the floor */
+  pickups: { id: number; kind: MobKind; x: number; y: number; vy: number; ground: boolean; t: number }[] = [];
+  /** the drop bag: what you brought (set by the game from your save) plus what you picked up; exits take from it */
+  drops: Partial<Record<MobKind, number>> = {};
+  /** what you picked up this run (the game adds it to your save, even if you escape or are knocked out) */
+  runDrops: Partial<Record<MobKind, number>> = {};
   /** mould nests: seconds to their next hatchling */
   nestT = new Map<number, number>();
 
@@ -408,6 +415,7 @@ export class World {
     const holding = this.holdout > 0 || (this.scroll !== null && !this.scroll.got) || this.arenas.some(a => !a.done);
     if (!this.portal && (this.stage.maps ? this.bossRoomClear() && this.holdout <= 0 : this.blocking === 0 && !holding)) { this.portal = true; this.events.push({ t: 'portal' }); }
     if (this.stage.maps) this.stepMapZones(dt);
+    if (this.pickups.length) this.stepPickups(dt);
     const h = this.hero;
     const npcHome = !this.npc || Math.abs(this.npc.x - this.exitX) < 140;
     if (this.portal && npcHome && h.state !== 'down' && Math.abs(h.x - this.exitX) < 40 && Math.abs(h.y - this.stage.groundY) < 4) {
@@ -1083,7 +1091,7 @@ export class World {
     return {
       t: Math.round(this.time * 60), portal: this.portal, cleared: this.cleared, failed: this.failed,
       heroes: this.heroes.map(h => ({ i: h.idx, sp: h.d.cls.species, x: r(h.x), y: r(h.y), f: h.face, st: h.state, tt: +h.t.toFixed(2), step: h.step, hp: r(h.hp), mhp: h.d.maxHp, sk: h.skill?.id ?? null, ult: r(h.ult) })),
-      mobs: this.mobs.map(m => ({ id: m.id, k: m.kind, x: r(m.x), y: r(m.y), f: m.face, st: m.state, mv: m.move, hp: r(m.hp), mhp: m.maxHp, lv: m.lv, e: m.elite ? 1 : 0, u: m.under ? 1 : 0, d: m.disguised ? 1 : 0 })),
+      mobs: this.mobs.filter(m => !this.stage.maps || this.heroes.some(h => this.mapAt(h.x) === this.mapAt(m.x))).map(m => ({ id: m.id, k: m.kind, x: r(m.x), y: r(m.y), f: m.face, st: m.state, mv: m.move, hp: r(m.hp), mhp: m.maxHp, lv: m.lv, e: m.elite ? 1 : 0, u: m.under ? 1 : 0, d: m.disguised ? 1 : 0 })),
       shots: this.shots.map(s => ({ id: s.id, x: r(s.x), y: r(s.y), k: s.kind ?? '', fr: s.from })),
       boxes: this.boxes.map(b => ({ id: b.id, x: r(b.x), y: r(b.y), tier: b.tier, o: b.owner ?? 0 })),
     };
@@ -1212,18 +1220,42 @@ export class World {
     const mi = this.mapAt(h.x), map = this.stage.maps![mi];
     const p = map?.portals.find(q => Math.abs(q.x - h.x) < 46);
     if (!p) return false;
-    if (p.boss && !this.doorOpen) { h.prev = { ...inp }; this.events.push({ t: 'doorLocked', left: this.stage.maps!.filter((m, i) => m.kind === 'zone' && !this.zones2[i].done).length }); return false; }
+    // a map's exit takes its quest monster's drops (from your bag: ones you picked up now or kept from before)
+    const g = map.goal;
+    if (p.need && g?.kind === 'collect' && !this.zones2[mi].done) {
+      const have = this.drops[g.mob] ?? 0;
+      if (have < g.need) { h.prev = { ...inp }; this.events.push({ t: 'needDrops', kind: g.mob, have, need: g.need }); return false; }
+      this.drops[g.mob] = have - g.need; this.zones2[mi].done = true;
+    }
     const go = (o: Hero) => { o.x = p.tx; o.y = this.stage.groundY; o.vx = 0; o.vy = 0; o.ground = true; o.on = -1; o.prev = { ...inp }; this.enter(o, 'move'); };
     go(h);
-    // back at camp: a rest by the fire patches everyone up (zones and the boss are each a fair fight)
-    if (this.stage.maps![p.to].kind === 'hub') for (const o of this.heroes) if (o.state !== 'down' && (o === h || o.cpu)) { const n = Math.round(o.d.maxHp - o.hp); if (n > 0) { o.hp = o.d.maxHp; this.events.push({ t: 'heal', x: o.x, y: o.y - 70, n, hero: true }); } }
-    if (this.stage.maps![p.to].kind === 'hub' && this.npc && this.npc.hp > 0) this.npc.hp = this.npc.maxHp;
     // CPU buddies and the escorted Crumblet come along
-    // CPU buddies come along; the escorted Crumblet waits safely at camp while you clear the zones, then follows you
-    // through the boss door (and back to camp)
-    if (h.idx === 0) { for (const o of this.heroes) if (o.cpu && o !== h) go(o); const k = this.stage.maps![p.to].kind; if (this.npc && (k === 'boss' || (k === 'hub' && this.mapAt(this.npc.x) !== 0))) this.npc.x = p.tx - 60; }
+    if (h.idx === 0) { for (const o of this.heroes) if (o.cpu && o !== h) go(o); if (this.npc) { this.npc.x = p.tx - 60; if (this.npc.hp > 0) this.npc.hp = this.npc.maxHp; } } // (the Crumblet catches its breath)
+    this.pickups = this.pickups.filter(q => this.mapAt(q.x) !== mi); // drops left behind are gone
     this.events.push({ t: 'warp', to: p.to, hi: h.idx });
     return true;
+  }
+  /** Skip straight to the boss room (the stage panel spent the drops). */
+  skipToBoss(): void {
+    const maps = this.stage.maps; if (!maps) return;
+    const b = maps[maps.length - 1];
+    maps.forEach((m, i) => { if (m.kind === 'zone') this.zones2[i].done = true; });
+    for (const h of this.heroes) { h.x = b.x0 + 120 + h.idx * 40; h.y = this.stage.groundY; }
+    if (this.npc) this.npc.x = b.x0 + 70;
+  }
+  /** Monster drops lying on the floor: they fall, drift to a hero close by and are picked up. */
+  private stepPickups(dt: number): void {
+    for (const q of this.pickups) {
+      q.t += dt;
+      const h = this.heroes.filter(o => o.state !== 'down').sort((u, v) => Math.abs(u.x - q.x) - Math.abs(v.x - q.x))[0];
+      if (h && q.t > 0.4 && Math.abs(h.x - q.x) < 150 && Math.abs(h.y - q.y) < 150) { q.x += clamp(h.x - q.x, -420 * dt, 420 * dt); q.y += clamp(h.y - 30 - q.y, -420 * dt, 420 * dt); q.ground = false; }
+      else if (!q.ground) { q.vy += 1400 * dt; const f = q.vy > 0 ? this.floorBelow(q.x, q.y - q.vy * dt, q.y + q.vy * dt, false) : null; q.y += q.vy * dt; if (f && q.y >= f.y) { q.y = f.y; q.vy = 0; q.ground = true; } if (q.y > this.stage.groundY) { q.y = this.stage.groundY; q.ground = true; } }
+      if (h && q.t > 0.4 && Math.abs(h.x - q.x) < 32 && Math.abs(h.y - 30 - q.y) < 70) {
+        q.t = -1; this.drops[q.kind] = (this.drops[q.kind] ?? 0) + 1; this.runDrops[q.kind] = (this.runDrops[q.kind] ?? 0) + 1;
+        this.events.push({ t: 'loot', kind: q.kind, n: this.drops[q.kind]!, x: q.x, y: q.y });
+      }
+    }
+    this.pickups = this.pickups.filter(q => q.t >= 0 && q.t < 90);
   }
   /** Zone goals: quest drops (with pity), rescues, nests, arenas, timed goals; nests keep spawning, quest monsters respawn. */
   private stepMapZones(dt: number): void {
@@ -1250,7 +1282,7 @@ export class World {
       if (g.kind === 'arena' && this.arenas.filter(a => a.x0 >= m.x0 && a.x1 <= m.x1).every(a => a.done)) finish(`${m.name}: arena cleared!`);
       if (g.kind === 'fetch' && this.scroll?.got && this.holdout <= 0) finish(`${m.name}: Recipe Scroll saved!`);
       if (g.kind === 'survive' && this.objArmed && this.holdout <= 0) { finish(`${m.name}: you held out!`); }
-      if ((g.kind === 'collect' || g.kind === 'rescue' || g.kind === 'nests') && z.have >= g.need) finish(`${m.name}: done!`);
+      if ((g.kind === 'rescue' || g.kind === 'nests') && z.have >= g.need) finish(`${m.name}: done!`);
     });
   }
   /** A zone goal ticks up (quest item, freed Crumblet, smashed nest). */
@@ -1747,7 +1779,12 @@ export class World {
     this.run.kills++;
     this.addStyle('kill', 3);
     // a zone's quest monster: drops its quest item now and then (never more than two misses in a row)
-    if (this.stage.maps) { const zi = this.mapAt(m.x), g = this.stage.maps[zi]?.goal, z = this.zones2[zi]; if (g?.kind === 'collect' && g.mob === m.kind && !z.done) { if (z.miss >= 2 || this.rand() < 0.45) { z.miss = 0; this.zoneTick(zi, g.item); } else z.miss++; } }
+    if (this.stage.maps && DROPS[m.kind]) {
+      const zi = this.mapAt(m.x), g = this.stage.maps[zi]?.goal, z = this.zones2[zi], quest = g?.kind === 'collect' && g.mob === m.kind && !z.done;
+      let drop = this.rand() < (quest ? QUEST_DROP_CHANCE : DROP_CHANCE);
+      if (quest) { if (z.miss >= 2) drop = true; z.miss = drop ? 0 : z.miss + 1; }
+      if (drop) this.pickups.push({ id: nextId++, kind: m.kind, x: m.x, y: m.y - 30, vy: -380, ground: false, t: 0 });
+    }
     if (m.mods.includes('splitting')) for (const off of [-40, 40]) { const c = this.spawnMob(m.kind, clamp(m.x + off, 30, this.stage.width - 30), Math.max(1, m.lv - 1), m.on !== null && m.on >= 0 ? m.y : undefined); c.hp = c.maxHp = Math.round(c.maxHp * 0.6); c.vy = -380; c.vx = off * 5; c.ground = false; c.on = null; c.state = 'hurt'; c.t = 0; c.under = false; c.disguised = false; }
     if (m.stolen >= 0) { const slot = h.bag[m.stolen]; if (slot) slot.n++; this.events.push({ t: 'recover', name: slot ? CONSUMABLES[slot.id].name : '' }); m.stolen = -1; }
     if (def.split) for (const off of [-30, 30]) { const c = this.spawnMob(def.split, clamp(m.x + off, 30, this.stage.width - 30), Math.max(1, m.lv - 2), m.on !== null && m.on >= 0 ? m.y : undefined); c.vy = -380; c.vx = off * 6; c.ground = false; c.on = null; c.state = 'hurt'; c.t = 0; }
@@ -2429,6 +2466,7 @@ export class World {
       }
       if ((s.kind === 'boomerang' || s.kind === 'gearboom') && !s.back && s.t > 0.42) { s.back = true; s.hit = new Set(); } // comes back: hits again
       if (s.kind === 'gearburst' && s.t > 0.55) { s.t = 99; continue; } // the star doesn't fly forever
+      if (this.stage.maps && this.mapAt(s.x) < 0) { s.t = 99; continue; } // shots don't cross the gap between maps
       if (s.kind === 'gearorbit') { // circles its owner, re-hitting every 0.45 s
         const o = this.heroes[s.owner ?? 0] ?? h, a = this.time * 5 + (s.tx ?? 0) * Math.PI * 2;
         s.x = o.x + Math.cos(a) * 80; s.y = o.y - 44 + Math.sin(a) * 40; s.vx = 0; s.vy = 0;
@@ -2525,6 +2563,7 @@ export class World {
       }
       this.cur = this.heroes[0];
       for (const m of this.mobs) {
+        if (this.stage.maps && !this.heroes.some(o => this.mapAt(o.x) === this.mapAt(m.x))) continue; // a map nobody is in stays as it is
         const md = MOBS[m.kind];
         if (m.state === 'dead' || m.under || m.disguised || md.brain === 'boss' || md.brain === 'flyer' || z.hit.has(m.id) || !inZone(m.x, m.y)) continue;
         z.hit.add(m.id);

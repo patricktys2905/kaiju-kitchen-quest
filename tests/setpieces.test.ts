@@ -13,10 +13,11 @@ const flat: StageDef = {
 const hero = (sp = 0) => { const p = newProfile(sp); p.level = 12; return derive(p); };
 
 describe('arena rooms', () => {
-  it('story stages: a camp, three zones with goals and a boss room; arena rooms have three waves (one-wave rooms are miniboss rooms)', () => {
+  it('story stages: three maps (each exit wants a monster drop) and a boss room; arena rooms have three waves (one-wave rooms are miniboss rooms)', () => {
     for (const s of STAGES) {
-      expect(s.maps!.map(m => m.kind), s.id).toEqual(['hub', 'zone', 'zone', 'zone', 'boss']);
-      expect(s.maps!.filter(m => m.goal).length).toBe(3);
+      expect(s.maps!.map(m => m.kind), s.id).toEqual(s.boss ? ['zone', 'zone', 'boss'] : ['zone', 'zone', 'zone', 'boss']); // map I -> II (-> III) -> the boss room
+      for (const m of s.maps!.filter(q => q.kind === 'zone')) expect(m.portals.some(p => p.need && p.to === s.maps!.indexOf(m) + 1), s.id).toBe(true);
+      expect(s.maps!.filter(m => m.goal).length).toBe(s.boss ? 2 : 3);
       const rooms = (s.arenas ?? []).filter(a => a.waves.length > 1);
       for (const a of rooms) expect(a.waves.length).toBe(3);
       for (const a of (s.arenas ?? []).filter(a => a.waves.length === 1)) expect(MOBS[a.waves[0][0].kind].mini, s.id).toBe(true);

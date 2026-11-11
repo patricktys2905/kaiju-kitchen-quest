@@ -35,16 +35,19 @@ export interface Snapshot {
   ar: number[][];       // arenas [locked, done, wave]
   ch: number[] | null;  // chase [x, on, done]
   ga?: number[];        // gates open
+  ids?: number[];       // map stages: every monster's id (only those in a map with a hero are sent in full: the rest are frozen)
+  pk?: number[][];      // monster drops on the floor [id, kind, x, y]
   lo: number[][][];     // each player's loot [tier, ilvl]
   run: number[];        // RunStats values (RUN_KEYS order)
   bg?: number[][];      // each hero's quick-bag counts, then Second Helpings left
 }
 
 export function makeSnapshot(w: World): Snapshot {
+  const active = w.stage.maps ? new Set(w.heroes.map(h => w.mapAt(h.x))) : null;
   return {
     w: [r2(w.time), b(w.portal), b(w.cleared), b(w.failed), w.combo, r(w.style), r2(w.slowmo), r1(w.objTimer), r1(w.holdout), b(w.objDone), r1(w.run.time), w.run.crumbs],
     h: w.heroes.map(h => [r(h.x), r(h.y), r(h.vx), r(h.vy), h.face, HERO_STATES.indexOf(h.state), r2(h.t), h.step, b(h.ground), h.skill?.id ?? '', b(h.gliding), r2(h.inv), r(h.hp), h.d.maxHp, b(!!h.buff), r2(h.counter), r(h.ult), r2(h.revT), h.orbs ? h.orbs.n : 0, h.on ?? -9, r1(h.cds[0]), r1(h.cds[1]), r1(h.cds[2]), r1(h.cds[3] ?? 0), r(h.shield)]),
-    m: w.mobs.map(m => [m.id, KINDS.indexOf(m.kind), r(m.x), r(m.y), r(m.vx), m.face, MOB_STATES.indexOf(m.state), r2(m.t), m.move, r(m.hp), m.maxHp, m.lv,
+    m: w.mobs.filter(m => !active || active.has(w.mapAt(m.x))).map(m => [m.id, KINDS.indexOf(m.kind), r(m.x), r(m.y), r(m.vx), m.face, MOB_STATES.indexOf(m.state), r2(m.t), m.move, r(m.hp), m.maxHp, m.lv,
       b(m.elite) | b(m.under) << 1 | b(m.disguised) << 2 | b(m.enraged) << 3 | b(m.frozen > 0) << 4 | b(m.glued > 0) << 5 | b(m.burn > 0) << 6 | b(m.tired > 0) << 7 | b(m.weak > 0) << 8 | b(m.shellT > 0) << 9 | b(m.guardT > 0) << 10,
       m.mods.join(','), r(m.aimX), r(m.aimY), r2(m.flash), r1(m.hurtShown), r2(m.deadT), r2(m.armor), m.arena, m.bossPhase]),
     s: w.shots.map(s => [s.id, s.kind ?? '', r(s.x), r(s.y), r(s.vx), r(s.vy), s.r ?? 0, s.tx ?? -1, s.ty ?? -1, s.from === 'hero' ? 1 : 0, s.icon ?? '', s.t < 0 ? 1 : 0]),
@@ -60,6 +63,8 @@ export function makeSnapshot(w: World): Snapshot {
     sc: b(!!w.scroll?.got),
     ar: w.arenas.map(a => [b(a.locked), b(a.done), a.wave]),
     ga: w.gates.map(g => b(g.open)),
+    ...(active ? { ids: w.mobs.map(m => m.id) } : {}),
+    ...(w.pickups.length ? { pk: w.pickups.map(q => [q.id, KINDS.indexOf(q.kind), r(q.x), r(q.y)]) } : {}),
     ch: w.chase ? [r(w.chase.x), b(w.chase.on), b(w.chase.done)] : null,
     lo: w.lootOf.map(l => l.map(x => [x.tier, x.ilvl])),
     run: RUN_KEYS.map(k => r1(w.run[k])),
@@ -103,7 +108,9 @@ export function applySnapshot(w: World, s: Snapshot): void {
       mods: mods ? (mods as string).split(',') : [] });
     next.push(m);
   }
-  w.mobs = next;
+  // map stages: monsters not sent are frozen in another map: keep them as they are, in order
+  if (s.ids) { const sent = new Map(next.map(m => [m.id, m])); w.mobs = s.ids.map(id => sent.get(id) ?? byId.get(id)).filter((m): m is Mob => !!m); } else w.mobs = next;
+  w.pickups = (s.pk ?? []).map(([id, k, x, y]) => ({ id, kind: KINDS[k], x, y, vy: 0, ground: true, t: 1 }));
   w.shots = s.s.map(a => { const [id, kind, x, y, vx, vy, rr, tx, ty, fromHero, icon, early] = a as never as [number, string, number, number, number, number, number, number, number, number, string, number];
     return { id, kind: kind || undefined, x, y, vx, vy, r: rr || undefined, tx: tx < 0 ? undefined : tx, ty: ty < 0 ? undefined : ty, from: fromHero ? 'hero' : 'mob', t: 0, dmg: 0, hit: new Set<number>(), kx: 0, ky: 0, pierce: false, icon: icon || undefined, ...(early ? { t: -1 } : {}) }; });
   w.boxes = s.bx.map(([id, tier, x, y, ground, owner]) => ({ id, tier: tier as BoxTier, x, y, ground: !!ground, owner, vy: 0, t: 1, ilvl: 1 }));

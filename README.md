@@ -343,3 +343,11 @@ the kaiju's signature set, each weapon with its own gear skill (gear.ts). TIER_L
   18% (+rank / mode), guaranteed by the 5th clear (`save.bwPity`). Icons: scripts/bossgear-jobs.mjs. Tests:
   tests/bossgear.test.ts.
 - Balance (skilled bot, 8 jams): stages 85-97% clear with 2-4 jams, bosses 40-80%; bot stage time 4-7 min.
+
+## Linear map stages + monster drops (replaces the camp hub)
+- Stages run map I -> II -> III -> boss room (world bosses: two maps). Each map ends in an EXIT portal that wants a number of
+  one monster's drop (src/sim/drops.ts: every monster kind has its own item, icons drop-<kind>); you pick drops up off the floor
+  (they drift to you), the exit takes them as you go through, extras stay in your bag (save.drops). Holding a stage's full
+  set shows SKIP TO BOSS on the stage panel (World.skipToBoss). The pause menu's ESCAPE leaves the stage keeping drops and
+  crumbs (not boxes). Honey jars at each map start and before the boss. Online snapshots only send monsters in maps with a hero.
+- Tuning (skilled bot, 8 jams): stages 85-97% clear with 2.5-4 jams, bosses ~50-80%; mobPow W5 0.92 W6 1.35 W8 1.4 W9 0.6 W10 0.62; TUNE.atk 1.8; MINI_ROOM_HP 4.

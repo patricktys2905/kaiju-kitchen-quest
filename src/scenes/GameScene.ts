@@ -35,6 +35,7 @@ import { type FreeRun, beatenBosses, bossName, freeData, freeSummary, mmss, pick
 import { endlessFloor, endlessReward, perkChoices, rushStages, withPerks } from '../sim/free';
 import type { LootBox } from '../sim/types';
 import { applySnapshot, makeSnapshot, type Snapshot } from '../net/snapshot';
+import { dropIcon, dropName } from '../sim/drops';
 import { type Input, NO_INPUT } from '../sim/types';
 
 /** Equipped items → what to draw on the kaiju. */
@@ -66,7 +67,7 @@ interface MobView { img: Phaser.GameObjects.Image; plate: Phaser.GameObjects.Tex
 /** What a zone asks you to do, in a few words. */
 export function goalText(g: ZoneGoal): string {
   switch (g.kind) {
-    case 'collect': return `collect ${g.need} ${g.item} from ${MOBS[g.mob].name}s`;
+    case 'collect': return `collect ${g.need} ${dropName(g.mob)} from ${MOBS[g.mob].name}s, then take the EXIT`;
     case 'rescue': return `free ${g.need} caged Crumblets`;
     case 'nests': return `smash ${g.need} mould nests`;
     case 'arena': return 'clear the arena';
@@ -96,6 +97,10 @@ export class GameScene extends Phaser.Scene {
   private shake = 0;
   private hitStop = 0;
   private paused = false;
+  /** monster drops lying on the floor */
+  private pickupViews = new Map<number, Phaser.GameObjects.Image>();
+  /** start this stage in its boss room (the stage panel spent the drops) */
+  private skipBoss = false;
   private xpGained = 0;
   private levels = 0;
   private done = false;
@@ -165,7 +170,8 @@ export class GameScene extends Phaser.Scene {
 
   private has(k: string): boolean { return manifest.includes(k) && this.textures.exists(k); }
 
-  create(data: { stage?: string; online?: NetPlay; free?: FreeRun }): void {
+  create(data: { stage?: string; online?: NetPlay; free?: FreeRun; skip?: boolean }): void {
+    this.skipBoss = !!data.skip && !data.online && !data.free;
     measure(this.scale.width);
     this.scale.off('resize');
     this.scale.on('resize', (g: Phaser.Structs.Size) => { measure(g.width); this.mid?.setSize(VW, 1080 * MID); });
@@ -233,6 +239,8 @@ export class GameScene extends Phaser.Scene {
       this.world.view(this.me);
     } else this.world = new World(st, derive(p), (Date.now() & 0xffff) + 1, quickBag(), save.items.revive ?? 0, this.hard, STORIES[p.species]?.variants[st.id], [...(save.spicy ?? [])], nemesisOf(p.species), this.nightmare,
       this.buddySpecies() !== null ? [derive(buddyProfile(this.buddySpecies()!, p.level))] : []);
+    // the drop bag comes along (map exits take from it); the stage panel's skip spends a stage's set up front
+    if (st.maps && this.world) { this.world.drops = { ...(save.drops ?? {}) } as typeof this.world.drops; if (this.skipBoss) { this.skipBoss = false; for (const m of st.maps) if (m.goal?.kind === 'collect') this.world.drops[m.goal.mob] = Math.max(0, (this.world.drops[m.goal.mob] ?? 0) - m.goal.need); this.world.skipToBoss(); save.drops = { ...this.world.drops }; persist(); } }
     const cam = this.cameras.main.setZoom(ZOOM).setBackgroundColor('#f6dcb4');
     const bg = this.has(st.bg) ? st.bg : 'bg-far';
     this.far = this.has(bg) ? this.add.image(SX, SY, bg).setOrigin(0, 0).setScrollFactor(0).setDepth(-100) : undefined;
@@ -276,7 +284,7 @@ export class GameScene extends Phaser.Scene {
       this.pinView = this.add.container(0, st.groundY - 60, [body, ...grain, knob]).setDepth(7).setVisible(false);
     }
     this.beltG = (st.belts ?? []).length ? this.add.graphics().setDepth(-3) : undefined;
-    this.propViews.clear(); this.cookerViews.clear(); this.npcView = undefined; this.scrollView = undefined;
+    this.pickupViews.clear(); this.propViews.clear(); this.cookerViews.clear(); this.npcView = undefined; this.scrollView = undefined;
     this.bubbles = []; this.taunted.clear(); this.quipT = 2; this.tauntT = 1; this.lowWarned = false; this.comboQuipped = 0;
     if (this.world.npc && this.has('npc-crumblet')) {
       const img = this.add.image(0, 0, 'npc-crumblet').setOrigin(0.5, 1).setDepth(4); img.setScale(46 / img.height);
@@ -391,6 +399,9 @@ export class GameScene extends Phaser.Scene {
 
   private leave(): void {
     showPause(false);
+    // escape: you keep the drops you picked up and the crumbs you found (not the stage's boxes); start fresh next time
+    const w = this.world;
+    if (w && !this.done && w.stage.maps) { this.done = true; save.drops = { ...w.drops }; save.crumbs += w.run.crumbs; persist(); }
     if (this.online) { this.unhookNet(); leaveOnline(); }
     this.scene.restart({});
   }
@@ -646,6 +657,8 @@ export class GameScene extends Phaser.Scene {
           break;
         }
         case 'goal': if (e.done) { sfx('portal'); toast(`✓ ${e.text}${w.doorOpen ? ' · The boss door is open!' : ''}`, { big: true, color: '#a8f0a8' }); } else toast(e.text, { color: '#ffe27a' }); break;
+        case 'loot': this.callout(e.x, e.y - 30, `+1 ${dropName(e.kind)} (${e.n})`, '#ffe27a', 11); break;
+        case 'needDrops': toast(`The exit wants ${e.need} ${dropName(e.kind)} (you have ${e.have}): hunt ${MOBS[e.kind].name}s`, { color: '#ffd27a' }); break;
         case 'doorLocked': toast(`🔒 Sealed: finish ${e.left} more zone${e.left === 1 ? '' : 's'} first`, { color: '#c8b8d8' }); break;
         case 'ambush': sfx('boss'); this.shake = 8; toast('⚠️ AMBUSH!', { big: true, color: '#ff7a6a' }); break;
         case 'gate': sfx('portal'); toast('The gate opens!', { color: '#a8f0a8' }); break;
@@ -785,6 +798,7 @@ export class GameScene extends Phaser.Scene {
     if (!failed && chillies) w.run.crumbs = Math.round(w.run.crumbs * (1 + 0.25 * chillies));
     save.crumbs += w.run.crumbs;
     save.items.fstone = (save.items.fstone ?? 0) + w.run.stones;
+    if (w.stage.maps) save.drops = { ...w.drops }; // drops are kept, cleared or not
     if (w.run.crumbs) track('crumbs', w.run.crumbs);
     if (this.free && this.online) { this.finishFreeOnline(failed); return; }
     if (this.free) { this.finishFree(failed); return; }
@@ -1115,11 +1129,18 @@ export class GameScene extends Phaser.Scene {
       if (p.kind === 'nest') img.setScale(img.scaleX, (60 / img.height) * (1 + Math.sin(t * 3 + p.x) * 0.06));
     }
     for (const v of this.portalViews) {
-      const to = st.maps![v.to], z = w.zones2[v.to];
-      if (to.kind === 'zone') v.label.setText(`${to.name}${z?.done ? ' ✓' : ''}`).setColor(z?.done ? '#a8f0a8' : '#ffe27a');
-      if (v.boss) v.label.setText(w.doorOpen ? `☠ ${to.name}` : `🔒 ${to.name}`).setColor(w.doorOpen ? '#ff9a6a' : '#b8a8c8');
+      const from = st.maps![w.mapAt(v.x)], g = from?.goal, z = w.zones2[w.mapAt(v.x)], to = st.maps![v.to];
+      if (g?.kind === 'collect') { const have = w.drops[g.mob] ?? 0, ok = z?.done || have >= g.need; v.label.setText(`${to.kind === 'boss' ? '☠ ' + to.name : 'EXIT ➜'}\n${z?.done ? 'open' : `${dropName(g.mob)} ${Math.min(have, g.need)}/${g.need}`}`).setColor(ok ? '#a8f0a8' : '#ffe27a'); }
       v.hint.setVisible(Math.abs(h.x - v.x) < 46 && h.ground);
     }
+    const seenP = new Set<number>();
+    for (const q of w.pickups) {
+      seenP.add(q.id);
+      let img = this.pickupViews.get(q.id);
+      if (!img) { const key = this.has(dropIcon(q.kind)) ? dropIcon(q.kind) : MOBS[q.kind].art; img = this.add.image(q.x, q.y, this.has(key) ? key : '__WHITE').setOrigin(0.5, 1).setDepth(5); img.setScale(30 / img.height); this.pickupViews.set(q.id, img); }
+      img.setPosition(q.x, q.y - 4 + (q.ground ? Math.sin(t * 5 + q.id) * 3 : 0));
+    }
+    for (const [id, img] of this.pickupViews) if (!seenP.has(id)) { img.destroy(); this.pickupViews.delete(id); }
     for (const c of w.cookers) {
       let img = this.cookerViews.get(c.id);
       if (!img && this.has('ob-cooker')) { img = this.add.image(0, 0, 'ob-cooker').setOrigin(0.5, 1).setDepth(3); img.setScale(54 / img.height); this.cookerViews.set(c.id, img); }

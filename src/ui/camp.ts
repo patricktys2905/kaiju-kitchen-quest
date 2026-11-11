@@ -29,6 +29,8 @@ import { fsButton } from './title';
 import { STARS_FOR_SECRET, challengesFor } from '../sim/challenges';
 import { GEAR } from '../sim/gear';
 import { bossWeaponFor } from '../sim/bossgearData';
+import { dropName } from '../sim/drops';
+import type { MobKind } from '../sim/types';
 import { isMuted, sfx, toggleMute } from '../audio';
 
 type Tab = 'map' | 'free' | 'hero' | 'skills' | 'bag' | 'market' | 'boxes' | 'quests';
@@ -64,13 +66,13 @@ let bagTab: BagTab = 'weapon';
 let selItem: number | null = null;
 let selStage: string | null = null;
 let selConsumable: ConsumableId | null = null;
-let onPlay: (stageId: string) => void = () => {};
+let onPlay: (stageId: string, skip?: boolean) => void = () => {};
 let onOnline: () => void = () => {};
 let flash = '';
 let useSafety = true;
 let bagMine = true;
 
-export function initCamp(play: (stageId: string) => void, online: () => void = () => {}): void {
+export function initCamp(play: (stageId: string, skip?: boolean) => void, online: () => void = () => {}): void {
   onPlay = play; onOnline = online;
   const st = document.createElement('style');
   st.textContent = UI_CSS + CAMP_CSS;
@@ -190,7 +192,7 @@ function mapPage(): string {
       <div class="lv">Monsters Lv ${lv(sel.lv[0])}${sel.lv[1] !== sel.lv[0] ? '–' + lv(sel.lv[1]) : ''} · <span style="color:${low ? '#ff8a8a' : '#a8f0a8'}">you Lv ${p.level}${low ? ' (low!)' : ''}</span></div>
       <div class="lv">Reward: ${rewardLine(sel)}</div>
       ${sel.boss ? (() => { const bw = bossWeaponFor(WORLDS[sel.world - 1].boss, p.species); return bw ? `<div class="lv" style="color:#ffb347">⚔ Hunts for: <img src="art/${bw.base}.webp" style="height:1.3em;vertical-align:middle"> ${bw.name} <small>(${bw.skill}${(save.bwPity?.[bw.base] ?? 0) ? `, ${save.bwPity![bw.base]}/4 clears without it` : ''})</small></div>` : ''; })() : ''}
-      ${sel.maps ? `<div class="lv" style="color:#ff9a6a">☠ Boss room: ${sel.id.endsWith('-5') && sel.world <= 5 && nemesisOf(p.species) ? MOB_DEFS[nemesisOf(p.species)!].name : sel.maps[sel.maps.length - 1].name} · 3 zones to clear first</div>` : ''}
+      ${sel.maps ? `<div class="lv" style="color:#ff9a6a">☠ Boss room: ${sel.id.endsWith('-5') && sel.world <= 5 && nemesisOf(p.species) ? MOB_DEFS[nemesisOf(p.species)!].name : sel.maps[sel.maps.length - 1].name}</div><div class="lv dropreq">${sel.maps.filter(m => m.goal?.kind === 'collect').map((m, i) => { const g = m.goal as { mob: MobKind; need: number }, have = save.drops?.[g.mob] ?? 0; return `<span class="${have >= g.need ? 'ok' : ''}"><img src="art/drop-${g.mob}.webp" onerror="this.style.display='none'"> Map ${i + 1} exit: ${g.need} ${dropName(g.mob)} <small>(${MOB_DEFS[g.mob].name}) · you have ${have}</small></span>`; }).join('')}</div>` : ''}
       ${sel.objective ? `<div class="lv" style="color:#ffd27a">${({ escort: '🧁 Escort the lost Crumblet', fetch: `📜 Grab the Recipe Scroll in ${sel.objective.t}s`, survive: `⏱ Hold out for ${sel.objective.t}s` })[sel.objective.kind]} · bonus box</div>` : ''}
       ${STORIES[p.species]?.variants[sel.id] ? (() => { const v = VARIANT_INFO[STORIES[p.species].variants[sel.id]]; return `<div class="lv vtx">${v.icon} Story twist: <b>${v.name}</b> — ${v.desc}</div>`; })() : ''}
       <div class="lv story">📖 ${STORIES[p.species]?.title ?? ''}${beatBefore(sel.id, sel.id === '1-1').some(b => p.seen.includes(b)) || (sel.boss && p.seen.includes(`w${sel.world}-after`)) ? ` <button class="mini" data-replay="${sel.id}" title="Replay this stage's scenes">↻</button>` : ''} <button class="mini" data-act="storymode" title="Story scenes: every stage, or only the big ones">${save.storyMode === 'key' ? 'Key scenes' : 'All scenes'}</button></div>
@@ -198,7 +200,7 @@ function mapPage(): string {
       ${challengesFor(sel.id).length ? `<div class="lv chal">${challengesFor(sel.id).map(c => { const ok = (save.challenges?.[sel.id] ?? []).includes(c.id); return `<span class="${ok ? 'ok' : ''}" title="${c.desc}">${ok ? '★' : '☆'} ${c.name}: <small>${c.desc}</small></span>`; }).join('')}<small class="stars">World stars ${worldStars(sel.world)}/${STARS_FOR_SECRET} opens the secret stage</small></div>` : ''}
       ${(save.keys ?? []).includes(sel.world) ? (() => { const b = BONUS_STAGES[sel.world - 1]; return `<button class="pill big secret" data-play="${b.id}">🗝 ${b.name} <small>Lv ${b.lv[0]}–${b.lv[1]}</small></button>`; })() : sel.id.endsWith('-7') ? '<div class="lv" style="color:#ffd27a">🗝 A secret chest here hides this world\'s key</div>' : ''}
       <div class="lv buddy">🤝 Buddy <button class="pill" data-act="buddy">${save.buddy != null && save.buddy !== p.species && save.unlocked.includes(save.buddy) ? `<img src="art/kaiju-${save.buddy}.webp"> ${CLASSES.find(c => c.species === save.buddy)!.name}` : 'None'} ▸</button></div>
-      <div class="playrow"><button class="pill go big" data-play="${sel.id}" ${stageUnlocked(sel) ? '' : 'disabled'}>${stageUnlocked(sel) ? '▶ PLAY' : '🔒 LOCKED'}</button><button class="pill online" data-act="online">🌐 ONLINE</button></div>
+      <div class="playrow"><button class="pill go big" data-play="${sel.id}" ${stageUnlocked(sel) ? '' : 'disabled'}>${stageUnlocked(sel) ? '▶ PLAY' : '🔒 LOCKED'}</button><button class="pill online" data-act="online">🌐 ONLINE</button>${sel.maps && stageUnlocked(sel) && canSkip(sel) ? `<button class="pill skip" data-skip="${sel.id}" title="Hand in the drops for every map's exit and start in the boss room">⚡ SKIP TO BOSS</button>` : ''}</div>
       ${(() => {
         const mode = save.nightmare && nightmareOk ? 'nm' : save.hard ? 'hard' : 'normal';
         return `<div class="diff"><button class="${mode === 'normal' ? 'on' : ''}" data-act="diff-normal">Normal</button><button class="${mode === 'hard' ? 'on' : ''} ${hardOk ? '' : 'locked'}" data-act="diff-hard">${hardOk ? '' : '🔒 '}Hard</button><button class="nmb ${mode === 'nm' ? 'on' : ''} ${nightmareOk ? '' : 'locked'}" data-act="diff-nm">${nightmareOk ? '💀' : '🔒'} Nightmare</button></div>`
@@ -328,7 +330,7 @@ function sortedBag(slot: Slot): Item[] {
 }
 
 function bagPage(): string {
-  const counts: Record<BagTab, number> = { weapon: 0, armor: 0, charm: 0, items: Object.values(save.items).reduce((a, b) => a + (b ?? 0), 0) };
+  const counts: Record<BagTab, number> = { weapon: 0, armor: 0, charm: 0, items: Object.values(save.items).reduce((a, b) => a + (b ?? 0), 0) + Object.values(save.drops ?? {}).reduce((a: number, b) => a + (b ?? 0), 0) };
   for (const it of save.bag) counts[BASES[it.base].slot]++;
   const sub = `<div class="subtabs">${(['weapon', 'armor', 'charm', 'items'] as BagTab[]).map(t => `<button class="${bagTab === t ? 'on' : ''}" data-bag="${t}">${t === 'items' ? 'Items' : SLOT_NAMES[t as Slot] + 's'} <small>${counts[t]}</small></button>`).join('')}
     <label class="mine"><input type="checkbox" data-act="mine" ${bagMine ? 'checked' : ''}> Only ${CLASSES.find(c => c.species === save.selected)!.name}'s gear</label>
@@ -342,11 +344,19 @@ function bagPage(): string {
     ${sel ? detail(sel, false) : ''}</div>` : `<div class="empty">No ${SLOT_NAMES[bagTab].toLowerCase()}s yet. Open boxes or visit the Market!</div>`);
 }
 
+/** Monster drops in the bag (map exits take them; a stage's full set skips it to the boss). */
+function dropsHtml(): string {
+  const d = Object.entries(save.drops ?? {}).filter(([, n]) => (n ?? 0) > 0) as [MobKind, number][];
+  return `<div class="h3" style="margin-top:1.6vmin">Monster drops <small style="color:#b8a8b8;font-family:Nunito;font-size:1.8vmin">map exits ask for them · a stage's whole set skips it to the boss</small></div>${d.length ? `<div class="dlist">${d.map(([k, n]) => `<span><img src="art/drop-${k}.webp" onerror="this.style.visibility='hidden'"><b>${dropName(k)} ×${n}</b><small>${MOB_DEFS[k].name}</small></span>`).join('')}</div>` : '<div class="empty">None yet: monsters drop them in stages.</div>'}`;
+}
+/** Do you hold every map exit's drops for this stage? */
+function canSkip(s: StageDef): boolean { return !!s.maps && s.maps.every(m => m.goal?.kind !== 'collect' || (save.drops?.[m.goal.mob] ?? 0) >= m.goal.need) && s.maps.some(m => m.goal?.kind === 'collect'); }
 function itemsTab(): string {
   const owned = (Object.keys(CONSUMABLES) as ConsumableId[]).filter(id => (save.items[id] ?? 0) > 0);
   return `<div class="h3">Quick bag <small style="color:#b8a8b8;font-family:Nunito;font-size:1.8vmin">4 slots you can tap in stages (keys 1-4). Pick an item, then tap a slot.</small></div>
     <div class="qslots">${Array.from({ length: QUICK_SLOTS }, (_, i) => { const id = save.quick[i]; return `<button class="qs ${selConsumable ? 'pick' : ''}" data-qslot="${i}">${id ? `<img src="${cIcon(id)}"><b>${save.items[id] ?? 0}</b>` : '<span>empty</span>'}<i>${i + 1}</i></button>`; }).join('')}</div>
     <div class="h3" style="margin-top:1.6vmin">Items</div>
+    ${dropsHtml()}
     ${owned.length ? `<div class="clist">${owned.map(id => { const c = CONSUMABLES[id]; return `<button class="citem ${selConsumable === id ? 'on' : ''}" data-cons="${id}"><img src="${cIcon(id)}"><div><b>${c.name} ×${save.items[id]}</b><span>${c.desc}</span><span class="${c.quick ? 'ok' : 'cmp'}">${c.quick ? 'Quick bag item' : id === 'revive' ? 'Works automatically' : 'Use at camp (Hero / Skills)'}</span></div></button>`; }).join('')}</div>` : '<div class="empty">No items. Buy potions at the Market!</div>'}`;
 }
 
@@ -436,6 +446,7 @@ function onClick(e: MouseEvent): void {
   else if (ds.free) { hideCamp(); startFree(ds.free as FreeMode); return; }
   else if (ds.node) selStage = ds.node;
   else if (ds.mappage) { const m = MAPS[Number(ds.mappage)]; selStage = [...STAGES].reverse().find(x => m.worlds.includes(x.world) && stageUnlocked(x))?.id ?? `${m.worlds[0]}-1`; }
+  else if (ds.skip) { const s = stageById(ds.skip); if (stageUnlocked(s) && canSkip(s)) { hideCamp(); onPlay(s.id, true); } return; }
   else if (ds.play) {
     const s = stageById(ds.play);
     if (!stageUnlocked(s)) return;
@@ -750,6 +761,9 @@ const CAMP_CSS = `
 #camp .side .hp u { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 3.6vmin; text-decoration: none; filter: none; }
 .kq .node .vt { position: absolute; left: -1.4vmin; top: -1.6vmin; font-style: normal; font-size: 2.2vmin; }
 .kq .vtx { color: #c8a8ff !important; }
+.kq .lv.dropreq { display: flex; flex-direction: column; gap: 0.3vmin; font-size: 0.9em; } .kq .lv.dropreq span { color: #ffd27a; } .kq .lv.dropreq span.ok { color: #a8f0a8; } .kq .lv.dropreq img { height: 1.4em; vertical-align: middle; }
+.kq .pill.skip { background: linear-gradient(#ffe27a, #ffb347); color: #3a1a08; }
+.kq .dlist { display: grid; grid-template-columns: repeat(auto-fill, minmax(22vmin, 1fr)); gap: 0.8vmin; } .kq .dlist span { display: flex; align-items: center; gap: 0.8vmin; background: #2a1a30; border-radius: 1vmin; padding: 0.6vmin; } .kq .dlist img { width: 5vmin; height: 5vmin; object-fit: contain; } .kq .dlist b { font-size: 1.9vmin; } .kq .dlist small { color: #b8a8c8; font-size: 1.5vmin; margin-left: auto; }
 .kq .lv.chal { display: flex; flex-direction: column; gap: 0.3vmin; font-size: 0.92em; } .kq .lv.chal span { color: #c8b8d8; } .kq .lv.chal span.ok { color: #ffd23c; } .kq .lv.chal small { opacity: 0.85; } .kq .lv.chal small.stars { color: #9fe8ff; }
 .kq .quest .rq { width: 7vmin; height: 7vmin; object-fit: contain; }
 #camp .flashmsg { position: absolute; left: 50%; bottom: 3vmin; transform: translateX(-50%); background: #3a2448f0; border: 2px solid #ffd27a; border-radius: 2vmin; padding: 1vmin 2.4vmin; font-size: 2.4vmin; animation: tst 2.4s forwards; pointer-events: none; z-index: 5; }

@@ -39,6 +39,8 @@ export interface Save {
   spicy?: Spicy[];
   /** World Keys found in secret chests (open that world's secret bonus stage) */
   keys?: number[];
+  /** monster drops in your bag (kind -> count): map exits take them; enough skip a stage to its boss */
+  drops?: Partial<Record<string, number>>;
   /** boss weapon pity: clears since that boss last dropped its weapon for that kaiju (base id -> misses) */
   bwPity?: Record<string, number>;
   /** stage challenges done (stage id -> challenge ids); shared by every kaiju */

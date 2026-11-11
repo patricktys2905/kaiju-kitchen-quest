@@ -43,23 +43,21 @@ export class Bot {
   /** Map stages: which portal to take, or which cage / nest to smash. Null = fight / explore as usual. */
   private mapNav(h: Hero, inp: Input, pulse: boolean, alive: Mob[]): Input | null {
     const w = this.w, maps = w.stage.maps!, mi = w.mapAt(h.x), m = maps[mi];
-    if (!m || h.state === 'climb') return null;
+    if (!m || h.state === 'climb' || m.kind === 'boss') return null;
+    const near = alive.some(o => Math.abs(o.x - h.x) < 180 && Math.abs(o.y - h.y) < 30); // only something right in its face interrupts an errand
+    if (near) return null;
     const enter = (px: number): Input => {
       if (Math.abs(px - h.x) > 24) { inp[px > h.x ? 'right' : 'left'] = true; return inp; }
       if (h.ground) inp.up = pulse;
       return inp;
     };
-    const near = alive.some(o => Math.abs(o.x - h.x) < 180 && Math.abs(o.y - h.y) < 30); // only something right in its face interrupts an errand
-    if (m.kind === 'hub') {
-      const p = w.doorOpen ? m.portals.find(q => q.boss) : m.portals.find(q => !q.boss && !w.zones2[q.to].done);
-      return p ? enter(p.x) : null;
-    }
-    if (m.kind === 'zone' && w.zones2[mi].done && !near) return enter(m.portals[0].x);
-    if (m.kind === 'zone' && !near && m.goal && (m.goal.kind === 'rescue' || m.goal.kind === 'nests')) {
-      const kind = m.goal.kind === 'rescue' ? 'cage' : 'nest';
-      const p = w.props.filter(q => q.kind === kind && q.hp > 0 && w.mapAt(q.x) === mi).sort((a, b) => Math.abs(a.x - h.x) - Math.abs(b.x - h.x))[0];
-      if (p && !w.gates.some(g => !g.open && (g.x - h.x) * (p.x - g.x) > 0)) return this.goTo(p.x, p.y, h, inp, pulse); // (a shut gate in the way: its lever first)
-    }
+    // enough of the map's drop: head for the exit (a shut gate on the way: its lever first)
+    const g = m.goal, exit = m.portals.find(p => p.need) ?? m.portals[0];
+    const ready = !g || g.kind !== 'collect' || w.zones2[mi].done || (w.drops[g.mob] ?? 0) >= g.need;
+    if (ready && exit && !w.gates.some(gt => !gt.open && (gt.x - h.x) * (exit.x - gt.x) > 0) && (!w.scroll || w.scroll.got || w.mapAt(w.scroll.x) !== mi) && w.holdout <= 0) return enter(exit.x);
+    // drops lying around: pick them up
+    const q = w.pickups.filter(p => w.mapAt(p.x) === mi && Math.abs(p.x - h.x) < 700).sort((u, v) => Math.abs(u.x - h.x) - Math.abs(v.x - h.x))[0];
+    if (q) { inp[q.x > h.x ? 'right' : 'left'] = Math.abs(q.x - h.x) > 10; return inp; }
     return null;
   }
 

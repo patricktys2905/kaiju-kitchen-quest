@@ -1,0 +1,498 @@
+[
+ {
+  "name": "drop-bun",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/c-bean.png"
+  ],
+  "prompt": "Generate an image. The reference is an item icon from my cute 2D kitchen action RPG. Draw a NEW ITEM icon, a monster drop called \"Mouldy Crust\": a chunk of bread crust with fuzzy green mould spots. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute). A small collectible item icon, shown centred, filling about 75% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "drop-worm",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/c-bean.png"
+  ],
+  "prompt": "Generate an image. The reference is an item icon from my cute 2D kitchen action RPG. Draw a NEW ITEM icon, a monster drop called \"Sour Gummy Tail\": the striped tail end of a sugar-dusted sour gummy worm. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute). A small collectible item icon, shown centred, filling about 75% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "drop-ant",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/c-bean.png"
+  ],
+  "prompt": "Generate an image. The reference is an item icon from my cute 2D kitchen action RPG. Draw a NEW ITEM icon, a monster drop called \"Sugar Cube\": a sparkly white sugar cube. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute). A small collectible item icon, shown centred, filling about 75% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "drop-pepper",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/c-bean.png"
+  ],
+  "prompt": "Generate an image. The reference is an item icon from my cute 2D kitchen action RPG. Draw a NEW ITEM icon, a monster drop called \"Pepper Seed\": a few shiny red chilli pepper seeds. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute). A small collectible item icon, shown centred, filling about 75% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "drop-garlic",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/c-bean.png"
+  ],
+  "prompt": "Generate an image. The reference is an item icon from my cute 2D kitchen action RPG. Draw a NEW ITEM icon, a monster drop called \"Garlic Clove\": a single plump garlic clove. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute). A small collectible item icon, shown centred, filling about 75% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "drop-egg",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/c-bean.png"
+  ],
+  "prompt": "Generate an image. The reference is an item icon from my cute 2D kitchen action RPG. Draw a NEW ITEM icon, a monster drop called \"Rotten Yolk\": a wobbly greenish egg yolk. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute). A small collectible item icon, shown centred, filling about 75% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "drop-pea",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/c-bean.png"
+  ],
+  "prompt": "Generate an image. The reference is an item icon from my cute 2D kitchen action RPG. Draw a NEW ITEM icon, a monster drop called \"Frozen Pea\": a frosty green pea with ice crystals. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute). A small collectible item icon, shown centred, filling about 75% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "drop-yogurt",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/c-bean.png"
+  ],
+  "prompt": "Generate an image. The reference is an item icon from my cute 2D kitchen action RPG. Draw a NEW ITEM icon, a monster drop called \"Yogurt Blob\": a dollop of pink yogurt. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute). A small collectible item icon, shown centred, filling about 75% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "drop-milk",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/c-bean.png"
+  ],
+  "prompt": "Generate an image. The reference is an item icon from my cute 2D kitchen action RPG. Draw a NEW ITEM icon, a monster drop called \"Carton Horn\": a little horn made from a folded milk-carton corner. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute). A small collectible item icon, shown centred, filling about 75% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "drop-icebat",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/c-bean.png"
+  ],
+  "prompt": "Generate an image. The reference is an item icon from my cute 2D kitchen action RPG. Draw a NEW ITEM icon, a monster drop called \"Frost Wing\": a small icy blue bat wing. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute). A small collectible item icon, shown centred, filling about 75% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "drop-carrot",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/c-bean.png"
+  ],
+  "prompt": "Generate an image. The reference is an item icon from my cute 2D kitchen action RPG. Draw a NEW ITEM icon, a monster drop called \"Carrot Top\": a leafy green carrot top. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute). A small collectible item icon, shown centred, filling about 75% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "drop-pickle",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/c-bean.png"
+  ],
+  "prompt": "Generate an image. The reference is an item icon from my cute 2D kitchen action RPG. Draw a NEW ITEM icon, a monster drop called \"Pickle Brine\": a tiny corked bottle of green pickle brine. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute). A small collectible item icon, shown centred, filling about 75% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "drop-jelly",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/c-bean.png"
+  ],
+  "prompt": "Generate an image. The reference is an item icon from my cute 2D kitchen action RPG. Draw a NEW ITEM icon, a monster drop called \"Jelly Wobble\": a wobbly cube of lime jelly. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute). A small collectible item icon, shown centred, filling about 75% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "drop-bacon",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/c-bean.png"
+  ],
+  "prompt": "Generate an image. The reference is an item icon from my cute 2D kitchen action RPG. Draw a NEW ITEM icon, a monster drop called \"Bacon Strip\": a crispy curly bacon strip. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute). A small collectible item icon, shown centred, filling about 75% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "drop-popcorn",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/c-bean.png"
+  ],
+  "prompt": "Generate an image. The reference is an item icon from my cute 2D kitchen action RPG. Draw a NEW ITEM icon, a monster drop called \"Popped Kernel\": a fluffy popped popcorn kernel. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute). A small collectible item icon, shown centred, filling about 75% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "drop-sausage",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/c-bean.png"
+  ],
+  "prompt": "Generate an image. The reference is an item icon from my cute 2D kitchen action RPG. Draw a NEW ITEM icon, a monster drop called \"Sausage Link\": a short sizzling sausage link. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute). A small collectible item icon, shown centred, filling about 75% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "drop-imp",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/c-bean.png"
+  ],
+  "prompt": "Generate an image. The reference is an item icon from my cute 2D kitchen action RPG. Draw a NEW ITEM icon, a monster drop called \"Hot Sauce Drop\": a glowing red drop of hot sauce. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute). A small collectible item icon, shown centred, filling about 75% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "drop-kettle",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/c-bean.png"
+  ],
+  "prompt": "Generate an image. The reference is an item icon from my cute 2D kitchen action RPG. Draw a NEW ITEM icon, a monster drop called \"Kettle Whistle\": a little brass kettle whistle. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute). A small collectible item icon, shown centred, filling about 75% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "drop-meatball",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/c-bean.png"
+  ],
+  "prompt": "Generate an image. The reference is an item icon from my cute 2D kitchen action RPG. Draw a NEW ITEM icon, a monster drop called \"Meatball Crumb\": a small saucy meatball. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute). A small collectible item icon, shown centred, filling about 75% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "drop-marsh",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/c-bean.png"
+  ],
+  "prompt": "Generate an image. The reference is an item icon from my cute 2D kitchen action RPG. Draw a NEW ITEM icon, a monster drop called \"Toasty Marshmallow\": a golden toasted marshmallow. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute). A small collectible item icon, shown centred, filling about 75% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "drop-cheerio",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/c-bean.png"
+  ],
+  "prompt": "Generate an image. The reference is an item icon from my cute 2D kitchen action RPG. Draw a NEW ITEM icon, a monster drop called \"Cheerio Ring\": a single golden cereal ring. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute). A small collectible item icon, shown centred, filling about 75% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "drop-flour",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/c-bean.png"
+  ],
+  "prompt": "Generate an image. The reference is an item icon from my cute 2D kitchen action RPG. Draw a NEW ITEM icon, a monster drop called \"Flour Puff\": a soft puff of white flour in a tiny paper twist. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute). A small collectible item icon, shown centred, filling about 75% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "drop-noodle",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/c-bean.png"
+  ],
+  "prompt": "Generate an image. The reference is an item icon from my cute 2D kitchen action RPG. Draw a NEW ITEM icon, a monster drop called \"Dry Noodle\": a small bundle of dry spaghetti. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute). A small collectible item icon, shown centred, filling about 75% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "drop-can",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/c-bean.png"
+  ],
+  "prompt": "Generate an image. The reference is an item icon from my cute 2D kitchen action RPG. Draw a NEW ITEM icon, a monster drop called \"Can Tab\": a shiny bent soda-can pull tab. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute). A small collectible item icon, shown centred, filling about 75% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "drop-raisin",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/c-bean.png"
+  ],
+  "prompt": "Generate an image. The reference is an item icon from my cute 2D kitchen action RPG. Draw a NEW ITEM icon, a monster drop called \"Raisin\": a wrinkly purple raisin. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute). A small collectible item icon, shown centred, filling about 75% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "drop-soda",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/c-bean.png"
+  ],
+  "prompt": "Generate an image. The reference is an item icon from my cute 2D kitchen action RPG. Draw a NEW ITEM icon, a monster drop called \"Fizz Crystal\": a white crystal of baking soda, fizzing. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute). A small collectible item icon, shown centred, filling about 75% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "drop-plate",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/c-bean.png"
+  ],
+  "prompt": "Generate an image. The reference is an item icon from my cute 2D kitchen action RPG. Draw a NEW ITEM icon, a monster drop called \"Plate Shard\": a curved piece of a white china plate with a blue rim. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute). A small collectible item icon, shown centred, filling about 75% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "drop-bubble",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/c-bean.png"
+  ],
+  "prompt": "Generate an image. The reference is an item icon from my cute 2D kitchen action RPG. Draw a NEW ITEM icon, a monster drop called \"Soap Bubble\": a rainbow soap bubble in a little ring. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute). A small collectible item icon, shown centred, filling about 75% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "drop-mug",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/c-bean.png"
+  ],
+  "prompt": "Generate an image. The reference is an item icon from my cute 2D kitchen action RPG. Draw a NEW ITEM icon, a monster drop called \"Mug Handle\": a broken-off mug handle. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute). A small collectible item icon, shown centred, filling about 75% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "drop-eel",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/c-bean.png"
+  ],
+  "prompt": "Generate an image. The reference is an item icon from my cute 2D kitchen action RPG. Draw a NEW ITEM icon, a monster drop called \"Drain Eel Fin\": a slimy grey eel fin. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute). A small collectible item icon, shown centred, filling about 75% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "drop-glove",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/c-bean.png"
+  ],
+  "prompt": "Generate an image. The reference is an item icon from my cute 2D kitchen action RPG. Draw a NEW ITEM icon, a monster drop called \"Rubber Finger\": the yellow fingertip of a rubber kitchen glove. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute). A small collectible item icon, shown centred, filling about 75% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "drop-scrub",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/c-bean.png"
+  ],
+  "prompt": "Generate an image. The reference is an item icon from my cute 2D kitchen action RPG. Draw a NEW ITEM icon, a monster drop called \"Steel Wool Tuft\": a curly tuft of steel wool. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute). A small collectible item icon, shown centred, filling about 75% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "drop-fork",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/c-bean.png"
+  ],
+  "prompt": "Generate an image. The reference is an item icon from my cute 2D kitchen action RPG. Draw a NEW ITEM icon, a monster drop called \"Fork Prong\": a single bent silver fork prong. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute). A small collectible item icon, shown centred, filling about 75% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "drop-napkin",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/c-bean.png"
+  ],
+  "prompt": "Generate an image. The reference is an item icon from my cute 2D kitchen action RPG. Draw a NEW ITEM icon, a monster drop called \"Napkin Scrap\": a folded lace napkin scrap. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute). A small collectible item icon, shown centred, filling about 75% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "drop-candle",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/c-bean.png"
+  ],
+  "prompt": "Generate an image. The reference is an item icon from my cute 2D kitchen action RPG. Draw a NEW ITEM icon, a monster drop called \"Candle Wax\": a drip of warm candle wax. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute). A small collectible item icon, shown centred, filling about 75% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "drop-gravy",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/c-bean.png"
+  ],
+  "prompt": "Generate an image. The reference is an item icon from my cute 2D kitchen action RPG. Draw a NEW ITEM icon, a monster drop called \"Gravy Drop\": a glossy brown gravy droplet. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute). A small collectible item icon, shown centred, filling about 75% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "drop-teapot",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/c-bean.png"
+  ],
+  "prompt": "Generate an image. The reference is an item icon from my cute 2D kitchen action RPG. Draw a NEW ITEM icon, a monster drop called \"Tea Leaf\": a curled green tea leaf. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute). A small collectible item icon, shown centred, filling about 75% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "drop-roast",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/c-bean.png"
+  ],
+  "prompt": "Generate an image. The reference is an item icon from my cute 2D kitchen action RPG. Draw a NEW ITEM icon, a monster drop called \"Roast Crackling\": a crunchy piece of roast crackling. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute). A small collectible item icon, shown centred, filling about 75% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "drop-beetle",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/c-bean.png"
+  ],
+  "prompt": "Generate an image. The reference is an item icon from my cute 2D kitchen action RPG. Draw a NEW ITEM icon, a monster drop called \"Kebab Shell\": a shiny grilled beetle shell plate. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute). A small collectible item icon, shown centred, filling about 75% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "drop-wasp",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/c-bean.png"
+  ],
+  "prompt": "Generate an image. The reference is an item icon from my cute 2D kitchen action RPG. Draw a NEW ITEM icon, a monster drop called \"Wasp Stinger\": a striped yellow-black wasp stinger. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute). A small collectible item icon, shown centred, filling about 75% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "drop-ketchup",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/c-bean.png"
+  ],
+  "prompt": "Generate an image. The reference is an item icon from my cute 2D kitchen action RPG. Draw a NEW ITEM icon, a monster drop called \"Ketchup Cap\": a red ketchup bottle cap. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute). A small collectible item icon, shown centred, filling about 75% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "drop-charcoal",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/c-bean.png"
+  ],
+  "prompt": "Generate an image. The reference is an item icon from my cute 2D kitchen action RPG. Draw a NEW ITEM icon, a monster drop called \"Charcoal Chunk\": a glowing charcoal briquette. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute). A small collectible item icon, shown centred, filling about 75% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "drop-corn",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/c-bean.png"
+  ],
+  "prompt": "Generate an image. The reference is an item icon from my cute 2D kitchen action RPG. Draw a NEW ITEM icon, a monster drop called \"Corn Kernel\": a buttery yellow corn kernel. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute). A small collectible item icon, shown centred, filling about 75% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "drop-patty",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/c-bean.png"
+  ],
+  "prompt": "Generate an image. The reference is an item icon from my cute 2D kitchen action RPG. Draw a NEW ITEM icon, a monster drop called \"Bun Top\": a sesame-seed burger bun top. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute). A small collectible item icon, shown centred, filling about 75% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "drop-snail",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/c-bean.png"
+  ],
+  "prompt": "Generate an image. The reference is an item icon from my cute 2D kitchen action RPG. Draw a NEW ITEM icon, a monster drop called \"Lettuce Leaf\": a crisp green lettuce leaf. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute). A small collectible item icon, shown centred, filling about 75% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "drop-ladybug",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/c-bean.png"
+  ],
+  "prompt": "Generate an image. The reference is an item icon from my cute 2D kitchen action RPG. Draw a NEW ITEM icon, a monster drop called \"Ladybug Spot\": a red shell piece with a black spot. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute). A small collectible item icon, shown centred, filling about 75% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "drop-peapod",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/c-bean.png"
+  ],
+  "prompt": "Generate an image. The reference is an item icon from my cute 2D kitchen action RPG. Draw a NEW ITEM icon, a monster drop called \"Pea Pod\": an empty green pea pod. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute). A small collectible item icon, shown centred, filling about 75% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "drop-mole",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/c-bean.png"
+  ],
+  "prompt": "Generate an image. The reference is an item icon from my cute 2D kitchen action RPG. Draw a NEW ITEM icon, a monster drop called \"Potato Peel\": a curly potato peel. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute). A small collectible item icon, shown centred, filling about 75% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "drop-tomato",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/c-bean.png"
+  ],
+  "prompt": "Generate an image. The reference is an item icon from my cute 2D kitchen action RPG. Draw a NEW ITEM icon, a monster drop called \"Tomato Slice\": a juicy tomato slice. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute). A small collectible item icon, shown centred, filling about 75% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "drop-radish",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/c-bean.png"
+  ],
+  "prompt": "Generate an image. The reference is an item icon from my cute 2D kitchen action RPG. Draw a NEW ITEM icon, a monster drop called \"Radish Root\": a little red radish with its root. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute). A small collectible item icon, shown centred, filling about 75% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "drop-pumpkin",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/c-bean.png"
+  ],
+  "prompt": "Generate an image. The reference is an item icon from my cute 2D kitchen action RPG. Draw a NEW ITEM icon, a monster drop called \"Pumpkin Seed\": a flat cream pumpkin seed. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute). A small collectible item icon, shown centred, filling about 75% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "drop-trolley",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/c-bean.png"
+  ],
+  "prompt": "Generate an image. The reference is an item icon from my cute 2D kitchen action RPG. Draw a NEW ITEM icon, a monster drop called \"Trolley Wheel\": a tiny grey trolley wheel. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute). A small collectible item icon, shown centred, filling about 75% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "drop-bag",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/c-bean.png"
+  ],
+  "prompt": "Generate an image. The reference is an item icon from my cute 2D kitchen action RPG. Draw a NEW ITEM icon, a monster drop called \"Bag Handle\": a plastic shopping-bag handle loop. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute). A small collectible item icon, shown centred, filling about 75% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "drop-banana",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/c-bean.png"
+  ],
+  "prompt": "Generate an image. The reference is an item icon from my cute 2D kitchen action RPG. Draw a NEW ITEM icon, a monster drop called \"Banana Peel\": a spotty banana peel. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute). A small collectible item icon, shown centred, filling about 75% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "drop-scanner",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/c-bean.png"
+  ],
+  "prompt": "Generate an image. The reference is an item icon from my cute 2D kitchen action RPG. Draw a NEW ITEM icon, a monster drop called \"Barcode Sticker\": a small barcode sticker (no readable numbers). Same style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute). A small collectible item icon, shown centred, filling about 75% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "drop-can2",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/c-bean.png"
+  ],
+  "prompt": "Generate an image. The reference is an item icon from my cute 2D kitchen action RPG. Draw a NEW ITEM icon, a monster drop called \"Can Lid\": a round dented tin-can lid. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute). A small collectible item icon, shown centred, filling about 75% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "drop-melon",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/c-bean.png"
+  ],
+  "prompt": "Generate an image. The reference is an item icon from my cute 2D kitchen action RPG. Draw a NEW ITEM icon, a monster drop called \"Melon Seed\": a shiny black watermelon seed. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute). A small collectible item icon, shown centred, filling about 75% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "drop-cherrysoldier",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/c-bean.png"
+  ],
+  "prompt": "Generate an image. The reference is an item icon from my cute 2D kitchen action RPG. Draw a NEW ITEM icon, a monster drop called \"Candied Cherry\": a glossy red candied cherry. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute). A small collectible item icon, shown centred, filling about 75% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "drop-peel",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/c-bean.png"
+  ],
+  "prompt": "Generate an image. The reference is an item icon from my cute 2D kitchen action RPG. Draw a NEW ITEM icon, a monster drop called \"Candied Peel\": a strip of orange candied peel. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute). A small collectible item icon, shown centred, filling about 75% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "drop-fruitknight",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/c-bean.png"
+  ],
+  "prompt": "Generate an image. The reference is an item icon from my cute 2D kitchen action RPG. Draw a NEW ITEM icon, a monster drop called \"Fruitcake Chunk\": a chunk of dark fruitcake. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute). A small collectible item icon, shown centred, filling about 75% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "drop-mimic",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/c-bean.png"
+  ],
+  "prompt": "Generate an image. The reference is an item icon from my cute 2D kitchen action RPG. Draw a NEW ITEM icon, a monster drop called \"Lunchbox Latch\": a blue plastic lunchbox latch. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute). A small collectible item icon, shown centred, filling about 75% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "drop-cereal",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/c-bean.png"
+  ],
+  "prompt": "Generate an image. The reference is an item icon from my cute 2D kitchen action RPG. Draw a NEW ITEM icon, a monster drop called \"Cereal Prize\": a tiny toy prize from a cereal box. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute). A small collectible item icon, shown centred, filling about 75% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ }
+]

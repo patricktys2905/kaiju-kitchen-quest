@@ -32,7 +32,7 @@ describe('boss signature weapons', () => {
       p.equip.weapon = rollItem(1, 5, 40, () => 0.5, [], bw.species, bw.base, 4);
       const d = derive(p);
       expect(gearOf(p.equip.weapon)!.style, bw.base).toBe(style);
-      const w = new World({ ...st, mobs: [], arenas: [], hazards: [], props: [], cookers: [], maps: undefined, objective: undefined, gates: undefined, chase: undefined }, d, 3);
+      const w = new World({ ...st, mobs: [], arenas: [], hazards: [], props: [], cookers: [], platforms: [], ladders: [], maps: undefined, objective: undefined, gates: undefined, chase: undefined }, d, 3);
       w.hero.x = 600; w.hero.face = 1;
       const mobs = [w.spawnMob('egg', 700, 20), w.spawnMob('egg', 800, 20), w.spawnMob('egg', 520, 20)];
       for (const m of mobs) m.hp = m.maxHp = 1e7;
