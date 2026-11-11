@@ -410,11 +410,11 @@ describe('art', () => {
 });
 
 describe('kaiju-specific gear', () => {
-  it('weapons always belong to one kaiju, every kaiju has 3 weapon tiers and an armor, charms are for everyone', async () => {
+  it('weapons always belong to one kaiju, every kaiju has 5 weapon tiers and an armor, charms are for everyone', async () => {
     const { OWNERS, canWear, rollBase } = await import('../src/sim/items');
     for (const c of CLASSES) {
       const ws = Object.values(BASES).filter(b => b.slot === 'weapon' && b.for === c.species);
-      expect(ws.map(w => w.tier).sort(), c.name).toEqual([1, 1, 2, 2, 3]); // 3 tiers + an extra weapon type at tiers 1 and 2
+      expect(ws.map(w => w.tier).sort(), c.name).toEqual([1, 1, 2, 2, 3, 4, 5]); // 5 tiers + an extra weapon type at tiers 1 and 2
       expect(Object.values(BASES).some(b => b.slot === 'armor' && b.for === c.species), c.name).toBe(true);
     }
     expect(OWNERS.length).toBe(CLASSES.length);

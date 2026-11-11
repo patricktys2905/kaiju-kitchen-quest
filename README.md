@@ -289,3 +289,15 @@ were thrown from (`Shot.fromY`) and fall through ledges above it, so they land a
 8 more armour/charm effects in PROCS (Meringue Guard, Popcorn Burst, Syrup Slide, Pepper Breath, Second Scoop, Quick Draw,
 Snack Bite, Crumb Magnet; tests/procs2.test.ts), a kaiju armour each with a built-in effect (`a-<ref>x`, item level 6+) and 8
 charms with a built-in effect (`BaseDef.proc`). Icons: `node scripts/gear2-jobs.mjs`.
+
+## Skill trees (src/sim/tree.ts)
+Each kaiju has 3 paths × 7 rows (stat, stat, NEW SKILL at 5 points, stat, an upgrade to an original skill at 10, a capstone at 15,
+a 10-rank mastery at 18): 84 points, more than a Lv 110 kaiju earns, so you choose. New skills reuse proven skill templates
+with their own numbers. 3 skill buttons: pick from the 3 originals + learned tree skills (HeroProfile.loadout, Skills tab →
+⚔ SKILLS). Recipe Scroll refunds tree points. Monsters grow `TUNE.treeRamp` per level past 20 to absorb the extra power.
+Tests: tests/tree.test.ts; screen: `node scripts/tree-shot.mjs`.
+
+## Late-game gear tiers
+Every kaiju has weapon and armour tiers 4 (item level 40) and 5 (item level 75): BASES `w-<ref>4/5`, `a-<ref>4/5`, part of
+the kaiju's signature set, each weapon with its own gear skill (gear.ts). TIER_LV = [0, 6, 14, 40, 75]. Icons:
+`node scripts/gear3-jobs.mjs` then `sh scripts/gem-batch.sh art-src/jobs-gear3.json shots/gem-gear3.log`. Tests: tests/gear-late.test.ts.

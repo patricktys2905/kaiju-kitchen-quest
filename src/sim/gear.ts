@@ -126,6 +126,27 @@ export const GEAR: Record<string, GearSkill> = {
   'w-blobb': { name: 'Gummy Boomerang', style: 'boomerang', fx: 'heal' },
   'w-fisha': { name: 'Hook Boomerang', style: 'boomerang', fx: 'pull' },
   'w-fishb': { name: 'Roe Trap', style: 'trap', fx: 'launch' },
+  // late-game tiers 4 / 5
+  'w-gob4': { name: 'Thorn Lash', style: 'boomerang', fx: 'pull' }, 'w-gob5': { name: 'Jam Dragon Drop', style: 'slam', fx: 'burn' },
+  'w-squid4': { name: 'Potion Splash', style: 'lob', fx: 'freeze' }, 'w-squid5': { name: 'Tesla Coil', style: 'trap', fx: 'launch' },
+  'w-crab4': { name: 'Parmesan Pinch', style: 'boomerang', fx: 'glue' }, 'w-crab5': { name: 'Cabbage King Quake', style: 'slam', fx: 'freeze' },
+  'w-blob4': { name: 'Gelatin Snare', style: 'trap', fx: 'glue' }, 'w-blob5': { name: 'Jelly Crown Rain', style: 'rain', fx: 'heal' },
+  'w-moth4': { name: 'Starlight Sprinkle', style: 'rain', fx: 'slow' }, 'w-moth5': { name: 'Moonmallow Nova', style: 'burst', fx: 'heal' },
+  'w-toast4': { name: 'Crouton Flurry', style: 'burst', fx: 'slow' }, 'w-toast5': { name: 'Reaper Toss', style: 'boomerang', fx: 'heal' },
+  'w-dump4': { name: 'Bao Moon Drop', style: 'lob', fx: 'heal' }, 'w-dump5': { name: 'Imperial Wok Spin', style: 'roll', fx: 'burn' },
+  'w-nori4': { name: 'Salmon Slash', style: 'throw', fx: 'slow' }, 'w-nori5': { name: 'Wasabi Dragon Rain', style: 'rain', fx: 'burn' },
+  'w-choco4': { name: 'Brownie Brick Drop', style: 'rain', fx: 'launch' }, 'w-choco5': { name: 'Lava Cake Eruption', style: 'slam', fx: 'burn' },
+  'w-gum4': { name: 'Jawbreaker Bowl', style: 'roll', fx: 'launch' }, 'w-gum5': { name: 'Bubble Barrage', style: 'burst', fx: 'glue' },
+  'w-blue4': { name: 'Berry Bomb Barrage', style: 'burst', fx: 'glue' }, 'w-blue5': { name: 'Golden Muffin Crush', style: 'slam', fx: 'launch' },
+  'w-pizza4': { name: 'Cheese Wheel Run', style: 'roll', fx: 'slow' }, 'w-pizza5': { name: 'Inferno Slice', style: 'throw', fx: 'burn' },
+  'w-slo4': { name: 'Boba Pearl Shot', style: 'throw', fx: 'glue' }, 'w-slo5': { name: 'Dream Pillow Thump', style: 'slam', fx: 'slow' },
+  'w-avo4': { name: 'Nacho Chip Spin', style: 'boomerang', fx: 'burn' }, 'w-avo5': { name: 'Golden Pit Bomb', style: 'lob', fx: 'heal' },
+  'w-fish4': { name: 'Harpoon Hook', style: 'throw', fx: 'pull' }, 'w-fish5': { name: 'River King Wave', style: 'slam', fx: 'freeze' },
+  'w-hog4': { name: 'Kebab Javelin', style: 'throw', fx: 'launch' }, 'w-hog5': { name: 'Flaming Fork Trap', style: 'trap', fx: 'burn' },
+  'w-mint4': { name: 'Mint Shield Roll', style: 'roll', fx: 'freeze' }, 'w-mint5': { name: 'Glacier Scoop Drop', style: 'lob', fx: 'freeze' },
+  'w-peng4': { name: 'Cone Lance Toss', style: 'throw', fx: 'freeze' }, 'w-peng5': { name: 'Blizzard Sundae', style: 'rain', fx: 'freeze' },
+  'w-roo4': { name: 'Fudge Uppercut', style: 'slam', fx: 'launch' }, 'w-roo5': { name: 'Champion Combo', style: 'boomerang', fx: 'pull' },
+  'w-owl4': { name: 'Churro Star Burst', style: 'burst', fx: 'burn' }, 'w-owl5': { name: 'Pinata Thunder', style: 'rain', fx: 'launch' },
 };
 
 /** Gear skill names for a twist: the effect word + the style's noun, e.g. 'Frosty Lob'. */

@@ -44,9 +44,9 @@ export const TWIST_CHANCE = 0.65;
 
 export interface BaseDef { /** a built-in effect (PROCS key) every copy carries */ proc?: string; slot: Slot; name: string; icon: string; main: Line[]; minLv?: number; /** only this kaiju can wear it */ for?: number; tier?: number; /** no longer drops */ retired?: boolean; /** always part of this set */ set?: string }
 /** main = guaranteed stat at ilvl 1 (scaled by ilvl and rarity) */
-const TIER_LV = [0, 6, 14]; // item level each gear tier starts dropping at
-const W = (name: string, icon: string, owner: number, tier: number, main: Line[]): BaseDef => ({ slot: 'weapon', name, icon, main, for: owner, minLv: TIER_LV[tier - 1], tier, set: tier === 3 ? `sig${owner}` : undefined });
-const AR = (name: string, icon: string, owner: number, main: Line[], tier = 1): BaseDef => ({ slot: 'armor', name, icon, main, for: owner, minLv: TIER_LV[tier - 1], tier, set: tier === 3 ? `sig${owner}` : undefined });
+const TIER_LV = [0, 6, 14, 40, 75]; // item level each gear tier starts dropping at
+const W = (name: string, icon: string, owner: number, tier: number, main: Line[]): BaseDef => ({ slot: 'weapon', name, icon, main, for: owner, minLv: TIER_LV[tier - 1], tier, set: tier >= 3 ? `sig${owner}` : undefined });
+const AR = (name: string, icon: string, owner: number, main: Line[], tier = 1): BaseDef => ({ slot: 'armor', name, icon, main, for: owner, minLv: TIER_LV[tier - 1], tier, set: tier >= 3 ? `sig${owner}` : undefined });
 const CH = (name: string, icon: string, owner: number, main: Line[]): BaseDef => ({ slot: 'charm', name, icon, main, for: owner, minLv: 12, set: `sig${owner}` });
 export const BASES: Record<string, BaseDef> = {
   // ----- kaiju weapons: 3 tiers each (tier 2 from item level 6, tier 3 from 14); every drop may roll a twist -----
@@ -201,6 +201,47 @@ export const BASES: Record<string, BaseDef> = {
   salt: { slot: 'charm', name: 'Salt Crystal', icon: 'eq-salt', main: [{ k: 'skillDmg', v: 0.06 }] },
   snow: { slot: 'charm', name: 'Snowflake Charm', icon: 'eq-snow', main: [{ k: 'cdr', v: 0.05 }, { k: 'crit', v: 2 }], minLv: 12 },
   ember: { slot: 'charm', name: 'Ember Chili', icon: 'eq-ember', main: [{ k: 'skillDmg', v: 0.06 }, { k: 'atk', v: 2 }], minLv: 24 },
+  // ----- late-game tiers: weapon and armour tier 4 (item level 40) and tier 5 (75) for every kaiju -----
+  'w-gob4': W('Thorn Vine Flail', 'w-gob4', 0, 4, [{ k: 'atk', v: 7 }, { k: 'str', v: 2 }, { k: 'critDmg', v: 0.12 }]), 'w-gob5': W('Jam Dragon Cleaver', 'w-gob5', 0, 5, [{ k: 'atk', v: 10 }, { k: 'str', v: 4 }, { k: 'critDmg', v: 0.145 }]),
+  'a-gob4': AR('Berry Patch Plate', 'a-gob4', 0, [{ k: 'def', v: 6 }, { k: 'hp', v: 36 }, { k: 'str', v: 2 }], 4), 'a-gob5': AR('Ruby Jam Armour', 'a-gob5', 0, [{ k: 'def', v: 8 }, { k: 'hp', v: 45 }, { k: 'str', v: 4 }], 5),
+  'w-squid4': W('Bubbling Beaker Staff', 'w-squid4', 1, 4, [{ k: 'atk', v: 7 }, { k: 'int', v: 2 }, { k: 'crit', v: 2 }]), 'w-squid5': W('Tentacle Tesla Rod', 'w-squid5', 1, 5, [{ k: 'atk', v: 10 }, { k: 'int', v: 4 }, { k: 'crit', v: 4 }]),
+  'a-squid4': AR('Reef Plate', 'a-squid4', 1, [{ k: 'def', v: 6 }, { k: 'hp', v: 34 }, { k: 'int', v: 2 }], 4), 'a-squid5': AR('Abyssal Lab Armour', 'a-squid5', 1, [{ k: 'def', v: 8 }, { k: 'hp', v: 42 }, { k: 'int', v: 4 }], 5),
+  'w-crab4': W('Parmesan Pincers', 'w-crab4', 2, 4, [{ k: 'atk', v: 7 }, { k: 'vit', v: 2 }, { k: 'def', v: 4 }]), 'w-crab5': W('Cabbage King Claw', 'w-crab5', 2, 5, [{ k: 'atk', v: 10 }, { k: 'vit', v: 4 }, { k: 'def', v: 5 }]),
+  'a-crab4': AR('Cheddar Bulwark', 'a-crab4', 2, [{ k: 'def', v: 8 }, { k: 'hp', v: 41 }, { k: 'vit', v: 2 }], 4), 'a-crab5': AR('Aged Gouda Fortress', 'a-crab5', 2, [{ k: 'def', v: 11 }, { k: 'hp', v: 50 }, { k: 'vit', v: 4 }], 5),
+  'w-blob4': W('Gelatin Whip', 'w-blob4', 3, 4, [{ k: 'atk', v: 6 }, { k: 'int', v: 2 }, { k: 'skillDmg', v: 0.096 }]), 'w-blob5': W('Jelly Crown Sceptre', 'w-blob5', 3, 5, [{ k: 'atk', v: 8 }, { k: 'int', v: 4 }, { k: 'skillDmg', v: 0.116 }]),
+  'a-blob4': AR('Wobble Mail', 'a-blob4', 3, [{ k: 'def', v: 6 }, { k: 'hp', v: 43 }, { k: 'vit', v: 2 }], 4), 'a-blob5': AR('Royal Jelly Armour', 'a-blob5', 3, [{ k: 'def', v: 8 }, { k: 'hp', v: 53 }, { k: 'vit', v: 4 }], 5),
+  'w-moth4': W('Starlight Whisk', 'w-moth4', 4, 4, [{ k: 'atk', v: 6 }, { k: 'int', v: 2 }, { k: 'skillDmg', v: 0.108 }]), 'w-moth5': W('Moonmallow Scepter', 'w-moth5', 4, 5, [{ k: 'atk', v: 8 }, { k: 'int', v: 4 }, { k: 'skillDmg', v: 0.131 }]),
+  'a-moth4': AR('Spun Sugar Robe', 'a-moth4', 4, [{ k: 'def', v: 5 }, { k: 'hp', v: 31 }, { k: 'int', v: 2 }], 4), 'a-moth5': AR('Nebula Silk Gown', 'a-moth5', 4, [{ k: 'def', v: 7 }, { k: 'hp', v: 39 }, { k: 'int', v: 4 }], 5),
+  'w-toast4': W('Crouton Daggers', 'w-toast4', 5, 4, [{ k: 'atk', v: 6 }, { k: 'dex', v: 2 }, { k: 'critDmg', v: 0.144 }]), 'w-toast5': W('Burnt Toast Reaper', 'w-toast5', 5, 5, [{ k: 'atk', v: 8 }, { k: 'dex', v: 4 }, { k: 'critDmg', v: 0.174 }]),
+  'a-toast4': AR('Sourdough Shadow Cloak', 'a-toast4', 5, [{ k: 'def', v: 5 }, { k: 'hp', v: 31 }, { k: 'dex', v: 2 }], 4), 'a-toast5': AR('Midnight Brioche Mantle', 'a-toast5', 5, [{ k: 'def', v: 7 }, { k: 'hp', v: 39 }, { k: 'dex', v: 4 }], 5),
+  'w-dump4': W('Bao Moon Staff', 'w-dump4', 6, 4, [{ k: 'atk', v: 6 }, { k: 'int', v: 2 }, { k: 'skillDmg', v: 0.096 }]), 'w-dump5': W('Imperial Wok Shield', 'w-dump5', 6, 5, [{ k: 'atk', v: 8 }, { k: 'int', v: 4 }, { k: 'skillDmg', v: 0.116 }]),
+  'a-dump4': AR('Jade Steamer Robe', 'a-dump4', 6, [{ k: 'def', v: 6 }, { k: 'hp', v: 43 }, { k: 'int', v: 2 }], 4), 'a-dump5': AR('Emperor Dumpling Armour', 'a-dump5', 6, [{ k: 'def', v: 8 }, { k: 'hp', v: 53 }, { k: 'int', v: 4 }], 5),
+  'w-nori4': W('Salmon Fin Katana', 'w-nori4', 7, 4, [{ k: 'atk', v: 6 }, { k: 'int', v: 2 }, { k: 'skillDmg', v: 0.108 }]), 'w-nori5': W('Wasabi Dragon Glaive', 'w-nori5', 7, 5, [{ k: 'atk', v: 8 }, { k: 'int', v: 4 }, { k: 'skillDmg', v: 0.131 }]),
+  'a-nori4': AR('Tamago Plate', 'a-nori4', 7, [{ k: 'def', v: 6 }, { k: 'hp', v: 36 }, { k: 'int', v: 2 }], 4), 'a-nori5': AR('Dragon Roll Armour', 'a-nori5', 7, [{ k: 'def', v: 8 }, { k: 'hp', v: 45 }, { k: 'int', v: 4 }], 5),
+  'w-choco4': W('Brownie Brick Gauntlets', 'w-choco4', 8, 4, [{ k: 'atk', v: 8 }, { k: 'str', v: 2 }, { k: 'critDmg', v: 0.12 }]), 'w-choco5': W('Molten Lava Cake Hammer', 'w-choco5', 8, 5, [{ k: 'atk', v: 11 }, { k: 'str', v: 4 }, { k: 'critDmg', v: 0.145 }]),
+  'a-choco4': AR('Truffle Plate', 'a-choco4', 8, [{ k: 'def', v: 7 }, { k: 'hp', v: 43 }, { k: 'str', v: 2 }], 4), 'a-choco5': AR('Cocoa Titan Armour', 'a-choco5', 8, [{ k: 'def', v: 10 }, { k: 'hp', v: 53 }, { k: 'str', v: 4 }], 5),
+  'w-gum4': W('Jawbreaker Mace', 'w-gum4', 9, 4, [{ k: 'atk', v: 7 }, { k: 'vit', v: 2 }, { k: 'hp', v: 31 }]), 'w-gum5': W('Bubble Blaster', 'w-gum5', 9, 5, [{ k: 'atk', v: 10 }, { k: 'vit', v: 4 }, { k: 'hp', v: 39 }]),
+  'a-gum4': AR('Taffy Armour', 'a-gum4', 9, [{ k: 'def', v: 7 }, { k: 'hp', v: 48 }, { k: 'vit', v: 2 }], 4), 'a-gum5': AR('Rock Candy Fortress', 'a-gum5', 9, [{ k: 'def', v: 10 }, { k: 'hp', v: 59 }, { k: 'vit', v: 4 }], 5),
+  'w-blue4': W('Blueberry Bomb Hammer', 'w-blue4', 10, 4, [{ k: 'atk', v: 7 }, { k: 'vit', v: 2 }, { k: 'hp', v: 30 }]), 'w-blue5': W('Golden Muffin Maul', 'w-blue5', 10, 5, [{ k: 'atk', v: 10 }, { k: 'vit', v: 4 }, { k: 'hp', v: 37 }]),
+  'a-blue4': AR('Crumble Knight Plate', 'a-blue4', 10, [{ k: 'def', v: 7 }, { k: 'hp', v: 48 }, { k: 'vit', v: 2 }], 4), 'a-blue5': AR('Royal Muffin Mail', 'a-blue5', 10, [{ k: 'def', v: 10 }, { k: 'hp', v: 59 }, { k: 'vit', v: 4 }], 5),
+  'w-pizza4': W('Cheese Wheel Saw', 'w-pizza4', 11, 4, [{ k: 'atk', v: 6 }, { k: 'dex', v: 2 }, { k: 'crit', v: 6 }]), 'w-pizza5': W('Inferno Pizza Blade', 'w-pizza5', 11, 5, [{ k: 'atk', v: 8 }, { k: 'dex', v: 4 }, { k: 'crit', v: 8 }]),
+  'a-pizza4': AR('Mozzarella Mail', 'a-pizza4', 11, [{ k: 'def', v: 6 }, { k: 'hp', v: 31 }, { k: 'dex', v: 2 }], 4), 'a-pizza5': AR('Wood-Fired Plate', 'a-pizza5', 11, [{ k: 'def', v: 8 }, { k: 'hp', v: 39 }, { k: 'dex', v: 4 }], 5),
+  'w-slo4': W('Boba Bo Staff', 'w-slo4', 12, 4, [{ k: 'atk', v: 7 }, { k: 'int', v: 2 }, { k: 'skillDmg', v: 0.096 }]), 'w-slo5': W('Dream Pillow Hammer', 'w-slo5', 12, 5, [{ k: 'atk', v: 10 }, { k: 'int', v: 4 }, { k: 'skillDmg', v: 0.116 }]),
+  'a-slo4': AR('Tea Leaf Wrap', 'a-slo4', 12, [{ k: 'def', v: 6 }, { k: 'hp', v: 38 }, { k: 'int', v: 2 }], 4), 'a-slo5': AR('Sleepy Moon Robe', 'a-slo5', 12, [{ k: 'def', v: 8 }, { k: 'hp', v: 47 }, { k: 'int', v: 4 }], 5),
+  'w-avo4': W('Nacho Spear', 'w-avo4', 13, 4, [{ k: 'atk', v: 7 }, { k: 'int', v: 2 }, { k: 'skillDmg', v: 0.084 }]), 'w-avo5': W('Golden Avocado Staff', 'w-avo5', 13, 5, [{ k: 'atk', v: 10 }, { k: 'int', v: 4 }, { k: 'skillDmg', v: 0.102 }]),
+  'a-avo4': AR('Guac Shell Armour', 'a-avo4', 13, [{ k: 'def', v: 6 }, { k: 'hp', v: 38 }, { k: 'int', v: 2 }], 4), 'a-avo5': AR('Fiesta Dragon Plate', 'a-avo5', 13, [{ k: 'def', v: 8 }, { k: 'hp', v: 47 }, { k: 'int', v: 4 }], 5),
+  'w-fish4': W('Salmon Harpoon', 'w-fish4', 14, 4, [{ k: 'atk', v: 7 }, { k: 'str', v: 2 }, { k: 'critDmg', v: 0.12 }]), 'w-fish5': W('River King Trident', 'w-fish5', 14, 5, [{ k: 'atk', v: 10 }, { k: 'str', v: 4 }, { k: 'critDmg', v: 0.145 }]),
+  'a-fish4': AR('Riverstone Scale Mail', 'a-fish4', 14, [{ k: 'def', v: 6 }, { k: 'hp', v: 36 }, { k: 'str', v: 2 }], 4), 'a-fish5': AR('Sushi Emperor Armour', 'a-fish5', 14, [{ k: 'def', v: 8 }, { k: 'hp', v: 45 }, { k: 'str', v: 4 }], 5),
+  'w-hog4': W('Kebab Lance', 'w-hog4', 15, 4, [{ k: 'atk', v: 7 }, { k: 'vit', v: 2 }, { k: 'crit', v: 4 }]), 'w-hog5': W('Flaming Grill Fork', 'w-hog5', 15, 5, [{ k: 'atk', v: 10 }, { k: 'vit', v: 4 }, { k: 'crit', v: 5 }]),
+  'a-hog4': AR('Grill Mesh Mail', 'a-hog4', 15, [{ k: 'def', v: 7 }, { k: 'hp', v: 41 }, { k: 'vit', v: 2 }], 4), 'a-hog5': AR('Barbecue Champion Plate', 'a-hog5', 15, [{ k: 'def', v: 10 }, { k: 'hp', v: 50 }, { k: 'vit', v: 4 }], 5),
+  'w-mint4': W('Mint Crystal Shield', 'w-mint4', 16, 4, [{ k: 'atk', v: 7 }, { k: 'vit', v: 2 }, { k: 'skillDmg', v: 0.072 }]), 'w-mint5': W('Glacier Scoop Staff', 'w-mint5', 16, 5, [{ k: 'atk', v: 10 }, { k: 'vit', v: 4 }, { k: 'skillDmg', v: 0.087 }]),
+  'a-mint4': AR('Waffle Shell Plate', 'a-mint4', 16, [{ k: 'def', v: 8 }, { k: 'hp', v: 46 }, { k: 'vit', v: 2 }], 4), 'a-mint5': AR('Frozen Fortress Shell', 'a-mint5', 16, [{ k: 'def', v: 11 }, { k: 'hp', v: 56 }, { k: 'vit', v: 4 }], 5),
+  'w-peng4': W('Frozen Cone Lance', 'w-peng4', 17, 4, [{ k: 'atk', v: 6 }, { k: 'dex', v: 2 }, { k: 'crit', v: 5 }]), 'w-peng5': W('Blizzard Sundae Staff', 'w-peng5', 17, 5, [{ k: 'atk', v: 8 }, { k: 'dex', v: 4 }, { k: 'crit', v: 7 }]),
+  'a-peng4': AR('Cookie Crust Plate', 'a-peng4', 17, [{ k: 'def', v: 5 }, { k: 'hp', v: 34 }, { k: 'dex', v: 2 }], 4), 'a-peng5': AR('Glacier Tux Armour', 'a-peng5', 17, [{ k: 'def', v: 7 }, { k: 'hp', v: 42 }, { k: 'dex', v: 4 }], 5),
+  'w-roo4': W('Fudge Knuckles', 'w-roo4', 18, 4, [{ k: 'atk', v: 7 }, { k: 'str', v: 2 }, { k: 'crit', v: 4 }]), 'w-roo5': W('Champion Cake Gloves', 'w-roo5', 18, 5, [{ k: 'atk', v: 10 }, { k: 'str', v: 4 }, { k: 'crit', v: 5 }]),
+  'a-roo4': AR('Velvet Boxer Robe', 'a-roo4', 18, [{ k: 'def', v: 6 }, { k: 'hp', v: 36 }, { k: 'str', v: 2 }], 4), 'a-roo5': AR('Grand Champion Belt Armour', 'a-roo5', 18, [{ k: 'def', v: 8 }, { k: 'hp', v: 45 }, { k: 'str', v: 4 }], 5),
+  'w-owl4': W('Churro Wand', 'w-owl4', 19, 4, [{ k: 'atk', v: 6 }, { k: 'dex', v: 2 }, { k: 'critDmg', v: 0.12 }]), 'w-owl5': W('Pinata Thunder Staff', 'w-owl5', 19, 5, [{ k: 'atk', v: 8 }, { k: 'dex', v: 4 }, { k: 'critDmg', v: 0.145 }]),
+  'a-owl4': AR('Tortilla Feather Mantle', 'a-owl4', 19, [{ k: 'def', v: 5 }, { k: 'hp', v: 34 }, { k: 'dex', v: 2 }], 4), 'a-owl5': AR('Night Fiesta Armour', 'a-owl5', 19, [{ k: 'def', v: 7 }, { k: 'hp', v: 42 }, { k: 'dex', v: 4 }], 5),
 };
 
 /** Kaiju that own gear (species numbers). */
