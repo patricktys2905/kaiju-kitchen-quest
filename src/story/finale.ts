@@ -7,7 +7,7 @@ export const HOOK: StoryLine[] = [
   ['lo2', 'Boss! BOSS! The Mold Crown got flushed! Our little science project went right down the drain!'],
   ['lo', "Hmph. I've been sittin' back here since LAST Christmas, Sir Stale. I can wait a little longer."],
   ['lo2', 'Yeah! Nobody ever eats the fruitcake! Hahaha! Oh. Oh no. Sorry, boss.'],
-  ['lo', 'They pushed us to the back. They forgot all about us. Well, now the whole kitchen is gonna remember...'],
+  ['lo', "Shoved us in the back and forgot all about us, didn't they? Well, guess what, kitchen? You're gonna REMEMBER us!"],
   ['lo', 'THE LEFTOVERS! Mwahahaha!'],
   ['n', 'The adventure continues in Act 2: Beyond the Kitchen!'],
 ];
@@ -16,8 +16,8 @@ export const HOOK: StoryLine[] = [
 export const HOOK2: StoryLine[] = [
   ['n', 'The next morning, a shiny delivery van rumbles up to the house...'],
   ['n', 'On the doorstep: a golden envelope. "You are invited to... THE GREAT FOOD FESTIVAL!"'],
-  ['me', 'A festival?! With MORE food? And MORE friends? Count me in!'],
-  ['n', 'The adventure continues! Maybe. Probably. Definitely! THE END of Act 2.'],
+  ['me', 'A festival?! With MORE food? And MORE friends? WOOHOO!'],
+  ['n', 'Will our heroes go? You bet your sprinkles they will! THE END of Act 2!'],
 ];
 
 /** Who says what in the tease (shown as dark silhouettes). */

@@ -29,7 +29,7 @@ export interface KQuest { id: string; title: string; text: string; key: string; 
 /** Each kaiju's favourite foe (its first quest) and story-flavoured quest titles. */
 const FLAVOUR: Record<number, { foe: MobKind; titles: string[] }> = {
   0: { foe: 'egg', titles: ['Egg Smasher', 'Seedy Business', 'Medium-Sized Hero', 'Combo Kaiju', 'Untouchable Berry', 'Ice Breaker', 'Roar of the Ultimate', 'Gobzilla Senior'] },
-  10: { foe: 'bun', titles: ['No Mould Near My Cubs', 'Quake Papa', 'Bear Necessities', 'Paw-some Combo', 'Not a Scratch', 'Thaw the Golem', 'Meteor Shower', 'Papa Bear of the Kitchen'] },
+  10: { foe: 'bun', titles: ['Hands Off My Crumblets', 'Quake Papa', 'Bear Necessities', 'Paw-some Combo', 'Not a Scratch', 'Thaw the Golem', 'Meteor Shower', 'Papa Bear of the Kitchen'] },
   11: { foe: 'worm', titles: ['Worm Delivery', 'Express Lane', 'On-Time Bonus', 'Combo Crust', 'Box Stays Level', 'Hot Delivery, Cold Golem', 'Rush Hour', 'Employee of the Month'] },
   4: { foe: 'icebat', titles: ['Bat Out of the Light', 'Glitter Bolts', 'Moonrise', 'Dancing in the Dust', 'Soft as Marshmallow', 'Light in the Freezer', 'Moonbeam', 'The Moth Who Found the Moon'] },
   1: { foe: 'yogurt', titles: ['Culture Samples', 'Ink Analysis', 'Peer Review', 'Eight-Arm Combo', 'Lab Safety', 'Thermal Experiment', 'Kraken Theory', 'Doctor of Jellyology'] },

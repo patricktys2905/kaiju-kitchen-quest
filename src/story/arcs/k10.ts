@@ -7,7 +7,7 @@ export const TAGLINE = "One grumpy papa bear, six missing muffins. Hmph!";
 export const ARC: Record<string, StoryLine[]> = {
   "intro": [
     ["n", "Uh-oh! When the Head Chef vanished, the muffin tin tipped over and the little Crumblets scattered everywhere!"],
-    ["me", "Hmph. Six little Crumblets, out there with moldy monsters."],
+    ["me", "My six little Crumblets, out there with the moldy monsters!"],
     ["me", "I'm NOT worried! I'm just going for a walk. A real long walk. In every direction. Grrr."],
   ],
   "w1-open": [
@@ -20,7 +20,7 @@ export const ARC: Record<string, StoryLine[]> = {
   ],
   "w1-after": [
     ["boss", "Oof! Sorry! I thought they were croutons. The mold makes everything so blurry!"],
-    ["me", "Hmph. C'mere, you two. Two found, four to go."],
+    ["me", "C'mere, you two! That's two found, four to go."],
     ["boss", "I saw some little ones rolling off toward the cold!"],
   ],
   "w2-open": [
@@ -33,11 +33,11 @@ export const ARC: Record<string, StoryLine[]> = {
   ],
   "w2-after": [
     ["boss", "Drip, drip! They looked so cold, so I kept 'em in my ice. I thought I was HELPING!"],
-    ["me", "Hmph. Well, ya kinda were. A little. ...Thanks."],
+    ["me", "Well, ya kinda were. A little. ...Thanks."],
     ["n", "Four Crumblets found! The last two were spotted near the Oven!"],
   ],
   "w3-open": [
-    ["me", "The Oven. Muffins go in here for twenty minutes, tops. NOT forever. Grrr."],
+    ["me", "Muffins go in the Oven for twenty minutes, tops! NOT forever! Grrr."],
   ],
   "w3-boss": [
     ["boss", "BAKED GOODS! I SHALL HOARD THEM ALL! MY PRECIOUS MUFFINS!"],
@@ -45,11 +45,11 @@ export const ARC: Record<string, StoryLine[]> = {
   ],
   "w3-after": [
     ["boss", "Ow ow ow! Sorry! Dragons hoard stuff. Moldy dragons hoard SILLY stuff."],
-    ["me", "Five. Hmph. One more."],
+    ["me", "That's five! Just one more to go."],
     ["boss", "The last one crawled into the Pantry, toward a great big cookie jar!"],
   ],
   "w4-open": [
-    ["me", "Last Crumblet. Then home. Then a great big snoring nap. Hmph."],
+    ["me", "One last Crumblet, then home, then a great big snoring nap."],
   ],
   "w4-boss": [
     ["boss", "NOM NOM NOM! ONE LITTLE MUFFIN LEFT TO EAT!"],
@@ -57,13 +57,13 @@ export const ARC: Record<string, StoryLine[]> = {
   ],
   "w4-after": [
     ["boss", "HURK! Ptoo! Sorry, little muffin!"],
-    ["me", "Littlest! Sticky, but safe. All six. Hmph. Stop hugging me. ...Okay, fine. Five more seconds."],
+    ["me", "Littlest! You're sticky, but you're safe! All six of you! Hey, stop hugging me. ...Okay, fine. Five more seconds."],
     ["mold", "Hehehe! What a sweet little family. The Mold Crown in the Sink would LOVE to meet them."],
     ["me", "Over my frosting, ya creep."],
     ["n", "To be continued in World 5: The Sink."],
   ],
   "w5-open": [
-    ["me", "The Sink. Six Crumblets tucked in at home. Counted 'em twice. Okay, nine times."],
+    ["me", "Six Crumblets, tucked in safe at home. I counted 'em twice. Okay, nine times."],
     ["me", "Now for the creep who wants to MEET 'em. Bath time, mold. Grrr."],
   ],
   "w5-boss": [
@@ -79,7 +79,7 @@ export const ARC: Record<string, StoryLine[]> = {
     ["n", "GLUG! Down the drain! A note floats up: \"Safe and sound. Go home to those little ones, bear. The Chef.\""],
     ["me", "One, two, three, four, five, six. All asleep in their cups. Hmph. Good."],
     ["foe", "Caw! Psst! That spare muffin cup still free, fuzzy?"],
-    ["me", "Shh! You'll wake 'em. Get in, bird. Hmph. Seven."],
+    ["me", "Shh! You'll wake 'em. Get in, bird. That makes seven."],
     ["me", "Don't look at me like that. This is my grumpy face. It's just... smiling a little. Hmph."],
   ],
   "w6-open": [
@@ -98,14 +98,14 @@ export const ARC: Record<string, StoryLine[]> = {
   "w6-after": [
     ["n", "SNAP! The butter-knife lance breaks in half, and Sir Stale dives out the window!"],
     ["boss", "Unhand me, varlet! To the Backyard! Baron Brussels shall grill thee AND thy crumbs!"],
-    ["me", "Grill my crumbs? Hmph. Now it's personal."],
+    ["me", "Grill my crumbs? Oh, now it's personal."],
     ["me", "Littlest wants to see the world? Fine. We see it together. Hold on to my ear, kiddo."],
-    ["me", "Next stop, the Backyard. Littlest calls it \"the big outside\". Hmph. Cute. Don't tell anybody I said cute."],
+    ["me", "Next stop, the Backyard! Littlest calls it \"the big outside\". Cute. Don't tell anybody I said cute."],
   ],
   "w7-open": [
     ["n", "The Backyard! Littlest squeaks at its very first sky, and Bluebeary's ears go all wiggly."],
-    ["me", "The big outside. Grass up to my nose. Stay on the ear, kiddo. Ear's the safe seat."],
-    ["me", "Smell that? Barbecue. Somebody wants to grill my crumbs? Hmph. Somebody's getting grilled FIRST."],
+    ["me", "So this is the big outside? The grass is up to my nose! Stay on my ear, kiddo, it's the safe seat."],
+    ["me", "Smell that barbecue? Somebody wants to grill my crumbs? Well, somebody's getting grilled FIRST."],
   ],
   "w7-boss": [
     ["boss", "ATTEN-TION, bear! I am BARON BRUSSELS! That little muffin is hereby drafted into my Sprout Soldiers!"],
@@ -117,13 +117,13 @@ export const ARC: Record<string, StoryLine[]> = {
     ["n", "KA-BLAM! Baron Brussels tumbles off the grill and goes rolling across the lawn!"],
     ["boss", "Retreat! Always left on the PLATE! The Mystery Meatloaf will deal with you in the Garden, bear!"],
     ["boss", "Nobody knows what's in him! Not even HIM! Hmph!"],
-    ["me", "Mystery meat. Hmph. Littlest, that's a no-eat food."],
-    ["me", "Littlest wants to see the Garden now. Fine. Ear seat, buckle up. Nap after. Okay, nap DURING."],
+    ["me", "Mystery meat? Littlest, that's a no-eat food."],
+    ["me", "And now the Littlest wants to see the Garden. Fine! Buckle up on the ear. We nap after. Okay, we nap DURING."],
   ],
   "w8-open": [
     ["n", "The Garden! Fireflies blink on, and Littlest squeaks like it found a whole sky full of night-lights!"],
     ["me", "Fireflies, kid. Bugs with glowy tails. No touching. Okay, ONE touch."],
-    ["me", "Mystery Meatloaf's out here somewhere. Littlest, that's still a no-eat food. Hmph."],
+    ["me", "That Mystery Meatloaf's out here somewhere. And Littlest, he's STILL a no-eat food."],
   ],
   "w8-boss": [
     ["boss", "Hey! A muffin! Is there muffin in ME? Hold on, lemme check... huh, a BUTTON?"],
@@ -134,12 +134,12 @@ export const ARC: Record<string, StoryLine[]> = {
   "w8-after": [
     ["n", "SPLORT! The Mystery Meatloaf wobbles off the heap, shedding peas and one very confused sock!"],
     ["boss", "Retreat! To the SUPERMARKET! The Tupperwraith haunts the back aisles, bear! Nobody's opened HIM in years!"],
-    ["me", "A haunted leftovers tub. Hmph. And now Littlest wants to see a supermarket."],
-    ["me", "Fine. Ear seat, buckle up. But we nap BEFORE the spooky aisle. Grrr."],
+    ["me", "A haunted leftovers tub? And now the Littlest wants to see a supermarket. Of course it does."],
+    ["me", "Fine, buckle up on the ear. But we nap BEFORE the spooky aisle. Grrr."],
   ],
   "w9-open": [
     ["n", "The Supermarket! Littlest squeaks at aisles so tall they disappear into the dark!"],
-    ["me", "Nap's done. Took it in a shopping trolley. Hmph. Comfy, actually. Ear seat, kid. Nobody wanders off in here."],
+    ["me", "Nap's done! I took it in a shopping trolley, and it was comfy, actually. Up on the ear, kid. Nobody wanders off in here."],
     ["lo2", "Hah! Thy crumbs are past their best-before, bear! The Tupperwraith shall SHELVE them!"],
     ["me", "Best-before THIS, breadstick. Grrr."],
   ],
@@ -154,11 +154,11 @@ export const ARC: Record<string, StoryLine[]> = {
     ["me", "Cabbage. Golden Butter. A thermostat knob. And Littlest's BLANKIE?! So THAT'S why nobody can nap!"],
     ["boss", "Woooo! It was so soft! Fine, keep it! I'm floating home to Old Fruitcake! The Feast is coming! Hmph!"],
     ["lo", "Bring the muffins to the House, bear. Every forgotten crumb gets a seat at my Feast."],
-    ["me", "Littlest's got a blankie and a papa. Hmph. Nap first. Then we crash your Feast, Fruitcake. GRRR."],
+    ["me", "The Littlest's got a blankie and a papa. We nap first, then we crash your Feast, Fruitcake! GRRR."],
   ],
   "w10-open": [
     ["n", "The back of the Fridge! Frosty shelves, dusty jars, and one long, empty table waiting at the end!"],
-    ["me", "Head count. Littlest on the ear, blankie on Littlest. Five at home with the bird. Hmph. Good."],
+    ["me", "Head count! Littlest on the ear, blankie on the Littlest, five at home with the bird. Good."],
     ["me", "Last stop on the world tour, kid. Then home for the biggest nap in history. Grrr."],
   ],
   "w10-boss": [
@@ -171,8 +171,8 @@ export const ARC: Record<string, StoryLine[]> = {
     ["boss", "Oof. My crown. Just a dented old cake tin."],
     ["boss", "Every Christmas they wrap me up and pass me on. Nobody ever brings me home. I just wanted an invite, bear."],
     ["boss", "One seat at one feast. Was that so much? *sniff*"],
-    ["me", "Hmph. Littlest's giving you its blankie. Don't make it weird."],
-    ["me", "Big table back home. Bring your gang. Breadstick sits by the bird."],
+    ["me", "Look, the Littlest's giving you its blankie. Don't make it weird."],
+    ["me", "There's a big table back home. Bring your whole gang! Breadstick sits by the bird."],
     ["foe", "Caw?! Not by the bird! Fine. He can have the shiny fork."],
     ["me", "One, two, three, four, five, Littlest, bird, ten strays, a bunch of Leftovers and one old Fruitcake. Hmph."],
     ["me", "Everybody's counted. Now NAP. ...Okay, fine. Cake first."],
@@ -202,7 +202,7 @@ export const NEMESIS: Record<"w1-elite" | "w2-elite" | "w3-elite" | "w4-elite" |
     ["foe", "CAW! Steel wool feathers, fuzzy! Scratchy AND shiny! Last chance, hand over the crumbs!"],
     ["me", "Kids are home, bird. You're guarding a sink full of dirty forks."],
     ["foe", "They're SHINY forks! Caw... fine. Beat me and maybe I'll quit snatching stuff. MAYBE!"],
-    ["me", "Hmph. Offer's still open. Gotta flatten ya first, though. GRRR."],
+    ["me", "My offer's still open, bird. Gotta flatten ya first, though. GRRR."],
   ],
   "w6-elite": [
     ["foe", "Caw! Fuzzy! Roast Brute up the ridge. Smells like Sunday dinner, hits like a truck!"],

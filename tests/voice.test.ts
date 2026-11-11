@@ -31,6 +31,23 @@ describe('cartoon voice', () => {
     }
     expect(heavy).toEqual([]);
   });
+  it('nobody opens a line by announcing the stage name like a signpost ("Crumb Trail. Crumbs everywhere.")', async () => {
+    const { STAGES } = await import('../src/sim/stages');
+    const names = [...new Set(STAGES.map(s => s.name))];
+    const bad = allLines().filter(l => names.some(n => l.text.startsWith(`${n}.`))).map(l => `${l.where}: ${l.text}`);
+    expect(bad).toEqual([]);
+  });
+  it('no kaiju says the same long line twice (no copy-paste scenes)', () => {
+    const dup: string[] = [];
+    for (const c of CLASSES) {
+      const seen = new Set<string>();
+      for (const [beat, lines] of Object.entries(STORIES[c.species].beats)) for (const [, t] of lines) {
+        if (t.length < 30) continue;
+        if (seen.has(t)) dup.push(`${c.name} ${beat}: ${t}`); seen.add(t);
+      }
+    }
+    expect(dup).toEqual([]);
+  });
   it('every story still ends World 4 on the Sink cliffhanger, with the Mold Crown speaking', () => {
     for (const c of CLASSES) {
       const end = STORIES[c.species].beats['w4-after'];

@@ -12,7 +12,7 @@ export const ARC: Record<string, StoryLine[]> = {
   "w2-open": [["me", "FRIDGE! Me LOVE fridge! Me nice and crunchy here! Yay!"]],
   "w2-boss": [["boss", "STAY HERE! STAY COLD! STAY FOREVERRRR!"], ["me", "Ooh, tempting. But Chef need Chocomunch! Sorry, big guy!"]],
   "w2-after": [["boss", "Ugh, my head. Here, take some ice with you. For the Oven."], ["me", "Ooh, ice! Me still scared. But me go!"]],
-  "w3-open": [["me", "Oven. Hot hot HOT. Me count to ten. One, two, uh, TEN! Okay, me go!"]],
+  "w3-open": [["me", "Uh-oh, Oven is hot hot HOT! Me count to ten. One, two, uh, TEN! Okay, me go!"]],
   "w3-boss": [["boss", "FONDUE! I'LL MAKE FONDUE OUT OF YOU!"], ["me", "NO FONDUE! NEVER FONDUE!"]],
   "w3-after": [["n", "Chocomunch is a little drippy round the edges, but still standing!"], ["me", "Me did it! Me in Oven! Me not scared no more! Well, teeny bit scared."], ["boss", "Oof, sorry about the fire breath. The Chef was here, but went up to the Pantry. Hurry!"]],
   "w4-open": [["me", "Ahh, Pantry cool! Me firm again! Me READY!"]],
