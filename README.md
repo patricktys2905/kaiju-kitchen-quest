@@ -312,7 +312,9 @@ the kaiju's signature set, each weapon with its own gear skill (gear.ts). TIER_L
   near the end (`Objective.at`). The Crumblet heals when left alone and shelters behind arena gates.
 - **Boss stages**: a run-up, then the boss room; the boss sleeps until you walk in (backdrop and music switch:
   `StageDef.bossBg`, event `bossWake`); 3 honey jars by the door. Boss Rush / Endless use the room alone (`short`).
-- **Minibosses**: 20 new ones (2 per world, `m<world>a/b`, art `scripts/minis-jobs.mjs`) guard miniboss rooms; each world's
+- **Minibosses**: 50 (5 per world, `m<world>a-e`, art `scripts/minis-jobs.mjs` + `scripts/minis2-jobs.mjs`) plus 30 Kings
+  (`k<monster>`: a world monster drawn twice as big with a crown, same art, `MobDef.king`) guard the boss rooms: `ROOM_FOES`
+  in stages.ts gives each world's stages 1-4 and 6-9 a different foe (3 Kings + 5 minibosses = 8); each world's
   stage-5 elite is now a champion (`x<elite>`) with its own moves; arena finales use a random champion of the world's
   monsters. They keep strictly to their move order (walking in for close-range moves).
 - **Difficulty** ("tough": jams needed): tuned against a SKILLED bot (bot.ts) carrying 8 jams: stages clear ~85-95% using
@@ -360,3 +362,6 @@ the kaiju's signature set, each weapon with its own gear skill (gear.ts). TIER_L
 - 20 more monsters (2 per world, early stages) with their own drops: scripts/mobs3-jobs.mjs; 82 monster drops in all.
 - Minibosses, champions and nemeses fight in armour like bosses: hits don't interrupt or flinch them until it cracks (stagger,
   then weak). Skill tree: first row opens at Lv 1; a newly learned tree skill goes onto a free button.
+- **Story vs stages**: `docs/stage-facts.md` (`npx vite-node scripts/stage-facts.ts > docs/stage-facts.md`) lists each stage's
+  boss-room foe, wanted drops and feature; the short pre-stage scenes (`src/story/more`) are written against it, so
+  regenerate it and re-check those scenes whenever stage generation changes. Boss-room fights: `scripts/room-duel.ts`.

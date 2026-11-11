@@ -1,0 +1,242 @@
+[
+ {
+  "name": "mob-m1c",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/mob-bun.png"
+  ],
+  "prompt": "Generate an image. The reference is an enemy from my cute 2D side-scrolling action RPG set in a giant kitchen and house. I need a NEW MINIBOSS for the COUNTERTOP world: a ROLLING PIN ROGUE: a wooden rolling pin bandit with a bandana mask and stubby arms, flour dust puffing around it. Draw it in exactly the same art style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute but a little menacing, with a few fuzzy green mould spots because the Mold Crown has corrupted it). It is a MINIBOSS: a bit bigger, tougher and more detailed than a normal enemy. Side view facing LEFT, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1 image."
+ },
+ {
+  "name": "mob-m1d",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/mob-bun.png"
+  ],
+  "prompt": "Generate an image. The reference is an enemy from my cute 2D side-scrolling action RPG set in a giant kitchen and house. I need a NEW MINIBOSS for the COUNTERTOP world: a CUTTING BOARD GOLEM: a big chunky wooden chopping board golem with knife-scratch scars and a cleaver-shaped fist. Draw it in exactly the same art style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute but a little menacing, with a few fuzzy green mould spots because the Mold Crown has corrupted it). It is a MINIBOSS: a bit bigger, tougher and more detailed than a normal enemy. Side view facing LEFT, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1 image."
+ },
+ {
+  "name": "mob-m1e",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/mob-bun.png"
+  ],
+  "prompt": "Generate an image. The reference is an enemy from my cute 2D side-scrolling action RPG set in a giant kitchen and house. I need a NEW MINIBOSS for the COUNTERTOP world: a COOKIE CUTTER WITCH: a star-shaped metal cookie cutter witch with a tiny pointed hat and a wooden-spoon wand. Draw it in exactly the same art style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute but a little menacing, with a few fuzzy green mould spots because the Mold Crown has corrupted it). It is a MINIBOSS: a bit bigger, tougher and more detailed than a normal enemy. Side view facing LEFT, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1 image."
+ },
+ {
+  "name": "mob-m2c",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/mob-bun.png"
+  ],
+  "prompt": "Generate an image. The reference is an enemy from my cute 2D side-scrolling action RPG set in a giant kitchen and house. I need a NEW MINIBOSS for the FRIDGE world: a FISH FINGER GENERAL: a golden breaded fish finger with a frosty general hat and a toothpick sword. Draw it in exactly the same art style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute but a little menacing, with a few fuzzy green mould spots because the Mold Crown has corrupted it). It is a MINIBOSS: a bit bigger, tougher and more detailed than a normal enemy. Side view facing LEFT, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1 image."
+ },
+ {
+  "name": "mob-m2d",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/mob-bun.png"
+  ],
+  "prompt": "Generate an image. The reference is an enemy from my cute 2D side-scrolling action RPG set in a giant kitchen and house. I need a NEW MINIBOSS for the FRIDGE world: a BUTTER BLOCK BRUTE: a hulking yellow block of butter with a knife-cut grin and a greasy shine. Draw it in exactly the same art style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute but a little menacing, with a few fuzzy green mould spots because the Mold Crown has corrupted it). It is a MINIBOSS: a bit bigger, tougher and more detailed than a normal enemy. Side view facing LEFT, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1 image."
+ },
+ {
+  "name": "mob-m2e",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/mob-bun.png"
+  ],
+  "prompt": "Generate an image. The reference is an enemy from my cute 2D side-scrolling action RPG set in a giant kitchen and house. I need a NEW MINIBOSS for the FRIDGE world: a LEFTOVER LASAGNA LICH: a spooky slab of old lasagna in a cracked dish with glowing eyes and noodle arms. Draw it in exactly the same art style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute but a little menacing, with a few fuzzy green mould spots because the Mold Crown has corrupted it). It is a MINIBOSS: a bit bigger, tougher and more detailed than a normal enemy. Side view facing LEFT, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1 image."
+ },
+ {
+  "name": "mob-m3c",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/mob-bun.png"
+  ],
+  "prompt": "Generate an image. The reference is an enemy from my cute 2D side-scrolling action RPG set in a giant kitchen and house. I need a NEW MINIBOSS for the OVEN world: a PIZZA PEEL PALADIN: a knight with a wooden pizza-peel shield and a cheese-grater helmet. Draw it in exactly the same art style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute but a little menacing, with a few fuzzy green mould spots because the Mold Crown has corrupted it). It is a MINIBOSS: a bit bigger, tougher and more detailed than a normal enemy. Side view facing LEFT, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1 image."
+ },
+ {
+  "name": "mob-m3d",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/mob-bun.png"
+  ],
+  "prompt": "Generate an image. The reference is an enemy from my cute 2D side-scrolling action RPG set in a giant kitchen and house. I need a NEW MINIBOSS for the OVEN world: a BURNT SOUFFLE SORCERER: a tall puffed-up burnt souffle in a ramekin, wearing a wizard hat, sparks of heat around it. Draw it in exactly the same art style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute but a little menacing, with a few fuzzy green mould spots because the Mold Crown has corrupted it). It is a MINIBOSS: a bit bigger, tougher and more detailed than a normal enemy. Side view facing LEFT, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1 image."
+ },
+ {
+  "name": "mob-m3e",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/mob-bun.png"
+  ],
+  "prompt": "Generate an image. The reference is an enemy from my cute 2D side-scrolling action RPG set in a giant kitchen and house. I need a NEW MINIBOSS for the OVEN world: a GINGERBREAD GLADIATOR: a muscular gingerbread man with icing armour, a candy-cane sword and a gumdrop shield. Draw it in exactly the same art style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute but a little menacing, with a few fuzzy green mould spots because the Mold Crown has corrupted it). It is a MINIBOSS: a bit bigger, tougher and more detailed than a normal enemy. Side view facing LEFT, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1 image."
+ },
+ {
+  "name": "mob-m4c",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/mob-bun.png"
+  ],
+  "prompt": "Generate an image. The reference is an enemy from my cute 2D side-scrolling action RPG set in a giant kitchen and house. I need a NEW MINIBOSS for the PANTRY world: a CEREAL BOX COLOSSUS: a towering cereal box giant with cardboard arms, cereal spilling from its top, a simple sun logo (no letters). Draw it in exactly the same art style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute but a little menacing, with a few fuzzy green mould spots because the Mold Crown has corrupted it). It is a MINIBOSS: a bit bigger, tougher and more detailed than a normal enemy. Side view facing LEFT, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1 image."
+ },
+ {
+  "name": "mob-m4d",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/mob-bun.png"
+  ],
+  "prompt": "Generate an image. The reference is an enemy from my cute 2D side-scrolling action RPG set in a giant kitchen and house. I need a NEW MINIBOSS for the PANTRY world: a PEANUT BUTTER OGRE: a big jar of crunchy peanut butter with arms, a sticky drip and a lid tilted like a cap. Draw it in exactly the same art style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute but a little menacing, with a few fuzzy green mould spots because the Mold Crown has corrupted it). It is a MINIBOSS: a bit bigger, tougher and more detailed than a normal enemy. Side view facing LEFT, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1 image."
+ },
+ {
+  "name": "mob-m4e",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/mob-bun.png"
+  ],
+  "prompt": "Generate an image. The reference is an enemy from my cute 2D side-scrolling action RPG set in a giant kitchen and house. I need a NEW MINIBOSS for the PANTRY world: a SPICE RACK SHAMAN: a wooden spice rack spirit with little spice jars on its body, sneezing pepper clouds, holding a cinnamon-stick staff. Draw it in exactly the same art style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute but a little menacing, with a few fuzzy green mould spots because the Mold Crown has corrupted it). It is a MINIBOSS: a bit bigger, tougher and more detailed than a normal enemy. Side view facing LEFT, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1 image."
+ },
+ {
+  "name": "mob-m5c",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/mob-bun.png"
+  ],
+  "prompt": "Generate an image. The reference is an enemy from my cute 2D side-scrolling action RPG set in a giant kitchen and house. I need a NEW MINIBOSS for the SINK world: a PLUNGER PALADIN: a red rubber plunger knight with a shiny bucket helmet and a soap-bar shield. Draw it in exactly the same art style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute but a little menacing, with a few fuzzy green mould spots because the Mold Crown has corrupted it). It is a MINIBOSS: a bit bigger, tougher and more detailed than a normal enemy. Side view facing LEFT, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1 image."
+ },
+ {
+  "name": "mob-m5d",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/mob-bun.png"
+  ],
+  "prompt": "Generate an image. The reference is an enemy from my cute 2D side-scrolling action RPG set in a giant kitchen and house. I need a NEW MINIBOSS for the SINK world: a SCRUB BRUSH BOAR: a wild boar made from a wooden scrubbing brush with bristle tusks and soapy foam. Draw it in exactly the same art style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute but a little menacing, with a few fuzzy green mould spots because the Mold Crown has corrupted it). It is a MINIBOSS: a bit bigger, tougher and more detailed than a normal enemy. Side view facing LEFT, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1 image."
+ },
+ {
+  "name": "mob-m5e",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/mob-bun.png"
+  ],
+  "prompt": "Generate an image. The reference is an enemy from my cute 2D side-scrolling action RPG set in a giant kitchen and house. I need a NEW MINIBOSS for the SINK world: a CLOGGED DRAIN HAG: a creepy witch made of grey drain gunk and tangled noodles, rising out of a plughole. Draw it in exactly the same art style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute but a little menacing, with a few fuzzy green mould spots because the Mold Crown has corrupted it). It is a MINIBOSS: a bit bigger, tougher and more detailed than a normal enemy. Side view facing LEFT, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1 image."
+ },
+ {
+  "name": "mob-m6c",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/mob-bun.png"
+  ],
+  "prompt": "Generate an image. The reference is an enemy from my cute 2D side-scrolling action RPG set in a giant kitchen and house. I need a NEW MINIBOSS for the DINING ROOM world: a TEAPOT TYRANT: a pompous porcelain teapot with a crown-shaped lid, a monocle and steam puffing from its spout. Draw it in exactly the same art style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute but a little menacing, with a few fuzzy green mould spots because the Mold Crown has corrupted it). It is a MINIBOSS: a bit bigger, tougher and more detailed than a normal enemy. Side view facing LEFT, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1 image."
+ },
+ {
+  "name": "mob-m6d",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/mob-bun.png"
+  ],
+  "prompt": "Generate an image. The reference is an enemy from my cute 2D side-scrolling action RPG set in a giant kitchen and house. I need a NEW MINIBOSS for the DINING ROOM world: a SILVER CLOCHE KNIGHT: a knight whose body is a shiny silver serving dome, with fork and knife arms. Draw it in exactly the same art style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute but a little menacing, with a few fuzzy green mould spots because the Mold Crown has corrupted it). It is a MINIBOSS: a bit bigger, tougher and more detailed than a normal enemy. Side view facing LEFT, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1 image."
+ },
+ {
+  "name": "mob-m6e",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/mob-bun.png"
+  ],
+  "prompt": "Generate an image. The reference is an enemy from my cute 2D side-scrolling action RPG set in a giant kitchen and house. I need a NEW MINIBOSS for the DINING ROOM world: a NAPKIN RINGMASTER: a circus ringmaster made of a folded red napkin with silver napkin rings as hoops. Draw it in exactly the same art style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute but a little menacing, with a few fuzzy green mould spots because the Mold Crown has corrupted it). It is a MINIBOSS: a bit bigger, tougher and more detailed than a normal enemy. Side view facing LEFT, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1 image."
+ },
+ {
+  "name": "mob-m7c",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/mob-bun.png"
+  ],
+  "prompt": "Generate an image. The reference is an enemy from my cute 2D side-scrolling action RPG set in a giant kitchen and house. I need a NEW MINIBOSS for the BACKYARD BBQ world: a GRILL SPATULA SHERIFF: a metal barbecue spatula with a cowboy hat and a sheriff star, a ketchup-bottle holster. Draw it in exactly the same art style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute but a little menacing, with a few fuzzy green mould spots because the Mold Crown has corrupted it). It is a MINIBOSS: a bit bigger, tougher and more detailed than a normal enemy. Side view facing LEFT, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1 image."
+ },
+ {
+  "name": "mob-m7d",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/mob-bun.png"
+  ],
+  "prompt": "Generate an image. The reference is an enemy from my cute 2D side-scrolling action RPG set in a giant kitchen and house. I need a NEW MINIBOSS for the BACKYARD BBQ world: a MARSHMALLOW MAMMOTH: a huge fluffy toasted-marshmallow woolly mammoth with pretzel tusks. Draw it in exactly the same art style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute but a little menacing, with a few fuzzy green mould spots because the Mold Crown has corrupted it). It is a MINIBOSS: a bit bigger, tougher and more detailed than a normal enemy. Side view facing LEFT, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1 image."
+ },
+ {
+  "name": "mob-m7e",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/mob-bun.png"
+  ],
+  "prompt": "Generate an image. The reference is an enemy from my cute 2D side-scrolling action RPG set in a giant kitchen and house. I need a NEW MINIBOSS for the BACKYARD BBQ world: a BBQ SAUCE BANDIT: a squeezy bottle of smoky barbecue sauce with a bandit mask and a dripping nozzle. Draw it in exactly the same art style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute but a little menacing, with a few fuzzy green mould spots because the Mold Crown has corrupted it). It is a MINIBOSS: a bit bigger, tougher and more detailed than a normal enemy. Side view facing LEFT, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1 image."
+ },
+ {
+  "name": "mob-m8c",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/mob-bun.png"
+  ],
+  "prompt": "Generate an image. The reference is an enemy from my cute 2D side-scrolling action RPG set in a giant kitchen and house. I need a NEW MINIBOSS for the GARDEN world: a WATERING CAN WIZARD: an old tin watering can with a wizard beard of leaves and a twig wand. Draw it in exactly the same art style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute but a little menacing, with a few fuzzy green mould spots because the Mold Crown has corrupted it). It is a MINIBOSS: a bit bigger, tougher and more detailed than a normal enemy. Side view facing LEFT, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1 image."
+ },
+ {
+  "name": "mob-m8d",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/mob-bun.png"
+  ],
+  "prompt": "Generate an image. The reference is an enemy from my cute 2D side-scrolling action RPG set in a giant kitchen and house. I need a NEW MINIBOSS for the GARDEN world: a HEDGE TRIMMER BEETLE: a big green beetle with garden-shear mandibles and leafy armour. Draw it in exactly the same art style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute but a little menacing, with a few fuzzy green mould spots because the Mold Crown has corrupted it). It is a MINIBOSS: a bit bigger, tougher and more detailed than a normal enemy. Side view facing LEFT, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1 image."
+ },
+ {
+  "name": "mob-m8e",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/mob-bun.png"
+  ],
+  "prompt": "Generate an image. The reference is an enemy from my cute 2D side-scrolling action RPG set in a giant kitchen and house. I need a NEW MINIBOSS for the GARDEN world: a PUMPKIN SCARECROW: a tall scarecrow with a carved pumpkin head, straw arms and a patched coat. Draw it in exactly the same art style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute but a little menacing, with a few fuzzy green mould spots because the Mold Crown has corrupted it). It is a MINIBOSS: a bit bigger, tougher and more detailed than a normal enemy. Side view facing LEFT, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1 image."
+ },
+ {
+  "name": "mob-m9c",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/mob-bun.png"
+  ],
+  "prompt": "Generate an image. The reference is an enemy from my cute 2D side-scrolling action RPG set in a giant kitchen and house. I need a NEW MINIBOSS for the SUPERMARKET world: a CASH REGISTER GOLEM: a chunky old cash register with a drawer mouth full of coins and receipt-paper arms (no readable text). Draw it in exactly the same art style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute but a little menacing, with a few fuzzy green mould spots because the Mold Crown has corrupted it). It is a MINIBOSS: a bit bigger, tougher and more detailed than a normal enemy. Side view facing LEFT, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1 image."
+ },
+ {
+  "name": "mob-m9d",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/mob-bun.png"
+  ],
+  "prompt": "Generate an image. The reference is an enemy from my cute 2D side-scrolling action RPG set in a giant kitchen and house. I need a NEW MINIBOSS for the SUPERMARKET world: a MOP BUCKET MAGE: a yellow mop bucket with a mop for hair, a wet-floor-sign shield (no letters). Draw it in exactly the same art style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute but a little menacing, with a few fuzzy green mould spots because the Mold Crown has corrupted it). It is a MINIBOSS: a bit bigger, tougher and more detailed than a normal enemy. Side view facing LEFT, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1 image."
+ },
+ {
+  "name": "mob-m9e",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/mob-bun.png"
+  ],
+  "prompt": "Generate an image. The reference is an enemy from my cute 2D side-scrolling action RPG set in a giant kitchen and house. I need a NEW MINIBOSS for the SUPERMARKET world: a SHELF STACKER ROBOT: a boxy supermarket robot with a forklift base and tin cans stacked on its head. Draw it in exactly the same art style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute but a little menacing, with a few fuzzy green mould spots because the Mold Crown has corrupted it). It is a MINIBOSS: a bit bigger, tougher and more detailed than a normal enemy. Side view facing LEFT, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1 image."
+ },
+ {
+  "name": "mob-m10c",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/mob-bun.png"
+  ],
+  "prompt": "Generate an image. The reference is an enemy from my cute 2D side-scrolling action RPG set in a giant kitchen and house. I need a NEW MINIBOSS for the FEAST OF THE FORGOTTEN world: a MOULDY BANQUET BUTLER: a ghostly old butler made of a mouldy roast chicken in a tailcoat, carrying a tarnished silver tray. Draw it in exactly the same art style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute but a little menacing, with a few fuzzy green mould spots because the Mold Crown has corrupted it). It is a MINIBOSS: a bit bigger, tougher and more detailed than a normal enemy. Side view facing LEFT, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1 image."
+ },
+ {
+  "name": "mob-m10d",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/mob-bun.png"
+  ],
+  "prompt": "Generate an image. The reference is an enemy from my cute 2D side-scrolling action RPG set in a giant kitchen and house. I need a NEW MINIBOSS for the FEAST OF THE FORGOTTEN world: a STALE TRIFLE TITAN: a towering layered trifle giant in a cracked glass bowl body, custard and sponge layers, a cherry on its head. Draw it in exactly the same art style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute but a little menacing, with a few fuzzy green mould spots because the Mold Crown has corrupted it). It is a MINIBOSS: a bit bigger, tougher and more detailed than a normal enemy. Side view facing LEFT, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1 image."
+ },
+ {
+  "name": "mob-m10e",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/mob-bun.png"
+  ],
+  "prompt": "Generate an image. The reference is an enemy from my cute 2D side-scrolling action RPG set in a giant kitchen and house. I need a NEW MINIBOSS for the FEAST OF THE FORGOTTEN world: a FONDUE FIEND: a bubbling pot of molten cheese fondue with long fondue-fork arms and a cheesy grin. Draw it in exactly the same art style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute but a little menacing, with a few fuzzy green mould spots because the Mold Crown has corrupted it). It is a MINIBOSS: a bit bigger, tougher and more detailed than a normal enemy. Side view facing LEFT, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1 image."
+ }
+]

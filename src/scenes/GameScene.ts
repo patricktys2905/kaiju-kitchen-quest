@@ -62,7 +62,7 @@ const MID = 0.16;
 let manifest: string[] = [];
 let uiReady = false;
 
-interface MobView { img: Phaser.GameObjects.Image; plate: Phaser.GameObjects.Text; bar: Phaser.GameObjects.Rectangle; barBg: Phaser.GameObjects.Rectangle; shadow: Phaser.GameObjects.Ellipse; s: number; warn: Phaser.GameObjects.Text }
+interface MobView { img: Phaser.GameObjects.Image; plate: Phaser.GameObjects.Text; bar: Phaser.GameObjects.Rectangle; barBg: Phaser.GameObjects.Rectangle; shadow: Phaser.GameObjects.Ellipse; s: number; warn: Phaser.GameObjects.Text; crown?: Phaser.GameObjects.Text }
 
 /** What a zone asks you to do, in a few words. */
 export function goalText(g: ZoneGoal): string {
@@ -1243,7 +1243,7 @@ export class GameScene extends Phaser.Scene {
     // monsters
     const seen = new Set<number>();
     for (const m of w.mobs) { seen.add(m.id); this.drawMob(m, t); }
-    for (const [id, v] of this.mobViews) if (!seen.has(id)) { v.img.destroy(); v.plate.destroy(); v.bar.destroy(); v.barBg.destroy(); v.shadow.destroy(); v.warn.destroy(); this.mobViews.delete(id); }
+    for (const [id, v] of this.mobViews) if (!seen.has(id)) { v.crown?.destroy(); v.img.destroy(); v.plate.destroy(); v.bar.destroy(); v.barBg.destroy(); v.shadow.destroy(); v.warn.destroy(); this.mobViews.delete(id); }
 
     // boxes
     const seenB = new Set<number>();
@@ -1379,7 +1379,7 @@ export class GameScene extends Phaser.Scene {
     // long stages hold dozens of monsters: only draw the ones near the camera (their views are made when they come close)
     const view = this.cameras.main.worldView;
     if (m.x < view.x - 360 || m.x > view.right + 360) {
-      if (v) { v.img.setVisible(false); v.plate.setVisible(false); v.shadow.setVisible(false); v.bar.setVisible(false); v.barBg.setVisible(false); v.warn.setVisible(false); }
+      if (v) { v.crown?.setVisible(false); v.img.setVisible(false); v.plate.setVisible(false); v.shadow.setVisible(false); v.bar.setVisible(false); v.barBg.setVisible(false); v.warn.setVisible(false); }
       return;
     }
     if (!v) {
@@ -1394,6 +1394,7 @@ export class GameScene extends Phaser.Scene {
       if (m.elite) plate.setColor('#ffb347');
       if (m.mods.length) plate.setColor(ELITE_MODS[m.mods[0]].color);
       if (def.brain === 'boss') plate.setVisible(false);
+      if (def.king) v.crown = this.add.text(0, 0, '👑', { fontSize: '38px' }).setOrigin(0.5, 0.85).setDepth(3.5).setResolution(2);
       this.mobViews.set(m.id, v);
     }
     const flyer = def.brain === 'flyer';
@@ -1429,6 +1430,7 @@ export class GameScene extends Phaser.Scene {
     else v.img.clearTint().setTintMode(Phaser.TintModes.MULTIPLY);
     const top = m.y - def.h * (m.elite ? ELITE.scale : 1) - 18;
     const danger = this.world!.isDanger(m);
+    v.crown?.setVisible(!m.under && m.state !== 'dead').setPosition(m.x + m.face * def.w * 0.08, m.y - def.h * sy * (m.elite ? ELITE.scale : 1) + 4).setRotation(rot);
     v.warn.setVisible(danger).setPosition(m.x, top - 4).setScale(danger ? 1 + Math.sin(t * 24) * 0.15 : 1);
     const fl = this.world!.floorBelow(m.x, m.y, m.y + 2000, false);
     v.shadow.setPosition(m.x, (fl ? fl.y : m.y) - 1).setAlpha(m.state === 'dead' ? 0 : 1);

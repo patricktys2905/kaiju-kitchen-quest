@@ -32,6 +32,20 @@ export interface WorldDef {
   names: string[];
 }
 
+/** Each world's boss-room foes for stages 1-4 and 6-9, in order: all different (its minibosses and Kings). */
+export const ROOM_FOES: Record<number, MobKind[]> = {
+  1: ['kbun', 'm1a', 'm1c', 'kworm', 'm1b', 'm1d', 'kpepper', 'm1e'],
+  2: ['kpea', 'm2a', 'm2c', 'kmilk', 'm2b', 'm2d', 'kcarrot', 'm2e'],
+  3: ['kbacon', 'm3a', 'm3c', 'kpopcorn', 'm3b', 'm3d', 'kkettle', 'm3e'],
+  4: ['kcheerio', 'm4a', 'm4c', 'knoodle', 'm4b', 'm4d', 'kraisin', 'm4e'],
+  5: ['kplate', 'm5a', 'm5c', 'kmug', 'm5b', 'm5d', 'kglove', 'm5e'],
+  6: ['kfork', 'm6a', 'm6c', 'kcandle', 'm6b', 'm6d', 'kteapot', 'm6e'],
+  7: ['kbeetle', 'm7a', 'm7c', 'kketchup', 'm7b', 'm7d', 'kcorn', 'm7e'],
+  8: ['ksnail', 'm8a', 'm8c', 'ktomato', 'm8b', 'm8d', 'kradish', 'm8e'],
+  9: ['ktrolley', 'm9a', 'm9c', 'kbanana', 'm9b', 'm9d', 'kcan2', 'm9e'],
+  10: ['kcherrysoldier', 'm10a', 'm10c', 'kpudding', 'm10b', 'm10d', 'kcracker2', 'm10e'],
+};
+export const roomFoe = (world: number, n: number): MobKind => ROOM_FOES[world][[1, 2, 3, 4, 6, 7, 8, 9].indexOf(n)] ?? ROOM_FOES[world][0];
 export const WORLDS: WorldDef[] = [
   {
     id: 1, name: 'The Countertop', blurb: 'Where the leftovers went bad.', bg: 'bg-far', mid: 'bg-mid', tile: 'tile-ground', platTint: 0xffffff, bossBg: 'bg-far-stove',
@@ -344,7 +358,7 @@ function genMaps(w: WorldDef, n: number, o: { seed?: number; id: string; name?: 
   const { lvLo, lvHi } = o, boss = n === 10;
   const r = rng(o.seed ?? w.id * 1000 + n * 37 + 11);
   const pick = <T>(a2: T[]): T => a2[Math.floor(r() * a2.length)];
-  const mini = (n + w.id) % 2 ? [`m${w.id}a`, `m${w.id}b`] : [`m${w.id}b`, `m${w.id}a`];
+  const mini = roomFoe(w.id, n);
   const b: Build = { platforms: [], ladders: [], mobs: [], props: [], hazards: [], arenas: [], belts: [], darks: [], gates: [] };
   const GAP = 600, maps: StageMap[] = [];
   const nMaps = boss || n <= 3 ? 2 : 3; // a world's first stages and its boss stage: two maps
@@ -404,7 +418,7 @@ function genMaps(w: WorldDef, n: number, o: { seed?: number; id: string; name?: 
   const mv = <T extends { x: number }>(a2: T): T => ({ ...a2, x: a2.x + bx0 });
   for (const p of room.platforms) b.platforms.push(mv(p));
   const foe: MobSpawn = boss ? { ...mv(room.mobs[0]), wake: bx0 + 320 }
-    : { kind: (n === 5 ? w.elite : mini[0]) as MobKind, lv: lvHi + 1, x: bx0 + 1150, elite: !(w.id === 1 && n <= 2), wake: bx0 + 320 };
+    : { kind: (n === 5 ? w.elite : mini) as MobKind, lv: lvHi + 1, x: bx0 + 1150, elite: !(w.id === 1 && n <= 2), wake: bx0 + 320 };
   b.mobs.unshift(foe); // the boss is mobs[0]
   if (boss) for (const h of room.hazards ?? []) b.hazards.push(mv(h));
   const bossMap: StageMap = { name: boss ? MOBS[w.boss].name : MOBS[foe.kind].name, kind: 'boss', x0: bx0, x1: bx0 + room.width, portals: [] };

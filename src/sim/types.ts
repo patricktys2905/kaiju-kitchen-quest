@@ -97,7 +97,7 @@ export interface StageDef {
 }
 
 export type MobKind = 'jamhop' | 'salt' | 'cheesemouse' | 'icepop' | 'crumbcube' | 'mitt' | 'bee' | 'cracker' | 'duck' | 'straw' | 'teacake' | 'ladle' | 'skewer' | 'firefly' | 'caterpillar' | 'toadstool' | 'coupon' | 'boxbot' | 'pudding' | 'cracker2'
-  | 'm1a' | 'm1b' | 'm2a' | 'm2b' | 'm3a' | 'm3b' | 'm4a' | 'm4b' | 'm5a' | 'm5b' | 'm6a' | 'm6b' | 'm7a' | 'm7b' | 'm8a' | 'm8b' | 'm9a' | 'm9b' | 'm10a' | 'm10b' | 'xegg' | 'xpickle' | 'xmeatball' | 'xcan' | 'xscrub' | 'xroast' | 'xpatty' | 'xpumpkin' | 'xmelon' | 'xfruitknight'
+  | 'm1a' | 'm1b' | 'm2a' | 'm2b' | 'm3a' | 'm3b' | 'm4a' | 'm4b' | 'm5a' | 'm5b' | 'm6a' | 'm6b' | 'm7a' | 'm7b' | 'm8a' | 'm8b' | 'm9a' | 'm9b' | 'm10a' | 'm10b' | 'm1c' | 'm1d' | 'm1e' | 'm2c' | 'm2d' | 'm2e' | 'm3c' | 'm3d' | 'm3e' | 'm4c' | 'm4d' | 'm4e' | 'm5c' | 'm5d' | 'm5e' | 'm6c' | 'm6d' | 'm6e' | 'm7c' | 'm7d' | 'm7e' | 'm8c' | 'm8d' | 'm8e' | 'm9c' | 'm9d' | 'm9e' | 'm10c' | 'm10d' | 'm10e' | 'kbun' | 'kworm' | 'kpepper' | 'kpea' | 'kmilk' | 'kcarrot' | 'kbacon' | 'kpopcorn' | 'kkettle' | 'kcheerio' | 'knoodle' | 'kraisin' | 'kplate' | 'kmug' | 'kglove' | 'kfork' | 'kcandle' | 'kteapot' | 'kbeetle' | 'kketchup' | 'kcorn' | 'ksnail' | 'ktomato' | 'kradish' | 'ktrolley' | 'kbanana' | 'kcan2' | 'kcherrysoldier' | 'kpudding' | 'kcracker2' | 'xegg' | 'xpickle' | 'xmeatball' | 'xcan' | 'xscrub' | 'xroast' | 'xpatty' | 'xpumpkin' | 'xmelon' | 'xfruitknight'
   | 'bun' | 'worm' | 'pepper' | 'egg' | 'toast' | 'pea' | 'yogurt' | 'icebat' | 'pickle' | 'golem'
   | 'popcorn' | 'imp' | 'bacon' | 'meatball' | 'dragon'
   | 'can' | 'cheerio' | 'minicheerio' | 'soda' | 'flour' | 'jar'
