@@ -21,7 +21,7 @@ export interface Platform { x: number; y: number; w: number; solid?: boolean;
   secret?: boolean }
 /** Interactive props. crate/jar break for loot, sponge bounces you up, lever drops a rolling pin on [tx-tw/2, tx+tw/2],
  *  chest (on secret ledges) holds a big box and maybe this world's key. */
-export interface Prop { kind: 'crate' | 'jar' | 'sponge' | 'lever' | 'chest'; x: number; y: number; key?: boolean; tx?: number; tw?: number; /** a lever that opens gate i (instead of dropping a rolling pin) */ gate?: number }
+export interface Prop { kind: 'crate' | 'jar' | 'sponge' | 'lever' | 'chest' | 'cage' | 'nest'; x: number; y: number; key?: boolean; tx?: number; tw?: number; /** a lever that opens gate i (instead of dropping a rolling pin) */ gate?: number }
 export interface Ladder { x: number; top: number; bottom: number }
 export interface MobSpawn { kind: MobKind; x: number; y?: number; lv: number; elite?: boolean; /** asleep until a hero passes this x (a boss at the end of a long stage) */ wake?: number }
 /** Stage hazard on the ground floor. burner = flame pillar, vent = steam launch, drop = falling can, ice = slippery.
@@ -33,7 +33,23 @@ export interface Objective { kind: 'escort' | 'fetch' | 'survive'; /** seconds: 
 /** Optional "Spicy" challenges chosen before a stage (each adds loot). */
 export type Spicy = 'nopots' | 'glass' | 'clock';
 
+/** A zone's goal: its piece of the boss-door key. */
+export type ZoneGoal =
+  | { kind: 'collect'; mob: MobKind; item: string; need: number }
+  | { kind: 'rescue'; need: number }
+  | { kind: 'nests'; need: number }
+  | { kind: 'arena' }
+  | { kind: 'fetch' }
+  | { kind: 'survive' };
+/** One map of a stage: maps sit side by side in the world, walled off, joined by portals (press up to go through). */
+export interface StageMap {
+  name: string; kind: 'hub' | 'zone' | 'boss'; x0: number; x1: number; goal?: ZoneGoal;
+  /** to = map index, tx = where you come out; boss = the boss door (opens when every zone's goal is done) */
+  portals: { x: number; to: number; tx: number; boss?: boolean }[];
+}
 export interface StageDef {
+  /** a stage of maps: a hub, zones with goals, and the boss room (see stages.ts genMaps) */
+  maps?: StageMap[];
   /** a long boss stage: the backdrop switches to this when the boss wakes */
   bossBg?: string;
   /** free mode: monster strength set by level instead of by world */
@@ -102,6 +118,9 @@ export type BoxTier = 1 | 2 | 3 | 4 | 5;
 export interface LootBox { tier: BoxTier; ilvl: number }
 
 export type SimEvent =
+  | { t: 'warp'; to: number; hi: number }
+  | { t: 'goal'; zone: number; text: string; done: boolean }
+  | { t: 'doorLocked'; left: number }
   | { t: 'ambush'; x: number }
   | { t: 'gate'; i: number; x: number }
   | { t: 'bossWake'; kind: MobKind }

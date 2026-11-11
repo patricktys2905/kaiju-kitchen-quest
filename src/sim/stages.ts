@@ -3,7 +3,7 @@
 // Reach: the lowest jumper (Bluebeary) rises ~105 px, so tiers are 90 px apart; the top tier needs a ladder
 // or a lower platform beside it (tests/world.test.ts checks every platform is reachable).
 import { MOBS } from './mobs';
-import type { Arena, Hazard, HazardKind, MobKind, MobSpawn, Platform, Ladder, Prop, StageDef } from './types';
+import type { Arena, Hazard, HazardKind, MobKind, MobSpawn, Platform, Ladder, Prop, StageDef, StageMap, ZoneGoal } from './types';
 
 const G = 470;
 const SPECIALIST = new Set(['turret', 'sniper', 'healer', 'summoner', 'charger', 'burrower']);
@@ -11,20 +11,9 @@ const TIER = [380, 290, 200];
 /** Story stages are this many times the original short layout (5-10 minutes each); a boss stage's run-up before the boss room. */
 export const STAGE_LEN = 5, BOSS_RUN = 3.2;
 
-/** Each stage number's own sections, in order (the first field and the finale are added around them). */
-const RECIPE: Record<number, Sec[]> = {
-  1: ['treasure', 'field', 'arena', 'tower', 'swarm'],
-  2: ['chase', 'field', 'arena', 'gauntlet', 'ambush'],
-  3: ['lever', 'snipers', 'treasure', 'tower', 'arena', 'mini'],
-  4: ['field', 'gauntlet', 'arena', 'treasure', 'heavies'],
-  5: ['ambush', 'arena', 'tower', 'gate', 'heavies'],
-  6: ['snipers', 'mini', 'tower', 'arena'],
-  7: ['lever', 'dark', 'arena', 'treasure', 'gate', 'mini'],
-  8: ['conveyor', 'ambush', 'holdout', 'arena', 'snipers'],
-  9: ['dark', 'gauntlet', 'arena', 'treasure', 'mini', 'ambush', 'tower'],
-};
-/** extra sections the shuffle can add (a world adds its own flavour: conveyors from the Fridge on, lights-out from the Oven) */
-const EXTRAS: Sec[] = ['field', 'swarm', 'snipers', 'heavies', 'tower', 'gauntlet', 'treasure', 'ambush', 'gate'];
+/** A zone goal's name (also the zone's name) and, for collecting, what each world's quest item is called. */
+const GOAL_NAME: Record<ZoneGoal['kind'], string> = { collect: 'Hunting Ground', rescue: 'Crumblet Cages', nests: 'Mould Nests', arena: 'The Pit', fetch: 'Scroll Run', survive: 'Last Stand' };
+const QUEST_ITEM = ['Mould Crumbs', 'Frost Shards', 'Ember Coals', 'Pantry Tokens', 'Soap Pearls', 'Silver Spoons', 'Charcoal Chips', 'Seed Pods', 'Price Tags', 'Candied Peels'];
 
 export interface WorldDef {
   id: number; name: string; blurb: string;
@@ -49,38 +38,38 @@ export interface WorldDef {
 export const WORLDS: WorldDef[] = [
   {
     id: 1, name: 'The Countertop', blurb: 'Where the leftovers went bad.', bg: 'bg-far', mid: 'bg-mid', tile: 'tile-ground', platTint: 0xffffff, bossBg: 'bg-far-stove',
-    baseLv: 1, power: 1, pool: [[1, 'bun'], [3, 'worm'], [4, 'ant'], [6, 'pepper'], [6, 'garlic'], [7, 'egg']], hazard: 'burner', mimic: 'mimic', elite: 'xegg', boss: 'toast',
+    baseLv: 1, power: 1, mobPow: 1.12, pool: [[1, 'bun'], [3, 'worm'], [4, 'ant'], [6, 'pepper'], [6, 'garlic'], [7, 'egg']], hazard: 'burner', mimic: 'mimic', elite: 'xegg', boss: 'toast',
     names: ['Countertop Meadow', 'Crumb Trail', 'Gummy Gully', 'Toaster Hills', 'Rotten Ridge', 'Spice Shelf', 'Pepper Pass', 'Cutting Board Bluffs', 'Burner Approach', 'Stovetop Throne'],
   },
   {
     id: 2, name: 'The Fridge', blurb: 'Cold, crisp and full of grudges.', bg: 'bg-far-fridge', mid: 'bg-mid-fridge', tile: 'tile-fridge', platTint: 0xc8e4ff, bossBg: 'bg-far-freezer',
-    baseLv: 13, power: 1.3, pool: [[1, 'pea'], [1, 'yogurt'], [2, 'milk'], [3, 'icebat'], [4, 'carrot'], [6, 'pickle'], [7, 'jelly']], hazard: 'ice', mimic: 'mimic', elite: 'xpickle', boss: 'golem',
+    baseLv: 13, power: 1.3, mobPow: 1.12, pool: [[1, 'pea'], [1, 'yogurt'], [2, 'milk'], [3, 'icebat'], [4, 'carrot'], [6, 'pickle'], [7, 'jelly']], hazard: 'ice', mimic: 'mimic', elite: 'xpickle', boss: 'golem',
     names: ['Crisper Drawer', 'Dairy Lane', 'Frosty Shelf', 'Pickle Jar Pier', 'Knight of the Brine', 'Egg Carton Cliffs', 'Butter Bridge', 'Ketchup Canyon', 'Ice Tray Steps', 'Freezer Throne'],
   },
   {
     id: 3, name: 'The Oven', blurb: 'Preheated to dangerous.', bg: 'bg-far-oven', mid: 'bg-mid-oven', tile: 'tile-oven', platTint: 0xffc8a0, bossBg: 'bg-far-dragon',
-    baseLv: 25, power: 1.6, pool: [[1, 'bacon'], [1, 'popcorn'], [2, 'sausage'], [3, 'imp'], [4, 'kettle'], [6, 'meatball'], [7, 'marsh']], hazard: 'vent', mimic: 'cereal', elite: 'xmeatball', boss: 'dragon',
+    baseLv: 25, power: 1.6, mobPow: 1.12, pool: [[1, 'bacon'], [1, 'popcorn'], [2, 'sausage'], [3, 'imp'], [4, 'kettle'], [6, 'meatball'], [7, 'marsh']], hazard: 'vent', mimic: 'cereal', elite: 'xmeatball', boss: 'dragon',
     names: ['Oven Door Ramp', 'Bottom Rack', 'Muffin Tin Maze', 'Casserole Cliffs', 'Meatball Mountain', 'Cookie Sheet Plains', 'Roasting Pan Pass', 'Pizza Stone Steppe', 'Top Rack Ascent', 'Broiler Peak'],
   },
   {
     id: 4, name: 'The Pantry', blurb: 'Dusty shelves, grumpy groceries.', bg: 'bg-far-pantry', mid: 'bg-mid-pantry', tile: 'tile-pantry', platTint: 0xe8d0b0, bossBg: 'bg-far-jar',
-    baseLv: 37, power: 2.5, pool: [[1, 'cheerio'], [1, 'flour'], [2, 'noodle'], [3, 'can'], [4, 'raisin'], [5, 'soda']], hazard: 'drop', mimic: 'cereal', elite: 'xcan', boss: 'jar',
+    baseLv: 37, power: 2.5, mobPow: 1.12, pool: [[1, 'cheerio'], [1, 'flour'], [2, 'noodle'], [3, 'can'], [4, 'raisin'], [5, 'soda']], hazard: 'drop', mimic: 'cereal', elite: 'xcan', boss: 'jar',
     names: ['Cupboard Door', 'Cereal Canyon', 'Flour Drifts', 'Tin Can Alley', 'Shield Wall', 'Spice Rack Ridge', 'Pasta Jar Peaks', 'Honey Hollow', 'Top Shelf Climb', 'Cookie Vault'],
   },
   {
     id: 5, name: 'The Sink', blurb: 'Deep, damp and down the drain.', bg: 'bg-far-sink', mid: 'bg-mid-sink', tile: 'tile-sink', platTint: 0xd0e4f0, bossBg: 'bg-far-drain',
-    baseLv: 49, power: 3.0, pool: [[1, 'plate'], [1, 'bubble'], [2, 'mug'], [3, 'eel'], [4, 'glove'], [7, 'scrub']], hazard: 'tap', mimic: 'mimic', elite: 'xscrub', boss: 'moldking',
+    baseLv: 49, power: 3.0, mobPow: 1.12, pool: [[1, 'plate'], [1, 'bubble'], [2, 'mug'], [3, 'eel'], [4, 'glove'], [7, 'scrub']], hazard: 'tap', mimic: 'mimic', elite: 'xscrub', boss: 'moldking',
     names: ['Faucet Falls', 'Suds Slide', 'Sponge Shoals', 'Dish Rack Ridge', 'Steel Wool Wall', 'Bubble Bay', 'Plughole Pass', 'Greasy Pan Pits', 'Drain Descent', 'The Mold Throne'],
   },
   // ---- Act 2: Beyond the Kitchen ----
   {
     id: 6, name: 'The Dining Room', blurb: 'Fancy plates, forgotten feasts.', bg: 'bg-far-dining', mid: 'bg-mid-dining', tile: 'tile-dining', platTint: 0xf0e0c8, bossBg: 'bg-far-table',
-    baseLv: 61, power: 3.4, mobPow: 1.25, pool: [[1, 'fork'], [1, 'napkin'], [2, 'candle'], [3, 'gravy'], [4, 'teapot'], [7, 'roast']], hazard: 'wax', mimic: 'mimic', elite: 'xroast', boss: 'stale',
+    baseLv: 61, power: 3.4, mobPow: 1.35, pool: [[1, 'fork'], [1, 'napkin'], [2, 'candle'], [3, 'gravy'], [4, 'teapot'], [7, 'roast']], hazard: 'wax', mimic: 'mimic', elite: 'xroast', boss: 'stale',
     names: ['Tablecloth Trail', 'Placemat Plains', 'Candelabra Crossing', 'Gravy Boat Bay', 'Roast Ridge', 'Teacup Terrace', 'Napkin Fold Fort', 'Silverware Siege', 'Chandelier Climb', 'The Head of the Table'],
   },
   {
     id: 7, name: 'The Backyard BBQ', blurb: 'Sizzling, smoky and full of ants.', bg: 'bg-far-backyard', mid: 'bg-mid-backyard', tile: 'tile-backyard', platTint: 0xe8d0a8, bossBg: 'bg-far-grill',
-    baseLv: 71, power: 3.8, mobPow: 1.35, pool: [[1, 'beetle'], [1, 'wasp'], [2, 'ketchup'], [3, 'charcoal'], [4, 'corn'], [7, 'patty']], hazard: 'sprinkler', mimic: 'mimic', elite: 'xpatty', boss: 'brussels',
+    baseLv: 71, power: 3.8, mobPow: 1.15, pool: [[1, 'beetle'], [1, 'wasp'], [2, 'ketchup'], [3, 'charcoal'], [4, 'corn'], [7, 'patty']], hazard: 'sprinkler', mimic: 'mimic', elite: 'xpatty', boss: 'brussels',
     names: ['Lawn Launch', 'Hose Highway', 'Sprinkler Springs', 'Paddling Pool Pier', 'Patty Plateau', 'Picnic Table Peak', 'Flowerpot Fort', 'Cooler Canyon', 'Charcoal Climb', 'The Grill Summit'],
   },
   {
@@ -90,12 +79,12 @@ export const WORLDS: WorldDef[] = [
   },
   {
     id: 9, name: 'The Supermarket', blurb: 'Open late. Very, very late.', bg: 'bg-far-market', mid: 'bg-mid-market', tile: 'tile-market', platTint: 0xd8e0e8, bossBg: 'bg-far-freezer2',
-    baseLv: 91, power: 4.6, mobPow: 0.8, pool: [[1, 'trolley'], [1, 'bag'], [2, 'banana'], [3, 'scanner'], [4, 'can2'], [7, 'melon']], hazard: 'chill', mimic: 'mimic', elite: 'xmelon', boss: 'tupper',
+    baseLv: 91, power: 4.6, mobPow: 0.72, pool: [[1, 'trolley'], [1, 'bag'], [2, 'banana'], [3, 'scanner'], [4, 'can2'], [7, 'melon']], hazard: 'chill', mimic: 'mimic', elite: 'xmelon', boss: 'tupper',
     names: ['Sliding Doors', 'Trolley Track', 'Cereal Aisle', 'Fruit and Veg', 'Melon Mountain', 'Bakery Bluff', 'Canned Goods Keep', 'Checkout Chaos', 'The Frozen Aisle', 'The Back Aisle'],
   },
   {
     id: 10, name: 'The Feast of the Forgotten', blurb: 'Where forgotten food goes to sulk.', bg: 'bg-far-fridgeback', mid: 'bg-mid-fridgeback', tile: 'tile-fridgeback', platTint: 0xd0e0f0, bossBg: 'bg-far-feast',
-    baseLv: 101, power: 5.0, mobPow: 0.88, pool: [[1, 'cherrysoldier'], [1, 'peel'], [2, 'fork'], [3, 'beetle'], [4, 'snail'], [5, 'scanner'], [7, 'fruitknight']], hazard: 'chill', mimic: 'mimic', elite: 'xfruitknight', boss: 'fruitcake',
+    baseLv: 101, power: 5.0, mobPow: 0.72, pool: [[1, 'cherrysoldier'], [1, 'peel'], [2, 'fork'], [3, 'beetle'], [4, 'snail'], [5, 'scanner'], [7, 'fruitknight']], hazard: 'chill', mimic: 'mimic', elite: 'xfruitknight', boss: 'fruitcake',
     names: ['The Cold Door', 'Jam Jar Junction', 'Takeaway Towers', 'Frost Drawer Falls', 'Knight of the Fruitcake', 'Paper Chain Pass', 'The Forgotten Shelf', 'The Last Stand', 'The Long Table', 'The Feast of the Forgotten'],
   },
 ];
@@ -110,7 +99,7 @@ function rng(seed: number): () => number {
 export function genStage(w: WorldDef, n: number, o: { seed?: number; lv?: number; id?: string; name?: string; /** length multiplier */ len?: number; /** boss: just the boss room (Boss Rush, Endless) */ short?: boolean } = {}): StageDef {
   const id = o.id ?? `${w.id}-${n}`;
   const lvLo = o.lv ?? w.baseLv + n - 1, lvHi = lvLo + 1;
-  if (n === 10 && !o.short) return longBoss(w, id, lvLo, o);
+  if (n === 10 && !o.short) return genMaps(w, 10, { ...o, id, lvLo, lvHi: lvLo + 1 });
   if (n === 10) {
     return {
       id, world: w.id, num: id, name: o.name ?? w.names[9], bg: w.bossBg, mid: '', tile: w.tile, platTint: w.platTint, width: 1500, groundY: G,
@@ -123,7 +112,7 @@ export function genStage(w: WorldDef, n: number, o: { seed?: number; lv?: number
   }
   const r = rng(o.seed ?? w.id * 1000 + n * 37 + 11);
   const LEN = o.len ?? (w.id <= 5 ? STAGE_LEN * 1.2 : STAGE_LEN); // Act 1 monsters fall faster, so its stages run a little longer
-  if (LEN > 1.5) return genLong(w, n, { ...o, id, lvLo, lvHi });
+  if (LEN > 1.5) return genMaps(w, n, { ...o, id, lvLo, lvHi });
   const width = Math.round((2200 + n * 140) * LEN);
   const platforms: Platform[] = [];
   const ladders: Ladder[] = [];
@@ -193,27 +182,6 @@ export function genStage(w: WorldDef, n: number, o: { seed?: number; lv?: number
   };
 }
 
-/** A long boss stage: a run-up through the world (no timed goal), then the boss room. The boss is mobs[0] and sleeps
- *  until you walk into its room; the backdrop switches to the boss backdrop then. */
-function longBoss(w: WorldDef, id: string, lvLo: number, o: { seed?: number; name?: string }): StageDef {
-  const run = genLong(w, 9, { seed: (o.seed ?? w.id * 1000) + 997, id, lvLo, lvHi: lvLo + 1, run: true });
-  const W = run.width - 200; // the room starts here (the run-up's exit end is dropped)
-  const room = genStage(w, 10, { lv: lvLo, id, short: true });
-  const mv = <T extends { x: number }>(a: T): T => ({ ...a, x: a.x + W });
-  const boss = { ...room.mobs[0], x: room.mobs[0].x + W, wake: W + 260 };
-  return {
-    ...run, id, num: id, name: o.name ?? w.names[9], bg: w.bg, bossBg: w.bossBg, width: W + room.width, boss: true,
-    lv: [lvLo, lvLo + 2], rec: lvLo, par: run.par + 130, objective: undefined,
-    platforms: [...run.platforms.filter(p => p.x + p.w < W - 60), ...room.platforms.map(mv)],
-    ladders: run.ladders.filter(l => l.x < W - 60),
-    mobs: [boss, ...run.mobs.filter(m => m.x < W - 300)],
-    // a breather before the boss: three honey jars by the door (8% health each)
-    props: [...(run.props ?? []).filter(p => p.x < W - 400), ...[W - 330, W - 250, W - 170].map(x => ({ kind: 'jar' as const, x, y: G }))],
-    hazards: [...(run.hazards ?? []).filter(h => h.x < W - 300), ...(room.hazards ?? []).map(mv)],
-    arenas: (run.arenas ?? []).filter(a => a.x1 < W - 100),
-    cookers: (run.cookers ?? []).filter(x => x < W - 300),
-  };
-}
 
 /** Props, moving trays, cookers and a secret ledge for a normal stage (seeded, the same for everyone). */
 function interactive(w: WorldDef, n: number, width: number, platforms: Platform[], ladders: Ladder[], r: () => number, LEN = 1): { props: Prop[]; cookers: number[] } {
@@ -371,25 +339,17 @@ interface Build {
   belts: { x: number; w: number; v: number }[]; darks: { x0: number; x1: number }[]; gates: { x: number }[];
   chase?: { x0: number; x1: number }; holdAt?: number; fetchAt?: number;
 }
-function genLong(w: WorldDef, n: number, o: { seed?: number; id: string; name?: string; lvLo: number; lvHi: number; run?: boolean }): StageDef {
-  const { lvLo, lvHi } = o;
-  const r = rng(o.seed ?? w.id * 1000 + n * 37 + 11);
+/** The section builders, shared by every map of a stage: place(sec, x0) builds one section from x0 and returns its width. */
+function sectionKit(w: WorldDef, n: number, lvLo: number, lvHi: number, r: () => number, run = false) {
   const b: Build = { platforms: [], ladders: [], mobs: [], props: [], hazards: [], arenas: [], belts: [], darks: [], gates: [] };
-  const kinds = w.pool.filter(([from]) => (o.run ? 9 : n) >= from).map(([, k]) => k);
+  const kinds = w.pool.filter(([from]) => (run ? 9 : n) >= from).map(([, k]) => k);
   const basics = kinds.filter(k => !SPECIALIST.has(MOBS[k].brain));
   const pick = <T>(a: T[]): T => a[Math.floor(r() * a.length)];
   const lv = () => (r() < 0.5 ? lvLo : lvHi);
-  // the plan: an opening field, the stage's own sections with one or two extras slipped in, then the finale
-  let plan: Sec[] = o.run ? ['arena', pick(['tower', 'gauntlet', 'snipers']), 'ambush', pick(['heavies', 'swarm', 'dark'])] : [...RECIPE[n]];
-  const extras = EXTRAS.concat(w.id >= 2 ? ['conveyor'] : [], w.id >= 3 ? ['dark'] : []).filter(e => !plan.includes(e) && !(n === 4 && (e === 'ambush' || e === 'gate')));
-  for (let k = 0; k < (o.run ? 1 : 2 + (r() < 0.4 ? 1 : 0)); k++) { const e = pick(extras); plan.splice(1 + Math.floor(r() * plan.length), 0, e); extras.splice(extras.indexOf(e), 1); }
-  if (n === 2 && !o.run) plan = ['chase', ...plan.filter(p => p !== 'chase')]; // the rolling pin comes first
-  plan = ['field', ...plan, 'finale'];
   const mini = (n + w.id) % 2 ? [`m${w.id}a`, `m${w.id}b`] : [`m${w.id}b`, `m${w.id}a`];
   let miniI = 0, design = n;
-  let x = 0;
-  for (const sec of plan) {
-    const x0 = x;
+  const place = (sec: Sec, x0: number): number => {
+    let x = x0;
     switch (sec) {
       case 'field': case 'swarm': case 'snipers': case 'heavies': case 'dark': {
         const wd = 1700 + Math.round(r() * 700);
@@ -499,38 +459,115 @@ function genLong(w: WorldDef, n: number, o: { seed?: number; id: string; name?: 
       }
       case 'finale': {
         // the last stretch: the scroll race (stage 6), the elite / nemesis (stage 5), or a last fight before the exit
-        const wd = n === 6 && !o.run ? 2800 : 1700;
+        const wd = n === 6 && !run ? 2800 : 1700;
         terrain(b, x0 + 200, x0 + wd - 350, r);
         roam(b, x0 + 200, x0 + wd - 350, Math.round(wd / 340), kinds, kinds, basics, lv, r, 0);
-        if (n === 6 && !o.run) b.fetchAt = x0 + 100;
-        if (n === 5 && !o.run) b.mobs.push({ kind: w.elite, lv: lvHi + 1, x: x0 + wd - 450, elite: true, wake: x0 + wd - 1100 });
+        if (n === 6 && !run) b.fetchAt = x0 + 100;
+        if (n === 5 && !run) b.mobs.push({ kind: w.elite, lv: lvHi + 1, x: x0 + wd - 450, elite: true, wake: x0 + wd - 1100 });
         x += wd; break;
       }
     }
+
+    return x - x0;
+  };
+  return { b, place, kinds, basics, pick, lv, mini };
+}
+
+/** A stage of maps (Lunia / MapleStory style): a camp hub with portals to 3 zones; each zone has a goal (hunt a monster
+ *  for its quest drops, free caged Crumblets, smash mould nests, clear an arena, race for the scroll, hold out);
+ *  when all three are done the boss door opens: the stage's miniboss (stage 5: the elite or your nemesis; stage 10:
+ *  the world boss) in its own room, then the exit. */
+function genMaps(w: WorldDef, n: number, o: { seed?: number; id: string; name?: string; lvLo: number; lvHi: number }): StageDef {
+  const { lvLo, lvHi } = o, boss = n === 10;
+  const r = rng(o.seed ?? w.id * 1000 + n * 37 + 11);
+  const { b, place, basics, pick, lv, mini } = sectionKit(w, n, lvLo, lvHi, r, boss);
+  const GAP = 600, maps: StageMap[] = [];
+  // the camp: a couple of steps, two honey jars, a portal per zone and the boss door
+  const hub: StageMap = { name: 'Camp', kind: 'hub', x0: 0, x1: 1800, portals: [] };
+  b.platforms.push({ x: 200, y: TIER[0], w: 180 }, { x: 1180, y: TIER[0], w: 160 });
+  b.props.push({ kind: 'jar', x: 260, y: TIER[0] }, { kind: 'jar', x: 1250, y: TIER[0] });
+  maps.push(hub);
+  // the three goals: always a hunt; stage 6 has the scroll race, stage 8 the hold-out; the rest from the pool
+  const pool: ZoneGoal['kind'][] = ['rescue', 'nests', 'arena'].sort(() => r() - 0.5) as ZoneGoal['kind'][];
+  const kindsG: ZoneGoal['kind'][] = ['collect', n === 6 && !boss ? 'fetch' : n === 8 && !boss ? 'survive' : pool[0], pool[1]];
+  const close = basics.filter(k => !['ranged', 'sniper', 'turret', 'flyer'].includes(MOBS[k].brain));
+  const light = close.filter(k => MOBS[k].hp <= 120 && !MOBS[k].shield);
+  const huntable = light.length ? light : close.length ? close : basics;
+  const target = huntable[Math.floor(r() * huntable.length)];
+  const EXTRA: Sec[] = ['field', 'swarm', 'snipers', 'heavies', 'tower', ...(w.id === 1 && n === 1 ? [] : ['gauntlet' as Sec]), 'treasure', 'ambush', 'gate', ...(w.id >= 2 ? ['conveyor' as Sec] : []), ...(w.id >= 3 ? ['dark' as Sec] : [])];
+  let x = hub.x1 + GAP, fetchAt: number | undefined, holdAt: number | undefined, scrollX: number | undefined;
+  kindsG.forEach((gk, k) => {
+    const z0 = x;
+    let cx = z0 + 260;
+    const secs: Sec[] = [];
+    if (n === 2 && k === 0 && !boss) secs.push('chase');
+    if (gk === 'arena') secs.push(pick(['field', 'snipers', 'heavies'] as Sec[]), pick(EXTRA), 'arena');
+    else if (gk === 'survive') secs.push(pick(['field', 'swarm'] as Sec[]), pick(EXTRA), 'holdout');
+    else if (gk === 'fetch') secs.push(pick(['field', 'snipers'] as Sec[]), pick(['tower', 'gauntlet', 'ambush'] as Sec[]), 'field');
+    else { const ex = EXTRA.filter(e => !(n === 4 && (e === 'ambush' || e === 'gate'))); const e1 = pick(ex); secs.push(pick(['field', 'swarm', 'snipers', 'heavies'] as Sec[]), e1, pick(ex.filter(e => e !== e1))); }
+    if (n === 3 || n === 7) if (k === 1) secs.splice(1, 0, 'lever');
+    const mobs0 = b.mobs.length;
+    for (const sec of secs) cx += place(sec, cx);
+    let need = 0, goal: ZoneGoal;
+    if (gk === 'collect') {
+      need = 5 + Math.floor(n / 4);
+      goal = { kind: 'collect', mob: target, item: QUEST_ITEM[w.id - 1], need };
+      // plenty of the quest monster about (more come back while you hunt)
+      for (let i = 0; i < need + 2; i++) b.mobs.push({ kind: target, lv: lv(), x: Math.round(z0 + 500 + ((i + 0.5) / (need + 2)) * (cx - z0 - 700)) });
+    } else if (gk === 'rescue') {
+      goal = { kind: 'rescue', need: 3 };
+      const ledges = b.platforms.filter(p => p.x > z0 + 300 && p.x + p.w < cx - 100 && p.y === TIER[0] && !p.move && !p.secret);
+      for (let i = 0; i < 3; i++) { const p = ledges[i * 2]; b.props.push(p ? { kind: 'cage', x: Math.round(p.x + p.w / 2), y: p.y } : { kind: 'cage', x: Math.round(z0 + 600 + i * (cx - z0 - 900) / 2), y: G }); }
+    } else if (gk === 'nests') {
+      goal = { kind: 'nests', need: 3 };
+      for (let i = 0; i < 3; i++) b.props.push({ kind: 'nest', x: Math.round(z0 + 700 + i * (cx - z0 - 1100) / 2), y: G });
+    } else if (gk === 'fetch') {
+      goal = { kind: 'fetch' }; fetchAt = z0 + 200; scrollX = Math.min(cx - 120, z0 + 2800);
+    } else if (gk === 'survive') { goal = { kind: 'survive' }; holdAt = b.holdAt; }
+    else goal = { kind: 'arena' };
+    void mobs0;
+    // a few breakables to smash (crumbs, and now and then a honey jar)
+    for (let i = 0; i < 3; i++) b.props.push({ kind: r() < 0.5 ? 'crate' : 'jar', x: Math.round(z0 + 400 + r() * (cx - z0 - 700)), y: G });
+    // stage 7's world key: a secret ledge with a sponge, at the far end of the second zone (open sky above it)
+    if ((n === 3 || n === 7 || n === 9) && k === 0) b.mobs.push({ kind: w.mimic, lv: lvHi, x: Math.round(z0 + 600 + r() * (cx - z0 - 1000)) }); // a loot-box mimic lurks
+    if (n === 7 && k === 1 && !boss) { const lx = cx + 320; b.platforms.push({ x: lx, y: 150, w: 140, secret: true }); b.props.push({ kind: 'sponge', x: lx + 12, y: G }, { kind: 'chest', x: lx + 80, y: 150, key: true }); cx += 620; }
+    const z1 = cx + 200, hx = 380 + k * 340;
+    maps.push({ name: GOAL_NAME[gk], kind: 'zone', x0: z0, x1: z1, goal, portals: [{ x: z0 + 90, to: 0, tx: hx }] });
+    hub.portals.push({ x: hx, to: maps.length - 1, tx: z0 + 170 });
+    x = z1 + GAP;
+  });
+  // the boss room: the world boss on stage 10, else the stage's miniboss (stage 5: the elite, or your nemesis)
+  const bx0 = x, room = genStage(w, 10, { lv: lvLo, id: o.id, short: true });
+  const mv = <T extends { x: number }>(a: T): T => ({ ...a, x: a.x + bx0 });
+  for (const p of room.platforms) b.platforms.push(mv(p));
+  const foe: MobSpawn = boss ? { ...mv(room.mobs[0]), wake: bx0 + 320 }
+    : { kind: (n === 5 ? w.elite : mini[0]) as MobKind, lv: lvHi + 1, x: bx0 + 1150, elite: !(w.id === 1 && n <= 2), wake: bx0 + 320 };
+  b.mobs.unshift(foe); // the boss is mobs[0]
+  if (boss) for (const h of room.hazards ?? []) b.hazards.push(mv(h));
+  const bossMap: StageMap = { name: boss ? MOBS[w.boss].name : MOBS[foe.kind].name, kind: 'boss', x0: bx0, x1: bx0 + room.width, portals: [] };
+  maps.push(bossMap);
+  hub.portals.push({ x: hub.x1 - 200, to: maps.length - 1, tx: bx0 + 110, boss: true });
+  const width = bossMap.x1;
+  // hazards on open floor in the zones (not the camp or the boss room)
+  for (const m of maps.filter(q => q.kind === 'zone')) for (let tries = 0, got = 0; got < 1 + (n >= 6 ? 1 : 0) && tries < 40 && (w.id >= 2 || n >= 2); tries++) {
+    const hx = Math.round(m.x0 + 500 + r() * (m.x1 - m.x0 - 900));
+    if (b.arenas.some(a => hx > a.x0 - 120 && hx < a.x1 + 120) || b.gates.some(g => Math.abs(g.x - hx) < 300) || (b.chase && hx > b.chase.x0 && hx < b.chase.x1) || b.hazards.some(h => Math.abs(h.x - hx) < 380) || b.ladders.some(l => Math.abs(l.x - hx) < 90) || b.props.some(p => Math.abs(p.x - hx) < 120)) continue;
+    b.hazards.push(hazardAt(w.hazard, hx, r() * 3)); got++;
   }
-  const width = x + 300;
-  // hazards on open floor in the fields, away from ladders and the start / exit
-  const want = Math.round(width / 3000) + (n >= 6 ? 1 : 0);
-  for (let tries = 0; b.hazards.length < want + b.hazards.length * 0 && tries < 60 && (w.id >= 2 || n >= 2); tries++) {
-    const hx = Math.round(600 + r() * (width - 1200));
-    const inRoom = b.arenas.some(a => hx > a.x0 - 120 && hx < a.x1 + 120) || b.gates.some(g => Math.abs(g.x - hx) < 300) || (b.chase && hx > b.chase.x0 && hx < b.chase.x1);
-    if (inRoom || b.hazards.some(h => Math.abs(h.x - hx) < 380) || b.ladders.some(l => Math.abs(l.x - hx) < 90)) continue;
-    b.hazards.push(hazardAt(w.hazard, hx, r() * 3));
-    if (b.hazards.length >= want + 4 * plan.filter(p => p === 'gauntlet').length) break;
-  }
-  // the secret ledge / key chest, breakables, moving trays and pressure cookers, as in a short stage (no extra pin levers)
-  const inter = interactive(w, n, width, b.platforms, b.ladders, r, 3);
-  const props = [...b.props, ...inter.props.filter(p => p.kind !== 'lever' && (p.kind === 'sponge' || p.kind === 'chest' || !b.arenas.some(a => p.x > a.x0 - 40 && p.x < a.x1 + 40)))];
-  const cookers = inter.cookers.filter(cx => !b.arenas.some(a => cx > a.x0 - 200 && cx < a.x1 + 200) && !b.gates.some(g => Math.abs(g.x - cx) < 400));
-  const count = b.mobs.length + b.arenas.reduce((a, ar) => a + ar.waves.flat().length, 0);
+  // nothing may sit on a portal (you press up there)
+  const portalXs = maps.flatMap(m => m.portals.map(p => p.x));
+  b.ladders = b.ladders.filter(l => !portalXs.some(px => Math.abs(px - l.x) < 70));
+  const count = b.mobs.length + b.arenas.reduce((a2, ar) => a2 + ar.waves.flat().length, 0);
+  const play = width - GAP * (maps.length - 1);
   return {
     id: o.id, world: w.id, num: o.id, name: o.name ?? w.names[n - 1], bg: w.bg, mid: w.mid, tile: w.tile, platTint: w.platTint, width, groundY: G,
-    lv: [lvLo, n === 5 ? lvHi + 1 : lvHi], par: Math.round(25 + count * 5 + width / 70), rec: lvLo,
-    platforms: b.platforms, ladders: b.ladders, mobs: b.mobs, props, cookers,
-    hazards: awayFromSponges(b.hazards, props, b.ladders, width),
+    bossBg: boss ? w.bossBg : undefined, boss: boss || undefined,
+    lv: [lvLo, boss ? lvLo + 2 : lvHi + 1], par: Math.round(60 + count * 5 + play / 70), rec: lvLo,
+    platforms: b.platforms, ladders: b.ladders, mobs: b.mobs, props: b.props, cookers: [],
+    hazards: awayFromSponges(b.hazards, b.props, b.ladders, width),
     arenas: b.arenas, belts: b.belts.length ? b.belts : undefined, chase: b.chase, darks: b.darks.length ? b.darks : undefined, gates: b.gates.length ? b.gates : undefined,
-    sections: plan,
-    objective: o.run ? undefined : n === 4 ? { kind: 'escort' } : n === 6 ? { kind: 'fetch', t: w.id >= 7 ? 100 : w.id >= 5 ? 90 : 75, x: width - 260, at: b.fetchAt } : n === 8 ? { kind: 'survive', t: 45, at: b.holdAt } : undefined,
+    maps, sections: maps.map(m => m.name),
+    objective: boss ? undefined : n === 4 ? { kind: 'escort' } : n === 6 ? { kind: 'fetch', t: w.id >= 7 ? 110 : w.id >= 5 ? 100 : 90, x: scrollX, at: fetchAt } : n === 8 ? { kind: 'survive', t: 45, at: holdAt } : undefined,
   };
 }
 

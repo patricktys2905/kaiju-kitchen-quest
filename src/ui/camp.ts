@@ -14,8 +14,7 @@ import { HARD_LV } from '../sim/world';
 import {
   RANK_ORDER, type ClearResult, type Rank, chooseBranch, SHOP_BOXES, SHOP_ITEMS, autoStats, buyBox, buyConsumable, buyGear, canFortify, compare, equip, equipBest, fortify, regrade,
   gearPrice, hero, isLocked, levelSkill, learnNode, setLoadout, openBox, persist, resetStats, salvage, salvageWorse, save, setQuick, shopStock, spendStat, toggleLock,
-  unequip, useScroll, useSugar,
-} from '../save';
+  unequip, useScroll, useSugar, worldStars } from '../save';
 import { UI_CSS } from './style';
 import { freePage, startFree } from './free';
 import type { FreeMode } from '../sim/free';
@@ -27,6 +26,9 @@ import { ACHIEVEMENTS, DAILY_BONUS, achievements, checkUnlocks, claimAch, claimB
 import { STORIES, VARIANT_INFO, beatBefore, isMinorBeat } from '../story/stories';
 import { playStory } from './story';
 import { fsButton } from './title';
+import { STARS_FOR_SECRET, challengesFor } from '../sim/challenges';
+import { GEAR } from '../sim/gear';
+import { bossWeaponFor } from '../sim/bossgearData';
 import { isMuted, sfx, toggleMute } from '../audio';
 
 type Tab = 'map' | 'free' | 'hero' | 'skills' | 'bag' | 'market' | 'boxes' | 'quests';
@@ -150,7 +152,7 @@ function page(): string {
 // ---------- map ----------
 function rewardLine(s: StageDef): string {
   const lv = s.lv[1] + (save.hard ? HARD_LV : 0);
-  const tier = likelyTier(lv, 'A', !!s.boss), n = clearCount(lv);
+  const tier = likelyTier(lv, 'A', !!s.boss), n = clearCount('A', !!s.boss);
   return `<span class="rw"><img src="art/box-${tier}.webp"> ${TIER_NAMES[tier]}${n > 1 ? ` ×${n}` : ''}</span>`;
 }
 
@@ -187,10 +189,13 @@ function mapPage(): string {
       <div class="nm">${sel.name}</div>
       <div class="lv">Monsters Lv ${lv(sel.lv[0])}${sel.lv[1] !== sel.lv[0] ? '–' + lv(sel.lv[1]) : ''} · <span style="color:${low ? '#ff8a8a' : '#a8f0a8'}">you Lv ${p.level}${low ? ' (low!)' : ''}</span></div>
       <div class="lv">Reward: ${rewardLine(sel)}</div>
+      ${sel.boss ? (() => { const bw = bossWeaponFor(WORLDS[sel.world - 1].boss, p.species); return bw ? `<div class="lv" style="color:#ffb347">⚔ Hunts for: <img src="art/${bw.base}.webp" style="height:1.3em;vertical-align:middle"> ${bw.name} <small>(${bw.skill}${(save.bwPity?.[bw.base] ?? 0) ? `, ${save.bwPity![bw.base]}/4 clears without it` : ''})</small></div>` : ''; })() : ''}
+      ${sel.maps ? `<div class="lv" style="color:#ff9a6a">☠ Boss room: ${sel.id.endsWith('-5') && sel.world <= 5 && nemesisOf(p.species) ? MOB_DEFS[nemesisOf(p.species)!].name : sel.maps[sel.maps.length - 1].name} · 3 zones to clear first</div>` : ''}
       ${sel.objective ? `<div class="lv" style="color:#ffd27a">${({ escort: '🧁 Escort the lost Crumblet', fetch: `📜 Grab the Recipe Scroll in ${sel.objective.t}s`, survive: `⏱ Hold out for ${sel.objective.t}s` })[sel.objective.kind]} · bonus box</div>` : ''}
       ${STORIES[p.species]?.variants[sel.id] ? (() => { const v = VARIANT_INFO[STORIES[p.species].variants[sel.id]]; return `<div class="lv vtx">${v.icon} Story twist: <b>${v.name}</b> — ${v.desc}</div>`; })() : ''}
       <div class="lv story">📖 ${STORIES[p.species]?.title ?? ''}${beatBefore(sel.id, sel.id === '1-1').some(b => p.seen.includes(b)) || (sel.boss && p.seen.includes(`w${sel.world}-after`)) ? ` <button class="mini" data-replay="${sel.id}" title="Replay this stage's scenes">↻</button>` : ''} <button class="mini" data-act="storymode" title="Story scenes: every stage, or only the big ones">${save.storyMode === 'key' ? 'Key scenes' : 'All scenes'}</button></div>
       ${rank ? `<div class="lv">Best: <b style="color:${RANK_CSS[rank]}">${rank}</b></div>` : ''}
+      ${challengesFor(sel.id).length ? `<div class="lv chal">${challengesFor(sel.id).map(c => { const ok = (save.challenges?.[sel.id] ?? []).includes(c.id); return `<span class="${ok ? 'ok' : ''}" title="${c.desc}">${ok ? '★' : '☆'} ${c.name}: <small>${c.desc}</small></span>`; }).join('')}<small class="stars">World stars ${worldStars(sel.world)}/${STARS_FOR_SECRET} opens the secret stage</small></div>` : ''}
       ${(save.keys ?? []).includes(sel.world) ? (() => { const b = BONUS_STAGES[sel.world - 1]; return `<button class="pill big secret" data-play="${b.id}">🗝 ${b.name} <small>Lv ${b.lv[0]}–${b.lv[1]}</small></button>`; })() : sel.id.endsWith('-7') ? '<div class="lv" style="color:#ffd27a">🗝 A secret chest here hides this world\'s key</div>' : ''}
       <div class="lv buddy">🤝 Buddy <button class="pill" data-act="buddy">${save.buddy != null && save.buddy !== p.species && save.unlocked.includes(save.buddy) ? `<img src="art/kaiju-${save.buddy}.webp"> ${CLASSES.find(c => c.species === save.buddy)!.name}` : 'None'} ▸</button></div>
       <div class="playrow"><button class="pill go big" data-play="${sel.id}" ${stageUnlocked(sel) ? '' : 'disabled'}>${stageUnlocked(sel) ? '▶ PLAY' : '🔒 LOCKED'}</button><button class="pill online" data-act="online">🌐 ONLINE</button></div>
@@ -586,7 +591,7 @@ export function showResult(o: { stage: StageDef; res: ClearResult | null; time: 
     ${o.unlocked?.length ? `<div class="note" style="color:#7ee8c8">🎉 NEW KAIJU UNLOCKED: ${o.unlocked.join(', ')}! (starts at 1-1)</div>` : ''}
     ${o.levels ? `<div class="note">LEVEL UP ×${o.levels}! Spend your new stat and skill points at camp.</div>` : '<div class="note"></div>'}
     ${res ? `<div class="gots">${res.boxes.map((b: LootBox, i) => `<img src="art/box-${b.tier}.webp" title="${TIER_NAMES[b.tier]}" class="${i < res.upgraded ? 'up' : ''}">`).join('')}</div>
-    <div class="note">${res.upgraded ? `Rank ${res.rank} upgraded ${res.upgraded} box${res.upgraded > 1 ? 'es' : ''}! ` : ''}${res.firstClear ? 'First clear bonus box!' : ''}${res.firstClear && o.stage.boss ? ' +1 Golden Sugar Cube!' : ''}</div>` : '<div class="note">Boxes you found are lost (crumbs are kept). Level up, gear up, bring Jam Jars and try again!</div>'}
+    <div class="note">${res.upgraded ? `Rank ${res.rank} upgraded ${res.upgraded} box${res.upgraded > 1 ? 'es' : ''}! ` : ''}${res.firstClear ? 'First clear bonus box!' : ''}${res.firstClear && o.stage.boss ? ' +1 Golden Sugar Cube!' : ''}${res.newChallenges?.length ? `<br>★ ${res.newChallenges.join(' · ')} (+${res.crumbs} crumbs, +${res.newChallenges.length} box${res.newChallenges.length > 1 ? 'es' : ''})` : ''}${res.secretOpened ? '<br>🗝 Enough stars: this world\'s secret stage is open!' : ''}${res.bossWeapon ? `<br><b style="color:#ffb347">⚔ BOSS WEAPON: ${BASES[res.bossWeapon.base].name}</b> (gear skill: ${GEAR[res.bossWeapon.base]?.name ?? ''}) is in your bag!` : ''}</div>` : '<div class="note">Boxes you found are lost (crumbs are kept). Level up, gear up, bring Jam Jars and try again!</div>'}
     <div class="btns">${o.online ? `${res && save.boxes.length ? `<button class="pill" data-r="boxes">OPEN BOXES (${save.boxes.length})</button>` : ''}<button class="pill go" data-r="camp">BACK TO ROOM</button>` : `
       ${res ? `<button class="pill go" data-r="boxes">OPEN BOXES (${save.boxes.length})</button>` : `<button class="pill go" data-r="retry">RETRY</button>`}
       ${res && nextStage && stageUnlocked(nextStage) ? `<button class="pill" data-r="next">NEXT: ${nextStage.num} ▶</button>` : ''}
@@ -745,6 +750,7 @@ const CAMP_CSS = `
 #camp .side .hp u { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 3.6vmin; text-decoration: none; filter: none; }
 .kq .node .vt { position: absolute; left: -1.4vmin; top: -1.6vmin; font-style: normal; font-size: 2.2vmin; }
 .kq .vtx { color: #c8a8ff !important; }
+.kq .lv.chal { display: flex; flex-direction: column; gap: 0.3vmin; font-size: 0.92em; } .kq .lv.chal span { color: #c8b8d8; } .kq .lv.chal span.ok { color: #ffd23c; } .kq .lv.chal small { opacity: 0.85; } .kq .lv.chal small.stars { color: #9fe8ff; }
 .kq .quest .rq { width: 7vmin; height: 7vmin; object-fit: contain; }
 #camp .flashmsg { position: absolute; left: 50%; bottom: 3vmin; transform: translateX(-50%); background: #3a2448f0; border: 2px solid #ffd27a; border-radius: 2vmin; padding: 1vmin 2.4vmin; font-size: 2.4vmin; animation: tst 2.4s forwards; pointer-events: none; z-index: 5; }
 @keyframes tst { 0% { opacity: 0; transform: translate(-50%, 1vmin); } 10%, 80% { opacity: 1; transform: translate(-50%, 0); } 100% { opacity: 0; } }

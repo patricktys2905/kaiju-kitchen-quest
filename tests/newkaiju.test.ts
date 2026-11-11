@@ -80,7 +80,7 @@ describe('the newcomers are complete', () => {
       expect(SKILLS[sp].actives.length).toBe(3);
       expect(ULTS[sp]).toBeTruthy();
       const gear = Object.entries(BASES).filter(([, b]) => b.for === sp);
-      expect(gear.filter(([, b]) => b.slot === 'weapon').length).toBe(7); // 5 tiers + 2 extra weapon types
+      expect(gear.filter(([, b]) => b.slot === 'weapon' && !b.boss).length).toBe(7); // 5 tiers + 2 extra weapon types (+ 10 boss weapons, tests/bossgear.test.ts)
       expect(gear.filter(([, b]) => b.slot === 'armor').length).toBe(6); // 5 tiers + an armour with a built-in effect
       for (const [k, b] of gear) if (b.slot === 'weapon') expect(GEAR[k], k).toBeTruthy();
       expect(Object.values(UNIQUES).filter(u => u.for === sp).length).toBe(2);

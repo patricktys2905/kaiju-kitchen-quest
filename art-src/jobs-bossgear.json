@@ -1,0 +1,1602 @@
+[
+ {
+  "name": "bw-toast-gob",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-gob3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Toast King's Club\": a chunky club made of charred black toast with glowing ember cracks and a little golden crown motif. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-toast-squid",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-squid3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Toast King's Staff\": a science staff topped with a flask made of charred black toast with glowing ember cracks and a little golden crown motif. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-toast-crab",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-crab3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Toast King's Pincers\": a pair of big crab pincers made of charred black toast with glowing ember cracks and a little golden crown motif. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-toast-blob",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-blob3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Toast King's Whip\": a wobbly whip made of charred black toast with glowing ember cracks and a little golden crown motif. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-toast-moth",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-moth3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Toast King's Wand\": an elegant wand made of charred black toast with glowing ember cracks and a little golden crown motif. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-toast-toast",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-toast3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Toast King's Daggers\": a pair of curved daggers made of charred black toast with glowing ember cracks and a little golden crown motif. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-toast-dump",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-dump3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Toast King's Paddle\": a flat bao-paddle staff made of charred black toast with glowing ember cracks and a little golden crown motif. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-toast-nori",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-nori3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Toast King's Glaive\": a long sushi-chef glaive made of charred black toast with glowing ember cracks and a little golden crown motif. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-toast-choco",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-choco3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Toast King's Gauntlets\": a pair of huge gauntlets made of charred black toast with glowing ember cracks and a little golden crown motif. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-toast-gum",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-gum3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Toast King's Mace\": a candy mace made of charred black toast with glowing ember cracks and a little golden crown motif. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-toast-blue",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-blue3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Toast King's Hammer\": a heavy round-headed hammer made of charred black toast with glowing ember cracks and a little golden crown motif. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-toast-pizza",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-pizza3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Toast King's Blade\": a curved blade made of charred black toast with glowing ember cracks and a little golden crown motif. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-toast-slo",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-slo3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Toast King's Bo Staff\": a long bo staff made of charred black toast with glowing ember cracks and a little golden crown motif. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-toast-avo",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-avo3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Toast King's Spear\": a dragon spear made of charred black toast with glowing ember cracks and a little golden crown motif. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-toast-fish",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-fish3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Toast King's Harpoon\": a harpoon made of charred black toast with glowing ember cracks and a little golden crown motif. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-toast-hog",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-hog3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Toast King's Lance\": a long barbecue lance made of charred black toast with glowing ember cracks and a little golden crown motif. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-toast-mint",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-mint3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Toast King's Shield\": a round turtle-shell shield made of charred black toast with glowing ember cracks and a little golden crown motif. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-toast-peng",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-peng3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Toast King's Lance\": an icy cone lance made of charred black toast with glowing ember cracks and a little golden crown motif. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-toast-roo",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-roo3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Toast King's Gloves\": a pair of boxing gloves made of charred black toast with glowing ember cracks and a little golden crown motif. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-toast-owl",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-owl3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Toast King's Wand\": a party wand with a star tip made of charred black toast with glowing ember cracks and a little golden crown motif. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-golem-gob",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-gob3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Frostbite Club\": a chunky club carved from blue freezer ice with frost crystals and a snowflake gem. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-golem-squid",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-squid3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Frostbite Staff\": a science staff topped with a flask carved from blue freezer ice with frost crystals and a snowflake gem. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-golem-crab",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-crab3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Frostbite Pincers\": a pair of big crab pincers carved from blue freezer ice with frost crystals and a snowflake gem. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-golem-blob",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-blob3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Frostbite Whip\": a wobbly whip carved from blue freezer ice with frost crystals and a snowflake gem. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-golem-moth",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-moth3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Frostbite Wand\": an elegant wand carved from blue freezer ice with frost crystals and a snowflake gem. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-golem-toast",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-toast3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Frostbite Daggers\": a pair of curved daggers carved from blue freezer ice with frost crystals and a snowflake gem. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-golem-dump",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-dump3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Frostbite Paddle\": a flat bao-paddle staff carved from blue freezer ice with frost crystals and a snowflake gem. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-golem-nori",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-nori3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Frostbite Glaive\": a long sushi-chef glaive carved from blue freezer ice with frost crystals and a snowflake gem. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-golem-choco",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-choco3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Frostbite Gauntlets\": a pair of huge gauntlets carved from blue freezer ice with frost crystals and a snowflake gem. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-golem-gum",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-gum3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Frostbite Mace\": a candy mace carved from blue freezer ice with frost crystals and a snowflake gem. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-golem-blue",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-blue3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Frostbite Hammer\": a heavy round-headed hammer carved from blue freezer ice with frost crystals and a snowflake gem. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-golem-pizza",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-pizza3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Frostbite Blade\": a curved blade carved from blue freezer ice with frost crystals and a snowflake gem. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-golem-slo",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-slo3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Frostbite Bo Staff\": a long bo staff carved from blue freezer ice with frost crystals and a snowflake gem. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-golem-avo",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-avo3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Frostbite Spear\": a dragon spear carved from blue freezer ice with frost crystals and a snowflake gem. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-golem-fish",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-fish3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Frostbite Harpoon\": a harpoon carved from blue freezer ice with frost crystals and a snowflake gem. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-golem-hog",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-hog3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Frostbite Lance\": a long barbecue lance carved from blue freezer ice with frost crystals and a snowflake gem. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-golem-mint",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-mint3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Frostbite Shield\": a round turtle-shell shield carved from blue freezer ice with frost crystals and a snowflake gem. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-golem-peng",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-peng3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Frostbite Lance\": an icy cone lance carved from blue freezer ice with frost crystals and a snowflake gem. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-golem-roo",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-roo3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Frostbite Gloves\": a pair of boxing gloves carved from blue freezer ice with frost crystals and a snowflake gem. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-golem-owl",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-owl3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Frostbite Wand\": a party wand with a star tip carved from blue freezer ice with frost crystals and a snowflake gem. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-dragon-gob",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-gob3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Grease Dragon Club\": a chunky club with red dragon scales, a flame-shaped edge and a drip of glowing grease. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-dragon-squid",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-squid3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Grease Dragon Staff\": a science staff topped with a flask with red dragon scales, a flame-shaped edge and a drip of glowing grease. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-dragon-crab",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-crab3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Grease Dragon Pincers\": a pair of big crab pincers with red dragon scales, a flame-shaped edge and a drip of glowing grease. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-dragon-blob",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-blob3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Grease Dragon Whip\": a wobbly whip with red dragon scales, a flame-shaped edge and a drip of glowing grease. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-dragon-moth",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-moth3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Grease Dragon Wand\": an elegant wand with red dragon scales, a flame-shaped edge and a drip of glowing grease. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-dragon-toast",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-toast3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Grease Dragon Daggers\": a pair of curved daggers with red dragon scales, a flame-shaped edge and a drip of glowing grease. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-dragon-dump",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-dump3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Grease Dragon Paddle\": a flat bao-paddle staff with red dragon scales, a flame-shaped edge and a drip of glowing grease. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-dragon-nori",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-nori3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Grease Dragon Glaive\": a long sushi-chef glaive with red dragon scales, a flame-shaped edge and a drip of glowing grease. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-dragon-choco",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-choco3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Grease Dragon Gauntlets\": a pair of huge gauntlets with red dragon scales, a flame-shaped edge and a drip of glowing grease. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-dragon-gum",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-gum3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Grease Dragon Mace\": a candy mace with red dragon scales, a flame-shaped edge and a drip of glowing grease. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-dragon-blue",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-blue3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Grease Dragon Hammer\": a heavy round-headed hammer with red dragon scales, a flame-shaped edge and a drip of glowing grease. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-dragon-pizza",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-pizza3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Grease Dragon Blade\": a curved blade with red dragon scales, a flame-shaped edge and a drip of glowing grease. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-dragon-slo",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-slo3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Grease Dragon Bo Staff\": a long bo staff with red dragon scales, a flame-shaped edge and a drip of glowing grease. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-dragon-avo",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-avo3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Grease Dragon Spear\": a dragon spear with red dragon scales, a flame-shaped edge and a drip of glowing grease. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-dragon-fish",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-fish3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Grease Dragon Harpoon\": a harpoon with red dragon scales, a flame-shaped edge and a drip of glowing grease. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-dragon-hog",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-hog3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Grease Dragon Lance\": a long barbecue lance with red dragon scales, a flame-shaped edge and a drip of glowing grease. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-dragon-mint",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-mint3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Grease Dragon Shield\": a round turtle-shell shield with red dragon scales, a flame-shaped edge and a drip of glowing grease. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-dragon-peng",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-peng3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Grease Dragon Lance\": an icy cone lance with red dragon scales, a flame-shaped edge and a drip of glowing grease. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-dragon-roo",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-roo3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Grease Dragon Gloves\": a pair of boxing gloves with red dragon scales, a flame-shaped edge and a drip of glowing grease. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-dragon-owl",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-owl3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Grease Dragon Wand\": a party wand with a star tip with red dragon scales, a flame-shaped edge and a drip of glowing grease. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-jar-gob",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-gob3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Cookie Jar Club\": a chunky club with a cookie-jar lid, chocolate-chip studs and a toothy jar-mouth motif. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-jar-squid",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-squid3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Cookie Jar Staff\": a science staff topped with a flask with a cookie-jar lid, chocolate-chip studs and a toothy jar-mouth motif. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-jar-crab",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-crab3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Cookie Jar Pincers\": a pair of big crab pincers with a cookie-jar lid, chocolate-chip studs and a toothy jar-mouth motif. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-jar-blob",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-blob3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Cookie Jar Whip\": a wobbly whip with a cookie-jar lid, chocolate-chip studs and a toothy jar-mouth motif. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-jar-moth",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-moth3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Cookie Jar Wand\": an elegant wand with a cookie-jar lid, chocolate-chip studs and a toothy jar-mouth motif. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-jar-toast",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-toast3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Cookie Jar Daggers\": a pair of curved daggers with a cookie-jar lid, chocolate-chip studs and a toothy jar-mouth motif. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-jar-dump",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-dump3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Cookie Jar Paddle\": a flat bao-paddle staff with a cookie-jar lid, chocolate-chip studs and a toothy jar-mouth motif. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-jar-nori",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-nori3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Cookie Jar Glaive\": a long sushi-chef glaive with a cookie-jar lid, chocolate-chip studs and a toothy jar-mouth motif. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-jar-choco",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-choco3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Cookie Jar Gauntlets\": a pair of huge gauntlets with a cookie-jar lid, chocolate-chip studs and a toothy jar-mouth motif. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-jar-gum",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-gum3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Cookie Jar Mace\": a candy mace with a cookie-jar lid, chocolate-chip studs and a toothy jar-mouth motif. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-jar-blue",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-blue3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Cookie Jar Hammer\": a heavy round-headed hammer with a cookie-jar lid, chocolate-chip studs and a toothy jar-mouth motif. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-jar-pizza",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-pizza3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Cookie Jar Blade\": a curved blade with a cookie-jar lid, chocolate-chip studs and a toothy jar-mouth motif. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-jar-slo",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-slo3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Cookie Jar Bo Staff\": a long bo staff with a cookie-jar lid, chocolate-chip studs and a toothy jar-mouth motif. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-jar-avo",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-avo3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Cookie Jar Spear\": a dragon spear with a cookie-jar lid, chocolate-chip studs and a toothy jar-mouth motif. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-jar-fish",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-fish3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Cookie Jar Harpoon\": a harpoon with a cookie-jar lid, chocolate-chip studs and a toothy jar-mouth motif. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-jar-hog",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-hog3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Cookie Jar Lance\": a long barbecue lance with a cookie-jar lid, chocolate-chip studs and a toothy jar-mouth motif. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-jar-mint",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-mint3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Cookie Jar Shield\": a round turtle-shell shield with a cookie-jar lid, chocolate-chip studs and a toothy jar-mouth motif. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-jar-peng",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-peng3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Cookie Jar Lance\": an icy cone lance with a cookie-jar lid, chocolate-chip studs and a toothy jar-mouth motif. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-jar-roo",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-roo3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Cookie Jar Gloves\": a pair of boxing gloves with a cookie-jar lid, chocolate-chip studs and a toothy jar-mouth motif. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-jar-owl",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-owl3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Cookie Jar Wand\": a party wand with a star tip with a cookie-jar lid, chocolate-chip studs and a toothy jar-mouth motif. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-moldking-gob",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-gob3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Mold Crown Club\": a chunky club in purple and toxic green, with a tiny jagged crown and glowing spore bumps. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-moldking-squid",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-squid3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Mold Crown Staff\": a science staff topped with a flask in purple and toxic green, with a tiny jagged crown and glowing spore bumps. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-moldking-crab",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-crab3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Mold Crown Pincers\": a pair of big crab pincers in purple and toxic green, with a tiny jagged crown and glowing spore bumps. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-moldking-blob",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-blob3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Mold Crown Whip\": a wobbly whip in purple and toxic green, with a tiny jagged crown and glowing spore bumps. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-moldking-moth",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-moth3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Mold Crown Wand\": an elegant wand in purple and toxic green, with a tiny jagged crown and glowing spore bumps. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-moldking-toast",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-toast3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Mold Crown Daggers\": a pair of curved daggers in purple and toxic green, with a tiny jagged crown and glowing spore bumps. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-moldking-dump",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-dump3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Mold Crown Paddle\": a flat bao-paddle staff in purple and toxic green, with a tiny jagged crown and glowing spore bumps. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-moldking-nori",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-nori3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Mold Crown Glaive\": a long sushi-chef glaive in purple and toxic green, with a tiny jagged crown and glowing spore bumps. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-moldking-choco",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-choco3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Mold Crown Gauntlets\": a pair of huge gauntlets in purple and toxic green, with a tiny jagged crown and glowing spore bumps. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-moldking-gum",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-gum3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Mold Crown Mace\": a candy mace in purple and toxic green, with a tiny jagged crown and glowing spore bumps. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-moldking-blue",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-blue3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Mold Crown Hammer\": a heavy round-headed hammer in purple and toxic green, with a tiny jagged crown and glowing spore bumps. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-moldking-pizza",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-pizza3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Mold Crown Blade\": a curved blade in purple and toxic green, with a tiny jagged crown and glowing spore bumps. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-moldking-slo",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-slo3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Mold Crown Bo Staff\": a long bo staff in purple and toxic green, with a tiny jagged crown and glowing spore bumps. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-moldking-avo",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-avo3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Mold Crown Spear\": a dragon spear in purple and toxic green, with a tiny jagged crown and glowing spore bumps. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-moldking-fish",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-fish3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Mold Crown Harpoon\": a harpoon in purple and toxic green, with a tiny jagged crown and glowing spore bumps. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-moldking-hog",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-hog3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Mold Crown Lance\": a long barbecue lance in purple and toxic green, with a tiny jagged crown and glowing spore bumps. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-moldking-mint",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-mint3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Mold Crown Shield\": a round turtle-shell shield in purple and toxic green, with a tiny jagged crown and glowing spore bumps. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-moldking-peng",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-peng3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Mold Crown Lance\": an icy cone lance in purple and toxic green, with a tiny jagged crown and glowing spore bumps. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-moldking-roo",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-roo3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Mold Crown Gloves\": a pair of boxing gloves in purple and toxic green, with a tiny jagged crown and glowing spore bumps. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-moldking-owl",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-owl3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Mold Crown Wand\": a party wand with a star tip in purple and toxic green, with a tiny jagged crown and glowing spore bumps. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-stale-gob",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-gob3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Stale Knight Club\": a chunky club made of hard stale baguette with silver knightly armour plates. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-stale-squid",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-squid3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Stale Knight Staff\": a science staff topped with a flask made of hard stale baguette with silver knightly armour plates. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-stale-crab",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-crab3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Stale Knight Pincers\": a pair of big crab pincers made of hard stale baguette with silver knightly armour plates. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-stale-blob",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-blob3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Stale Knight Whip\": a wobbly whip made of hard stale baguette with silver knightly armour plates. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-stale-moth",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-moth3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Stale Knight Wand\": an elegant wand made of hard stale baguette with silver knightly armour plates. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-stale-toast",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-toast3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Stale Knight Daggers\": a pair of curved daggers made of hard stale baguette with silver knightly armour plates. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-stale-dump",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-dump3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Stale Knight Paddle\": a flat bao-paddle staff made of hard stale baguette with silver knightly armour plates. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-stale-nori",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-nori3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Stale Knight Glaive\": a long sushi-chef glaive made of hard stale baguette with silver knightly armour plates. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-stale-choco",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-choco3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Stale Knight Gauntlets\": a pair of huge gauntlets made of hard stale baguette with silver knightly armour plates. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-stale-gum",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-gum3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Stale Knight Mace\": a candy mace made of hard stale baguette with silver knightly armour plates. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-stale-blue",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-blue3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Stale Knight Hammer\": a heavy round-headed hammer made of hard stale baguette with silver knightly armour plates. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-stale-pizza",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-pizza3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Stale Knight Blade\": a curved blade made of hard stale baguette with silver knightly armour plates. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-stale-slo",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-slo3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Stale Knight Bo Staff\": a long bo staff made of hard stale baguette with silver knightly armour plates. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-stale-avo",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-avo3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Stale Knight Spear\": a dragon spear made of hard stale baguette with silver knightly armour plates. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-stale-fish",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-fish3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Stale Knight Harpoon\": a harpoon made of hard stale baguette with silver knightly armour plates. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-stale-hog",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-hog3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Stale Knight Lance\": a long barbecue lance made of hard stale baguette with silver knightly armour plates. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-stale-mint",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-mint3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Stale Knight Shield\": a round turtle-shell shield made of hard stale baguette with silver knightly armour plates. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-stale-peng",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-peng3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Stale Knight Lance\": an icy cone lance made of hard stale baguette with silver knightly armour plates. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-stale-roo",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-roo3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Stale Knight Gloves\": a pair of boxing gloves made of hard stale baguette with silver knightly armour plates. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-stale-owl",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-owl3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Stale Knight Wand\": a party wand with a star tip made of hard stale baguette with silver knightly armour plates. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-brussels-gob",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-gob3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Baron's Club\": a chunky club with brussels-sprout leaves, a little general's medal and green military trim. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-brussels-squid",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-squid3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Baron's Staff\": a science staff topped with a flask with brussels-sprout leaves, a little general's medal and green military trim. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-brussels-crab",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-crab3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Baron's Pincers\": a pair of big crab pincers with brussels-sprout leaves, a little general's medal and green military trim. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-brussels-blob",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-blob3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Baron's Whip\": a wobbly whip with brussels-sprout leaves, a little general's medal and green military trim. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-brussels-moth",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-moth3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Baron's Wand\": an elegant wand with brussels-sprout leaves, a little general's medal and green military trim. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-brussels-toast",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-toast3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Baron's Daggers\": a pair of curved daggers with brussels-sprout leaves, a little general's medal and green military trim. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-brussels-dump",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-dump3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Baron's Paddle\": a flat bao-paddle staff with brussels-sprout leaves, a little general's medal and green military trim. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-brussels-nori",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-nori3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Baron's Glaive\": a long sushi-chef glaive with brussels-sprout leaves, a little general's medal and green military trim. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-brussels-choco",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-choco3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Baron's Gauntlets\": a pair of huge gauntlets with brussels-sprout leaves, a little general's medal and green military trim. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-brussels-gum",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-gum3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Baron's Mace\": a candy mace with brussels-sprout leaves, a little general's medal and green military trim. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-brussels-blue",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-blue3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Baron's Hammer\": a heavy round-headed hammer with brussels-sprout leaves, a little general's medal and green military trim. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-brussels-pizza",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-pizza3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Baron's Blade\": a curved blade with brussels-sprout leaves, a little general's medal and green military trim. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-brussels-slo",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-slo3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Baron's Bo Staff\": a long bo staff with brussels-sprout leaves, a little general's medal and green military trim. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-brussels-avo",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-avo3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Baron's Spear\": a dragon spear with brussels-sprout leaves, a little general's medal and green military trim. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-brussels-fish",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-fish3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Baron's Harpoon\": a harpoon with brussels-sprout leaves, a little general's medal and green military trim. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-brussels-hog",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-hog3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Baron's Lance\": a long barbecue lance with brussels-sprout leaves, a little general's medal and green military trim. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-brussels-mint",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-mint3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Baron's Shield\": a round turtle-shell shield with brussels-sprout leaves, a little general's medal and green military trim. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-brussels-peng",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-peng3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Baron's Lance\": an icy cone lance with brussels-sprout leaves, a little general's medal and green military trim. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-brussels-roo",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-roo3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Baron's Gloves\": a pair of boxing gloves with brussels-sprout leaves, a little general's medal and green military trim. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-brussels-owl",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-owl3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Baron's Wand\": a party wand with a star tip with brussels-sprout leaves, a little general's medal and green military trim. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-meatloaf-gob",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-gob3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Mystery Club\": a chunky club made of glossy meatloaf with a gravy swirl and a mysterious question-mark gem. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-meatloaf-squid",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-squid3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Mystery Staff\": a science staff topped with a flask made of glossy meatloaf with a gravy swirl and a mysterious question-mark gem. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-meatloaf-crab",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-crab3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Mystery Pincers\": a pair of big crab pincers made of glossy meatloaf with a gravy swirl and a mysterious question-mark gem. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-meatloaf-blob",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-blob3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Mystery Whip\": a wobbly whip made of glossy meatloaf with a gravy swirl and a mysterious question-mark gem. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-meatloaf-moth",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-moth3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Mystery Wand\": an elegant wand made of glossy meatloaf with a gravy swirl and a mysterious question-mark gem. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-meatloaf-toast",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-toast3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Mystery Daggers\": a pair of curved daggers made of glossy meatloaf with a gravy swirl and a mysterious question-mark gem. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-meatloaf-dump",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-dump3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Mystery Paddle\": a flat bao-paddle staff made of glossy meatloaf with a gravy swirl and a mysterious question-mark gem. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-meatloaf-nori",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-nori3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Mystery Glaive\": a long sushi-chef glaive made of glossy meatloaf with a gravy swirl and a mysterious question-mark gem. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-meatloaf-choco",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-choco3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Mystery Gauntlets\": a pair of huge gauntlets made of glossy meatloaf with a gravy swirl and a mysterious question-mark gem. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-meatloaf-gum",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-gum3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Mystery Mace\": a candy mace made of glossy meatloaf with a gravy swirl and a mysterious question-mark gem. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-meatloaf-blue",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-blue3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Mystery Hammer\": a heavy round-headed hammer made of glossy meatloaf with a gravy swirl and a mysterious question-mark gem. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-meatloaf-pizza",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-pizza3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Mystery Blade\": a curved blade made of glossy meatloaf with a gravy swirl and a mysterious question-mark gem. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-meatloaf-slo",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-slo3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Mystery Bo Staff\": a long bo staff made of glossy meatloaf with a gravy swirl and a mysterious question-mark gem. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-meatloaf-avo",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-avo3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Mystery Spear\": a dragon spear made of glossy meatloaf with a gravy swirl and a mysterious question-mark gem. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-meatloaf-fish",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-fish3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Mystery Harpoon\": a harpoon made of glossy meatloaf with a gravy swirl and a mysterious question-mark gem. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-meatloaf-hog",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-hog3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Mystery Lance\": a long barbecue lance made of glossy meatloaf with a gravy swirl and a mysterious question-mark gem. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-meatloaf-mint",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-mint3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Mystery Shield\": a round turtle-shell shield made of glossy meatloaf with a gravy swirl and a mysterious question-mark gem. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-meatloaf-peng",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-peng3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Mystery Lance\": an icy cone lance made of glossy meatloaf with a gravy swirl and a mysterious question-mark gem. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-meatloaf-roo",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-roo3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Mystery Gloves\": a pair of boxing gloves made of glossy meatloaf with a gravy swirl and a mysterious question-mark gem. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-meatloaf-owl",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-owl3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Mystery Wand\": a party wand with a star tip made of glossy meatloaf with a gravy swirl and a mysterious question-mark gem. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-tupper-gob",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-gob3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Tupperwraith Club\": a chunky club made of ghostly translucent tupperware with snapping lids and a wispy pale glow. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-tupper-squid",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-squid3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Tupperwraith Staff\": a science staff topped with a flask made of ghostly translucent tupperware with snapping lids and a wispy pale glow. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-tupper-crab",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-crab3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Tupperwraith Pincers\": a pair of big crab pincers made of ghostly translucent tupperware with snapping lids and a wispy pale glow. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-tupper-blob",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-blob3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Tupperwraith Whip\": a wobbly whip made of ghostly translucent tupperware with snapping lids and a wispy pale glow. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-tupper-moth",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-moth3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Tupperwraith Wand\": an elegant wand made of ghostly translucent tupperware with snapping lids and a wispy pale glow. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-tupper-toast",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-toast3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Tupperwraith Daggers\": a pair of curved daggers made of ghostly translucent tupperware with snapping lids and a wispy pale glow. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-tupper-dump",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-dump3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Tupperwraith Paddle\": a flat bao-paddle staff made of ghostly translucent tupperware with snapping lids and a wispy pale glow. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-tupper-nori",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-nori3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Tupperwraith Glaive\": a long sushi-chef glaive made of ghostly translucent tupperware with snapping lids and a wispy pale glow. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-tupper-choco",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-choco3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Tupperwraith Gauntlets\": a pair of huge gauntlets made of ghostly translucent tupperware with snapping lids and a wispy pale glow. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-tupper-gum",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-gum3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Tupperwraith Mace\": a candy mace made of ghostly translucent tupperware with snapping lids and a wispy pale glow. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-tupper-blue",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-blue3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Tupperwraith Hammer\": a heavy round-headed hammer made of ghostly translucent tupperware with snapping lids and a wispy pale glow. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-tupper-pizza",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-pizza3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Tupperwraith Blade\": a curved blade made of ghostly translucent tupperware with snapping lids and a wispy pale glow. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-tupper-slo",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-slo3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Tupperwraith Bo Staff\": a long bo staff made of ghostly translucent tupperware with snapping lids and a wispy pale glow. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-tupper-avo",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-avo3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Tupperwraith Spear\": a dragon spear made of ghostly translucent tupperware with snapping lids and a wispy pale glow. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-tupper-fish",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-fish3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Tupperwraith Harpoon\": a harpoon made of ghostly translucent tupperware with snapping lids and a wispy pale glow. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-tupper-hog",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-hog3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Tupperwraith Lance\": a long barbecue lance made of ghostly translucent tupperware with snapping lids and a wispy pale glow. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-tupper-mint",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-mint3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Tupperwraith Shield\": a round turtle-shell shield made of ghostly translucent tupperware with snapping lids and a wispy pale glow. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-tupper-peng",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-peng3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Tupperwraith Lance\": an icy cone lance made of ghostly translucent tupperware with snapping lids and a wispy pale glow. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-tupper-roo",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-roo3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Tupperwraith Gloves\": a pair of boxing gloves made of ghostly translucent tupperware with snapping lids and a wispy pale glow. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-tupper-owl",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-owl3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Tupperwraith Wand\": a party wand with a star tip made of ghostly translucent tupperware with snapping lids and a wispy pale glow. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-fruitcake-gob",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-gob3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Fruitcake Club\": a chunky club made of rich fruitcake studded with candied cherries and a holly sprig. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-fruitcake-squid",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-squid3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Fruitcake Staff\": a science staff topped with a flask made of rich fruitcake studded with candied cherries and a holly sprig. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-fruitcake-crab",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-crab3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Fruitcake Pincers\": a pair of big crab pincers made of rich fruitcake studded with candied cherries and a holly sprig. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-fruitcake-blob",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-blob3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Fruitcake Whip\": a wobbly whip made of rich fruitcake studded with candied cherries and a holly sprig. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-fruitcake-moth",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-moth3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Fruitcake Wand\": an elegant wand made of rich fruitcake studded with candied cherries and a holly sprig. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-fruitcake-toast",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-toast3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Fruitcake Daggers\": a pair of curved daggers made of rich fruitcake studded with candied cherries and a holly sprig. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-fruitcake-dump",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-dump3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Fruitcake Paddle\": a flat bao-paddle staff made of rich fruitcake studded with candied cherries and a holly sprig. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-fruitcake-nori",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-nori3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Fruitcake Glaive\": a long sushi-chef glaive made of rich fruitcake studded with candied cherries and a holly sprig. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-fruitcake-choco",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-choco3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Fruitcake Gauntlets\": a pair of huge gauntlets made of rich fruitcake studded with candied cherries and a holly sprig. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-fruitcake-gum",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-gum3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Fruitcake Mace\": a candy mace made of rich fruitcake studded with candied cherries and a holly sprig. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-fruitcake-blue",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-blue3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Fruitcake Hammer\": a heavy round-headed hammer made of rich fruitcake studded with candied cherries and a holly sprig. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-fruitcake-pizza",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-pizza3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Fruitcake Blade\": a curved blade made of rich fruitcake studded with candied cherries and a holly sprig. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-fruitcake-slo",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-slo3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Fruitcake Bo Staff\": a long bo staff made of rich fruitcake studded with candied cherries and a holly sprig. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-fruitcake-avo",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-avo3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Fruitcake Spear\": a dragon spear made of rich fruitcake studded with candied cherries and a holly sprig. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-fruitcake-fish",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-fish3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Fruitcake Harpoon\": a harpoon made of rich fruitcake studded with candied cherries and a holly sprig. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-fruitcake-hog",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-hog3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Fruitcake Lance\": a long barbecue lance made of rich fruitcake studded with candied cherries and a holly sprig. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-fruitcake-mint",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-mint3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Fruitcake Shield\": a round turtle-shell shield made of rich fruitcake studded with candied cherries and a holly sprig. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-fruitcake-peng",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-peng3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Fruitcake Lance\": an icy cone lance made of rich fruitcake studded with candied cherries and a holly sprig. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-fruitcake-roo",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-roo3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Fruitcake Gloves\": a pair of boxing gloves made of rich fruitcake studded with candied cherries and a holly sprig. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ },
+ {
+  "name": "bw-fruitcake-owl",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-owl3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Fruitcake Wand\": a party wand with a star tip made of rich fruitcake studded with candied cherries and a holly sprig. Keep the same kind of weapon as the reference. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A LEGENDARY boss weapon: ornate and special, but no glow aura or sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody holding it. Square 1:1 image."
+ }
+]

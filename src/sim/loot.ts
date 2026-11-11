@@ -32,14 +32,15 @@ export function clearLevel(stageLv: number, rank: RankLetter, boss: boolean): nu
 }
 
 /** How many boxes clearing a stage gives: more on higher-level stages. */
-export function clearCount(stageLv: number): number { return Math.min(4, 1 + Math.floor((stageLv - 1) / 6)); }
+/** How many boxes the end-of-stage chest holds: your rank decides (S 3, A 2, else 1), +1 on a world boss. */
+export function clearCount(rank: RankLetter = 'A', boss = false): number { return (rank === 'S' ? 3 : rank === 'A' ? 2 : 1) + (boss ? 1 : 0); }
 
 /** Boxes for clearing a stage (higher stage level / better rank / boss → more and better boxes). */
 export function clearRewards(stageLv: number, rank: RankLetter, boss: boolean, firstClear: boolean, rand: () => number): BoxTier[] {
   const lvl = clearLevel(stageLv, rank, boss);
   const min = boss ? 3 : rank === 'S' ? 2 : 1;
   const out: BoxTier[] = [];
-  for (let i = 0; i < clearCount(stageLv); i++) out.push(Math.max(min, rollTier(lvl, rand)) as BoxTier);
+  for (let i = 0; i < clearCount(rank, boss); i++) out.push(Math.max(min, rollTier(lvl, rand)) as BoxTier);
   if (firstClear) out.push(Math.min(5, 2 + Math.floor(stageLv / 4) + (boss ? 1 : 0)) as BoxTier);
   return out;
 }

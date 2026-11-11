@@ -3,9 +3,12 @@
 //  - PROCS: armour and charms (Rare+) can carry a trigger effect (perfect dodge drops jam, every 6th hit zaps...).
 //  - Signature legendaries (items.ts UNIQUES with `skill`) upgrade one of their kaiju's skills.
 import { BASES, GRADE_MUL, type Item, fortMul, gradeOf } from './items';
+import { BOSS_WEAPONS } from './bossgearData';
 
-export type GearStyle = 'throw' | 'lob' | 'roll' | 'slam' | 'rain' | 'boomerang' | 'burst' | 'trap';
-export type GearFx = 'burn' | 'freeze' | 'glue' | 'slow' | 'launch' | 'pull' | 'heal';
+export type GearStyle = 'throw' | 'lob' | 'roll' | 'slam' | 'rain' | 'boomerang' | 'burst' | 'trap'
+  // boss weapons only
+  | 'orbit' | 'dash' | 'chain' | 'meteor' | 'vortex' | 'turret' | 'spin' | 'wave' | 'shield' | 'barrage' | 'pillar' | 'bounce';
+export type GearFx = 'burn' | 'freeze' | 'glue' | 'slow' | 'launch' | 'pull' | 'heal' | 'poison' | 'shatter' | 'crumbs';
 export interface GearSkill { name: string; style: GearStyle; fx?: GearFx }
 
 /** What each style does: damage × attack (per hit), cooldown, and how it's described. */
@@ -18,10 +21,23 @@ export const STYLE: Record<GearStyle, { dmg: number; cd: number; text: string }>
   boomerang: { dmg: 1.5, cd: 8, text: 'Throw it like a boomerang: it hits on the way out and again on the way back' },
   burst: { dmg: 1.6, cd: 9, text: 'Eight copies burst out all around you in a star' },
   trap: { dmg: 3.4, cd: 9, text: 'Plant it on the floor: it snaps the first monster that steps on it' },
+  orbit: { dmg: 0.7, cd: 12, text: 'Three copies circle you for 6 seconds, hitting everything they pass' },
+  dash: { dmg: 2.6, cd: 8, text: 'Rush forward with it, untouchable, hitting everything in your path' },
+  chain: { dmg: 1.6, cd: 8, text: 'A crackle that jumps from monster to monster (up to 6)' },
+  meteor: { dmg: 4.2, cd: 12, text: 'One giant copy crashes down ahead: a huge hit in a big circle' },
+  vortex: { dmg: 0.45, cd: 12, text: 'A whirlwind ahead drags monsters in and grinds them for 3 seconds' },
+  turret: { dmg: 0.9, cd: 13, text: 'Plant it: it fires at the nearest monster for 6 seconds' },
+  spin: { dmg: 0.65, cd: 10, text: 'Spin with it for a moment, hitting all around you again and again' },
+  wave: { dmg: 2.3, cd: 8, text: 'A ground wave that rolls far ahead, launching what it hits' },
+  shield: { dmg: 0, cd: 14, text: 'A guard that soaks a third of your health for 8 seconds' },
+  barrage: { dmg: 1.1, cd: 9, text: 'Six copies fired in a quick fan ahead' },
+  pillar: { dmg: 1.7, cd: 10, text: 'Pillars erupt from the floor one after another ahead of you' },
+  bounce: { dmg: 1.5, cd: 9, text: 'Bounces along the floor five times, hitting on every bounce' },
 };
 export const FX_TEXT: Record<GearFx, string> = {
   burn: 'sets monsters on fire', freeze: 'freezes monsters solid', glue: 'glues monsters in place', slow: 'slows monsters down',
   launch: 'launches monsters into the air', pull: 'drags monsters toward you', heal: 'heals you a little per hit',
+  poison: 'poisons monsters (damage over time, slowed)', shatter: 'cracks their armour (they take more damage)', crumbs: 'shakes crumbs (and a little health) out of every hit',
 };
 
 /** Every weapon's gear skill (keyed by weapon base). */
@@ -147,11 +163,13 @@ export const GEAR: Record<string, GearSkill> = {
   'w-peng4': { name: 'Cone Lance Toss', style: 'throw', fx: 'freeze' }, 'w-peng5': { name: 'Blizzard Sundae', style: 'rain', fx: 'freeze' },
   'w-roo4': { name: 'Fudge Uppercut', style: 'slam', fx: 'launch' }, 'w-roo5': { name: 'Champion Combo', style: 'boomerang', fx: 'pull' },
   'w-owl4': { name: 'Churro Star Burst', style: 'burst', fx: 'burn' }, 'w-owl5': { name: 'Pinata Thunder', style: 'rain', fx: 'launch' },
-};
+};// boss signature weapons: each its own style + the boss's element
+for (const bw of BOSS_WEAPONS) GEAR[bw.base] = { name: bw.skill, style: bw.style as GearStyle, fx: bw.fx as GearFx };
+
 
 /** Gear skill names for a twist: the effect word + the style's noun, e.g. 'Frosty Lob'. */
-const STYLE_NOUN: Record<GearStyle, string> = { throw: 'Fling', lob: 'Lob', roll: 'Roll', slam: 'Slam', rain: 'Shower', boomerang: 'Boomerang', burst: 'Burst', trap: 'Trap' };
-const FX_WORD: Record<GearFx, string> = { burn: 'Scorching', freeze: 'Frosty', glue: 'Sticky', slow: 'Syrupy', launch: 'Bouncy', pull: 'Grabby', heal: 'Hearty' };
+const STYLE_NOUN: Record<GearStyle, string> = { throw: 'Fling', lob: 'Lob', roll: 'Roll', slam: 'Slam', rain: 'Shower', boomerang: 'Boomerang', burst: 'Burst', trap: 'Trap', orbit: 'Orbit', dash: 'Rush', chain: 'Chain', meteor: 'Meteor', vortex: 'Vortex', turret: 'Sentry', spin: 'Whirl', wave: 'Wave', shield: 'Guard', barrage: 'Barrage', pillar: 'Pillars', bounce: 'Ricochet' };
+const FX_WORD: Record<GearFx, string> = { burn: 'Scorching', freeze: 'Frosty', glue: 'Sticky', slow: 'Syrupy', launch: 'Bouncy', pull: 'Grabby', heal: 'Hearty', poison: 'Spore', shatter: 'Cracking', crumbs: 'Crumbly' };
 /** The gear skill a weapon item gives: its rolled twist, or its base weapon's own skill. */
 export function gearSkillOf(weapon: Item): GearSkill | undefined {
   const base = GEAR[weapon.base];

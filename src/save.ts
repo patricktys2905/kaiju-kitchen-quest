@@ -7,6 +7,9 @@ import { canLearn, loadoutOf, nodeById, skillUnlocked } from './sim/tree';
 import { clearRewards } from './sim/loot';
 import { MAX_SKILL, SKILLS } from './sim/skills';
 import { type Derived, type HeroProfile, canLevelSkill, derive, gainXp, newProfile } from './sim/stats';
+import { type ChallengeCtx, STARS_FOR_SECRET, challengesFor } from './sim/challenges';
+import { bossWeaponFor } from './sim/bossgearData';
+import { WORLDS } from './sim/stages';
 import type { BoxTier, LootBox } from './sim/types';
 
 export type Rank = 'S' | 'A' | 'B' | 'C' | 'D';
@@ -36,6 +39,10 @@ export interface Save {
   spicy?: Spicy[];
   /** World Keys found in secret chests (open that world's secret bonus stage) */
   keys?: number[];
+  /** boss weapon pity: clears since that boss last dropped its weapon for that kaiju (base id -> misses) */
+  bwPity?: Record<string, number>;
+  /** stage challenges done (stage id -> challenge ids); shared by every kaiju */
+  challenges?: Record<string, string[]>;
   /** 'full' = a scene before every stage, 'key' = only the big ones (stage 1, nemesis, boss) */
   storyMode?: 'full' | 'key';
   /** Nightmare mode (per world, after beating its boss on Hard) */
@@ -241,10 +248,12 @@ export function openBox(i: number): { item: Item; crumbs: number; box: LootBox; 
   return { item, crumbs, box, extra };
 }
 
-export interface ClearResult { rank: Rank; boxes: LootBox[]; upgraded: number; firstClear: boolean; spicy: number }
+export interface ClearResult { rank: Rank; boxes: LootBox[]; upgraded: number; firstClear: boolean; spicy: number; /** challenges finished for the first time */ newChallenges?: string[]; crumbs?: number; secretOpened?: boolean; /** a boss signature weapon dropped */ bossWeapon?: Item }
+/** Stars (challenges done) in a world. */
+export function worldStars(world: number): number { return Object.entries(save.challenges ?? {}).filter(([id]) => id.startsWith(`${world}-`)).reduce((a, [, v]) => a + v.length, 0); }
 
 /** Stage finished: rank upgrades some boxes, adds the clear reward, records the best rank. */
-export function finishStage(stageId: string, rank: Rank, found: LootBox[], stageLv: number, boss: boolean, hard = false, spicy = 0, nightmare = false): ClearResult {
+export function finishStage(stageId: string, rank: Rank, found: LootBox[], stageLv: number, boss: boolean, hard = false, spicy = 0, nightmare = false, ctx?: ChallengeCtx): ClearResult {
   const up = { S: 0.5, A: 0.3, B: 0.15, C: 0, D: 0 }[rank];
   let upgraded = 0;
   const boxes = found.map(b => {
@@ -262,9 +271,33 @@ export function finishStage(stageId: string, rank: Rank, found: LootBox[], stage
   if (!prev || RANK_ORDER.indexOf(rank) > RANK_ORDER.indexOf(prev)) table[stageId] = rank;
   // boss first clears drop a Golden Sugar Cube (permanent stat point)
   if (boss && firstClear) { save.items.sugar = (save.items.sugar ?? 0) + 1; save.items.ggstone = (save.items.ggstone ?? 0) + 1; }
+  // a world boss can drop its signature weapon for the kaiju you're playing: better ranks and harder modes raise the odds,
+  // and it never takes more than 5 clears (pity)
+  let bossWeapon: Item | undefined;
+  const bw = boss ? bossWeaponFor(WORLDS[Number(stageId.split('-')[0]) - 1]?.boss ?? '', save.selected) : undefined;
+  if (bw) {
+    const miss = (save.bwPity ??= {})[bw.base] ?? 0;
+    const chance = 0.18 + ({ S: 0.12, A: 0.06, B: 0, C: 0, D: 0 }[rank]) + (nightmare ? 0.12 : hard ? 0.06 : 0);
+    if (miss >= 4 || Math.random() < chance) {
+      bossWeapon = rollItem(save.nextId++, 5, stageLv, Math.random, ALL_SKILLS, save.selected, bw.base, (Math.random() < 0.25 ? 5 : 4) as 4 | 5);
+      save.bag.push(bossWeapon); save.bwPity[bw.base] = 0;
+    } else save.bwPity[bw.base] = miss + 1;
+  }
+  // stage challenges: each pays out once (crumbs + a box); enough stars in a world opens its secret stage
+  const newChallenges: string[] = []; let crumbs = 0, secretOpened = false;
+  if (ctx) {
+    const done = ((save.challenges ??= {})[stageId] ??= []);
+    for (const c of challengesFor(stageId)) if (!done.includes(c.id) && c.done(ctx)) {
+      done.push(c.id); newChallenges.push(c.name);
+      crumbs += 40 + stageLv * 6; boxes.push({ tier: (['nojam', 'srank', 'fast', 'boss'].includes(c.id) ? 4 : 3) as BoxTier, ilvl: stageLv });
+    }
+    save.crumbs += crumbs;
+    const world = Number(stageId.split('-')[0]);
+    if (newChallenges.length && worldStars(world) >= STARS_FOR_SECRET && !(save.keys ?? []).includes(world)) { (save.keys ??= []).push(world); secretOpened = true; }
+  }
   save.boxes.push(...boxes);
   persist();
-  return { rank, boxes, upgraded, firstClear, spicy };
+  return { rank, boxes, upgraded, firstClear, spicy, newChallenges, crumbs, secretOpened, bossWeapon };
 }
 
 // ---------- consumables ----------

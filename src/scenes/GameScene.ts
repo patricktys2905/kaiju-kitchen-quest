@@ -15,7 +15,7 @@ import { ELITE, ELITE_MODS, MOBS, nemesisOf } from '../sim/mobs';
 import { ULT_LV, applyBranch, applyMod, skillsOf, skillScale } from '../sim/skills';
 import { STAGES, stageById, worldOf } from '../sim/stages';
 import { derive } from '../sim/stats';
-import type { SimEvent, StageDef } from '../sim/types';
+import type { SimEvent, StageDef, ZoneGoal } from '../sim/types';
 import { DT, HARD_LV, type Mob, World, guardBreakOf, launcherOf, rankOf } from '../sim/world';
 import { type GearLook, HeroView } from '../render/rig';
 import { itemIcon } from '../sim/items';
@@ -63,6 +63,17 @@ let uiReady = false;
 
 interface MobView { img: Phaser.GameObjects.Image; plate: Phaser.GameObjects.Text; bar: Phaser.GameObjects.Rectangle; barBg: Phaser.GameObjects.Rectangle; shadow: Phaser.GameObjects.Ellipse; s: number; warn: Phaser.GameObjects.Text }
 
+/** What a zone asks you to do, in a few words. */
+export function goalText(g: ZoneGoal): string {
+  switch (g.kind) {
+    case 'collect': return `collect ${g.need} ${g.item} from ${MOBS[g.mob].name}s`;
+    case 'rescue': return `free ${g.need} caged Crumblets`;
+    case 'nests': return `smash ${g.need} mould nests`;
+    case 'arena': return 'clear the arena';
+    case 'fetch': return 'race to the Recipe Scroll';
+    case 'survive': return 'hold out against the waves';
+  }
+}
 export class GameScene extends Phaser.Scene {
   private world: World | null = null;
   private stage!: StageDef;
@@ -116,6 +127,8 @@ export class GameScene extends Phaser.Scene {
   /** platform boards (moving trays follow, secret ledges fade in), props and cookers */
   private platViews: { board?: Phaser.GameObjects.Image; shadow: Phaser.GameObjects.Ellipse }[] = [];
   private propViews = new Map<number, Phaser.GameObjects.Image>();
+  /** map stages: a doorway per portal (label shows where it goes and whether that zone is done) */
+  private portalViews: { x: number; to: number; boss?: boolean; label: Phaser.GameObjects.Text; glow: Phaser.GameObjects.Ellipse; hint: Phaser.GameObjects.Text }[] = [];
   private cookerViews = new Map<number, Phaser.GameObjects.Image>();
   private npcView?: { img: Phaser.GameObjects.Image; bar: Phaser.GameObjects.Rectangle; bg: Phaser.GameObjects.Rectangle };
   private scrollView?: { img: Phaser.GameObjects.Image; glow: Phaser.GameObjects.Arc };
@@ -276,11 +289,27 @@ export class GameScene extends Phaser.Scene {
     }
     if (this.world.stage.objective) this.time.delayedCall(1500, () => toast(({ escort: '🧁 Keep the lost Crumblet safe and bring it to the EXIT', fetch: '📜 Grab the Recipe Scroll at the far end before time runs out!', survive: '⏱ Hold out until the timer runs out!' })[this.world!.stage.objective!.kind], { color: '#ffd27a' }));
     for (const p of this.world.props) {
-      const key = `ob-${p.kind}`;
+      const stand = ({ cage: 'npc-crumblet', nest: 'mob-jelly' } as Record<string, string>)[p.kind];
+      const key = this.has(`ob-${p.kind}`) ? `ob-${p.kind}` : stand && this.has(stand) ? stand : `ob-${p.kind}`;
       if (!this.has(key)) continue;
       const img = this.add.image(p.x, p.y + 2, key).setOrigin(0.5, 1).setDepth(p.kind === 'sponge' ? -4 : 1);
-      img.setScale(({ crate: 44, jar: 40, sponge: 22, lever: 56, chest: 40 } as Record<string, number>)[p.kind] / img.height);
+      img.setScale(({ crate: 44, jar: 40, sponge: 22, lever: 56, chest: 40, cage: 56, nest: 60 } as Record<string, number>)[p.kind] / img.height);
+      if (key === stand) img.setTint(p.kind === 'cage' ? 0xb8a890 : 0x7ad04a);
       this.propViews.set(p.id, img);
+    }
+    // map stages: doorways (press up to go through)
+    this.portalViews = [];
+    for (const m of st.maps ?? []) for (const pt of m.portals) {
+      const glow = this.add.ellipse(pt.x, st.groundY - 60, 84, 130, pt.boss ? 0xff8a5a : 0x9fe8ff, 0.35).setDepth(-3).setBlendMode(Phaser.BlendModes.ADD);
+      const arch = this.add.graphics().setDepth(-3);
+      arch.lineStyle(8, pt.boss ? 0x6a2a18 : 0x5a3a20, 1).strokeRoundedRect(pt.x - 44, st.groundY - 140, 88, 140, { tl: 40, tr: 40, bl: 0, br: 0 });
+      arch.lineStyle(3, pt.boss ? 0xffb38a : 0xffe27a, 1).strokeRoundedRect(pt.x - 38, st.groundY - 134, 76, 134, { tl: 34, tr: 34, bl: 0, br: 0 });
+      const to = st.maps![pt.to];
+      const label = this.add.text(pt.x, st.groundY - 152, '', { fontFamily: 'Luckiest Guy', fontSize: '15px', color: '#ffe27a', stroke: '#3a1a08', strokeThickness: 5, align: 'center' }).setOrigin(0.5, 1).setResolution(3).setDepth(9);
+      label.setText(to.kind === 'hub' ? '⬅ CAMP' : pt.boss ? `${to.name}` : to.name);
+      const hint = this.add.text(pt.x, st.groundY - 70, '⬆ ENTER', { fontFamily: 'Nunito', fontStyle: '900', fontSize: '12px', color: '#ffffff', backgroundColor: '#1a1020c0', padding: { x: 5, y: 2 } }).setOrigin(0.5).setResolution(3).setDepth(9).setVisible(false);
+      this.tweens.add({ targets: glow, alpha: 0.15, yoyo: true, repeat: -1, duration: 900 });
+      this.portalViews.push({ x: pt.x, to: pt.to, boss: pt.boss, label, glow, hint });
     }
     // exit: a glowing golden plate that appears once the stage is cleared
     const w = this.world;
@@ -612,6 +641,12 @@ export class GameScene extends Phaser.Scene {
           toast(`${theName(MOBS[e.kind].name)} awakens!`, { big: true, color: '#ff9a6a' });
           break;
         }
+        case 'warp': {
+          if (e.hi === this.me) { const me = w.heroes[this.me] ?? w.hero; this.cx = me.x; this.cameras.main.flash(250, 20, 10, 30); sfx('portal'); const m = w.stage.maps?.[e.to]; if (m) toast(m.kind === 'zone' && m.goal ? `${m.name}: ${goalText(m.goal)}` : m.name, { big: m.kind !== 'hub', color: m.kind === 'boss' ? '#ff9a6a' : '#9fe8ff' }); }
+          break;
+        }
+        case 'goal': if (e.done) { sfx('portal'); toast(`✓ ${e.text}${w.doorOpen ? ' · The boss door is open!' : ''}`, { big: true, color: '#a8f0a8' }); } else toast(e.text, { color: '#ffe27a' }); break;
+        case 'doorLocked': toast(`🔒 Sealed: finish ${e.left} more zone${e.left === 1 ? '' : 's'} first`, { color: '#c8b8d8' }); break;
         case 'ambush': sfx('boss'); this.shake = 8; toast('⚠️ AMBUSH!', { big: true, color: '#ff7a6a' }); break;
         case 'gate': sfx('portal'); toast('The gate opens!', { color: '#a8f0a8' }); break;
         case 'xp': {
@@ -753,7 +788,8 @@ export class GameScene extends Phaser.Scene {
     if (w.run.crumbs) track('crumbs', w.run.crumbs);
     if (this.free && this.online) { this.finishFreeOnline(failed); return; }
     if (this.free) { this.finishFree(failed); return; }
-    const res = failed ? null : finishStage(st.id, rankOf(w.run, st.par).rank, w.lootOf[Math.min(this.me, w.lootOf.length - 1)], st.lv[1] + (this.hard ? HARD_LV : 0), !!st.boss, this.hard, chillies, this.nightmare);
+    const res = failed ? null : finishStage(st.id, rankOf(w.run, st.par).rank, w.lootOf[Math.min(this.me, w.lootOf.length - 1)], st.lv[1] + (this.hard ? HARD_LV : 0), !!st.boss, this.hard, chillies, this.nightmare,
+      this.free || this.online ? undefined : { run: w.run, rank: rankOf(w.run, st.par).rank, par: st.par, bossHits: w.bossHits });
     const sp = hero().species;
     trackHero(sp, 'combo', w.run.maxCombo, true);
     if (res) {
@@ -996,7 +1032,8 @@ export class GameScene extends Phaser.Scene {
     const tx = (mate && h.state !== 'down' ? h.x * 0.75 + mate.x * 0.25 : mate && h.state === 'down' ? mate.x : h.x) + h.face * 40, ty = Math.min(h.y - 70, st.groundY + 90 - VH / 2);
     this.cx += (tx - this.cx) * Math.min(1, dt * 5);
     this.cy += (ty - this.cy) * Math.min(1, dt * 3);
-    this.cx = Phaser.Math.Clamp(this.cx, VW / 2, st.width - VW / 2);
+    const mp = st.maps?.[w.mapAt(h.x)];
+    this.cx = Phaser.Math.Clamp(this.cx, (mp ? mp.x0 : 0) + VW / 2, (mp ? mp.x1 : st.width) - VW / 2);
     this.cy = Phaser.Math.Clamp(this.cy, VH / 2 - 80, st.groundY + 90 - VH / 2);
     this.shake = Math.max(0, this.shake - dt * 30);
     const sh = this.shake * settings.shake; // Settings: screen shake on / less / off
@@ -1075,6 +1112,13 @@ export class GameScene extends Phaser.Scene {
       if (p.kind === 'chest') { const pl = w.stage.platforms.find(q => q.secret && p.x >= q.x && p.x <= q.x + q.w); const near = pl ? Math.max(0, 1 - Math.max(0, Math.abs(h.x - p.x) - 120) / 160) : 1; img.setAlpha(0.08 + near * 0.92).setY(p.y + 2 + Math.sin(t * 3) * 2); }
       if (p.kind === 'sponge') img.setScale(img.scaleX, (22 / img.height) * (1 - Math.max(0, 0.3 - Math.abs(h.x - p.x) / 120) * (h.ground ? 1 : 0)));
       if (p.kind === 'lever') img.setRotation(p.cd > 0 ? 0.6 : 0);
+      if (p.kind === 'nest') img.setScale(img.scaleX, (60 / img.height) * (1 + Math.sin(t * 3 + p.x) * 0.06));
+    }
+    for (const v of this.portalViews) {
+      const to = st.maps![v.to], z = w.zones2[v.to];
+      if (to.kind === 'zone') v.label.setText(`${to.name}${z?.done ? ' ✓' : ''}`).setColor(z?.done ? '#a8f0a8' : '#ffe27a');
+      if (v.boss) v.label.setText(w.doorOpen ? `☠ ${to.name}` : `🔒 ${to.name}`).setColor(w.doorOpen ? '#ff9a6a' : '#b8a8c8');
+      v.hint.setVisible(Math.abs(h.x - v.x) < 46 && h.ground);
     }
     for (const c of w.cookers) {
       let img = this.cookerViews.get(c.id);
@@ -1126,6 +1170,9 @@ export class GameScene extends Phaser.Scene {
       else if (z.kind === 'guac') { g.fillStyle(0x9ad84a, 0.75 * a); g.fillEllipse(z.x, z.y - 3, z.w, 14); g.fillStyle(0xd8f0a0, 0.6 * a); g.fillEllipse(z.x - z.w * 0.2, z.y - 5, z.w * 0.3, 5); }
       else if (z.kind === 'ice') { g.fillStyle(0xcfeeff, 0.55 * a); g.fillEllipse(z.x, z.y - 2, z.w, 10); }
       else if (z.kind === 'fire') { g.fillStyle(0xff7a2a, (0.4 + Math.sin(t * 20 + z.id) * 0.15) * a); g.fillEllipse(z.x, z.y - 20, z.w, 44); }
+      else if (z.kind === 'vortex') { for (let i = 0; i < 4; i++) { g.lineStyle(4 - i * 0.6, 0xc8b8ff, 0.55 * a); g.strokeEllipse(z.x, z.y - 40 - i * 18, z.w * (0.9 - i * 0.18) * (1 + Math.sin(t * 9 + i) * 0.06), 34 - i * 4); } }
+      else if (z.kind === 'sentry') { g.fillStyle(0x5a3a20, a); g.fillRoundedRect(z.x - 16, z.y - 36, 32, 36, 6); g.fillStyle(0xffd27a, a); g.fillCircle(z.x, z.y - 50, 14 + Math.sin(t * 10) * 2); g.lineStyle(3, 0x5a2a08, a); g.strokeCircle(z.x, z.y - 50, 14); }
+      else if (z.kind === 'spin') { g.lineStyle(5, 0xfff0c0, 0.6 * a); g.strokeEllipse(z.x, z.y - 44, z.w * (0.8 + Math.sin(t * 30) * 0.1), 70); g.lineStyle(2, 0xffffff, 0.5 * a); g.strokeEllipse(z.x, z.y - 44, z.w * 0.6, 50); }
       else { g.fillStyle(0xffffff, 0.75 * a); for (let i = 0; i < 40; i++) { const sx = z.x - z.w / 2 + ((i * 97 + t * 160) % z.w), sy = z.y - 300 + ((i * 53 + t * 220) % 320); g.fillCircle(sx, sy, 2.5); } }
     }
     if (h.orbs) for (let i = 0; i < h.orbs.n; i++) {

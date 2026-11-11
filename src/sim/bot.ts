@@ -40,6 +40,29 @@ export class Bot {
     return inp;
   }
 
+  /** Map stages: which portal to take, or which cage / nest to smash. Null = fight / explore as usual. */
+  private mapNav(h: Hero, inp: Input, pulse: boolean, alive: Mob[]): Input | null {
+    const w = this.w, maps = w.stage.maps!, mi = w.mapAt(h.x), m = maps[mi];
+    if (!m || h.state === 'climb') return null;
+    const enter = (px: number): Input => {
+      if (Math.abs(px - h.x) > 24) { inp[px > h.x ? 'right' : 'left'] = true; return inp; }
+      if (h.ground) inp.up = pulse;
+      return inp;
+    };
+    const near = alive.some(o => Math.abs(o.x - h.x) < 180 && Math.abs(o.y - h.y) < 30); // only something right in its face interrupts an errand
+    if (m.kind === 'hub') {
+      const p = w.doorOpen ? m.portals.find(q => q.boss) : m.portals.find(q => !q.boss && !w.zones2[q.to].done);
+      return p ? enter(p.x) : null;
+    }
+    if (m.kind === 'zone' && w.zones2[mi].done && !near) return enter(m.portals[0].x);
+    if (m.kind === 'zone' && !near && m.goal && (m.goal.kind === 'rescue' || m.goal.kind === 'nests')) {
+      const kind = m.goal.kind === 'rescue' ? 'cage' : 'nest';
+      const p = w.props.filter(q => q.kind === kind && q.hp > 0 && w.mapAt(q.x) === mi).sort((a, b) => Math.abs(a.x - h.x) - Math.abs(b.x - h.x))[0];
+      if (p && !w.gates.some(g => !g.open && (g.x - h.x) * (p.x - g.x) > 0)) return this.goTo(p.x, p.y, h, inp, pulse); // (a shut gate in the way: its lever first)
+    }
+    return null;
+  }
+
   /** Walk / climb to a spot (a lever on a ledge) and swing at it once there. */
   private goTo(tx: number, ty: number, h: Hero, inp: Input, pulse: boolean): Input {
     const w = this.w, dx = tx - h.x, dy = ty - h.y;
@@ -86,8 +109,9 @@ export class Bot {
     // locked in an arena: only its own monsters matter (the ones outside the gates can wait)
     const locked = w.arenas.findIndex(a => a.locked);
     // like a player, it leaves stragglers far behind (on a long stage only the last stretch keeps the exit shut)
-    const behind = w.stage.width > 6000 && !w.portal ? h.x - 1200 : -1e9;
-    const live = w.mobs.filter(m => m.state !== 'dead' && !m.wake && (locked < 0 || m.arena === locked) && (m.x > behind || m.x > w.exitX - 2600 || locked >= 0));
+    const behind = w.stage.width > 6000 && !w.portal && !w.stage.maps ? h.x - 1200 : -1e9;
+    const myMap = w.stage.maps ? w.mapAt(h.x) : -1;
+    const live = w.mobs.filter(m => m.state !== 'dead' && !m.wake && (myMap < 0 || w.mapAt(m.x) === myMap) && (locked < 0 || m.arena === locked) && (m.x > behind || m.x > w.exitX - 2600 || locked >= 0));
     // burrowed monsters can't be hit: go after the others first (chasing one up a ledge just loops)
     const up = live.filter(m => !m.under);
     const alive = up.length ? up : live;
@@ -102,6 +126,8 @@ export class Bot {
         this.seen.set(m.id, 1e9); // missed it
       }
     }
+    // a map stage: camp -> the next unfinished zone (or the boss door), a finished zone -> back to camp, cages / nests
+    if (w.stage.maps && locked < 0) { const nav = this.mapNav(h, inp, pulse, alive); if (nav) return nav; }
     // a shut gate just ahead and nothing to fight near it: go and pull its lever (it's up on a ledge: treat it like a target)
     const gi = w.gates.findIndex(g => !g.open && g.x > h.x - 40 && g.x - h.x < 1300);
     if (gi >= 0 && locked < 0 && !alive.some(m => Math.abs(m.x - h.x) < 380 && Math.abs(m.y - h.y) < 120)) {

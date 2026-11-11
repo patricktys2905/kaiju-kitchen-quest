@@ -27,6 +27,8 @@ const DODGE_T = 0.32, DODGE_INV = 0.3, DODGE_CD = 0.55;
 export const PERFECT_WIN = 0.2;
 /** Nightmare on top of Hard's levels: tougher, harder-hitting monsters (plus shorter telegraphs and smarter tactics) */
 export const NIGHTMARE = { hp: 1.2, atk: 1.25 };
+/** Boss-room minibosses (map stages) have this much more health than an elite. */
+export const MINI_ROOM_HP = 5;
 /** World bosses on Nightmare: a smaller bump (their fights are long and the shorter telegraphs already bite) */
 export const NIGHTMARE_BOSS = { hp: 1.1, atk: 1.12 };
 const SLOWMO_T = 0.55, SLOWMO_RATE = 0.3, COUNTER_T = 1.6;
@@ -142,6 +144,8 @@ export interface Mob {
   arena: number;
   /** asleep until a hero passes this x (0 = awake) */
   wake?: number;
+  /** the boss-room foe of a map stage */
+  roomBoss?: boolean;
   /** which hero it's after (index into heroes) */
   tgt: number;
   /** which side of you this monster tries to stand on (flanking) */
@@ -154,7 +158,7 @@ export interface Box { id: number; tier: BoxTier; ilvl: number; x: number; y: nu
 export interface Shot { /** lobbed by a hero: the floor height it was thrown from (it falls through ledges above that) */ fromY?: number; /** extra effects on hit (gear skills, upgraded skills) and the weapon icon a gear shot is drawn as */ fx?: string[]; icon?: string; id: number; x: number; y: number; vx: number; vy: number; t: number; dmg: number; hit: Set<number>; from: 'hero' | 'mob'; kx: number; ky: number; pierce: boolean; g?: number; kind?: string; /** hit radius (default 14) */ r?: number; back?: boolean; /** Pit Hurl: bounces so far */ bounces?: number; /** lobbed shots: where it will land (drawn as a warning) */ tx?: number; ty?: number; /** hero who fired it */ owner?: number }
 export interface Mine { id: number; x: number; y: number; t: number; dmg: number; kx: number; ky: number; owner?: number; /** Jam Trap: glues what it hits */ glue?: boolean; /** gear trap: the weapon's icon and on-hit effects */ icon?: string; fx?: string[] }
 
-export interface RunStats { time: number; hitsTaken: number; dmgTaken: number; maxCombo: number; kills: number; crumbs: number; revived: number; stones: number; perfects: number; interrupts: number; styleSum: number; styleTime: number; stylePeak: number }
+export interface RunStats { /** healing items drunk */ heals?: number; time: number; hitsTaken: number; dmgTaken: number; maxCombo: number; kills: number; crumbs: number; revived: number; stones: number; perfects: number; interrupts: number; styleSum: number; styleTime: number; stylePeak: number }
 
 let nextId = 1;
 
@@ -215,7 +219,7 @@ export class World {
   /** how many monsters may attack you at once (the rest circle and wait their turn) */
   get maxAttackers(): number { return this.nightmare ? 3 : 2; }
   /** lingering skill areas: steam / mustard goo / ice trail / fire floor / snow */
-  zones: { id: number; x: number; y: number; w: number; t: number; tick: number; next: number; dmg: number; kind: 'steam' | 'goo' | 'ice' | 'fire' | 'snow' | 'guac'; hit?: Set<number>; owner?: number }[] = [];
+  zones: { id: number; x: number; y: number; w: number; t: number; tick: number; next: number; dmg: number; kind: 'steam' | 'goo' | 'ice' | 'fire' | 'snow' | 'guac' | 'vortex' | 'sentry' | 'spin'; hit?: Set<number>; owner?: number; fx?: string[]; icon?: string }[] = [];
   spicy: Spicy[];
   hard: boolean;
   portal = false;
@@ -233,6 +237,12 @@ export class World {
   npcCalm = 0;
   /** ambush triggers already sprung (one shout each) */
   ambushed = new Set<number>();
+  /** multi-map stages: each zone's goal progress (have / done), misses since the last quest drop (pity), respawn clock */
+  zones2: { have: number; done: boolean; miss: number; spawnT: number }[] = [];
+  /** hits the player took in the boss room (a stage challenge) */
+  bossHits = 0;
+  /** mould nests: seconds to their next hatchling */
+  nestT = new Map<number, number>();
 
   constructor(public stage: StageDef, d: Derived, seed = 1, bag: Hero['bag'] = [], revives = 0, hard = false, variant?: 'swarm' | 'ambush' | 'night', spicy: Spicy[] = [], public nemesis?: MobKind, nightmare = false, party: Derived[] = [], humans = 1, partyBags: { bag: Hero['bag']; revives: number }[] = []) {
     nextId = 1; // ids restart with every stage: the same seed and inputs always play out the same (monster patrols use the id)
@@ -240,12 +250,13 @@ export class World {
     this.nightmare = nightmare; if (nightmare) hard = true;
     this.stage = stage = { ...stage, platforms: stage.platforms.map(p => ({ ...p })) };
     this.platBase = stage.platforms.map(p => p.x);
-    this.props = (stage.props ?? []).map(p => ({ id: nextId++, kind: p.kind, x: p.x, y: p.y, hp: p.kind === 'crate' ? 2 : p.kind === 'chest' ? 3 : p.kind === 'jar' ? 1 : 99, cd: 0, key: p.key, tx: p.tx, tw: p.tw, gate: p.gate }));
+    this.props = (stage.props ?? []).map(p => ({ id: nextId++, kind: p.kind, x: p.x, y: p.y, hp: p.kind === 'crate' ? 2 : p.kind === 'chest' ? 3 : p.kind === 'jar' ? 1 : p.kind === 'cage' ? 3 : p.kind === 'nest' ? 6 : 99, cd: 0, key: p.key, tx: p.tx, tw: p.tw, gate: p.gate }));
     this.cookers = (stage.cookers ?? []).map(x => ({ id: nextId++, x, y: stage.groundY, vx: 0, home: x, face: -1, fuse: 0, gone: 0 }));
     this.spicy = spicy; this.hard = hard;
     this.arenas = (stage.arenas ?? []).map(a => ({ ...a, wave: -1, locked: false, done: false }));
     this.chase = stage.chase ? { ...stage.chase, x: 0, speed: 0, on: false, done: false, cd: 0 } : null;
     this.gates = (stage.gates ?? []).map(g => ({ x: g.x, open: false }));
+    this.zones2 = (stage.maps ?? []).map(() => ({ have: 0, done: false, miss: 0, spawnT: 0 }));
     const ob = stage.objective;
     if (ob?.kind === 'escort') this.npc = { x: 60, y: stage.groundY, hp: 1, maxHp: 1, face: 1, hurt: 0 };
     if (ob?.kind === 'fetch') { this.scroll = { x: ob.x ?? stage.width - 260, y: stage.groundY, got: false }; this.objTimer = ob.t ?? 75; }
@@ -254,7 +265,7 @@ export class World {
     this.hazards = (stage.hazards ?? []).map(h => ({ ...h, state: 'off', hit: new Set<number>() }));
     let s = seed >>> 0 || 1;
     this.rand = () => { s ^= s << 13; s ^= s >>> 17; s ^= s << 5; return ((s >>> 0) % 100000) / 100000; };
-    this.exitX = stage.width - 90;
+    this.exitX = stage.maps ? stage.maps[stage.maps.length - 1].x1 - 120 : stage.width - 90;
     const mk = (dd: Derived, idx: number, x: number, b: Hero['bag'], rv: number): Hero => ({
       d: dd, x, y: stage.groundY, vx: 0, vy: 0, face: 1, ground: true, on: -1, state: 'move', t: 0, step: 0, queued: false,
       hitIds: new Set(), hp: dd.maxHp, inv: 0, cds: [0, 0, 0, 0], skill: null, skillMul: 1, ticks: 0,
@@ -272,7 +283,9 @@ export class World {
     if (this.npc) { this.npc.maxHp = this.npc.hp = Math.round(d.maxHp * 0.7); }
     // stage 5: this kaiju's story nemesis takes the elite's place
     const nemStage = !!nemesis && !stage.boss && stage.id.endsWith('-5') && stage.world <= 5; // Act 2: the nemeses have hung up their capes
-    for (const m of stage.mobs) { const mob = this.spawnMob(m.elite && nemStage ? nemesis! : m.kind, m.x, m.lv + (hard ? HARD_LV : 0) + night, m.y, m.elite); if (m.wake) mob.wake = m.wake; }
+    stage.mobs.forEach((m, mi) => { const mob = this.spawnMob(m.elite && nemStage ? nemesis! : m.kind, m.x, m.lv + (hard ? HARD_LV : 0) + night, m.y, m.elite); if (m.wake) mob.wake = m.wake;
+      // a map stage's boss-room miniboss: a proper fight (heroes shred an elite's usual health in seconds by now)
+      if (stage.maps && mi === 0) { mob.roomBoss = true; if (MOBS[mob.kind].brain !== 'boss') mob.hp = mob.maxHp = Math.round(mob.maxHp * MINI_ROOM_HP); } });
     if (this.variant === 'swarm') {
       for (const m of stage.mobs.filter((s, i) => i % 2 === 0 && !s.wake && !MOBS[s.kind].mini && !s.elite)) this.spawnMob(m.kind, Math.min(stage.width - 200, m.x + 70), m.lv + (hard ? HARD_LV : 0), m.y, m.elite);
       for (const m of this.mobs) if (!m.elite) { m.hp = m.maxHp = Math.round(m.maxHp * 0.65); }
@@ -355,6 +368,7 @@ export class World {
       this.cur = h;
       const e0 = this.events.length;
       h.counter = Math.max(0, h.counter - dt); h.spikyT = Math.max(0, h.spikyT - dt);
+      if (this.stage.maps && this.tryPortal(h, inputs[h.idx] ?? NO_INPUT)) continue;
       this.stepHero(inputs[h.idx] ?? NO_INPUT, dt);
       this.stepGearTimers(h, dt);
       this.stepOrbs(dt);
@@ -392,7 +406,8 @@ export class World {
     this.stepSetPieces(dt);
     this.cur = this.heroes[0];
     const holding = this.holdout > 0 || (this.scroll !== null && !this.scroll.got) || this.arenas.some(a => !a.done);
-    if (!this.portal && this.blocking === 0 && !holding) { this.portal = true; this.events.push({ t: 'portal' }); }
+    if (!this.portal && (this.stage.maps ? this.bossRoomClear() && this.holdout <= 0 : this.blocking === 0 && !holding)) { this.portal = true; this.events.push({ t: 'portal' }); }
+    if (this.stage.maps) this.stepMapZones(dt);
     const h = this.hero;
     const npcHome = !this.npc || Math.abs(this.npc.x - this.exitX) < 140;
     if (this.portal && npcHome && h.state !== 'down' && Math.abs(h.x - this.exitX) < 40 && Math.abs(h.y - this.stage.groundY) < 4) {
@@ -619,6 +634,65 @@ export class World {
       case 'burst': // eight copies in a star
         for (let i = 0; i < 8; i++) { const a = (i / 8) * Math.PI * 2; this.shots.push({ ...base, hit: new Set(), id: nextId++, x: h.x, y: h.y - 44, vx: Math.cos(a) * 520, vy: Math.sin(a) * 520, pierce: true, kind: 'gearburst', r: 20 }); }
         break;
+      case 'orbit': // three copies circle you, re-hitting as they pass
+        for (let i = 0; i < 3; i++) this.shots.push({ ...base, hit: new Set(), id: nextId++, x: h.x, y: h.y - 44, vx: 0, vy: 0, pierce: true, kind: 'gearorbit', r: 22, tx: i / 3 });
+        break;
+      case 'dash': { // rush forward (untouchable), hitting everything on the way
+        const from = h.x, mp = this.stage.maps?.[this.mapAt(h.x)];
+        let to = clamp(h.x + h.face * 300, (mp?.x0 ?? 0) + 30, (mp?.x1 ?? this.stage.width) - 30);
+        for (const gt of this.gates) if (!gt.open && (gt.x - from) * h.face > 0 && (gt.x - to) * h.face < 0) to = gt.x - h.face * 30;
+        for (const m of this.mobs) if (m.state !== 'dead' && !m.under && Math.abs(m.y - h.y) < 100 && (m.x - Math.min(from, to)) >= -30 && (m.x - Math.max(from, to)) <= 30) {
+          this.damageMob(m, atk, h.face, { kx: 260, ky, stun: 0.5 }, true); if (fx.length) this.applyFx(m, fx, h);
+        }
+        h.x = to; h.inv = Math.max(h.inv, 0.4); h.vx = h.face * 200;
+        this.shots.push({ ...base, hit: new Set(), id: nextId++, x: from, y: h.y - 44, vx: h.face * 1400, vy: 0, pierce: true, kind: 'gear', r: 1, dmg: 0, t: 0.15 });
+        this.events.push({ t: 'shock', x: to, y: h.y, r: 60 });
+        break;
+      }
+      case 'chain': { // jumps from monster to monster
+        const pts: [number, number][] = [[h.x + h.face * 30, h.y - 50]], hit = new Set<number>();
+        let cx = h.x + h.face * 60, cy = h.y;
+        for (let k = 0; k < 6; k++) {
+          const m = this.targetsNear(cx, cy, k === 0 ? 380 : 260, 200).find(o => !hit.has(o.id) && (k > 0 || Math.sign(o.x - h.x) !== -h.face));
+          if (!m) break;
+          hit.add(m.id); pts.push([m.x, m.y - MOBS[m.kind].h * 0.6]);
+          this.damageMob(m, atk, Math.sign(m.x - cx) || h.face, { kx: 80, ky: Math.min(ky, -120), stun: 0.4 }, true); if (fx.length) this.applyFx(m, fx, h);
+          cx = m.x; cy = m.y;
+        }
+        if (pts.length > 1) this.events.push({ t: 'zap', pts });
+        break;
+      }
+      case 'meteor':
+        this.shots.push({ ...base, hit: new Set(), id: nextId++, x: h.x + h.face * 200, y: h.y - 460, vx: 0, vy: 250, g: 1800, pierce: true, kind: 'gearmeteor', r: 60, fromY: h.y });
+        break;
+      case 'vortex':
+        this.zones.push({ id: nextId++, x: h.x + h.face * 180, y: h.y, w: 300, t: 3, tick: 0.25, next: 0.2, dmg: atk, kind: 'vortex', fx, owner: h.idx });
+        break;
+      case 'turret':
+        this.zones.push({ id: nextId++, x: h.x + h.face * 40, y: h.y, w: 0, t: 6, tick: 0.55, next: 0.3, dmg: atk, kind: 'sentry', fx, icon: g.icon, owner: h.idx });
+        break;
+      case 'spin':
+        this.zones.push({ id: nextId++, x: h.x, y: h.y, w: 230, t: 1.6, tick: 0.2, next: 0, dmg: atk, kind: 'spin', fx, icon: g.icon, owner: h.idx });
+        break;
+      case 'wave':
+        this.events.push({ t: 'shock', x: h.x + h.face * 40, y: h.y, r: 60 });
+        this.shots.push({ ...base, hit: new Set(), id: nextId++, x: h.x + h.face * 30, y: h.y - 16, vx: h.face * 620, vy: 0, pierce: true, kind: 'gearwave', r: 30, ky: -560, back: false, tx: 1 });
+        break;
+      case 'shield':
+        h.shield = Math.max(h.shield, Math.round(h.d.maxHp * 0.33)); h.shieldT = 8;
+        if (fx.includes('heal')) h.hp = Math.min(h.d.maxHp, h.hp + h.d.maxHp * 0.1);
+        for (const m of this.targetsNear(h.x, h.y, 140, 90)) { this.damageMob(m, h.d.atk * g.power, Math.sign(m.x - h.x) || 1, { kx: 220, ky: -200, stun: 0.5 }, true); if (fx.length) this.applyFx(m, fx, h); }
+        this.events.push({ t: 'shock', x: h.x, y: h.y, r: 90 });
+        break;
+      case 'barrage':
+        for (let i = 0; i < 6; i++) this.shots.push({ ...base, hit: new Set(), id: nextId++, x: h.x + h.face * 30, y: h.y - 44, vx: h.face * 760, vy: (i - 2.5) * 60, pierce: false, kind: 'gear', r: 18, t: -0.05 * i });
+        break;
+      case 'pillar': // erupt from the floor, one after another
+        for (let i = 0; i < 5; i++) this.shots.push({ ...base, hit: new Set(), id: nextId++, x: h.x + h.face * (90 + i * 85), y: h.y - 4, vx: 0, vy: -720, g: 2200, pierce: true, kind: 'gearpillar', r: 26, t: -0.12 * i, fromY: h.y });
+        break;
+      case 'bounce':
+        this.shots.push({ ...base, hit: new Set(), id: nextId++, x: h.x + h.face * 30, y: h.y - 50, vx: h.face * 430, vy: -380, pierce: true, kind: 'gearbounce', r: 22, fromY: h.y, tx: 0 });
+        break;
       case 'trap': { // planted on the floor ahead: snaps the first monster to step on it
         const fl = this.floorBelow(h.x + h.face * 50, h.y - 2, h.y + 400, false);
         this.mines.push({ id: nextId++, x: h.x + h.face * 50, y: fl ? fl.y : h.y, t: 0, dmg: atk, kx: 160, ky: g.fx === 'launch' ? -620 : -300, owner: h.idx, icon: g.icon, fx });
@@ -639,6 +713,9 @@ export class World {
       else if (e === 'slow') m.slow = Math.max(m.slow, 3);
       else if (e === 'pull') { if (!boss) m.x += clamp(h.x + h.face * 50 - m.x, -90, 90); }
       else if (e === 'heal') h.hp = Math.min(h.d.maxHp, h.hp + h.d.maxHp * 0.015);
+      else if (e === 'poison') { m.burn = Math.max(m.burn, 4); m.burnDmg = Math.max(m.burnDmg, h.d.atk * 0.22); m.slow = Math.max(m.slow, 2); }
+      else if (e === 'shatter') { m.armor = 0; m.weak = Math.max(m.weak, 3); }
+      else if (e === 'crumbs') { this.run.crumbs += 1 + Math.floor(m.lv / 10); h.hp = Math.min(h.d.maxHp, h.hp + h.d.maxHp * 0.006); }
     }
   }
 
@@ -915,13 +992,14 @@ export class World {
       return;
     }
     if (--p.hp > 0) { this.events.push({ t: 'block', x: p.x, y: p.y - 30 }); return; }
+    if ((p.kind === 'cage' || p.kind === 'nest') && this.stage.maps) this.zoneTick(this.mapAt(p.x), p.kind === 'cage' ? 'Crumblets freed' : 'Mould nests smashed');
     this.events.push({ t: 'prop', kind: p.kind, x: p.x, y: p.y });
     const lv = this.stage.lv[1];
     const cr = Math.round((p.kind === 'chest' ? 40 : 4) + lv * (p.kind === 'chest' ? 4 : 0.8));
     const crm = h.d.procs.includes('magnet') ? Math.round(cr * 1.25) : cr;
     this.run.crumbs += crm; this.events.push({ t: 'crumbs', n: crm, x: p.x, y: p.y - 40 });
     if (p.kind === 'jar') { const n = Math.round(h.d.maxHp * 0.08); h.hp = Math.min(h.d.maxHp, h.hp + n); this.events.push({ t: 'heal', x: h.x, y: h.y - 70, n, hero: true }); }
-    const drops = p.kind === 'chest' ? 2 : p.kind === 'crate' && this.rand() < 0.3 ? 1 : 0;
+    const drops = this.stage.maps ? (p.kind === 'chest' ? 1 : 0) : p.kind === 'chest' ? 2 : p.kind === 'crate' && this.rand() < 0.3 ? 1 : 0;
     for (let i = 0; i < drops; i++) {
       const tier = (p.kind === 'chest' ? 4 : 1 + Math.floor(this.rand() * 2)) as BoxTier;
       const b: Box = { id: nextId++, tier, ilvl: lv, x: p.x + (i - (drops - 1) / 2) * 40, y: p.y - 20, vy: -380, ground: false, t: 0 };
@@ -965,8 +1043,8 @@ export class World {
         a.locked = false; a.done = true;
         this.events.push({ t: 'arenaClear', i });
         if (this.npc && this.npc.hp > 0) this.npc.hp = this.npc.maxHp; // the Crumblet catches its breath after every room
-        const b: Box = { id: nextId++, tier: 3, ilvl: this.stage.lv[1], x: (a.x0 + a.x1) / 2, y: G - 80, vy: -300, ground: false, t: 0 };
-        this.boxes.push(b); this.events.push({ t: 'drop', id: b.id, tier: 3, x: b.x, y: b.y });
+        if (!this.stage.maps) { const b: Box = { id: nextId++, tier: 3, ilvl: this.stage.lv[1], x: (a.x0 + a.x1) / 2, y: G - 80, vy: -300, ground: false, t: 0 };
+        this.boxes.push(b); this.events.push({ t: 'drop', id: b.id, tier: 3, x: b.x, y: b.y }); }
       }
     });
     // the giant rolling pin: starts behind you at the chase line, a bit slower than you can run
@@ -1063,8 +1141,8 @@ export class World {
       n.hurt = Math.max(0, n.hurt - dt);
       // while an arena's gates are shut it ducks behind the gate (and waits there), safe from the waves
       const room = this.arenas.find(a => a.locked);
-      const safe = !!room;
-      const tx = this.portal ? this.exitX : room ? room.x0 + 30 : h.x - h.face * 70;
+      const safe = !!room || (!!this.stage.maps && this.mapAt(n.x) !== this.mapAt(h.x)); // waiting in another map (camp)
+      const tx = this.portal ? this.exitX : room ? room.x0 + 30 : safe ? n.x : h.x - h.face * 70;
       if (Math.abs(tx - n.x) > 8) { n.face = tx > n.x ? 1 : -1; n.x += n.face * Math.min(Math.abs(tx - n.x), 130 * dt); }
       for (const m of this.mobs) {
         if (m.state === 'dead' || m.under || n.hurt > 0 || safe) continue;
@@ -1119,6 +1197,70 @@ export class World {
     }
   }
 
+  // ---------- multi-map stages ----------
+  /** Which map an x is in (-1 off every map). */
+  mapAt(x: number): number { return (this.stage.maps ?? []).findIndex(m => x >= m.x0 && x <= m.x1); }
+  /** The boss door opens when every zone's goal is done. */
+  get doorOpen(): boolean { return (this.stage.maps ?? []).every((m, i) => m.kind !== 'zone' || this.zones2[i].done); }
+  private bossRoomClear(): boolean {
+    const maps = this.stage.maps!, b = maps.length - 1;
+    return this.heroes.some(h => this.mapAt(h.x) === b) && !this.mobs.some(m => m.state !== 'dead' && this.mapAt(m.x) === b);
+  }
+  /** Up at a portal: through it (the boss door only once it's open). Returns true when the hero went through. */
+  private tryPortal(h: Hero, inp: Input): boolean {
+    if (!inp.up || h.prev.up || h.state === 'down' || h.state === 'climb' || !h.ground) return false;
+    const mi = this.mapAt(h.x), map = this.stage.maps![mi];
+    const p = map?.portals.find(q => Math.abs(q.x - h.x) < 46);
+    if (!p) return false;
+    if (p.boss && !this.doorOpen) { h.prev = { ...inp }; this.events.push({ t: 'doorLocked', left: this.stage.maps!.filter((m, i) => m.kind === 'zone' && !this.zones2[i].done).length }); return false; }
+    const go = (o: Hero) => { o.x = p.tx; o.y = this.stage.groundY; o.vx = 0; o.vy = 0; o.ground = true; o.on = -1; o.prev = { ...inp }; this.enter(o, 'move'); };
+    go(h);
+    // back at camp: a rest by the fire patches everyone up (zones and the boss are each a fair fight)
+    if (this.stage.maps![p.to].kind === 'hub') for (const o of this.heroes) if (o.state !== 'down' && (o === h || o.cpu)) { const n = Math.round(o.d.maxHp - o.hp); if (n > 0) { o.hp = o.d.maxHp; this.events.push({ t: 'heal', x: o.x, y: o.y - 70, n, hero: true }); } }
+    if (this.stage.maps![p.to].kind === 'hub' && this.npc && this.npc.hp > 0) this.npc.hp = this.npc.maxHp;
+    // CPU buddies and the escorted Crumblet come along
+    // CPU buddies come along; the escorted Crumblet waits safely at camp while you clear the zones, then follows you
+    // through the boss door (and back to camp)
+    if (h.idx === 0) { for (const o of this.heroes) if (o.cpu && o !== h) go(o); const k = this.stage.maps![p.to].kind; if (this.npc && (k === 'boss' || (k === 'hub' && this.mapAt(this.npc.x) !== 0))) this.npc.x = p.tx - 60; }
+    this.events.push({ t: 'warp', to: p.to, hi: h.idx });
+    return true;
+  }
+  /** Zone goals: quest drops (with pity), rescues, nests, arenas, timed goals; nests keep spawning, quest monsters respawn. */
+  private stepMapZones(dt: number): void {
+    const maps = this.stage.maps!;
+    // keep everyone inside their own map (walls between maps)
+    for (const h of this.heroes) { const m = maps[this.mapAt(h.x)] ?? maps[0]; h.x = clamp(h.x, m.x0 + 24, m.x1 - 24); }
+    maps.forEach((m, i) => {
+      const z = this.zones2[i], g = m.goal;
+      if (!g || z.done) return;
+      const here = this.heroes.some(h => this.mapAt(h.x) === i && h.state !== 'down');
+      if (g.kind === 'collect' && here && (z.spawnT -= dt) <= 0) {
+        z.spawnT = 6;
+        // quest monsters come back (there are always some to hunt)
+        if (this.mobs.filter(o => o.kind === g.mob && o.state !== 'dead' && this.mapAt(o.x) === i).length < 2) {
+          const h = this.heroes[0], x = clamp(h.x + (this.rand() < 0.5 ? -1 : 1) * (420 + this.rand() * 300), m.x0 + 200, m.x1 - 200);
+          this.spawnMob(g.mob, x, this.stage.lv[0]);
+        }
+      }
+      if (g.kind === 'nests' && here) for (const p of this.props) if (p.kind === 'nest' && p.hp > 0 && this.mapAt(p.x) === i && Math.abs(p.x - this.heroes[0].x) < 700 && (this.nestT.set(p.id, (this.nestT.get(p.id) ?? 2) - dt).get(p.id)!) <= 0) {
+        this.nestT.set(p.id, 7);
+        if (this.mobs.filter(o => o.state !== 'dead' && Math.abs(o.x - p.x) < 300).length < 4) { const w = WORLDS.find(x => x.id === this.stage.world) ?? WORLDS[0]; const kinds = w.pool.map(([, k]) => k).filter(k => ['walker', 'hopper'].includes(MOBS[k].brain)); const c = this.spawnMob(kinds[Math.floor(this.rand() * kinds.length)] ?? 'bun', p.x + 30, this.stage.lv[0]); c.vy = -300; c.ground = false; c.on = null; }
+      }
+      const finish = (text: string) => { z.done = true; this.events.push({ t: 'goal', zone: i, text, done: true }); };
+      if (g.kind === 'arena' && this.arenas.filter(a => a.x0 >= m.x0 && a.x1 <= m.x1).every(a => a.done)) finish(`${m.name}: arena cleared!`);
+      if (g.kind === 'fetch' && this.scroll?.got && this.holdout <= 0) finish(`${m.name}: Recipe Scroll saved!`);
+      if (g.kind === 'survive' && this.objArmed && this.holdout <= 0) { finish(`${m.name}: you held out!`); }
+      if ((g.kind === 'collect' || g.kind === 'rescue' || g.kind === 'nests') && z.have >= g.need) finish(`${m.name}: done!`);
+    });
+  }
+  /** A zone goal ticks up (quest item, freed Crumblet, smashed nest). */
+  private zoneTick(i: number, what: string): void {
+    const m = this.stage.maps![i], g = m.goal!, z = this.zones2[i];
+    if (z.done || !('need' in g)) return;
+    z.have++;
+    this.events.push({ t: 'goal', zone: i, text: `${what} ${Math.min(z.have, g.need)}/${g.need}`, done: false });
+  }
+
   /** Moving trays, sponges, runaway pressure cookers. */
   private stepProps(dt: number): void {
     this.stage.platforms.forEach((p, i) => {
@@ -1168,12 +1310,20 @@ export class World {
       z.t -= dt; z.next -= dt;
       if (z.next > 0) continue;
       z.next = z.tick;
+      if (z.kind === 'spin') { const o = this.heroes[z.owner ?? 0]; if (o) { z.x = o.x; z.y = o.y; } }
+      if (z.kind === 'sentry') {
+        const tgt = this.targetsNear(z.x, z.y, 520, 220)[0];
+        if (tgt) { const dx = tgt.x - z.x, dy = tgt.y - MOBS[tgt.kind].h / 2 - (z.y - 50), d = Math.hypot(dx, dy) || 1; this.shots.push({ id: nextId++, x: z.x, y: z.y - 50, vx: dx / d * 700, vy: dy / d * 700, t: 0, dmg: z.dmg, hit: new Set(), from: 'hero', kx: 90, ky: -100, pierce: false, kind: 'gear', r: 14, icon: z.icon, fx: z.fx, owner: z.owner }); }
+        continue;
+      }
       if (z.kind === 'guac') for (const o of this.heroes) if (o.state !== 'down' && Math.abs(o.x - z.x) < z.w / 2 && Math.abs(o.y - z.y) < 70) o.hp = Math.min(o.d.maxHp, o.hp + o.d.maxHp * 0.015);
       for (const m of this.mobs) {
         if (m.state === 'dead' || m.under || m.disguised || Math.abs(m.x - z.x) > z.w / 2 + MOBS[m.kind].w / 2 || Math.abs(m.y - z.y) > (z.kind === 'snow' ? 400 : 70)) continue;
         if (z.kind === 'ice' || z.kind === 'snow' || z.kind === 'guac') m.slow = Math.max(m.slow, 1);
         if (z.kind === 'goo') { if (z.hit?.has(m.id)) continue; z.hit?.add(m.id); this.glue(m); }
         if (z.kind === 'fire') { m.burn = Math.max(m.burn, 1); m.burnDmg = Math.max(m.burnDmg, z.dmg * 0.5); }
+        if (z.kind === 'vortex' && MOBS[m.kind].brain !== 'boss') m.x += clamp(z.x - m.x, -34, 34);
+        if (z.fx?.length) this.applyFx(m, z.fx, this.heroes[z.owner ?? 0] ?? this.hero);
         if (z.dmg > 0) this.damageMob(m, z.dmg, Math.sign(m.x - z.x) || 1, { kx: 30, ky: 0, stun: 0.15 }, true);
       }
     }
@@ -1399,7 +1549,7 @@ export class World {
     const def = CONSUMABLES[it.id];
     if (!def.quick) return false;
     if (def.heal && h.hp >= h.d.maxHp) return false;
-    if (def.heal) h.hp = Math.min(h.d.maxHp, h.hp + h.d.maxHp * def.heal);
+    if (def.heal) { h.hp = Math.min(h.d.maxHp, h.hp + h.d.maxHp * def.heal); if (h.idx === 0) this.run.heals = (this.run.heals ?? 0) + 1; }
     if (def.boost) h.boosts[def.boost.kind] = [def.boost.v, def.boost.t];
     it.n--; h.quickCd = QUICK_CD;
     this.events.push({ t: 'use', slot, id: it.id });
@@ -1596,6 +1746,8 @@ export class World {
     m.hp = 0; m.state = 'dead'; m.deadT = 0; m.vy = Math.min(m.vy, -300); m.ground = false; m.on = null;
     this.run.kills++;
     this.addStyle('kill', 3);
+    // a zone's quest monster: drops its quest item now and then (never more than two misses in a row)
+    if (this.stage.maps) { const zi = this.mapAt(m.x), g = this.stage.maps[zi]?.goal, z = this.zones2[zi]; if (g?.kind === 'collect' && g.mob === m.kind && !z.done) { if (z.miss >= 2 || this.rand() < 0.45) { z.miss = 0; this.zoneTick(zi, g.item); } else z.miss++; } }
     if (m.mods.includes('splitting')) for (const off of [-40, 40]) { const c = this.spawnMob(m.kind, clamp(m.x + off, 30, this.stage.width - 30), Math.max(1, m.lv - 1), m.on !== null && m.on >= 0 ? m.y : undefined); c.hp = c.maxHp = Math.round(c.maxHp * 0.6); c.vy = -380; c.vx = off * 5; c.ground = false; c.on = null; c.state = 'hurt'; c.t = 0; c.under = false; c.disguised = false; }
     if (m.stolen >= 0) { const slot = h.bag[m.stolen]; if (slot) slot.n++; this.events.push({ t: 'recover', name: slot ? CONSUMABLES[slot.id].name : '' }); m.stolen = -1; }
     if (def.split) for (const off of [-30, 30]) { const c = this.spawnMob(def.split, clamp(m.x + off, 30, this.stage.width - 30), Math.max(1, m.lv - 2), m.on !== null && m.on >= 0 ? m.y : undefined); c.vy = -380; c.vx = off * 6; c.ground = false; c.on = null; c.state = 'hurt'; c.t = 0; }
@@ -1610,7 +1762,10 @@ export class World {
     const st = def.brain === 'boss' ? 3 : m.elite ? 2 : this.rand() < 0.07 ? 1 : 0;
     if (st) { this.run.stones += st; this.events.push({ t: 'stone', n: st, x: m.x, y: m.y - def.h - 14 }); }
     if (h.d.lifeOnKill > 0) h.hp = Math.min(h.d.maxHp, h.hp + h.d.maxHp * h.d.lifeOnKill);
-    const drops = def.brain === 'boss' ? 3 : m.elite || def.brain === 'mimic' ? 2 : this.rand() < def.dropChance * (this.variant === 'night' ? 1.4 : 1) ? 1 : 0;
+    // map stages: loot comes from the bosses (and the end-of-stage chest): ordinary monsters drop none, champions none,
+    // a mimic 1, the boss-room miniboss 1, a world boss 2
+    const drops = this.stage.maps ? (def.brain === 'boss' ? 2 : def.brain === 'mimic' || m.roomBoss ? 1 : 0)
+      : def.brain === 'boss' ? 3 : m.elite || def.brain === 'mimic' ? 2 : this.rand() < def.dropChance * (this.variant === 'night' ? 1.4 : 1) ? 1 : 0;
     for (let i = 0; i < drops; i++) {
       const big = def.brain === 'boss' || m.elite || def.brain === 'mimic';
       const tier = Math.max(def.brain === 'boss' ? 3 : def.brain === 'mimic' ? 3 : m.elite ? 2 : 1, rollTier(dropLevel(m.lv) + (big ? 2 : 0), this.rand)) as BoxTier;
@@ -1627,6 +1782,11 @@ export class World {
     const def = MOBS[m.kind], h = this.hero;
     m.t += dt; m.flash = Math.max(0, m.flash - dt); m.hurtShown = Math.max(0, m.hurtShown - dt); m.slow = Math.max(0, m.slow - dt);
     if (m.state === 'dead') { m.deadT += dt; m.vx *= 0.96; this.physics(m, dt, MAX_FALL, false); return; }
+    if (this.stage.maps) { // a map stage: monsters only stir while a hero is in their map, and never leave it
+      const mi = this.mapAt(m.x), mp = this.stage.maps[mi];
+      if (mp) m.x = clamp(m.x, mp.x0 + 20, mp.x1 - 20);
+      if (!this.heroes.some(p => this.mapAt(p.x) === mi)) { m.vx = 0; if (m.y > 0) this.physics(m, dt, MAX_FALL, false); return; }
+    }
     if (m.wake) { // asleep at the end of the stage until someone walks into its room
       if (!this.heroes.some(p => p.x >= m.wake! && p.state !== 'down')) { m.vx = 0; if (m.y > 0) this.physics(m, dt, MAX_FALL, false); return; }
       const trig = m.wake; m.wake = 0;
@@ -2228,7 +2388,7 @@ export class World {
     if (from && from.state !== 'dead' && h.d.uniques.includes('thornlid')) { from.hp -= Math.max(1, Math.round(dmg * 0.3)); from.flash = 0.1; if (from.hp <= 0) this.killMob(from); }
     if (h.hp <= 0 && !h.phoenixUsed && h.d.uniques.includes('phoenix')) { h.phoenixUsed = true; h.hp = 1; h.inv = 2.5; this.events.push({ t: 'revive' }); return; }
     h.ult = Math.min(100, h.ult + 4);
-    if (h === this.heroes[0]) { this.run.hitsTaken++; this.run.dmgTaken += dmg; }
+    if (h === this.heroes[0]) { this.run.hitsTaken++; this.run.dmgTaken += dmg; if (this.stage.maps && this.mapAt(h.x) === this.stage.maps.length - 1) this.bossHits++; }
     this.events.push({ t: 'hit', x: h.x, y: h.y - 60, dmg, crit: false, target: 'hero' });
     if (h.hp <= 0 && h.revives > 0) { // Second Helping
       h.revives--; this.run.revived++;
@@ -2269,6 +2429,17 @@ export class World {
       }
       if ((s.kind === 'boomerang' || s.kind === 'gearboom') && !s.back && s.t > 0.42) { s.back = true; s.hit = new Set(); } // comes back: hits again
       if (s.kind === 'gearburst' && s.t > 0.55) { s.t = 99; continue; } // the star doesn't fly forever
+      if (s.kind === 'gearorbit') { // circles its owner, re-hitting every 0.45 s
+        const o = this.heroes[s.owner ?? 0] ?? h, a = this.time * 5 + (s.tx ?? 0) * Math.PI * 2;
+        s.x = o.x + Math.cos(a) * 80; s.y = o.y - 44 + Math.sin(a) * 40; s.vx = 0; s.vy = 0;
+        if (Math.floor(s.t / 0.45) !== Math.floor((s.t - sdt) / 0.45)) s.hit = new Set();
+        if (s.t > 6) s.t = 99;
+      }
+      if (s.kind === 'gearbounce') { // bounces along the floor, hitting again on each bounce
+        s.vy += 1400 * sdt;
+        const f = s.vy > 0 ? this.floorBelow(s.x, s.y - s.vy * sdt, s.y + 10, false) : null;
+        if (f) { s.y = f.y - 12; s.vy = -420; s.hit = new Set(); s.tx = (s.tx ?? 0) + 1; this.events.push({ t: 'shock', x: s.x, y: f.y, r: 40 }); if (s.tx >= 5) s.t = 99; }
+      }
       if (s.back) { s.vx = approach(s.vx, Math.sign(h.x - s.x) * 700, 2600 * sdt); if (Math.abs(h.x - s.x) < 30 && Math.abs(h.y - 44 - s.y) < 60) { s.t = 99; continue; } }
       if (s.kind === 'homing') {
         const tgt = this.targetsNear(s.x, s.y, 700, 500)[0];
@@ -2457,7 +2628,9 @@ export class World {
 /** Stage rank from time, hits taken, best combo and style (average style meter + perfect dodges). */
 export function rankOf(run: RunStats, par: number): { rank: 'S' | 'A' | 'B' | 'C' | 'D'; score: number } {
   const timeScore = Math.max(0, Math.min(40, 40 * (1.6 - run.time / par) / 0.6));
-  const hitScore = Math.max(0, 35 - run.hitsTaken * 3);
+  // hits taken per minute (a 7-minute stage isn't judged like a 1-minute one), and each jam drunk costs a little
+  const perMin = run.hitsTaken / Math.max(1, run.time / 60);
+  const hitScore = Math.max(0, 35 - perMin * 3 - (run.heals ?? 0) * 2);
   const styleAvg = run.styleTime > 0 ? run.styleSum / run.styleTime : 0;
   const comboScore = Math.min(12, run.maxCombo * 0.6) + Math.min(13, styleAvg * 0.3 + run.perfects * 1.5 + run.interrupts * 0.5);
   const score = Math.round(timeScore + hitScore + comboScore);
@@ -2468,7 +2641,7 @@ export function rankOf(run: RunStats, par: number): { rank: 'S' | 'A' | 'B' | 'C
 /** hero projectiles that live longer than a bolt */
 /** Bosses shrug off thrown kitchenware a bit (gear skills deal 40% to them). */
 const gearVs = (m: Mob) => (MOBS[m.kind].brain === 'boss' ? 0.4 : 1);
-const LONG_SHOTS = new Set(['gearboom', 'minijelly', 'tide', 'salmon', 'gumball', 'trumpet', 'guacwave', 'gearroll', 'boomerang', 'homing', 'twister', 'snowball', 'wave', 'reflect']);
+const LONG_SHOTS = new Set(['gearorbit', 'gearbounce', 'gearmeteor', 'gearpillar', 'gearwave', 'gearboom', 'minijelly', 'tide', 'salmon', 'gumball', 'trumpet', 'guacwave', 'gearroll', 'boomerang', 'homing', 'twister', 'snowball', 'wave', 'reflect']);
 const NEW_BRAINS = new Set(['healer', 'summoner', 'charger', 'sniper', 'turret', 'burrower', 'mimic']);
 
 const gbCache = new WeakMap<AttackDef[], AttackDef>(), lnCache = new WeakMap<AttackDef[], AttackDef>();

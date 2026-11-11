@@ -192,7 +192,16 @@ export function updateHud(w: World, p: HeroProfile, st: StageDef): void {
     : w.holdout > 0 ? ` · ⏱ hold out ${Math.ceil(w.holdout)}s` : '';
   const arena = w.arenas.find(a => a.locked);
   const arenaTxt = arena ? ` · ⚔️ wave ${arena.wave + 1}/${arena.waves.length}` : w.portal || !w.arenas.some(a => !a.done) ? '' : ' · ⚔️ arena ahead';
-  q('.stage .s').textContent = (w.portal ? '➜ Exit is open! Head right' : `Monsters left: ${w.alive}`) + goal + arenaTxt + clock;
+  const maps = st.maps;
+  let where = '';
+  if (maps && !w.portal) {
+    const mi = w.mapAt(w.hero.x), m = maps[mi], z = w.zones2[mi];
+    const done = maps.filter((q2, i) => q2.kind === 'zone' && w.zones2[i].done).length, zonesN = maps.filter(q2 => q2.kind === 'zone').length;
+    where = !m ? '' : m.kind === 'hub' ? `Camp · goals ${done}/${zonesN}${done === zonesN ? ' · ☠ boss door open!' : ''}`
+      : m.kind === 'boss' ? m.name
+      : `${m.name}${z?.done ? ' ✓ back to camp' : m.goal && 'need' in m.goal ? ` · ${m.goal.kind === 'collect' ? m.goal.item : m.goal.kind === 'rescue' ? 'Crumblets' : 'nests'} ${z.have}/${m.goal.need}` : ''}`;
+  }
+  q('.stage .s').textContent = (w.portal ? '➜ Exit is open! Head right' : maps ? where : `Monsters left: ${w.alive}`) + goal + arenaTxt + clock;
   const letter = styleRank(w.style), sc = { S: '#ffd23c', A: '#9fe8ff', B: '#a8f0a8', C: '#ffb38a', D: '#c8b8c8' }[letter];
   const sEl = q('.style'); sEl.classList.toggle('on', w.style > 2); sEl.style.setProperty('--sc', sc!);
   q('.style b').textContent = letter; q<HTMLElement>('.style .sbar i').style.transform = `scaleX(${w.style / 100})`;

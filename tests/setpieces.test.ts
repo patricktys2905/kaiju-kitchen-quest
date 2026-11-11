@@ -13,10 +13,11 @@ const flat: StageDef = {
 const hero = (sp = 0) => { const p = newProfile(sp); p.level = 12; return derive(p); };
 
 describe('arena rooms', () => {
-  it('every story stage has at least one, with three waves (one-wave rooms are miniboss rooms)', () => {
-    for (const s of STAGES.filter(x => !x.boss)) {
+  it('story stages: a camp, three zones with goals and a boss room; arena rooms have three waves (one-wave rooms are miniboss rooms)', () => {
+    for (const s of STAGES) {
+      expect(s.maps!.map(m => m.kind), s.id).toEqual(['hub', 'zone', 'zone', 'zone', 'boss']);
+      expect(s.maps!.filter(m => m.goal).length).toBe(3);
       const rooms = (s.arenas ?? []).filter(a => a.waves.length > 1);
-      expect(rooms.length, s.id).toBeGreaterThanOrEqual(1);
       for (const a of rooms) expect(a.waves.length).toBe(3);
       for (const a of (s.arenas ?? []).filter(a => a.waves.length === 1)) expect(MOBS[a.waves[0][0].kind].mini, s.id).toBe(true);
     }

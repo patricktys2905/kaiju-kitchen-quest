@@ -255,8 +255,9 @@ describe('progression', () => {
     expect(avg(7, 'A')).toBeGreaterThan(avg(1, 'A') + 0.25);
     expect(avg(4, 'S')).toBeGreaterThan(avg(4, 'D') + 0.3);
     expect(avg(10, 'A', true)).toBeGreaterThan(avg(10, 'A'));
-    expect(clearCount(10)).toBeGreaterThan(clearCount(2));
-    expect(clearRewards(2, 'A', false, true, rand).length).toBe(clearCount(2) + 1); // first clear bonus
+    expect(clearCount('S')).toBeGreaterThan(clearCount('B')); // the end chest: your rank decides how much is in it
+    expect(clearCount('A', true)).toBeGreaterThan(clearCount('A'));
+    expect(clearRewards(2, 'A', false, true, rand).length).toBe(clearCount('A') + 1); // first clear bonus
   });
 
   it('item lines scale with rarity and item level', () => {
@@ -413,7 +414,7 @@ describe('kaiju-specific gear', () => {
   it('weapons always belong to one kaiju, every kaiju has 5 weapon tiers and an armor, charms are for everyone', async () => {
     const { OWNERS, canWear, rollBase } = await import('../src/sim/items');
     for (const c of CLASSES) {
-      const ws = Object.values(BASES).filter(b => b.slot === 'weapon' && b.for === c.species);
+      const ws = Object.values(BASES).filter(b => b.slot === 'weapon' && b.for === c.species && !b.boss);
       expect(ws.map(w => w.tier).sort(), c.name).toEqual([1, 1, 2, 2, 3, 4, 5]); // 5 tiers + an extra weapon type at tiers 1 and 2
       expect(Object.values(BASES).some(b => b.slot === 'armor' && b.for === c.species), c.name).toBe(true);
     }

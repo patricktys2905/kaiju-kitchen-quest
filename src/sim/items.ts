@@ -4,6 +4,7 @@ import type { Stat } from './classes';
 import { SKILLS } from './skills';
 const skillIdsOf = (sp: number) => (SKILLS[sp]?.actives ?? []).map(a => a.id);
 import type { BoxTier } from './types';
+import { BOSS_WEAPONS } from './bossgearData';
 
 export type Slot = 'weapon' | 'armor' | 'charm';
 export type Rarity = 1 | 2 | 3 | 4 | 5;
@@ -42,7 +43,7 @@ export const TWIST_WORD: Record<string, string> = {
 /** How often a (non-legendary) weapon drop rolls a twist. */
 export const TWIST_CHANCE = 0.65;
 
-export interface BaseDef { /** a built-in effect (PROCS key) every copy carries */ proc?: string; slot: Slot; name: string; icon: string; main: Line[]; minLv?: number; /** only this kaiju can wear it */ for?: number; tier?: number; /** no longer drops */ retired?: boolean; /** always part of this set */ set?: string }
+export interface BaseDef { /** a boss signature weapon: only that world boss drops it (never a random box) */ boss?: string; /** a built-in effect (PROCS key) every copy carries */ proc?: string; slot: Slot; name: string; icon: string; main: Line[]; minLv?: number; /** only this kaiju can wear it */ for?: number; tier?: number; /** no longer drops */ retired?: boolean; /** always part of this set */ set?: string }
 /** main = guaranteed stat at ilvl 1 (scaled by ilvl and rarity) */
 const TIER_LV = [0, 6, 14, 40, 75]; // item level each gear tier starts dropping at
 const W = (name: string, icon: string, owner: number, tier: number, main: Line[]): BaseDef => ({ slot: 'weapon', name, icon, main, for: owner, minLv: TIER_LV[tier - 1], tier, set: tier >= 3 ? `sig${owner}` : undefined });
@@ -243,6 +244,13 @@ export const BASES: Record<string, BaseDef> = {
   'w-owl4': W('Churro Wand', 'w-owl4', 19, 4, [{ k: 'atk', v: 6 }, { k: 'dex', v: 2 }, { k: 'critDmg', v: 0.12 }]), 'w-owl5': W('Pinata Thunder Staff', 'w-owl5', 19, 5, [{ k: 'atk', v: 8 }, { k: 'dex', v: 4 }, { k: 'critDmg', v: 0.145 }]),
   'a-owl4': AR('Tortilla Feather Mantle', 'a-owl4', 19, [{ k: 'def', v: 5 }, { k: 'hp', v: 34 }, { k: 'dex', v: 2 }], 4), 'a-owl5': AR('Night Fiesta Armour', 'a-owl5', 19, [{ k: 'def', v: 7 }, { k: 'hp', v: 42 }, { k: 'dex', v: 4 }], 5),
 };
+// boss signature weapons (bossgearData.ts): the kaiju's tier-5 weapon stats, 15% stronger; boss drops only
+for (const bw of BOSS_WEAPONS) {
+  const t5 = BASES[`w-${bw.ref}5`];
+  BASES[bw.base] = { slot: 'weapon', name: bw.name, icon: bw.base, for: bw.species, tier: 6, boss: bw.boss, retired: true, set: `sig${bw.species}`,
+    main: t5.main.map(l => ({ k: l.k, v: Number.isInteger(l.v) ? Math.round(l.v * 1.15) : +(l.v * 1.15).toFixed(3) })) };
+}
+
 
 /** Kaiju that own gear (species numbers). */
 export const OWNERS = [...new Set(Object.values(BASES).map(b => b.for).filter((x): x is number => x !== undefined))];
@@ -326,10 +334,10 @@ export function rollBase(ilvl: number, rand: () => number, prefer = -1): string 
   return pick(pool, rand);
 }
 
-export function rollItem(id: number, tier: BoxTier, ilvl: number, rand: () => number, skillIds: string[], prefer = -1): Item {
+export function rollItem(id: number, tier: BoxTier, ilvl: number, rand: () => number, skillIds: string[], prefer = -1, fixedBase?: string, fixedRarity?: Rarity): Item {
   if (!Number.isFinite(ilvl) || ilvl < 1) ilvl = 1; // never roll from a broken item level (no gear would qualify)
-  const rarity = rarityFor(tier, rand);
-  const base = rollBase(ilvl, rand, prefer);
+  const rarity = fixedRarity ?? rarityFor(tier, rand);
+  const base = fixedBase ?? rollBase(ilvl, rand, prefer);
   // skill-boost lines on kaiju gear only name that kaiju's skills
   const own = BASES[base].for;
   if (own !== undefined && skillIds.length) { const mine = skillIdsOf(own); if (mine.length) skillIds = mine; }
@@ -364,7 +372,7 @@ export function rollItem(id: number, tier: BoxTier, ilvl: number, rand: () => nu
   if (BASES[base].slot !== 'weapon' && rand() < [0, 0, 0.2, 0.5, 0.8][rarity - 1]) it.proc = pick(Object.keys(PROCS), rand);
   if (BASES[base].proc) it.proc = BASES[base].proc; // built-in effect
   // weapons: most drops twist their gear skill (a new style and/or effect), so the same weapon can play many ways
-  if (BASES[base].slot === 'weapon' && !it.unique && rand() < TWIST_CHANCE) {
+  if (BASES[base].slot === 'weapon' && !it.unique && !BASES[base].boss && rand() < TWIST_CHANCE) {
     const style = TWIST_STYLES[Math.floor(rand() * TWIST_STYLES.length)];
     const fx = rand() < 0.85 ? TWIST_FX[Math.floor(rand() * TWIST_FX.length)] : undefined;
     it.twist = { style, ...(fx ? { fx } : {}) };
