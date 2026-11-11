@@ -140,6 +140,8 @@ export interface Mob {
   guardT: number;
   /** spawned by arena room i (-1 = not) */
   arena: number;
+  /** asleep until a hero passes this x (0 = awake) */
+  wake?: number;
   /** which hero it's after (index into heroes) */
   tgt: number;
   /** which side of you this monster tries to stand on (flanking) */
@@ -191,7 +193,7 @@ export class World {
   puddles: { x: number; y: number; t: number; kind?: 'slow' | 'slick' | 'burn' | 'poison' | 'trap'; dmg?: number; w?: number }[] = [];
   private puddleTick = 0;
   /** interactive props (crates, jars, sponges, levers, chests) and runaway pressure cookers */
-  props: { id: number; kind: Prop['kind']; x: number; y: number; hp: number; cd: number; key?: boolean; tx?: number; tw?: number }[] = [];
+  props: { id: number; kind: Prop['kind']; x: number; y: number; hp: number; cd: number; key?: boolean; tx?: number; tw?: number ; gate?: number }[] = [];
   cookers: { id: number; x: number; y: number; vx: number; home: number; face: 1 | -1; fuse: number; gone: number }[] = [];
   private platBase: number[] = [];
   /** objective state: the escorted Crumblet, the fetch scroll, the survival / hold-out timer */
@@ -208,6 +210,8 @@ export class World {
   /** arena rooms (gates shut while you're fighting the waves), the rolling-pin chase, conveyor belts */
   arenas: { x0: number; x1: number; waves: MobSpawn[][]; wave: number; locked: boolean; done: boolean }[] = [];
   chase: { x0: number; x1: number; x: number; speed: number; on: boolean; done: boolean; cd: number } | null = null;
+  /** shut gates (long stages): nobody passes until the lever is pulled */
+  gates: { x: number; open: boolean }[] = [];
   /** how many monsters may attack you at once (the rest circle and wait their turn) */
   get maxAttackers(): number { return this.nightmare ? 3 : 2; }
   /** lingering skill areas: steam / mustard goo / ice trail / fire floor / snow */
@@ -223,6 +227,12 @@ export class World {
 
   /** story twist on this stage */
   variant: 'swarm' | 'ambush' | 'night' | undefined;
+  /** the objective's timer is running (long stages start it at objective.at) */
+  objArmed = true;
+  /** seconds since the escorted Crumblet was last hurt */
+  npcCalm = 0;
+  /** ambush triggers already sprung (one shout each) */
+  ambushed = new Set<number>();
 
   constructor(public stage: StageDef, d: Derived, seed = 1, bag: Hero['bag'] = [], revives = 0, hard = false, variant?: 'swarm' | 'ambush' | 'night', spicy: Spicy[] = [], public nemesis?: MobKind, nightmare = false, party: Derived[] = [], humans = 1, partyBags: { bag: Hero['bag']; revives: number }[] = []) {
     nextId = 1; // ids restart with every stage: the same seed and inputs always play out the same (monster patrols use the id)
@@ -230,15 +240,17 @@ export class World {
     this.nightmare = nightmare; if (nightmare) hard = true;
     this.stage = stage = { ...stage, platforms: stage.platforms.map(p => ({ ...p })) };
     this.platBase = stage.platforms.map(p => p.x);
-    this.props = (stage.props ?? []).map(p => ({ id: nextId++, kind: p.kind, x: p.x, y: p.y, hp: p.kind === 'crate' ? 2 : p.kind === 'chest' ? 3 : p.kind === 'jar' ? 1 : 99, cd: 0, key: p.key, tx: p.tx, tw: p.tw }));
+    this.props = (stage.props ?? []).map(p => ({ id: nextId++, kind: p.kind, x: p.x, y: p.y, hp: p.kind === 'crate' ? 2 : p.kind === 'chest' ? 3 : p.kind === 'jar' ? 1 : 99, cd: 0, key: p.key, tx: p.tx, tw: p.tw, gate: p.gate }));
     this.cookers = (stage.cookers ?? []).map(x => ({ id: nextId++, x, y: stage.groundY, vx: 0, home: x, face: -1, fuse: 0, gone: 0 }));
     this.spicy = spicy; this.hard = hard;
     this.arenas = (stage.arenas ?? []).map(a => ({ ...a, wave: -1, locked: false, done: false }));
     this.chase = stage.chase ? { ...stage.chase, x: 0, speed: 0, on: false, done: false, cd: 0 } : null;
+    this.gates = (stage.gates ?? []).map(g => ({ x: g.x, open: false }));
     const ob = stage.objective;
     if (ob?.kind === 'escort') this.npc = { x: 60, y: stage.groundY, hp: 1, maxHp: 1, face: 1, hurt: 0 };
     if (ob?.kind === 'fetch') { this.scroll = { x: ob.x ?? stage.width - 260, y: stage.groundY, got: false }; this.objTimer = ob.t ?? 75; }
-    if (ob?.kind === 'survive') { this.objTimer = ob.t ?? 45; this.holdout = this.objTimer; }
+    if (ob?.kind === 'survive') { this.objTimer = ob.t ?? 45; this.holdout = ob.at ? 0 : this.objTimer; }
+    this.objArmed = !ob?.at;
     this.hazards = (stage.hazards ?? []).map(h => ({ ...h, state: 'off', hit: new Set<number>() }));
     let s = seed >>> 0 || 1;
     this.rand = () => { s ^= s << 13; s ^= s >>> 17; s ^= s << 5; return ((s >>> 0) % 100000) / 100000; };
@@ -260,14 +272,14 @@ export class World {
     if (this.npc) { this.npc.maxHp = this.npc.hp = Math.round(d.maxHp * 0.7); }
     // stage 5: this kaiju's story nemesis takes the elite's place
     const nemStage = !!nemesis && !stage.boss && stage.id.endsWith('-5') && stage.world <= 5; // Act 2: the nemeses have hung up their capes
-    for (const m of stage.mobs) this.spawnMob(m.elite && nemStage ? nemesis! : m.kind, m.x, m.lv + (hard ? HARD_LV : 0) + night, m.y, m.elite);
+    for (const m of stage.mobs) { const mob = this.spawnMob(m.elite && nemStage ? nemesis! : m.kind, m.x, m.lv + (hard ? HARD_LV : 0) + night, m.y, m.elite); if (m.wake) mob.wake = m.wake; }
     if (this.variant === 'swarm') {
-      for (const m of stage.mobs.filter((_, i) => i % 2 === 0)) this.spawnMob(m.kind, Math.min(stage.width - 200, m.x + 70), m.lv + (hard ? HARD_LV : 0), m.y, m.elite);
+      for (const m of stage.mobs.filter((s, i) => i % 2 === 0 && !s.wake && !MOBS[s.kind].mini && !s.elite)) this.spawnMob(m.kind, Math.min(stage.width - 200, m.x + 70), m.lv + (hard ? HARD_LV : 0), m.y, m.elite);
       for (const m of this.mobs) if (!m.elite) { m.hp = m.maxHp = Math.round(m.maxHp * 0.65); }
     }
     if (this.variant === 'ambush') {
       const w = WORLDS.find(x => x.id === stage.world) ?? WORLDS[0];
-      this.spawnMob(w.elite, Math.round(stage.width * 0.55), stage.lv[1] + 1 + (hard ? HARD_LV : 0), undefined, true);
+      const e = this.spawnMob(w.elite, Math.round(stage.width * 0.55), stage.lv[1] + 1 + (hard ? HARD_LV : 0), undefined, true); e.wake = e.x - 700;
     }
     // elite modifiers: one per elite (two in Hard); in Hard some normal monsters get one too. Bosses never change.
     const all = Object.keys(ELITE_MODS) as EliteMod[];
@@ -302,12 +314,15 @@ export class World {
 
   spawnMob(kind: MobKind, x: number, lv: number, y?: number, elite = false): Mob {
     const pow = this.stage.power ?? WORLDS.find(x => x.id === this.stage.world)?.power ?? 1;
-    const nm = !this.nightmare ? { hp: 1, atk: 1 } : MOBS[kind].brain === 'boss' ? NIGHTMARE_BOSS : NIGHTMARE;
+    // Nightmare: in Act 2 (Worlds 6+) coming back a few levels over helps far less than early on, so it eases off there
+    const nm0 = !this.nightmare ? { hp: 1, atk: 1 } : MOBS[kind].brain === 'boss' ? NIGHTMARE_BOSS : NIGHTMARE, act2 = this.nightmare && this.stage.world >= 6;
+    const nm = act2 ? { hp: 1 + (nm0.hp - 1) * 0.3, atk: 1 + (nm0.atk - 1) * 0.3 } : nm0;
+    const wp = this.stage.power || MOBS[kind].brain === 'boss' || MOBS[kind].brain === 'nemesis' ? 1 : WORLDS.find(x => x.id === this.stage.world)?.mobPow ?? 1;
     // more heroes, tougher monsters: +60% HP per extra player, +35% per CPU buddy (it isn't as sharp as a person)
     const party = 1 + this.heroes.slice(1).reduce((a, h) => a + (h.cpu ? 0.35 : 0.6), 0);
     const hp = Math.round(mobHp(kind, lv) * (elite ? ELITE.hp : 1) * pow * nm.hp * party);
     const m: Mob = {
-      id: nextId++, kind, lv, x, y: y ?? this.stage.groundY, vx: 0, vy: 0, face: -1, hp, maxHp: hp, atk: Math.round(mobAtk(kind, lv) * (elite ? ELITE.atk : 1) * pow * nm.atk),
+      id: nextId++, kind, lv, x, y: y ?? this.stage.groundY, vx: 0, vy: 0, face: -1, hp, maxHp: hp, atk: Math.round(mobAtk(kind, lv) * (elite ? ELITE.atk : 1) * pow * nm.atk * wp),
       state: 'walk', move: '', t: this.rand() * 2, ground: true, on: y === undefined ? -1 : null, home: x, deadT: 0, flash: 0,
       hurtShown: 0, stagger: 0, summoned: 0, hitDone: false, elite, homeY: y ?? this.stage.groundY, slow: 0,
       mods: [], under: MOBS[kind].brain === 'burrower', disguised: MOBS[kind].brain === 'mimic', aimX: 0, aimY: 0, enraged: false, parent: 0, dropT: 0, surfT: 0, burn: 0, burnT: 0, burnDmg: 0, frozen: 0, glued: 0, phase: this.stage.world, shellT: 0, stolen: -1, guardT: 0, arena: -1, tgt: 0, flank: 1, queue: [], patI: 0, tired: 0, armor: 1, weak: 0, bossPhase: 1,
@@ -317,8 +332,10 @@ export class World {
     return m;
   }
 
-  get boss(): Mob | undefined { return this.mobs.find(m => MOBS[m.kind].brain === 'boss'); }
+  get boss(): Mob | undefined { return this.mobs.find(m => MOBS[m.kind].brain === 'boss' && !m.wake); }
   get alive(): number { return this.mobs.filter(m => m.state !== 'dead').length; }
+  /** monsters that keep the exit shut: on a long stage only the last stretch must be cleared (stragglers far back don't count) */
+  get blocking(): number { const from = this.stage.width > 6000 ? this.exitX - 2600 : -1e9; return this.mobs.filter(m => m.state !== 'dead' && (m.x > from || MOBS[m.kind].brain === 'boss' || m.arena >= 0)).length; }
 
   step(inp: Input | Input[], dt = DT): SimEvent[] {
     const inputs = Array.isArray(inp) ? inp : [inp];
@@ -375,7 +392,7 @@ export class World {
     this.stepSetPieces(dt);
     this.cur = this.heroes[0];
     const holding = this.holdout > 0 || (this.scroll !== null && !this.scroll.got) || this.arenas.some(a => !a.done);
-    if (!this.portal && this.alive === 0 && !holding) { this.portal = true; this.events.push({ t: 'portal' }); }
+    if (!this.portal && this.blocking === 0 && !holding) { this.portal = true; this.events.push({ t: 'portal' }); }
     const h = this.hero;
     const npcHome = !this.npc || Math.abs(this.npc.x - this.exitX) < 140;
     if (this.portal && npcHome && h.state !== 'down' && Math.abs(h.x - this.exitX) < 40 && Math.abs(h.y - this.stage.groundY) < 4) {
@@ -881,6 +898,11 @@ export class World {
 
   private hitProp(p: World['props'][number]): void {
     const h = this.hero;
+    if (p.kind === 'lever' && p.gate !== undefined) {
+      const g = this.gates[p.gate];
+      if (g && !g.open) { g.open = true; p.cd = 999; this.events.push({ t: 'lever', x: p.x }, { t: 'gate', i: p.gate, x: g.x }); }
+      return;
+    }
     if (p.kind === 'lever') {
       p.cd = 8;
       this.events.push({ t: 'lever', x: p.tx ?? p.x }, { t: 'shock', x: p.tx ?? p.x, y: this.stage.groundY, r: (p.tw ?? 260) / 2 });
@@ -911,6 +933,10 @@ export class World {
   /** Arena rooms, the rolling-pin chase, conveyor belts. */
   private stepSetPieces(dt: number): void {
     const h = this.hero, G = this.stage.groundY;
+    for (const g of this.gates) if (!g.open) {
+      for (const p of this.heroes) if (p.x < g.x + 40 && p.x > g.x - 24) p.x = g.x - 24;
+      for (const m of this.mobs) if (m.state !== 'dead' && Math.abs(m.x - g.x) < 30) m.x = m.x < g.x ? g.x - 30 : g.x + 30;
+    }
     this.arenas.forEach((a, i) => {
       if (a.done) return;
       if (!a.locked) {
@@ -938,6 +964,7 @@ export class World {
       } else {
         a.locked = false; a.done = true;
         this.events.push({ t: 'arenaClear', i });
+        if (this.npc && this.npc.hp > 0) this.npc.hp = this.npc.maxHp; // the Crumblet catches its breath after every room
         const b: Box = { id: nextId++, tier: 3, ilvl: this.stage.lv[1], x: (a.x0 + a.x1) / 2, y: G - 80, vy: -300, ground: false, t: 0 };
         this.boxes.push(b); this.events.push({ t: 'drop', id: b.id, tier: 3, x: b.x, y: b.y });
       }
@@ -1034,21 +1061,34 @@ export class World {
     if (n && n.hp > 0) {
       const nk = 0.6 * (1 - h.d.dr * 0.75);
       n.hurt = Math.max(0, n.hurt - dt);
-      const tx = this.portal ? this.exitX : h.x - h.face * 70;
+      // while an arena's gates are shut it ducks behind the gate (and waits there), safe from the waves
+      const room = this.arenas.find(a => a.locked);
+      const safe = !!room;
+      const tx = this.portal ? this.exitX : room ? room.x0 + 30 : h.x - h.face * 70;
       if (Math.abs(tx - n.x) > 8) { n.face = tx > n.x ? 1 : -1; n.x += n.face * Math.min(Math.abs(tx - n.x), 130 * dt); }
       for (const m of this.mobs) {
-        if (m.state === 'dead' || m.under || n.hurt > 0) continue;
+        if (m.state === 'dead' || m.under || n.hurt > 0 || safe) continue;
         const d = MOBS[m.kind];
         if ((m.state === 'attack' || (m.state === 'walk' && d.brain === 'hopper' && !m.ground)) && Math.abs(m.x - n.x) < d.w / 2 + 18 && Math.abs(m.y - n.y) < 50) {
           n.hp -= Math.round(m.atk * nk); n.hurt = 0.8;
           this.events.push({ t: 'hit', x: n.x, y: n.y - 40, dmg: Math.round(m.atk * nk), crit: false, target: 'hero' });
         }
       }
-      for (const s of this.shots) if (s.from === 'mob' && s.t >= 0 && Math.abs(s.x - n.x) < 18 && s.y > n.y - 44 && s.y < n.y + 4 && n.hurt <= 0) {
+      for (const s of this.shots) if (s.from === 'mob' && s.t >= 0 && Math.abs(s.x - n.x) < 18 && s.y > n.y - 44 && s.y < n.y + 4 && n.hurt <= 0 && !safe) {
         n.hp -= Math.round(s.dmg * nk); n.hurt = 0.8; s.t = 99;
         this.events.push({ t: 'hit', x: n.x, y: n.y - 40, dmg: Math.round(s.dmg * nk), crit: false, target: 'hero' });
       }
+      // left alone for a few seconds it gets its breath back (a long walk shouldn't be lost to scratches from an hour ago)
+      this.npcCalm = n.hurt > 0 ? 0 : this.npcCalm + dt;
+      if (this.npcCalm > 4 && n.hp > 0) n.hp = Math.min(n.maxHp, n.hp + n.maxHp * 0.03 * dt);
       if (n.hp <= 0) { n.hp = 0; fail('The Crumblet got hurt too badly!'); return; }
+    }
+    // a long stage starts its timer near the end (fetch: the last stretch to the scroll; survive: a hold-out halfway)
+    if (!this.objArmed) {
+      if (!this.heroes.some(p => p.x >= ob.at! && p.state !== 'down')) return;
+      this.objArmed = true;
+      if (ob.kind === 'survive') { this.holdout = this.objTimer; this.events.push({ t: 'objective', text: `Ambush! Hold out for ${Math.round(this.objTimer)} seconds!` }); }
+      if (ob.kind === 'fetch') this.events.push({ t: 'objective', text: `The Recipe Scroll is close! ${Math.round(this.objTimer)} seconds to grab it!` });
     }
     // fetch: grab the Recipe Scroll in time, then hold out
     if (this.scroll && !this.scroll.got) {
@@ -1587,6 +1627,12 @@ export class World {
     const def = MOBS[m.kind], h = this.hero;
     m.t += dt; m.flash = Math.max(0, m.flash - dt); m.hurtShown = Math.max(0, m.hurtShown - dt); m.slow = Math.max(0, m.slow - dt);
     if (m.state === 'dead') { m.deadT += dt; m.vx *= 0.96; this.physics(m, dt, MAX_FALL, false); return; }
+    if (m.wake) { // asleep at the end of the stage until someone walks into its room
+      if (!this.heroes.some(p => p.x >= m.wake! && p.state !== 'down')) { m.vx = 0; if (m.y > 0) this.physics(m, dt, MAX_FALL, false); return; }
+      const trig = m.wake; m.wake = 0;
+      if (m.y < 0) { m.ground = false; m.on = null; m.vy = 200; m.homeY = this.stage.groundY; /* they hung above the screen: hover / chase from the floor now */ if (!this.ambushed.has(trig)) { this.ambushed.add(trig); this.events.push({ t: 'ambush', x: m.x }); } }
+      else this.events.push({ t: 'bossWake', kind: m.kind });
+    }
     m.shellT = Math.max(0, m.shellT - dt); m.guardT = Math.max(0, m.guardT - dt); m.tired = Math.max(0, m.tired - dt);
     if (m.weak > 0 && (m.weak -= dt) <= 0) { m.weak = 0; m.armor = 1; } // armour grows back
     if (m.burn > 0) {
@@ -1811,7 +1857,12 @@ export class World {
     if (m.patI > 0 && m.patI % all.length === 0 && m.queue[0] !== 'rested') { m.queue = ['rested']; this.tire(m, m.bossPhase === 3 ? 0.9 : 1.4); return; }
     m.queue = [];
     let mv: NemMove | undefined;
-    for (let k = 0; k < all.length && !mv; k++) { const c = all[(m.patI + k) % all.length]; if (ok(c)) { mv = c; m.patI += k + 1; } }
+    if (def.nem!.species < 0) {
+      // minibosses keep strictly to their order: a close-range move that doesn't reach yet means walk up to you first
+      // (skipping it left slow ones only ever using their ranged moves); moves that can't happen now are skipped
+      const CLOSE = new Set<NemMove>(['slash', 'spin', 'roar', 'lure', 'skewer', 'scurry', 'zip', 'swipe', 'boomhop', 'haymaker']);
+      for (let k = 0; k < all.length && !mv; k++) { const c = all[(m.patI + k) % all.length]; if (ok(c)) { mv = c; m.patI += k + 1; } else if (CLOSE.has(c)) break; }
+    } else for (let k = 0; k < all.length && !mv; k++) { const c = all[(m.patI + k) % all.length]; if (ok(c)) { mv = c; m.patI += k + 1; } }
     if (!mv) return; // walk closer
     m.state = 'windup'; m.t = 0; m.vx = 0; m.move = mv; m.face = dx > 0 ? 1 : -1;
     const i = def.nem!.moves.indexOf(mv);

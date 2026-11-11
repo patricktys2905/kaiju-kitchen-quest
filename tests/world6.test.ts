@@ -29,7 +29,7 @@ describe('World 6: The Dining Room', () => {
   it('Act 2: stage 6-5 is a normal elite, not the old nemesis', () => {
     const w = new World(stageById('6-5'), hero(), 1, [], 0, false, undefined, [], nemesisOf(0));
     expect(w.mobs.some(m => m.kind === nemesisOf(0))).toBe(false);
-    expect(w.mobs.some(m => m.kind === 'roast' && m.elite)).toBe(true);
+    expect(w.mobs.some(m => m.kind === 'xroast' && m.elite)).toBe(true); // the Roast Brute champion (same monster, its own moves)
   });
   it('every kaiju has an Act 2 opening, a Sir Stale fight and a nemesis cameo', () => {
     for (const c of CLASSES) for (const b of ['w6-open', 'w6-elite', 'w6-boss', 'w6-after']) expect(STORIES[c.species].beats[b]?.length, `${c.name} ${b}`).toBeGreaterThan(0);

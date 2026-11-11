@@ -3,10 +3,12 @@
 // drinks jam when low, then walks to the exit.
 import { MOBS } from './mobs';
 import { type Input, NO_INPUT } from './types';
-import { type Mob, World } from './world';
+import { type Hero, type Mob, World } from './world';
 
 export interface BotOpts { dodgeSkill: number; reaction: number; potionAt: number }
 export const AVERAGE: BotOpts = { dodgeSkill: 0.45, reaction: 0.18, potionAt: 0.35 };
+/** A good human player: dodges most wind-ups, reacts fast. The "tough" difficulty target is set against this one. */
+export const SKILLED: BotOpts = { dodgeSkill: 0.8, reaction: 0.12, potionAt: 0.35 };
 
 export class Bot {
   private seen = new Map<number, number>(); // mob id → time its wind-up was noticed
@@ -36,6 +38,20 @@ export class Bot {
       if (Math.abs(d) < half + 26 && ((inp.right && d < 0) || (inp.left && d > 0))) return { ...inp, left: false, right: false, jump: false }; // wait
     }
     return inp;
+  }
+
+  /** Walk / climb to a spot (a lever on a ledge) and swing at it once there. */
+  private goTo(tx: number, ty: number, h: Hero, inp: Input, pulse: boolean): Input {
+    const w = this.w, dx = tx - h.x, dy = ty - h.y;
+    if (Math.abs(dy) < 12 && Math.abs(dx) < 40) { if ((dx > 0 ? 1 : -1) !== h.face && Math.abs(dx) > 6) inp[dx > 0 ? 'right' : 'left'] = true; inp.attack = pulse; return inp; }
+    if (h.state === 'climb') { if (dy < -2) inp.up = true; else if (Math.abs(dy) < 16) { inp[dx > 0 ? 'right' : 'left'] = true; inp.jump = pulse; } else inp.down = true; return inp; } // climb right to the top first (hopping off just short of it re-grabbed the ladder)
+    if (dy < -10) {
+      const lad = w.stage.ladders.find(l => Math.abs(l.top - ty) < 4 && Math.abs(l.x - tx) < 500);
+      if (lad) { if (Math.abs(lad.x - h.x) > 8) inp[lad.x > h.x ? 'right' : 'left'] = true; else inp.up = true; return inp; }
+      inp[dx > 0 ? 'right' : 'left'] = true; inp.jump = pulse && Math.abs(dx) < 120; return inp;
+    }
+    if (dy > 10 && h.ground && h.on !== null && h.on >= 0) { inp.down = true; inp.jump = pulse; return inp; }
+    inp[dx > 0 ? 'right' : 'left'] = true; return inp;
   }
 
   private decide(): Input {
@@ -69,7 +85,12 @@ export class Bot {
     if (w.chase?.on && w.chase.x > h.x - 520) { inp.right = true; inp.jump = h.ground && w.mobs.some(m => m.state !== 'dead' && m.x > h.x && m.x - h.x < 60) && pulse; return inp; }
     // locked in an arena: only its own monsters matter (the ones outside the gates can wait)
     const locked = w.arenas.findIndex(a => a.locked);
-    const alive = w.mobs.filter(m => m.state !== 'dead' && (locked < 0 || m.arena === locked));
+    // like a player, it leaves stragglers far behind (on a long stage only the last stretch keeps the exit shut)
+    const behind = w.stage.width > 6000 && !w.portal ? h.x - 1200 : -1e9;
+    const live = w.mobs.filter(m => m.state !== 'dead' && !m.wake && (locked < 0 || m.arena === locked) && (m.x > behind || m.x > w.exitX - 2600 || locked >= 0));
+    // burrowed monsters can't be hit: go after the others first (chasing one up a ledge just loops)
+    const up = live.filter(m => !m.under);
+    const alive = up.length ? up : live;
     // dodge an attack that is winding up close by
     for (const m of alive) {
       if (m.state !== 'windup' || Math.abs(m.x - h.x) > (MOBS[m.kind].brain === 'boss' ? 200 : 110)) { this.seen.delete(m.id); continue; }
@@ -81,7 +102,13 @@ export class Bot {
         this.seen.set(m.id, 1e9); // missed it
       }
     }
-    if (!alive.length) { // go to the exit
+    // a shut gate just ahead and nothing to fight near it: go and pull its lever (it's up on a ledge: treat it like a target)
+    const gi = w.gates.findIndex(g => !g.open && g.x > h.x - 40 && g.x - h.x < 1300);
+    if (gi >= 0 && locked < 0 && !alive.some(m => Math.abs(m.x - h.x) < 380 && Math.abs(m.y - h.y) < 120)) {
+      const lever = w.props.find(p => p.kind === 'lever' && p.gate === gi);
+      if (lever) return this.goTo(lever.x, lever.y, h, inp, pulse);
+    }
+    if (!alive.length || (w.portal && !alive.some(m => Math.abs(m.x - h.x) < 500))) { // go to the exit
       if (h.state === 'climb') { inp.down = true; return inp; } // finished the last monster mid-ladder: climb down first
       if (Math.abs(h.y - w.stage.groundY) > 2 && h.ground) { inp.down = true; inp.jump = (w.time * 10 | 0) % 2 === 0; return inp; }
       const goal = w.scroll && !w.scroll.got ? w.scroll.x : w.exitX; // fetch stages: the scroll first
@@ -100,7 +127,7 @@ export class Bot {
     if (Math.abs(h.x - this.lastX) < 0.5 && h.state === 'move') this.stuck++; else this.stuck = 0;
     this.lastX = h.x;
     // on a ladder: climb toward the target's height; once level with it, hop off toward it (no dithering up/down)
-    if (h.state === 'climb') { if (Math.abs(dy) < 16) { inp[dx > 0 ? 'right' : 'left'] = true; inp.jump = pulse; } else inp[dy < 0 ? 'up' : 'down'] = true; return inp; }
+    if (h.state === 'climb') { if (dy < -2) inp.up = true; else if (Math.abs(dy) < 16) { inp[dx > 0 ? 'right' : 'left'] = true; inp.jump = pulse; } else inp.down = true; return inp; } // climb right to the top first (hopping off just short of it re-grabbed the ladder)
     if (sameLevel || (flyer && Math.abs(dx) < reach + 20)) {
       if (Math.abs(dx) > reach * 0.85) {
         inp[dx > 0 ? 'right' : 'left'] = true;

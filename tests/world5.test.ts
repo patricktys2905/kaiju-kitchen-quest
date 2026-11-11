@@ -53,7 +53,7 @@ describe('World 5: The Sink', () => {
   it('failing an objective ends the stage straight away (it used to leave you stuck on the ground)', () => {
     const st = stageById('5-6');
     const w = new World(st, hero(), 1);
-    w.objTimer = 0.05;
+    w.objArmed = true; w.objTimer = 0.05; // (on a long stage the race starts near the end: start it now)
     let down = false;
     for (let i = 0; i < 30 && !w.failed; i++) down ||= w.step(NO_INPUT).some(e => e.t === 'down');
     expect(w.failed).toBe(true);

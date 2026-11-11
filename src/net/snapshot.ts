@@ -34,6 +34,7 @@ export interface Snapshot {
   sc: number;           // scroll got
   ar: number[][];       // arenas [locked, done, wave]
   ch: number[] | null;  // chase [x, on, done]
+  ga?: number[];        // gates open
   lo: number[][][];     // each player's loot [tier, ilvl]
   run: number[];        // RunStats values (RUN_KEYS order)
   bg?: number[][];      // each hero's quick-bag counts, then Second Helpings left
@@ -58,6 +59,7 @@ export function makeSnapshot(w: World): Snapshot {
     npc: w.npc ? [r(w.npc.x), r(w.npc.y), r(w.npc.hp), w.npc.maxHp, w.npc.face, r2(w.npc.hurt)] : null,
     sc: b(!!w.scroll?.got),
     ar: w.arenas.map(a => [b(a.locked), b(a.done), a.wave]),
+    ga: w.gates.map(g => b(g.open)),
     ch: w.chase ? [r(w.chase.x), b(w.chase.on), b(w.chase.done)] : null,
     lo: w.lootOf.map(l => l.map(x => [x.tier, x.ilvl])),
     run: RUN_KEYS.map(k => r1(w.run[k])),
@@ -115,6 +117,7 @@ export function applySnapshot(w: World, s: Snapshot): void {
   if (w.npc && s.npc) { const [x, y, hp, maxHp, face, hurt] = s.npc; Object.assign(w.npc, { x, y, hp, maxHp, face, hurt }); }
   if (w.scroll) w.scroll.got = !!s.sc;
   s.ar.forEach(([locked, done, wave], i) => { const a = w.arenas[i]; if (a) Object.assign(a, { locked: !!locked, done: !!done, wave }); });
+  (s.ga ?? []).forEach((o, i) => { const g = w.gates[i]; if (g) g.open = !!o; });
   if (w.chase && s.ch) { const [x, on, done] = s.ch; Object.assign(w.chase, { x, on: !!on, done: !!done }); }
   s.lo.forEach((l, i) => { if (w.lootOf[i]) w.lootOf[i] = l.map(([tier, ilvl]) => ({ tier: tier as BoxTier, ilvl })); });
   RUN_KEYS.forEach((k, i) => { w.run[k] = s.run[i] ?? 0; });

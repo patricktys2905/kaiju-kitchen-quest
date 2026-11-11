@@ -101,6 +101,10 @@ export interface PassiveDef {
 export type PassiveStat = 'hpPct' | 'crit' | 'skillDmg' | 'cdr' | 'lifeOnKill' | 'atkPct' | 'dr' | 'critDmg' | 'regen' | 'ultGain' | 'thorns' | 'heavyDmg' | 'dodge';
 
 export const MAX_SKILL = 5;
+/** Skill ranks come with hero levels: rank r of a skill needs hero level unlock + RANK_GAP x (r - 1), so a kaiju can't max
+ *  its skills in the first world (the first skill reaches rank 5 at Lv 25, the third at Lv 32). */
+export const RANK_GAP = 6;
+export const rankLv = (unlock: number, rank: number): number => unlock + RANK_GAP * (rank - 1);
 export const SKILL_UNLOCKS = [1, 4, 8];
 export const PASSIVE_UNLOCK = 6;
 

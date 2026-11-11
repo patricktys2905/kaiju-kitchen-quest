@@ -6,7 +6,7 @@ import { CLASSES, type Stat } from '../sim/classes';
 import { CONSUMABLES, type ConsumableId, QUICK_SLOTS } from '../sim/consumables';
 import { BASES, PROCS, SETS, UNIQUES, itemIcon, canWear, ownerOf, GRADES, GRADE_CSS, GRADE_MUL, type Item, MAX_PLUS, RARITY_CSS, RARITY_NAMES, type Slot, fortChance, fortCost, fortMul, fortRisky, gradeOf, itemLines, itemName, lineText, salvageValue } from '../sim/items';
 import { TIER_NAMES, clearCount, likelyTier } from '../sim/loot';
-import { BRANCH_LV, SKILLS, MAX_SKILL, type SkillDef, type SkillKind, ULTS, ULT_LV, branchesFor, skillsOf } from '../sim/skills';
+import { BRANCH_LV, SKILLS, MAX_SKILL, rankLv, type SkillDef, type SkillKind, ULTS, ULT_LV, branchesFor, skillsOf } from '../sim/skills';
 import { STAGES, WORLDS, BONUS_STAGES, stageById } from '../sim/stages';
 import { type HeroProfile, STAT_INFO, STATS, derive, xpFor } from '../sim/stats';
 import type { BoxTier, LootBox, StageDef } from '../sim/types';
@@ -20,7 +20,7 @@ import { UI_CSS } from './style';
 import { freePage, startFree } from './free';
 import type { FreeMode } from '../sim/free';
 import { gearSkillOf, gearText } from '../sim/gear';
-import { type TreePath, allActives, canLearn, nodeById, pointsIn, rankOf, skillUnlocked, statText, treeOf } from '../sim/tree';
+import { type TreePath, allActives, canLearn, nodeById, nodeLv, pointsIn, rankOf, skillUnlocked, statText, treeOf } from '../sim/tree';
 import { logError } from './report';
 import { isTouchDevice } from '../touch';
 import { ACHIEVEMENTS, DAILY_BONUS, achievements, checkUnlocks, claimAch, claimBonus, claimKaijuQuest, claimQuest, claimable, dailyQuests, kaijuQuestState, rewardText, track, unlockProgress } from '../quests';
@@ -206,7 +206,7 @@ function mapPage(): string {
       })() : ''}
     </div>
   </div>
-  <p class="hint">Tip: double-tap ← or → to <b>dodge roll</b> through attacks. Beat every monster, then walk to the EXIT. Stage 5 has an elite, stage 10 the world boss.</p>`;
+  <p class="hint">Tip: double-tap ← or → to <b>dodge roll</b> through attacks. Beat every monster, then walk to the EXIT. Long stages mix arenas, climbs, ambushes, gates and miniboss rooms; stage 5 ends with an elite, stage 10 with the world boss.</p>`;
 }
 
 /** Challenges (spicy) row folded open in the stage panel? */
@@ -283,7 +283,7 @@ function treeHtml(p: HeroProfile): string {
   };
   const detail = sel ? (() => {
     const { node: n, path, row } = sel, r = rankOf(p, n.id), can = canLearn(p, n.id);
-    const why = r >= n.ranks ? 'Maxed out' : p.skillPts <= 0 ? 'No points to spend (you get 1 per level)' : pointsIn(p, path) < n.need ? `Needs ${n.need} points in ${path.name} (you have ${pointsIn(p, path)})` : row > 0 && !rankOf(p, path.nodes[row - 1].id) ? `Learn ${path.nodes[row - 1].name} first` : '';
+    const why = r >= n.ranks ? 'Maxed out' : p.level < nodeLv(row, r + 1) ? `Needs hero Lv ${nodeLv(row, r + 1)}` : p.skillPts <= 0 ? 'No points to spend (you get 1 per level)' : pointsIn(p, path) < n.need ? `Needs ${n.need} points in ${path.name} (you have ${pointsIn(p, path)})` : row > 0 && !rankOf(p, path.nodes[row - 1].id) ? `Learn ${path.nodes[row - 1].name} first` : '';
     return `<div class="tdetail"><b>${n.icon} ${n.name}</b> <small>${n.kind === 'skill' ? 'NEW SKILL' : n.kind === 'cap' ? 'CAPSTONE' : n.kind === 'mod' ? 'UPGRADE' : n.kind === 'mastery' ? 'MASTERY' : 'BOOST'} · rank ${r}/${n.ranks}</small><span>${n.desc}${n.stat && r ? ` <em>(now: ${statText(n.stat, n.kind === 'cap' ? 1 : r)})</em>` : ''}</span>
       <button class="pill ${can ? 'go' : ''}" data-learn="${n.id}" ${can ? '' : 'disabled'}>${can ? 'LEARN +1' : why}</button></div>`;
   })() : '<div class="tdetail hint">Tap a node to see what it does. Each path gets stronger the more points you put in it: its new skill opens at 5 points, its capstone at 15.</div>';
@@ -295,11 +295,12 @@ function skillsPage(): string {
   const card = (s: { id: string; name: string; desc: string; unlock: number; kind?: SkillKind }, icon: string, extra: string) => {
     const learned = p.skills[s.id] ?? 0, eff = d.skillLv[s.id] ?? 0;
     const locked = p.level < s.unlock;
-    const can = !locked && p.skillPts > 0 && learned < MAX_SKILL;
+    const nextLv = rankLv(s.unlock, learned + 1);
+    const can = !locked && p.skillPts > 0 && learned < MAX_SKILL && p.level >= nextLv;
     const pips = Array.from({ length: Math.max(MAX_SKILL, eff) }, (_, i) => `<i class="${i < learned ? 'on' : i < eff ? 'bonus' : ''}"></i>`).join('');
     const br = s.kind ? branchesFor(s as SkillDef) : null, chosen = p.branch?.[s.id];
     const branchHtml = br ? (chosen ? `<span class="brc">⑂ ${br[chosen === 'a' ? 0 : 1].name}: ${br[chosen === 'a' ? 0 : 1].desc}</span>` : learned >= BRANCH_LV ? `<span class="brpick">Choose an upgrade: ${br.map(b => `<button class="pill go" data-branch="${s.id}:${b.id}">${b.name} <small>${b.desc}</small></button>`).join('')}</span>` : `<span class="brlock">⑂ Upgrade choice at skill Lv ${BRANCH_LV}: ${br[0].name} or ${br[1].name}</span>`) : '';
-    return `<div class="skill ${locked ? 'locked' : ''}"><div class="ic">${icon}</div><div class="t"><b>${s.name}</b> ${learned ? `Lv ${eff}` : ''}<span>${s.desc}</span><span>${locked ? `🔒 Unlocks at hero Lv ${s.unlock}` : learned ? extra : 'Not learned yet — spend a point'}</span>${branchHtml}<div class="pips">${pips}</div></div>
+    return `<div class="skill ${locked ? 'locked' : ''}"><div class="ic">${icon}</div><div class="t"><b>${s.name}</b> ${learned ? `Lv ${eff}` : ''}<span>${s.desc}</span><span>${locked ? `🔒 Unlocks at hero Lv ${s.unlock}` : learned ? extra : 'Not learned yet — spend a point'}${!locked && learned < MAX_SKILL && p.level < nextLv ? ` · next rank at hero Lv ${nextLv}` : ''}</span>${branchHtml}<div class="pips">${pips}</div></div>
       <button class="pill ${can ? 'go' : ''}" data-skill="${s.id}" ${can ? '' : 'disabled'}>+</button></div>`;
   };
   const head = `<div class="subtabs"><button class="${skillView === 'tree' ? 'on' : ''}" data-act="sv-tree">🌳 TREE</button><button class="${skillView === 'skills' ? 'on' : ''}" data-act="sv-skills">⚔ SKILLS</button>

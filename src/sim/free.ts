@@ -21,13 +21,16 @@ export function powerFor(lv: number): number {
 /** Today's date as a seed (local day), e.g. 20261110. */
 export function dayKey(d = new Date()): number { return d.getFullYear() * 10000 + (d.getMonth() + 1) * 100 + d.getDate(); }
 
+/** The Daily Dungeon is this strong compared with a story stage at your level. */
+export const DAILY_POWER = 0.85;
 /** The Daily Dungeon: a world theme and stage shape picked by the date, monsters at your level. */
 export function dailyStage(day: number, heroLv: number): StageDef {
   const w = WORLDS[day % WORLDS.length];
   const n = [2, 3, 6, 7, 8, 9][Math.floor(day / 7) % 6];
   const lv = Math.max(1, heroLv - 1);
   const st = genStage(w, n, { seed: day * 7 + 3, lv, id: `D-${day}`, name: `Daily: ${w.names[n - 1]}` });
-  return { ...st, num: 'DAILY', power: powerFor(lv), props: (st.props ?? []).map(p => ({ ...p, key: false })) };
+  // a full long stage now (5-10 minutes of sections): its monsters a little gentler than the story's at that level
+  return { ...st, num: 'DAILY', power: powerFor(lv) * DAILY_POWER, props: (st.props ?? []).map(p => ({ ...p, key: false })) };
 }
 
 /** Endless Pantry floor: one arena room (2-3 waves) from a world that changes every 3 floors; every 10th floor a boss. */
@@ -36,7 +39,7 @@ export function endlessFloor(floor: number, heroLv: number, seed: number): Stage
   const lv = Math.max(1, heroLv - 2 + Math.floor(floor * 0.8));
   const power = powerFor(lv) * (1 + 0.02 * floor); // deeper floors hit harder than their level alone
   const id = `E-${floor}`, name = `Endless Pantry: Floor ${floor}`;
-  if (floor % 10 === 0) { const st = genStage(w, 10, { lv: lv - 2, id, name }); return { ...st, num: `F${floor}`, power, mobs: st.mobs.map(m => ({ ...m, lv })) }; }
+  if (floor % 10 === 0) { const st = genStage(w, 10, { lv: lv - 2, id, name, short: true }); return { ...st, num: `F${floor}`, power, mobs: st.mobs.map(m => ({ ...m, lv })) }; }
   let s = (seed + floor * 7919) >>> 0 || 1;
   const r = () => { s ^= s << 13; s ^= s >>> 17; s ^= s << 5; return ((s >>> 0) % 100000) / 100000; };
   const kinds = w.pool.map(([, k]) => k).filter(k => MOBS[k].brain !== 'turret');
@@ -62,7 +65,7 @@ export const RUSH_POWER = 0.8;
 export function rushStages(beaten: number[], heroLv: number): StageDef[] {
   return WORLDS.filter(w => beaten.includes(w.id)).map((w, i) => {
     const lv = heroLv + 1;
-    const st = genStage(w, 10, { lv: lv - 2, id: `R-${w.id}`, name: `Boss Rush ${i + 1}: ${MOBS[w.boss].name}` });
+    const st = genStage(w, 10, { lv: lv - 2, id: `R-${w.id}`, name: `Boss Rush ${i + 1}: ${MOBS[w.boss].name}`, short: true });
     // a little gentler than the story fight: these come back to back with only half your health back in between
     return { ...st, num: `RUSH ${i + 1}`, power: powerFor(lv) * RUSH_POWER, mobs: st.mobs.map(m => ({ ...m, lv })) };
   });

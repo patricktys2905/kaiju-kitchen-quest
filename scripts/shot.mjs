@@ -62,7 +62,10 @@ await wait(1800);
 await p.screenshot({ path: 'shots/world2.png' });
 await kq(() => window.__kkq.play('1-10'));
 await wait(2500);
-await kq(() => { const w = window.__kkq.world(); w.hero.x = w.boss.x - 160; });
+// a long boss stage: step into the boss room (the boss wakes and the backdrop changes), then stand near it
+await kq(() => { const w = window.__kkq.world(); const b = w.mobs.find(m => m.wake); if (b) { w.hero.x = b.wake + 30; w.hero.inv = 99; } });
+await wait(800);
+await kq(() => { const w = window.__kkq.world(); if (w.boss) w.hero.x = w.boss.x - 160; });
 await wait(1200);
 await p.screenshot({ path: 'shots/boss.png' });
 

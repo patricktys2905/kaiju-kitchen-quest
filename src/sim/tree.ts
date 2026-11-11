@@ -9,6 +9,10 @@ import { type SkillDef, SKILLS } from './skills';
 import type { SkillMod } from './items';
 import type { HeroProfile } from './stats';
 
+/** Hero level each tree row opens at; a node's later ranks need 4 more levels each (mastery ranks: 4 each too). */
+export const ROW_LV = [3, 6, 10, 14, 22, 30, 36];
+export const nodeLv = (row: number, rank: number): number => ROW_LV[row] + 4 * (rank - 1);
+
 export type TreeStat = 'atkPct' | 'hpPct' | 'crit' | 'critDmg' | 'dr' | 'skillDmg' | 'cdr' | 'regen' | 'lifeOnKill' | 'ultGain';
 export interface TreeNode {
   id: string; name: string; icon: string; desc: string;
@@ -116,7 +120,7 @@ function buildTree(species: number): TreePath[] {
   return (SPECS[species] ?? []).map(([name, icon, arch, [sid, sname, template, sdesc, over], [oi, omod], [cname, cmod, cstat]], pi) => {
     const A = ARCH[arch], id = (n: string) => `${species}.${pi}.${n}`;
     const tpl = BY_ID[template];
-    const skill: SkillDef = { ...tpl, ...(over ?? {}), id: sid, name: sname, desc: sdesc, unlock: 1 };
+    const skill: SkillDef = { ...tpl, ...(over ?? {}), id: sid, name: sname, desc: sdesc, unlock: ROW_LV[2] };
     const target = orig[oi];
     const stat = (r: number) => { const [n, ic, s] = A.rows[r]; return { id: id(`s${r}`), name: n, icon: ic, kind: 'stat' as const, ranks: 5, stat: s as Partial<Record<TreeStat, number>>, desc: statText(s as Partial<Record<TreeStat, number>>) + ' per rank' }; };
     return {
@@ -149,6 +153,7 @@ export function canLearn(p: HeroProfile, id: string): boolean {
   const f = nodeById(p.species, id); if (!f || p.skillPts <= 0) return false;
   const { path, node, row } = f;
   if (rankOf(p, id) >= node.ranks) return false;
+  if (p.level < nodeLv(row, rankOf(p, id) + 1)) return false;
   if (pointsIn(p, path) < node.need) return false;
   if (row > 0 && rankOf(p, path.nodes[row - 1].id) === 0) return false;
   return true;

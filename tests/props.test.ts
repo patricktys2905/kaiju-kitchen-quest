@@ -64,12 +64,12 @@ describe('props', () => {
   it('the World Key is in the secret chest of stage 7 of every world; each world has a secret bonus stage', () => {
     for (const wd of WORLDS) {
       const s7 = STAGES.find(s => s.id === `${wd.id}-7`)!;
-      const chest = s7.props!.find(p => p.kind === 'chest')!;
-      expect(chest.key).toBe(true);
+      const chest = s7.props!.find(p => p.kind === 'chest' && p.key)!;
+      expect(chest, `${wd.id}-7 key chest`).toBeTruthy();
       expect(s7.platforms.some(p => p.secret && chest.x >= p.x && chest.x <= p.x + p.w)).toBe(true);
       expect(s7.props!.some(p => p.kind === 'sponge' && s7.platforms.some(q => q.secret && p.x >= q.x && p.x <= q.x + q.w))).toBe(true);
       const w = new World(s7, hero(), 1);
-      const c = w.props.find(p => p.kind === 'chest')!;
+      const c = w.props.find(p => p.kind === 'chest' && p.key)!;
       w.hero.x = c.x - 40; w.hero.y = c.y; w.hero.ground = true; w.hero.on = w.stage.platforms.findIndex(p => p.secret); w.hero.face = 1;
       for (const m of w.mobs) { m.hp = 0; m.state = 'dead'; }
       const evs = swing(w, 4);

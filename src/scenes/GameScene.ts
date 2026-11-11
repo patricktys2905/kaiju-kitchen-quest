@@ -121,6 +121,10 @@ export class GameScene extends Phaser.Scene {
   private scrollView?: { img: Phaser.GameObjects.Image; glow: Phaser.GameObjects.Arc };
   /** speech bubbles: monsters taunt the first time each kind appears, your kaiju quips at big moments */
   private gateViews: Phaser.GameObjects.Container[] = [];
+  /** lever gates of a long stage (a ladle portcullis each) */
+  private leverGates: Phaser.GameObjects.Graphics[] = [];
+  /** the lights-out overlay (long stages' dark stretches) */
+  private darkView?: Phaser.GameObjects.Rectangle;
   private pinView?: Phaser.GameObjects.Container;
   private beltG?: Phaser.GameObjects.Graphics;
   private bubbles: { c: Phaser.GameObjects.Container; who: number | 'hero'; t: number }[] = [];
@@ -241,6 +245,15 @@ export class GameScene extends Phaser.Scene {
       g.lineStyle(3, 0x4a2a10, 1); g.strokeRoundedRect(x - 9, st.groundY - 190, 18, 190, 6);
       return g;
     })).setDepth(6).setAlpha(0.35));
+    // lever gates: a tall fence of wooden spoons with a lock plate; it slides up when its lever is pulled
+    this.leverGates = this.world.gates.map(gt => {
+      const g = this.add.graphics().setDepth(6);
+      for (let i = -1; i <= 1; i++) { g.fillStyle(0x8a5a30, 1); g.fillRoundedRect(gt.x + i * 16 - 6, st.groundY - 230, 12, 230, 5); g.lineStyle(2, 0x4a2a10, 1); g.strokeRoundedRect(gt.x + i * 16 - 6, st.groundY - 230, 12, 230, 5); }
+      g.fillStyle(0xd8a060, 1); g.fillRoundedRect(gt.x - 30, st.groundY - 150, 60, 34, 6); g.lineStyle(3, 0x4a2a10, 1); g.strokeRoundedRect(gt.x - 30, st.groundY - 150, 60, 34, 6);
+      g.fillStyle(0x4a2a10, 1); g.fillCircle(gt.x, st.groundY - 136, 6);
+      return g;
+    });
+    this.darkView = (st.darks ?? []).length ? this.add.rectangle(SX, SY, VW * 2, VH * 2, 0x060418, 1).setOrigin(0, 0).setScrollFactor(0).setDepth(15).setAlpha(0) : undefined;
     this.pinView = undefined;
     if (this.world.chase) {
       // seen end-on as it rolls at you: a big wooden disc with grain spokes and the handle knob in the middle
@@ -304,11 +317,11 @@ export class GameScene extends Phaser.Scene {
     cam.centerOn(this.cx, this.cy);
     if (w.variant === 'night') { this.add.rectangle(SX, SY, VW * 2, VH * 2, 0x0a0a30, 0.42).setOrigin(0, 0).setScrollFactor(0).setDepth(15); }
     setTouchVisible(true); showHud(true);
-    playMusic(st.boss ? 'boss' : st.world === 2 || st.world === 4 ? 'world2' : st.world === 3 || st.world === 5 ? 'world3' : st.world === 6 ? 'world2' : st.world === 8 ? 'world3' : st.world === 9 ? 'world2' : st.world === 10 ? 'world3' : 'world1');
-    if (st.boss) this.time.delayedCall(900, () => sfx('boss'));
+    playMusic(st.boss && !st.bossBg ? 'boss' : st.world === 2 || st.world === 4 ? 'world2' : st.world === 3 || st.world === 5 ? 'world3' : st.world === 6 ? 'world2' : st.world === 8 ? 'world3' : st.world === 9 ? 'world2' : st.world === 10 ? 'world3' : 'world1');
+    if (st.boss && !st.bossBg) this.time.delayedCall(900, () => sfx('boss'));
     if (w.variant) this.time.delayedCall(900, () => toast(`${{ swarm: '🐜 SWARM', ambush: '⚔️ AMBUSH', night: '🌙 NIGHT' }[w.variant!]}!`, { color: '#c8a8ff' }));
     toast(`${st.num} ${st.name}${this.nightmare ? ' · 💀 NIGHTMARE' : this.hard ? ' · HARD' : ''}${w.spicy.length ? ' · ' + '🌶'.repeat(w.spicy.length) : ''}`, { big: true, color: this.hard ? '#ff7a6a' : undefined });
-    if (st.boss) this.time.delayedCall(1200, () => toast(`${theName(MOBS[st.mobs[0].kind].name)} awaits!`, { color: '#ff9a6a' }));
+    if (st.boss) this.time.delayedCall(1200, () => toast(st.bossBg ? `Fight your way to ${theName(MOBS[st.mobs[0].kind].name)}!` : `${theName(MOBS[st.mobs[0].kind].name)} awaits!`, { color: '#ff9a6a' }));
   }
 
   /** Debug/screenshot helper: freeze the hero in a state at time t. */
@@ -592,6 +605,15 @@ export class GameScene extends Phaser.Scene {
           this.burst(e.x, e.y - 24, e.boss ? 0xffb347 : 0xc8f0a0, e.boss ? 40 : 14);
           if (e.boss) { this.shake = 14; this.hitStop = 0.4; toast(`THE ${MOBS[e.kind].name.toUpperCase()} FALLS!`, { big: true, color: '#ffb347' }); }
           break;
+        case 'bossWake': { // a long boss stage: you've reached the boss room (or a sleeping elite wakes)
+          const st = this.stage, big = MOBS[e.kind].brain === 'boss';
+          if (big && st.bossBg && this.far && this.has(st.bossBg)) this.far.setTexture(st.bossBg);
+          if (big) playMusic('boss'); sfx('boss'); this.shake = big ? 10 : 6;
+          toast(`${theName(MOBS[e.kind].name)} awakens!`, { big: true, color: '#ff9a6a' });
+          break;
+        }
+        case 'ambush': sfx('boss'); this.shake = 8; toast('⚠️ AMBUSH!', { big: true, color: '#ff7a6a' }); break;
+        case 'gate': sfx('portal'); toast('The gate opens!', { color: '#a8f0a8' }); break;
         case 'xp': {
           this.xpGained += e.n;
           const ups = addXp(hero().species, e.n);
@@ -650,7 +672,12 @@ export class GameScene extends Phaser.Scene {
           toast(`🗝 WORLD ${e.world} KEY! A secret stage has opened on the map`, { big: true, color: '#ffd27a' });
           break;
         }
-        case 'arenaLock': sfx('boss'); this.shake = 6; toast(`⚔️ ARENA! Beat ${e.waves} waves to open the gates`, { big: true, color: '#ff9a6a' }); break;
+        case 'arenaLock': {
+          sfx('boss'); this.shake = 6;
+          const solo = w.arenas[e.i]?.waves.length === 1 ? w.arenas[e.i].waves[0].find(s => MOBS[s.kind].mini) : undefined;
+          toast(solo ? `⚔️ MINIBOSS: ${MOBS[solo.kind].name}!` : `⚔️ ARENA! Beat ${e.waves} waves to open the gates`, { big: true, color: '#ff9a6a' });
+          break;
+        }
         case 'arenaWave': if (e.wave > 1) { sfx('stagger'); toast(`WAVE ${e.wave} / ${e.waves}`, { color: '#ffd27a' }); } break;
         case 'arenaClear': sfx('portal'); toast('Arena cleared! The gates open', { big: true, color: '#a8f0a8' }); this.time.delayedCall(300, () => this.quip('objective')); break;
         case 'chase': if (e.on) { sfx('boss'); this.shake = 10; toast('RUN! A giant rolling pin!', { big: true, color: '#ff8a5a' }); } else { sfx('boom'); this.shake = 14; toast('Phew! It smashed into the wall', { color: '#a8f0a8' }); } break;
@@ -1013,6 +1040,8 @@ export class GameScene extends Phaser.Scene {
 
     // arenas, rolling pin, belts
     w.arenas.forEach((a, i) => { const g = this.gateViews[i]; if (g) g.setAlpha(a.done ? 0 : a.locked ? 1 : 0.3).setY(a.locked ? Math.sin(t * 20) * 0.6 : 0); });
+    w.gates.forEach((gt, i) => { const g = this.leverGates[i]; if (g) g.setY(gt.open ? Math.max(-260, g.y - 600 * dt) : 0).setAlpha(gt.open && g.y <= -250 ? 0 : 1); });
+    if (this.darkView) { const h = w.heroes[this.me] ?? w.hero, inDark = (st.darks ?? []).some(d => h.x > d.x0 && h.x < d.x1); this.darkView.setAlpha(Phaser.Math.Linear(this.darkView.alpha, inDark ? 0.62 : 0, Math.min(1, dt * 3))); }
     if (this.pinView && w.chase) { const c = w.chase; this.pinView.setVisible(c.on).setX(c.x).setRotation(c.x / 60); }
     if (this.beltG) {
       const g = this.beltG; g.clear();
@@ -1254,9 +1283,15 @@ export class GameScene extends Phaser.Scene {
   private drawMob(m: Mob, t: number): void {
     const def = MOBS[m.kind];
     let v = this.mobViews.get(m.id);
+    // long stages hold dozens of monsters: only draw the ones near the camera (their views are made when they come close)
+    const view = this.cameras.main.worldView;
+    if (m.x < view.x - 360 || m.x > view.right + 360) {
+      if (v) { v.img.setVisible(false); v.plate.setVisible(false); v.shadow.setVisible(false); v.bar.setVisible(false); v.barBg.setVisible(false); v.warn.setVisible(false); }
+      return;
+    }
     if (!v) {
       const img = this.add.image(0, 0, this.has(def.art) ? def.art : '__WHITE').setOrigin(0.5, 0.96).setDepth(def.brain === 'boss' ? 4 : 3);
-      const plate = this.add.text(0, 0, `Lv${m.lv} ${m.elite ? 'Elite ' : ''}${this.world!.mobName(m)}`, { fontFamily: 'Nunito', fontStyle: '900', fontSize: '10px', color: '#ffffff', backgroundColor: '#1a1020b0', padding: { x: 4, y: 1 } })
+      const plate = this.add.text(0, 0, `Lv${m.lv} ${m.elite && !MOBS[m.kind].mini ? 'Elite ' : ''}${this.world!.mobName(m)}`, { fontFamily: 'Nunito', fontStyle: '900', fontSize: '10px', color: '#ffffff', backgroundColor: '#1a1020b0', padding: { x: 4, y: 1 } })
         .setOrigin(0.5, 0).setDepth(9).setResolution(3);
       const barBg = this.add.rectangle(0, 0, 40, 5, 0x000000, 0.6).setDepth(9);
       const bar = this.add.rectangle(0, 0, 40, 5, 0xff4a5a).setOrigin(0, 0.5).setDepth(9);

@@ -5,7 +5,7 @@ import { allActives, loadoutOf, mergeMods, skillUnlocked, treeBonus } from './tr
 import type { SkillDef } from './skills';
 import { type Item, SETS, type SkillMod, type Slot, UNIQUES, itemIcon, itemLines } from './items';
 import { type HeroGear, gearOf } from './gear';
-import { MAX_SKILL, PASSIVE_UNLOCK, skillScale, skillsOf } from './skills';
+import { MAX_SKILL, PASSIVE_UNLOCK, rankLv, skillScale, skillsOf } from './skills';
 
 export const MAX_LEVEL = 110; // Act 2 (Worlds 6+) goes past 60
 export const STAT_PTS_PER_LEVEL = 3;
@@ -50,7 +50,9 @@ export function newProfile(species: number): HeroProfile {
     cleared: {}, hardCleared: {}, stats: {}, kq: [], seen: [] };
 }
 
-export function xpFor(level: number): number { return Math.round(25 * Math.pow(level, 1.35)); }
+/** XP for the next level. Long stages give a lot of XP: this curve has a single clean pass through the story land just
+ *  under each stage's recommended level (replays and failed tries make up the rest). Check: scripts/xp-curve.ts */
+export function xpFor(level: number): number { return Math.round(76 * (Math.pow(level, 1.35) + 8 * Math.pow(level, 0.35))); }
 
 /** Adds XP; returns how many levels were gained. Each level: +3 stat points, +1 skill point. */
 export function gainXp(p: HeroProfile, xp: number): number {
@@ -168,6 +170,7 @@ export function canLevelSkill(p: HeroProfile, id: string): boolean {
   const sk = skillsOf(p.species);
   const def = [...allActives(p.species), sk.passive].find(s => s.id === id);
   if (!def || p.skillPts <= 0 || p.level < def.unlock) return false;
+  if (p.level < rankLv(def.unlock, (p.skills[id] ?? 0) + 1)) return false; // the next rank needs a higher hero level
   if (def !== sk.passive && !skillUnlocked(p, id)) return false; // a tree skill: learn its node first
   return (p.skills[id] ?? 0) < MAX_SKILL;
 }

@@ -22,6 +22,8 @@ export type Brain = 'walker' | 'hopper' | 'ranged' | 'brute' | 'flyer' | 'bomber
 
 export interface MobDef {
   name: string; brain: Brain; art: string;
+  /** a miniboss (miniboss rooms, stage-5 champions): never picked as an ordinary monster */
+  mini?: boolean;
   hp: number; atk: number; speed: number;
   w: number; h: number; knock: number;
   aggro: number; range: number; windup: number; patrol: number;
@@ -47,7 +49,7 @@ export interface MobDef {
 export type NemMove = 'slash' | 'leap' | 'charge' | 'rain' | 'breath' | 'fanshot' | 'lob' | 'spin' | 'roar' | 'puddle' | 'trap' | 'summon'
   | 'slimesurge' | 'rootspike' | 'dive' | 'snatch' | 'boomerang' | 'beam' | 'lure' | 'vanish' | 'shell' | 'burrow' | 'heatwave' | 'skewer' | 'finslide' | 'yank' | 'stingers' | 'scurry' | 'haymaker' | 'zip' | 'boomhop' | 'drip' | 'swipe';
 export interface NemesisDef {
-  /** whose story it belongs to */
+  /** whose story it belongs to (-1: a miniboss, nobody's nemesis) */
   species: number;
   moves: NemMove[];
   /** what each move is called for this nemesis (shown as it winds up) */
@@ -95,7 +97,7 @@ export const MOBS: Record<MobKind, MobDef> = {
   mug: { name: 'Mouldy Mug', brain: 'ranged', art: 'mob-mug', hp: 60, atk: 8, speed: 60, w: 44, h: 50, knock: 1, aggro: 360, range: 320, windup: 0.55, patrol: 100, xp: 12, dropChance: 0.3 },
   scrub: { name: 'Scrub Brute', brain: 'brute', art: 'mob-scrub', hp: 215, atk: 16, speed: 50, w: 72, h: 76, knock: 0.45, aggro: 280, range: 90, windup: 0.8, patrol: 90, xp: 30, dropChance: 0.6, armor: true },
   sporeling: { name: 'Sporeling', brain: 'hopper', art: 'mob-sporeling', hp: 26, atk: 7, speed: 100, w: 30, h: 28, knock: 1.3, aggro: 340, range: 180, windup: 0.35, patrol: 120, xp: 3, dropChance: 0.04 },
-  moldking: { name: 'The Mold Crown', brain: 'boss', art: 'boss-mold', hp: 1700, atk: 18, speed: 80, w: 140, h: 190, knock: 0.2, aggro: 2000, range: 150, windup: 0.75, patrol: 0, xp: 420, dropChance: 1, armor: true, moves: ['slash', 'leap', 'rain', 'charge'], calls: 'sporeling' },
+  moldking: { name: 'The Mold Crown', brain: 'boss', art: 'boss-mold', hp: 1550, atk: 18, speed: 80, w: 140, h: 190, knock: 0.2, aggro: 2000, range: 150, windup: 0.75, patrol: 0, xp: 420, dropChance: 1, armor: true, moves: ['slash', 'leap', 'rain', 'charge'], calls: 'sporeling' },
   // ---- World 10: The Feast of the Forgotten ----
   cherrysoldier: { name: 'Candied Cherry Soldier', brain: 'hopper', art: 'mob-cherrysoldier', hp: 34, atk: 8, speed: 105, w: 32, h: 34, knock: 1.3, aggro: 340, range: 190, windup: 0.35, patrol: 120, xp: 5, dropChance: 0.08 },
   fruitknight: { name: 'Fruitcake Knight', brain: 'brute', art: 'mob-fruitknight', hp: 240, atk: 16, speed: 48, w: 78, h: 84, knock: 0.45, aggro: 280, range: 92, windup: 0.8, patrol: 90, xp: 34, dropChance: 0.6, armor: true, shield: true },
@@ -119,7 +121,7 @@ export const MOBS: Record<MobKind, MobDef> = {
   radish: { name: 'Radish Bomber', brain: 'bomber', art: 'mob-radish', hp: 40, atk: 21, speed: 150, w: 38, h: 46, knock: 1.2, aggro: 340, range: 60, windup: 0.7, patrol: 140, xp: 12, dropChance: 0.25 },
   pumpkin: { name: 'Pumpkin Brute', brain: 'brute', art: 'mob-pumpkin', hp: 230, atk: 16, speed: 48, w: 80, h: 80, knock: 0.45, aggro: 280, range: 92, windup: 0.8, patrol: 90, xp: 32, dropChance: 0.6, armor: true },
   chunk: { name: 'Mystery Chunk', brain: 'hopper', art: 'mob-chunk', hp: 26, atk: 7, speed: 100, w: 30, h: 28, knock: 1.3, aggro: 340, range: 180, windup: 0.35, patrol: 120, xp: 3, dropChance: 0.04 },
-  meatloaf: { name: 'The Mystery Meatloaf', brain: 'boss', art: 'boss-meatloaf', hp: 1450, atk: 19, speed: 75, w: 140, h: 150, knock: 0.2, aggro: 2000, range: 150, windup: 0.75, patrol: 0, xp: 540, dropChance: 1, armor: true, moves: ['slash', 'leap', 'charge', 'rain'], calls: 'chunk' },
+  meatloaf: { name: 'The Mystery Meatloaf', brain: 'boss', art: 'boss-meatloaf', hp: 1150, atk: 19, speed: 75, w: 140, h: 150, knock: 0.2, aggro: 2000, range: 150, windup: 0.75, patrol: 0, xp: 540, dropChance: 1, armor: true, moves: ['slash', 'leap', 'charge', 'rain'], calls: 'chunk' },
   // ---- World 7: The Backyard BBQ ----
   wasp: { name: 'Picnic Wasp', brain: 'flyer', art: 'mob-wasp', hp: 40, atk: 7, speed: 125, w: 44, h: 42, knock: 1.1, aggro: 340, range: 230, windup: 0.5, patrol: 160, xp: 13, dropChance: 0.3 },
   corn: { name: 'Corn Cob Cannon', brain: 'turret', art: 'mob-corn', hp: 85, atk: 8, speed: 0, w: 50, h: 60, knock: 0, aggro: 400, range: 400, windup: 0.9, patrol: 0, xp: 16, dropChance: 0.4 },
@@ -128,7 +130,7 @@ export const MOBS: Record<MobKind, MobDef> = {
   charcoal: { name: 'Charcoal Imp', brain: 'burrower', art: 'mob-charcoal', hp: 90, atk: 12, speed: 100, w: 50, h: 50, knock: 0.9, aggro: 360, range: 40, windup: 0.55, patrol: 120, xp: 18, dropChance: 0.35 },
   patty: { name: 'Burger Brute', brain: 'brute', art: 'mob-patty', hp: 225, atk: 16, speed: 50, w: 76, h: 78, knock: 0.45, aggro: 280, range: 90, windup: 0.8, patrol: 90, xp: 31, dropChance: 0.6, armor: true },
   sprout: { name: 'Sprout Soldier', brain: 'hopper', art: 'mob-sprout', hp: 26, atk: 7, speed: 100, w: 30, h: 30, knock: 1.3, aggro: 340, range: 180, windup: 0.35, patrol: 120, xp: 3, dropChance: 0.04 },
-  brussels: { name: 'Baron Brussels', brain: 'boss', art: 'boss-brussels', hp: 1750, atk: 18, speed: 75, w: 130, h: 170, knock: 0.2, aggro: 2000, range: 150, windup: 0.75, patrol: 0, xp: 500, dropChance: 1, armor: true, moves: ['slash', 'leap', 'charge', 'rain'], calls: 'sprout' },
+  brussels: { name: 'Baron Brussels', brain: 'boss', art: 'boss-brussels', hp: 1450, atk: 18, speed: 75, w: 130, h: 170, knock: 0.2, aggro: 2000, range: 150, windup: 0.75, patrol: 0, xp: 500, dropChance: 1, armor: true, moves: ['slash', 'leap', 'charge', 'rain'], calls: 'sprout' },
   // ---- World 6: The Dining Room ----
   fork: { name: 'Fork Soldier', brain: 'walker', art: 'mob-fork', hp: 105, atk: 12, speed: 65, w: 40, h: 70, knock: 0.8, aggro: 300, range: 72, windup: 0.5, patrol: 110, xp: 17, dropChance: 0.35 },
   napkin: { name: 'Napkin Ghost', brain: 'flyer', art: 'mob-napkin', hp: 42, atk: 7, speed: 120, w: 46, h: 48, knock: 1.1, aggro: 340, range: 230, windup: 0.5, patrol: 160, xp: 13, dropChance: 0.3 },
@@ -137,7 +139,7 @@ export const MOBS: Record<MobKind, MobDef> = {
   teapot: { name: 'Teapot Nanny', brain: 'healer', art: 'mob-teapot', hp: 70, atk: 8, speed: 55, w: 50, h: 54, knock: 1, aggro: 320, range: 260, windup: 0.9, patrol: 100, xp: 15, dropChance: 0.4 },
   roast: { name: 'Roast Brute', brain: 'brute', art: 'mob-roast', hp: 220, atk: 16, speed: 50, w: 76, h: 74, knock: 0.45, aggro: 280, range: 90, windup: 0.8, patrol: 90, xp: 30, dropChance: 0.6, armor: true },
   crouton: { name: 'Crouton Squire', brain: 'hopper', art: 'mob-crouton', hp: 26, atk: 7, speed: 100, w: 30, h: 30, knock: 1.3, aggro: 340, range: 180, windup: 0.35, patrol: 120, xp: 3, dropChance: 0.04 },
-  stale: { name: 'Sir Stale', brain: 'boss', art: 'boss-stale', hp: 1500, atk: 18, speed: 85, w: 110, h: 200, knock: 0.2, aggro: 2000, range: 160, windup: 0.75, patrol: 0, xp: 460, dropChance: 1, armor: true, moves: ['slash', 'leap', 'charge', 'fanshot'], calls: 'crouton' },
+  stale: { name: 'Sir Stale', brain: 'boss', art: 'boss-stale', hp: 1320, atk: 18, speed: 85, w: 110, h: 200, knock: 0.2, aggro: 2000, range: 160, windup: 0.75, patrol: 0, xp: 460, dropChance: 1, armor: true, moves: ['slash', 'leap', 'charge', 'fanshot'], calls: 'crouton' },
   // ---- new monsters, 3 per world ----
   garlic: { name: 'Garlic Cleric', brain: 'healer', art: 'mob-garlic', hp: 55, atk: 7, speed: 60, w: 44, h: 56, knock: 1, aggro: 320, range: 260, windup: 0.9, patrol: 100, xp: 14, dropChance: 0.4 },
   ant: { name: 'Sugar Ant Digger', brain: 'burrower', art: 'mob-ant', hp: 60, atk: 11, speed: 95, w: 50, h: 42, knock: 1, aggro: 340, range: 40, windup: 0.6, patrol: 120, xp: 13, dropChance: 0.3 },
@@ -194,6 +196,68 @@ export const MOBS: Record<MobKind, MobDef> = {
   nbear: { name: 'Grizzly Grizzle', brain: 'nemesis', art: 'mob-nem-bear', hp: 225, atk: 16, speed: 70, w: 92, h: 104, knock: 0.35, aggro: 900, range: 150, windup: 0.75, patrol: 60, xp: 32, dropChance: 1, armor: true,
     nem: { species: 14, moves: ['swipe', 'charge', 'lob', 'leap'], names: ['Double Swipe', 'Bear Rush', 'Patty Toss', 'Big Bear Belly Flop'] } },
   golem: { name: 'Freezer Golem', brain: 'boss', art: 'boss-golem', hp: 2050, atk: 25, speed: 80, w: 130, h: 180, knock: 0.2, aggro: 2000, range: 150, windup: 0.75, patrol: 0, xp: 320, dropChance: 1, armor: true, moves: ['slash', 'leap', 'rain', 'charge'] },
+  // ----- minibosses (2 per world): they guard the miniboss rooms of long stages (art: scripts/minis-jobs.mjs) -----
+  m1a: { name: 'Sir Butterknife', brain: 'nemesis', art: 'mob-m1a', hp: 200, atk: 15, speed: 85, w: 70, h: 100, knock: 0.35, aggro: 900, range: 130, windup: 0.7, patrol: 60, xp: 40, dropChance: 1, armor: true, mini: true,
+    nem: {species: -1, moves: ['slash','charge','shell','puddle'], names: ['Butter Slash','Knightly Charge','Crumpet Guard','Melted Butter'], puddle: 'slick'} },
+  m1b: { name: 'The Toaster Tyrant', brain: 'nemesis', art: 'mob-m1b', hp: 190, atk: 15, speed: 70, w: 84, h: 88, knock: 0.35, aggro: 900, range: 300, windup: 0.7, patrol: 60, xp: 40, dropChance: 1, armor: true, mini: true,
+    nem: {species: -1, moves: ['fanshot','lob','heatwave','boomhop'], names: ['Toast Volley','Burnt Toast Lob','Hot Coils','Pop-Up Hop'], shot: 'crumb'} },
+  m2a: { name: 'Ice Cube Ogre', brain: 'nemesis', art: 'mob-m2a', hp: 240, atk: 16, speed: 55, w: 92, h: 104, knock: 0.35, aggro: 900, range: 120, windup: 0.7, patrol: 60, xp: 40, dropChance: 1, armor: true, mini: true,
+    nem: {species: -1, moves: ['haymaker','leap','puddle','roar'], names: ['Ice Fist','Avalanche Drop','Frost Slick','Brain Freeze Roar'], puddle: 'slick'} },
+  m2b: { name: 'The Cheese Wheel', brain: 'nemesis', art: 'mob-m2b', hp: 210, atk: 15, speed: 120, w: 90, h: 90, knock: 0.35, aggro: 900, range: 120, windup: 0.7, patrol: 60, xp: 40, dropChance: 1, armor: true, mini: true,
+    nem: {species: -1, moves: ['boomhop','charge','leap','puddle'], names: ['Rind Bounce','Wheel Roll','Big Wheel Drop','Melty Cheese'], puddle: 'slow'} },
+  m3a: { name: 'Casserole Commander', brain: 'nemesis', art: 'mob-m3a', hp: 220, atk: 15, speed: 65, w: 90, h: 92, knock: 0.35, aggro: 900, range: 140, windup: 0.7, patrol: 60, xp: 40, dropChance: 1, armor: true, mini: true,
+    nem: {species: -1, moves: ['summon','slash','heatwave','roar'], names: ['Call the Troops','Spoon Smack','Oven Blast','Rally Cry'], calls: 'bacon'} },
+  m3b: { name: 'Muffin Tin Mortar', brain: 'nemesis', art: 'mob-m3b', hp: 200, atk: 16, speed: 55, w: 94, h: 80, knock: 0.35, aggro: 900, range: 360, windup: 0.7, patrol: 60, xp: 40, dropChance: 1, armor: true, mini: true,
+    nem: {species: -1, moves: ['lob','fanshot','trap','boomhop'], names: ['Hot Muffin Mortar','Muffin Spray','Cupcake Mines','Tin Hop'], shot: 'heat'} },
+  m4a: { name: 'Flour Sack Sumo', brain: 'nemesis', art: 'mob-m4a', hp: 260, atk: 17, speed: 60, w: 100, h: 100, knock: 0.35, aggro: 900, range: 120, windup: 0.7, patrol: 60, xp: 40, dropChance: 1, armor: true, mini: true,
+    nem: {species: -1, moves: ['charge','leap','puddle','roar'], names: ['Belly Push','Sumo Stomp','Flour Cloud','Sumo Shout'], puddle: 'slow'} },
+  m4b: { name: 'Honey Pot Hermit', brain: 'nemesis', art: 'mob-m4b', hp: 200, atk: 15, speed: 70, w: 80, h: 88, knock: 0.35, aggro: 900, range: 300, windup: 0.7, patrol: 60, xp: 40, dropChance: 1, armor: true, mini: true,
+    nem: {species: -1, moves: ['drip','boomerang','puddle','summon'], names: ['Honey Drip','Dipper Toss','Sticky Pool','Angry Bees'], puddle: 'slow', shot: 'marinade', calls: 'raisin'} },
+  m5a: { name: 'Sponge Golem', brain: 'nemesis', art: 'mob-m5a', hp: 260, atk: 16, speed: 55, w: 96, h: 104, knock: 0.35, aggro: 900, range: 130, windup: 0.7, patrol: 60, xp: 40, dropChance: 1, armor: true, mini: true,
+    nem: {species: -1, moves: ['slimesurge','haymaker','puddle','leap'], names: ['Soap Surge','Soggy Punch','Suds Slick','Squish Drop'], puddle: 'slick', trail: true} },
+  m5b: { name: 'Dish Soap Siren', brain: 'nemesis', art: 'mob-m5b', hp: 200, atk: 15, speed: 80, w: 78, h: 100, knock: 0.35, aggro: 900, range: 320, windup: 0.7, patrol: 60, xp: 40, dropChance: 1, armor: true, mini: true,
+    nem: {species: -1, moves: ['fanshot','vanish','slimesurge','stingers'], names: ['Bubble Song','Into the Suds','Soap Wave','Trident Jabs'], shot: 'ring'} },
+  m6a: { name: 'Gravy Boat Captain', brain: 'nemesis', art: 'mob-m6a', hp: 230, atk: 16, speed: 80, w: 96, h: 88, knock: 0.35, aggro: 900, range: 140, windup: 0.7, patrol: 60, xp: 40, dropChance: 1, armor: true, mini: true,
+    nem: {species: -1, moves: ['charge','boomerang','puddle','summon'], names: ['Full Steam Ahead','Ladle Hook','Gravy Spill','All Hands!'], puddle: 'slow', shot: 'marinade', calls: 'fork'} },
+  m6b: { name: 'Candelabra Duchess', brain: 'nemesis', art: 'mob-m6b', hp: 210, atk: 16, speed: 60, w: 80, h: 120, knock: 0.35, aggro: 900, range: 320, windup: 0.7, patrol: 60, xp: 40, dropChance: 1, armor: true, mini: true,
+    nem: {species: -1, moves: ['heatwave','fanshot','drip','roar'], names: ['Flame Waltz','Wax Volley','Hot Wax','How Rude!'], shot: 'heat'} },
+  m7a: { name: 'Hot Coal Golem', brain: 'nemesis', art: 'mob-m7a', hp: 260, atk: 17, speed: 55, w: 96, h: 104, knock: 0.35, aggro: 900, range: 130, windup: 0.7, patrol: 60, xp: 40, dropChance: 1, armor: true, mini: true,
+    nem: {species: -1, moves: ['heatwave','haymaker','puddle','rootspike'], names: ['Ember Blast','Coal Fist','Hot Ash','Fire Vents'], puddle: 'burn', shot: 'heat'} },
+  m7b: { name: 'Corn Cob Gunner', brain: 'nemesis', art: 'mob-m7b', hp: 200, atk: 15, speed: 90, w: 70, h: 110, knock: 0.35, aggro: 900, range: 360, windup: 0.7, patrol: 60, xp: 40, dropChance: 1, armor: true, mini: true,
+    nem: {species: -1, moves: ['fanshot','zip','trap','lob'], names: ['Popcorn Burst','Husk Dash','Kernel Mines','Butter Bomb'], shot: 'crumb'} },
+  m8a: { name: 'Snapdragon', brain: 'nemesis', art: 'mob-m8a', hp: 230, atk: 16, speed: 40, w: 90, h: 104, knock: 0.35, aggro: 900, range: 200, windup: 0.7, patrol: 60, xp: 40, dropChance: 1, armor: true, mini: true,
+    nem: {species: -1, moves: ['yank','rootspike','fanshot','summon'], names: ['Vine Grab','Root Snap','Thorn Spit','Sprouts'], shot: 'spike', calls: 'ladybug'} },
+  m8b: { name: 'Gnome General', brain: 'nemesis', art: 'mob-m8b', hp: 210, atk: 16, speed: 75, w: 70, h: 96, knock: 0.35, aggro: 900, range: 140, windup: 0.7, patrol: 60, xp: 40, dropChance: 1, armor: true, mini: true,
+    nem: {species: -1, moves: ['slash','charge','summon','trap'], names: ['Shovel Strike','Charge!','Gnome Squad','Garden Traps'], calls: 'snail'} },
+  m9a: { name: 'Trolley Chariot', brain: 'nemesis', art: 'mob-m9a', hp: 240, atk: 17, speed: 130, w: 100, h: 92, knock: 0.35, aggro: 900, range: 130, windup: 0.7, patrol: 60, xp: 40, dropChance: 1, armor: true, mini: true,
+    nem: {species: -1, moves: ['boomhop','charge','fanshot','leap'], names: ['Wheelie Hop','Runaway Trolley','Can Spill','Aisle Jump'], shot: 'crumb'} },
+  m9b: { name: 'Price Gun Paladin', brain: 'nemesis', art: 'mob-m9b', hp: 210, atk: 16, speed: 70, w: 78, h: 104, knock: 0.35, aggro: 900, range: 320, windup: 0.7, patrol: 60, xp: 40, dropChance: 1, armor: true, mini: true,
+    nem: {species: -1, moves: ['fanshot','slash','shell','stingers'], names: ['Price Tag Volley','Box Cutter','Price Shield','Label Jabs'], shot: 'knife'} },
+  m10a: { name: 'Forgotten Soup', brain: 'nemesis', art: 'mob-m10a', hp: 200, atk: 16, speed: 90, w: 84, h: 100, knock: 0.35, aggro: 900, range: 300, windup: 0.7, patrol: 60, xp: 40, dropChance: 1, armor: true, mini: true,
+    nem: {species: -1, moves: ['vanish','fanshot','drip','dive'], names: ['Fade Away','Soggy Croutons','Cold Soup','Ghostly Swoop'], shot: 'spore', fly: true} },
+  m10b: { name: 'Pudding Juggernaut', brain: 'nemesis', art: 'mob-m10b', hp: 280, atk: 18, speed: 55, w: 100, h: 104, knock: 0.35, aggro: 900, range: 130, windup: 0.7, patrol: 60, xp: 40, dropChance: 1, armor: true, mini: true,
+    nem: {species: -1, moves: ['leap','roar','haymaker','charge'], names: ['Christmas Drop','Holly Roar','Pudding Punch','Rolling Pudding']} },
+  // ----- stage-5 champions: each world's elite brute fought as a real miniboss with its own moves (same art) -----
+  xegg: { name: 'Rotten Egg', brain: 'nemesis', art: 'mob-egg', hp: 200, atk: 16, speed: 60, w: 70, h: 78, knock: 0.4, aggro: 900, range: 120, windup: 0.75, patrol: 60, xp: 34, dropChance: 1, armor: true, mini: true,
+    nem: {species: -1, moves: ['haymaker','puddle','leap','roar'], names: ['Yolk Punch','Stink Puddle','Belly Flop','Rotten Roar'], puddle: 'poison'} },
+  xpickle: { name: 'Pickle Knight', brain: 'nemesis', art: 'mob-pickle', hp: 190, atk: 15, speed: 70, w: 50, h: 82, knock: 0.4, aggro: 900, range: 120, windup: 0.75, patrol: 60, xp: 34, dropChance: 1, armor: true, mini: true,
+    nem: {species: -1, moves: ['slash','skewer','charge','shell'], names: ['Brine Slash','Toothpick Skewer','Pickle Charge','Jar Guard']} },
+  xmeatball: { name: 'Meatball Brute', brain: 'nemesis', art: 'mob-meatball', hp: 210, atk: 16, speed: 65, w: 72, h: 76, knock: 0.4, aggro: 900, range: 120, windup: 0.75, patrol: 60, xp: 34, dropChance: 1, armor: true, mini: true,
+    nem: {species: -1, moves: ['charge','leap','haymaker','puddle'], names: ['Meatball Roll','Big Bounce','Saucy Punch','Sauce Spill'], puddle: 'burn'} },
+  xcan: { name: 'Can Crusher', brain: 'nemesis', art: 'mob-can', hp: 110, atk: 12, speed: 70, w: 52, h: 60, knock: 0.4, aggro: 900, range: 120, windup: 0.75, patrol: 60, xp: 34, dropChance: 1, armor: true, mini: true,
+    nem: {species: -1, moves: ['charge','shell','haymaker','boomhop'], names: ['Can Ram','Tin Shell','Crush','Hop Stomp']} },
+  xscrub: { name: 'Scrub Brute', brain: 'nemesis', art: 'mob-scrub', hp: 215, atk: 16, speed: 65, w: 72, h: 76, knock: 0.4, aggro: 900, range: 120, windup: 0.75, patrol: 60, xp: 34, dropChance: 1, armor: true, mini: true,
+    nem: {species: -1, moves: ['swipe','slimesurge','haymaker','puddle'], names: ['Scour Swipe','Suds Surge','Steel Wool Punch','Soap Slick'], puddle: 'slick'} },
+  xroast: { name: 'Roast Brute', brain: 'nemesis', art: 'mob-roast', hp: 220, atk: 16, speed: 65, w: 76, h: 74, knock: 0.4, aggro: 900, range: 120, windup: 0.75, patrol: 60, xp: 34, dropChance: 1, armor: true, mini: true,
+    nem: {species: -1, moves: ['haymaker','heatwave','leap','roar'], names: ['Roast Punch','Oven Heat','Gravy Drop','Carving Roar']} },
+  xpatty: { name: 'Burger Brute', brain: 'nemesis', art: 'mob-patty', hp: 225, atk: 16, speed: 65, w: 76, h: 78, knock: 0.4, aggro: 900, range: 120, windup: 0.75, patrol: 60, xp: 34, dropChance: 1, armor: true, mini: true,
+    nem: {species: -1, moves: ['charge','fanshot','haymaker','puddle'], names: ['Patty Rush','Sesame Spray','Bun Smash','Grease Spill'], puddle: 'burn', shot: 'crumb'} },
+  xpumpkin: { name: 'Pumpkin Brute', brain: 'nemesis', art: 'mob-pumpkin', hp: 230, atk: 16, speed: 63, w: 80, h: 80, knock: 0.4, aggro: 900, range: 120, windup: 0.75, patrol: 60, xp: 34, dropChance: 1, armor: true, mini: true,
+    nem: {species: -1, moves: ['boomhop','rootspike','haymaker','summon'], names: ['Gourd Hop','Vine Spikes','Squash!','Seedlings'], calls: 'ladybug'} },
+  xmelon: { name: 'Watermelon Brute', brain: 'nemesis', art: 'mob-melon', hp: 235, atk: 16, speed: 63, w: 82, h: 80, knock: 0.4, aggro: 900, range: 120, windup: 0.75, patrol: 60, xp: 34, dropChance: 1, armor: true, mini: true,
+    nem: {species: -1, moves: ['charge','fanshot','leap','haymaker'], names: ['Melon Roll','Seed Spit','Big Splash','Rind Punch'], shot: 'spike'} },
+  xfruitknight: { name: 'Fruitcake Knight', brain: 'nemesis', art: 'mob-fruitknight', hp: 240, atk: 16, speed: 63, w: 78, h: 84, knock: 0.4, aggro: 900, range: 120, windup: 0.75, patrol: 60, xp: 34, dropChance: 1, armor: true, mini: true,
+    nem: {species: -1, moves: ['slash','skewer','charge','roar'], names: ['Candied Slash','Fork Lance','Knight Charge','Rally']} },
 };
 
 /** Stage-5 mini-boss multipliers. */
@@ -290,7 +354,10 @@ export const TUNE = { hp: 2.5, atk: 1.8, bossHp: 1.35, bossAtk: 0.6, windup: 0.8
 /** Monsters past level 20 grow a little extra per level, in step with the skill-tree points a kaiju has by then. */
 const ramp = (lv: number) => 1 + TUNE.treeRamp * Math.max(0, lv - 20);
 export function mobHp(kind: MobKind, lv: number): number { return Math.round(MOBS[kind].hp * TUNE.hp * (MOBS[kind].brain === 'boss' ? TUNE.bossHp : 1) * (1 + 0.32 * (lv - 1)) * ramp(lv)); }
-export function mobAtk(kind: MobKind, lv: number): number { return Math.round(MOBS[kind].atk * TUNE.atk * (1 + 0.2 * (lv - 1)) * ramp(lv)); }
+/** Act 2 monsters (past Lv 55) hit harder still: your kit is complete by then, so they keep you reaching for jams (world
+ *  bosses only a little: they're already a long fight at the end of a long stage). */
+const lateHit = (kind: MobKind, lv: number) => 1 + (MOBS[kind].brain === 'boss' ? 0 : MOBS[kind].brain === 'nemesis' ? 0.006 : 0.009) * Math.max(0, lv - 55);
+export function mobAtk(kind: MobKind, lv: number): number { return Math.round(MOBS[kind].atk * TUNE.atk * (1 + 0.2 * (lv - 1)) * ramp(lv) * lateHit(kind, lv)); }
 export function mobXp(kind: MobKind, lv: number): number { return Math.round(MOBS[kind].xp * (1 + 0.3 * (lv - 1))); }
 /** Box odds level for a monster level (see loot.ts) */
 export function dropLevel(lv: number): number { return 1 + (lv - 1) / 4; }

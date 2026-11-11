@@ -3,13 +3,15 @@ import { describe, expect, it } from 'vitest';
 import { CLASSES } from '../src/sim/classes';
 import { MOBS, nemesisMoves, nemesisOf } from '../src/sim/mobs';
 import { skillsOf } from '../src/sim/skills';
-import { STAGES } from '../src/sim/stages';
+import { STAGES, bossRoom } from '../src/sim/stages';
 import { derive, newProfile } from '../src/sim/stats';
 import { NO_INPUT, type MobKind } from '../src/sim/types';
 import { World } from '../src/sim/world';
 import { STORIES } from '../src/story/stories';
 
-const NEMS = (Object.keys(MOBS) as MobKind[]).filter(k => MOBS[k].brain === 'nemesis');
+const NEMS = (Object.keys(MOBS) as MobKind[]).filter(k => MOBS[k].brain === 'nemesis' && MOBS[k].nem!.species >= 0);
+/** minibosses and stage-5 champions fight with the same move kit */
+const MINIS = (Object.keys(MOBS) as MobKind[]).filter(k => MOBS[k].brain === 'nemesis' && MOBS[k].nem!.species < 0);
 const SIGNATURES = ['slimesurge', 'summon', 'rootspike', 'dive', 'snatch', 'boomerang', 'beam', 'lure', 'vanish', 'shell', 'burrow', 'heatwave', 'skewer', 'finslide', 'yank', 'stingers', 'scurry', 'haymaker', 'zip', 'boomhop', 'drip', 'swipe'];
 function hero(species: number, level: number) {
   const p = newProfile(species); p.level = level;
@@ -42,20 +44,21 @@ describe('nemeses', () => {
       expect(n.length).toBe(1);
       expect(n[0].kind).toBe(nemesisOf(c.species));
       expect(n[0].phase).toBe(wid);
-      const boss = STAGES.find(s => s.id === `${wid}-10`)!;
+      const boss = bossRoom(wid);
       const b = new World(boss, hero(c.species, boss.rec), 1, [], 0, false, undefined, [], nemesisOf(c.species));
       expect(b.mobs.map(m => m.kind)).toEqual([boss.mobs[0].kind]);
     }
   });
-  it('every nemesis uses all of its World 4 moves without errors', () => {
+  it('every nemesis, miniboss and champion uses all of its moves without errors', () => {
     const st = STAGES.find(s => s.id === '4-5')!;
-    for (const k of NEMS) {
+    expect(MINIS.length).toBe(30);
+    for (const k of [...NEMS, ...MINIS]) {
       const w = new World({ ...st, mobs: [], hazards: [] }, hero(0, 45), 3);
       w.hero.hp = w.hero.d.maxHp = 1e7; w.hero.x = 600;
       const m = w.spawnMob(k, 900, 45, undefined, true); m.phase = 4;
       const used = new Set<string>();
       let hurt = false;
-      for (let i = 0; i < 60 * 90 && used.size < 4; i++) {
+      for (let i = 0; i < 60 * 90 && (used.size < 4 || !hurt); i++) {
         for (const e of w.step(NO_INPUT)) { if (e.t === 'mobAttack' && e.id === m.id) used.add(e.kind); if (e.t === 'hit' && e.target === 'hero') hurt = true; }
         if (i % 120 === 0) w.hero.x = 500 + ((i / 120) % 3) * 150; // move around so every range comes up
         m.hp = m.maxHp;

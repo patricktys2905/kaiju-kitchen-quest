@@ -84,10 +84,10 @@ describe('party', () => {
   });
   it('a CPU buddy pulls its weight: it lands a good share of the hits and the pair clears the stage', () => {
     const st = STAGES.find(s => s.id === '1-3')!;
-    const w = new World(st, d(0, 5), 3, [], 0, false, undefined, [], undefined, false, [d(10, 5)]);
+    const w = new World(st, d(0, 5), 3, [{ id: 'jam', n: 8 }, null, null, null], 0, false, undefined, [], undefined, false, [d(10, 5)], 1, [{ bag: [{ id: 'jam', n: 8 }, null, null, null], revives: 0 }]);
     const a = new Bot(w, AVERAGE, 7, 0), b = new Bot(w, AVERAGE, 9, 1);
     const hits = [0, 0];
-    for (let i = 0; i < 60 * 240 && !w.cleared && !w.failed; i++) for (const e of w.step([a.think(), b.think()])) if (e.t === 'hit' && e.target === 'mob') hits[(e as { hi?: number }).hi ?? 0]++;
+    for (let i = 0; i < 60 * 900 && !w.cleared && !w.failed; i++) for (const e of w.step([a.think(), b.think()])) if (e.t === 'hit' && e.target === 'mob') hits[(e as { hi?: number }).hi ?? 0]++;
     expect(w.cleared).toBe(true);
     expect(hits[1] / (hits[0] + hits[1])).toBeGreaterThan(0.25);
   });

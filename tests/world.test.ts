@@ -5,7 +5,7 @@ import { BASES, GRADE_MUL, fortChance, fortMul, itemLines, rollGrade, rollItem }
 import { clearCount, clearRewards, rollTier } from '../src/sim/loot';
 import { MOBS } from '../src/sim/mobs';
 import { SKILLS, ULTS, applyBranch, branchesFor, skillsOf } from '../src/sim/skills';
-import { STAGES } from '../src/sim/stages';
+import { STAGES, bossRoom } from '../src/sim/stages';
 import { type HeroProfile, derive, gainXp, newProfile } from '../src/sim/stats';
 import { type Input, NO_INPUT, type StageDef } from '../src/sim/types';
 import { GRAVITY, World, rankOf } from '../src/sim/world';
@@ -82,7 +82,7 @@ describe('stages', () => {
 
   it('every monster stands on the ground or on a platform, and the last stage is a boss', () => {
     for (const st of STAGES) for (const m of st.mobs) {
-      if (m.y === undefined) continue;
+      if (m.y === undefined || (m.wake && m.y < 0)) continue; // ambushers wait above the screen and drop in
       expect(st.platforms.some(p => p.y === m.y && m.x >= p.x && m.x <= p.x + p.w), `${st.id} ${m.kind}@${m.x}`).toBe(true);
     }
     for (const st of STAGES) {
@@ -182,7 +182,7 @@ describe('combat', () => {
 
 describe('boss', () => {
   it('the Burnt Toast King attacks, staggers and calls helpers', () => {
-    const boss = STAGES.find(s => s.boss)!;
+    const boss = bossRoom(1);
     const p = prof(10, 12);
     p.alloc.str = 33; // a levelled hero spends its stat points
     const w = new World(boss, derive(p), 5);
@@ -208,7 +208,7 @@ describe('boss', () => {
 describe('progression', () => {
   it('levels give stat and skill points; stats raise the numbers', () => {
     const p = newProfile(0);
-    const lv = gainXp(p, 2000);
+    const lv = gainXp(p, 6000);
     expect(lv).toBeGreaterThan(2);
     expect(p.statPts).toBe(lv * 3);
     expect(p.skillPts).toBe(lv);
@@ -326,7 +326,7 @@ describe('world 2 monsters', () => {
   });
 
   it('the Freezer Golem rains icicles', () => {
-    const st = STAGES.find(s => s.id === '2-10')!;
+    const st = bossRoom(2);
     const w = new World(st, derive(prof(10, 24)), 9);
     w.hero.hp = w.hero.d.maxHp = 1e6;
     let rain = false;
@@ -451,7 +451,7 @@ describe('stories, recruits and kaiju quests', () => {
   });
 
   it('boss stages are identical for every kaiju, and variants change normal stages', () => {
-    const boss = STAGES.find(s => s.id === '1-10')!;
+    const boss = bossRoom(1);
     const a = new World(boss, derive(prof(0, 10)), 1, [], 0, false, 'swarm');
     const b = new World(boss, derive(prof(0, 10)), 1);
     expect(a.mobs.length).toBe(b.mobs.length);

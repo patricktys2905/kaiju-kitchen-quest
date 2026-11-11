@@ -301,3 +301,25 @@ Tests: tests/tree.test.ts; screen: `node scripts/tree-shot.mjs`.
 Every kaiju has weapon and armour tiers 4 (item level 40) and 5 (item level 75): BASES `w-<ref>4/5`, `a-<ref>4/5`, part of
 the kaiju's signature set, each weapon with its own gear skill (gear.ts). TIER_LV = [0, 6, 14, 40, 75]. Icons:
 `node scripts/gear3-jobs.mjs` then `sh scripts/gem-batch.sh art-src/jobs-gear3.json shots/gem-gear3.log`. Tests: tests/gear-late.test.ts.
+
+## Long stages (5-10 minutes), tough difficulty, levelling (playtest fixes)
+- **Sections** (stages.ts `genLong`, `RECIPE`): every story stage is a run of sections: field / swarm / snipers / heavies
+  / dark (lights out) / arena / tower (a climb) / gauntlet (hazards + trays) / conveyor / treasure (crates + mimics) /
+  ambush (monsters drop in from above: `MobSpawn.wake` + y < 0) / mini (miniboss room) / gate (pull its lever up on a
+  ledge: `StageDef.gates`, `Prop.gate`) / chase / lever / holdout, then a finale. Each stage number has its own recipe plus
+  2-3 random extras, so no two stages play alike. Shooters and flyers are capped at about a third of a stretch.
+  The exit only needs the last ~2600 px cleared (stragglers far behind don't block it). Fetch / hold-out timers start
+  near the end (`Objective.at`). The Crumblet heals when left alone and shelters behind arena gates.
+- **Boss stages**: a run-up, then the boss room; the boss sleeps until you walk in (backdrop and music switch:
+  `StageDef.bossBg`, event `bossWake`); 3 honey jars by the door. Boss Rush / Endless use the room alone (`short`).
+- **Minibosses**: 20 new ones (2 per world, `m<world>a/b`, art `scripts/minis-jobs.mjs`) guard miniboss rooms; each world's
+  stage-5 elite is now a champion (`x<elite>`) with its own moves; arena finales use a random champion of the world's
+  monsters. They keep strictly to their move order (walking in for close-range moves).
+- **Difficulty** ("tough": jams needed): tuned against a SKILLED bot (bot.ts) carrying 8 jams: stages clear ~85-95% using
+  3-4 jams, bosses ~45-90%. `WorldDef.mobPow` evens worlds out, Act 2 ordinary monsters hit harder (`lateHit`), Nightmare
+  eases off in Act 2. Tools: `JAMS=8 sh scripts/sweep-all.sh 1 normal skilled` then `node scripts/sweep-sum.mjs` /
+  `node scripts/sweep-kaiju.mjs`; `scripts/fail-why.ts <stage>`; `scripts/stuck-check.ts <stage>`.
+- **Levelling**: `xpFor` is steeper (long stages give far more XP); one pass of the story keeps you about at each stage's
+  recommended level (`scripts/progress-sim.ts`). Skill ranks need hero levels (`rankLv`: unlock + 6 per rank) and so do
+  tree nodes (`ROW_LV`, +4 per rank), so a kaiju can't max its skills in World 1.
+- Performance: monsters far off-camera aren't drawn. Screens: `node scripts/sections-shot.mjs`.

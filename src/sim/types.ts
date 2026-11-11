@@ -21,19 +21,21 @@ export interface Platform { x: number; y: number; w: number; solid?: boolean;
   secret?: boolean }
 /** Interactive props. crate/jar break for loot, sponge bounces you up, lever drops a rolling pin on [tx-tw/2, tx+tw/2],
  *  chest (on secret ledges) holds a big box and maybe this world's key. */
-export interface Prop { kind: 'crate' | 'jar' | 'sponge' | 'lever' | 'chest'; x: number; y: number; key?: boolean; tx?: number; tw?: number }
+export interface Prop { kind: 'crate' | 'jar' | 'sponge' | 'lever' | 'chest'; x: number; y: number; key?: boolean; tx?: number; tw?: number; /** a lever that opens gate i (instead of dropping a rolling pin) */ gate?: number }
 export interface Ladder { x: number; top: number; bottom: number }
-export interface MobSpawn { kind: MobKind; x: number; y?: number; lv: number; elite?: boolean }
+export interface MobSpawn { kind: MobKind; x: number; y?: number; lv: number; elite?: boolean; /** asleep until a hero passes this x (a boss at the end of a long stage) */ wake?: number }
 /** Stage hazard on the ground floor. burner = flame pillar, vent = steam launch, drop = falling can, ice = slippery.
  *  Timed hazards cycle: on for `on` s, off, then glow a warning for the last 0.9 s before the next burst. */
 export type HazardKind = 'burner' | 'vent' | 'drop' | 'ice' | 'tap' | 'wax' | 'sprinkler' | 'pollen' | 'chill';
 export interface Hazard { kind: HazardKind; x: number; w: number; period: number; on: number; offset: number; /** boss arenas: only after the boss enrages */ phase2?: boolean }
 export interface Arena { x0: number; x1: number; waves: MobSpawn[][] }
-export interface Objective { kind: 'escort' | 'fetch' | 'survive'; /** seconds: survive length, or fetch time limit */ t?: number; /** fetch: where the scroll is */ x?: number }
+export interface Objective { kind: 'escort' | 'fetch' | 'survive'; /** seconds: survive length, or fetch time limit */ t?: number; /** fetch: where the scroll is */ x?: number; /** the timer only starts once a hero passes this x */ at?: number }
 /** Optional "Spicy" challenges chosen before a stage (each adds loot). */
 export type Spicy = 'nopots' | 'glass' | 'clock';
 
 export interface StageDef {
+  /** a long boss stage: the backdrop switches to this when the boss wakes */
+  bossBg?: string;
   /** free mode: monster strength set by level instead of by world */
   power?: number;
   id: string;
@@ -59,6 +61,12 @@ export interface StageDef {
   arenas?: Arena[];
   /** a giant rolling pin chases you from x0 to x1 */
   chase?: { x0: number; x1: number };
+  /** lights-out stretches */
+  darks?: { x0: number; x1: number }[];
+  /** shut gates: nobody passes x until its lever is pulled */
+  gates?: { x: number }[];
+  /** the section plan of a long stage (for tests and the stage info) */
+  sections?: string[];
   /** conveyor belts on the floor (v px/s, + = rightwards) */
   belts?: { x: number; w: number; v: number }[];
   /** monster level shown on the map */
@@ -70,7 +78,8 @@ export interface StageDef {
   rec: number;
 }
 
-export type MobKind = 'bun' | 'worm' | 'pepper' | 'egg' | 'toast' | 'pea' | 'yogurt' | 'icebat' | 'pickle' | 'golem'
+export type MobKind = 'm1a' | 'm1b' | 'm2a' | 'm2b' | 'm3a' | 'm3b' | 'm4a' | 'm4b' | 'm5a' | 'm5b' | 'm6a' | 'm6b' | 'm7a' | 'm7b' | 'm8a' | 'm8b' | 'm9a' | 'm9b' | 'm10a' | 'm10b' | 'xegg' | 'xpickle' | 'xmeatball' | 'xcan' | 'xscrub' | 'xroast' | 'xpatty' | 'xpumpkin' | 'xmelon' | 'xfruitknight'
+  | 'bun' | 'worm' | 'pepper' | 'egg' | 'toast' | 'pea' | 'yogurt' | 'icebat' | 'pickle' | 'golem'
   | 'popcorn' | 'imp' | 'bacon' | 'meatball' | 'dragon'
   | 'can' | 'cheerio' | 'minicheerio' | 'soda' | 'flour' | 'jar'
   | 'garlic' | 'ant' | 'mimic' | 'carrot' | 'milk' | 'jelly' | 'jellybit' | 'kettle' | 'sausage' | 'marsh' | 'noodle' | 'raisin' | 'cereal'
@@ -93,6 +102,9 @@ export type BoxTier = 1 | 2 | 3 | 4 | 5;
 export interface LootBox { tier: BoxTier; ilvl: number }
 
 export type SimEvent =
+  | { t: 'ambush'; x: number }
+  | { t: 'gate'; i: number; x: number }
+  | { t: 'bossWake'; kind: MobKind }
   | { t: 'hit'; x: number; y: number; dmg: number; crit: boolean; target: 'mob' | 'hero' }
   | { t: 'gear'; name: string; style: string; x: number; y: number }
   | { t: 'zap'; pts: [number, number][] }

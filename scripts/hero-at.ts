@@ -1,7 +1,7 @@
 // Balance-bot hero at a level (same as scripts/balance.ts heroAt), shared by diagnostic scripts.
 import { newProfile, type HeroProfile } from '../src/sim/stats';
 import { CLASSES, type Stat } from '../src/sim/classes';
-import { MAX_SKILL, skillsOf } from '../src/sim/skills';
+import { MAX_SKILL, rankLv, skillsOf } from '../src/sim/skills';
 import { BASES, rollItem, type Slot } from '../src/sim/items';
 import { canLearn, treeOf } from '../src/sim/tree';
 export function heroFor(species: number, level: number, seed: number): HeroProfile {
@@ -13,7 +13,7 @@ export function heroFor(species: number, level: number, seed: number): HeroProfi
   const sk = skillsOf(species);
   let pts = level - 1;
   const all = [...sk.actives, sk.passive];
-  for (let round = 0; round < MAX_SKILL && pts > 0; round++) for (const s of all) if (level >= s.unlock && pts > 0 && (p.skills[s.id] ?? 0) < MAX_SKILL) { p.skills[s.id] = (p.skills[s.id] ?? 0) + 1; if (round > 0 || s.id !== sk.actives[0].id) pts--; }
+  for (let round = 0; round < MAX_SKILL && pts > 0; round++) for (const s of all) if (level >= rankLv(s.unlock, (p.skills[s.id] ?? 0) + 1) && pts > 0 && (p.skills[s.id] ?? 0) < MAX_SKILL) { p.skills[s.id] = (p.skills[s.id] ?? 0) + 1; if (round > 0 || s.id !== sk.actives[0].id) pts--; }
   let s = seed * 7919 + species;
   const rand = () => { s = (s * 16807) % 2147483647; return s / 2147483647; };
   for (const slot of ['weapon', 'armor', 'charm'] as Slot[]) {

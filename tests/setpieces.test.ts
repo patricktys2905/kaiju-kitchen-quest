@@ -1,6 +1,7 @@
+import { MOBS } from '../src/sim/mobs';
 // Arena rooms, the rolling-pin chase, conveyor belts.
 import { describe, expect, it } from 'vitest';
-import { STAGES, WORLDS } from '../src/sim/stages';
+import { STAGES } from '../src/sim/stages';
 import { derive, newProfile } from '../src/sim/stats';
 import { NO_INPUT, type StageDef } from '../src/sim/types';
 import { World } from '../src/sim/world';
@@ -12,11 +13,12 @@ const flat: StageDef = {
 const hero = (sp = 0) => { const p = newProfile(sp); p.level = 12; return derive(p); };
 
 describe('arena rooms', () => {
-  it('stages 2, 3, 7 and 9 of every world have one, with three waves', () => {
-    for (const w of WORLDS) for (const n of [2, 3, 7, 9]) {
-      const a = STAGES.find(s => s.id === `${w.id}-${n}`)!.arenas;
-      expect(a?.length, `${w.id}-${n}`).toBe(1);
-      expect(a![0].waves.length).toBe(3);
+  it('every story stage has at least one, with three waves (one-wave rooms are miniboss rooms)', () => {
+    for (const s of STAGES.filter(x => !x.boss)) {
+      const rooms = (s.arenas ?? []).filter(a => a.waves.length > 1);
+      expect(rooms.length, s.id).toBeGreaterThanOrEqual(1);
+      for (const a of rooms) expect(a.waves.length).toBe(3);
+      for (const a of (s.arenas ?? []).filter(a => a.waves.length === 1)) expect(MOBS[a.waves[0][0].kind].mini, s.id).toBe(true);
     }
   });
   it('the gates shut, the waves come one after another, then the gates open and the exit can open', () => {

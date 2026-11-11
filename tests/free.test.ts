@@ -1,6 +1,6 @@
 // Free mode: Daily Dungeon, Endless Pantry, Boss Rush.
 import { describe, expect, it } from 'vitest';
-import { AVERAGE, Bot } from '../src/sim/bot';
+import { Bot, SKILLED } from '../src/sim/bot';
 import { PERKS, dailyStage, endlessFloor, perkChoices, powerFor, rushStages, withPerks } from '../src/sim/free';
 import { WORLDS } from '../src/sim/stages';
 import { derive, newProfile } from '../src/sim/stats';
@@ -9,9 +9,10 @@ import { heroFor } from '../scripts/hero-at';
 
 const d = (lv: number, sp = 0) => { const p = newProfile(sp); p.level = lv; for (const k of Object.keys(p.skills)) p.skills[k] = 3; return derive(p); };
 const play = (st: Parameters<typeof dailyStage> extends never ? never : ReturnType<typeof dailyStage>, lv: number, seed = 3) => {
-  const w = new World(st, derive(heroFor(10, lv, seed)), seed, [{ id: 'jam', n: 3 }, null, null, null]);
-  const bot = new Bot(w, AVERAGE, seed);
-  for (let i = 0; i < 60 * 300 && !w.cleared && !w.failed; i++) w.step(bot.think());
+  // a long stage at its level, played the way the game is tuned (a good player with a bag of jams)
+  const w = new World(st, derive(heroFor(10, lv, seed)), seed, [{ id: 'jam', n: 8 }, null, null, null]);
+  const bot = new Bot(w, SKILLED, seed);
+  for (let i = 0; i < 60 * 900 && !w.cleared && !w.failed; i++) w.step(bot.think());
   return w;
 };
 

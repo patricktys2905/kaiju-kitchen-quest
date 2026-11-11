@@ -1,13 +1,13 @@
 // Learnable bosses: fixed attack strings, a tired window after each, armour to crack, three phases.
 import { describe, expect, it } from 'vitest';
 import { BOSS_PATTERNS, MOBS } from '../src/sim/mobs';
-import { STAGES } from '../src/sim/stages';
+import { STAGES, bossRoom } from '../src/sim/stages';
 import { derive, newProfile } from '../src/sim/stats';
 import { NO_INPUT, type StageDef } from '../src/sim/types';
 import { World } from '../src/sim/world';
 
 const hero = (lv = 12) => { const p = newProfile(0); p.level = lv; return derive(p); };
-const arena = (id: string): StageDef => ({ ...STAGES.find(s => s.id === id)!, hazards: [] });
+const arena = (id: string): StageDef => ({ ...bossRoom(Number(id.split('-')[0])), hazards: [] });
 /** the moves a boss starts, in order, while the hero stands still at a distance */
 function moves(id: string, seed: number, n = 6): string[] {
   const w = new World(arena(id), hero(), seed);

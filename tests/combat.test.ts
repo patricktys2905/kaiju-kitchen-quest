@@ -3,7 +3,7 @@
 import { describe, expect, it } from 'vitest';
 import { MOBS } from '../src/sim/mobs';
 import { skillsOf } from '../src/sim/skills';
-import { STAGES, WORLDS } from '../src/sim/stages';
+import { STAGES, WORLDS, bossRoom } from '../src/sim/stages';
 import { type HeroProfile, derive, newProfile } from '../src/sim/stats';
 import { type Input, type MobKind, NO_INPUT, type Spicy, type StageDef } from '../src/sim/types';
 import { World } from '../src/sim/world';
@@ -190,7 +190,7 @@ describe('new monsters', () => {
       for (const n of [3, 7, 9]) expect(STAGES.find(s => s.id === `${w.id}-${n}`)!.mobs.some(m => MOBS[m.kind].brain === 'mimic'), `${w.id}-${n}`).toBe(true);
       expect((STAGES.find(s => s.id === `${w.id}-1`)!.hazards ?? []).length > 0).toBe(w.id >= 2); // 1-1 is the gentle first stage
       for (let n = 2; n <= 9; n++) expect((STAGES.find(s => s.id === `${w.id}-${n}`)!.hazards ?? []).length).toBeGreaterThan(0);
-      expect(STAGES.find(s => s.id === `${w.id}-10`)!.hazards!.every(h => h.phase2)).toBe(true);
+      expect(bossRoom(w.id).hazards!.every(h => h.phase2)).toBe(true);
     }
   });
 });
@@ -206,7 +206,7 @@ describe('challenge', () => {
     expect(n.mobName(n.mobs[0])).toMatch(/ Rotten Egg$/);
   });
   it('a boss enrages at half HP and switches on its arena hazards', () => {
-    const boss = STAGES.find(s => s.id === '1-10')!;
+    const boss = bossRoom(1);
     const w = new World(boss, derive(prof(0, 12)), 2);
     const b = w.boss!;
     b.hp = Math.round(b.maxHp * 0.52);
