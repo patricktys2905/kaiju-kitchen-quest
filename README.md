@@ -323,3 +323,23 @@ the kaiju's signature set, each weapon with its own gear skill (gear.ts). TIER_L
   recommended level (`scripts/progress-sim.ts`). Skill ranks need hero levels (`rankLv`: unlock + 6 per rank) and so do
   tree nodes (`ROW_LV`, +4 per rank), so a kaiju can't max its skills in World 1.
 - Performance: monsters far off-camera aren't drawn. Screens: `node scripts/sections-shot.mjs`.
+
+## Map stages, boss loot, challenges, boss weapons (Lunia / MapleStory style)
+- **Maps** (stages.ts `genMaps`, World `mapAt` / `tryPortal` / `stepMapZones`): every story stage is a camp hub, three
+  zones and a boss room, side by side in one world, walled off, joined by portals (press up). Each zone has a goal
+  (`ZoneGoal`): collect a named monster's quest drops (45% per kill, never 3 misses in a row; the monster respawns),
+  free caged Crumblets (`cage` props), smash mould nests (`nest` props that hatch monsters), clear an arena, race for the
+  Recipe Scroll (stage 6) or hold out (stage 8). All three open the boss door: the stage's miniboss (stage 5: the elite
+  or your nemesis; stage 10: the world boss) with `MINI_ROOM_HP` health. Arriving at camp heals you (and the escorted
+  Crumblet, which waits at camp until the boss room). Zones are built from the section kit (`sectionKit`).
+- **Loot**: ordinary monsters drop no boxes (crumbs and quest items); the boss-room miniboss 1, a world boss 2, chests 1,
+  mimics 1; the end chest holds rank-many boxes (S 3, A 2, else 1; +1 for a world boss). Rank: time vs par, hits taken
+  per minute, jams drunk (`RunStats.heals`), combo and style.
+- **Challenges** (src/sim/challenges.ts): 3 per stage, each pays crumbs + a box once and gives a star; 15 stars in a world
+  open its secret stage (`STARS_FOR_SECRET`).
+- **Boss weapons** (src/sim/bossgearData.ts): 200, one per kaiju per world boss (`bw-<boss>-<ref>`), each with its own
+  gear skill: one of 20 styles (12 new: orbit, dash, chain, meteor, vortex, turret, spin, wave, shield, barrage, pillar,
+  bounce) + the boss's element (incl. new poison / shatter / crumbs). Dropped by the world boss for the kaiju you play:
+  18% (+rank / mode), guaranteed by the 5th clear (`save.bwPity`). Icons: scripts/bossgear-jobs.mjs. Tests:
+  tests/bossgear.test.ts.
+- Balance (skilled bot, 8 jams): stages 85-97% clear with 2-4 jams, bosses 40-80%; bot stage time 4-7 min.
