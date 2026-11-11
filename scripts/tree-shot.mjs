@@ -12,7 +12,7 @@ const errs = []; p.on('pageerror', e => errs.push(e.message));
 await p.goto(base); await p.evaluate(() => localStorage.clear()); await p.reload();
 for (let i = 0; i < 60 && !await p.evaluate(() => !!window.__kkq); i++) await wait(250);
 await p.evaluate(() => document.querySelector('#title .play')?.click()); await wait(800);
-await p.evaluate(() => { const s = window.__kkq.save; s.selected = 10; const h = s.heroes[10]; h.level = 30; h.skillPts = 20; window.__kkq.scene.scene.restart({}); }); await wait(700);
+await p.evaluate(() => { const s = window.__kkq.save; s.selected = 10; const h = s.heroes[10]; h.level = 8; h.skillPts = 7; window.__kkq.scene.scene.restart({}); }); await wait(700);
 await p.evaluate(() => document.querySelector('[data-tab="skills"]')?.click()); await wait(300);
 await p.screenshot({ path: 'shots/tree-1.png' });
 // learn down the first path: click each node and LEARN while possible

@@ -1,0 +1,18 @@
+[
+ {
+  "name": "mob-firefly",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/mob-bun.png"
+  ],
+  "prompt": "Generate an image. The reference is an enemy from my cute 2D side-scrolling action RPG set in a giant kitchen and house. I need a NEW ENEMY for the BACKYARD BBQ world: an EMBER FIREFLY: a glowing orange firefly with a little coal-ember body, flying. Draw it in exactly the same art style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute but a little mischievous, with a few fuzzy green mould spots because the Mold Crown has corrupted it). Side view facing LEFT, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1 image."
+ },
+ {
+  "name": "drop-toadstool",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/c-bean.png"
+  ],
+  "prompt": "Generate an image. The reference is an item icon from my cute 2D kitchen action RPG. Draw a NEW ITEM icon, a monster drop called \"Mushroom Cap\": a red spotted mushroom cap. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute). A small collectible item icon, shown centred, filling about 75% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ }
+]

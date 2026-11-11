@@ -3,7 +3,7 @@
 // Reach: the lowest jumper (Bluebeary) rises ~105 px, so tiers are 90 px apart; the top tier needs a ladder
 // or a lower platform beside it (tests/world.test.ts checks every platform is reachable).
 import { MOBS } from './mobs';
-import type { Arena, Hazard, HazardKind, MobKind, MobSpawn, Platform, Ladder, Prop, StageDef, StageMap, ZoneGoal } from './types';
+import type { Arena, Hazard, HazardKind, MobKind, MobSpawn, Platform, Ladder, Prop, StageDef, StageMap } from './types';
 
 const G = 470;
 const SPECIALIST = new Set(['turret', 'sniper', 'healer', 'summoner', 'charger', 'burrower']);
@@ -35,53 +35,53 @@ export interface WorldDef {
 export const WORLDS: WorldDef[] = [
   {
     id: 1, name: 'The Countertop', blurb: 'Where the leftovers went bad.', bg: 'bg-far', mid: 'bg-mid', tile: 'tile-ground', platTint: 0xffffff, bossBg: 'bg-far-stove',
-    baseLv: 1, power: 1, mobPow: 1, pool: [[1, 'bun'], [3, 'worm'], [4, 'ant'], [6, 'pepper'], [6, 'garlic'], [7, 'egg']], hazard: 'burner', mimic: 'mimic', elite: 'xegg', boss: 'toast',
+    baseLv: 1, power: 1, mobPow: 0.7, pool: [[2, 'salt'], [1, 'jamhop'], [1, 'bun'], [3, 'worm'], [4, 'ant'], [6, 'pepper'], [6, 'garlic'], [7, 'egg']], hazard: 'burner', mimic: 'mimic', elite: 'xegg', boss: 'toast',
     names: ['Countertop Meadow', 'Crumb Trail', 'Gummy Gully', 'Toaster Hills', 'Rotten Ridge', 'Spice Shelf', 'Pepper Pass', 'Cutting Board Bluffs', 'Burner Approach', 'Stovetop Throne'],
   },
   {
     id: 2, name: 'The Fridge', blurb: 'Cold, crisp and full of grudges.', bg: 'bg-far-fridge', mid: 'bg-mid-fridge', tile: 'tile-fridge', platTint: 0xc8e4ff, bossBg: 'bg-far-freezer',
-    baseLv: 13, power: 1.3, mobPow: 1, pool: [[1, 'pea'], [1, 'yogurt'], [2, 'milk'], [3, 'icebat'], [4, 'carrot'], [6, 'pickle'], [7, 'jelly']], hazard: 'ice', mimic: 'mimic', elite: 'xpickle', boss: 'golem',
+    baseLv: 13, power: 1.3, mobPow: 0.85, pool: [[2, 'icepop'], [1, 'cheesemouse'], [1, 'pea'], [1, 'yogurt'], [2, 'milk'], [3, 'icebat'], [4, 'carrot'], [6, 'pickle'], [7, 'jelly']], hazard: 'ice', mimic: 'mimic', elite: 'xpickle', boss: 'golem',
     names: ['Crisper Drawer', 'Dairy Lane', 'Frosty Shelf', 'Pickle Jar Pier', 'Knight of the Brine', 'Egg Carton Cliffs', 'Butter Bridge', 'Ketchup Canyon', 'Ice Tray Steps', 'Freezer Throne'],
   },
   {
     id: 3, name: 'The Oven', blurb: 'Preheated to dangerous.', bg: 'bg-far-oven', mid: 'bg-mid-oven', tile: 'tile-oven', platTint: 0xffc8a0, bossBg: 'bg-far-dragon',
-    baseLv: 25, power: 1.6, mobPow: 1, pool: [[1, 'bacon'], [1, 'popcorn'], [2, 'sausage'], [3, 'imp'], [4, 'kettle'], [6, 'meatball'], [7, 'marsh']], hazard: 'vent', mimic: 'cereal', elite: 'xmeatball', boss: 'dragon',
+    baseLv: 25, power: 1.6, mobPow: 0.75, pool: [[2, 'mitt'], [1, 'crumbcube'], [1, 'bacon'], [1, 'popcorn'], [2, 'sausage'], [3, 'imp'], [4, 'kettle'], [6, 'meatball'], [7, 'marsh']], hazard: 'vent', mimic: 'cereal', elite: 'xmeatball', boss: 'dragon',
     names: ['Oven Door Ramp', 'Bottom Rack', 'Muffin Tin Maze', 'Casserole Cliffs', 'Meatball Mountain', 'Cookie Sheet Plains', 'Roasting Pan Pass', 'Pizza Stone Steppe', 'Top Rack Ascent', 'Broiler Peak'],
   },
   {
     id: 4, name: 'The Pantry', blurb: 'Dusty shelves, grumpy groceries.', bg: 'bg-far-pantry', mid: 'bg-mid-pantry', tile: 'tile-pantry', platTint: 0xe8d0b0, bossBg: 'bg-far-jar',
-    baseLv: 37, power: 2.5, mobPow: 1, pool: [[1, 'cheerio'], [1, 'flour'], [2, 'noodle'], [3, 'can'], [4, 'raisin'], [5, 'soda']], hazard: 'drop', mimic: 'cereal', elite: 'xcan', boss: 'jar',
+    baseLv: 37, power: 2.5, mobPow: 0.9, pool: [[2, 'cracker'], [1, 'bee'], [1, 'cheerio'], [1, 'flour'], [2, 'noodle'], [3, 'can'], [4, 'raisin'], [5, 'soda']], hazard: 'drop', mimic: 'cereal', elite: 'xcan', boss: 'jar',
     names: ['Cupboard Door', 'Cereal Canyon', 'Flour Drifts', 'Tin Can Alley', 'Shield Wall', 'Spice Rack Ridge', 'Pasta Jar Peaks', 'Honey Hollow', 'Top Shelf Climb', 'Cookie Vault'],
   },
   {
     id: 5, name: 'The Sink', blurb: 'Deep, damp and down the drain.', bg: 'bg-far-sink', mid: 'bg-mid-sink', tile: 'tile-sink', platTint: 0xd0e4f0, bossBg: 'bg-far-drain',
-    baseLv: 49, power: 3.0, mobPow: 0.92, pool: [[1, 'plate'], [1, 'bubble'], [2, 'mug'], [3, 'eel'], [4, 'glove'], [7, 'scrub']], hazard: 'tap', mimic: 'mimic', elite: 'xscrub', boss: 'moldking',
+    baseLv: 49, power: 3.0, mobPow: 0.75, pool: [[2, 'straw'], [1, 'duck'], [1, 'plate'], [1, 'bubble'], [2, 'mug'], [3, 'eel'], [4, 'glove'], [7, 'scrub']], hazard: 'tap', mimic: 'mimic', elite: 'xscrub', boss: 'moldking',
     names: ['Faucet Falls', 'Suds Slide', 'Sponge Shoals', 'Dish Rack Ridge', 'Steel Wool Wall', 'Bubble Bay', 'Plughole Pass', 'Greasy Pan Pits', 'Drain Descent', 'The Mold Throne'],
   },
   // ---- Act 2: Beyond the Kitchen ----
   {
     id: 6, name: 'The Dining Room', blurb: 'Fancy plates, forgotten feasts.', bg: 'bg-far-dining', mid: 'bg-mid-dining', tile: 'tile-dining', platTint: 0xf0e0c8, bossBg: 'bg-far-table',
-    baseLv: 61, power: 3.4, mobPow: 1.35, pool: [[1, 'fork'], [1, 'napkin'], [2, 'candle'], [3, 'gravy'], [4, 'teapot'], [7, 'roast']], hazard: 'wax', mimic: 'mimic', elite: 'xroast', boss: 'stale',
+    baseLv: 61, power: 3.4, mobPow: 1, pool: [[2, 'ladle'], [1, 'teacake'], [1, 'fork'], [1, 'napkin'], [2, 'candle'], [3, 'gravy'], [4, 'teapot'], [7, 'roast']], hazard: 'wax', mimic: 'mimic', elite: 'xroast', boss: 'stale',
     names: ['Tablecloth Trail', 'Placemat Plains', 'Candelabra Crossing', 'Gravy Boat Bay', 'Roast Ridge', 'Teacup Terrace', 'Napkin Fold Fort', 'Silverware Siege', 'Chandelier Climb', 'The Head of the Table'],
   },
   {
     id: 7, name: 'The Backyard BBQ', blurb: 'Sizzling, smoky and full of ants.', bg: 'bg-far-backyard', mid: 'bg-mid-backyard', tile: 'tile-backyard', platTint: 0xe8d0a8, bossBg: 'bg-far-grill',
-    baseLv: 71, power: 3.8, mobPow: 1, pool: [[1, 'beetle'], [1, 'wasp'], [2, 'ketchup'], [3, 'charcoal'], [4, 'corn'], [7, 'patty']], hazard: 'sprinkler', mimic: 'mimic', elite: 'xpatty', boss: 'brussels',
+    baseLv: 71, power: 3.8, mobPow: 1, pool: [[2, 'firefly'], [1, 'skewer'], [1, 'beetle'], [1, 'wasp'], [2, 'ketchup'], [3, 'charcoal'], [4, 'corn'], [7, 'patty']], hazard: 'sprinkler', mimic: 'mimic', elite: 'xpatty', boss: 'brussels',
     names: ['Lawn Launch', 'Hose Highway', 'Sprinkler Springs', 'Paddling Pool Pier', 'Patty Plateau', 'Picnic Table Peak', 'Flowerpot Fort', 'Cooler Canyon', 'Charcoal Climb', 'The Grill Summit'],
   },
   {
     id: 8, name: 'The Garden', blurb: 'Overgrown, untended and up to something.', bg: 'bg-far-garden', mid: 'bg-mid-garden', tile: 'tile-garden', platTint: 0xd8e8c0, bossBg: 'bg-far-greenhouse',
-    baseLv: 81, power: 4.2, mobPow: 1.4, pool: [[1, 'snail'], [1, 'ladybug'], [2, 'peapod'], [3, 'mole'], [4, 'tomato'], [5, 'radish'], [7, 'pumpkin']], hazard: 'pollen', mimic: 'mimic', elite: 'xpumpkin', boss: 'meatloaf',
+    baseLv: 81, power: 4.2, mobPow: 1.15, pool: [[2, 'toadstool'], [1, 'caterpillar'], [1, 'snail'], [1, 'ladybug'], [2, 'peapod'], [3, 'mole'], [4, 'tomato'], [5, 'radish'], [7, 'pumpkin']], hazard: 'pollen', mimic: 'mimic', elite: 'xpumpkin', boss: 'meatloaf',
     names: ['Seedling Lane', 'Watering Can Run', 'Sunflower Grove', 'Pumpkin Patch Path', 'Gourd Guard', 'Beanstalk Heights', 'Compost Keep', 'Scarecrow Stand', 'Greenhouse Steps', 'The Mystery Heap'],
   },
   {
     id: 9, name: 'The Supermarket', blurb: 'Open late. Very, very late.', bg: 'bg-far-market', mid: 'bg-mid-market', tile: 'tile-market', platTint: 0xd8e0e8, bossBg: 'bg-far-freezer2',
-    baseLv: 91, power: 4.6, mobPow: 0.6, pool: [[1, 'trolley'], [1, 'bag'], [2, 'banana'], [3, 'scanner'], [4, 'can2'], [7, 'melon']], hazard: 'chill', mimic: 'mimic', elite: 'xmelon', boss: 'tupper',
+    baseLv: 91, power: 4.6, mobPow: 0.6, pool: [[2, 'boxbot'], [1, 'coupon'], [1, 'trolley'], [1, 'bag'], [2, 'banana'], [3, 'scanner'], [4, 'can2'], [7, 'melon']], hazard: 'chill', mimic: 'mimic', elite: 'xmelon', boss: 'tupper',
     names: ['Sliding Doors', 'Trolley Track', 'Cereal Aisle', 'Fruit and Veg', 'Melon Mountain', 'Bakery Bluff', 'Canned Goods Keep', 'Checkout Chaos', 'The Frozen Aisle', 'The Back Aisle'],
   },
   {
     id: 10, name: 'The Feast of the Forgotten', blurb: 'Where forgotten food goes to sulk.', bg: 'bg-far-fridgeback', mid: 'bg-mid-fridgeback', tile: 'tile-fridgeback', platTint: 0xd0e0f0, bossBg: 'bg-far-feast',
-    baseLv: 101, power: 5.0, mobPow: 0.62, pool: [[1, 'cherrysoldier'], [1, 'peel'], [2, 'fork'], [3, 'beetle'], [4, 'snail'], [5, 'scanner'], [7, 'fruitknight']], hazard: 'chill', mimic: 'mimic', elite: 'xfruitknight', boss: 'fruitcake',
+    baseLv: 101, power: 5.0, mobPow: 0.62, pool: [[2, 'cracker2'], [1, 'pudding'], [1, 'cherrysoldier'], [1, 'peel'], [2, 'fork'], [3, 'beetle'], [4, 'snail'], [5, 'scanner'], [7, 'fruitknight']], hazard: 'chill', mimic: 'mimic', elite: 'xfruitknight', boss: 'fruitcake',
     names: ['The Cold Door', 'Jam Jar Junction', 'Takeaway Towers', 'Frost Drawer Falls', 'Knight of the Fruitcake', 'Paper Chain Pass', 'The Forgotten Shelf', 'The Last Stand', 'The Long Table', 'The Feast of the Forgotten'],
   },
 ];
@@ -330,144 +330,10 @@ export function worldOf(s: StageDef): WorldDef { return WORLDS.find(w => w.id ==
 // Long stages (5-10 minutes): a run of different SECTIONS, so no two stages play alike. Every stage has its own recipe
 // (what its number is about: the chase, the lever, the escort, the elite, the scroll race, the hold-out...), shuffled
 // with a few picks from the library, and every world plays them with its own monsters and hazard.
-type Sec = 'field' | 'swarm' | 'snipers' | 'heavies' | 'arena' | 'tower' | 'gauntlet' | 'conveyor' | 'dark' | 'treasure' | 'ambush' | 'mini' | 'chase' | 'lever' | 'gate' | 'holdout' | 'finale';
 interface Build {
   platforms: Platform[]; ladders: Ladder[]; mobs: MobSpawn[]; props: Prop[]; hazards: Hazard[]; arenas: Arena[];
   belts: { x: number; w: number; v: number }[]; darks: { x0: number; x1: number }[]; gates: { x: number }[];
   chase?: { x0: number; x1: number }; holdAt?: number; fetchAt?: number;
-}
-/** The section builders, shared by every map of a stage: place(sec, x0) builds one section from x0 and returns its width. */
-function sectionKit(w: WorldDef, n: number, lvLo: number, lvHi: number, r: () => number, run = false) {
-  const b: Build = { platforms: [], ladders: [], mobs: [], props: [], hazards: [], arenas: [], belts: [], darks: [], gates: [] };
-  const kinds = w.pool.filter(([from]) => (run ? 9 : n) >= from).map(([, k]) => k);
-  const basics = kinds.filter(k => !SPECIALIST.has(MOBS[k].brain));
-  const pick = <T>(a: T[]): T => a[Math.floor(r() * a.length)];
-  const lv = () => (r() < 0.5 ? lvLo : lvHi);
-  const mini = (n + w.id) % 2 ? [`m${w.id}a`, `m${w.id}b`] : [`m${w.id}b`, `m${w.id}a`];
-  let miniI = 0, design = n;
-  const place = (sec: Sec, x0: number): number => {
-    let x = x0;
-    switch (sec) {
-      case 'field': case 'swarm': case 'snipers': case 'heavies': case 'dark': {
-        const wd = 1700 + Math.round(r() * 700);
-        terrain(b, x0 + 200, x0 + wd - 150, r);
-        const count = Math.round(wd / (sec === 'swarm' ? 190 : sec === 'heavies' ? 420 : 300));
-        const close = basics.filter(k => !['ranged', 'sniper', 'turret'].includes(MOBS[k].brain));
-        const pool = sec === 'swarm' ? (close.filter(k => MOBS[k].hp <= 70).length ? close.filter(k => MOBS[k].hp <= 70) : close.length ? close : basics)
-          : sec === 'heavies' ? (kinds.filter(k => ['brute', 'charger'].includes(MOBS[k].brain) || MOBS[k].shield).length ? kinds.filter(k => ['brute', 'charger'].includes(MOBS[k].brain) || MOBS[k].shield) : basics)
-          : sec === 'snipers' ? kinds.filter(k => ['ranged', 'sniper', 'turret'].includes(MOBS[k].brain))
-          : sec === 'dark' ? kinds.filter(k => ['flyer', 'hopper', 'walker'].includes(MOBS[k].brain)) : kinds;
-        roam(b, x0 + 250, x0 + wd - 150, count, pool.length ? pool : basics, kinds, basics, lv, r, x0 === 0 ? 520 : 0);
-        if (sec === 'snipers') roam(b, x0 + 250, x0 + wd - 150, Math.round(count / 2), basics, kinds, basics, lv, r, 0); // a screen of melee in front
-        if (sec === 'dark') b.darks.push({ x0: x0 + 100, x1: x0 + wd - 100 });
-        x += wd; break;
-      }
-      case 'arena': {
-        const rx0 = x0 + 160, rx1 = rx0 + 640;
-        b.platforms.push({ x: rx0 + 90, y: TIER[0], w: 170 }, { x: rx1 - 260, y: TIER[0], w: 170 });
-        const d = [2, 3, 7, 9][(design++ + w.id) % 4];
-        b.arenas.push({ x0: rx0, x1: rx1, waves: arenaWaves(w, d, rx0, rx1, lvLo, lvHi, pick(basics.length ? basics : kinds)) });
-        x += 960; break;
-      }
-      case 'mini': {
-        // a jar to catch your breath, then the miniboss room (gates shut, one big fight)
-        b.props.push({ kind: 'jar', x: x0 + 120, y: G });
-        const rx0 = x0 + 260, rx1 = rx0 + 760;
-        b.platforms.push({ x: rx0 + 110, y: TIER[0], w: 180 }, { x: rx1 - 290, y: TIER[0], w: 180 });
-        const k = mini[miniI++ % 2] as MobKind;
-        b.arenas.push({ x0: rx0, x1: rx1, waves: [[{ kind: k, lv: lvHi + 1, x: rx1 - 140, elite: true }]] });
-        x += 1140; break;
-      }
-      case 'tower': {
-        // a climb: three tiers and two ladders, shooters up top, a jar and a crate (sometimes a chest) for the climber
-        const bx = x0 + 160;
-        b.platforms.push({ x: bx, y: TIER[0], w: 300 }, { x: bx + 260, y: TIER[1], w: 380 }, { x: bx + 560, y: TIER[2], w: 320 }, { x: bx + 940, y: TIER[0], w: 200 });
-        b.ladders.push({ x: bx + 300, top: TIER[1], bottom: G }, { x: bx + 600, top: TIER[2], bottom: G });
-        const shooters = kinds.filter(k => ['ranged', 'sniper'].includes(MOBS[k].brain));
-        for (let i = 0; i < 2; i++) b.mobs.push({ kind: shooters.length ? pick(shooters) : pick(basics), lv: lv(), x: bx + 420 + i * 120, y: TIER[1] });
-        b.mobs.push({ kind: pick(basics), lv: lv(), x: bx + 720, y: TIER[2] }, { kind: pick(basics), lv: lv(), x: bx + 200 }, { kind: pick(basics), lv: lv(), x: bx + 820 });
-        b.props.push({ kind: 'jar', x: bx + 640, y: TIER[2] }, { kind: 'crate', x: bx + 820, y: TIER[2] });
-        if (r() < 0.5) b.props.push({ kind: 'chest', x: bx + 760, y: TIER[2] });
-        x += 1260; break;
-      }
-      case 'gauntlet': {
-        // hazards in a row on the floor, with moving trays above as the high road
-        const wd = 1400;
-        for (let i = 0; i < 4; i++) b.hazards.push(hazardAt(w.hazard, x0 + 260 + i * 300, i * 0.8));
-        b.platforms.push({ x: x0 + 330, y: TIER[0], w: 140, move: { dx: 160, period: 3.4 } }, { x: x0 + 760, y: TIER[0], w: 140, move: { dx: -160, period: 3 } });
-        const hop = kinds.filter(k => ['hopper', 'flyer'].includes(MOBS[k].brain));
-        for (let i = 0; i < 3; i++) b.mobs.push({ kind: hop.length ? pick(hop) : pick(basics), lv: lv(), x: x0 + 400 + i * 330 });
-        x += wd; break;
-      }
-      case 'conveyor': {
-        const wd = 1300, v = r() < 0.5 ? 90 : -90;
-        b.belts.push({ x: x0 + 180, w: 380, v }, { x: x0 + 700, w: 380, v: -v });
-        b.platforms.push({ x: x0 + 600, y: TIER[0], w: 140 });
-        for (let i = 0; i < 4; i++) b.mobs.push({ kind: pick(basics), lv: lv(), x: x0 + 260 + i * 250 });
-        x += wd; break;
-      }
-      case 'treasure': {
-        // a store room: crates and honey jars, a chest on a step, and a lunchbox mimic hiding among them
-        const wd = 1100;
-        b.platforms.push({ x: x0 + 420, y: TIER[0], w: 240 });
-        b.props.push({ kind: 'chest', x: x0 + 540, y: TIER[0] });
-        for (let i = 0; i < 7; i++) b.props.push({ kind: r() < 0.6 ? 'crate' : 'jar', x: x0 + 160 + i * 120 + Math.round(r() * 30), y: G });
-        b.mobs.push({ kind: w.mimic, lv: lvHi, x: x0 + 300 + Math.round(r() * 500) });
-        if (w.id >= 5) b.mobs.push({ kind: w.mimic, lv: lvHi, x: x0 + 900 });
-        x += wd; break;
-      }
-      case 'ambush': {
-        // open ground that looks empty... until you reach the middle and monsters drop in from both sides
-        const wd = 1400, tx = x0 + 650;
-        b.platforms.push({ x: x0 + 200, y: TIER[0], w: 200 }, { x: x0 + 1000, y: TIER[0], w: 200 });
-        for (let i = 0; i < 6; i++) b.mobs.push({ kind: pick(basics), lv: lv(), x: tx + (i % 2 ? 1 : -1) * (220 + Math.floor(i / 2) * 110), y: -260, wake: tx });
-        x += wd; break;
-      }
-      case 'gate': {
-        // a shut gate: the lever that opens it is up on a ledge (climb the ladder, whack the lever)
-        const wd = 1200, gx = x0 + wd - 140;
-        b.platforms.push({ x: x0 + 520, y: TIER[1], w: 300 }, { x: x0 + 300, y: TIER[0], w: 180 });
-        b.ladders.push({ x: x0 + 780, top: TIER[1], bottom: G });
-        b.props.push({ kind: 'lever', x: x0 + 600, y: TIER[1], gate: b.gates.length });
-        b.gates.push({ x: gx });
-        for (let i = 0; i < 4; i++) b.mobs.push({ kind: pick(basics), lv: lv(), x: x0 + 250 + i * 230 });
-        x += wd; break;
-      }
-      case 'chase': {
-        const wd = 2700;
-        b.chase = { x0: x0 + 520, x1: x0 + 2500 };
-        for (let i = 0; i < 4; i++) b.mobs.push({ kind: pick(basics), lv: lv(), x: x0 + 900 + i * 420 });
-        b.platforms.push({ x: x0 + 1300, y: TIER[0], w: 220 }, { x: x0 + 2000, y: TIER[0], w: 220 });
-        x += wd; break;
-      }
-      case 'lever': {
-        // a crowd standing right under a rolling pin: pull the lever
-        const wd = 1100;
-        b.props.push({ kind: 'lever', x: x0 + 220, y: G, tx: x0 + 520, tw: 300 });
-        for (let i = 0; i < 6; i++) b.mobs.push({ kind: pick(basics), lv: lv(), x: x0 + 400 + i * 45 });
-        b.platforms.push({ x: x0 + 800, y: TIER[0], w: 200 });
-        x += wd; break;
-      }
-      case 'holdout': {
-        const wd = 1500;
-        b.holdAt = x0 + 600;
-        b.platforms.push({ x: x0 + 250, y: TIER[0], w: 220 }, { x: x0 + 1000, y: TIER[0], w: 220 });
-        x += wd; break;
-      }
-      case 'finale': {
-        // the last stretch: the scroll race (stage 6), the elite / nemesis (stage 5), or a last fight before the exit
-        const wd = n === 6 && !run ? 2800 : 1700;
-        terrain(b, x0 + 200, x0 + wd - 350, r);
-        roam(b, x0 + 200, x0 + wd - 350, Math.round(wd / 340), kinds, kinds, basics, lv, r, 0);
-        if (n === 6 && !run) b.fetchAt = x0 + 100;
-        if (n === 5 && !run) b.mobs.push({ kind: w.elite, lv: lvHi + 1, x: x0 + wd - 450, elite: true, wake: x0 + wd - 1100 });
-        x += wd; break;
-      }
-    }
-
-    return x - x0;
-  };
-  return { b, place, kinds, basics, pick, lv, mini };
 }
 
 /** A stage of maps (Lunia / MapleStory style): a camp hub with portals to 3 zones; each zone has a goal (hunt a monster
@@ -477,55 +343,65 @@ function sectionKit(w: WorldDef, n: number, lvLo: number, lvHi: number, r: () =>
 function genMaps(w: WorldDef, n: number, o: { seed?: number; id: string; name?: string; lvLo: number; lvHi: number }): StageDef {
   const { lvLo, lvHi } = o, boss = n === 10;
   const r = rng(o.seed ?? w.id * 1000 + n * 37 + 11);
-  const { b, place, basics, pick, lv, mini } = sectionKit(w, n, lvLo, lvHi, r, boss);
+  const pick = <T>(a2: T[]): T => a2[Math.floor(r() * a2.length)];
+  const mini = (n + w.id) % 2 ? [`m${w.id}a`, `m${w.id}b`] : [`m${w.id}b`, `m${w.id}a`];
+  const b: Build = { platforms: [], ladders: [], mobs: [], props: [], hazards: [], arenas: [], belts: [], darks: [], gates: [] };
   const GAP = 600, maps: StageMap[] = [];
-  // three maps, then the boss room. Every map's exit portal wants a number of one monster's drop; the middle map can
-  // also hold the stage's set piece (stage 6: the scroll race, stage 8: the hold-out) or an arena
-  const kindsG: ZoneGoal['kind'][] = boss ? ['collect', r() < 0.5 ? 'arena' : 'collect'] // a world boss: two maps, then the big fight
-    : ['collect', n === 6 ? 'fetch' : n === 8 ? 'survive' : r() < 0.5 ? 'arena' : 'collect', 'collect'];
-  const close = basics.filter(k => !['ranged', 'sniper', 'turret', 'flyer'].includes(MOBS[k].brain));
-  const light = close.filter(k => MOBS[k].hp <= 120 && !MOBS[k].shield);
-  const huntable = light.length ? light : close.length ? close : basics;
-  const targets = [...huntable].sort(() => r() - 0.5); // a different quest monster in each map (when the world has enough)
-  const EXTRA: Sec[] = ['field', 'swarm', 'snipers', 'heavies', 'tower', ...(w.id === 1 && n === 1 ? [] : ['gauntlet' as Sec]), 'treasure', 'ambush', 'gate', ...(w.id >= 2 ? ['conveyor' as Sec] : []), ...(w.id >= 3 ? ['dark' as Sec] : [])];
-  let x = 0, fetchAt: number | undefined, holdAt: number | undefined, scrollX: number | undefined;
-  kindsG.forEach((gk, k) => {
-    const z0 = x;
-    let cx = z0 + (k === 0 ? 420 : 260);
-    const secs: Sec[] = [];
-    if (n === 2 && k === 0 && !boss) secs.push('chase');
-    if (gk === 'arena') secs.push(pick(['field', 'snipers', 'heavies'] as Sec[]), 'arena', pick(EXTRA));
-    else if (gk === 'survive') secs.push(pick(['field', 'swarm'] as Sec[]), pick(EXTRA), 'holdout');
-    else if (gk === 'fetch') secs.push(pick(['field', 'snipers'] as Sec[]), pick(['tower', 'gauntlet', 'ambush'] as Sec[]), 'field');
-    else { const ex = EXTRA.filter(e => !(n === 4 && (e === 'ambush' || e === 'gate'))); const e1 = pick(ex); secs.push(pick(['field', 'swarm', 'snipers', 'heavies'] as Sec[]), e1, pick(ex.filter(e => e !== e1))); }
-    if (n === 3 || n === 7) if (k === 1) secs.splice(1, 0, 'lever');
-    const mobs0 = b.mobs.length;
-    for (const sec of secs) cx += place(sec, cx);
-    // every map's exit wants its quest monster's drop (the scroll race / hold-out / arena come on top)
-    const target = targets[k % targets.length];
-    const need = 6 + Math.floor(n / 4);
-    const goal: ZoneGoal = { kind: 'collect', mob: target, item: target, need };
-    // plenty of the quest monster about (more come back while you hunt)
-    for (let i = 0; i < need + 2; i++) b.mobs.push({ kind: target, lv: lv(), x: Math.round(z0 + 500 + ((i + 0.5) / (need + 2)) * (cx - z0 - 700)) });
-    if (gk === 'fetch') { fetchAt = z0 + 200; scrollX = Math.min(cx - 120, z0 + 2800); }
-    else if (gk === 'survive') holdAt = b.holdAt;
-    void mobs0;
-    // a few breakables to smash (crumbs, and now and then a honey jar)
-    for (let i = 0; i < 3; i++) b.props.push({ kind: r() < 0.5 ? 'crate' : 'jar', x: Math.round(z0 + 400 + r() * (cx - z0 - 700)), y: G });
-    // stage 7's world key: a secret ledge with a sponge, at the far end of the second zone (open sky above it)
-    if ((n === 3 || n === 7 || n === 9) && k === 0) b.mobs.push({ kind: w.mimic, lv: lvHi, x: Math.round(z0 + 600 + r() * (cx - z0 - 1000)) }); // a loot-box mimic lurks
-    if (n === 7 && k === 1 && !boss) { const lx = cx + 320; b.platforms.push({ x: lx, y: 150, w: 140, secret: true }); b.props.push({ kind: 'sponge', x: lx + 12, y: G }, { kind: 'chest', x: lx + 80, y: 150, key: true }); cx += 620; }
-    // a breather at the start of every map: two honey jars (8% health each)
-    b.props.push({ kind: 'jar', x: z0 + 140, y: G }, { kind: 'jar', x: z0 + 200, y: G });
-    // the exit portal at the far end (the next map starts past the gap)
-    const z1 = cx + 360;
-    maps.push({ name: `${o.name ?? w.names[n - 1]} ${['I', 'II', 'III'][k]}`, kind: 'zone', x0: z0, x1: z1, goal, portals: [{ x: z1 - 150, to: maps.length + 1, tx: z1 + GAP + 150, need: true }] });
+  const nMaps = boss || n <= 3 ? 2 : 3; // a world's first stages and its boss stage: two maps
+  const layouts = ['terraces', 'towers', 'steps', 'islands', 'deck', 'valley'].sort(() => r() - 0.5);
+  let x = 0, fetchAt: number | undefined, holdAt: number | undefined, scrollX: number | undefined, scrollY: number | undefined;
+  for (let k = 0; k < nMaps; k++) {
+    const z0 = x, W = 2700 + Math.round(r() * 600), z1 = z0 + W + (n === 7 && k === 1 ? 700 : 0);
+    const L = layouts[k % layouts.length], p0 = b.platforms.length;
+    const P = (px: number, tier: number, pw: number) => b.platforms.push({ x: Math.round(z0 + px + (r() - 0.5) * 60), y: TIER[tier], w: pw });
+    // the floors (every platform can be reached by a jump from the floor below it, or a ladder)
+    if (L === 'terraces') { P(250, 0, 900); P(1350, 0, 900); P(2350, 0, 450); P(700, 1, 1000); P(1900, 1, 650); P(1150, 2, 600); }
+    else if (L === 'towers') { P(250, 0, 500); P(350, 1, 420); P(250, 2, 520); P(W - 750, 0, 500); P(W - 770, 1, 420); P(W - 770, 2, 520); P(1100, 0, W - 2200); b.ladders.push({ x: z0 + 500, top: TIER[2], bottom: G }, { x: z0 + W - 500, top: TIER[2], bottom: G }); }
+    else if (L === 'steps') { P(300, 0, 600); P(800, 1, 600); P(1300, 2, 700); P(1900, 1, 550); P(2350, 0, 450); }
+    else if (L === 'islands') { P(300, 0, 400); P(1100, 0, 400); P(1900, 0, 400); P(2650, 0, 260); P(700, 1, 330); P(1500, 1, 330); P(2300, 1, 330); P(1100, 2, 300); P(1900, 2, 300); b.platforms.push({ x: z0 + 1500, y: TIER[0], w: 140, move: { dx: 260, period: 4 } }); }
+    else if (L === 'deck') { const dx = z0 + 350, dw = W - 800; b.platforms.push({ x: dx, y: TIER[2], w: dw }); for (const f of [0.15, 0.5, 0.85]) b.ladders.push({ x: Math.round(dx + dw * f), top: TIER[2], bottom: G }); P(600, 0, 400); P(W - 1000, 0, 400); }
+    else { P(150, 0, 350); P(250, 1, 700); P(W - 950, 1, 700); P(W - 500, 0, 350); P(1200, 0, 300); if (w.id >= 2) b.belts.push({ x: Math.round(z0 + W / 2 - 400), w: 300, v: r() < 0.5 ? 90 : -90 }, { x: Math.round(z0 + W / 2 + 200), w: 300, v: r() < 0.5 ? 90 : -90 }); }
+    // a ladder up to every upper floor (MapleStory style ropes: easy on a phone, and nothing is out of reach)
+    b.platforms.slice(p0).forEach((p, i) => {
+      if (p.y > TIER[1] || p.move || b.ladders.some(l => l.top === p.y && l.x >= p.x && l.x <= p.x + p.w)) return;
+      // never right next to another ladder (standing at the top of one you'd grab the wrong one)
+      const at = (i % 2 ? [p.x + p.w - 50, p.x + 50, p.x + p.w / 2] : [p.x + 50, p.x + p.w - 50, p.x + p.w / 2]).find(lx => !b.ladders.some(l => Math.abs(l.x - lx) < 120));
+      if (at !== undefined) b.ladders.push({ x: Math.round(at), top: p.y, bottom: G });
+    });
+    // what lives here: this stage's monsters, and one more of the next stage's in later maps (so even 1-1 varies)
+    const kinds = w.pool.filter(([from]) => from <= Math.min(9, n + k)).map(([, kk]) => kk).filter(kk => MOBS[kk].brain !== 'mimic');
+    const huntable = kinds.filter(kk => !['sniper', 'healer', 'summoner', 'turret', 'burrower'].includes(MOBS[kk].brain));
+    const fresh = huntable.filter(kk => !b.mobs.some(mm => mm.kind === kk)); // prefer monsters the earlier maps didn't ask for
+    const nWant = n <= 3 && k === 0 ? 2 : boss ? 2 : n >= 6 && k === 2 ? 3 : 2 + (r() < 0.4 ? 1 : 0);
+    // close-range monsters first (a crowd of shooters on the upper floors just wears you down): at most one shooter wanted
+    const shoots = (kk: MobKind) => ['ranged', 'sniper', 'turret'].includes(MOBS[kk].brain);
+    const order = [...fresh.sort(() => r() - 0.5), ...huntable.filter(kk => !fresh.includes(kk)).sort(() => r() - 0.5)];
+    const wantKinds = [...order.filter(kk => !shoots(kk)), ...order.filter(shoots).slice(0, 1)].slice(0, Math.min(nWant, huntable.length));
+    const per = 3;
+    const wants = wantKinds.map(mob => ({ mob, n: per }));
+    const extras = kinds.filter(kk => !wantKinds.includes(kk)).sort(() => r() - 0.5).slice(0, 3);
+    const spawnKinds = [...wantKinds, ...wantKinds.filter(kk => !shoots(kk)), ...extras]; // wanted ones twice as often (shooters once)
+    // spawn points: along every floor and the ground (not by the entrance or the exit)
+    const pts: [number, number][] = [];
+    for (const p of b.platforms.slice(p0)) for (let px = p.x + 60; px < p.x + p.w - 40; px += 230) pts.push([Math.round(px), p.y]);
+    for (let px = z0 + 500; px < z1 - 350; px += 280) pts.push([px, G]);
+    const cap = 6 + Math.floor(n / 4);
+    for (let i = 0; i < cap; i++) { const [sx, sy] = pts[Math.floor(r() * pts.length)]; const kk = pick(spawnKinds); b.mobs.push({ kind: kk, lv: r() < 0.5 ? lvLo : lvHi, x: sx, ...(sy !== G && MOBS[kk].brain !== 'flyer' && MOBS[kk].brain !== 'brute' ? { y: sy } : {}) }); }
+    // a little of what made stages different: a hazard or two, a breakable, a mimic, the stage's set piece
+    if (w.id >= 2 || n >= 2) for (let i = 0; i < 1 + (n >= 6 ? 1 : 0); i++) b.hazards.push(hazardAt(w.hazard, Math.round(z0 + 700 + r() * (W - 1300)), r() * 3));
+    b.props.push({ kind: 'jar', x: z0 + 140, y: G }, { kind: 'jar', x: z0 + 200, y: G }, { kind: r() < 0.5 ? 'crate' : 'jar', x: Math.round(z0 + 600 + r() * (W - 1000)), y: G });
+    if ((n === 3 || n === 7 || n === 9) && k === 0) b.mobs.push({ kind: w.mimic, lv: lvHi, x: Math.round(z0 + 900 + r() * (W - 1400)) });
+    if (n === 6 && k === 1 && !boss) { fetchAt = z0 + 120; const top = b.platforms.slice(p0).sort((u, v) => u.y - v.y || v.x - u.x)[0]; scrollX = Math.round(top.x + top.w - 50); scrollY = top.y; }
+    if (n === 8 && k === 1 && !boss) holdAt = z0 + 500;
+    if (n === 7 && k === 1 && !boss) { const lx = z0 + W + 200; b.platforms.push({ x: lx, y: 150, w: 140, secret: true }); b.props.push({ kind: 'sponge', x: lx + 12, y: G }, { kind: 'chest', x: lx + 80, y: 150, key: true }); }
+    maps.push({ name: `${o.name ?? w.names[n - 1]} ${['I', 'II', 'III'][k]}`, kind: 'zone', x0: z0, x1: z1, goal: { kind: 'collect', wants },
+      spawns: { kinds: spawnKinds, pts, cap, lv: lvLo }, portals: [{ x: z1 - 150, to: maps.length + 1, tx: z1 + GAP + 150, need: true }] });
     x = z1 + GAP;
-  });
+  }
   // the boss room: the world boss on stage 10, else the stage's miniboss (stage 5: the elite, or your nemesis)
   const bx0 = x, room = genStage(w, 10, { lv: lvLo, id: o.id, short: true });
   b.props.push({ kind: 'jar', x: bx0 + 50, y: G }, { kind: 'jar', x: bx0 + 90, y: G }, { kind: 'jar', x: bx0 + 130, y: G }); // before the boss: three jars
-  const mv = <T extends { x: number }>(a: T): T => ({ ...a, x: a.x + bx0 });
+  const mv = <T extends { x: number }>(a2: T): T => ({ ...a2, x: a2.x + bx0 });
   for (const p of room.platforms) b.platforms.push(mv(p));
   const foe: MobSpawn = boss ? { ...mv(room.mobs[0]), wake: bx0 + 320 }
     : { kind: (n === 5 ? w.elite : mini[0]) as MobKind, lv: lvHi + 1, x: bx0 + 1150, elite: !(w.id === 1 && n <= 2), wake: bx0 + 320 };
@@ -534,73 +410,22 @@ function genMaps(w: WorldDef, n: number, o: { seed?: number; id: string; name?: 
   const bossMap: StageMap = { name: boss ? MOBS[w.boss].name : MOBS[foe.kind].name, kind: 'boss', x0: bx0, x1: bx0 + room.width, portals: [] };
   maps.push(bossMap);
   const width = bossMap.x1;
-  // hazards on open floor in the zones (not the camp or the boss room)
-  for (const m of maps.filter(q => q.kind === 'zone')) for (let tries = 0, got = 0; got < 1 + (n >= 6 ? 1 : 0) && tries < 40 && (w.id >= 2 || n >= 2); tries++) {
-    const hx = Math.round(m.x0 + 500 + r() * (m.x1 - m.x0 - 900));
-    if (b.arenas.some(a => hx > a.x0 - 120 && hx < a.x1 + 120) || b.gates.some(g => Math.abs(g.x - hx) < 300) || (b.chase && hx > b.chase.x0 && hx < b.chase.x1) || b.hazards.some(h => Math.abs(h.x - hx) < 380) || b.ladders.some(l => Math.abs(l.x - hx) < 90) || b.props.some(p => Math.abs(p.x - hx) < 120)) continue;
-    b.hazards.push(hazardAt(w.hazard, hx, r() * 3)); got++;
-  }
   // nothing may sit on a portal (you press up there)
   const portalXs = maps.flatMap(m => m.portals.map(p => p.x));
   b.ladders = b.ladders.filter(l => !portalXs.some(px => Math.abs(px - l.x) < 70));
-  const count = b.mobs.length + b.arenas.reduce((a2, ar) => a2 + ar.waves.flat().length, 0);
+  b.hazards = b.hazards.filter(h => !portalXs.some(px => Math.abs(px - h.x) < 200));
+  const count = b.mobs.length * 2;
   const play = width - GAP * (maps.length - 1);
+  void fetchAt; void scrollY;
   return {
     id: o.id, world: w.id, num: o.id, name: o.name ?? w.names[n - 1], bg: w.bg, mid: w.mid, tile: w.tile, platTint: w.platTint, width, groundY: G,
     bossBg: boss ? w.bossBg : undefined, boss: boss || undefined,
     lv: [lvLo, boss ? lvLo + 2 : lvHi + 1], par: Math.round(60 + count * 5 + play / 70), rec: lvLo,
-    platforms: b.platforms, ladders: b.ladders, mobs: b.mobs, props: b.props, cookers: [],
+    platforms: b.platforms, ladders: b.ladders, mobs: b.mobs, props: b.props, cookers: [], belts: b.belts.length ? b.belts : undefined,
     hazards: awayFromSponges(b.hazards, b.props, b.ladders, width),
-    arenas: b.arenas, belts: b.belts.length ? b.belts : undefined, chase: b.chase, darks: b.darks.length ? b.darks : undefined, gates: b.gates.length ? b.gates : undefined,
     maps, sections: maps.map(m => m.name),
-    objective: boss ? undefined : n === 4 ? { kind: 'escort' } : n === 6 ? { kind: 'fetch', t: w.id >= 7 ? 110 : w.id >= 5 ? 100 : 90, x: scrollX, at: fetchAt } : n === 8 ? { kind: 'survive', t: 45, at: holdAt } : undefined,
+    objective: boss ? undefined : n === 4 ? { kind: 'escort' } : n === 6 ? { kind: 'fetch', t: 140, x: scrollX, at: fetchAt } : n === 8 ? { kind: 'survive', t: 45, at: holdAt } : undefined,
   };
 }
 
-/** Layout pieces (open ground, steps, stairs, ladder towers) between x0 and x1. */
-function terrain(b: Build, x0: number, x1: number, r: () => number): void {
-  let x = x0;
-  while (x < x1 - 200) {
-    const k = r();
-    if (k < 0.22) { x += 220 + r() * 120; continue; }
-    if (k < 0.5) { const pw = 220 + Math.round(r() * 120); b.platforms.push({ x, y: TIER[0], w: pw }); x += pw + 140 + r() * 80; }
-    else if (k < 0.78) {
-      const pw = 200 + Math.round(r() * 60);
-      b.platforms.push({ x, y: TIER[0], w: pw }, { x: x + pw - 60, y: TIER[1], w: pw + 40 });
-      if (r() < 0.4) b.platforms.push({ x: x + pw * 2 - 100, y: TIER[2], w: pw });
-      x += pw * 2 + 220;
-    } else {
-      const pw = 280 + Math.round(r() * 100), top = r() < 0.5 ? TIER[2] : TIER[1];
-      b.platforms.push({ x, y: top, w: pw });
-      b.ladders.push({ x: x + 40 + Math.round(r() * (pw - 80)), top, bottom: G });
-      if (top === TIER[2] && r() < 0.6) b.platforms.push({ x: x + pw + 60, y: TIER[0], w: 200 });
-      x += pw + 280;
-    }
-  }
-}
 
-/** Monsters spread between x0 and x1 (some on ledges). Specialists are spice: at most 2 of each per section (1 turret). */
-function roam(b: Build, x0: number, x1: number, count: number, pool: MobKind[], kinds: MobKind[], basics: MobKind[], lv: () => number, r: () => number, startClear: number): void {
-  const from = Math.max(x0, startClear);
-  const placed: MobKind[] = [];
-  for (let i = 0; i < count; i++) {
-    let kind = pool[Math.floor(r() * pool.length)];
-    if (SPECIALIST.has(MOBS[kind].brain) && placed.filter(k => k === kind).length >= (MOBS[kind].brain === 'turret' ? 1 : 2)) kind = basics[Math.floor(r() * basics.length)] ?? kind;
-    // shooters are spice too: at most about a third of a stretch (a world's first stage has few kinds: no pea barrages)
-    const shooter = (k: MobKind) => ['ranged', 'sniper', 'turret'].includes(MOBS[k].brain);
-    const melee = basics.filter(k => !shooter(k));
-    if (shooter(kind) && melee.length && placed.filter(shooter).length >= Math.ceil(count * 0.35)) kind = melee[Math.floor(r() * melee.length)];
-    // and flyers (a cloud of wasps is no fun either)
-    const walkers = melee.filter(k => MOBS[k].brain !== 'flyer');
-    if (MOBS[kind].brain === 'flyer' && walkers.length && placed.filter(k => MOBS[k].brain === 'flyer').length >= Math.ceil(count * 0.35)) kind = walkers[Math.floor(r() * walkers.length)];
-    placed.push(kind);
-    const at = Math.round(from + ((i + 0.5) / count) * (x1 - from) + (r() - 0.5) * 80);
-    const perches = b.platforms.filter(p => p.y >= TIER[1] && p.x < x1 && p.x + p.w > x0 && !p.move && !p.secret);
-    const brain = MOBS[kind].brain;
-    if (brain !== 'flyer' && brain !== 'turret' && brain !== 'brute' && r() < 0.35 && perches.length) {
-      const p = perches[Math.floor(r() * perches.length)];
-      b.mobs.push({ kind, lv: lv(), x: Math.round(p.x + 30 + r() * (p.w - 60)), y: p.y });
-    } else b.mobs.push({ kind, lv: lv(), x: at });
-  }
-  void kinds;
-}

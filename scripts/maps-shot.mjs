@@ -16,9 +16,9 @@ await p.evaluate(() => document.querySelector('#title .play')?.click()); await w
 await p.evaluate(() => { const s = window.__kkq.save; s.selected = 0; s.storyMode = 'key'; const h = s.heroes[0]; h.level = 20; h.seen.push('intro', 'w1-open', 'w2-open', 'w2-s3'); s.tips = ['move', 'jump', 'attack', 'dodge', 'skill', 'gear', 'ladder', 'drop', 'arena', 'hazard', 'sponge', 'potion', 'escort', 'fetch', 'boss', 'exit']; });
 const stay = 'const w = window.__kkq.world(); w.hero.inv = 9999; w.hero.hp = w.hero.d.maxHp;';
 await p.evaluate(st => window.__kkq.play(st), '2-3'); await wait(3000);
-await p.evaluate(new Function(stay + 'const z = w.stage.maps[0]; w.drops[z.goal.mob] = 3; w.hero.x = z.portals[0].x - 10; for (let i = 0; i < 4; i++) w.pickups.push({ id: 9000 + i, kind: z.goal.mob, x: w.hero.x - 200 - i * 40, y: 470, vy: 0, ground: true, t: 1 });')); await wait(900);
+await p.evaluate(new Function(stay + 'const z = w.stage.maps[0]; w.drops[z.goal.wants[0].mob] = 2; w.hero.x = z.portals[0].x - 10; for (let i = 0; i < 4; i++) w.pickups.push({ id: 9000 + i, kind: z.goal.wants[i % z.goal.wants.length].mob, x: w.hero.x - 200 - i * 40, y: 470, vy: 0, ground: true, t: 1 });')); await wait(900);
 await p.screenshot({ path: 'shots/map-camp.png' });
-await p.evaluate(new Function(stay + 'const z = w.stage.maps[1]; w.hero.x = z.x0 + 900;')); await wait(1500);
+await p.evaluate(new Function(stay + 'const z = w.stage.maps[1]; w.hero.x = z.x0 + 1300;')); await wait(1500);
 await p.screenshot({ path: 'shots/map-zone.png' });
 await p.evaluate(new Function(stay + 'const z = w.stage.maps[2]; w.hero.x = z.x0 + 900;')); await wait(1500);
 await p.screenshot({ path: 'shots/map-zone2.png' });

@@ -67,7 +67,7 @@ interface MobView { img: Phaser.GameObjects.Image; plate: Phaser.GameObjects.Tex
 /** What a zone asks you to do, in a few words. */
 export function goalText(g: ZoneGoal): string {
   switch (g.kind) {
-    case 'collect': return `collect ${g.need} ${dropName(g.mob)} from ${MOBS[g.mob].name}s, then take the EXIT`;
+    case 'collect': return `collect ${g.wants.map(q => `${q.n} ${dropName(q.mob)} (${MOBS[q.mob].name})`).join(' + ')}, then take the EXIT`;
     case 'rescue': return `free ${g.need} caged Crumblets`;
     case 'nests': return `smash ${g.need} mould nests`;
     case 'arena': return 'clear the arena';
@@ -240,7 +240,7 @@ export class GameScene extends Phaser.Scene {
     } else this.world = new World(st, derive(p), (Date.now() & 0xffff) + 1, quickBag(), save.items.revive ?? 0, this.hard, STORIES[p.species]?.variants[st.id], [...(save.spicy ?? [])], nemesisOf(p.species), this.nightmare,
       this.buddySpecies() !== null ? [derive(buddyProfile(this.buddySpecies()!, p.level))] : []);
     // the drop bag comes along (map exits take from it); the stage panel's skip spends a stage's set up front
-    if (st.maps && this.world) { this.world.drops = { ...(save.drops ?? {}) } as typeof this.world.drops; if (this.skipBoss) { this.skipBoss = false; for (const m of st.maps) if (m.goal?.kind === 'collect') this.world.drops[m.goal.mob] = Math.max(0, (this.world.drops[m.goal.mob] ?? 0) - m.goal.need); this.world.skipToBoss(); save.drops = { ...this.world.drops }; persist(); } }
+    if (st.maps && this.world) { this.world.drops = { ...(save.drops ?? {}) } as typeof this.world.drops; if (this.skipBoss) { this.skipBoss = false; for (const m of st.maps) if (m.goal?.kind === 'collect') for (const q of m.goal.wants) this.world.drops[q.mob] = Math.max(0, (this.world.drops[q.mob] ?? 0) - q.n); this.world.skipToBoss(); save.drops = { ...this.world.drops }; persist(); } }
     const cam = this.cameras.main.setZoom(ZOOM).setBackgroundColor('#f6dcb4');
     const bg = this.has(st.bg) ? st.bg : 'bg-far';
     this.far = this.has(bg) ? this.add.image(SX, SY, bg).setOrigin(0, 0).setScrollFactor(0).setDepth(-100) : undefined;
@@ -1130,7 +1130,7 @@ export class GameScene extends Phaser.Scene {
     }
     for (const v of this.portalViews) {
       const from = st.maps![w.mapAt(v.x)], g = from?.goal, z = w.zones2[w.mapAt(v.x)], to = st.maps![v.to];
-      if (g?.kind === 'collect') { const have = w.drops[g.mob] ?? 0, ok = z?.done || have >= g.need; v.label.setText(`${to.kind === 'boss' ? '☠ ' + to.name : 'EXIT ➜'}\n${z?.done ? 'open' : `${dropName(g.mob)} ${Math.min(have, g.need)}/${g.need}`}`).setColor(ok ? '#a8f0a8' : '#ffe27a'); }
+      if (g?.kind === 'collect') { const ok = z?.done || g.wants.every(q => (w.drops[q.mob] ?? 0) >= q.n); v.label.setText(`${to.kind === 'boss' ? '☠ ' + to.name : 'EXIT ➜'}\n${z?.done ? 'open' : g.wants.map(q => `${dropName(q.mob)} ${Math.min(w.drops[q.mob] ?? 0, q.n)}/${q.n}`).join('\n')}`).setColor(ok ? '#a8f0a8' : '#ffe27a'); }
       v.hint.setVisible(Math.abs(h.x - v.x) < 46 && h.ground);
     }
     const seenP = new Set<number>();

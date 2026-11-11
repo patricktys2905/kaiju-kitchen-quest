@@ -1,0 +1,322 @@
+[
+ {
+  "name": "mob-jamhop",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/mob-bun.png"
+  ],
+  "prompt": "Generate an image. The reference is an enemy from my cute 2D side-scrolling action RPG set in a giant kitchen and house. I need a NEW ENEMY for the COUNTERTOP world: a JAM BLOB HOPPER: a bouncy blob of strawberry jam with a toothy grin and a jam-jar lid stuck on its head like a hat. Draw it in exactly the same art style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute but a little mischievous, with a few fuzzy green mould spots because the Mold Crown has corrupted it). Side view facing LEFT, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1 image."
+ },
+ {
+  "name": "drop-jamhop",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/c-bean.png"
+  ],
+  "prompt": "Generate an image. The reference is an item icon from my cute 2D kitchen action RPG. Draw a NEW ITEM icon, a monster drop called \"Jam Glob\": a glossy red blob of strawberry jam. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute). A small collectible item icon, shown centred, filling about 75% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "mob-salt",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/mob-bun.png"
+  ],
+  "prompt": "Generate an image. The reference is an enemy from my cute 2D side-scrolling action RPG set in a giant kitchen and house. I need a NEW ENEMY for the COUNTERTOP world: a SALT SHAKER GUNNER: a grumpy glass salt shaker on little legs that fires salt grains from its holes. Draw it in exactly the same art style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute but a little mischievous, with a few fuzzy green mould spots because the Mold Crown has corrupted it). Side view facing LEFT, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1 image."
+ },
+ {
+  "name": "drop-salt",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/c-bean.png"
+  ],
+  "prompt": "Generate an image. The reference is an item icon from my cute 2D kitchen action RPG. Draw a NEW ITEM icon, a monster drop called \"Salt Crystal\": a sparkly white salt crystal. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute). A small collectible item icon, shown centred, filling about 75% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "mob-cheesemouse",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/mob-bun.png"
+  ],
+  "prompt": "Generate an image. The reference is an enemy from my cute 2D side-scrolling action RPG set in a giant kitchen and house. I need a NEW ENEMY for the FRIDGE world: a CHEESE CUBE CRITTER: a small hopping cube of yellow cheese with mouse ears and holes. Draw it in exactly the same art style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute but a little mischievous, with a few fuzzy green mould spots because the Mold Crown has corrupted it). Side view facing LEFT, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1 image."
+ },
+ {
+  "name": "drop-cheesemouse",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/c-bean.png"
+  ],
+  "prompt": "Generate an image. The reference is an item icon from my cute 2D kitchen action RPG. Draw a NEW ITEM icon, a monster drop called \"Cheese Crumb\": a small wedge of holey yellow cheese. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute). A small collectible item icon, shown centred, filling about 75% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "mob-icepop",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/mob-bun.png"
+  ],
+  "prompt": "Generate an image. The reference is an enemy from my cute 2D side-scrolling action RPG set in a giant kitchen and house. I need a NEW ENEMY for the FRIDGE world: a MELTY ICE POP: a dripping rainbow ice lolly on a stick that waddles on two little feet. Draw it in exactly the same art style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute but a little mischievous, with a few fuzzy green mould spots because the Mold Crown has corrupted it). Side view facing LEFT, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1 image."
+ },
+ {
+  "name": "drop-icepop",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/c-bean.png"
+  ],
+  "prompt": "Generate an image. The reference is an item icon from my cute 2D kitchen action RPG. Draw a NEW ITEM icon, a monster drop called \"Popsicle Stick\": a wooden popsicle stick with a melted rainbow tip. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute). A small collectible item icon, shown centred, filling about 75% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "mob-crouton",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/mob-bun.png"
+  ],
+  "prompt": "Generate an image. The reference is an enemy from my cute 2D side-scrolling action RPG set in a giant kitchen and house. I need a NEW ENEMY for the OVEN world: a BURNT CROUTON: a tiny angry blackened bread cube with smoke puffing off it, hopping. Draw it in exactly the same art style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute but a little mischievous, with a few fuzzy green mould spots because the Mold Crown has corrupted it). Side view facing LEFT, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1 image."
+ },
+ {
+  "name": "drop-crouton",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/c-bean.png"
+  ],
+  "prompt": "Generate an image. The reference is an item icon from my cute 2D kitchen action RPG. Draw a NEW ITEM icon, a monster drop called \"Burnt Crouton\": a crunchy golden crouton cube. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute). A small collectible item icon, shown centred, filling about 75% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "mob-mitt",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/mob-bun.png"
+  ],
+  "prompt": "Generate an image. The reference is an enemy from my cute 2D side-scrolling action RPG set in a giant kitchen and house. I need a NEW ENEMY for the OVEN world: an OVEN MITT GRABBER: a charging quilted oven mitt with a cheeky face and a burn mark. Draw it in exactly the same art style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute but a little mischievous, with a few fuzzy green mould spots because the Mold Crown has corrupted it). Side view facing LEFT, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1 image."
+ },
+ {
+  "name": "drop-mitt",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/c-bean.png"
+  ],
+  "prompt": "Generate an image. The reference is an item icon from my cute 2D kitchen action RPG. Draw a NEW ITEM icon, a monster drop called \"Mitt Thread\": a little spool of red quilted thread. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute). A small collectible item icon, shown centred, filling about 75% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "mob-bee",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/mob-bun.png"
+  ],
+  "prompt": "Generate an image. The reference is an enemy from my cute 2D side-scrolling action RPG set in a giant kitchen and house. I need a NEW ENEMY for the PANTRY world: a HONEY BEE: a round fuzzy bee with a honey-dipper stinger, flying. Draw it in exactly the same art style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute but a little mischievous, with a few fuzzy green mould spots because the Mold Crown has corrupted it). Side view facing LEFT, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1 image."
+ },
+ {
+  "name": "drop-bee",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/c-bean.png"
+  ],
+  "prompt": "Generate an image. The reference is an item icon from my cute 2D kitchen action RPG. Draw a NEW ITEM icon, a monster drop called \"Bee Wing\": a shiny translucent bee wing. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute). A small collectible item icon, shown centred, filling about 75% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "mob-cracker",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/mob-bun.png"
+  ],
+  "prompt": "Generate an image. The reference is an enemy from my cute 2D side-scrolling action RPG set in a giant kitchen and house. I need a NEW ENEMY for the PANTRY world: a CRACKER CRAWLER: a square salted cracker walking on crumb legs with a shield-like face. Draw it in exactly the same art style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute but a little mischievous, with a few fuzzy green mould spots because the Mold Crown has corrupted it). Side view facing LEFT, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1 image."
+ },
+ {
+  "name": "drop-cracker",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/c-bean.png"
+  ],
+  "prompt": "Generate an image. The reference is an item icon from my cute 2D kitchen action RPG. Draw a NEW ITEM icon, a monster drop called \"Cracker Shard\": a broken corner of a salted cracker. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute). A small collectible item icon, shown centred, filling about 75% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "mob-duck",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/mob-bun.png"
+  ],
+  "prompt": "Generate an image. The reference is an enemy from my cute 2D side-scrolling action RPG set in a giant kitchen and house. I need a NEW ENEMY for the SINK world: a RUBBER DUCKY: a yellow rubber duck with angry eyebrows that squirts soapy water from its beak. Draw it in exactly the same art style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute but a little mischievous, with a few fuzzy green mould spots because the Mold Crown has corrupted it). Side view facing LEFT, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1 image."
+ },
+ {
+  "name": "drop-duck",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/c-bean.png"
+  ],
+  "prompt": "Generate an image. The reference is an item icon from my cute 2D kitchen action RPG. Draw a NEW ITEM icon, a monster drop called \"Ducky Squeaker\": a little rubber squeaker. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute). A small collectible item icon, shown centred, filling about 75% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "mob-straw",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/mob-bun.png"
+  ],
+  "prompt": "Generate an image. The reference is an enemy from my cute 2D side-scrolling action RPG set in a giant kitchen and house. I need a NEW ENEMY for the SINK world: a STRAW SNAKE: a bendy striped drinking straw slithering like a snake with a tiny tongue. Draw it in exactly the same art style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute but a little mischievous, with a few fuzzy green mould spots because the Mold Crown has corrupted it). Side view facing LEFT, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1 image."
+ },
+ {
+  "name": "drop-straw",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/c-bean.png"
+  ],
+  "prompt": "Generate an image. The reference is an item icon from my cute 2D kitchen action RPG. Draw a NEW ITEM icon, a monster drop called \"Straw Bit\": a short striped bendy straw piece. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute). A small collectible item icon, shown centred, filling about 75% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "mob-teacake",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/mob-bun.png"
+  ],
+  "prompt": "Generate an image. The reference is an enemy from my cute 2D side-scrolling action RPG set in a giant kitchen and house. I need a NEW ENEMY for the DINING ROOM world: a TEA CAKE HOPPER: a frosted fairy cake with sprinkles and a cherry, hopping on a doily. Draw it in exactly the same art style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute but a little mischievous, with a few fuzzy green mould spots because the Mold Crown has corrupted it). Side view facing LEFT, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1 image."
+ },
+ {
+  "name": "drop-teacake",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/c-bean.png"
+  ],
+  "prompt": "Generate an image. The reference is an item icon from my cute 2D kitchen action RPG. Draw a NEW ITEM icon, a monster drop called \"Sprinkles\": a little pile of rainbow sprinkles. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute). A small collectible item icon, shown centred, filling about 75% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "mob-ladle",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/mob-bun.png"
+  ],
+  "prompt": "Generate an image. The reference is an enemy from my cute 2D side-scrolling action RPG set in a giant kitchen and house. I need a NEW ENEMY for the DINING ROOM world: a LADLE LANCER: a silver soup ladle walking upright, charging with its handle like a lance. Draw it in exactly the same art style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute but a little mischievous, with a few fuzzy green mould spots because the Mold Crown has corrupted it). Side view facing LEFT, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1 image."
+ },
+ {
+  "name": "drop-ladle",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/c-bean.png"
+  ],
+  "prompt": "Generate an image. The reference is an item icon from my cute 2D kitchen action RPG. Draw a NEW ITEM icon, a monster drop called \"Ladle Bowl\": a small shiny silver ladle bowl. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute). A small collectible item icon, shown centred, filling about 75% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "mob-skewer",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/mob-bun.png"
+  ],
+  "prompt": "Generate an image. The reference is an enemy from my cute 2D side-scrolling action RPG set in a giant kitchen and house. I need a NEW ENEMY for the BACKYARD BBQ world: a VEGGIE SKEWER SOLDIER: a kebab skewer of pepper, onion and mushroom chunks marching like a soldier. Draw it in exactly the same art style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute but a little mischievous, with a few fuzzy green mould spots because the Mold Crown has corrupted it). Side view facing LEFT, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1 image."
+ },
+ {
+  "name": "drop-skewer",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/c-bean.png"
+  ],
+  "prompt": "Generate an image. The reference is an item icon from my cute 2D kitchen action RPG. Draw a NEW ITEM icon, a monster drop called \"Pepper Chunk\": a chunk of grilled bell pepper. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute). A small collectible item icon, shown centred, filling about 75% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "mob-firefly",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/mob-bun.png"
+  ],
+  "prompt": "Generate an image. The reference is an enemy from my cute 2D side-scrolling action RPG set in a giant kitchen and house. I need a NEW ENEMY for the BACKYARD BBQ world: an EMBER FIREFLY: a glowing orange firefly with a little coal-ember body, flying. Draw it in exactly the same art style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute but a little mischievous, with a few fuzzy green mould spots because the Mold Crown has corrupted it). Side view facing LEFT, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1 image."
+ },
+ {
+  "name": "drop-firefly",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/c-bean.png"
+  ],
+  "prompt": "Generate an image. The reference is an item icon from my cute 2D kitchen action RPG. Draw a NEW ITEM icon, a monster drop called \"Ember Glow\": a glowing little ember in a tiny jar. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute). A small collectible item icon, shown centred, filling about 75% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "mob-caterpillar",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/mob-bun.png"
+  ],
+  "prompt": "Generate an image. The reference is an enemy from my cute 2D side-scrolling action RPG set in a giant kitchen and house. I need a NEW ENEMY for the GARDEN world: a LEAF CATERPILLAR: a chubby green caterpillar munching a leaf, with tiny boots. Draw it in exactly the same art style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute but a little mischievous, with a few fuzzy green mould spots because the Mold Crown has corrupted it). Side view facing LEFT, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1 image."
+ },
+ {
+  "name": "drop-caterpillar",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/c-bean.png"
+  ],
+  "prompt": "Generate an image. The reference is an item icon from my cute 2D kitchen action RPG. Draw a NEW ITEM icon, a monster drop called \"Silk Thread\": a small bundle of silky white thread. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute). A small collectible item icon, shown centred, filling about 75% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "mob-toadstool",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/mob-bun.png"
+  ],
+  "prompt": "Generate an image. The reference is an enemy from my cute 2D side-scrolling action RPG set in a giant kitchen and house. I need a NEW ENEMY for the GARDEN world: a TOADSTOOL HOPPER: a red-and-white spotted mushroom with a grumpy face, hopping. Draw it in exactly the same art style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute but a little mischievous, with a few fuzzy green mould spots because the Mold Crown has corrupted it). Side view facing LEFT, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1 image."
+ },
+ {
+  "name": "drop-toadstool",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/c-bean.png"
+  ],
+  "prompt": "Generate an image. The reference is an item icon from my cute 2D kitchen action RPG. Draw a NEW ITEM icon, a monster drop called \"Mushroom Cap\": a red spotted mushroom cap. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute). A small collectible item icon, shown centred, filling about 75% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "mob-coupon",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/mob-bun.png"
+  ],
+  "prompt": "Generate an image. The reference is an enemy from my cute 2D side-scrolling action RPG set in a giant kitchen and house. I need a NEW ENEMY for the SUPERMARKET world: a COUPON GHOST: a floating paper coupon with dotted cut lines and spooky eyes (no readable text). Draw it in exactly the same art style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute but a little mischievous, with a few fuzzy green mould spots because the Mold Crown has corrupted it). Side view facing LEFT, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1 image."
+ },
+ {
+  "name": "drop-coupon",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/c-bean.png"
+  ],
+  "prompt": "Generate an image. The reference is an item icon from my cute 2D kitchen action RPG. Draw a NEW ITEM icon, a monster drop called \"Coupon Scrap\": a torn paper coupon corner with dotted lines (no text). Same style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute). A small collectible item icon, shown centred, filling about 75% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "mob-boxbot",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/mob-bun.png"
+  ],
+  "prompt": "Generate an image. The reference is an enemy from my cute 2D side-scrolling action RPG set in a giant kitchen and house. I need a NEW ENEMY for the SUPERMARKET world: a CARDBOARD BOX WALKER: a walking cardboard box with tape, a cheeky face and little arms. Draw it in exactly the same art style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute but a little mischievous, with a few fuzzy green mould spots because the Mold Crown has corrupted it). Side view facing LEFT, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1 image."
+ },
+ {
+  "name": "drop-boxbot",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/c-bean.png"
+  ],
+  "prompt": "Generate an image. The reference is an item icon from my cute 2D kitchen action RPG. Draw a NEW ITEM icon, a monster drop called \"Tape Strip\": a curled strip of brown packing tape. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute). A small collectible item icon, shown centred, filling about 75% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "mob-pudding",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/mob-bun.png"
+  ],
+  "prompt": "Generate an image. The reference is an enemy from my cute 2D side-scrolling action RPG set in a giant kitchen and house. I need a NEW ENEMY for the FEAST OF THE FORGOTTEN world: a PUDDING CUP: a wobbly chocolate pudding in a little cup, hopping, with a spoon stuck in it. Draw it in exactly the same art style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute but a little mischievous, with a few fuzzy green mould spots because the Mold Crown has corrupted it). Side view facing LEFT, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1 image."
+ },
+ {
+  "name": "drop-pudding",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/c-bean.png"
+  ],
+  "prompt": "Generate an image. The reference is an item icon from my cute 2D kitchen action RPG. Draw a NEW ITEM icon, a monster drop called \"Pudding Spoon\": a tiny silver dessert spoon with chocolate on it. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute). A small collectible item icon, shown centred, filling about 75% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ },
+ {
+  "name": "mob-cracker2",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/mob-bun.png"
+  ],
+  "prompt": "Generate an image. The reference is an enemy from my cute 2D side-scrolling action RPG set in a giant kitchen and house. I need a NEW ENEMY for the FEAST OF THE FORGOTTEN world: a PARTY CRACKER BOMBER: a red-and-gold Christmas cracker with a fuse, running to explode. Draw it in exactly the same art style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute but a little mischievous, with a few fuzzy green mould spots because the Mold Crown has corrupted it). Side view facing LEFT, whole body visible, centred, filling about 85% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text. Square 1:1 image."
+ },
+ {
+  "name": "drop-cracker2",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/c-bean.png"
+  ],
+  "prompt": "Generate an image. The reference is an item icon from my cute 2D kitchen action RPG. Draw a NEW ITEM icon, a monster drop called \"Paper Crown\": a folded yellow paper party crown. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute). A small collectible item icon, shown centred, filling about 75% of the frame. Solid flat magenta (#FF00FF) background, no shadow, no text, no character. Square 1:1 image."
+ }
+]

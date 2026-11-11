@@ -35,7 +35,7 @@ export type Spicy = 'nopots' | 'glass' | 'clock';
 
 /** A zone's goal: its piece of the boss-door key. */
 export type ZoneGoal =
-  | { kind: 'collect'; mob: MobKind; item: string; need: number }
+  | { kind: 'collect'; /** the drops the exit wants: n of each monster's */ wants: { mob: MobKind; n: number }[] }
   | { kind: 'rescue'; need: number }
   | { kind: 'nests'; need: number }
   | { kind: 'arena' }
@@ -44,6 +44,8 @@ export type ZoneGoal =
 /** One map of a stage: maps sit side by side in the world, walled off, joined by portals (press up to go through). */
 export interface StageMap {
   name: string; kind: 'hub' | 'zone' | 'boss'; x0: number; x1: number; goal?: ZoneGoal;
+  /** respawning monsters (MapleStory style): which kinds, where they appear (x, floor y), how many at once */
+  spawns?: { kinds: MobKind[]; pts: [number, number][]; cap: number; lv: number };
   /** to = map index, tx = where you come out; boss = the boss door (opens when every zone's goal is done) */
   portals: { x: number; to: number; tx: number; boss?: boolean; /** the map's exit: opens with the map's goal (drops handed in) */ need?: boolean }[];
 }
@@ -94,7 +96,8 @@ export interface StageDef {
   rec: number;
 }
 
-export type MobKind = 'm1a' | 'm1b' | 'm2a' | 'm2b' | 'm3a' | 'm3b' | 'm4a' | 'm4b' | 'm5a' | 'm5b' | 'm6a' | 'm6b' | 'm7a' | 'm7b' | 'm8a' | 'm8b' | 'm9a' | 'm9b' | 'm10a' | 'm10b' | 'xegg' | 'xpickle' | 'xmeatball' | 'xcan' | 'xscrub' | 'xroast' | 'xpatty' | 'xpumpkin' | 'xmelon' | 'xfruitknight'
+export type MobKind = 'jamhop' | 'salt' | 'cheesemouse' | 'icepop' | 'crumbcube' | 'mitt' | 'bee' | 'cracker' | 'duck' | 'straw' | 'teacake' | 'ladle' | 'skewer' | 'firefly' | 'caterpillar' | 'toadstool' | 'coupon' | 'boxbot' | 'pudding' | 'cracker2'
+  | 'm1a' | 'm1b' | 'm2a' | 'm2b' | 'm3a' | 'm3b' | 'm4a' | 'm4b' | 'm5a' | 'm5b' | 'm6a' | 'm6b' | 'm7a' | 'm7b' | 'm8a' | 'm8b' | 'm9a' | 'm9b' | 'm10a' | 'm10b' | 'xegg' | 'xpickle' | 'xmeatball' | 'xcan' | 'xscrub' | 'xroast' | 'xpatty' | 'xpumpkin' | 'xmelon' | 'xfruitknight'
   | 'bun' | 'worm' | 'pepper' | 'egg' | 'toast' | 'pea' | 'yogurt' | 'icebat' | 'pickle' | 'golem'
   | 'popcorn' | 'imp' | 'bacon' | 'meatball' | 'dragon'
   | 'can' | 'cheerio' | 'minicheerio' | 'soda' | 'flour' | 'jar'
@@ -118,6 +121,7 @@ export type BoxTier = 1 | 2 | 3 | 4 | 5;
 export interface LootBox { tier: BoxTier; ilvl: number }
 
 export type SimEvent =
+  | { t: 'spawnPop'; x: number; y: number }
   | { t: 'loot'; kind: MobKind; n: number; x: number; y: number }
   | { t: 'needDrops'; kind: MobKind; have: number; need: number }
   | { t: 'warp'; to: number; hi: number }

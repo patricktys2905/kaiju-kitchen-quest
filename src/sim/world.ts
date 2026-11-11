@@ -29,7 +29,7 @@ export const PERFECT_WIN = 0.2;
 /** Nightmare on top of Hard's levels: tougher, harder-hitting monsters (plus shorter telegraphs and smarter tactics) */
 export const NIGHTMARE = { hp: 1.2, atk: 1.25 };
 /** Boss-room minibosses (map stages) have this much more health than an elite. */
-export const MINI_ROOM_HP = 4;
+export const MINI_ROOM_HP = 3;
 /** World bosses on Nightmare: a smaller bump (their fights are long and the shorter telegraphs already bite) */
 export const NIGHTMARE_BOSS = { hp: 1.1, atk: 1.12 };
 const SLOWMO_T = 0.55, SLOWMO_RATE = 0.3, COUNTER_T = 1.6;
@@ -1149,8 +1149,8 @@ export class World {
       n.hurt = Math.max(0, n.hurt - dt);
       // while an arena's gates are shut it ducks behind the gate (and waits there), safe from the waves
       const room = this.arenas.find(a => a.locked);
-      const safe = !!room || (!!this.stage.maps && this.mapAt(n.x) !== this.mapAt(h.x)); // waiting in another map (camp)
-      const tx = this.portal ? this.exitX : room ? room.x0 + 30 : safe ? n.x : h.x - h.face * 70;
+      const safe = !!room || (!!this.stage.maps && (this.mapAt(n.x) !== this.mapAt(h.x) || this.mapAt(n.x) === this.stage.maps.length - 1)); // in another map, or hiding by the boss room door
+      const tx = this.portal ? this.exitX : room ? room.x0 + 30 : safe ? (this.stage.maps && this.mapAt(n.x) === this.stage.maps.length - 1 ? this.stage.maps[this.stage.maps.length - 1].x0 + 60 : n.x) : h.x - h.face * 70;
       if (Math.abs(tx - n.x) > 8) { n.face = tx > n.x ? 1 : -1; n.x += n.face * Math.min(Math.abs(tx - n.x), 130 * dt); }
       for (const m of this.mobs) {
         if (m.state === 'dead' || m.under || n.hurt > 0 || safe) continue;
@@ -1223,9 +1223,10 @@ export class World {
     // a map's exit takes its quest monster's drops (from your bag: ones you picked up now or kept from before)
     const g = map.goal;
     if (p.need && g?.kind === 'collect' && !this.zones2[mi].done) {
-      const have = this.drops[g.mob] ?? 0;
-      if (have < g.need) { h.prev = { ...inp }; this.events.push({ t: 'needDrops', kind: g.mob, have, need: g.need }); return false; }
-      this.drops[g.mob] = have - g.need; this.zones2[mi].done = true;
+      const miss = g.wants.find(q => (this.drops[q.mob] ?? 0) < q.n);
+      if (miss) { h.prev = { ...inp }; this.events.push({ t: 'needDrops', kind: miss.mob, have: this.drops[miss.mob] ?? 0, need: miss.n }); return false; }
+      for (const q of g.wants) this.drops[q.mob] = (this.drops[q.mob] ?? 0) - q.n;
+      this.zones2[mi].done = true;
     }
     const go = (o: Hero) => { o.x = p.tx; o.y = this.stage.groundY; o.vx = 0; o.vy = 0; o.ground = true; o.on = -1; o.prev = { ...inp }; this.enter(o, 'move'); };
     go(h);
@@ -1266,12 +1267,14 @@ export class World {
       const z = this.zones2[i], g = m.goal;
       if (!g || z.done) return;
       const here = this.heroes.some(h => this.mapAt(h.x) === i && h.state !== 'down');
-      if (g.kind === 'collect' && here && (z.spawnT -= dt) <= 0) {
-        z.spawnT = 6;
-        // quest monsters come back (there are always some to hunt)
-        if (this.mobs.filter(o => o.kind === g.mob && o.state !== 'dead' && this.mapAt(o.x) === i).length < 2) {
-          const h = this.heroes[0], x = clamp(h.x + (this.rand() < 0.5 ? -1 : 1) * (420 + this.rand() * 300), m.x0 + 200, m.x1 - 200);
-          this.spawnMob(g.mob, x, this.stage.lv[0]);
+      // MapleStory style: monsters come back at the map's spawn points (away from you) to keep it lively
+      const sp = m.spawns;
+      if (sp && here && (z.spawnT -= dt) <= 0) {
+        z.spawnT = 3.5;
+        if (this.mobs.filter(o => o.state !== 'dead' && this.mapAt(o.x) === i).length < sp.cap) {
+          const far = sp.pts.filter(([px, py]) => this.heroes.every(o => Math.abs(o.x - px) > 380 || Math.abs(o.y - py) > 150));
+          const at = far.length ? far[Math.floor(this.rand() * far.length)] : null;
+          if (at) { const kk = sp.kinds[Math.floor(this.rand() * sp.kinds.length)]; const mm = this.spawnMob(kk, at[0], sp.lv + (this.rand() < 0.5 ? 0 : 1) + (this.hard ? HARD_LV : 0), at[1] !== this.stage.groundY && MOBS[kk].brain !== 'flyer' && MOBS[kk].brain !== 'brute' ? at[1] : undefined); mm.flash = 0.4; this.events.push({ t: 'spawnPop', x: mm.x, y: mm.y }); }
         }
       }
       if (g.kind === 'nests' && here) for (const p of this.props) if (p.kind === 'nest' && p.hp > 0 && this.mapAt(p.x) === i && Math.abs(p.x - this.heroes[0].x) < 700 && (this.nestT.set(p.id, (this.nestT.get(p.id) ?? 2) - dt).get(p.id)!) <= 0) {
@@ -1699,7 +1702,9 @@ export class World {
     if (m.frozen > 0) raw *= 1.3;
     if (m.glued > 0 && h.state === 'skill' && h.skill?.kind === 'roll') raw *= 2; // Mustard Glue + Spike Roll combo
     if (guardBreak || (h.state === 'attack' && h.step === 2)) raw *= 1 + h.d.heavyDmg;
-    if (isBoss) raw *= (m.armor > 0 ? BOSS_ARMOR.take : 1) * (m.weak > 0 ? BOSS_ARMOR.weakMul : 1);
+    // bosses and minibosses (nemeses, champions) fight in armour: it softens hits and has to be cracked
+    const tough = isBoss || def.brain === 'nemesis';
+    if (tough) raw *= (m.armor > 0 ? BOSS_ARMOR.take : 1) * (m.weak > 0 ? BOSS_ARMOR.weakMul : 1);
     if (m.tired > 0) raw *= BOSS_ARMOR.tiredMul;
     const counter = h.counter > 0;
     const crit = counter || this.rand() * 100 < h.d.crit;
@@ -1748,7 +1753,7 @@ export class World {
     }
     // interrupt: hitting a wind-up cancels it, unless it's a red (danger) attack or the monster is armoured and the hit is light
     const danger = this.isDanger(m);
-    if (m.state === 'windup' && !isBoss && !danger && m.hp > 0 && (!(def.armor || m.elite) || heavy || k.stun >= 0.6)) {
+    if (m.state === 'windup' && !tough && !danger && m.hp > 0 && (!(def.armor || m.elite) || heavy || k.stun >= 0.6)) {
       // cancelled: the knockback below still applies, with a longer stun
       m.move = ''; m.state = 'hurt';
       this.run.interrupts++; this.addStyle('interrupt', 10);
@@ -1756,8 +1761,9 @@ export class World {
       k = { ...k, stun: Math.max(k.stun, 0.9) };
     }
 
-    const flinch = (!(def.armor || m.elite) || (def.brain !== 'boss' && (heavy || k.stun >= 0.6)) || m.state === 'stagger') && !danger && def.brain !== 'turret';
-    if (def.brain === 'boss' && m.armor > 0 && m.hp > 0) {
+    // (bosses and minibosses don't flinch while their armour holds: mashing won't stop them, cracking it will)
+    const flinch = (!(def.armor || m.elite) || (!tough && (heavy || k.stun >= 0.6)) || m.state === 'stagger') && !danger && def.brain !== 'turret';
+    if (tough && m.armor > 0 && m.hp > 0) {
       m.armor -= dmg / (m.maxHp * BOSS_ARMOR.pool) * (heavy || guardBreak ? BOSS_ARMOR.heavy : 1);
       if (m.armor <= 0) { // armour cracks: stagger, then weak for a while
         m.armor = 0; m.weak = BOSS_ARMOR.weak; m.state = 'stagger'; m.t = 0; m.vx = 0; m.queue = [];
@@ -1780,7 +1786,7 @@ export class World {
     this.addStyle('kill', 3);
     // a zone's quest monster: drops its quest item now and then (never more than two misses in a row)
     if (this.stage.maps && DROPS[m.kind]) {
-      const zi = this.mapAt(m.x), g = this.stage.maps[zi]?.goal, z = this.zones2[zi], quest = g?.kind === 'collect' && g.mob === m.kind && !z.done;
+      const zi = this.mapAt(m.x), g = this.stage.maps[zi]?.goal, z = this.zones2[zi], quest = g?.kind === 'collect' && g.wants.some(q => q.mob === m.kind) && !z.done;
       let drop = this.rand() < (quest ? QUEST_DROP_CHANCE : DROP_CHANCE);
       if (quest) { if (z.miss >= 2) drop = true; z.miss = drop ? 0 : z.miss + 1; }
       if (drop) this.pickups.push({ id: nextId++, kind: m.kind, x: m.x, y: m.y - 30, vy: -380, ground: false, t: 0 });

@@ -10,7 +10,7 @@ import type { SkillMod } from './items';
 import type { HeroProfile } from './stats';
 
 /** Hero level each tree row opens at; a node's later ranks need 4 more levels each (mastery ranks: 4 each too). */
-export const ROW_LV = [3, 6, 10, 14, 22, 30, 36];
+export const ROW_LV = [1, 4, 8, 12, 20, 28, 34];
 export const nodeLv = (row: number, rank: number): number => ROW_LV[row] + 4 * (rank - 1);
 
 export type TreeStat = 'atkPct' | 'hpPct' | 'crit' | 'critDmg' | 'dr' | 'skillDmg' | 'cdr' | 'regen' | 'lifeOnKill' | 'ultGain';

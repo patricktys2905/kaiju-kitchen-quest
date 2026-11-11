@@ -25,9 +25,29 @@ export const DROPS: Partial<Record<MobKind, [string, string]>> = {
   pumpkin: ['Pumpkin Seed', 'a flat cream pumpkin seed'], trolley: ['Trolley Wheel', 'a tiny grey trolley wheel'], bag: ['Bag Handle', 'a plastic shopping-bag handle loop'],
   banana: ['Banana Peel', 'a spotty banana peel'], scanner: ['Barcode Sticker', 'a small barcode sticker (no readable numbers)'], can2: ['Can Lid', 'a round dented tin-can lid'],
   melon: ['Melon Seed', 'a shiny black watermelon seed'], cherrysoldier: ['Candied Cherry', 'a glossy red candied cherry'], peel: ['Candied Peel', 'a strip of orange candied peel'],
+  jamhop: ['Jam Glob', 'a glossy red blob of strawberry jam'],
+  salt: ['Salt Crystal', 'a sparkly white salt crystal'],
+  cheesemouse: ['Cheese Crumb', 'a small wedge of holey yellow cheese'],
+  icepop: ['Popsicle Stick', 'a wooden popsicle stick with a melted rainbow tip'],
+  crumbcube: ['Burnt Crouton', 'a crunchy golden crouton cube'],
+  mitt: ['Mitt Thread', 'a little spool of red quilted thread'],
+  bee: ['Bee Wing', 'a shiny translucent bee wing'],
+  cracker: ['Cracker Shard', 'a broken corner of a salted cracker'],
+  duck: ['Ducky Squeaker', 'a little rubber squeaker'],
+  straw: ['Straw Bit', 'a short striped bendy straw piece'],
+  teacake: ['Sprinkles', 'a little pile of rainbow sprinkles'],
+  ladle: ['Ladle Bowl', 'a small shiny silver ladle bowl'],
+  skewer: ['Pepper Chunk', 'a chunk of grilled bell pepper'],
+  firefly: ['Ember Glow', 'a glowing little ember in a tiny jar'],
+  caterpillar: ['Silk Thread', 'a small bundle of silky white thread'],
+  toadstool: ['Mushroom Cap', 'a red spotted mushroom cap'],
+  coupon: ['Coupon Scrap', 'a torn paper coupon corner with dotted lines (no text)'],
+  boxbot: ['Tape Strip', 'a curled strip of brown packing tape'],
+  pudding: ['Pudding Spoon', 'a tiny silver dessert spoon with chocolate on it'],
+  cracker2: ['Paper Crown', 'a folded yellow paper party crown'],
   fruitknight: ['Fruitcake Chunk', 'a chunk of dark fruitcake'], mimic: ['Lunchbox Latch', 'a blue plastic lunchbox latch'], cereal: ['Cereal Prize', 'a tiny toy prize from a cereal box'],
 };
 export const dropName = (k: MobKind): string => DROPS[k]?.[0] ?? 'Monster Bit';
 export const dropIcon = (k: MobKind): string => `drop-${k}`;
 /** How often a monster drops its item (the map's quest monster: more, and never 3 misses in a row). */
-export const DROP_CHANCE = 0.2, QUEST_DROP_CHANCE = 0.4;
+export const DROP_CHANCE = 0.2, QUEST_DROP_CHANCE = 0.55;

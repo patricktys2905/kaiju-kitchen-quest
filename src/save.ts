@@ -151,7 +151,12 @@ export function learnNode(species: number, id: string): boolean {
   if (!canLearn(p, id)) return false;
   const f = nodeById(species, id)!;
   p.skillPts--; p.tree = { ...(p.tree ?? {}), [id]: (p.tree?.[id] ?? 0) + 1 };
-  if (f.node.skill) p.skills[f.node.skill.id] = Math.max(1, p.skills[f.node.skill.id] ?? 0);
+  if (f.node.skill) {
+    p.skills[f.node.skill.id] = Math.max(1, p.skills[f.node.skill.id] ?? 0);
+    // a brand-new skill goes straight onto a button that holds a skill you haven't learned yet (else you swap it in yourself)
+    const lo = loadoutOf(p).map(s => s.id), free = lo.findIndex(id2 => !(p.skills[id2] ?? 0));
+    if (free >= 0 && !lo.includes(f.node.skill.id)) { lo[free] = f.node.skill.id; p.loadout = lo; }
+  }
   persist(); return true;
 }
 /** Put a skill on button 1-3 (it swaps with whatever was there). */

@@ -200,7 +200,8 @@ export function updateHud(w: World, p: HeroProfile, st: StageDef): void {
     const done = maps.filter((q2, i) => q2.kind === 'zone' && w.zones2[i].done).length, zonesN = maps.filter(q2 => q2.kind === 'zone').length;
     void done; void zonesN;
     where = !m ? '' : m.kind === 'boss' ? `☠ ${m.name}`
-      : `${m.name} (${mi + 1}/${maps.length - 1})${m.goal?.kind === 'collect' ? ` · ${dropName(m.goal.mob)} ${Math.min(w.drops[m.goal.mob] ?? 0, m.goal.need)}/${m.goal.need}${(w.drops[m.goal.mob] ?? 0) >= m.goal.need ? ' ✓ → EXIT' : ` from ${MOBS[m.goal.mob].name}s`}` : ''}`;
+      : `${m.name} (${mi + 1}/${maps.length - 1})${m.goal?.kind === 'collect' ? ` · ${m.goal.wants.map(q2 => `${dropName(q2.mob)} ${Math.min(w.drops[q2.mob] ?? 0, q2.n)}/${q2.n}`).join(' · ')}${m.goal.wants.every(q2 => (w.drops[q2.mob] ?? 0) >= q2.n) ? ' ✓ → EXIT' : ''}` : ''}`;
+  void MOBS;
   }
   q('.stage .s').textContent = (w.portal ? '➜ Exit is open! Head right' : maps ? where : `Monsters left: ${w.alive}`) + goal + arenaTxt + clock;
   const letter = styleRank(w.style), sc = { S: '#ffd23c', A: '#9fe8ff', B: '#a8f0a8', C: '#ffb38a', D: '#c8b8c8' }[letter];

@@ -351,3 +351,12 @@ the kaiju's signature set, each weapon with its own gear skill (gear.ts). TIER_L
   set shows SKIP TO BOSS on the stage panel (World.skipToBoss). The pause menu's ESCAPE leaves the stage keeping drops and
   crumbs (not boxes). Honey jars at each map start and before the boss. Online snapshots only send monsters in maps with a hero.
 - Tuning (skilled bot, 8 jams): stages 85-97% clear with 2.5-4 jams, bosses ~50-80%; mobPow W5 0.92 W6 1.35 W8 1.4 W9 0.6 W10 0.62; TUNE.atk 1.8; MINI_ROOM_HP 4.
+
+## Compact maps, mixed drops, armoured minibosses (playtest round 3)
+- Maps are 2-3 screens (stages.ts genMaps): one of six layouts (terraces, towers, steps, islands, deck, valley) with several floors,
+  a ladder up to every upper floor, spawn points on every floor and MapleStory-style respawns (StageMap.spawns: kinds, points, cap;
+  World.stepMapZones). Stages 1-3 and boss stages have 2 maps, the rest 3. Later maps bring in the next stage's monster.
+- Exits want a MIX: 2-3 monsters' drops, 3 of each (ZoneGoal collect.wants), close-range monsters first (at most one shooter).
+- 20 more monsters (2 per world, early stages) with their own drops: scripts/mobs3-jobs.mjs; 82 monster drops in all.
+- Minibosses, champions and nemeses fight in armour like bosses: hits don't interrupt or flinch them until it cracks (stagger,
+  then weak). Skill tree: first row opens at Lv 1; a newly learned tree skill goes onto a free button.

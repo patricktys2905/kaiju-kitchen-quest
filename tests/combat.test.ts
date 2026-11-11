@@ -185,7 +185,7 @@ describe('new monsters', () => {
   });
   it('every world has 3 new monsters in its pool, a mimic in stages 3/7/9 and hazards from stage 2 (stage 1 too after World 1)', () => {
     const fresh: MobKind[] = ['garlic', 'ant', 'carrot', 'milk', 'jelly', 'kettle', 'sausage', 'marsh', 'noodle', 'raisin'];
-    for (const k of fresh) expect(STAGES.some(s => s.mobs.some(m => m.kind === k)), k).toBe(true);
+    for (const k of fresh) expect(STAGES.some(s => s.mobs.some(m => m.kind === k) || s.maps?.some(m => m.spawns?.kinds.includes(k))), k).toBe(true);
     for (const w of WORLDS) {
       for (const n of [3, 7, 9]) expect(STAGES.find(s => s.id === `${w.id}-${n}`)!.mobs.some(m => MOBS[m.kind].brain === 'mimic'), `${w.id}-${n}`).toBe(true);
       expect((STAGES.find(s => s.id === `${w.id}-1`)!.hazards ?? []).length > 0).toBe(w.id >= 2); // 1-1 is the gentle first stage

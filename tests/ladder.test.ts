@@ -7,7 +7,7 @@ import { NO_INPUT } from '../src/sim/types';
 import { World } from '../src/sim/world';
 
 describe('ladders', () => {
-  const st = STAGES.find(s => s.id === '1-1')!, l = st.ladders[0];
+  const st = STAGES.find(s => s.ladders.length > 0)!, l = st.ladders[0];
   const climbing = (sp: number) => {
     const w = new World({ ...st, mobs: [], arenas: [], hazards: [], chase: undefined }, derive(newProfile(sp)), 1);
     const h = w.hero; h.x = l.x; h.y = st.groundY;

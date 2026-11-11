@@ -19,7 +19,7 @@ import { UI_CSS } from './style';
 import { freePage, startFree } from './free';
 import type { FreeMode } from '../sim/free';
 import { gearSkillOf, gearText } from '../sim/gear';
-import { type TreePath, allActives, canLearn, nodeById, nodeLv, pointsIn, rankOf, skillUnlocked, statText, treeOf } from '../sim/tree';
+import { type TreePath, allActives, canLearn, nodeById, nodeLv, pointsIn, rankOf, skillUnlocked, statText, treeOf, loadoutOf } from '../sim/tree';
 import { logError } from './report';
 import { isTouchDevice } from '../touch';
 import { ACHIEVEMENTS, DAILY_BONUS, achievements, checkUnlocks, claimAch, claimBonus, claimKaijuQuest, claimQuest, claimable, dailyQuests, kaijuQuestState, rewardText, track, unlockProgress } from '../quests';
@@ -192,7 +192,7 @@ function mapPage(): string {
       <div class="lv">Monsters Lv ${lv(sel.lv[0])}${sel.lv[1] !== sel.lv[0] ? '–' + lv(sel.lv[1]) : ''} · <span style="color:${low ? '#ff8a8a' : '#a8f0a8'}">you Lv ${p.level}${low ? ' (low!)' : ''}</span></div>
       <div class="lv">Reward: ${rewardLine(sel)}</div>
       ${sel.boss ? (() => { const bw = bossWeaponFor(WORLDS[sel.world - 1].boss, p.species); return bw ? `<div class="lv" style="color:#ffb347">⚔ Hunts for: <img src="art/${bw.base}.webp" style="height:1.3em;vertical-align:middle"> ${bw.name} <small>(${bw.skill}${(save.bwPity?.[bw.base] ?? 0) ? `, ${save.bwPity![bw.base]}/4 clears without it` : ''})</small></div>` : ''; })() : ''}
-      ${sel.maps ? `<div class="lv" style="color:#ff9a6a">☠ Boss room: ${sel.id.endsWith('-5') && sel.world <= 5 && nemesisOf(p.species) ? MOB_DEFS[nemesisOf(p.species)!].name : sel.maps[sel.maps.length - 1].name}</div><div class="lv dropreq">${sel.maps.filter(m => m.goal?.kind === 'collect').map((m, i) => { const g = m.goal as { mob: MobKind; need: number }, have = save.drops?.[g.mob] ?? 0; return `<span class="${have >= g.need ? 'ok' : ''}"><img src="art/drop-${g.mob}.webp" onerror="this.style.display='none'"> Map ${i + 1} exit: ${g.need} ${dropName(g.mob)} <small>(${MOB_DEFS[g.mob].name}) · you have ${have}</small></span>`; }).join('')}</div>` : ''}
+      ${sel.maps ? `<div class="lv" style="color:#ff9a6a">☠ Boss room: ${sel.id.endsWith('-5') && sel.world <= 5 && nemesisOf(p.species) ? MOB_DEFS[nemesisOf(p.species)!].name : sel.maps[sel.maps.length - 1].name}</div><div class="lv dropreq">${sel.maps.filter(m => m.goal?.kind === 'collect').map((m, i) => { const g = m.goal as { wants: { mob: MobKind; n: number }[] }; return `<span class="${g.wants.every(q => (save.drops?.[q.mob] ?? 0) >= q.n) ? 'ok' : ''}">Map ${i + 1} exit: ${g.wants.map(q => `<img src="art/drop-${q.mob}.webp" onerror="this.style.display='none'"> ${q.n} ${dropName(q.mob)} <small>(${MOB_DEFS[q.mob].name}, have ${save.drops?.[q.mob] ?? 0})</small>`).join(' + ')}</span>`; }).join('')}</div>` : ''}
       ${sel.objective ? `<div class="lv" style="color:#ffd27a">${({ escort: '🧁 Escort the lost Crumblet', fetch: `📜 Grab the Recipe Scroll in ${sel.objective.t}s`, survive: `⏱ Hold out for ${sel.objective.t}s` })[sel.objective.kind]} · bonus box</div>` : ''}
       ${STORIES[p.species]?.variants[sel.id] ? (() => { const v = VARIANT_INFO[STORIES[p.species].variants[sel.id]]; return `<div class="lv vtx">${v.icon} Story twist: <b>${v.name}</b> — ${v.desc}</div>`; })() : ''}
       <div class="lv story">📖 ${STORIES[p.species]?.title ?? ''}${beatBefore(sel.id, sel.id === '1-1').some(b => p.seen.includes(b)) || (sel.boss && p.seen.includes(`w${sel.world}-after`)) ? ` <button class="mini" data-replay="${sel.id}" title="Replay this stage's scenes">↻</button>` : ''} <button class="mini" data-act="storymode" title="Story scenes: every stage, or only the big ones">${save.storyMode === 'key' ? 'Key scenes' : 'All scenes'}</button></div>
@@ -350,7 +350,12 @@ function dropsHtml(): string {
   return `<div class="h3" style="margin-top:1.6vmin">Monster drops <small style="color:#b8a8b8;font-family:Nunito;font-size:1.8vmin">map exits ask for them · a stage's whole set skips it to the boss</small></div>${d.length ? `<div class="dlist">${d.map(([k, n]) => `<span><img src="art/drop-${k}.webp" onerror="this.style.visibility='hidden'"><b>${dropName(k)} ×${n}</b><small>${MOB_DEFS[k].name}</small></span>`).join('')}</div>` : '<div class="empty">None yet: monsters drop them in stages.</div>'}`;
 }
 /** Do you hold every map exit's drops for this stage? */
-function canSkip(s: StageDef): boolean { return !!s.maps && s.maps.every(m => m.goal?.kind !== 'collect' || (save.drops?.[m.goal.mob] ?? 0) >= m.goal.need) && s.maps.some(m => m.goal?.kind === 'collect'); }
+function canSkip(s: StageDef): boolean {
+  if (!s.maps) return false;
+  const need: Record<string, number> = {};
+  for (const m of s.maps) if (m.goal?.kind === 'collect') for (const q of m.goal.wants) need[q.mob] = (need[q.mob] ?? 0) + q.n;
+  return Object.keys(need).length > 0 && Object.entries(need).every(([k, v]) => (save.drops?.[k] ?? 0) >= v);
+}
 function itemsTab(): string {
   const owned = (Object.keys(CONSUMABLES) as ConsumableId[]).filter(id => (save.items[id] ?? 0) > 0);
   return `<div class="h3">Quick bag <small style="color:#b8a8b8;font-family:Nunito;font-size:1.8vmin">4 slots you can tap in stages (keys 1-4). Pick an item, then tap a slot.</small></div>
@@ -463,7 +468,7 @@ function onClick(e: MouseEvent): void {
   else if (ds.sugar) { if (useSugar(sp, ds.sugar as Stat)) flash = `Golden Sugar Cube: +1 ${ds.sugar.toUpperCase()} forever!`; }
   else if (ds.skill) levelSkill(sp, ds.skill);
   else if (ds.tnode) selNode = selNode === ds.tnode ? null : ds.tnode;
-  else if (ds.learn) { const f = nodeById(sp, ds.learn); if (learnNode(sp, ds.learn)) { sfx('levelup'); if (f?.node.skill) { flash = `New skill: ${f.node.skill.name}! Put it on a button in ⚔ SKILLS`; } } }
+  else if (ds.learn) { const f = nodeById(sp, ds.learn); if (learnNode(sp, ds.learn)) { sfx('levelup'); if (f?.node.skill) { flash = loadoutOf(hero()).some(s => s.id === f.node.skill!.id) ? `New skill: ${f.node.skill.name}! It's on your buttons (swap them in ⚔ SKILLS)` : `New skill: ${f.node.skill.name}! Put it on a button in ⚔ SKILLS`; } } }
   else if (ds.slot) pickSlot = pickSlot === Number(ds.slot) ? null : Number(ds.slot);
   else if (ds.equipskill) { if (pickSlot !== null && setLoadout(sp, pickSlot, ds.equipskill)) { flash = 'Skill set on the button'; pickSlot = null; } }
   else if (ds.branch) { const [id, b] = ds.branch.split(':'); if (chooseBranch(sp, id, b as 'a' | 'b')) flash = 'Upgrade chosen! (A Recipe Scroll resets it)'; }

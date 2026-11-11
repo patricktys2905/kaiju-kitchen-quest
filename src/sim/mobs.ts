@@ -258,6 +258,27 @@ export const MOBS: Record<MobKind, MobDef> = {
     nem: {species: -1, moves: ['charge','fanshot','leap','haymaker'], names: ['Melon Roll','Seed Spit','Big Splash','Rind Punch'], shot: 'spike'} },
   xfruitknight: { name: 'Fruitcake Knight', brain: 'nemesis', art: 'mob-fruitknight', hp: 240, atk: 16, speed: 63, w: 78, h: 84, knock: 0.4, aggro: 900, range: 120, windup: 0.75, patrol: 60, xp: 34, dropChance: 1, armor: true, mini: true,
     nem: {species: -1, moves: ['slash','skewer','charge','roar'], names: ['Candied Slash','Fork Lance','Knight Charge','Rally']} },
+  // ----- more monsters (2 per world, early stages): each has its own drop (art: scripts/mobs3-jobs.mjs) -----
+  jamhop: { name: 'Jam Blob', brain: 'hopper', art: 'mob-jamhop', hp: 50, atk: 10, speed: 80, w: 44, h: 44, knock: 1.1, aggro: 300, range: 190, windup: 0.45, patrol: 140, xp: 10, dropChance: 0.3 },
+  salt: { name: 'Salt Shaker Gunner', brain: 'ranged', art: 'mob-salt', hp: 55, atk: 9, speed: 70, w: 40, h: 58, knock: 1, aggro: 340, range: 300, windup: 0.6, patrol: 100, xp: 11, dropChance: 0.35 },
+  cheesemouse: { name: 'Cheese Cube Critter', brain: 'hopper', art: 'mob-cheesemouse', hp: 45, atk: 11, speed: 90, w: 42, h: 42, knock: 1.2, aggro: 320, range: 210, windup: 0.35, patrol: 150, xp: 11, dropChance: 0.3 },
+  icepop: { name: 'Melty Ice Pop', brain: 'walker', art: 'mob-icepop', hp: 85, atk: 9, speed: 55, w: 56, h: 50, knock: 0.9, aggro: 260, range: 64, windup: 0.6, patrol: 120, xp: 10, dropChance: 0.3 },
+  crumbcube: { name: 'Burnt Crouton', brain: 'hopper', art: 'mob-crumbcube', hp: 45, atk: 11, speed: 90, w: 42, h: 42, knock: 1.2, aggro: 320, range: 210, windup: 0.35, patrol: 150, xp: 11, dropChance: 0.3 },
+  mitt: { name: 'Oven Mitt Grabber', brain: 'charger', art: 'mob-mitt', hp: 120, atk: 15, speed: 70, w: 64, h: 46, knock: 0.6, aggro: 400, range: 380, windup: 0.7, patrol: 110, xp: 18, dropChance: 0.4 },
+  bee: { name: 'Honey Bee', brain: 'flyer', art: 'mob-bee', hp: 45, atk: 10, speed: 120, w: 46, h: 40, knock: 1.2, aggro: 340, range: 220, windup: 0.5, patrol: 160, xp: 12, dropChance: 0.3 },
+  cracker: { name: 'Cracker Crawler', brain: 'walker', art: 'mob-cracker', hp: 110, atk: 12, speed: 55, w: 52, h: 60, knock: 0.6, aggro: 280, range: 70, windup: 0.6, patrol: 100, xp: 18, dropChance: 0.4, shield: true },
+  duck: { name: 'Rubber Ducky', brain: 'ranged', art: 'mob-duck', hp: 60, atk: 8, speed: 60, w: 44, h: 50, knock: 1, aggro: 360, range: 320, windup: 0.55, patrol: 100, xp: 12, dropChance: 0.3 },
+  straw: { name: 'Straw Snake', brain: 'walker', art: 'mob-straw', hp: 125, atk: 13, speed: 55, w: 54, h: 62, knock: 0.6, aggro: 280, range: 70, windup: 0.6, patrol: 100, xp: 19, dropChance: 0.4, shield: true },
+  teacake: { name: 'Tea Cake Hopper', brain: 'hopper', art: 'mob-teacake', hp: 45, atk: 11, speed: 90, w: 42, h: 42, knock: 1.2, aggro: 320, range: 210, windup: 0.35, patrol: 150, xp: 11, dropChance: 0.3 },
+  ladle: { name: 'Ladle Lancer', brain: 'charger', art: 'mob-ladle', hp: 110, atk: 11, speed: 65, w: 66, h: 50, knock: 0.6, aggro: 400, range: 380, windup: 0.7, patrol: 110, xp: 18, dropChance: 0.4 },
+  skewer: { name: 'Veggie Skewer Soldier', brain: 'walker', art: 'mob-skewer', hp: 105, atk: 12, speed: 65, w: 40, h: 70, knock: 0.8, aggro: 300, range: 72, windup: 0.5, patrol: 110, xp: 17, dropChance: 0.35 },
+  firefly: { name: 'Ember Firefly', brain: 'flyer', art: 'mob-firefly', hp: 40, atk: 7, speed: 125, w: 44, h: 42, knock: 1.1, aggro: 340, range: 230, windup: 0.5, patrol: 160, xp: 13, dropChance: 0.3 },
+  caterpillar: { name: 'Leaf Caterpillar', brain: 'walker', art: 'mob-caterpillar', hp: 130, atk: 12, speed: 45, w: 58, h: 52, knock: 0.6, aggro: 280, range: 70, windup: 0.65, patrol: 80, xp: 19, dropChance: 0.4, shield: true },
+  toadstool: { name: 'Toadstool Hopper', brain: 'hopper', art: 'mob-toadstool', hp: 62, atk: 9, speed: 95, w: 50, h: 46, knock: 1.1, aggro: 320, range: 210, windup: 0.4, patrol: 150, xp: 14, dropChance: 0.3 },
+  coupon: { name: 'Coupon Ghost', brain: 'flyer', art: 'mob-coupon', hp: 40, atk: 7, speed: 120, w: 44, h: 46, knock: 1.1, aggro: 340, range: 230, windup: 0.5, patrol: 160, xp: 13, dropChance: 0.3 },
+  boxbot: { name: 'Cardboard Box Walker', brain: 'walker', art: 'mob-boxbot', hp: 105, atk: 12, speed: 65, w: 40, h: 70, knock: 0.8, aggro: 300, range: 72, windup: 0.5, patrol: 110, xp: 17, dropChance: 0.35 },
+  pudding: { name: 'Pudding Cup', brain: 'hopper', art: 'mob-pudding', hp: 34, atk: 8, speed: 105, w: 32, h: 34, knock: 1.3, aggro: 340, range: 190, windup: 0.35, patrol: 120, xp: 5, dropChance: 0.08 },
+  cracker2: { name: 'Party Cracker Bomber', brain: 'bomber', art: 'mob-cracker2', hp: 40, atk: 21, speed: 150, w: 38, h: 46, knock: 1.2, aggro: 340, range: 60, windup: 0.7, patrol: 140, xp: 12, dropChance: 0.25 },
 };
 
 /** Stage-5 mini-boss multipliers. */
@@ -350,7 +371,7 @@ export function nemesisMoves(kind: MobKind, world: number): NemMove[] {
 }
 
 /** Global difficulty knobs (tuned with scripts/balance.ts). */
-export const TUNE = { hp: 2.5, atk: 1.8, bossHp: 1.35, bossAtk: 0.6, windup: 0.85, treeRamp: 0.0055 };
+export const TUNE = { hp: 2.5, atk: 1.5, bossHp: 1.35, bossAtk: 0.6, windup: 0.85, treeRamp: 0.0055 };
 /** Monsters past level 20 grow a little extra per level, in step with the skill-tree points a kaiju has by then. */
 const ramp = (lv: number) => 1 + TUNE.treeRamp * Math.max(0, lv - 20);
 export function mobHp(kind: MobKind, lv: number): number { return Math.round(MOBS[kind].hp * TUNE.hp * (MOBS[kind].brain === 'boss' ? TUNE.bossHp : 1) * (1 + 0.32 * (lv - 1)) * ramp(lv)); }

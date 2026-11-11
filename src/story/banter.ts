@@ -7,6 +7,27 @@ export type QuipKind = 'combo' | 'lowhp' | 'perfect' | 'levelup' | 'secret' | 'b
 
 /** What each monster says when it first appears in a stage (one is picked at random). */
 export const TAUNTS: Partial<Record<MobKind, string[]>> = {
+  // the newer monsters
+  jamhop: ["Boing! Jam session!", "I'm on a roll! A JAM roll!", "Spread the word: you're toast!"],
+  salt: ["Take that with a pinch of ME!", "Salty? ME? Never!", "Shake, shake, SHOOT!"],
+  cheesemouse: ["Squeak! Cheese it!", "Holey moley, a hero!", "I'm the big cheese now!"],
+  icepop: ["Brain freeze, coming up!", "I'm cool. Too cool. Melting cool!", "Lick THIS!"],
+  crumbcube: ["Crunch time!", "I'm burnt and I'm ANGRY!", "Toast you later!"],
+  mitt: ["High five! In the FACE!", "Hot stuff coming through!", "I've got you covered. Literally!"],
+  bee: ["Buzz off!", "Bee-hold my stinger!", "Honey, I'm home! Bzzz!"],
+  cracker: ["Snap! Crackle! Smack!", "I'm a tough cookie. Er, cracker!", "You'll crack first!"],
+  duck: ["Quack attack!", "Squeak! Squirt! Splash!", "Get in line, ducky!"],
+  straw: ["Sssip, sssip, hooray!", "I'm the last straw, pal!", "Bendy and DEADLY!"],
+  teacake: ["Tea time is over!", "Sprinkle sprinkle, you're in trouble!", "Have a slice of DEFEAT!"],
+  ladle: ["Soup's on! And so am I!", "En garde, hero!", "I'll serve you up!"],
+  skewer: ["Shish-ka-BAM!", "Line up, veggies, CHARGE!", "You're grilled!"],
+  firefly: ["Glow and behold!", "Light 'em up!", "Bzzt! Hot hot hot!"],
+  caterpillar: ["Munch, munch, YOU'RE next!", "I'll be a butterfly someday! After this!", "Leaf me alone!"],
+  toadstool: ["Mush-ROOM for one more!", "Fun guy? I'm a FUN-GUS!", "Spore-ry, not sorry!"],
+  coupon: ["Woooo! Half off your health!", "Expired! Like YOU will be!", "Clip clip, gotcha!"],
+  boxbot: ["Fragile? Not ME!", "Think outside the box! Ha, you can't!", "This side UP! You, side DOWN!"],
+  pudding: ["Wibble wobble, here I come!", "Proof's in the pudding, pal!", "Spoon fight!"],
+  cracker2: ["Pull my end! I DARE you!", "Bang bang, party's over!", "Surprise! It's a JOKE! And a BOMB!"],
   // World 10: The Feast of the Forgotten
   cherrysoldier: ["For the King! Er, the CAKE!", "Candied and dangerous!", "Cherry on top? Cherry ON YOU!"],
   fruitknight: ["None shall pass! Nobody eats me anyway!", "Aged one hundred years. FIGHT me!", "I'm dense, I'm tough, I'm FRUITCAKE!"],

@@ -51,9 +51,11 @@ export class Bot {
       if (h.ground) inp.up = pulse;
       return inp;
     };
+    // the Recipe Scroll race is on in this map: go for the scroll (the monsters keep coming anyway)
+    if (w.scroll && !w.scroll.got && w.objArmed && w.mapAt(w.scroll.x) === mi) { inp[w.scroll.x > h.x ? 'right' : 'left'] = Math.abs(w.scroll.x - h.x) > 8; if (h.ground && h.on !== null && h.on >= 0) { inp.down = true; inp.jump = pulse; } return inp; }
     // enough of the map's drop: head for the exit (a shut gate on the way: its lever first)
     const g = m.goal, exit = m.portals.find(p => p.need) ?? m.portals[0];
-    const ready = !g || g.kind !== 'collect' || w.zones2[mi].done || (w.drops[g.mob] ?? 0) >= g.need;
+    const ready = !g || g.kind !== 'collect' || w.zones2[mi].done || g.wants.every(q => (w.drops[q.mob] ?? 0) >= q.n);
     if (ready && exit && !w.gates.some(gt => !gt.open && (gt.x - h.x) * (exit.x - gt.x) > 0) && (!w.scroll || w.scroll.got || w.mapAt(w.scroll.x) !== mi) && w.holdout <= 0) return enter(exit.x);
     // drops lying around: pick them up
     const q = w.pickups.filter(p => w.mapAt(p.x) === mi && Math.abs(p.x - h.x) < 700).sort((u, v) => Math.abs(u.x - h.x) - Math.abs(v.x - h.x))[0];
@@ -140,19 +142,22 @@ export class Bot {
       return inp;
     }
     // nearest target, preferring ones on our level
-    const cost = (m: Mob) => Math.abs(m.x - h.x) + Math.abs(m.y - h.y) * (MOBS[m.kind].brain === 'flyer' ? 0.5 : 3);
+    // like a player hunting: monsters whose drops the map's exit still wants come first
+    const g0 = myMap >= 0 ? w.stage.maps![myMap].goal : undefined;
+    const wanted = (m: Mob) => g0?.kind === 'collect' && !w.zones2[myMap].done && g0.wants.some(q => q.mob === m.kind && (w.drops[q.mob] ?? 0) < q.n);
+    const cost = (m: Mob) => (Math.abs(m.x - h.x) + Math.abs(m.y - h.y) * (MOBS[m.kind].brain === 'flyer' ? 0.5 : 3)) * (wanted(m) ? 0.4 : 1);
     const t = alive.reduce((a, b) => cost(a) < cost(b) ? a : b);
     const def = MOBS[t.kind];
     const dx = t.x - h.x, dy = t.y - h.y;
     const flyer = def.brain === 'flyer';
-    const sameLevel = flyer ? dy > -110 : Math.abs(dy) < 12;
+    const sameLevel = flyer ? dy > -110 && dy < 70 : Math.abs(dy) < 12; // (a flyer hovering well below a ledge: drop down to it)
     const reach = (h.d.cls.combo[0].reach) * 0.8 + def.w / 2;
     // stuck detection: jump
     if (Math.abs(h.x - this.lastX) < 0.5 && h.state === 'move') this.stuck++; else this.stuck = 0;
     this.lastX = h.x;
     // on a ladder: climb toward the target's height; once level with it, hop off toward it (no dithering up/down)
     if (h.state === 'climb') { if (dy < -2) inp.up = true; else if (Math.abs(dy) < 16) { inp[dx > 0 ? 'right' : 'left'] = true; inp.jump = pulse; } else inp.down = true; return inp; } // climb right to the top first (hopping off just short of it re-grabbed the ladder)
-    if (sameLevel || (flyer && Math.abs(dx) < reach + 20)) {
+    if (sameLevel || (flyer && dy < 70 && Math.abs(dx) < reach + 20)) {
       if (Math.abs(dx) > reach * 0.85) {
         inp[dx > 0 ? 'right' : 'left'] = true;
         // same height but on another platform: jump the gap at our edge
