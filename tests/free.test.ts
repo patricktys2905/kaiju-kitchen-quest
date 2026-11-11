@@ -56,5 +56,5 @@ describe('free mode', () => {
       expect(wins(() => endlessFloor(1, lv, 7)), `floor 1 at Lv ${lv}`).toBeGreaterThanOrEqual(2);
       expect(wins(() => dailyStage(20261110, lv)), `daily at Lv ${lv}`).toBeGreaterThanOrEqual(2);
     }
-  });
+  }, 60_000); // several full 5-10 minute stages: slow on CI
 });

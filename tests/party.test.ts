@@ -90,7 +90,7 @@ describe('party', () => {
     for (let i = 0; i < 60 * 900 && !w.cleared && !w.failed; i++) for (const e of w.step([a.think(), b.think()])) if (e.t === 'hit' && e.target === 'mob') hits[(e as { hi?: number }).hi ?? 0]++;
     expect(w.cleared).toBe(true);
     expect(hits[1] / (hits[0] + hits[1])).toBeGreaterThan(0.25);
-  });
+  }, 60_000); // a full stage: slow on CI
   it('a snapshot of the stage is small and JSON-safe (for online play later)', () => {
     const w = duo(STAGES.find(s => s.id === '2-4')!);
     for (let i = 0; i < 60; i++) w.step([NO_INPUT, NO_INPUT]);
