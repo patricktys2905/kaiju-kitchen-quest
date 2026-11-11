@@ -81,6 +81,18 @@ body.touch #hud .quick { left: 55%; }
 #hud .quick .q.down { transform: scale(0.92); }
 #hud .boosts { font-size: 1.6vmin; color: #ffd27a; }
 body.touch #hud .help { display: none; }
+#bagov { position: fixed; inset: 0; z-index: 34; background: #120a18d8; display: none; align-items: center; justify-content: center; }
+#bagov.on { display: flex; }
+#bagov .bagp { width: min(92vw, 120vmin); max-height: 86vh; overflow: auto; background: #24142a; border: 3px solid #ffd27a; border-radius: 2.4vmin; padding: 2vmin 2.4vmin; color: #fff; font: 700 2.3vmin Nunito, sans-serif; }
+#bagov h2 { font-family: 'Luckiest Guy', sans-serif; color: #ffb347; font-size: 4.6vmin; margin: 0 0 1vmin; display: flex; justify-content: space-between; align-items: center; }
+#bagov h3 { color: #9fe8ff; font-size: 2.6vmin; margin: 1.6vmin 0 0.8vmin; }
+#bagov .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(24vmin, 1fr)); gap: 0.8vmin; }
+#bagov .it { display: flex; align-items: center; gap: 1vmin; background: #2f1d38; border-radius: 1.2vmin; padding: 0.7vmin 1vmin; }
+#bagov .it.need { outline: 2px solid #ffd27a; } #bagov .it.ok { outline: 2px solid #7ae87a; }
+#bagov .it img { width: 5.4vmin; height: 5.4vmin; object-fit: contain; } #bagov .it small { color: #c8b8d8; display: block; font-size: 1.7vmin; }
+#bagov button.use { margin-left: auto; font: 900 2vmin Nunito, sans-serif; background: #7ae87a; color: #12301a; border: 0; border-radius: 1vmin; padding: 0.6vmin 1.2vmin; }
+#bagov button.use:disabled { background: #554a5a; color: #998; }
+#bagov .x { font: 900 3vmin Nunito, sans-serif; background: #3a2448; color: #fff; border: 2px solid #ffd27a; border-radius: 1.2vmin; padding: 0.4vmin 1.6vmin; }
 #pause { position: fixed; inset: 0; z-index: 35; background: #120a18c8; display: none; align-items: center; justify-content: center; flex-direction: column; gap: 2vmin; }
 #pause.on { display: flex; }
 #pause h2 { font-size: 6vmin; color: #ffb347; }
@@ -92,7 +104,9 @@ let root: HTMLElement;
 let q: <T extends HTMLElement>(s: string) => T;
 let lastCombo = 0;
 
-export function initHud(onMenu: () => void, onResume: () => void, onLeave: () => void): void {
+let bagUse: (slot: number) => void = () => {}, bagClose: () => void = () => {};
+export function initHud(onMenu: () => void, onResume: () => void, onLeave: () => void, onBag: () => void = () => {}, onUse: (slot: number) => void = () => {}, onBagClose: () => void = () => {}): void {
+  bagUse = onUse; bagClose = onBagClose;
   const st = document.createElement('style');
   st.textContent = CSS;
   document.head.appendChild(st);
@@ -105,15 +119,18 @@ export function initHud(onMenu: () => void, onResume: () => void, onLeave: () =>
     <div class="emos"></div>
     <div class="stage"><div class="t"></div><div class="s"></div></div>
     <div class="boss"><div class="t"></div><div class="bar"><i></i><u></u></div></div>
-    <div class="right"><div class="loot"><img src="art/box-3.webp"><span>0</span></div><button class="emo" title="Quick chat (keys 7 8 9 0)">💬</button><button class="menu">☰</button></div>
+    <div class="right"><div class="loot"><img src="art/box-3.webp"><span>0</span></div><button class="emo" title="Quick chat (keys 7 8 9 0)">💬</button><button class="menu bagb" title="Bag (B)">🎒</button><button class="menu">☰</button></div>
     <div class="combo"><b>0</b><span>HITS</span></div>
     <div class="style"><b>D</b><div class="sbar"><i></i></div><span>STYLE</span></div>
     <div class="quick">${[0, 1, 2, 3].map(i => `<div class="q" data-q="${i}"><i>${i + 1}</i><b></b><u></u></div>`).join('')}</div>
     <div class="toasts"></div>
-    <div class="help">← → move · ↑ ↓ climb · SPACE jump · J attack ×3 combo · L / I / O skills · U ultimate · ↓+SPACE drop · ESC menu</div>`;
+    <div class="help">← → move · ↑ ↓ climb · SPACE jump · J attack ×3 combo · L / I / O skills · U ultimate · ↓+SPACE drop · B bag · ESC menu</div>`;
   document.body.appendChild(root);
   q = <T extends HTMLElement>(s: string) => root.querySelector<T>(s)!;
-  q('.menu').addEventListener('pointerdown', e => { e.preventDefault(); onMenu(); });
+  q('.menu:not(.bagb)').addEventListener('pointerdown', e => { e.preventDefault(); onMenu(); });
+  q('.bagb').addEventListener('pointerdown', e => { e.preventDefault(); onBag(); });
+  const bo = document.createElement('div'); bo.id = 'bagov'; bo.className = 'kq'; document.body.appendChild(bo);
+  bo.addEventListener('pointerdown', e => { const t = (e.target as HTMLElement).closest<HTMLElement>('[data-use],[data-bagclose]'); if (!t) return; e.preventDefault(); if (t.dataset.use) bagUse(Number(t.dataset.use)); else bagClose(); });
   q('.emo').addEventListener('pointerdown', e => { e.preventDefault(); q('.emos').classList.toggle('on'); });
   q('.emos').addEventListener('pointerdown', e => {
     const b = (e.target as HTMLElement).closest<HTMLElement>('[data-e]'); if (!b) return;
@@ -144,6 +161,8 @@ export function setEmotes(lines: readonly string[] | null, fn: ((e: number) => v
   q('.emos').classList.remove('on');
   q('.emos').innerHTML = (lines ?? []).map((l, i) => `<button data-e="${i}">${l} <small>${[7, 8, 9, 0][i]}</small></button>`).join('');
 }
+/** The in-stage bag (null hides it). */
+export function showBag(html: string | null): void { const b = document.getElementById('bagov'); if (!b) return; b.classList.toggle('on', html !== null); if (html !== null) b.innerHTML = html; }
 export function showPause(v: boolean): void { document.getElementById('pause')?.classList.toggle('on', v); }
 
 /** Teammates' names by hero index (online friends' names, or "CPU"). */

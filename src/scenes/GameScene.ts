@@ -2,7 +2,7 @@
 // the boss, loot boxes, skill effects, the exit. Started from the camp; reports results back to the save.
 import * as Phaser from 'phaser';
 import { playMusic, sfx, toggleMute } from '../audio';
-import { initHud, setEmotes, setMateNames, showHud, showPause, toast, updateHud } from '../hud';
+import { initHud, setEmotes, setMateNames, showHud, showPause, toast, updateHud, showBag } from '../hud';
 import { setReportContext } from '../ui/report';
 import { settings } from '../ui/settings';
 import { Coach } from '../ui/tips';
@@ -15,7 +15,7 @@ import { ELITE, ELITE_MODS, MOBS, nemesisOf } from '../sim/mobs';
 import { ULT_LV, applyBranch, applyMod, skillsOf, skillScale } from '../sim/skills';
 import { STAGES, stageById, worldOf } from '../sim/stages';
 import { derive } from '../sim/stats';
-import type { SimEvent, StageDef, ZoneGoal } from '../sim/types';
+import type { MobKind, SimEvent, StageDef, ZoneGoal } from '../sim/types';
 import { DT, HARD_LV, type Mob, World, guardBreakOf, launcherOf, rankOf } from '../sim/world';
 import { type GearLook, HeroView } from '../render/rig';
 import { itemIcon } from '../sim/items';
@@ -172,12 +172,13 @@ export class GameScene extends Phaser.Scene {
 
   create(data: { stage?: string; online?: NetPlay; free?: FreeRun; skip?: boolean }): void {
     this.skipBoss = !!data.skip && !data.online && !data.free;
+    this.bagOpen = false; showBag(null);
     measure(this.scale.width);
     this.scale.off('resize');
     this.scale.on('resize', (g: Phaser.Structs.Size) => { measure(g.width); this.mid?.setSize(VW, 1080 * MID); });
     if (!uiReady) {
       uiReady = true;
-      initHud(() => this.pause(true), () => this.pause(false), () => this.leave());
+      initHud(() => this.pause(true), () => this.pause(false), () => this.leave(), () => this.openBag(), slot => this.bagUse(slot), () => this.closeBag());
       (window as unknown as { __kkq: unknown }).__kkq = {
         scene: this, world: () => this.world, setPose: (s: string, t: number) => this.debugPose(s, t),
         play: (id: string) => this.scene.restart({ stage: id }), save,
@@ -397,6 +398,29 @@ export class GameScene extends Phaser.Scene {
     if (m) { m.emo = line; m.emoT = 3; }
   }
 
+  /** The in-stage bag: drops (and what this map's exit wants), the quick bag (usable), boxes and crumbs found. */
+  private bagOpen = false;
+  private openBag(): void {
+    const w = this.world; if (!w || this.done) return;
+    this.bagOpen = true; if (!this.online) { this.paused = true; setTouchVisible(false); }
+    this.renderBag();
+  }
+  private closeBag(): void { this.bagOpen = false; showBag(null); if (!this.online) { this.paused = false; setTouchVisible(true); } }
+  private bagUse(slot: number): void { const w = this.world; if (!w || this.online) return; if (w.useItem(slot)) sfx('pickup'); this.renderBag(); }
+  private renderBag(): void {
+    const w = this.world!, h = w.heroes[this.me] ?? w.hero, st = w.stage;
+    const g = st.maps?.[w.mapAt(h.x)]?.goal, wants = g?.kind === 'collect' ? g.wants : [];
+    const drops = (Object.entries(w.drops) as [MobKind, number][]).filter(([, n]) => n > 0);
+    for (const q of wants) if (!drops.some(([k]) => k === q.mob)) drops.unshift([q.mob, 0]);
+    const dropHtml = drops.length ? drops.map(([k, n]) => { const q = wants.find(x => x.mob === k); return `<div class="it ${q ? (n >= q.n ? 'ok' : 'need') : ''}"><img src="art/drop-${k}.webp" onerror="this.style.visibility='hidden'"><div>${dropName(k)} ×${n}<small>${MOBS[k].name}${q ? ` · exit wants ${q.n}` : ''}</small></div></div>`; }).join('') : '<div class="it">No drops yet: beat monsters and pick them up.</div>';
+    const quick = h.bag.map((b, i) => b ? `<div class="it"><img src="art/${CONSUMABLES[b.id].icon}.webp" onerror="this.style.visibility='hidden'"><div>${CONSUMABLES[b.id].name} ×${b.n}<small>slot ${i + 1}</small></div><button class="use" data-use="${i}" ${this.online || b.n <= 0 || h.quickCd > 0 || !CONSUMABLES[b.id].quick ? 'disabled' : ''}>USE</button></div>` : '').join('') || '<div class="it">Your quick bag is empty (set it up in the camp Bag).</div>';
+    const loot = w.lootOf[Math.min(this.me, w.lootOf.length - 1)] ?? [];
+    showBag(`<div class="bagp"><h2>🎒 Bag <button class="x" data-bagclose>✕</button></h2>
+      <h3>Monster drops${wants.length ? ' (outlined: what this exit wants)' : ''}</h3><div class="grid">${dropHtml}</div>
+      <h3>Quick bag${this.online ? ' (online: use keys / buttons 1-4)' : ''}</h3><div class="grid">${quick}</div>
+      <h3>Found this stage</h3><div class="grid"><div class="it">🎁 ${loot.length} box${loot.length === 1 ? '' : 'es'}</div><div class="it">🍪 ${w.run.crumbs} crumbs</div></div></div>`);
+  }
+
   private leave(): void {
     showPause(false);
     // escape: you keep the drops you picked up and the crumbs you found (not the stage's boxes); start fresh next time
@@ -568,7 +592,8 @@ export class GameScene extends Phaser.Scene {
 
   update(_time: number, deltaMs: number): void {
     for (const k of takeTaps()) {
-      if (k === 'Escape' && this.world && !this.done) this.pause(!this.paused);
+      if (k === 'Escape' && this.world && !this.done) { if (this.bagOpen) this.closeBag(); else this.pause(!this.paused); }
+      if (k === 'KeyB' && this.world && !this.done) { if (this.bagOpen) this.closeBag(); else this.openBag(); }
       if (k === 'KeyM') toast(toggleMute() ? 'Sound off' : 'Sound on');
       const ei = ['Digit7', 'Digit8', 'Digit9', 'Digit0'].indexOf(k);
       if (ei >= 0 && this.online && this.world) this.sendEmote(ei);
