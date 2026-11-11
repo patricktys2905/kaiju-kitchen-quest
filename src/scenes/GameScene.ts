@@ -1241,7 +1241,7 @@ export class GameScene extends Phaser.Scene {
 
     if ((this.hudTick = (this.hudTick + 1) % 2) === 0 || this.done) updateHud(w, hero(), st); // the HTML HUD at 30 Hz: plenty, and half the page work
     setUltUi(h.d.level >= ULT_LV, h.ult);
-    const sk = skillsOf(h.d.cls.species).actives;
+    const sk = h.d.actives;
     for (let i = 0; i < 3; i++) {
       const lv = h.d.skillLv[sk[i].id] ?? 0;
       const full = applyMod(applyBranch(sk[i], h.d.branch[sk[i].id]), h.d.mods[sk[i].id]).cd * skillScale(lv).cd * (1 - h.d.cdr);

@@ -3,6 +3,7 @@ import type { Spicy } from './sim/types';
 import { CLASSES, type Stat } from './sim/classes';
 import { CONSUMABLES, type ConsumableId } from './sim/consumables';
 import { type Item, MAX_PLUS, type Slot, BASES, PROCS, SETS, UNIQUES, canWear, fortChance, fortCost, fortRisky, gradeOf, rollGrade, rollItem, salvageValue } from './sim/items';
+import { canLearn, loadoutOf, nodeById, skillUnlocked } from './sim/tree';
 import { clearRewards } from './sim/loot';
 import { MAX_SKILL, SKILLS } from './sim/skills';
 import { type Derived, type HeroProfile, canLevelSkill, derive, gainXp, newProfile } from './sim/stats';
@@ -133,6 +134,24 @@ export function chooseBranch(species: number, id: string, b: 'a' | 'b'): boolean
   const p = save.heroes[species];
   if ((p.skills[id] ?? 0) < 3 || p.branch?.[id]) return false;
   p.branch = { ...(p.branch ?? {}), [id]: b }; persist(); return true;
+}
+
+/** Skill tree: put a point into a node (a skill node also teaches its skill at level 1). */
+export function learnNode(species: number, id: string): boolean {
+  const p = save.heroes[species];
+  if (!canLearn(p, id)) return false;
+  const f = nodeById(species, id)!;
+  p.skillPts--; p.tree = { ...(p.tree ?? {}), [id]: (p.tree?.[id] ?? 0) + 1 };
+  if (f.node.skill) p.skills[f.node.skill.id] = Math.max(1, p.skills[f.node.skill.id] ?? 0);
+  persist(); return true;
+}
+/** Put a skill on button 1-3 (it swaps with whatever was there). */
+export function setLoadout(species: number, slot: number, id: string): boolean {
+  const p = save.heroes[species];
+  if (!skillUnlocked(p, id)) return false;
+  const cur = loadoutOf(p).map(s => s.id), was = cur.indexOf(id);
+  if (was >= 0) cur[was] = cur[slot];
+  cur[slot] = id; p.loadout = cur; persist(); return true;
 }
 
 export function levelSkill(species: number, id: string): boolean {
@@ -281,8 +300,10 @@ export function useScroll(species: number): boolean {
   const first = SKILLS[species]?.actives[0].id ?? Object.keys(p.skills)[0];
   let refund = 0;
   for (const [id, lv] of Object.entries(p.skills)) refund += id === first ? lv - 1 : lv;
+  // tree points too (a skill node's point is the skill's first level, already counted above)
+  for (const [id, r] of Object.entries(p.tree ?? {})) if (!nodeById(species, id)?.node.skill) refund += r;
   p.skills = { [first]: 1 };
-  p.branch = {};
+  p.branch = {}; p.tree = {}; p.loadout = undefined;
   p.skillPts += refund;
   save.items.scroll--; persist(); return true;
 }

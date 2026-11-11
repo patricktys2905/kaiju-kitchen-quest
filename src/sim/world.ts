@@ -5,7 +5,7 @@ import type { AttackDef } from './classes';
 import { rollTier } from './loot';
 import { type BoostKind, CONSUMABLES, type ConsumableId, QUICK_CD } from './consumables';
 import { BOSS_ARMOR, BOSS_PATTERNS, DANGER_MOVES, ELITE, ELITE_MODS, type EliteMod, MOBS, type NemMove, TUNE, nemesisMoves, dropLevel, mobAtk, mobCrumbs, mobHp, mobXp } from './mobs';
-import { type SkillDef, ULTS, ULT_LV, applyBranch, applyMod, skillScale, skillsOf } from './skills';
+import { type SkillDef, ULTS, ULT_LV, applyBranch, applyMod, skillScale } from './skills';
 import { WORLDS } from './stages';
 import type { Derived } from './stats';
 import { type BoxTier, type Hazard, type Input, type MobSpawn, type Prop, type LootBox, type MobKind, NO_INPUT, type SimEvent, type Spicy, type StageDef } from './types';
@@ -438,7 +438,7 @@ export class World {
     const slots = ['skill1', 'skill2', 'skill3'] as const;
     for (let i = 0; i < 3 && free; i++) {
       if (!pressed(slots[i])) continue;
-      const base = skillsOf(c.species).actives[i];
+      const base = h.d.actives[i];
       const lv = h.d.skillLv[base.id] ?? 0;
       const sk = applyMod(applyBranch(base, h.d.branch[base.id]), h.d.mods[base.id]);
       if (!lv || h.cds[i] > 0) continue;
@@ -709,7 +709,7 @@ export class World {
         const n = sk.n ?? 8, big = sk.kind === 'meteor';
         for (let i = 0; i < n; i++) {
           const x = clamp(h.x + h.face * (60 + (i + 0.5) * sk.reach / n) + (this.rand() - 0.5) * 30, 20, this.stage.width - 20);
-          this.shots.push({ id: nextId++, x, y: h.y - 320 - this.rand() * 80, vx: 0, vy: 150, t: -i * (big ? 0.09 : 0.05), dmg: atk * sk.dmg, hit: new Set(), from: 'hero', kx: sk.kx, ky: sk.ky, pierce: big, g: 1400, kind: big ? 'meteor' : 'toast', r: big ? 30 : 16 });
+          this.shots.push({ fromY: h.y, id: nextId++, x, y: h.y - 320 - this.rand() * 80, vx: 0, vy: 150, t: -i * (big ? 0.09 : 0.05), dmg: atk * sk.dmg, hit: new Set(), from: 'hero', kx: sk.kx, ky: sk.ky, pierce: big, g: 1400, kind: big ? 'meteor' : 'toast', r: big ? 30 : 16 });
         }
         break;
       }

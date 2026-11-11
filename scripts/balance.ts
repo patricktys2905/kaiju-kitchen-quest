@@ -9,6 +9,7 @@ import { skillsOf, MAX_SKILL } from '../src/sim/skills';
 import { STAGES } from '../src/sim/stages';
 import { type HeroProfile, derive, newProfile } from '../src/sim/stats';
 import { World } from '../src/sim/world';
+import { heroFor } from './hero-at';
 
 const filter = process.argv[2] ?? '';
 const RUNS = Number(process.argv[3] ?? 3);
@@ -43,7 +44,7 @@ for (const st of STAGES.filter(s => s.id.startsWith(filter))) {
   for (const c of CLASSES) {
     let hc = 0;
     for (let r = 0; r < RUNS; r++) {
-      const p = heroAt(c.species, st.rec + OVER, r + 1);
+      const p = heroFor(c.species, st.rec + OVER, r + 1); void heroAt; // the shared bot build (skills, gear, skill tree)
       const w = new World(st, derive(p), 100 + r, [{ id: 'jam', n: 3 }, null, null, null], 0, HARD, undefined, [], nemesisOf(c.species), NIGHTMARE);
       const bot = new Bot(w, AVERAGE, 7 + r);
       const LIMIT = 60 * 60 * 6;

@@ -8,18 +8,19 @@ import { BASES, PROCS, SETS, UNIQUES, itemIcon, canWear, ownerOf, GRADES, GRADE_
 import { TIER_NAMES, clearCount, likelyTier } from '../sim/loot';
 import { BRANCH_LV, SKILLS, MAX_SKILL, type SkillDef, type SkillKind, ULTS, ULT_LV, branchesFor, skillsOf } from '../sim/skills';
 import { STAGES, WORLDS, BONUS_STAGES, stageById } from '../sim/stages';
-import { STAT_INFO, STATS, derive, xpFor } from '../sim/stats';
+import { type HeroProfile, STAT_INFO, STATS, derive, xpFor } from '../sim/stats';
 import type { BoxTier, LootBox, StageDef } from '../sim/types';
 import { HARD_LV } from '../sim/world';
 import {
   RANK_ORDER, type ClearResult, type Rank, chooseBranch, SHOP_BOXES, SHOP_ITEMS, autoStats, buyBox, buyConsumable, buyGear, canFortify, compare, equip, equipBest, fortify, regrade,
-  gearPrice, hero, isLocked, levelSkill, openBox, persist, resetStats, salvage, salvageWorse, save, setQuick, shopStock, spendStat, toggleLock,
+  gearPrice, hero, isLocked, levelSkill, learnNode, setLoadout, openBox, persist, resetStats, salvage, salvageWorse, save, setQuick, shopStock, spendStat, toggleLock,
   unequip, useScroll, useSugar,
 } from '../save';
 import { UI_CSS } from './style';
 import { freePage, startFree } from './free';
 import type { FreeMode } from '../sim/free';
 import { gearSkillOf, gearText } from '../sim/gear';
+import { type TreePath, allActives, canLearn, nodeById, pointsIn, rankOf, skillUnlocked, statText, treeOf } from '../sim/tree';
 import { logError } from './report';
 import { isTouchDevice } from '../touch';
 import { ACHIEVEMENTS, DAILY_BONUS, achievements, checkUnlocks, claimAch, claimBonus, claimKaijuQuest, claimQuest, claimable, dailyQuests, kaijuQuestState, rewardText, track, unlockProgress } from '../quests';
@@ -266,6 +267,29 @@ function specialHtml(it: Item): string {
 
 function skillText(it: Item): string { return it.skill!.id === 'all' ? `+${it.skill!.n} to all skills` : `+${it.skill!.n} ${SKILL_NAME[it.skill!.id] ?? it.skill!.id}`; }
 
+/** Skills tab: the tree, or the skills list with the button loadout. */
+let skillView: 'tree' | 'skills' = 'tree';
+let selNode: string | null = null;
+let pickSlot: number | null = null;
+function treeHtml(p: HeroProfile): string {
+  const paths = treeOf(p.species);
+  const sel = selNode ? nodeById(p.species, selNode) : null;
+  const col = (t: TreePath) => {
+    const pts = pointsIn(p, t);
+    return `<div class="tpath ${t.arch}"><div class="tph">${t.icon} ${t.name}<small>${pts} pts</small></div>${t.nodes.map((n, row) => {
+      const r = rankOf(p, n.id), can = canLearn(p, n.id), open = (row === 0 || rankOf(p, t.nodes[row - 1].id) > 0) && pts >= n.need;
+      return `<button class="tnode ${n.kind} ${r ? 'got' : ''} ${r >= n.ranks ? 'max' : ''} ${can ? 'can' : ''} ${open ? '' : 'shut'} ${selNode === n.id ? 'sel' : ''}" data-tnode="${n.id}"><i>${open ? n.icon : '🔒'}</i><b>${n.name}</b><u>${r}/${n.ranks}</u></button>`;
+    }).join('')}</div>`;
+  };
+  const detail = sel ? (() => {
+    const { node: n, path, row } = sel, r = rankOf(p, n.id), can = canLearn(p, n.id);
+    const why = r >= n.ranks ? 'Maxed out' : p.skillPts <= 0 ? 'No points to spend (you get 1 per level)' : pointsIn(p, path) < n.need ? `Needs ${n.need} points in ${path.name} (you have ${pointsIn(p, path)})` : row > 0 && !rankOf(p, path.nodes[row - 1].id) ? `Learn ${path.nodes[row - 1].name} first` : '';
+    return `<div class="tdetail"><b>${n.icon} ${n.name}</b> <small>${n.kind === 'skill' ? 'NEW SKILL' : n.kind === 'cap' ? 'CAPSTONE' : n.kind === 'mod' ? 'UPGRADE' : n.kind === 'mastery' ? 'MASTERY' : 'BOOST'} · rank ${r}/${n.ranks}</small><span>${n.desc}${n.stat && r ? ` <em>(now: ${statText(n.stat, n.kind === 'cap' ? 1 : r)})</em>` : ''}</span>
+      <button class="pill ${can ? 'go' : ''}" data-learn="${n.id}" ${can ? '' : 'disabled'}>${can ? 'LEARN +1' : why}</button></div>`;
+  })() : '<div class="tdetail hint">Tap a node to see what it does. Each path gets stronger the more points you put in it: its new skill opens at 5 points, its capstone at 15.</div>';
+  return `<div class="tree">${paths.map(col).join('')}</div>${detail}`;
+}
+
 function skillsPage(): string {
   const p = hero(), d = derive(p), sk = skillsOf(p.species);
   const card = (s: { id: string; name: string; desc: string; unlock: number; kind?: SkillKind }, icon: string, extra: string) => {
@@ -278,10 +302,16 @@ function skillsPage(): string {
     return `<div class="skill ${locked ? 'locked' : ''}"><div class="ic">${icon}</div><div class="t"><b>${s.name}</b> ${learned ? `Lv ${eff}` : ''}<span>${s.desc}</span><span>${locked ? `🔒 Unlocks at hero Lv ${s.unlock}` : learned ? extra : 'Not learned yet — spend a point'}</span>${branchHtml}<div class="pips">${pips}</div></div>
       <button class="pill ${can ? 'go' : ''}" data-skill="${s.id}" ${can ? '' : 'disabled'}>+</button></div>`;
   };
-  return `<div class="h3">Skills ${p.skillPts ? `<span style="color:#ff8a8a">· ${p.skillPts} points</span>` : ''}
-      ${save.items.scroll ? `<button class="pill" data-act="scroll" style="font-size:1.8vmin;padding:0.6vmin 1.4vmin">📜 USE RECIPE SCROLL (refund points) ×${save.items.scroll}</button>` : ''}
-      <small style="color:#b8a8b8;font-family:Nunito;font-size:1.8vmin">1 point per level. Each skill level: +20% damage, -4% cooldown. ⭐ gear adds bonus levels (blue).</small></div>
-    <div class="skills">${sk.actives.map((a, i) => card(a, SKILL_ICON[a.kind], `Button ${i + 1} · ${a.kind === 'buff' ? `${a.buff?.t}s buff` : a.kind === 'heal' ? 'heal' : `${Math.round(a.dmg * 100)}% dmg`} · ${a.cd}s cooldown`)).join('')}
+  const head = `<div class="subtabs"><button class="${skillView === 'tree' ? 'on' : ''}" data-act="sv-tree">🌳 TREE</button><button class="${skillView === 'skills' ? 'on' : ''}" data-act="sv-skills">⚔ SKILLS</button>
+      <span class="pts ${p.skillPts ? 'has' : ''}">${p.skillPts} point${p.skillPts === 1 ? '' : 's'} to spend</span>
+      ${save.items.scroll ? `<button class="pill" data-act="scroll" style="font-size:1.7vmin;padding:0.5vmin 1.2vmin">📜 RESET POINTS ×${save.items.scroll}</button>` : ''}</div>`;
+  if (skillView === 'tree') return head + treeHtml(p);
+  const lo = d.actives, mine = allActives(p.species).filter(a => skillUnlocked(p, a.id));
+  const loadout = `<div class="loadout"><span>Buttons:</span>${lo.map((a, i) => `<button class="slot ${pickSlot === i ? 'on' : ''}" data-slot="${i}"><i>${i + 1}</i>${SKILL_ICON[a.kind] ?? '★'} ${a.name}</button>`).join('')}
+      ${pickSlot !== null ? `<div class="pick">Put on button ${pickSlot + 1}: ${mine.map(a => `<button class="pill ${lo[pickSlot!]?.id === a.id ? 'go' : ''}" data-equipskill="${a.id}">${SKILL_ICON[a.kind] ?? '★'} ${a.name}</button>`).join('')}</div>` : '<small>Tap a button to swap in another skill. New skills come from the 🌳 tree.</small>'}</div>`;
+  const line = (a: SkillDef) => `${lo.includes(a) ? `Button ${lo.indexOf(a) + 1}` : 'Not on a button'} · ${a.kind === 'buff' ? `${a.buff?.t}s buff` : a.kind === 'heal' ? 'heal' : `${Math.round(a.dmg * 100)}% dmg`} · ${a.cd}s cooldown`;
+  return `${head}${loadout}
+    <div class="skills">${mine.map(a => card(a, SKILL_ICON[a.kind] ?? '★', line(a))).join('')}
     ${card(sk.passive, '💗', 'Passive: always on')}
     ${ULTS[p.species] ? `<div class="skill ult ${p.level < ULT_LV ? 'locked' : ''}"><div class="ic">🔥</div><div class="t"><b>ULTIMATE: ${ULTS[p.species].name}</b><span>${ULTS[p.species].desc}</span><span>${p.level < ULT_LV ? `🔒 Unlocks at hero Lv ${ULT_LV}` : 'Fill the gauge by landing and taking hits, then press ULT (key U). Invincible while it plays.'}</span></div></div>` : ''}</div>`;
 }
@@ -384,7 +414,7 @@ function boxesPage(): string {
 }
 
 function onClick(e: MouseEvent): void {
-  const t = (e.target as HTMLElement).closest<HTMLElement>('[data-tab],[data-hero],[data-node],[data-play],[data-stat],[data-sugar],[data-skill],[data-item],[data-act],[data-box],[data-eqslot],[data-bag],[data-cons],[data-qslot],[data-buy],[data-buybox],[data-buygear],[data-branch],[data-mappage],[data-claimq],[data-claima],[data-replay],[data-claimk],[data-free]');
+  const t = (e.target as HTMLElement).closest<HTMLElement>('[data-tab],[data-hero],[data-node],[data-play],[data-stat],[data-sugar],[data-skill],[data-item],[data-act],[data-box],[data-eqslot],[data-bag],[data-cons],[data-qslot],[data-buy],[data-buybox],[data-buygear],[data-branch],[data-mappage],[data-claimq],[data-claima],[data-replay],[data-claimk],[data-free],[data-tnode],[data-learn],[data-slot],[data-equipskill]');
   if (!t || (t as HTMLButtonElement).disabled) return;
   sfx('click');
   const sp = save.selected;
@@ -415,6 +445,10 @@ function onClick(e: MouseEvent): void {
   else if (ds.spicy) { const k = ds.spicy as Spicy, cur = save.spicy ?? []; save.spicy = cur.includes(k) ? cur.filter(x => x !== k) : [...cur, k]; persist(); }
   else if (ds.sugar) { if (useSugar(sp, ds.sugar as Stat)) flash = `Golden Sugar Cube: +1 ${ds.sugar.toUpperCase()} forever!`; }
   else if (ds.skill) levelSkill(sp, ds.skill);
+  else if (ds.tnode) selNode = selNode === ds.tnode ? null : ds.tnode;
+  else if (ds.learn) { const f = nodeById(sp, ds.learn); if (learnNode(sp, ds.learn)) { sfx('levelup'); if (f?.node.skill) { flash = `New skill: ${f.node.skill.name}! Put it on a button in ⚔ SKILLS`; } } }
+  else if (ds.slot) pickSlot = pickSlot === Number(ds.slot) ? null : Number(ds.slot);
+  else if (ds.equipskill) { if (pickSlot !== null && setLoadout(sp, pickSlot, ds.equipskill)) { flash = 'Skill set on the button'; pickSlot = null; } }
   else if (ds.branch) { const [id, b] = ds.branch.split(':'); if (chooseBranch(sp, id, b as 'a' | 'b')) flash = 'Upgrade chosen! (A Recipe Scroll resets it)'; }
   else if (ds.item) selItem = Number(ds.item);
   else if (ds.bag) { bagTab = ds.bag as BagTab; selItem = null; }
@@ -483,6 +517,8 @@ function onClick(e: MouseEvent): void {
       case 'mine': bagMine = !bagMine; selItem = null; break;
       case 'bonus': { const r = claimBonus(); if (r) { flash = 'Daily bonus: ' + r; sfx('reveal5'); } break; }
       case 'mute': toggleMute(); break;
+      case 'sv-tree': skillView = 'tree'; break;
+      case 'sv-skills': skillView = 'skills'; pickSlot = null; break;
       case 'open-all': runGacha(save.boxes.map((_, i) => i)); return;
     }
   }
@@ -659,6 +695,25 @@ const CAMP_CSS = `
 .kq .forge .safe { display: flex; gap: 0.5vmin; align-items: center; color: #a8f0a8; }
 .kq .forge .have { color: #b8a8b8; margin-top: 0.4vmin; }
 .kq .skill .brc { color: #7ac0ff; }
+.kq .pts { font-size: 2vmin; color: #b8a8b8; font-family: Nunito; font-weight: 800; } .kq .pts.has { color: #ff9a8a; }
+.kq .tree { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1vmin; }
+.kq .tpath { background: #1a1020aa; border: 2px solid #ffd27a33; border-radius: 1.6vmin; padding: 0.8vmin; display: flex; flex-direction: column; gap: 0.5vmin; }
+.kq .tpath.power { border-color: #ff8a6a55; } .kq .tpath.guard { border-color: #7ac0ff55; } .kq .tpath.craft { border-color: #c8a8ff55; }
+.kq .tph { font-family: 'Luckiest Guy', sans-serif; font-size: 2.4vmin; color: #ffd27a; display: flex; justify-content: space-between; align-items: baseline; }
+.kq .tph small { font-family: Nunito; font-size: 1.7vmin; color: #b8a8b8; }
+.kq .tnode { display: grid; grid-template-columns: 3.4vmin 1fr auto; align-items: center; gap: 0.6vmin; font: inherit; font-weight: 800; font-size: 1.8vmin; text-align: left; padding: 0.5vmin 0.8vmin; border-radius: 1vmin; border: 2px solid #ffffff22; background: #24142a; color: #c8b8c8; cursor: pointer; }
+.kq .tnode i { font-style: normal; font-size: 2.4vmin; text-align: center; } .kq .tnode u { text-decoration: none; color: #8a7a9a; font-size: 1.6vmin; }
+.kq .tnode.got { color: #ffe9c7; border-color: #ffd27a77; } .kq .tnode.got u { color: #ffd27a; } .kq .tnode.max { background: #3a2a18; }
+.kq .tnode.can { box-shadow: 0 0 0 2px #7ae87a inset; } .kq .tnode.shut { opacity: 0.45; } .kq .tnode.sel { outline: 2px solid #fff; }
+.kq .tnode.skill b, .kq .tnode.cap b { color: #ffd27a; } .kq .tnode.skill { background: #2a2a14; } .kq .tnode.cap { background: #3a1a28; }
+.kq .tdetail { margin-top: 1vmin; display: flex; flex-wrap: wrap; align-items: center; gap: 0.6vmin 1.4vmin; background: #1a1020; border: 2px solid #ffd27a55; border-radius: 1.4vmin; padding: 1vmin 1.4vmin; font-size: 2vmin; color: #e8d8f0; }
+.kq .tdetail b { font-family: 'Luckiest Guy', sans-serif; font-size: 2.6vmin; color: #ffd27a; } .kq .tdetail small { color: #b8a8b8; } .kq .tdetail span { flex-basis: 100%; } .kq .tdetail em { color: #7ae87a; font-style: normal; }
+.kq .tdetail.hint { color: #b8a8b8; }
+.kq .loadout { display: flex; flex-wrap: wrap; align-items: center; gap: 0.8vmin; margin-bottom: 1vmin; font-size: 2vmin; color: #ffe9c7; }
+.kq .loadout .slot { font: inherit; font-weight: 800; padding: 0.6vmin 1.2vmin; border-radius: 1.2vmin; border: 2px solid #7ac0ff88; background: #1a2a3a; color: #e8f4ff; cursor: pointer; }
+.kq .loadout .slot i { font-style: normal; background: #7ac0ff; color: #0a1a2a; border-radius: 50%; padding: 0 0.6vmin; margin-right: 0.5vmin; } .kq .loadout .slot.on { border-color: #fff; background: #2a4a6a; }
+.kq .loadout .pick { flex-basis: 100%; display: flex; flex-wrap: wrap; gap: 0.6vmin; align-items: center; } .kq .loadout .pick .pill { font-size: 1.8vmin; padding: 0.5vmin 1vmin; }
+.kq .loadout small { color: #b8a8b8; }
 .kq .skill .brlock { color: #8a7a9a; font-size: 1.7vmin; }
 .kq .skill .brpick { display: flex; gap: 0.8vmin; flex-wrap: wrap; margin-top: 0.4vmin; color: #ffd27a; align-items: center; }
 .kq .skill .brpick .pill { font-size: 1.7vmin; padding: 0.5vmin 1vmin; }

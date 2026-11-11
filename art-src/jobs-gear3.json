@@ -1,0 +1,642 @@
+[
+ {
+  "name": "w-gob4",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-gob3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Thorn Vine Flail\": a flail of twisted thorny strawberry vines with a big glossy berry head. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A strong high-level item (a little more ornate than the reference, but no glow or sparkles). Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody wearing or holding it. Square 1:1 image."
+ },
+ {
+  "name": "w-gob5",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-gob3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Jam Dragon Cleaver\": a huge cleaver of crystallised red jam with a strawberry-leaf hilt. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A strong high-level item (a little more ornate than the reference, but no glow or sparkles). Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody wearing or holding it. Square 1:1 image."
+ },
+ {
+  "name": "a-gob4",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/a-gob3.png"
+  ],
+  "prompt": "Generate an image. The reference is a armour icon from my cute 2D kitchen action RPG. Draw a NEW ARMOUR icon called \"Berry Patch Plate\": a sturdy plate armour of layered strawberry slices with leaf pauldrons. Shown flat and centred, filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A strong high-level item (a little more ornate than the reference, but no glow or sparkles). Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody wearing or holding it. Square 1:1 image."
+ },
+ {
+  "name": "a-gob5",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/a-gob3.png"
+  ],
+  "prompt": "Generate an image. The reference is a armour icon from my cute 2D kitchen action RPG. Draw a NEW ARMOUR icon called \"Ruby Jam Armour\": a grand armour of glossy ruby-red jam crystal with golden seed studs. Shown flat and centred, filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A strong high-level item (a little more ornate than the reference, but no glow or sparkles). Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody wearing or holding it. Square 1:1 image."
+ },
+ {
+  "name": "w-squid4",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-squid3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Bubbling Beaker Staff\": a staff topped with a round beaker of bubbling blue potion. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A strong high-level item (a little more ornate than the reference, but no glow or sparkles). Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody wearing or holding it. Square 1:1 image."
+ },
+ {
+  "name": "w-squid5",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-squid3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Tentacle Tesla Rod\": a rod coiled with jelly tentacles and crackling blue sparks. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A strong high-level item (a little more ornate than the reference, but no glow or sparkles). Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody wearing or holding it. Square 1:1 image."
+ },
+ {
+  "name": "a-squid4",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/a-squid3.png"
+  ],
+  "prompt": "Generate an image. The reference is a armour icon from my cute 2D kitchen action RPG. Draw a NEW ARMOUR icon called \"Reef Plate\": a plate armour of pink and blue coral. Shown flat and centred, filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A strong high-level item (a little more ornate than the reference, but no glow or sparkles). Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody wearing or holding it. Square 1:1 image."
+ },
+ {
+  "name": "a-squid5",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/a-squid3.png"
+  ],
+  "prompt": "Generate an image. The reference is a armour icon from my cute 2D kitchen action RPG. Draw a NEW ARMOUR icon called \"Abyssal Lab Armour\": a deep-sea armour with glowing jellyfish lanterns and brass gauges. Shown flat and centred, filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A strong high-level item (a little more ornate than the reference, but no glow or sparkles). Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody wearing or holding it. Square 1:1 image."
+ },
+ {
+  "name": "w-crab4",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-crab3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Parmesan Pincers\": a pair of crab pincers carved from hard parmesan cheese. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A strong high-level item (a little more ornate than the reference, but no glow or sparkles). Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody wearing or holding it. Square 1:1 image."
+ },
+ {
+  "name": "w-crab5",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-crab3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Cabbage King Claw\": a giant regal claw of layered cabbage leaves with a gold rim. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A strong high-level item (a little more ornate than the reference, but no glow or sparkles). Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody wearing or holding it. Square 1:1 image."
+ },
+ {
+  "name": "a-crab4",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/a-crab3.png"
+  ],
+  "prompt": "Generate an image. The reference is a armour icon from my cute 2D kitchen action RPG. Draw a NEW ARMOUR icon called \"Cheddar Bulwark\": a thick round armour of orange cheddar with a red wax trim. Shown flat and centred, filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A strong high-level item (a little more ornate than the reference, but no glow or sparkles). Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody wearing or holding it. Square 1:1 image."
+ },
+ {
+  "name": "a-crab5",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/a-crab3.png"
+  ],
+  "prompt": "Generate an image. The reference is a armour icon from my cute 2D kitchen action RPG. Draw a NEW ARMOUR icon called \"Aged Gouda Fortress\": a massive fortress-like armour of aged golden gouda with wax towers. Shown flat and centred, filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A strong high-level item (a little more ornate than the reference, but no glow or sparkles). Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody wearing or holding it. Square 1:1 image."
+ },
+ {
+  "name": "w-blob4",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-blob3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Gelatin Whip\": a wobbly whip of clear rainbow gelatin. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A strong high-level item (a little more ornate than the reference, but no glow or sparkles). Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody wearing or holding it. Square 1:1 image."
+ },
+ {
+  "name": "w-blob5",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-blob3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Jelly Crown Sceptre\": a sceptre topped with a wobbly jelly crown and a cherry. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A strong high-level item (a little more ornate than the reference, but no glow or sparkles). Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody wearing or holding it. Square 1:1 image."
+ },
+ {
+  "name": "a-blob4",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/a-blob3.png"
+  ],
+  "prompt": "Generate an image. The reference is a armour icon from my cute 2D kitchen action RPG. Draw a NEW ARMOUR icon called \"Wobble Mail\": a mail armour of little jelly cubes in many colours. Shown flat and centred, filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A strong high-level item (a little more ornate than the reference, but no glow or sparkles). Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody wearing or holding it. Square 1:1 image."
+ },
+ {
+  "name": "a-blob5",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/a-blob3.png"
+  ],
+  "prompt": "Generate an image. The reference is a armour icon from my cute 2D kitchen action RPG. Draw a NEW ARMOUR icon called \"Royal Jelly Armour\": a regal armour of golden royal jelly with honeycomb trims. Shown flat and centred, filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A strong high-level item (a little more ornate than the reference, but no glow or sparkles). Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody wearing or holding it. Square 1:1 image."
+ },
+ {
+  "name": "w-moth4",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-moth3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Starlight Whisk\": an elegant wand made of a silver whisk with a glowing star in its wires. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A strong high-level item (a little more ornate than the reference, but no glow or sparkles). Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody wearing or holding it. Square 1:1 image."
+ },
+ {
+  "name": "w-moth5",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-moth3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Moonmallow Scepter\": a scepter topped with a glowing crescent-moon marshmallow. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A strong high-level item (a little more ornate than the reference, but no glow or sparkles). Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody wearing or holding it. Square 1:1 image."
+ },
+ {
+  "name": "a-moth4",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/a-moth3.png"
+  ],
+  "prompt": "Generate an image. The reference is a armour icon from my cute 2D kitchen action RPG. Draw a NEW ARMOUR icon called \"Spun Sugar Robe\": a flowing robe of spun sugar threads in pastel lilac. Shown flat and centred, filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A strong high-level item (a little more ornate than the reference, but no glow or sparkles). Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody wearing or holding it. Square 1:1 image."
+ },
+ {
+  "name": "a-moth5",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/a-moth3.png"
+  ],
+  "prompt": "Generate an image. The reference is a armour icon from my cute 2D kitchen action RPG. Draw a NEW ARMOUR icon called \"Nebula Silk Gown\": a starry deep-purple silk gown with marshmallow-puff shoulders. Shown flat and centred, filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A strong high-level item (a little more ornate than the reference, but no glow or sparkles). Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody wearing or holding it. Square 1:1 image."
+ },
+ {
+  "name": "w-toast4",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-toast3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Crouton Daggers\": two curved daggers made of crunchy golden croutons. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A strong high-level item (a little more ornate than the reference, but no glow or sparkles). Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody wearing or holding it. Square 1:1 image."
+ },
+ {
+  "name": "w-toast5",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-toast3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Burnt Toast Reaper\": a dark scythe with a blade of blackened toast and glowing embers. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A strong high-level item (a little more ornate than the reference, but no glow or sparkles). Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody wearing or holding it. Square 1:1 image."
+ },
+ {
+  "name": "a-toast4",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/a-toast3.png"
+  ],
+  "prompt": "Generate an image. The reference is a armour icon from my cute 2D kitchen action RPG. Draw a NEW ARMOUR icon called \"Sourdough Shadow Cloak\": a hooded shadowy cloak with a sourdough crust texture. Shown flat and centred, filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A strong high-level item (a little more ornate than the reference, but no glow or sparkles). Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody wearing or holding it. Square 1:1 image."
+ },
+ {
+  "name": "a-toast5",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/a-toast3.png"
+  ],
+  "prompt": "Generate an image. The reference is a armour icon from my cute 2D kitchen action RPG. Draw a NEW ARMOUR icon called \"Midnight Brioche Mantle\": a midnight-blue mantle with golden brioche plates. Shown flat and centred, filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A strong high-level item (a little more ornate than the reference, but no glow or sparkles). Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody wearing or holding it. Square 1:1 image."
+ },
+ {
+  "name": "w-dump4",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-dump3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Bao Moon Staff\": a staff topped with a round white bao bun like a full moon. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A strong high-level item (a little more ornate than the reference, but no glow or sparkles). Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody wearing or holding it. Square 1:1 image."
+ },
+ {
+  "name": "w-dump5",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-dump3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Imperial Wok Shield\": a grand round wok used as a weapon with a dragon motif. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A strong high-level item (a little more ornate than the reference, but no glow or sparkles). Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody wearing or holding it. Square 1:1 image."
+ },
+ {
+  "name": "a-dump4",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/a-dump3.png"
+  ],
+  "prompt": "Generate an image. The reference is a armour icon from my cute 2D kitchen action RPG. Draw a NEW ARMOUR icon called \"Jade Steamer Robe\": a jade-green robe with woven bamboo steamer panels. Shown flat and centred, filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A strong high-level item (a little more ornate than the reference, but no glow or sparkles). Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody wearing or holding it. Square 1:1 image."
+ },
+ {
+  "name": "a-dump5",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/a-dump3.png"
+  ],
+  "prompt": "Generate an image. The reference is a armour icon from my cute 2D kitchen action RPG. Draw a NEW ARMOUR icon called \"Emperor Dumpling Armour\": an imperial armour of golden dumpling-pleat scales. Shown flat and centred, filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A strong high-level item (a little more ornate than the reference, but no glow or sparkles). Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody wearing or holding it. Square 1:1 image."
+ },
+ {
+  "name": "w-nori4",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-nori3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Salmon Fin Katana\": a sleek katana with a salmon-pink blade and a nori-wrapped hilt. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A strong high-level item (a little more ornate than the reference, but no glow or sparkles). Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody wearing or holding it. Square 1:1 image."
+ },
+ {
+  "name": "w-nori5",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-nori3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Wasabi Dragon Glaive\": a long glaive with a glowing green wasabi dragon blade. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A strong high-level item (a little more ornate than the reference, but no glow or sparkles). Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody wearing or holding it. Square 1:1 image."
+ },
+ {
+  "name": "a-nori4",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/a-nori3.png"
+  ],
+  "prompt": "Generate an image. The reference is a armour icon from my cute 2D kitchen action RPG. Draw a NEW ARMOUR icon called \"Tamago Plate\": a plate armour of folded yellow tamago omelette layers. Shown flat and centred, filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A strong high-level item (a little more ornate than the reference, but no glow or sparkles). Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody wearing or holding it. Square 1:1 image."
+ },
+ {
+  "name": "a-nori5",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/a-nori3.png"
+  ],
+  "prompt": "Generate an image. The reference is a armour icon from my cute 2D kitchen action RPG. Draw a NEW ARMOUR icon called \"Dragon Roll Armour\": a grand armour shaped like a dragon sushi roll with avocado scales. Shown flat and centred, filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A strong high-level item (a little more ornate than the reference, but no glow or sparkles). Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody wearing or holding it. Square 1:1 image."
+ },
+ {
+  "name": "w-choco4",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-choco3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Brownie Brick Gauntlets\": heavy gauntlets made of fudgy brownie bricks. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A strong high-level item (a little more ornate than the reference, but no glow or sparkles). Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody wearing or holding it. Square 1:1 image."
+ },
+ {
+  "name": "w-choco5",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-choco3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Molten Lava Cake Hammer\": a hammer with a lava-cake head oozing glowing chocolate. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A strong high-level item (a little more ornate than the reference, but no glow or sparkles). Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody wearing or holding it. Square 1:1 image."
+ },
+ {
+  "name": "a-choco4",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/a-choco3.png"
+  ],
+  "prompt": "Generate an image. The reference is a armour icon from my cute 2D kitchen action RPG. Draw a NEW ARMOUR icon called \"Truffle Plate\": a dark chocolate truffle plate armour with cocoa dust. Shown flat and centred, filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A strong high-level item (a little more ornate than the reference, but no glow or sparkles). Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody wearing or holding it. Square 1:1 image."
+ },
+ {
+  "name": "a-choco5",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/a-choco3.png"
+  ],
+  "prompt": "Generate an image. The reference is a armour icon from my cute 2D kitchen action RPG. Draw a NEW ARMOUR icon called \"Cocoa Titan Armour\": a massive cocoa-bean titan armour with gold-foil trim. Shown flat and centred, filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A strong high-level item (a little more ornate than the reference, but no glow or sparkles). Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody wearing or holding it. Square 1:1 image."
+ },
+ {
+  "name": "w-gum4",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-gum3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Jawbreaker Mace\": a mace with a layered rainbow jawbreaker head. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A strong high-level item (a little more ornate than the reference, but no glow or sparkles). Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody wearing or holding it. Square 1:1 image."
+ },
+ {
+  "name": "w-gum5",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-gum3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Bubble Blaster\": a big candy-pink blaster that blows giant bubblegum bubbles. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A strong high-level item (a little more ornate than the reference, but no glow or sparkles). Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody wearing or holding it. Square 1:1 image."
+ },
+ {
+  "name": "a-gum4",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/a-gum3.png"
+  ],
+  "prompt": "Generate an image. The reference is a armour icon from my cute 2D kitchen action RPG. Draw a NEW ARMOUR icon called \"Taffy Armour\": a stretchy pastel taffy armour with candy-wrapper trims. Shown flat and centred, filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A strong high-level item (a little more ornate than the reference, but no glow or sparkles). Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody wearing or holding it. Square 1:1 image."
+ },
+ {
+  "name": "a-gum5",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/a-gum3.png"
+  ],
+  "prompt": "Generate an image. The reference is a armour icon from my cute 2D kitchen action RPG. Draw a NEW ARMOUR icon called \"Rock Candy Fortress\": a crystal armour of glittering rock candy. Shown flat and centred, filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A strong high-level item (a little more ornate than the reference, but no glow or sparkles). Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody wearing or holding it. Square 1:1 image."
+ },
+ {
+  "name": "w-blue4",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-blue3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Blueberry Bomb Hammer\": a big hammer whose head is a cluster of shiny blueberries bound in a muffin-tin band. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A strong high-level item (a little more ornate than the reference, but no glow or sparkles). Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody wearing or holding it. Square 1:1 image."
+ },
+ {
+  "name": "w-blue5",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-blue3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Golden Muffin Maul\": a giant maul shaped like a golden muffin top with blueberry gems. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A strong high-level item (a little more ornate than the reference, but no glow or sparkles). Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody wearing or holding it. Square 1:1 image."
+ },
+ {
+  "name": "a-blue4",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/a-blue3.png"
+  ],
+  "prompt": "Generate an image. The reference is a armour icon from my cute 2D kitchen action RPG. Draw a NEW ARMOUR icon called \"Crumble Knight Plate\": a knightly plate armour with a crumbly streusel texture and blueberry buttons. Shown flat and centred, filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A strong high-level item (a little more ornate than the reference, but no glow or sparkles). Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody wearing or holding it. Square 1:1 image."
+ },
+ {
+  "name": "a-blue5",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/a-blue3.png"
+  ],
+  "prompt": "Generate an image. The reference is a armour icon from my cute 2D kitchen action RPG. Draw a NEW ARMOUR icon called \"Royal Muffin Mail\": a royal armour of golden muffin-cup pleats with a blueberry crown crest. Shown flat and centred, filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A strong high-level item (a little more ornate than the reference, but no glow or sparkles). Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody wearing or holding it. Square 1:1 image."
+ },
+ {
+  "name": "w-pizza4",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-pizza3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Cheese Wheel Saw\": a round saw blade made of a hard cheese wheel with pepperoni teeth. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A strong high-level item (a little more ornate than the reference, but no glow or sparkles). Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody wearing or holding it. Square 1:1 image."
+ },
+ {
+  "name": "w-pizza5",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-pizza3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Inferno Pizza Blade\": a long curved sword of fiery pizza crust with a molten-cheese edge. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A strong high-level item (a little more ornate than the reference, but no glow or sparkles). Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody wearing or holding it. Square 1:1 image."
+ },
+ {
+  "name": "a-pizza4",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/a-pizza3.png"
+  ],
+  "prompt": "Generate an image. The reference is a armour icon from my cute 2D kitchen action RPG. Draw a NEW ARMOUR icon called \"Mozzarella Mail\": a stretchy chain mail of woven mozzarella strands with a basil-leaf clasp. Shown flat and centred, filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A strong high-level item (a little more ornate than the reference, but no glow or sparkles). Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody wearing or holding it. Square 1:1 image."
+ },
+ {
+  "name": "a-pizza5",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/a-pizza3.png"
+  ],
+  "prompt": "Generate an image. The reference is a armour icon from my cute 2D kitchen action RPG. Draw a NEW ARMOUR icon called \"Wood-Fired Plate\": a dark heavy plate armour like a wood-fired oven with glowing ember cracks. Shown flat and centred, filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A strong high-level item (a little more ornate than the reference, but no glow or sparkles). Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody wearing or holding it. Square 1:1 image."
+ },
+ {
+  "name": "w-slo4",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-slo3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Boba Bo Staff\": a long bo staff like a tall bubble-tea straw with tapioca pearls. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A strong high-level item (a little more ornate than the reference, but no glow or sparkles). Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody wearing or holding it. Square 1:1 image."
+ },
+ {
+  "name": "w-slo5",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-slo3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Dream Pillow Hammer\": a hammer with a big fluffy cloud-pillow head. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A strong high-level item (a little more ornate than the reference, but no glow or sparkles). Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody wearing or holding it. Square 1:1 image."
+ },
+ {
+  "name": "a-slo4",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/a-slo3.png"
+  ],
+  "prompt": "Generate an image. The reference is a armour icon from my cute 2D kitchen action RPG. Draw a NEW ARMOUR icon called \"Tea Leaf Wrap\": a wrap armour of layered tea leaves with a boba button. Shown flat and centred, filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A strong high-level item (a little more ornate than the reference, but no glow or sparkles). Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody wearing or holding it. Square 1:1 image."
+ },
+ {
+  "name": "a-slo5",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/a-slo3.png"
+  ],
+  "prompt": "Generate an image. The reference is a armour icon from my cute 2D kitchen action RPG. Draw a NEW ARMOUR icon called \"Sleepy Moon Robe\": a cosy dark-blue robe with sleepy moons and stars. Shown flat and centred, filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A strong high-level item (a little more ornate than the reference, but no glow or sparkles). Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody wearing or holding it. Square 1:1 image."
+ },
+ {
+  "name": "w-avo4",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-avo3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Nacho Spear\": a spear with a big triangular nacho chip blade and salsa. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A strong high-level item (a little more ornate than the reference, but no glow or sparkles). Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody wearing or holding it. Square 1:1 image."
+ },
+ {
+  "name": "w-avo5",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-avo3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Golden Avocado Staff\": a staff topped with a gleaming golden avocado half and its pit. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A strong high-level item (a little more ornate than the reference, but no glow or sparkles). Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody wearing or holding it. Square 1:1 image."
+ },
+ {
+  "name": "a-avo4",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/a-avo3.png"
+  ],
+  "prompt": "Generate an image. The reference is a armour icon from my cute 2D kitchen action RPG. Draw a NEW ARMOUR icon called \"Guac Shell Armour\": a tough green avocado-skin shell armour. Shown flat and centred, filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A strong high-level item (a little more ornate than the reference, but no glow or sparkles). Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody wearing or holding it. Square 1:1 image."
+ },
+ {
+  "name": "a-avo5",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/a-avo3.png"
+  ],
+  "prompt": "Generate an image. The reference is a armour icon from my cute 2D kitchen action RPG. Draw a NEW ARMOUR icon called \"Fiesta Dragon Plate\": a festive dragon plate armour with papel-picado colours. Shown flat and centred, filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A strong high-level item (a little more ornate than the reference, but no glow or sparkles). Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody wearing or holding it. Square 1:1 image."
+ },
+ {
+  "name": "w-fish4",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-fish3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Salmon Harpoon\": a harpoon with a salmon-pink head and a seaweed-wrapped shaft. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A strong high-level item (a little more ornate than the reference, but no glow or sparkles). Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody wearing or holding it. Square 1:1 image."
+ },
+ {
+  "name": "w-fish5",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-fish3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"River King Trident\": a grand trident with a leaping-salmon motif and a lemon gem. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A strong high-level item (a little more ornate than the reference, but no glow or sparkles). Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody wearing or holding it. Square 1:1 image."
+ },
+ {
+  "name": "a-fish4",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/a-fish3.png"
+  ],
+  "prompt": "Generate an image. The reference is a armour icon from my cute 2D kitchen action RPG. Draw a NEW ARMOUR icon called \"Riverstone Scale Mail\": a scale mail of smooth grey river stones and salmon scales. Shown flat and centred, filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A strong high-level item (a little more ornate than the reference, but no glow or sparkles). Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody wearing or holding it. Square 1:1 image."
+ },
+ {
+  "name": "a-fish5",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/a-fish3.png"
+  ],
+  "prompt": "Generate an image. The reference is a armour icon from my cute 2D kitchen action RPG. Draw a NEW ARMOUR icon called \"Sushi Emperor Armour\": an emperor armour with nigiri shoulder plates and a wasabi gem. Shown flat and centred, filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A strong high-level item (a little more ornate than the reference, but no glow or sparkles). Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody wearing or holding it. Square 1:1 image."
+ },
+ {
+  "name": "w-hog4",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-hog3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Kebab Lance\": a long lance threaded with grilled kebab chunks. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A strong high-level item (a little more ornate than the reference, but no glow or sparkles). Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody wearing or holding it. Square 1:1 image."
+ },
+ {
+  "name": "w-hog5",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-hog3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Flaming Grill Fork\": a giant barbecue fork with flaming prongs. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A strong high-level item (a little more ornate than the reference, but no glow or sparkles). Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody wearing or holding it. Square 1:1 image."
+ },
+ {
+  "name": "a-hog4",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/a-hog3.png"
+  ],
+  "prompt": "Generate an image. The reference is a armour icon from my cute 2D kitchen action RPG. Draw a NEW ARMOUR icon called \"Grill Mesh Mail\": a chain mail of blackened grill mesh with mustard-yellow trim. Shown flat and centred, filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A strong high-level item (a little more ornate than the reference, but no glow or sparkles). Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody wearing or holding it. Square 1:1 image."
+ },
+ {
+  "name": "a-hog5",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/a-hog3.png"
+  ],
+  "prompt": "Generate an image. The reference is a armour icon from my cute 2D kitchen action RPG. Draw a NEW ARMOUR icon called \"Barbecue Champion Plate\": a champion plate armour with grill bars and a golden sausage emblem. Shown flat and centred, filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A strong high-level item (a little more ornate than the reference, but no glow or sparkles). Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody wearing or holding it. Square 1:1 image."
+ },
+ {
+  "name": "w-mint4",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-mint3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Mint Crystal Shield\": a round shield of clear mint crystal with chocolate chips. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A strong high-level item (a little more ornate than the reference, but no glow or sparkles). Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody wearing or holding it. Square 1:1 image."
+ },
+ {
+  "name": "w-mint5",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-mint3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Glacier Scoop Staff\": a staff topped with a giant ice-cream scoop of glacier mint. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A strong high-level item (a little more ornate than the reference, but no glow or sparkles). Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody wearing or holding it. Square 1:1 image."
+ },
+ {
+  "name": "a-mint4",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/a-mint3.png"
+  ],
+  "prompt": "Generate an image. The reference is a armour icon from my cute 2D kitchen action RPG. Draw a NEW ARMOUR icon called \"Waffle Shell Plate\": a heavy armour like a waffle-cone turtle shell. Shown flat and centred, filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A strong high-level item (a little more ornate than the reference, but no glow or sparkles). Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody wearing or holding it. Square 1:1 image."
+ },
+ {
+  "name": "a-mint5",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/a-mint3.png"
+  ],
+  "prompt": "Generate an image. The reference is a armour icon from my cute 2D kitchen action RPG. Draw a NEW ARMOUR icon called \"Frozen Fortress Shell\": a massive frozen shell armour of mint ice and dark chocolate. Shown flat and centred, filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A strong high-level item (a little more ornate than the reference, but no glow or sparkles). Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody wearing or holding it. Square 1:1 image."
+ },
+ {
+  "name": "w-peng4",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-peng3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Frozen Cone Lance\": a lance shaped like a long frozen ice-cream cone with icy swirls. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A strong high-level item (a little more ornate than the reference, but no glow or sparkles). Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody wearing or holding it. Square 1:1 image."
+ },
+ {
+  "name": "w-peng5",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-peng3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Blizzard Sundae Staff\": a staff topped with a swirling blizzard sundae and a cherry. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A strong high-level item (a little more ornate than the reference, but no glow or sparkles). Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody wearing or holding it. Square 1:1 image."
+ },
+ {
+  "name": "a-peng4",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/a-peng3.png"
+  ],
+  "prompt": "Generate an image. The reference is a armour icon from my cute 2D kitchen action RPG. Draw a NEW ARMOUR icon called \"Cookie Crust Plate\": a plate armour of black-and-white cookie crust. Shown flat and centred, filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A strong high-level item (a little more ornate than the reference, but no glow or sparkles). Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody wearing or holding it. Square 1:1 image."
+ },
+ {
+  "name": "a-peng5",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/a-peng3.png"
+  ],
+  "prompt": "Generate an image. The reference is a armour icon from my cute 2D kitchen action RPG. Draw a NEW ARMOUR icon called \"Glacier Tux Armour\": an icy tuxedo-style armour of glacier blue with cookie buttons. Shown flat and centred, filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A strong high-level item (a little more ornate than the reference, but no glow or sparkles). Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody wearing or holding it. Square 1:1 image."
+ },
+ {
+  "name": "w-roo4",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-roo3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Fudge Knuckles\": boxing knuckles made of glossy fudge. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A strong high-level item (a little more ornate than the reference, but no glow or sparkles). Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody wearing or holding it. Square 1:1 image."
+ },
+ {
+  "name": "w-roo5",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-roo3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Champion Cake Gloves\": golden champion boxing gloves with red velvet cake layers. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A strong high-level item (a little more ornate than the reference, but no glow or sparkles). Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody wearing or holding it. Square 1:1 image."
+ },
+ {
+  "name": "a-roo4",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/a-roo3.png"
+  ],
+  "prompt": "Generate an image. The reference is a armour icon from my cute 2D kitchen action RPG. Draw a NEW ARMOUR icon called \"Velvet Boxer Robe\": a deep-red velvet boxer's robe with gold trim. Shown flat and centred, filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A strong high-level item (a little more ornate than the reference, but no glow or sparkles). Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody wearing or holding it. Square 1:1 image."
+ },
+ {
+  "name": "a-roo5",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/a-roo3.png"
+  ],
+  "prompt": "Generate an image. The reference is a armour icon from my cute 2D kitchen action RPG. Draw a NEW ARMOUR icon called \"Grand Champion Belt Armour\": an armour with a huge golden champion belt and frosting layers. Shown flat and centred, filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A strong high-level item (a little more ornate than the reference, but no glow or sparkles). Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody wearing or holding it. Square 1:1 image."
+ },
+ {
+  "name": "w-owl4",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-owl3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Churro Wand\": a wand made of a sugary churro with a star tip. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A strong high-level item (a little more ornate than the reference, but no glow or sparkles). Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody wearing or holding it. Square 1:1 image."
+ },
+ {
+  "name": "w-owl5",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/w-owl3.png"
+  ],
+  "prompt": "Generate an image. The reference is a weapon icon from my cute 2D kitchen action RPG. Draw a NEW WEAPON icon called \"Pinata Thunder Staff\": a staff topped with a colourful pinata star crackling with sparks. Shown diagonally with the HEAD at the TOP-LEFT and the HANDLE at the BOTTOM-RIGHT (round items simply centred), filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A strong high-level item (a little more ornate than the reference, but no glow or sparkles). Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody wearing or holding it. Square 1:1 image."
+ },
+ {
+  "name": "a-owl4",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/a-owl3.png"
+  ],
+  "prompt": "Generate an image. The reference is a armour icon from my cute 2D kitchen action RPG. Draw a NEW ARMOUR icon called \"Tortilla Feather Mantle\": a feathered mantle of golden tortilla strips. Shown flat and centred, filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A strong high-level item (a little more ornate than the reference, but no glow or sparkles). Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody wearing or holding it. Square 1:1 image."
+ },
+ {
+  "name": "a-owl5",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/a-owl3.png"
+  ],
+  "prompt": "Generate an image. The reference is a armour icon from my cute 2D kitchen action RPG. Draw a NEW ARMOUR icon called \"Night Fiesta Armour\": a midnight armour with glowing fiesta-light trims and owl motifs. Shown flat and centred, filling 80% of the frame. Same style (clean dark outlines, saturated colours, glossy cel shading). A strong high-level item (a little more ornate than the reference, but no glow or sparkles). Solid flat magenta (#FF00FF) background, no shadow, no text, no character, nobody wearing or holding it. Square 1:1 image."
+ }
+]

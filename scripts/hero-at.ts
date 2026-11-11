@@ -3,6 +3,7 @@ import { newProfile, type HeroProfile } from '../src/sim/stats';
 import { CLASSES, type Stat } from '../src/sim/classes';
 import { MAX_SKILL, skillsOf } from '../src/sim/skills';
 import { BASES, rollItem, type Slot } from '../src/sim/items';
+import { canLearn, treeOf } from '../src/sim/tree';
 export function heroFor(species: number, level: number, seed: number): HeroProfile {
   const p = newProfile(species);
   p.level = level;
@@ -19,6 +20,12 @@ export function heroFor(species: number, level: number, seed: number): HeroProfi
     let it; do { it = rollItem(1, rand() < 0.5 ? 2 : 3, level, rand, [], species); } while (BASES[it.base].slot !== slot || (BASES[it.base].for !== undefined && BASES[it.base].for !== species));
     it.rarity = Math.min(it.rarity, 3) as 1 | 2 | 3; p.equip[slot] = it;
   }
+  // the rest of the points go into the skill tree, like a player working down one path, then the next
+  p.skillPts = pts;
+  for (const path of treeOf(species)) for (const n of path.nodes) while (canLearn(p, n.id)) { p.skillPts--; p.tree = { ...(p.tree ?? {}), [n.id]: (p.tree?.[n.id] ?? 0) + 1 }; if (n.skill) p.skills[n.skill.id] = Math.max(1, p.skills[n.skill.id] ?? 0); }
+  // put up to two of the new tree skills on the buttons (so the bots use and test them)
+  const learned = treeOf(species).map(t => t.nodes[2]).filter(n => (p.tree?.[n.id] ?? 0) > 0).map(n => n.skill!.id).slice(0, 2);
+  if (learned.length) p.loadout = [...learned, ...sk.actives.map(a => a.id)].slice(0, 3);
   return p;
 }
 

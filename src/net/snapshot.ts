@@ -2,7 +2,8 @@
 // same stage purely for drawing and copies every snapshot into it. Arrays of rounded numbers keep messages small
 // (the backup MQTT route is slow). Index tables are append-only: change them only with the app version.
 import { MOBS } from '../sim/mobs';
-import { SKILLS, ULTS } from '../sim/skills';
+import { ULTS } from '../sim/skills';
+import { allActives } from '../sim/tree';
 import type { BoxTier, MobKind } from '../sim/types';
 import type { HeroState, Mob, World } from '../sim/world';
 
@@ -74,7 +75,7 @@ export function applySnapshot(w: World, s: Snapshot): void {
     const [x, y, vx, vy, face, st, t, step, ground, skill, gliding, inv, hp, , buff, counter, ult, revT, orbs, on] = a as number[];
     Object.assign(h, { x, y, vx, vy, face, state: HERO_STATES[st], t, step, ground: !!ground, gliding: !!gliding, inv, hp, counter, ult, revT, on: on === -9 ? null : on });
     const sid = (a[9] as string) || '';
-    h.skill = sid ? [...(SKILLS[h.d.cls.species]?.actives ?? []), ULTS[h.d.cls.species]].find(k => k?.id === sid) ?? null : null;
+    h.skill = sid ? [...allActives(h.d.cls.species), ULTS[h.d.cls.species]].find(k => k?.id === sid) ?? null : null;
     void skill;
     h.buff = buff ? (h.buff ?? { atk: 0, def: 0, speed: 0, armor: false, t: 1 }) : null;
     h.orbs = orbs ? (h.orbs ?? { t: 1, n: orbs, dmg: 0, cd: new Map() }) : null;

@@ -1,6 +1,8 @@
 // Hero progression: level, XP, primary stats (STR/DEX/INT/VIT), skill levels and equipment → combat numbers.
 import { type HeroClass, type Stat, type Stats, classOf } from './classes';
 import { KAIJU_TUNE } from './kaijuTune';
+import { allActives, loadoutOf, mergeMods, skillUnlocked, treeBonus } from './tree';
+import type { SkillDef } from './skills';
 import { type Item, SETS, type SkillMod, type Slot, UNIQUES, itemIcon, itemLines } from './items';
 import { type HeroGear, gearOf } from './gear';
 import { MAX_SKILL, PASSIVE_UNLOCK, skillScale, skillsOf } from './skills';
@@ -36,6 +38,10 @@ export interface HeroProfile {
   kq: string[];
   /** story beats already seen */
   seen: string[];
+  /** skill tree: node id → ranks learned (src/sim/tree.ts) */
+  tree?: Record<string, number>;
+  /** the 3 active skills on the buttons (ids; empty = the 3 originals) */
+  loadout?: string[];
 }
 
 export function newProfile(species: number): HeroProfile {
@@ -60,6 +66,8 @@ export function gainXp(p: HeroProfile, xp: number): number {
 }
 
 export interface Derived {
+  /** the 3 active skills on the buttons */
+  actives: SkillDef[];
   cls: HeroClass;
   level: number;
   prim: Stats;
@@ -88,7 +96,7 @@ export interface Derived {
 
 /** Main-stat scaling (tuned with scripts/kaiju-diag.ts and scripts/balance.ts). INT's skill bonus is measured against the
  *  level (so casters don't run away late), STR also multiplies attack a little, and DEX past the crit cap adds crit damage. */
-export const SCALE = { int: 0.025, intLv: 0.024, str: 0.0017, critCap: 75, dexOver: 0.006, hpLv: 14, drSoft: 0.7, drOver: 0.4, hpAll: 0.73, dmgAll: 1.36 };
+export const SCALE = { int: 0.025, intLv: 0.024, str: 0.0017, critCap: 75, dexOver: 0.006, hpLv: 14, drSoft: 0.7, drOver: 0.4, hpAll: 0.854, dmgAll: 1.306 };
 /** Damage reduction past drSoft counts for less (so the sturdiest kaiju still feel boss hits). */
 const softDr = (dr: number) => dr <= SCALE.drSoft ? dr : SCALE.drSoft + (dr - SCALE.drSoft) * SCALE.drOver;
 
@@ -107,9 +115,9 @@ export function derive(p: HeroProfile): Derived {
   for (const s of STATS) prim[s] += eq[s] ?? 0;
 
   const skillLv: Record<string, number> = {};
-  for (const a of [...sk.actives, sk.passive]) {
+  for (const a of [...allActives(p.species), sk.passive]) {
     const learned = p.skills[a.id] ?? 0;
-    const unlocked = p.level >= a.unlock;
+    const unlocked = p.level >= a.unlock && (a === sk.passive || skillUnlocked(p, a.id));
     skillLv[a.id] = unlocked && learned > 0 ? learned + (boosts[a.id] ?? 0) + (boosts.all ?? 0) : 0;
   }
   const pas = sk.passive, pl = p.level >= PASSIVE_UNLOCK ? skillLv[pas.id] : 0;
@@ -123,12 +131,17 @@ export function derive(p: HeroProfile): Derived {
     if (it?.proc && !procs.includes(it.proc)) procs.push(it.proc);
   }
   const sb = { atkPct: 0, hpPct: 0, critDmg: 0, speed: 0, skillDmg: 0, cdr: 0, dr: 0, ultGain: 0, ultDmg: 0 };
+  // skill tree: stats on top, skill upgrades merged with the signature-legendary ones
+  const tb = treeBonus(p), ts = tb.stat;
+  sb.atkPct += ts.atkPct ?? 0; sb.hpPct += ts.hpPct ?? 0; sb.critDmg += ts.critDmg ?? 0; sb.skillDmg += ts.skillDmg ?? 0; sb.cdr += ts.cdr ?? 0; sb.ultGain += ts.ultGain ?? 0;
+  sb.dr = 1 - (1 - sb.dr) * (1 - (ts.dr ?? 0));
+  for (const m of tb.mods) mods[m.skill] = mergeMods(mods[m.skill], m.mod);
   for (const [k, n] of Object.entries(sets)) for (const b of [n >= 2 ? SETS[k].b2 : null, n >= 3 ? SETS[k].b3 : null]) if (b) for (const [bk, bv] of Object.entries(b)) sb[bk as keyof typeof sb] += bv;
   const per = (k: keyof typeof pas.per) => (pas.per[k] ?? 0) * pl;
 
   const tune = KAIJU_TUNE[p.species] ?? { hp: 1, dmg: 1 };
   const def = prim.vit * 0.6 + (eq.def ?? 0);
-  const critRaw = 5 + prim.dex * 0.5 + (eq.crit ?? 0) + per('crit');
+  const critRaw = 5 + prim.dex * 0.5 + (eq.crit ?? 0) + per('crit') + (ts.crit ?? 0);
   return {
     cls, level: p.level, prim,
     maxHp: Math.round((cls.hp + prim.vit * 9 + p.level * SCALE.hpLv + (eq.hp ?? 0)) * (1 + per('hpPct') + sb.hpPct) * tune.hp * SCALE.hpAll),
@@ -141,8 +154,9 @@ export function derive(p: HeroProfile): Derived {
     cdr: Math.min(0.5, prim.int * 0.004 + (eq.cdr ?? 0) + per('cdr') + sb.cdr),
     speed: 1 + Math.min(0.35, prim.dex * 0.004 + (eq.speed ?? 0) + sb.speed),
     uniques, sets, ultGain: 1 + sb.ultGain + per('ultGain'), ultDmg: 1 + sb.ultDmg,
-    regen: per('regen'), thorns: per('thorns'), heavyDmg: per('heavyDmg'), dodge: per('dodge'),
-    lifeOnKill: per('lifeOnKill'),
+    regen: per('regen') + (ts.regen ?? 0), thorns: per('thorns'), heavyDmg: per('heavyDmg'), dodge: per('dodge'),
+    lifeOnKill: per('lifeOnKill') + (ts.lifeOnKill ?? 0),
+    actives: loadoutOf(p),
     gear: gearOf(p.equip.weapon, p.equip.weapon ? itemIcon(p.equip.weapon) : undefined), procs, mods,
     skillLv,
     branch: { ...(p.branch ?? {}) },
@@ -152,8 +166,9 @@ export function derive(p: HeroProfile): Derived {
 /** Can this skill take another skill point right now? */
 export function canLevelSkill(p: HeroProfile, id: string): boolean {
   const sk = skillsOf(p.species);
-  const def = [...sk.actives, sk.passive].find(s => s.id === id);
+  const def = [...allActives(p.species), sk.passive].find(s => s.id === id);
   if (!def || p.skillPts <= 0 || p.level < def.unlock) return false;
+  if (def !== sk.passive && !skillUnlocked(p, id)) return false; // a tree skill: learn its node first
   return (p.skills[id] ?? 0) < MAX_SKILL;
 }
 
