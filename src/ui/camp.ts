@@ -72,6 +72,13 @@ let flash = '';
 let useSafety = true;
 let bagMine = true;
 
+/** The drops a stage's map exits want, added up: one icon each with have / need (the title says which monster drops it). */
+function dropRow(st: StageDef): string {
+  const need = new Map<MobKind, number>();
+  for (const m of st.maps ?? []) if (m.goal?.kind === 'collect') for (const q of m.goal.wants) need.set(q.mob, (need.get(q.mob) ?? 0) + q.n);
+  if (!need.size) return '';
+  return `<div class="lv dropreq">Drops: ${[...need].map(([k, n]) => { const have = save.drops?.[k] ?? 0; return `<span class="${have >= n ? 'ok' : ''}" title="${dropName(k)} from ${MOB_DEFS[k].name}"><img src="art/drop-${k}.webp" onerror="this.style.display='none'"> ${Math.min(have, n)}/${n}</span>`; }).join('')}</div>`;
+}
 export function initCamp(play: (stageId: string, skip?: boolean) => void, online: () => void = () => {}): void {
   onPlay = play; onOnline = online;
   const st = document.createElement('style');
@@ -187,17 +194,17 @@ function mapPage(): string {
       }).join('')}
     </div>
     <div class="info">
-      <div class="num">${sel.num}${sel.boss ? ' · BOSS' : sel.id.endsWith('-5') && sel.world <= 5 && nemesisOf(p.species) ? ` · NEMESIS: ${MOB_DEFS[nemesisOf(p.species)!].name}` : sel.id.endsWith('-5') ? ' · ELITE' : ''}</div>
+      <div class="num">${sel.num}${sel.boss ? ' · BOSS' : sel.id.endsWith('-5') && sel.world <= 5 && nemesisOf(p.species) ? ' · NEMESIS' : sel.id.endsWith('-5') ? ' · ELITE' : ''}</div>
       <div class="nm">${sel.name}</div>
       <div class="lv">Monsters Lv ${lv(sel.lv[0])}${sel.lv[1] !== sel.lv[0] ? '–' + lv(sel.lv[1]) : ''} · <span style="color:${low ? '#ff8a8a' : '#a8f0a8'}">you Lv ${p.level}${low ? ' (low!)' : ''}</span></div>
       <div class="lv">Reward: ${rewardLine(sel)}</div>
-      ${sel.boss ? (() => { const bw = bossWeaponFor(WORLDS[sel.world - 1].boss, p.species); return bw ? `<div class="lv" style="color:#ffb347">⚔ Hunts for: <img src="art/${bw.base}.webp" style="height:1.3em;vertical-align:middle"> ${bw.name} <small>(${bw.skill}${(save.bwPity?.[bw.base] ?? 0) ? `, ${save.bwPity![bw.base]}/4 clears without it` : ''})</small></div>` : ''; })() : ''}
-      ${sel.maps ? `<div class="lv" style="color:#ff9a6a">☠ Boss room: ${sel.id.endsWith('-5') && sel.world <= 5 && nemesisOf(p.species) ? MOB_DEFS[nemesisOf(p.species)!].name : `${sel.maps[sel.maps.length - 1].name}${sel.mobs[0] ? ` — ${MOB_DEFS[sel.mobs[0].kind].name}` : ''}`}</div><div class="lv dropreq">${sel.maps.filter(m => m.goal?.kind === 'collect').map((m, i) => { const g = m.goal as { wants: { mob: MobKind; n: number }[] }; return `<span class="${g.wants.every(q => (save.drops?.[q.mob] ?? 0) >= q.n) ? 'ok' : ''}">Map ${i + 1} exit: ${g.wants.map(q => `<img src="art/drop-${q.mob}.webp" onerror="this.style.display='none'"> ${q.n} ${dropName(q.mob)} <small>(${MOB_DEFS[q.mob].name}, have ${save.drops?.[q.mob] ?? 0})</small>`).join(' + ')}</span>`; }).join('')}</div>` : ''}
+      ${sel.boss ? (() => { const bw = bossWeaponFor(WORLDS[sel.world - 1].boss, p.species); return bw ? `<div class="lv" style="color:#ffb347" title="${bw.skill}">⚔ Can drop: <img src="art/${bw.base}.webp" style="height:1.3em;vertical-align:middle"> ${bw.name}</div>` : ''; })() : ''}
+      ${sel.maps ? `<div class="lv" style="color:#ff9a6a">☠ Boss: ${!hero().cleared[sel.id] ? '???' : sel.id.endsWith('-5') && sel.world <= 5 && nemesisOf(p.species) ? MOB_DEFS[nemesisOf(p.species)!].name : sel.mobs[0] ? MOB_DEFS[sel.mobs[0].kind].name : '???'}</div>${dropRow(sel)}` : ''}
       ${sel.objective ? `<div class="lv" style="color:#ffd27a">${({ escort: '🧁 Escort the lost Crumblet', fetch: `📜 Grab the Recipe Scroll in ${sel.objective.t}s`, survive: `⏱ Hold out for ${sel.objective.t}s` })[sel.objective.kind]} · bonus box</div>` : ''}
       ${STORIES[p.species]?.variants[sel.id] ? (() => { const v = VARIANT_INFO[STORIES[p.species].variants[sel.id]]; return `<div class="lv vtx">${v.icon} Story twist: <b>${v.name}</b> — ${v.desc}</div>`; })() : ''}
       <div class="lv story">📖 ${STORIES[p.species]?.title ?? ''}${beatBefore(sel.id, sel.id === '1-1').some(b => p.seen.includes(b)) || (sel.boss && p.seen.includes(`w${sel.world}-after`)) ? ` <button class="mini" data-replay="${sel.id}" title="Replay this stage's scenes">↻</button>` : ''} <button class="mini" data-act="storymode" title="Story scenes: every stage, or only the big ones">${save.storyMode === 'key' ? 'Key scenes' : 'All scenes'}</button></div>
       ${rank ? `<div class="lv">Best: <b style="color:${RANK_CSS[rank]}">${rank}</b></div>` : ''}
-      ${challengesFor(sel.id).length ? `<div class="lv chal">${challengesFor(sel.id).map(c => { const ok = (save.challenges?.[sel.id] ?? []).includes(c.id); return `<span class="${ok ? 'ok' : ''}" title="${c.desc}">${ok ? '★' : '☆'} ${c.name}: <small>${c.desc}</small></span>`; }).join('')}<small class="stars">World stars ${worldStars(sel.world)}/${STARS_FOR_SECRET} opens the secret stage</small></div>` : ''}
+      ${challengesFor(sel.id).length ? `<details class="lv chal"><summary>${challengesFor(sel.id).map(c => (save.challenges?.[sel.id] ?? []).includes(c.id) ? '★' : '☆').join('')} Challenges <small>▸</small></summary>${challengesFor(sel.id).map(c => { const ok = (save.challenges?.[sel.id] ?? []).includes(c.id); return `<span class="${ok ? 'ok' : ''}">${ok ? '★' : '☆'} ${c.name}: <small>${c.desc}</small></span>`; }).join('')}<small class="stars">World stars ${worldStars(sel.world)}/${STARS_FOR_SECRET} open the secret stage</small></details>` : ''}
       ${(save.keys ?? []).includes(sel.world) ? (() => { const b = BONUS_STAGES[sel.world - 1]; return `<button class="pill big secret" data-play="${b.id}">🗝 ${b.name} <small>Lv ${b.lv[0]}–${b.lv[1]}</small></button>`; })() : sel.id.endsWith('-7') ? '<div class="lv" style="color:#ffd27a">🗝 A secret chest here hides this world\'s key</div>' : ''}
       <div class="lv buddy">🤝 Buddy <button class="pill" data-act="buddy">${save.buddy != null && save.buddy !== p.species && save.unlocked.includes(save.buddy) ? `<img src="art/kaiju-${save.buddy}.webp"> ${CLASSES.find(c => c.species === save.buddy)!.name}` : 'None'} ▸</button></div>
       <div class="playrow"><button class="pill go big" data-play="${sel.id}" ${stageUnlocked(sel) ? '' : 'disabled'}>${stageUnlocked(sel) ? '▶ PLAY' : '🔒 LOCKED'}</button><button class="pill online" data-act="online">🌐 ONLINE</button>${sel.maps && stageUnlocked(sel) && canSkip(sel) ? `<button class="pill skip" data-skip="${sel.id}" title="Hand in the drops for every map's exit and start in the boss room">⚡ SKIP TO BOSS</button>` : ''}</div>
@@ -766,7 +773,7 @@ const CAMP_CSS = `
 #camp .side .hp u { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 3.6vmin; text-decoration: none; filter: none; }
 .kq .node .vt { position: absolute; left: -1.4vmin; top: -1.6vmin; font-style: normal; font-size: 2.2vmin; }
 .kq .vtx { color: #c8a8ff !important; }
-.kq .lv.dropreq { display: flex; flex-direction: column; gap: 0.3vmin; font-size: 0.9em; } .kq .lv.dropreq span { color: #ffd27a; } .kq .lv.dropreq span.ok { color: #a8f0a8; } .kq .lv.dropreq img { height: 1.4em; vertical-align: middle; }
+.kq .lv.dropreq { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4vmin 1.4vmin; } .kq .lv.dropreq span { color: #ffd27a; white-space: nowrap; } .kq .lv.dropreq span.ok { color: #a8f0a8; } .kq .lv.dropreq img { height: 1.5em; vertical-align: middle; } .kq details.chal summary { cursor: pointer; list-style: none; } .kq details.chal summary::-webkit-details-marker { display: none; } .kq details.chal[open] summary small { display: none; }
 .kq .pill.skip { background: linear-gradient(#ffe27a, #ffb347); color: #3a1a08; }
 .kq .dlist { display: grid; grid-template-columns: repeat(auto-fill, minmax(22vmin, 1fr)); gap: 0.8vmin; } .kq .dlist span { display: flex; align-items: center; gap: 0.8vmin; background: #2a1a30; border-radius: 1vmin; padding: 0.6vmin; } .kq .dlist img { width: 5vmin; height: 5vmin; object-fit: contain; } .kq .dlist b { font-size: 1.9vmin; } .kq .dlist small { color: #b8a8c8; font-size: 1.5vmin; margin-left: auto; }
 .kq .lv.chal { display: flex; flex-direction: column; gap: 0.3vmin; font-size: 0.92em; } .kq .lv.chal span { color: #c8b8d8; } .kq .lv.chal span.ok { color: #ffd23c; } .kq .lv.chal small { opacity: 0.85; } .kq .lv.chal small.stars { color: #9fe8ff; }

@@ -4,3 +4,4 @@ shots
 *.log
 art-src/raw
 .claude/worktrees
+scripts/tmp-*

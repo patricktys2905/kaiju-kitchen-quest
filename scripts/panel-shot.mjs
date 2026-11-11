@@ -18,6 +18,8 @@ await wait(500);
 const info = async name => { const el = await p.$('.map .info'); if (el) await el.screenshot({ path: `shots/panel-${name}.png` }); else await p.screenshot({ path: `shots/panel-${name}.png` }); };
 await info('fresh');
 await p.screenshot({ path: 'shots/panel-fresh-full.png' });
+await p.evaluate(() => { window.__kkq.save.drops = { jamhop: 2, worm: 2, bun: 13 }; document.querySelector('[data-node="1-5"]')?.click(); }); await wait(300);
+await info('stage5');
 await p.evaluate(() => { const s = window.__kkq.save, h = s.heroes[s.selected]; for (let n = 1; n <= 10; n++) h.cleared['1-' + n] = 'A'; h.level = 12; s.hard = true; window.__kkq.scene.scene.restart({}); });
 await wait(800);
 await p.evaluate(() => document.querySelector('[data-node="1-4"]')?.click()); await wait(300);
