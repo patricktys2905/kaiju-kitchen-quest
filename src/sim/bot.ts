@@ -34,7 +34,9 @@ export class Bot {
       const up = ({ vent: 110, sprinkler: 110, pollen: 150, chill: 150, drop: 70, wax: 70, tap: 900 } as Record<string, number>)[z.kind] ?? 60;
       if (h.y < G - up - 10) continue;
       const half = z.w / 2 + 12, d = h.x - z.x;
-      if (Math.abs(d) < half) return { ...NO_INPUT, [d >= 0 ? 'right' : 'left']: true }; // get out, the short way
+      // already inside: get out the short way (only warning, and we're heading through: keep going, a slow kaiju that backed
+      // out every time never got past)
+      if (Math.abs(d) < half) return z.state === 'warn' && (inp.right || inp.left) ? { ...inp, jump: false } : { ...NO_INPUT, [d >= 0 ? 'right' : 'left']: true };
       if (Math.abs(d) < half + 26 && ((inp.right && d < 0) || (inp.left && d > 0))) return { ...inp, left: false, right: false, jump: false }; // wait
     }
     return inp;
@@ -178,7 +180,12 @@ export class Bot {
       return inp;
     }
     if (dy < 0) { // target above: ladder if one leads there, else jump toward it
-      const lad = w.stage.ladders.find(l => Math.abs(l.top - t.y) < 4 && t.x > l.x - 400 && t.x < l.x + 400);
+      // the ladder up to the target's own platform first (two ledges at one height with a gap: the other ladder led back
+      // to the wrong one, round and round), else the closest one to it
+      const tp = w.stage.platforms.find(p => Math.abs(p.y - t.y) < 4 && t.x >= p.x - 10 && t.x <= p.x + p.w + 10);
+      const onTp = (l: { x: number }) => !!tp && l.x >= tp.x - 10 && l.x <= tp.x + tp.w + 10;
+      const lad = w.stage.ladders.filter(l => Math.abs(l.top - t.y) < 4 && t.x > l.x - 400 && t.x < l.x + 400)
+        .sort((a, b) => (onTp(b) ? 1 : 0) - (onTp(a) ? 1 : 0) || Math.abs(a.x - t.x) - Math.abs(b.x - t.x))[0];
       if (lad) {
         if (Math.abs(lad.x - h.x) > 8) inp[lad.x > h.x ? 'right' : 'left'] = true;
         else inp.up = true;

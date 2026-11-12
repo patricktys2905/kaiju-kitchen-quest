@@ -1180,8 +1180,8 @@ export class World {
     if (this.scroll && !this.scroll.got) {
       this.objTimer -= dt;
       if (this.heroes.some(p => Math.abs(p.x - this.scroll!.x) < 36 && Math.abs(p.y - this.scroll!.y) < 60)) {
-        this.scroll.got = true; this.holdout = 25;
-        this.events.push({ t: 'objective', text: 'Got the Recipe Scroll! Hold out for 25 seconds!' });
+        this.scroll.got = true; this.holdout = this.stage.maps ? 0 : 25; // map stages: the boss room is the finale
+        this.events.push({ t: 'objective', text: this.stage.maps ? 'Got the Recipe Scroll!' : 'Got the Recipe Scroll! Hold out for 25 seconds!' });
       } else if (this.objTimer <= 0) { fail('Too slow: the Recipe Scroll crumbled away!'); return; }
     }
     // survive / hold out: waves from both sides until the timer runs out
@@ -1199,7 +1199,9 @@ export class World {
       }
       if (this.holdout <= 0) { // the waves retreat
         this.holdout = 0;
-        for (const m of this.mobs) if (m.state !== 'dead') { m.state = 'dead'; m.deadT = 0.3; m.hp = 0; }
+        // only the waves around you retreat: never a boss-room foe, nor monsters in maps nobody is in
+        const here = new Set(this.heroes.map(p => this.mapAt(p.x)));
+        for (const m of this.mobs) if (m.state !== 'dead' && !m.roomBoss && (!this.stage.maps || here.has(this.mapAt(m.x)))) { m.state = 'dead'; m.deadT = 0.3; m.hp = 0; }
         this.events.push({ t: 'objective', text: 'You held out! The monsters retreat' });
       }
     }
@@ -1271,10 +1273,14 @@ export class World {
       const sp = m.spawns;
       if (sp && here && (z.spawnT -= dt) <= 0) {
         z.spawnT = 3.5;
-        if (this.mobs.filter(o => o.state !== 'dead' && this.mapAt(o.x) === i).length < sp.cap) {
+        const inMap = this.mobs.filter(o => o.state !== 'dead' && this.mapAt(o.x) === i);
+        // a monster whose drop you still need, with fewer than 2 of it around (bombers blow up, crowds fill the map): it comes
+        // next, even when the map is full, so the exit never waits on a monster that isn't there
+        const short = g.kind === 'collect' ? g.wants.filter(q => (this.drops[q.mob] ?? 0) < q.n && inMap.filter(o => o.kind === q.mob).length < 2).map(q => q.mob) : [];
+        if (inMap.length < sp.cap + (short.length ? 2 : 0)) {
           const far = sp.pts.filter(([px, py]) => this.heroes.every(o => Math.abs(o.x - px) > 380 || Math.abs(o.y - py) > 150));
           const at = far.length ? far[Math.floor(this.rand() * far.length)] : null;
-          if (at) { const kk = sp.kinds[Math.floor(this.rand() * sp.kinds.length)]; const mm = this.spawnMob(kk, at[0], sp.lv + (this.rand() < 0.5 ? 0 : 1) + (this.hard ? HARD_LV : 0), at[1] !== this.stage.groundY && MOBS[kk].brain !== 'flyer' && MOBS[kk].brain !== 'brute' ? at[1] : undefined); mm.flash = 0.4; this.events.push({ t: 'spawnPop', x: mm.x, y: mm.y }); }
+          if (at) { const kk = short.length ? short[Math.floor(this.rand() * short.length)] : sp.kinds[Math.floor(this.rand() * sp.kinds.length)]; const mm = this.spawnMob(kk, at[0], sp.lv + (this.rand() < 0.5 ? 0 : 1) + (this.hard ? HARD_LV : 0), at[1] !== this.stage.groundY && MOBS[kk].brain !== 'flyer' && MOBS[kk].brain !== 'brute' ? at[1] : undefined); mm.flash = 0.4; this.events.push({ t: 'spawnPop', x: mm.x, y: mm.y }); }
         }
       }
       if (g.kind === 'nests' && here) for (const p of this.props) if (p.kind === 'nest' && p.hp > 0 && this.mapAt(p.x) === i && Math.abs(p.x - this.heroes[0].x) < 700 && (this.nestT.set(p.id, (this.nestT.get(p.id) ?? 2) - dt).get(p.id)!) <= 0) {

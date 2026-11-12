@@ -237,7 +237,7 @@ export const MOBS: Record<MobKind, MobDef> = {
     nem: {species: -1, moves: ['fanshot','slash','shell','stingers'], names: ['Price Tag Volley','Box Cutter','Price Shield','Label Jabs'], shot: 'knife'} },
   m10a: { name: 'Forgotten Soup', brain: 'nemesis', art: 'mob-m10a', hp: 200, atk: 16, speed: 90, w: 84, h: 100, knock: 0.35, aggro: 900, range: 300, windup: 0.7, patrol: 60, xp: 40, dropChance: 1, armor: true, mini: true,
     nem: {species: -1, moves: ['vanish','fanshot','charge','drip'], names: ['Fade Away','Soggy Croutons','Ghostly Swoop','Cold Soup'], shot: 'spore'} },
-  m10b: { name: 'Pudding Juggernaut', brain: 'nemesis', art: 'mob-m10b', hp: 280, atk: 18, speed: 55, w: 100, h: 104, knock: 0.35, aggro: 900, range: 130, windup: 0.7, patrol: 60, xp: 40, dropChance: 1, armor: true, mini: true,
+  m10b: { name: 'Pudding Juggernaut', brain: 'nemesis', art: 'mob-m10b', hp: 245, atk: 17, speed: 55, w: 100, h: 104, knock: 0.35, aggro: 900, range: 130, windup: 0.7, patrol: 60, xp: 40, dropChance: 1, armor: true, mini: true,
     nem: {species: -1, moves: ['leap','roar','haymaker','charge'], names: ['Christmas Drop','Holly Roar','Pudding Punch','Rolling Pudding']} },
   // ----- stage-5 champions: each world's elite brute fought as a real miniboss with its own moves (same art) -----
   // more minibosses (scripts/minis2-jobs.mjs): with the Kings, every normal stage of a world has its own boss-room foe
@@ -262,7 +262,7 @@ export const MOBS: Record<MobKind, MobDef> = {
   m4c: { name: 'Cereal Box Colossus', brain: 'nemesis', art: 'mob-m4c', hp: 250, atk: 16, speed: 65, w: 84, h: 100, knock: 0.35, aggro: 900, range: 140, windup: 0.7, patrol: 60, xp: 40, dropChance: 1, armor: true, mini: true,
     nem: {species: -1, moves: ['haymaker','summon','leap','roar'], names: ['Box Smash','Cereal Squad','Pantry Quake','Part of a Balanced Roar'], calls: 'cheerio'} },
   m4d: { name: 'Peanut Butter Ogre', brain: 'nemesis', art: 'mob-m4d', hp: 215, atk: 16, speed: 80, w: 84, h: 100, knock: 0.35, aggro: 900, range: 300, windup: 0.7, patrol: 60, xp: 40, dropChance: 1, armor: true, mini: true,
-    nem: {species: -1, moves: ['puddle','yank','haymaker','shell'], names: ['Sticky Spread','Gloopy Grab','Crunchy Punch','Lid Guard'], puddle: 'slow'} },
+    nem: {species: -1, moves: ['yank','puddle','haymaker','shell'], names: ['Gloopy Grab','Sticky Spread','Crunchy Punch','Lid Guard'], puddle: 'slow'} },
   m4e: { name: 'Spice Rack Shaman', brain: 'nemesis', art: 'mob-m4e', hp: 215, atk: 16, speed: 80, w: 84, h: 100, knock: 0.35, aggro: 900, range: 300, windup: 0.7, patrol: 60, xp: 40, dropChance: 1, armor: true, mini: true,
     nem: {species: -1, moves: ['fanshot','trap','heatwave','lure'], names: ['Spice Spray','Pepper Mines','Chilli Blast','Smell This'], shot: 'heat'} },
   m5c: { name: 'Plunger Paladin', brain: 'nemesis', art: 'mob-m5c', hp: 215, atk: 16, speed: 80, w: 84, h: 100, knock: 0.35, aggro: 900, range: 140, windup: 0.7, patrol: 60, xp: 40, dropChance: 1, armor: true, mini: true,

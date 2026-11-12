@@ -59,6 +59,20 @@ describe('monster drops', () => {
     expect(inMap()).toBeGreaterThan(4);
   });
 
+  it('a hold-out ending never takes the boss-room foe (or monsters in other maps) with it', () => {
+    for (const id of ['1-6', '1-8']) {
+      const st = STAGES.find(s => s.id === id)!;
+      const w = new World(st, hero(), 3);
+      w.hero.inv = 1e9; w.hero.x = st.maps![1].x0 + 300; w.hero.y = st.groundY; w.hero.ground = true;
+      const foe = w.mobs[0], other = w.mobs.find(m => w.mapAt(m.x) === 2 && m !== foe)!;
+      (w as unknown as { holdout: number }).holdout = 0.05; (w as unknown as { objArmed: boolean }).objArmed = true;
+      if (w.scroll) w.scroll.got = true;
+      for (let i = 0; i < 30; i++) w.step(NO_INPUT);
+      expect(foe.state, id).not.toBe('dead');
+      expect(other.state, id).not.toBe('dead');
+    }
+  });
+
   it('skipping to the boss starts you in the boss room', () => {
     const st = STAGES.find(s => s.id === '3-5')!;
     const w = new World(st, hero(), 3);
