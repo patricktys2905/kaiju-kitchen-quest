@@ -33,6 +33,11 @@ await p.evaluate(() => {
 });
 await wait(800); await freeze();
 for (const tab of ['map', 'hero', 'skills', 'bag', 'market', 'quests', 'free']) { await p.evaluate(t => document.querySelector(`[data-tab="${t}"]`)?.click(), tab); await snap(`camp-${tab}`); }
+// the Monster Cookbook (Bag → Cookbook): a part-filled page, then one card opened. Set up here, after the tab shots, so they stay as they were
+await p.evaluate(() => { const s = window.__kkq.save; s.drops = { bun: 7, jamhop: 2, worm: 12, ant: 1, mimic: 3 }; s.cookbook = { bun: 5, worm: 12, ant: 1, egg: 3, garlic: 1 }; });
+await p.evaluate(() => document.querySelector('[data-tab="bag"]')?.click()); await p.evaluate(() => document.querySelector('[data-bag="cookbook"]')?.click()); await snap('camp-cookbook');
+await p.evaluate(() => document.querySelector('[data-cb="card:bun"]')?.click()); await snap('camp-cookbook-card');
+await p.evaluate(() => { const s = window.__kkq.save; delete s.drops; delete s.cookbook; document.querySelector('[data-cb="back"]')?.click(); document.querySelector('[data-bag="weapon"]')?.click(); });
 await p.evaluate(() => document.querySelector('[data-tab="map"]')?.click());
 await p.evaluate(() => document.querySelector('[data-act="spicyopen"]')?.click()); await snap('stage-panel');
 await p.evaluate(() => document.querySelector('[data-report]')?.click()); await snap('report');

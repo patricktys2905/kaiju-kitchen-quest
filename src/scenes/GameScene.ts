@@ -32,7 +32,7 @@ import { ELEMENT_INFO, stageElements, weakOf } from '../sim/elements';
 import { weakHtml } from '../ui/elementUi';
 import { setGearUi, setSkillUi, setTouchVisible, setUltUi } from '../touch';
 import { hideCamp, runGacha, showCamp, showResult, stageUnlocked } from '../ui/camp';
-import { type NetPlay, inGame, kitOf, launch, leaveOnline, net, netRunBoxes, showOnline } from '../ui/online';
+import { type NetPlay, inGame, kitOf, kitTitle, launch, leaveOnline, net, netRunBoxes, showOnline } from '../ui/online';
 import { type FreeRun, beatenBosses, bossName, freeData, freeSummary, mmss, pickPerk, waitPerk } from '../ui/free';
 import { endlessFloor, endlessReward, perkChoices, rushStages, stageTitle, withPerks } from '../sim/free';
 import type { LootBox } from '../sim/types';
@@ -113,7 +113,7 @@ export class GameScene extends Phaser.Scene {
   private hard = false;
   private nightmare = false;
   /** teammates (CPU buddy or online friends): puppet, shadow, name tag, and a bot when the CPU plays them */
-  private mates: { i: number; view: HeroView; shadow: Phaser.GameObjects.Ellipse; tag: Phaser.GameObjects.Text; name: string; bot?: Bot; emo?: string; emoT?: number }[] = [];
+  private mates: { i: number; view: HeroView; shadow: Phaser.GameObjects.Ellipse; tag: Phaser.GameObjects.Text; name: string; /** the Cookbook title a friend shows (a second line on the name tag) */ title?: string; bot?: Bot; emo?: string; emoT?: number }[] = [];
   /** free mode run in progress (null = story) */
   private free: FreeRun | null = null;
   /** first-time tips for this stage */
@@ -349,13 +349,13 @@ export class GameScene extends Phaser.Scene {
     this.hero.root.setDepth(5);
     this.mates = []; this.downWarned = false;
     const bsp = this.buddySpecies();
-    const addMate = (i: number, prof: HeroProfile, name: string, bot?: Bot) => {
+    const addMate = (i: number, prof: HeroProfile, name: string, bot?: Bot, title = '') => {
       const view = new HeroView(this, prof.species, k => this.has(k), 84, lookOf(prof));
       view.root.setDepth(4.5 - i * 0.01);
-      const tag = this.add.text(0, 0, name, { fontFamily: 'Luckiest Guy', fontSize: '11px', color: '#a8e8ff', stroke: '#1a2a40', strokeThickness: 4 }).setOrigin(0.5).setDepth(9).setResolution(3);
-      this.mates.push({ i, view, tag, name, bot, shadow: this.add.ellipse(0, 0, 54, 12, 0x000000, 0.18).setDepth(-2) });
+      const tag = this.add.text(0, 0, name, { fontFamily: 'Luckiest Guy', fontSize: '11px', color: '#a8e8ff', stroke: '#1a2a40', strokeThickness: 4, align: 'center' }).setOrigin(0.5).setDepth(9).setResolution(3);
+      this.mates.push({ i, view, tag, name, title, bot, shadow: this.add.ellipse(0, 0, 54, 12, 0x000000, 0.18).setDepth(-2) });
     };
-    if (this.online) this.online.kits.forEach((k, i) => { if (i !== this.me) addMate(i, k.profile, k.name); });
+    if (this.online) this.online.kits.forEach((k, i) => { if (i !== this.me) addMate(i, k.profile, k.name, undefined, kitTitle(k)); });
     else if (bsp !== null && w.heroes[1]) addMate(1, save.heroes[bsp], 'CPU', new Bot(w, AVERAGE, (Date.now() & 0xff) + 5, 1));
     this.nameMates();
     setEmotes(this.online ? EMOTES : null, this.online ? e => this.sendEmote(e) : null);
@@ -553,7 +553,7 @@ export class GameScene extends Phaser.Scene {
       const i = on.guests.indexOf(g) + 1, w = this.world;
       if (i <= 0 || !w || this.done) return;
       const m = this.mates.find(x => x.i === i);
-      if (m && !m.bot) { m.bot = new Bot(w, AVERAGE, i * 31 + 7, i); m.name = 'CPU'; this.nameMates(); toast(`${on.kits[i].name} left: the CPU takes over their kaiju`, { color: '#a8e8ff' }); }
+      if (m && !m.bot) { m.bot = new Bot(w, AVERAGE, i * 31 + 7, i); m.name = 'CPU'; m.title = ''; this.nameMates(); toast(`${on.kits[i].name} left: the CPU takes over their kaiju`, { color: '#a8e8ff' }); }
     };
     inGame.kit = (g, kit) => { const i = on.guests.indexOf(g) + 1; if (i > 0 && this.world && !this.done) this.world.setDerivedOf(i, this.free ? withPerks(derive(kit.profile), this.free.perks) : derive(kit.profile)); };
     inGame.emo = (seat, e) => { if (seat !== this.me) this.showEmote(seat, e); };
@@ -1129,9 +1129,9 @@ export class GameScene extends Phaser.Scene {
       const bf = w.floorBelow(o.x, o.y, o.y + 2000, false);
       m.shadow.setPosition(o.x, (bf ? bf.y : st.groundY) - 1).setAlpha(o.state === 'climb' ? 0 : 1);
       if (m.emoT && m.emoT > 0) m.emoT -= dt;
-      const label = o.state === 'down' ? (o.revT > 0 ? `REVIVING ${Math.round(o.revT / 2 * 100)}%` : 'DOWN! Stand by me') : m.name;
       const wv = this.cameras.main.worldView;
       const off = o.x < wv.x || o.x > wv.right || o.y - 60 < wv.y || o.y - 20 > wv.bottom;
+      const label = o.state === 'down' ? (o.revT > 0 ? `REVIVING ${Math.round(o.revT / 2 * 100)}%` : 'DOWN! Stand by me') : m.title && !off ? m.name + '\n' + m.title : m.name;
       const tx = Phaser.Math.Clamp(o.x, wv.x + 34, wv.right - 34), ty = Phaser.Math.Clamp(o.y - 100, wv.y + 16, wv.bottom - 30);
       const arrow = !off ? '' : o.x < wv.x ? '◀ ' : o.x > wv.right ? '' : o.y - 60 < wv.y ? '▲ ' : '▼ ';
       m.tag.setPosition(tx, ty).setText(`${m.emoT && m.emoT > 0 ? m.emo + '\n' : ''}${arrow}${label}${off && o.x > wv.right ? ' ▶' : ''}`).setAlign('center')

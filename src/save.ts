@@ -9,7 +9,9 @@ import { MAX_SKILL, SKILLS } from './sim/skills';
 import { type Derived, type HeroProfile, canLevelSkill, derive, gainXp, newProfile } from './sim/stats';
 import { type ChallengeCtx, STARS_FOR_SECRET, challengesMet, isHardChallenge, keepStars } from './sim/challenges';
 import { bossWeaponFor } from './sim/bossgearData';
-import { WORLDS } from './sim/stages';
+import { BONUS_STAGES, STAGES, WORLDS } from './sim/stages';
+import { type BookView, type CardView, type DropBag, type HandInResult, bookView, cardView, handIn, handInSpares, repairCookbook, setTitle, skipsBrokenBy } from './sim/cookbook';
+import type { StageDef } from './sim/types';
 import type { BoxTier, LootBox } from './sim/types';
 import { type Element, canReseason, reseasonCost, reseasonItem, reseasonTwist } from './sim/elements';
 
@@ -58,6 +60,12 @@ export interface Save {
   tips?: string[];
   /** free mode: day of the last Daily Dungeon bonus, best Endless floor and Boss Rush time (seconds) per kaiju */
   free?: { daily?: number; endless: Record<number, number>; rush: Record<number, number> };
+  /** Monster Cookbook (sim/cookbook.ts): drops handed in per monster kind */
+  cookbook?: Record<string, number>;
+  /** Cookbook page rewards already paid: page id ('1'.., 'all') -> highest level paid (earned titles are read from it) */
+  cookbookPaid?: Record<string, number>;
+  /** the Cookbook title shown under the kaiju's name ('w3', 'all'), or unset */
+  title?: string;
 }
 
 // v2: per-kaiju progress, 4 starters, story (older v1 saves are not carried over)
@@ -102,6 +110,7 @@ function load(): Save {
       for (const c of CLASSES) out.heroes[c.species] = { ...newProfile(c.species), ...out.heroes[c.species] };
       if (!out.unlocked.includes(out.selected)) out.selected = STARTERS[0];
       repairItems(out);
+      repairCookbook(out); // odd drop bags and Cookbook fields (absent in older saves: an empty book)
       keepStars(out.challenges); // a stage's challenge list changed: stars already earned stay earned
       return out;
     }
@@ -503,4 +512,40 @@ export function buddyProfile(species: number, level: number): HeroProfile {
   const sk = SKILLS[species];
   for (const s of [...sk.actives, sk.passive]) if (p.level >= s.unlock) p.skills[s.id] = Math.max(p.skills[s.id] ?? 0, Math.min(MAX_SKILL, 1 + Math.floor(p.level / 8)));
   return p;
+}
+
+// ---------- Monster Cookbook (rules and the full API notes: sim/cookbook.ts) ----------
+/** Is this stage open to the kaiju being played? (the stage panel's rule: the story in order, a secret stage by its key) */
+export function stageOpen(st: StageDef, s: Save = save): boolean {
+  if (st.id.startsWith('S-')) return (s.keys ?? []).includes(st.world);
+  const i = STAGES.indexOf(st);
+  return i === 0 || (i > 0 && !!s.heroes[s.selected]?.cleared[STAGES[i - 1].id]);
+}
+/** The stages whose SKIP TO BOSS the player could use right now if they held the drops: what every drop-spend check looks at. */
+export function skipStages(s: Save = save): StageDef[] { return [...STAGES, ...BONUS_STAGES].filter(st => !!st.maps && stageOpen(st, s)); }
+/** The whole Cookbook, ready to draw (pages, cards, stamps, titles, the Bag tab badge). */
+export function cookbookView(s: Save = save): BookView { return bookView(s, skipStages(s)); }
+/** One Cookbook card (null for a monster with no drop). */
+export function cookCardView(kind: string, s: Save = save): CardView | null { return cardView(s, kind, skipStages(s)); }
+/** The unlocked stages whose SKIP TO BOSS is affordable now and would not be after spending these drops (kind -> count).
+ *  Every screen that spends drops asks this first and shows HAND IN / KEEP when it is not empty. */
+export function cookSpendWarning(spend: DropBag, s: Save = save): StageDef[] { return skipsBrokenBy(s.drops, spend, skipStages(s)); }
+/** Hand in a monster's drop to its Cookbook card (default: all the card can use). Pays crumbs, stamps, borders and titles
+ *  only, each once. It does not ask about SKIP TO BOSS: check cookCardView(kind).breaks or cookSpendWarning first. */
+export function cookHandIn(kind: string, n?: number, s: Save = save): HandInResult {
+  const r = handIn(s, kind, n);
+  if (r.handed && s === save) persist();
+  return r;
+}
+/** 'Hand in all spares' on a page (or 'all'): never takes a drop an affordable SKIP TO BOSS needs. */
+export function cookHandInSpares(pageId: string, s: Save = save): HandInResult[] {
+  const r = handInSpares(s, pageId, skipStages(s));
+  if (r.length && s === save) persist();
+  return r;
+}
+/** Show an earned Cookbook title under the kaiju's name (null = none). False if it is not earned. */
+export function chooseTitle(id: string | null, s: Save = save): boolean {
+  const ok = setTitle(s, id);
+  if (ok && s === save) persist();
+  return ok;
 }

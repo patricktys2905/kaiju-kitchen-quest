@@ -175,3 +175,16 @@ drop chance); Cookbook pays no boxes.
 - Hard / Nightmare / Free Play were only spot-checked with weaknesses (within noise).
 - Next: Monster Cookbook, then Garnish (docs/DROPS-USES.md), then World 11 build (art batch 1
   done; batch 2 = stills + 20 boss weapon icons).
+
+## 2026-11-14 (evening): Monster Cookbook shipped; World 11 art batch 2a
+
+**Shipped:** Monster Cookbook phase 1 (Bag -> Cookbook): 10 pages / 82 cards, hand-ins at 1/5/12
+(1/3/8 for the 26 never-wanted kinds), rewards crumbs + stamps + gold borders + titles (no boxes,
+no power), skip-break warning, HAND IN ALL SPARES, never-wanted drop rate 20% -> 35%, titles on
+the Hero tab and online (id only). 408 tests. Sanity sweep: clears identical at both drop rates.
+World title for World 10 shortened to "Feast Cook" (producer edit).
+**Art:** 20 bw-flosso-<ref> boss weapon icons + still-w11-open / -boss / -cure accepted (not wired).
+**Open:** warning dialog has an extra "ONLY THE n SPARE" button (kept); in-stage friend title is as
+large as the name; Garnish test B1.3 must exclude respawn differences (the bag feeds respawns);
+`flosso` is not yet in BOSS_ORDER / BW_BOSS; 27 World 11 scene paintings wait for stage facts.
+**Next:** Garnish slot, then World 11 build.

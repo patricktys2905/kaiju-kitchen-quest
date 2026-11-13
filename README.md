@@ -324,6 +324,17 @@ each device writes its own). A friend who drops mid-stage is handed to the CPU; 
   down); a teammate's name tag sticks to the screen edge with an arrow when off screen.
 - Tests in a browser: `node scripts/online-shot.mjs [backup]`, `node scripts/online-free-shot.mjs` (two browsers).
 
+## Monster Cookbook (`src/sim/cookbook.ts`, `src/ui/cookbook.ts`, spec `docs/DROPS-USES.md`)
+Bag → Cookbook: a card per monster with a drop, a page per world (built from `WORLDS` pools and `DROPS`, so a new world
+is a new page with no code). Hand in spare drops to raise a card (`CARD_NEEDS`); cards, pages and the whole book pay once:
+crumbs, map stamps, gold borders and titles only (`CookReward` has no other fields: nothing from drops gives power or
+boxes). Monsters no exit ever asks for drop at `SPARE_DROP_CHANCE` (`neverWantedKinds`, worked out from the stages). A
+hand-in that would break a SKIP TO BOSS you can afford asks HAND IN / KEEP (`skipsBrokenBy`); HAND IN ALL SPARES never
+breaks one. Save fields `cookbook`, `cookbookPaid`, `title` (all optional, repaired on load). The chosen title shows on
+the Hero tab and to friends online (sent as an id). Floor pickups have their own id counter so drop counts can never
+shift monster behaviour. Tests: `tests/cookbook.test.ts`, `tests/cookbook-ui.test.ts`; screens:
+`node scripts/cookbook-shot.mjs` (needs a dev server already running). Next phase: the Garnish slot (same spec).
+
 ## Camp, save and settings
 - **Camp** (`src/ui/camp.ts`): tabs Map (world map, stage card with challenges, difficulty, buddy, online), Free Play,
   Hero (stats, equipment), Skills (ranks, tree, loadout), Bag (tabs, ▲▼ compare, lock, equip best, salvage, quick bag),

@@ -13,6 +13,7 @@ import { hardUnlocked, stageUnlocked } from './camp';
 import { sfx } from '../audio';
 import { stageElements } from '../sim/elements';
 import { weakHtml } from './elementUi';
+import { shownTitle, titleName } from '../sim/cookbook';
 
 /** What the game scene needs to run an online stage. Seat 0 is the host; guests[k] is the host-side id of seat k+1. */
 export interface NetPlay {
@@ -56,10 +57,19 @@ let stage = '1-1', hard = false, nightmare = false, mode: Mode = 'story';
 /** guest: the latest lobby from the host */
 let lobby: Extract<NetMsg, { t: 'lobby' }> | null = null;
 
-/** Only what the host needs to build your kaiju (no quest counters or story flags). */
+/** A kit or lobby seat with the Cookbook title its player shows. It travels as the title's id ('w3', 'all'), never as
+ *  text: the name is looked up on this device (titleName), so a friend can only ever show a real title, and a version
+ *  that does not know the field (or the id) shows nothing. */
+type Titled = { title?: string };
+/** The Cookbook title a friend shows ('' for none, an older version, or anything that is not a title id). */
+export function kitTitle(k: unknown): string { const t = (k as Titled | null | undefined)?.title; return typeof t === 'string' ? titleName(t) : ''; }
+
+/** Only what the host needs to build your kaiju (no quest counters or story flags), plus the Cookbook title shown. */
 export function kitOf(p: HeroProfile = hero()): Kit {
-  return { name: save.netName || 'Player', profile: { species: p.species, level: p.level, xp: 0, statPts: 0, alloc: p.alloc, skillPts: 0, skills: p.skills, equip: p.equip, branch: p.branch, cleared: {}, hardCleared: {}, stats: {}, kq: [], seen: [] },
+  const kit: Kit & Titled = { name: save.netName || 'Player', profile: { species: p.species, level: p.level, xp: 0, statPts: 0, alloc: p.alloc, skillPts: 0, skills: p.skills, equip: p.equip, branch: p.branch, cleared: {}, hardCleared: {}, stats: {}, kq: [], seen: [] },
     bag: quickBag(), revives: save.items.revive ?? 0 };
+  if (shownTitle(save)) kit.title = save.title;
+  return kit;
 }
 
 export function initOnline(start: (stage: string, play: NetPlay) => void, camp: () => void): void {
@@ -82,10 +92,10 @@ export function showOnline(): void {
 }
 function hide(): void { el.classList.remove('on'); }
 
-function seats(): LobbySeat[] {
+function seats(): (LobbySeat & Titled)[] {
   const me = hero();
-  return [{ who: 'host', name: save.netName || 'Host', species: me.species, level: me.level },
-    ...[...guests].map(([g, v]) => ({ who: 'guest' as const, guest: g, name: v.kit.name, species: v.kit.profile.species, level: v.kit.profile.level, route: v.route }))];
+  return [{ who: 'host', name: save.netName || 'Host', species: me.species, level: me.level, title: shownTitle(save) ? save.title : undefined },
+    ...[...guests].map(([g, v]) => ({ who: 'guest' as const, guest: g, name: v.kit.name, species: v.kit.profile.species, level: v.kit.profile.level, route: v.route, title: kitTitle(v.kit) ? (v.kit as Titled).title : undefined }))];
 }
 
 function broadcastLobby(): void {
@@ -193,7 +203,7 @@ function weakRow(m: Mode, stageId: string, lv: number): string {
   return line ? `<p class="hint weakln">${line}</p>` : '';
 }
 const esc = (s: string) => s.replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]!));
-const seatHtml = (s: LobbySeat, me: boolean) => `<div class="seat ${me ? 'me' : ''}"><img src="art/kaiju-${s.species}.webp"><b>${esc(s.name)}</b><span>${CLASSES.find(c => c.species === s.species)?.name ?? ''} · Lv ${s.level}</span>${s.route === 'backup' ? '<em>backup route</em>' : s.who === 'host' ? '<em>host</em>' : ''}</div>`;
+const seatHtml = (s: LobbySeat, me: boolean) => `<div class="seat ${me ? 'me' : ''}"><img src="art/kaiju-${s.species}.webp"><b>${esc(s.name)}</b>${kitTitle(s) ? `<u class="ttl">🎖 ${esc(kitTitle(s))}</u>` : ''}<span>${CLASSES.find(c => c.species === s.species)?.name ?? ''} · Lv ${s.level}</span>${s.route === 'backup' ? '<em>backup route</em>' : s.who === 'host' ? '<em>host</em>' : ''}</div>`;
 
 function render(): void {
   const st = status ? `<p class="status ${statusOk ? '' : 'bad'}">${esc(status)}</p>` : '';
@@ -288,4 +298,5 @@ const CSS = `
 #online .seat img { height: 9vmin; }
 #online .seat b { font-family: 'Luckiest Guy', sans-serif; font-size: 2.6vmin; }
 #online .seat em { color: #a8e8ff; font-size: 1.6vmin; }
+#online .seat .ttl { text-decoration: none; color: #ffe27a; font-size: 1.7vmin; white-space: nowrap; }
 `;

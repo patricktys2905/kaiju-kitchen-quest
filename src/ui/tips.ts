@@ -7,6 +7,12 @@ import { isTouchDevice } from '../touch';
 import { settings } from './settings';
 import type { World } from '../sim/world';
 import { ELEMENT_INFO, type Element } from '../sim/elements';
+import { stageWants } from '../sim/cookbook';
+
+/** Does the bag hold a drop this stage's exits will not take (a kind they do not ask for, or more than they ask for)? */
+export function hasSpareDrop(drops: Partial<Record<string, number>>, wants: Record<string, number>): boolean {
+  return Object.entries(drops).some(([k, n]) => (n ?? 0) > (wants[k] ?? 0));
+}
 
 interface Tip { id: string; text: (touch: boolean, c: Coach) => string; /** show it now? */ when: (w: World, c: Coach) => boolean; /** done (hide early)? */ done?: (w: World, t: number) => boolean; basic?: boolean }
 
@@ -31,6 +37,8 @@ const TIPS: Tip[] = [
   { id: 'escort', text: () => 'Keep the Crumblet safe: it follows you to the exit', when: w => !!w.npc },
   { id: 'fetch', text: () => 'Race to the Recipe Scroll before the timer runs out!', when: w => !!w.scroll && !w.scroll.got && w.objArmed },
   { id: 'boss', text: () => 'A boss! Watch for its glowing wind-ups, and dodge the red ones', when: w => !!w.boss },
+  // the Monster Cookbook: the first time you hold a drop no exit of this stage will take
+  { id: 'cookbook', text: () => 'A spare drop! Exits only take what they ask for. Hand spares in at camp: Bag → Cookbook pays crumbs', when: w => hasSpareDrop(w.drops, stageWants(w.stage)) },
   { id: 'exit', text: () => 'All clear! Walk to the glowing EXIT on the right', when: w => w.portal },
 ];
 

@@ -35,10 +35,12 @@ import { isMuted, sfx, toggleMute } from '../audio';
 import { ELEMENT_INFO, type Element, GUARD_BREAK_ELEMENT, RESEASON_ELEMENTS, type StageElements, canReseason, elementsOfGear, elementsOfGearSkill, elementsOfSkill, reseasonCost, reseasonItem, stageElements, weakOf } from '../sim/elements';
 import { ELEMENT_CSS, elHtml, elsHtml, tickHtml, weakHtml } from './elementUi';
 import { applyBranch, applyMod } from '../sim/skills';
-import { findWeapon, reseason, reseasonBlock } from '../save';
+import { findWeapon, reseason, reseasonBlock, stageOpen } from '../save';
+import { canSkipWith, stageWants } from '../sim/cookbook';
+import { COOKBOOK_CSS, cookbookBadge, cookbookBody, cookbookClick, cookbookGold, cookbookHead, stampHtml, titleHtml, worldStamps } from './cookbook';
 
 type Tab = 'map' | 'free' | 'hero' | 'skills' | 'bag' | 'market' | 'boxes' | 'quests';
-type BagTab = Slot | 'items';
+type BagTab = Slot | 'items' | 'cookbook';
 const RANK_CSS: Record<Rank, string> = { S: '#ffd23c', A: '#7ee87e', B: '#7ac0ff', C: '#d8c8d8', D: '#a89898' };
 const TIER_CSS: Record<BoxTier, string> = { 1: '#e0c09a', 2: '#7ee87e', 3: '#7ac0ff', 4: '#ffd23c', 5: '#ff8af4' };
 export const SKILL_ICON: Record<SkillKind, string> = { jiggle: '🟢', clones: '👯', wobble: '🫨', upstream: '🐟', tide: '🌊', salmon: '🐠', jellyquake: '💥', salmonrun: '🎏', swing: '🌿', nap: '😴', slowtime: '🐌', wall: '🧇', scoop: '🍨', chipstorm: '🍫', snooze: '💤', sundae: '🍨', bubbletrap: '🫧', gumball: '🍬', trumpet: '🎺', hops: '🦘', flurry: '🥊', cakebomb: '🧁', megabubble: '🎈', tko: '💫', pitbounce: '🥑', guac: '🥣', gust: '🌬️', drop: '🌶️', screech: '🦉', volley: '🌮', guacflood: '🌊', fiesta: '🪅', cone: '💥', slam: '🌋', dash: '⚡', bolt: '✨', spin: '🌀', uppercut: '⤴️', mines: '🫐', buff: '🛡️', nova: '🌟', fan: '🎐', heal: '🥟',
@@ -76,12 +78,12 @@ let flash = '';
 let useSafety = true;
 let bagMine = true;
 
-/** The drops a stage's map exits want, added up: one icon each with have / need (the title says which monster drops it). */
+/** The drops a stage's map exits want, added up: one icon each with have / need (the title says which monster drops it).
+ *  Each one opens that monster's Cookbook card. */
 function dropRow(st: StageDef): string {
-  const need = new Map<MobKind, number>();
-  for (const m of st.maps ?? []) if (m.goal?.kind === 'collect') for (const q of m.goal.wants) need.set(q.mob, (need.get(q.mob) ?? 0) + q.n);
-  if (!need.size) return '';
-  return `<div class="lv dropreq">Drops: ${[...need].map(([k, n]) => { const have = save.drops?.[k] ?? 0; return `<span class="${have >= n ? 'ok' : ''}" title="${dropName(k)} from ${MOB_DEFS[k].name} (weak to ${ELEMENT_INFO[weakOf(k)].name})"><img src="art/drop-${k}.webp" onerror="this.style.display='none'">${elHtml(weakOf(k))} ${Math.min(have, n)}/${n}</span>`; }).join('')}</div>`;
+  const need = Object.entries(stageWants(st)) as [MobKind, number][];
+  if (!need.length) return '';
+  return `<div class="lv dropreq">Drops: ${need.map(([k, n]) => { const have = save.drops?.[k] ?? 0; return `<button class="${have >= n ? 'ok' : ''}" data-cb="open:${k}" title="${dropName(k)} from ${MOB_DEFS[k].name} (weak to ${ELEMENT_INFO[weakOf(k)].name}): tap for its Cookbook card"><img src="art/drop-${k}.webp" onerror="this.style.display='none'">${elHtml(weakOf(k))} ${Math.min(have, n)}/${n}</button>`; }).join('')}</div>`;
 }
 /** What the stage picked on the map is weak to (with this kaiju's nemesis at stage 5): the green ticks in the kit screens use it. */
 function selStageEl(): { st: StageDef; se: StageElements } {
@@ -98,7 +100,7 @@ function fitNote(): string {
 export function initCamp(play: (stageId: string, skip?: boolean) => void, online: () => void = () => {}): void {
   onPlay = play; onOnline = online;
   const st = document.createElement('style');
-  st.textContent = UI_CSS + CAMP_CSS + ELEMENT_CSS;
+  st.textContent = UI_CSS + CAMP_CSS + ELEMENT_CSS + COOKBOOK_CSS;
   document.head.appendChild(st);
   el = document.createElement('div');
   el.id = 'camp';
@@ -131,16 +133,13 @@ function badgeFor(it: Item): string {
 const ownerName = (it: Item) => { const o = ownerOf(it); return o === undefined ? '' : CLASSES.find(c => c.species === o)?.name ?? ''; };
 const cIcon = (id: ConsumableId) => `art/${CONSUMABLES[id].icon}.webp`;
 
-export function stageUnlocked(s: StageDef): boolean {
-  if (s.id.startsWith('S-')) return (save.keys ?? []).includes(s.world);
-  const i = STAGES.indexOf(s);
-  return i === 0 || !!hero().cleared[STAGES[i - 1].id];
-}
+/** Is this stage open to the kaiju being played? (the rule lives in save.ts: the Cookbook's skip guard uses the same one) */
+export function stageUnlocked(s: StageDef): boolean { return stageOpen(s); }
 export function hardUnlocked(world: number): boolean { return !!hero().cleared[`${world}-10`]; }
 
 function render(): void {
   const p = hero();
-  const tabs: [Tab, string, number][] = [['map', 'Map', 0], ['free', 'Free Play', 0], ['hero', 'Hero', p.statPts], ['skills', 'Skills', p.skillPts], ['bag', 'Bag', 0], ['market', 'Market', 0], ['boxes', 'Boxes', save.boxes.length], ['quests', 'Quests', claimable()]];
+  const tabs: [Tab, string, number][] = [['map', 'Map', 0], ['free', 'Free Play', 0], ['hero', 'Hero', p.statPts], ['skills', 'Skills', p.skillPts], ['bag', 'Bag', cookbookBadge()], ['market', 'Market', 0], ['boxes', 'Boxes', save.boxes.length], ['quests', 'Quests', claimable()]];
   el.innerHTML = `
     <div class="side">${CLASSES.map(c => { const h = save.heroes[c.species], open = save.unlocked.includes(c.species); return `<button class="hp ${c.species === save.selected ? 'on' : ''} ${open && h.statPts + h.skillPts ? 'pts' : ''} ${open ? '' : 'lockd'}" data-hero="${c.species}" title="${c.name}" style="background-image:url(art/kaiju-${c.species}.webp)"><i></i>${open ? `<b>${h.level}</b>` : '<u>🔒</u>'}</button>`; }).join('')}</div>
     <div class="main">
@@ -196,13 +195,15 @@ function mapPage(): string {
   const lv = (n: number) => n + (save.hard ? HARD_LV : 0);
   const low = p.level < lv(sel.rec) - 1;
   const se = stageElements(sel, p.species);
-  return `<div class="mappages">${MAPS.map((m, i) => { const open = m.worlds.some(w => stageUnlocked(STAGES.find(s => s.id === `${w}-1`)!)); return `<button class="${m === mp ? 'on' : ''}" data-mappage="${i}" ${open ? '' : 'disabled'}>${open ? '' : '🔒 '}${m.name}</button>`; }).join('')}</div>
+  // Cookbook stamps: on the world's label, and on a map tab once every world on it has one (gold when all are gold)
+  const stamps = worldStamps(), tabStamp = (ws: number[]) => ws.every(w => stamps[w] === 'gold') ? 'gold' : ws.every(w => stamps[w]) ? 'hat' : null;
+  return `<div class="mappages">${MAPS.map((m, i) => { const open = m.worlds.some(w => stageUnlocked(STAGES.find(s => s.id === `${w}-1`)!)); return `<button class="${m === mp ? 'on' : ''}" data-mappage="${i}" ${open ? '' : 'disabled'}>${open ? '' : '🔒 '}${m.name}${stampHtml(tabStamp(m.worlds))}</button>`; }).join('')}</div>
   <div class="map">
     <div class="mapimg" style="background-image:url(art/${mp.img}.webp)">
       <svg viewBox="0 0 100 100" preserveAspectRatio="none">
         ${WORLDS.filter(w => mp.worlds.includes(w.id)).map(w => `<polyline points="${pts(w.id)}" class="path"/>${done(w.id).length > 1 ? `<polyline points="${done(w.id).map(([x, y]) => `${x},${y}`).join(' ')}" class="path done"/>` : ''}`).join('')}
       </svg>
-      ${WORLDS.filter(w => mp.worlds.includes(w.id)).map(w => { const [x, y] = MAP_POS[`${w.id}-1`]; return `<div class="wlabel" style="left:${x}%;top:${y + 7}%">World ${w.id}: ${w.name}</div>`; }).join('')}
+      ${WORLDS.filter(w => mp.worlds.includes(w.id)).map(w => { const [x, y] = MAP_POS[`${w.id}-1`]; return `<div class="wlabel" style="left:${x}%;top:${y + 7}%">World ${w.id}: ${w.name}${stampHtml(stamps[w.id])}</div>`; }).join('')}
       ${STAGES.filter(s => mp.worlds.includes(s.world)).map(s => {
         const [x, y] = MAP_POS[s.id];
         const open = stageUnlocked(s), r = (save.hard ? hero().hardCleared : hero().cleared)[s.id] as Rank | undefined;
@@ -260,7 +261,7 @@ function heroPage(): string {
   const pct = (v: number) => `${Math.round(v * 100)}%`;
   const fit = selStageEl();
   return `<div class="hero">
-    <div class="portrait"><img src="art/kaiju-${p.species}.webp"><h2>${cls.name}</h2><div class="role">${cls.role}</div>
+    <div class="portrait"><img src="art/kaiju-${p.species}.webp"><h2>${cls.name}</h2>${titleHtml()}<div class="role">${cls.role}</div>
       <div style="font-size:2.4vmin;margin-top:1vmin">Level ${p.level}</div><div class="bar"><i style="width:${Math.min(100, p.xp / need * 100)}%"></i></div><div style="font-size:1.7vmin;color:#b8a8b8">${p.xp} / ${need} XP</div></div>
     <div><div class="h3">Stats ${p.statPts ? `<span style="color:#ff8a8a">· ${p.statPts} points</span>` : ''}${sugar ? ` <span style="color:#ffd27a;font-size:1.8vmin">· ${sugar} Golden Sugar Cube${sugar > 1 ? 's' : ''} (gold button)</span>` : ''}</div>
       <div class="rows">${STATS.map(statRow).join('')}</div>
@@ -368,11 +369,15 @@ function sortedBag(slot: Slot): Item[] {
 }
 
 function bagPage(): string {
-  const counts: Record<BagTab, number> = { weapon: 0, armor: 0, charm: 0, items: Object.values(save.items).reduce((a, b) => a + (b ?? 0), 0) + Object.values(save.drops ?? {}).reduce((a: number, b) => a + (b ?? 0), 0) };
+  const counts: Record<BagTab, number> = { weapon: 0, armor: 0, charm: 0, items: Object.values(save.items).reduce((a, b) => a + (b ?? 0), 0), cookbook: cookbookBadge() };
   for (const it of save.bag) counts[BASES[it.base].slot]++;
-  const sub = `<div class="subtabs">${(['weapon', 'armor', 'charm', 'items'] as BagTab[]).map(t => `<button class="${bagTab === t ? 'on' : ''}" data-bag="${t}">${t === 'items' ? 'Items' : SLOT_NAMES[t as Slot] + 's'} <small>${counts[t]}</small></button>`).join('')}
-    <label class="mine"><input type="checkbox" data-act="mine" ${bagMine ? 'checked' : ''}> Only ${CLASSES.find(c => c.species === save.selected)!.name}'s gear</label>
-    <span style="flex:1"></span><button class="pill" data-act="best">⚡ EQUIP BEST</button><button class="pill" data-act="salvage-worse">🍪 SALVAGE WORSE</button></div>`;
+  const book = bagTab === 'cookbook';
+  const sub = `<div class="subtabs">${(['weapon', 'armor', 'charm', 'items', 'cookbook'] as BagTab[]).map(t => t === 'cookbook'
+    ? `<button class="cbtab ${book ? 'on' : ''} ${cookbookGold() ? 'gold' : ''}" data-bag="cookbook">📖 Cookbook${counts.cookbook ? `<em>${counts.cookbook}</em>` : ''}</button>`
+    : `<button class="${bagTab === t ? 'on' : ''}" data-bag="${t}">${t === 'items' ? 'Items' : SLOT_NAMES[t as Slot] + 's'} <small>${counts[t]}</small></button>`).join('')}
+    ${book ? cookbookHead() : `<label class="mine"><input type="checkbox" data-act="mine" ${bagMine ? 'checked' : ''}> Only ${CLASSES.find(c => c.species === save.selected)!.name}'s gear</label>
+    <span style="flex:1"></span><button class="pill" data-act="best">⚡ EQUIP BEST</button><button class="pill" data-act="salvage-worse">🍪 SALVAGE WORSE</button>`}</div>`;
+  if (bagTab === 'cookbook') return sub + cookbookBody();
   if (bagTab === 'items') return sub + itemsTab();
   const bag = sortedBag(bagTab);
   const sel = bag.find(i => i.id === selItem) ?? bag[0];
@@ -382,24 +387,13 @@ function bagPage(): string {
     ${sel ? detail(sel, false) : ''}</div>` : `<div class="empty">No ${SLOT_NAMES[bagTab].toLowerCase()}s yet. Open boxes or visit the Market!</div>`);
 }
 
-/** Monster drops in the bag (map exits take them; a stage's full set skips it to the boss). */
-function dropsHtml(): string {
-  const d = Object.entries(save.drops ?? {}).filter(([, n]) => (n ?? 0) > 0) as [MobKind, number][];
-  return `<div class="h3" style="margin-top:1.6vmin">Monster drops <small style="color:#b8a8b8;font-family:Nunito;font-size:1.8vmin">map exits ask for them · a stage's whole set skips it to the boss</small></div>${d.length ? `<div class="dlist">${d.map(([k, n]) => `<span><img src="art/drop-${k}.webp" onerror="this.style.visibility='hidden'"><b>${dropName(k)} ×${n}</b><small>${MOB_DEFS[k].name}</small></span>`).join('')}</div>` : '<div class="empty">None yet: monsters drop them in stages.</div>'}`;
-}
-/** Do you hold every map exit's drops for this stage? */
-function canSkip(s: StageDef): boolean {
-  if (!s.maps) return false;
-  const need: Record<string, number> = {};
-  for (const m of s.maps) if (m.goal?.kind === 'collect') for (const q of m.goal.wants) need[q.mob] = (need[q.mob] ?? 0) + q.n;
-  return Object.keys(need).length > 0 && Object.entries(need).every(([k, v]) => (save.drops?.[k] ?? 0) >= v);
-}
+/** Do you hold every map exit's drops for this stage? (the sum lives in sim/cookbook.ts: every drop-spend screen shares it) */
+const canSkip = (s: StageDef): boolean => canSkipWith(save.drops, s);
 function itemsTab(): string {
   const owned = (Object.keys(CONSUMABLES) as ConsumableId[]).filter(id => (save.items[id] ?? 0) > 0);
   return `<div class="h3">Quick bag <small style="color:#b8a8b8;font-family:Nunito;font-size:1.8vmin">4 slots you can tap in stages (keys 1-4). Pick an item, then tap a slot.</small></div>
     <div class="qslots">${Array.from({ length: QUICK_SLOTS }, (_, i) => { const id = save.quick[i]; return `<button class="qs ${selConsumable ? 'pick' : ''}" data-qslot="${i}">${id ? `<img src="${cIcon(id)}"><b>${save.items[id] ?? 0}</b>` : '<span>empty</span>'}<i>${i + 1}</i></button>`; }).join('')}</div>
     <div class="h3" style="margin-top:1.6vmin">Items</div>
-    ${dropsHtml()}
     ${owned.length ? `<div class="clist">${owned.map(id => { const c = CONSUMABLES[id]; return `<button class="citem ${selConsumable === id ? 'on' : ''}" data-cons="${id}"><img src="${cIcon(id)}"><div><b>${c.name} ×${save.items[id]}</b><span>${c.desc}</span><span class="${c.quick ? 'ok' : 'cmp'}">${c.quick ? 'Quick bag item' : id === 'revive' ? 'Works automatically' : 'Use at camp (Hero / Skills)'}</span></div></button>`; }).join('')}</div>` : '<div class="empty">No items. Buy potions at the Market!</div>'}`;
 }
 
@@ -520,7 +514,7 @@ function boxesPage(): string {
 /** Every data attribute the camp's one click handler answers to. A button whose attribute is left out of this list looks
  *  fine and does nothing (the Challenges chillies and SKIP TO BOSS were dead that way): tests/camp-clicks.test.ts checks
  *  that every `ds.<name>` the handler reads is listed here. */
-const CLICKABLE = '[data-tab],[data-hero],[data-node],[data-play],[data-stat],[data-sugar],[data-skill],[data-item],[data-act],[data-box],[data-eqslot],[data-bag],[data-cons],[data-qslot],[data-buy],[data-buybox],[data-buygear],[data-branch],[data-mappage],[data-claimq],[data-claima],[data-replay],[data-claimk],[data-free],[data-tnode],[data-learn],[data-slot],[data-equipskill],[data-reel],[data-reitem],[data-spicy],[data-skip]';
+const CLICKABLE = '[data-tab],[data-hero],[data-node],[data-play],[data-stat],[data-sugar],[data-skill],[data-item],[data-act],[data-box],[data-eqslot],[data-bag],[data-cons],[data-qslot],[data-buy],[data-buybox],[data-buygear],[data-branch],[data-mappage],[data-claimq],[data-claima],[data-replay],[data-claimk],[data-free],[data-tnode],[data-learn],[data-slot],[data-equipskill],[data-reel],[data-reitem],[data-spicy],[data-skip],[data-cb]';
 function onClick(e: MouseEvent): void {
   const t = (e.target as HTMLElement).closest<HTMLElement>(CLICKABLE);
   if (!t || (t as HTMLButtonElement).disabled) return;
@@ -551,6 +545,7 @@ function onClick(e: MouseEvent): void {
   else if (ds.replay) { const [id, sp] = [ds.replay, save.selected]; playStory(sp, [...beatBefore(id, id === '1-1'), ...(id.endsWith('-10') ? [`w${id.split('-')[0]}-after`] : [])].filter(b => hero().seen.includes(b)), () => render()); return; }
   else if (ds.claimk) { const r = claimKaijuQuest(save.selected, ds.claimk); if (r) { flash = 'Quest reward: ' + r; sfx('reveal3'); } }
   else if (ds.stat) spendStat(sp, ds.stat as Stat);
+  else if (ds.cb) { const r = cookbookClick(ds.cb); if (r.show) { tab = 'bag'; bagTab = 'cookbook'; selItem = null; } if (r.flash) flash = r.flash; }
   else if (ds.spicy) { const k = ds.spicy as Spicy, cur = save.spicy ?? []; save.spicy = cur.includes(k) ? cur.filter(x => x !== k) : [...cur, k]; persist(); }
   else if (ds.sugar) { if (useSugar(sp, ds.sugar as Stat)) flash = `Golden Sugar Cube: +1 ${ds.sugar.toUpperCase()} forever!`; }
   else if (ds.skill) levelSkill(sp, ds.skill);
@@ -873,7 +868,6 @@ const CAMP_CSS = `
 .kq .vtx { color: #c8a8ff !important; }
 .kq .lv.dropreq { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4vmin 1.4vmin; } .kq .lv.dropreq span { color: #ffd27a; white-space: nowrap; } .kq .lv.dropreq span.ok { color: #a8f0a8; } .kq .lv.dropreq img { height: 1.5em; vertical-align: middle; } .kq details.chal summary { cursor: pointer; list-style: none; } .kq details.chal summary::-webkit-details-marker { display: none; } .kq details.chal[open] summary small { display: none; }
 .kq .pill.skip { background: linear-gradient(#ffe27a, #ffb347); color: #3a1a08; }
-.kq .dlist { display: grid; grid-template-columns: repeat(auto-fill, minmax(22vmin, 1fr)); gap: 0.8vmin; } .kq .dlist span { display: flex; align-items: center; gap: 0.8vmin; background: #2a1a30; border-radius: 1vmin; padding: 0.6vmin; } .kq .dlist img { width: 5vmin; height: 5vmin; object-fit: contain; } .kq .dlist b { font-size: 1.9vmin; } .kq .dlist small { color: #b8a8c8; font-size: 1.5vmin; margin-left: auto; }
 .kq .lv.chal { display: flex; flex-direction: column; gap: 0.3vmin; font-size: 0.92em; } .kq .lv.chal span { color: #c8b8d8; } .kq .lv.chal span.ok { color: #ffd23c; } .kq .lv.chal small { opacity: 0.85; } .kq .lv.chal small.stars { color: #9fe8ff; }
 .kq .quest .rq { width: 7vmin; height: 7vmin; object-fit: contain; }
 #camp .flashmsg { position: absolute; left: 50%; bottom: 3vmin; transform: translateX(-50%); background: #3a2448f0; border: 2px solid #ffd27a; border-radius: 2vmin; padding: 1vmin 2.4vmin; font-size: 2.4vmin; animation: tst 2.4s forwards; pointer-events: none; z-index: 5; }

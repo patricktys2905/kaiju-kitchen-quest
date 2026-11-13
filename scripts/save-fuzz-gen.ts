@@ -8,6 +8,8 @@ import { MAX_LEVEL, newProfile } from '../src/sim/stats';
 import { STORIES } from '../src/story/stories';
 import { CONSUMABLES } from '../src/sim/consumables';
 import type { BoxTier } from '../src/sim/types';
+import { DROPS } from '../src/sim/drops';
+import { cardNeeds, cookbook } from '../src/sim/cookbook';
 
 const COUNT = Number(process.argv[2] ?? 60);
 let s = 12345;
@@ -16,6 +18,17 @@ const pick = <T>(a: T[]) => a[Math.floor(r() * a.length)];
 const RANKS = ['D', 'C', 'B', 'A', 'S'] as const;
 const CONS = Object.keys(CONSUMABLES);
 const ids = [...STAGES, ...BONUS_STAGES].map(x => x.id);
+const DROP_KINDS = Object.keys(DROPS);
+// Monster Cookbook fields (drops, cookbook, cookbookPaid, title) that no real game would write: load must repair every one
+const ODD_BOOKS: Record<string, unknown>[] = [
+  { drops: null, cookbook: null, cookbookPaid: null, title: null },
+  { drops: 'lots', cookbook: 'full', cookbookPaid: 'yes', title: 7 },
+  { drops: [3, 4, 5], cookbook: [1, 2], cookbookPaid: [2], title: ['all'] },
+  { drops: { bun: -4, worm: 2.5, ant: 'six', salt: null, egg: 1e12, 'no-such-monster': 9, toast: 3 }, cookbook: { bun: -1, worm: 3.7, ant: '5', salt: null, egg: 1e9, 'no-such-monster': 12, toast: 12, kbun: 5 }, cookbookPaid: { 1: 9, 2: -1, 3: 'two', 99: 2, all: 5, x: 1 }, title: 'w99' },
+  { cookbook: { bun: 12 }, cookbookPaid: {}, title: 'all' }, // a title that was never earned
+  { cookbookPaid: { 1: 2, all: 1 }, title: 'w1' }, // paid marks with an empty book (titles stay earned)
+  { drops: {}, cookbook: {}, cookbookPaid: {}, title: '' },
+];
 
 function save(kind: string) {
   const heroes: Record<number, ReturnType<typeof newProfile>> = {};
@@ -49,15 +62,31 @@ function save(kind: string) {
     nightmare: r() < 0.2, buddy: r() < 0.3 ? pick(CLASSES).species : null, netName: r() < 0.5 ? 'Tester <b>&amp;</b>' : undefined,
     free: r() < 0.6 ? { daily: 20261110, endless: { 0: 12 }, rush: { 10: 300 } } : undefined,
   };
+  // drops and the Cookbook: empty and old saves have none of the fields; max has a finished book; the rest are part-way
+  if (extreme) {
+    out.drops = Object.fromEntries(DROP_KINDS.map(k => [k, 99]));
+    out.cookbook = Object.fromEntries(DROP_KINDS.map(k => [k, cardNeeds(k)[2]]));
+    out.cookbookPaid = { ...Object.fromEntries(cookbook().pages.map(p => [p.id, 2])), all: 1 }; out.title = 'all';
+  } else if (!empty) {
+    if (r() < 0.8) out.drops = Object.fromEntries(DROP_KINDS.filter(() => r() < 0.5).map(k => [k, Math.floor(r() * 30)]));
+    if (r() < 0.7) {
+      const done = r() < 0.3; // some saves with whole pages done, so stamps and titles get drawn
+      out.cookbook = Object.fromEntries(DROP_KINDS.filter(() => done || r() < 0.6).map(k => [k, done && r() < 0.8 ? cardNeeds(k)[2] : Math.floor(r() * 14)]));
+      out.cookbookPaid = Object.fromEntries(cookbook().pages.filter(() => r() < (done ? 0.7 : 0.15)).map(p => [p.id, 1 + Math.floor(r() * 2)]));
+      if (r() < 0.5) out.title = pick(['w1', 'w4', 'w10', 'all']); // earned or not: an unearned one is cleared on load
+    }
+    if (r() < 0.25) Object.assign(out, pick(ODD_BOOKS));
+  }
   out.unlocked = [...new Set(out.unlocked as number[])];
   if (!(out.unlocked as number[]).includes(out.selected as number)) out.selected = 0;
   // deliberately odd versions of real saves
-  if (kind === 'old') { delete out.free; delete out.keys; delete out.spicy; delete out.storyMode; for (const it of bag) { delete (it as { grade?: number }).grade; delete (it as { twist?: unknown }).twist; } }
+  if (kind === 'old') { delete out.drops; delete out.cookbook; delete out.cookbookPaid; delete out.title; delete out.free; delete out.keys; delete out.spicy; delete out.storyMode; for (const it of bag) { delete (it as { grade?: number }).grade; delete (it as { twist?: unknown }).twist; } }
   if (kind === 'broken') {
     (out.boxes as { ilvl: number | null }[]).push({ tier: 3, ilvl: null }, { tier: 2, ilvl: null });
     (out.bag as unknown[]).push({ id: nextId++, base: 'no-such-thing', rarity: 2, ilvl: 5, plus: 0, lines: [] }, { id: nextId++, base: 'pin', rarity: 3, ilvl: null, plus: 0, lines: [{ k: 'atk', v: 4 }] });
     out.shop = { day: 'x', stock: [{ id: 1, base: 'gone-item', rarity: 2, ilvl: 3, plus: 0, lines: [] }] };
     out.quick = ['jam', 'not-a-potion', null];
+    Object.assign(out, ODD_BOOKS[3]);
   }
   return out;
 }

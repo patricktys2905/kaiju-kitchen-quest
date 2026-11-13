@@ -8,7 +8,8 @@ import { BOSS_ARMOR, BOSS_PATTERNS, DANGER_MOVES, ELITE, ELITE_MODS, type EliteM
 import { type SkillDef, ULTS, ULT_LV, applyBranch, applyMod, skillScale } from './skills';
 import { WORLDS } from './stages';
 import type { Derived } from './stats';
-import { DROPS, DROP_CHANCE, QUEST_DROP_CHANCE } from './drops';
+import { DROPS, QUEST_DROP_CHANCE } from './drops';
+import { baseDropChance } from './cookbook';
 import { type Element, GUARD_BREAK_ELEMENT, elementDmgMul, elementStatusMul, elementsOfFx, elementsOfSkill, pickElement } from './elements';
 import { type BoxTier, type Hazard, type Input, type MobSpawn, type Prop, type LootBox, type MobKind, NO_INPUT, type SimEvent, type Spicy, type StageDef } from './types';
 
@@ -254,6 +255,9 @@ export class World {
   bossHits = 0;
   /** monster drops on the floor */
   pickups: { id: number; kind: MobKind; x: number; y: number; vy: number; ground: boolean; t: number }[] = [];
+  /** floor pickups count their own ids (never the shared nextId): monster patrols read a monster's id, so how many drops
+   *  have fallen must never shift the ids of monsters spawned later (docs/DROPS-USES.md B1.3) */
+  private nextPickup = 1;
   /** the drop bag: what you brought (set by the game from your save) plus what you picked up; exits take from it */
   drops: Partial<Record<MobKind, number>> = {};
   /** what you picked up this run (the game adds it to your save, even if you escape or are knocked out) */
@@ -1893,9 +1897,10 @@ export class World {
     // a zone's quest monster: drops its quest item now and then (never more than two misses in a row)
     if (this.stage.maps && DROPS[m.kind]) {
       const zi = this.mapAt(m.x), g = this.stage.maps[zi]?.goal, z = this.zones2[zi], quest = g?.kind === 'collect' && g.wants.some(q => q.mob === m.kind) && !z.done;
-      let drop = this.rand() < (quest ? QUEST_DROP_CHANCE : DROP_CHANCE);
+      // one random call whatever the chance, so a different drop rate changes the floor pickups and nothing else
+      let drop = this.rand() < (quest ? QUEST_DROP_CHANCE : baseDropChance(m.kind));
       if (quest) { if (z.miss >= 2) drop = true; z.miss = drop ? 0 : z.miss + 1; }
-      if (drop) this.pickups.push({ id: nextId++, kind: m.kind, x: m.x, y: m.y - 30, vy: -380, ground: false, t: 0 });
+      if (drop) this.pickups.push({ id: this.nextPickup++, kind: m.kind, x: m.x, y: m.y - 30, vy: -380, ground: false, t: 0 });
     }
     if (m.mods.includes('splitting')) for (const off of [-40, 40]) { const c = this.spawnMob(m.kind, clamp(m.x + off, 30, this.stage.width - 30), Math.max(1, m.lv - 1), m.on !== null && m.on >= 0 ? m.y : undefined); c.hp = c.maxHp = Math.round(c.maxHp * 0.6); c.vy = -380; c.vx = off * 5; c.ground = false; c.on = null; c.state = 'hurt'; c.t = 0; c.under = false; c.disguised = false; }
     if (m.stolen >= 0) { const slot = h.bag[m.stolen]; if (slot) slot.n++; this.events.push({ t: 'recover', name: slot ? CONSUMABLES[slot.id].name : '' }); m.stolen = -1; }

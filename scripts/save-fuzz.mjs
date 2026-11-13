@@ -1,12 +1,12 @@
 // Save stress test: loads every save from shots/fuzz-saves.json (scripts/save-fuzz-gen.ts) into the real game and walks
 // every screen with it, on a few phone sizes. Reports page errors, console errors and "hit a snag" tabs.
-// node scripts/save-fuzz.mjs [from=0] [count=all]
+// node scripts/save-fuzz.mjs [from=0] [count=all]   (FUZZ_PORT=5345 to pick the dev server port when the default is taken)
 import fs from 'node:fs';
 import { spawn } from 'node:child_process';
 import { chromium } from 'playwright-core';
 const saves = JSON.parse(fs.readFileSync('shots/fuzz-saves.json', 'utf8'));
 const from = Number(process.argv[2] ?? 0), count = Number(process.argv[3] ?? saves.length);
-const PORT = 5340 + (from % 50), base = `http://localhost:${PORT}/?touch`;
+const PORT = Number(process.env.FUZZ_PORT) || 5340 + (from % 50), base = `http://localhost:${PORT}/?touch`;
 const server = spawn(process.execPath, ['node_modules/vite/bin/vite.js', '--port', String(PORT), '--strictPort'], { stdio: 'pipe' });
 const wait = ms => new Promise(r => setTimeout(r, ms));
 await wait(3000);
@@ -25,7 +25,9 @@ for (let i = from; i < Math.min(saves.length, from + count); i++) {
   await p.goto(base);
   await p.evaluate(s => localStorage.setItem('kkq-save-v3', JSON.stringify(s)), save);
   await p.reload();
-  for (let k = 0; k < 60 && !await p.evaluate(() => !!window.__kkq).catch(() => false); k++) await wait(250);
+  for (let k = 0; k < 240 && !await p.evaluate(() => !!window.__kkq).catch(() => false); k++) await wait(250);
+  // a save the game cannot start with must not pass quietly (every step below tolerates a missing element)
+  if (!await p.evaluate(() => !!window.__kkq).catch(() => false)) { report('the game did not start'); await ctx.close(); process.stdout.write(`${i}! `); continue; }
   await p.evaluate(() => document.querySelector('#title .play')?.click()); await wait(900);
   const snag = async () => { const t = await p.evaluate(() => document.body.innerText.match(/hit a snag[^\n]*\n?[^\n]*/)?.[0]); if (t) report('snag: ' + t.replace(/\s+/g, ' ')); };
   const click = sel => p.evaluate(sel => { const el = document.querySelector(sel); el?.click(); return !!el; }, sel);
@@ -46,6 +48,19 @@ for (let i = from; i < Math.min(saves.length, from + count); i++) {
   await click('[data-tab="bag"]'); await wait(150);
   where = 'bag items';
   for (let k = 0; k < 4; k++) { await p.evaluate(k => [...document.querySelectorAll('[data-item]')][k * 3]?.click(), k); await wait(100); await snag(); }
+  // the Monster Cookbook: every page, a card opened, a hand-in from the grid (KEEP if it asks), hand in all spares, the title picker
+  where = 'cookbook'; await click('[data-tab="bag"]'); await click('[data-bag="cookbook"]'); await wait(150); await snag();
+  if (!await p.evaluate(() => !!document.querySelector('.cb .cbpages'))) report('the Cookbook did not draw');
+  const cbPages = await p.evaluate(() => [...document.querySelectorAll('.cbpages [data-cb]')].map(e => e.dataset.cb));
+  for (const pg of cbPages) {
+    where = `cookbook ${pg}`; await click(`[data-cb="${pg}"]`); await wait(60); await snag();
+    if (!await p.evaluate(() => document.querySelectorAll('.cbcard').length)) report('a Cookbook page with no cards');
+    await click('.cbcard'); await wait(50); await snag(); await click('.cbdetail [data-cb^="hand:"]'); await wait(50); await click('.cbask [data-cb="no"]'); await click('[data-cb="back"]'); await wait(40); await snag();
+    if (cbPages.indexOf(pg) % 3 === 0) { await click('.cbcard [data-cb^="hand:"]'); await wait(50); await click('.cbask [data-cb="yes"]'); await click('[data-cb^="spares:"]:not([disabled])'); await wait(60); await snag(); }
+  }
+  where = 'cookbook titles'; await click('.cbpick'); await wait(60); await snag(); await click('.cbtitles [data-cb^="title:"]:last-child'); await wait(60); await snag();
+  { const bad = await p.evaluate(() => { const s = window.__kkq.save; if (!document.querySelector('#camp.on')) return true; return [s.crumbs, ...Object.values(s.drops ?? {}), ...Object.values(s.cookbook ?? {})].some(n => !Number.isFinite(n) || n < 0); }); if (bad) report('the Cookbook left a bad number in the save (or the camp is gone)'); }
+  await click('[data-tab="hero"]'); await wait(80); await snag(); await click('[data-tab="map"]'); await wait(80); await snag();
   await click('[data-tab="market"]'); await wait(150); where = 'market buy'; await click('[data-buy]'); await click('[data-buybox]'); await click('[data-buygear]'); await wait(150); await snag();
   await click('[data-tab="boxes"]'); await wait(150); where = 'boxes'; await snag();
   // a stage: start the selected one, play a moment, leave

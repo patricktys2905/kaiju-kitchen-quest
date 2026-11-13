@@ -51,3 +51,7 @@ export const dropName = (k: MobKind): string => DROPS[k]?.[0] ?? 'Monster Bit';
 export const dropIcon = (k: MobKind): string => `drop-${k}`;
 /** How often a monster drops its item (the map's quest monster: more, and never 3 misses in a row). */
 export const DROP_CHANCE = 0.2, QUEST_DROP_CHANCE = 0.55;
+/** The 'never wanted' kinds (no story exit asks for their drop: shooters, healers, summoners, mimics...) drop more often,
+ *  so the Monster Cookbook can be filled without a five-minute hunt. Which kinds those are is worked out from the stages
+ *  in sim/cookbook.ts (`neverWantedKinds`, `baseDropChance`), so a new world is classified by itself. */
+export const SPARE_DROP_CHANCE = 0.35;
