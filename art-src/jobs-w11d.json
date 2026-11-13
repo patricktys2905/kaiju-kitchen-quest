@@ -1,0 +1,74 @@
+[
+ {
+  "name": "drop-cadet",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/c-bean.png"
+  ],
+  "prompt": "Generate an image. The reference is an item icon from my cute 2D food-monster action RPG. Draw a NEW ITEM icon, a monster drop called \"Paper Hat\": a folded paper soldier hat made of plain cream paper with a red stripe (no print, no letters). Same style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute). A small collectible item icon, shown centred, filling about 75% of the frame. A crisp dark outline, no white sticker border, no sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no letters, no character, no face. Square 1:1 image."
+ },
+ {
+  "name": "drop-toffee",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/c-bean.png"
+  ],
+  "prompt": "Generate an image. The reference is an item icon from my cute 2D food-monster action RPG. Draw a NEW ITEM icon, a monster drop called \"Toffee Shard\": a jagged glossy shard of amber-red toffee. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute). A small collectible item icon, shown centred, filling about 75% of the frame. A crisp dark outline, no white sticker border, no sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no letters, no character, no face. Square 1:1 image."
+ },
+ {
+  "name": "drop-floss",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/c-bean.png"
+  ],
+  "prompt": "Generate an image. The reference is an item icon from my cute 2D food-monster action RPG. Draw a NEW ITEM icon, a monster drop called \"Floss Puff\": a small fluffy puff of pale pastel pink candy floss with a dark outline. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute). A small collectible item icon, shown centred, filling about 75% of the frame. A crisp dark outline, no white sticker border, no sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no letters, no character, no face. Square 1:1 image."
+ },
+ {
+  "name": "drop-snowcone",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/c-bean.png"
+  ],
+  "prompt": "Generate an image. The reference is an item icon from my cute 2D food-monster action RPG. Draw a NEW ITEM icon, a monster drop called \"Syrup Drop\": a glossy bright blue drop of syrup with a tiny ice crystal in it. It is one single TEARDROP-shaped drop (pointed at the top, round at the bottom) of thick glossy syrup, not a ball and not a planet. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute). A small collectible item icon, shown centred, filling about 75% of the frame. A crisp dark outline, no white sticker border, no sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no letters, no character, no face. Square 1:1 image."
+ },
+ {
+  "name": "drop-bumper",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/c-bean.png"
+  ],
+  "prompt": "Generate an image. The reference is an item icon from my cute 2D food-monster action RPG. Draw a NEW ITEM icon, a monster drop called \"Rubber Bumper\": a thick curved piece of black rubber bumper with a teal stripe. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute). A small collectible item icon, shown centred, filling about 75% of the frame. A crisp dark outline, no white sticker border, no sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no letters, no character, no face. Square 1:1 image."
+ },
+ {
+  "name": "drop-churro",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/c-bean.png"
+  ],
+  "prompt": "Generate an image. The reference is an item icon from my cute 2D food-monster action RPG. Draw a NEW ITEM icon, a monster drop called \"Cinnamon Sugar\": a small paper twist bag spilling sparkly brown cinnamon sugar. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute). A small collectible item icon, shown centred, filling about 75% of the frame. A crisp dark outline, no white sticker border, no sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no letters, no character, no face. Square 1:1 image."
+ },
+ {
+  "name": "drop-coconut",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/c-bean.png"
+  ],
+  "prompt": "Generate an image. The reference is an item icon from my cute 2D food-monster action RPG. Draw a NEW ITEM icon, a monster drop called \"Coconut Shell\": half a cracked coconut shell, hairy brown outside and white inside. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute). A small collectible item icon, shown centred, filling about 75% of the frame. A crisp dark outline, no white sticker border, no sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no letters, no character, no face. Square 1:1 image."
+ },
+ {
+  "name": "drop-pretzel",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/c-bean.png"
+  ],
+  "prompt": "Generate an image. The reference is an item icon from my cute 2D food-monster action RPG. Draw a NEW ITEM icon, a monster drop called \"Lucky Ring\": a wooden ring-toss hoop wrapped in red and teal tape. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute). A small collectible item icon, shown centred, filling about 75% of the frame. A crisp dark outline, no white sticker border, no sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no letters, no character, no face. Square 1:1 image."
+ },
+ {
+  "name": "drop-jawbreaker",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/c-bean.png"
+  ],
+  "prompt": "Generate an image. The reference is an item icon from my cute 2D food-monster action RPG. Draw a NEW ITEM icon, a monster drop called \"Jawbreaker Chip\": a chipped chunk of jawbreaker candy showing rainbow layers. Same style as the reference (clean dark outlines, saturated colours, glossy cel shading, cute). A small collectible item icon, shown centred, filling about 75% of the frame. A crisp dark outline, no white sticker border, no sparkles around it. Solid flat magenta (#FF00FF) background, no shadow, no text, no letters, no character, no face. Square 1:1 image."
+ }
+]

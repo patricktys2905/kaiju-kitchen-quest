@@ -130,7 +130,9 @@ export type SimEvent =
   | { t: 'ambush'; x: number }
   | { t: 'gate'; i: number; x: number }
   | { t: 'bossWake'; kind: MobKind }
-  | { t: 'hit'; x: number; y: number; dmg: number; crit: boolean; target: 'mob' | 'hero' }
+  /** el / w (elemental weaknesses, see the top of elements.ts): the element the hit carried (missing = a plain hit) and
+   *  whether the monster is weak to it (1: "WEAK!") or resists it (-1: "RESIST"); dmg is already the final number */
+  | { t: 'hit'; x: number; y: number; dmg: number; crit: boolean; target: 'mob' | 'hero'; el?: import('./elements').Element; w?: 1 | -1 }
   | { t: 'gear'; name: string; style: string; x: number; y: number }
   | { t: 'zap'; pts: [number, number][] }
   | { t: 'proc'; name: string; x: number; y: number }

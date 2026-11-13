@@ -10,6 +10,7 @@ import type { World } from './sim/world';
 import { dropName } from './sim/drops';
 import { stageTitle } from './sim/free';
 import { canFullscreen, fsIcon, isFullscreen } from './ui/title';
+import { ELEMENT_INFO, weakOf } from './sim/elements';
 
 const CSS = `
 #hud { position: fixed; inset: 0; pointer-events: none; z-index: 9; font-family: Nunito, Arial, sans-serif; font-weight: 900; color: #fff; display: none; }
@@ -97,6 +98,7 @@ body.touch #hud .help { display: none; }
 #pause { position: fixed; inset: 0; z-index: 35; background: #120a18c8; display: none; align-items: center; justify-content: center; flex-direction: column; gap: 2vmin; }
 #pause.on { display: flex; }
 #pause h2 { font-size: 6vmin; color: #ffb347; }
+#pause .weakln { font: 800 2.4vmin Nunito, sans-serif; margin-top: -1vmin; }
 `;
 
 const TIER_CSS: Record<BoxTier, string> = { 1: '#e0c09a', 2: '#7ee87e', 3: '#7ac0ff', 4: '#ffd23c', 5: '#ff8af4' };
@@ -144,7 +146,7 @@ export function initHud(onMenu: () => void, onResume: () => void, onLeave: () =>
   });
   const p = document.createElement('div');
   p.id = 'pause'; p.className = 'kq';
-  p.innerHTML = `<h2>PAUSED</h2><button class="pill go" data-a="resume">▶ RESUME</button><button class="pill" data-a="mute">🔊 SOUND ON / OFF</button>${canFullscreen() ? `<button class="pill" data-fs="long">${fsIcon()} ${isFullscreen() ? 'EXIT FULL SCREEN' : 'FULL SCREEN'}</button>` : ''}<button class="pill" data-settings>⚙ SETTINGS</button><button class="pill" data-report>🐞 REPORT A BUG</button><button class="pill" data-a="leave" title="Leave the stage: you keep the drops you picked up and the crumbs you found (not the boxes); next time you start fresh at full health">⟵ ESCAPE (keep drops &amp; crumbs)</button>`;
+  p.innerHTML = `<h2>PAUSED</h2><div class="weakln"></div><button class="pill go" data-a="resume">▶ RESUME</button><button class="pill" data-a="mute">🔊 SOUND ON / OFF</button>${canFullscreen() ? `<button class="pill" data-fs="long">${fsIcon()} ${isFullscreen() ? 'EXIT FULL SCREEN' : 'FULL SCREEN'}</button>` : ''}<button class="pill" data-settings>⚙ SETTINGS</button><button class="pill" data-report>🐞 REPORT A BUG</button><button class="pill" data-a="leave" title="Leave the stage: you keep the drops you picked up and the crumbs you found (not the boxes); next time you start fresh at full health">⟵ ESCAPE (keep drops &amp; crumbs)</button>`;
   document.body.appendChild(p);
   p.querySelector('[data-a=resume]')!.addEventListener('click', onResume);
   p.querySelector('[data-a=leave]')!.addEventListener('click', onLeave);
@@ -164,7 +166,13 @@ export function setEmotes(lines: readonly string[] | null, fn: ((e: number) => v
 }
 /** The in-stage bag (null hides it). */
 export function showBag(html: string | null): void { const b = document.getElementById('bagov'); if (!b) return; b.classList.toggle('on', html !== null); if (html !== null) b.innerHTML = html; }
-export function showPause(v: boolean): void { document.getElementById('pause')?.classList.toggle('on', v); }
+/** `weak`: the stage's weakness line (HTML from ui/elementUi weakHtml), shown under the title. */
+export function showPause(v: boolean, weak?: string): void {
+  const p = document.getElementById('pause'); if (!p) return;
+  p.classList.toggle('on', v);
+  const ln = p.querySelector<HTMLElement>('.weakln');
+  if (ln && weak !== undefined) { ln.innerHTML = weak ? `This stage · ${weak}` : ''; ln.style.display = weak ? '' : 'none'; }
+}
 
 /** Teammates' names by hero index (online friends' names, or "CPU"). */
 let mateNames: Record<number, string> = {};
@@ -232,7 +240,7 @@ export function updateHud(w: World, p: HeroProfile, st: StageDef): void {
   bb.classList.toggle('on', !!boss && boss.state !== 'dead');
   document.body.classList.toggle('bossbar', !!boss && boss.state !== 'dead'); // the coach tip bar moves below the boss bar (src/ui/tips.ts)
   if (boss) {
-    q('.boss .t').textContent = `Lv ${boss.lv} ${MOBS[boss.kind].name.toUpperCase()}`;
+    q('.boss .t').textContent = `Lv ${boss.lv} ${MOBS[boss.kind].name.toUpperCase()} · WEAK ${ELEMENT_INFO[weakOf(boss.kind)].icon}`;
     q('.boss .bar i').style.transform = `scaleX(${Math.max(0, boss.hp / boss.maxHp)})`;
     q<HTMLElement>('.boss .bar u').style.transform = `scaleX(${boss.weak > 0 ? 0 : boss.armor})`; // armour left
   }

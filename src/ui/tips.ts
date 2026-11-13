@@ -6,8 +6,9 @@ import { save, persist } from '../save';
 import { isTouchDevice } from '../touch';
 import { settings } from './settings';
 import type { World } from '../sim/world';
+import { ELEMENT_INFO, type Element } from '../sim/elements';
 
-interface Tip { id: string; text: (touch: boolean) => string; /** show it now? */ when: (w: World) => boolean; /** done (hide early)? */ done?: (w: World, t: number) => boolean; basic?: boolean }
+interface Tip { id: string; text: (touch: boolean, c: Coach) => string; /** show it now? */ when: (w: World, c: Coach) => boolean; /** done (hide early)? */ done?: (w: World, t: number) => boolean; basic?: boolean }
 
 const TIPS: Tip[] = [
   // the guided start, in order (only on a kaiju's first stage of a save)
@@ -18,6 +19,9 @@ const TIPS: Tip[] = [
   { id: 'skill', basic: true, text: t => t ? 'The round blue buttons are your skills' : 'Skills: L, I and O', when: w => (w.hero.d.skillLv[Object.keys(w.hero.d.skillLv)[0]] ?? 0) > 0, done: w => w.hero.state === 'skill' },
   { id: 'gear', basic: true, text: t => t ? 'Your weapon has a special move: the GEAR button' : 'Your weapon has a special move: press F', when: w => !!w.hero.d.gear, done: w => (w.hero.cds[3] ?? 0) > 0 },
   // one-time tips, the first time it happens
+  // elemental weaknesses: set off by the hit events (GameScene tells the coach), not by the world's state
+  { id: 'weak', text: (_t, c) => `WEAK! This monster hates ${c.weakEl ? ELEMENT_INFO[c.weakEl].icon : 'that'}. The stage card shows what each stage is weak to`, when: (_w, c) => !!c.weakEl },
+  { id: 'resist', text: () => 'RESIST: this monster shrugs that element off a bit. Plain hits always do full damage', when: (_w, c) => c.resists >= 3 },
   { id: 'ladder', text: () => 'A ladder! Stand on it and press ↑ to climb', when: w => !!w.ladderAt(w.hero.x, w.hero.y), done: w => w.hero.state === 'climb' },
   { id: 'drop', text: t => t ? 'Hold the stick down and tap JUMP to drop through a ledge' : 'Hold ↓ and press SPACE to drop through a ledge', when: w => w.hero.ground && w.hero.on !== null && w.hero.on >= 0, done: w => !w.hero.ground && w.hero.vy > 0 },
   { id: 'arena', text: () => 'The gates are shut! Beat every wave to open them', when: w => w.arenas.some(a => a.locked) },
@@ -52,6 +56,12 @@ export class Coach {
   private quiet = 1.5; // a moment of calm before the first tip
   private basics: boolean;
   constructor(firstStage: boolean) { this.basics = firstStage; }
+  /** the element of your first weak hit this stage (the 'weak' tip names it) */
+  weakEl: Element | null = null;
+  /** how many of your hits this stage were resisted (the 'resist' tip comes on the third) */
+  resists = 0;
+  /** One of your hits carried an element the monster is weak to (w 1) or resists (w -1). */
+  onElementHit(el: Element, w: 1 | -1): void { if (w > 0) this.weakEl ??= el; else this.resists++; }
   private seen(id: string) { return (save.tips ?? []).includes(id); }
   private remember(id: string) { (save.tips ??= []).push(id); persist(); }
   step(w: World, dt: number): void {
@@ -63,13 +73,13 @@ export class Coach {
       return;
     }
     if ((this.quiet -= dt) > 0) return;
-    const next = TIPS.find(t => !this.seen(t.id) && (this.basics || !t.basic) && t.when(w));
+    const next = TIPS.find(t => !this.seen(t.id) && (this.basics || !t.basic) && t.when(w, this));
     if (next) this.show(next);
   }
   private show(t: Tip): void {
     this.cur = t; this.shownT = 0; this.remember(t.id);
     const b = ensureBar();
-    b.innerHTML = `<b>TIP</b><span>${t.text(isTouchDevice)}</span><button aria-label="Hide tip">✕</button>`;
+    b.innerHTML = `<b>TIP</b><span>${t.text(isTouchDevice, this)}</span><button aria-label="Hide tip">✕</button>`;
     b.querySelector('button')!.addEventListener('pointerdown', e => { e.preventDefault(); this.hide(); });
     b.classList.add('on');
   }

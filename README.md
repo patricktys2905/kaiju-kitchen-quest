@@ -115,8 +115,10 @@ Tests: `tests/drops.test.ts`, `tests/world.test.ts` (every platform reachable), 
   drop no boxes (crumbs, stones and their drop item only); a mimic drops 1, the boss-room foe 1, a world boss 2, a secret
   chest 1 (`World.killMob`, `hitProp`). The end-of-stage chest holds boxes by rank (`clearCount`), plus a first-clear box
   (`clearRewards`); a good rank can also upgrade boxes you found (`save.ts` `finishStage`).
-- **Rank** (`world.ts` `rankOf`): time against par, hits taken per minute, jams drunk (`RunStats.heals`), best combo, and
-  style (average style meter, perfect dodges, interrupts).
+- **Rank** (`world.ts` `rankOf`): time against par, hits taken per monster defeated (a world boss stage on its own
+  scale), jams drunk (`RunStats.heals`), best combo, and style (average style meter, perfect dodges, interrupts). Waiting
+  earns nothing; a SKIP TO BOSS run can reach A at best. Constants: `RANK` in `world.ts`; parts: `rankParts`. Measure with
+  `scripts/rank-probe.ts` then `scripts/rank-rescore.ts` (tests: `tests/rank.test.ts`).
 - **Stage challenges** (`src/sim/challenges.ts`): 3 per story stage, each pays crumbs and a box once and gives a star.
 - **Secret bonus stages** (`BONUS_STAGES`, `S-1` … `S-10`, button on the stage card): opened by the World Key from that
   world's stage 7 chest, or by `STARS_FOR_SECRET` challenge stars in that world. A bonus stage is the world's stage 9
@@ -129,6 +131,9 @@ Tests: `tests/drops.test.ts`, `tests/world.test.ts` (every platform reachable), 
 - **Nightmare** (per world, after its boss on Hard): Hard plus the `NIGHTMARE` / `NIGHTMARE_BOSS` multipliers in
   `world.ts`, shorter telegraphs, more modifiers, three attackers at once, and an extra high-tier box every clear.
 - **Spicy chillies** (after 1-10): No potions / Glass jaw / Beat the clock, each adding a bonus box and more crumbs.
+- **SKIP TO BOSS** runs (`RunStats.skipped`): no chilli rules or bonuses, no challenge stars, rank capped at A, and they
+  don't count for rank quests; `save.ts` `finishStage` enforces it. Every button the camp screen acts on must be in
+  `CLICKABLE` in `camp.ts` (`tests/camp-clicks.test.ts`: the chillies and SKIP were dead for days because they weren't).
 - **Story twists** (`STORIES[sp].variants`, `VARIANT_INFO`): some stages in a kaiju's story are Swarm, Ambush or Night.
 - **CPU buddy** and **story mode** (FULL STORY / KEY SCENES ONLY, `save.storyMode`) are also picked on the stage card.
 - Global knobs: `TUNE` and `ELITE` in `mobs.ts`, `WorldDef.power` / `mobPow`, `lateHit` (Act 2 ordinary monsters),
@@ -151,6 +156,19 @@ never touches story progress.
 Balance: `npx vite-node scripts/free-balance.ts [runs]`. Screens: `node scripts/free-shot.mjs`. Tests: `tests/free.test.ts`.
 
 ## Combat (`src/sim/world.ts`)
+- **Elemental weaknesses** (`src/sim/elements.ts`, numbers in `src/sim/elementTune.ts`, spec `docs/WEAKNESS-DESIGN.md`):
+  four elements, HOT (burn, poison), COLD (freeze, ice), STICKY (glue, slow) and CRUNCH (Guard Break, shatter). Every
+  monster kind has one of four types with a fixed weak / resist pair (`typeOf`, `weakOf`, `resistOf`; Kings and champions
+  inherit from their base monster, summons share their caller's type). A hit that CARRIES an element (`World.hitEls`, set
+  by the skill, shot, zone, gear skill or Guard Break that deals it; skills are read with `elementsOfSkill`, never `sk.el`)
+  does more to a weak monster and less to a resisting one, and its freeze / glue / slow lasts longer or shorter; world
+  bosses use a smaller pair. Plain hits never change. The `hit` event carries `el` and `w` (1 weak, -1 resisted) for the
+  WEAK! / RESIST popups. UI: `src/ui/elementUi.ts` (stage panel Weak row, icons and green ticks on skills and gear,
+  HP-bar icon, tips). Market RE-SEASON (`reseason` in `save.ts`, price `RESEASON_PRICE`) sets an ordinary weapon's twist
+  to HOT / COLD / STICKY. The bot ignores elements; `PREPARED=1` (or `PREPARED=weapon`) on `balance.ts` / `sweep-pass.sh`
+  gives it a build matched to the boss-room foe, `ELTUNE=off` or six numbers overrides the multipliers for what-if sweeps.
+  Tests: `tests/elements.test.ts`, `tests/elementUi.test.ts`. Screens: `scripts/weak-shot.mjs`, `weak-fight-shot.mjs`,
+  `weak-online-shot.mjs` (each needs a server already running: `[port] [width] [height]`). Probes: `scripts/weak-*.ts`.
 - **Perfect dodge**: get hit at the very start of a roll (`PERFECT_WIN`) → slow motion, a window of guaranteed crits, ult gauge.
 - **Interrupts**: hitting a wind-up cancels it (armoured monsters need a heavy hit). **Red wind-ups** (`DANGER_MOVES`:
   boss charge / leap, elite slams, charger rushes) can't be interrupted: dodge them. Elites leave an opening after each attack.

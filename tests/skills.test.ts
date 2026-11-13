@@ -73,7 +73,7 @@ describe('new skill mechanics', () => {
   });
   it('Deep Freeze freezes monsters solid', () => {
     let id = 0;
-    const w = cast(17, 'freeze', w => { id = w.spawnMob('bun', 580, 12).id; }); // tough enough to live through the hit
+    const w = cast(17, 'freeze', w => { id = w.spawnMob('salt', 580, 12).id; }); // tough enough to live through the hit; neither weak to COLD nor resisting it
     run(w, {}, 30);
     expect(w.mobs.find(m => m.id === id)!.frozen).toBeGreaterThan(1.5);
   });

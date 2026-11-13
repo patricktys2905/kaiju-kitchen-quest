@@ -9,6 +9,7 @@ import { skillsOf, MAX_SKILL, rankLv } from '../src/sim/skills';
 import { STAGES } from '../src/sim/stages';
 import { type HeroProfile, derive, newProfile } from '../src/sim/stats';
 import { World } from '../src/sim/world';
+import { ELEMENT_TUNE } from '../src/sim/elementTune';
 import { heroFor } from './hero-at';
 
 const filter = process.argv[2] ?? '';
@@ -18,6 +19,16 @@ const HARD = NIGHTMARE || process.argv[4] === 'hard'; // Hard: monsters +6 level
 const OVER = NIGHTMARE ? 6 : HARD ? 3 : 0;
 const SKILL = process.argv[5] === 'skilled' ? SKILLED : AVERAGE;
 const JAMS = Number(process.argv[6] ?? 3); // jam jars carried // npx vite-node scripts/balance.ts 3- 2 normal skilled
+// what-if sweeps without editing elementTune.ts: ELTUNE=off (all six at 1 = the game before weaknesses) or
+// ELTUNE=weakDmg,weakStatus,resistDmg,resistStatus,bossWeakDmg,bossResistDmg (e.g. ELTUNE=1.3,1.5,0.8,0.5,1.25,0.85)
+if (process.env.ELTUNE) {
+  const v = process.env.ELTUNE === 'off' ? [1, 1, 1, 1, 1, 1] : process.env.ELTUNE.split(',').map(Number);
+  if (v.length !== 6 || v.some(x => !(x > 0))) throw new Error('ELTUNE needs "off" or six positive numbers');
+  [ELEMENT_TUNE.weakDmg, ELEMENT_TUNE.weakStatus, ELEMENT_TUNE.resistDmg, ELEMENT_TUNE.resistStatus, ELEMENT_TUNE.bossWeakDmg, ELEMENT_TUNE.bossResistDmg] = v;
+}
+// PREPARED=1 (or a 7th argument 'prepared'): the build of a player who read the stage card (hero-at.ts prepare): weapon
+// re-seasoned and buttons matched to the boss-room foe. PREPARED=weapon: the re-season only. The bot plays the same.
+const PREPARED = process.argv[7] === 'prepared' || process.env.PREPARED === '1' ? 'full' as const : process.env.PREPARED === 'weapon' ? 'weapon' as const : undefined;
 
 function heroAt(species: number, level: number, seed: number): HeroProfile {
   const p = newProfile(species);
@@ -46,7 +57,7 @@ for (const st of STAGES.filter(s => s.id.startsWith(filter))) {
   for (const c of CLASSES.filter(k => !process.env.KAIJU || process.env.KAIJU.split(',').includes(String(k.species)))) {
     let hc = 0;
     for (let r = 0; r < RUNS; r++) {
-      const p = heroFor(c.species, st.rec + OVER, r + 1); void heroAt; // the shared bot build (skills, gear, skill tree)
+      const p = heroFor(c.species, st.rec + OVER, r + 1, PREPARED ? st : undefined, PREPARED); void heroAt; // the shared bot build (skills, gear, skill tree)
       const w = new World(st, derive(p), 100 + r, [{ id: 'jam', n: JAMS }, null, null, null], 0, HARD, undefined, [], nemesisOf(c.species), NIGHTMARE);
       const bot = new Bot(w, SKILL, 7 + r);
       const LIMIT = 60 * 60 * 15;

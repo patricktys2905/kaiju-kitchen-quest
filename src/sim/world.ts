@@ -9,6 +9,7 @@ import { type SkillDef, ULTS, ULT_LV, applyBranch, applyMod, skillScale } from '
 import { WORLDS } from './stages';
 import type { Derived } from './stats';
 import { DROPS, DROP_CHANCE, QUEST_DROP_CHANCE } from './drops';
+import { type Element, GUARD_BREAK_ELEMENT, elementDmgMul, elementStatusMul, elementsOfFx, elementsOfSkill, pickElement } from './elements';
 import { type BoxTier, type Hazard, type Input, type MobSpawn, type Prop, type LootBox, type MobKind, NO_INPUT, type SimEvent, type Spicy, type StageDef } from './types';
 
 export const DT = 1 / 60;
@@ -81,7 +82,7 @@ export interface Hero {
   perfectDone: boolean;
   spikyT: number;
   /** Rice Ball Ring: orbs circling the hero */
-  orbs: { t: number; n: number; dmg: number; cd: Map<number, number> } | null;
+  orbs: { t: number; n: number; dmg: number; cd: Map<number, number>; els?: Element[] } | null;
   /** launched by a sponge (letting go of jump doesn't cut it short) */
   bounced: boolean;
   /** party: which hero this is (0 = the player), CPU-controlled, revive progress, touched down this step */
@@ -135,6 +136,8 @@ export interface Mob {
   surfT: number;
   /** status from skills: burning (damage every 0.5 s), frozen solid (no action, +30% damage taken) */
   burn: number; burnT: number; burnDmg: number; frozen: number;
+  /** the burning is poison (Mold Crown weapons): its ticks count as HOT or STICKY, whichever is better for the player. Sim-only, not in the snapshot. */
+  tox?: boolean;
   /** stuck in mustard: can't move or act (can still be hit) */
   glued: number;
   /** nemesis: which world's version (more moves later), shell timer, a stolen quick-bag item */
@@ -156,10 +159,10 @@ export interface Mob {
 }
 
 export interface Box { id: number; tier: BoxTier; ilvl: number; x: number; y: number; vy: number; ground: boolean; t: number; /** only this player can pick it up (each player gets their own drops) */ owner?: number }
-export interface Shot { /** lobbed by a hero: the floor height it was thrown from (it falls through ledges above that) */ fromY?: number; /** extra effects on hit (gear skills, upgraded skills) and the weapon icon a gear shot is drawn as */ fx?: string[]; icon?: string; id: number; x: number; y: number; vx: number; vy: number; t: number; dmg: number; hit: Set<number>; from: 'hero' | 'mob'; kx: number; ky: number; pierce: boolean; g?: number; kind?: string; /** hit radius (default 14) */ r?: number; back?: boolean; /** Pit Hurl: bounces so far */ bounces?: number; /** lobbed shots: where it will land (drawn as a warning) */ tx?: number; ty?: number; /** hero who fired it */ owner?: number }
-export interface Mine { id: number; x: number; y: number; t: number; dmg: number; kx: number; ky: number; owner?: number; /** Jam Trap: glues what it hits */ glue?: boolean; /** gear trap: the weapon's icon and on-hit effects */ icon?: string; fx?: string[] }
+export interface Shot { /** elemental weaknesses: the element(s) this shot's hits carry (elements.ts); none = plain */ els?: Element[]; /** lobbed by a hero: the floor height it was thrown from (it falls through ledges above that) */ fromY?: number; /** extra effects on hit (gear skills, upgraded skills) and the weapon icon a gear shot is drawn as */ fx?: string[]; icon?: string; id: number; x: number; y: number; vx: number; vy: number; t: number; dmg: number; hit: Set<number>; from: 'hero' | 'mob'; kx: number; ky: number; pierce: boolean; g?: number; kind?: string; /** hit radius (default 14) */ r?: number; back?: boolean; /** Pit Hurl: bounces so far */ bounces?: number; /** lobbed shots: where it will land (drawn as a warning) */ tx?: number; ty?: number; /** hero who fired it */ owner?: number }
+export interface Mine { els?: Element[]; id: number; x: number; y: number; t: number; dmg: number; kx: number; ky: number; owner?: number; /** Jam Trap: glues what it hits */ glue?: boolean; /** gear trap: the weapon's icon and on-hit effects */ icon?: string; fx?: string[] }
 
-export interface RunStats { /** healing items drunk */ heals?: number; time: number; hitsTaken: number; dmgTaken: number; maxCombo: number; kills: number; crumbs: number; revived: number; stones: number; perfects: number; interrupts: number; styleSum: number; styleTime: number; stylePeak: number }
+export interface RunStats { /** healing items drunk */ heals?: number; time: number; hitsTaken: number; dmgTaken: number; maxCombo: number; kills: number; crumbs: number; revived: number; stones: number; perfects: number; interrupts: number; styleSum: number; styleTime: number; stylePeak: number; /** rank inputs the World fills in (see rankOf): a world boss stage; SKIP TO BOSS was used */ boss?: boolean; skipped?: boolean }
 
 let nextId = 1;
 
@@ -227,7 +230,7 @@ export class World {
   /** how many monsters may attack you at once (the rest circle and wait their turn) */
   get maxAttackers(): number { return this.nightmare ? 3 : 2; }
   /** lingering skill areas: steam / mustard goo / ice trail / fire floor / snow */
-  zones: { id: number; x: number; y: number; w: number; t: number; tick: number; next: number; dmg: number; kind: 'steam' | 'goo' | 'ice' | 'fire' | 'snow' | 'guac' | 'vortex' | 'sentry' | 'spin'; hit?: Set<number>; owner?: number; fx?: string[]; icon?: string }[] = [];
+  zones: { id: number; x: number; y: number; w: number; t: number; tick: number; next: number; dmg: number; kind: 'steam' | 'goo' | 'ice' | 'fire' | 'snow' | 'guac' | 'vortex' | 'sentry' | 'spin'; hit?: Set<number>; owner?: number; fx?: string[]; icon?: string; els?: Element[] }[] = [];
   spicy: Spicy[];
   hard: boolean;
   portal = false;
@@ -262,6 +265,7 @@ export class World {
     nextId = 1; // ids restart with every stage: the same seed and inputs always play out the same (monster patrols use the id)
     this.humans = Math.max(1, humans); this.lootOf = Array.from({ length: this.humans }, () => []);
     this.nightmare = nightmare; if (nightmare) hard = true;
+    if (stage.boss) this.run.boss = true; // the rank judges a world boss stage on its own scale (RANK)
     this.stage = stage = { ...stage, platforms: stage.platforms.map(p => ({ ...p })) };
     this.platBase = stage.platforms.map(p => p.x);
     // top floor to the ground, plus a jump or a sponge bounce above the top floor
@@ -482,7 +486,7 @@ export class World {
       if (canDodge && h.lastTap.dir === tapDir && this.time - h.lastTap.t < DOUBLE_TAP) {
         h.face = tapDir as 1 | -1;
         this.enter(h, 'dodge'); h.perfectDone = false;
-        if (h.d.procs.includes('syrup')) for (const o of this.targetsNear(h.x + h.face * 60, h.y, 130, 80)) o.slow = Math.max(o.slow, 3);
+        if (h.d.procs.includes('syrup')) for (const o of this.targetsNear(h.x + h.face * 60, h.y, 130, 80)) o.slow = Math.max(o.slow, 3 * this.statusMul(o, 'STICKY'));
         h.inv = Math.max(h.inv, DODGE_INV); h.dodgeCd = DODGE_CD * (1 - h.d.dodge); h.lastTap = { dir: 0, t: -9 };
         this.events.push({ t: 'dodge' });
       } else h.lastTap = { dir: tapDir, t: this.time };
@@ -572,7 +576,7 @@ export class World {
         const lunging = h.t < atk.hit[1];
         h.vx = h.ground ? (lunging ? h.face * atk.lunge : approach(h.vx, 0, 2400 * grip * dt)) : approach(h.vx, dir * speed, 1200 * dt);
         if (h.atkBuf > 0 && h.step >= 0 && h.step < c.combo.length - 1 && h.t > atk.hit[0]) { h.queued = true; h.atkBuf = 0; }
-        if (h.t >= atk.hit[0] && h.t <= atk.hit[1]) this.hitBox(h.x + h.face * atk.reach / 2, h.y, atk.reach, atk.h, atk.dmg, h.step === -2, atk, h.hitIds);
+        if (h.t >= atk.hit[0] && h.t <= atk.hit[1]) { this.hitEls = h.step === -2 ? GUARD_BREAK_ELS : undefined; this.hitBox(h.x + h.face * atk.reach / 2, h.y, atk.reach, atk.h, atk.dmg, h.step === -2, atk, h.hitIds); this.hitEls = undefined; }
         if (h.t >= atk.dur || (h.step < 0 && h.ground && h.t > atk.hit[1])) {
           if (h.queued) {
             h.queued = false; h.step++;
@@ -584,7 +588,7 @@ export class World {
         }
         break;
       }
-      case 'skill': this.stepSkill(h, dir, speed, dt); break;
+      case 'skill': this.hitEls = this.elsOf(h.skill); this.stepSkill(h, dir, speed, dt); this.hitEls = undefined; break;
       case 'dodge':
         h.vx = h.face * 560 * (1 - h.t / DODGE_T * 0.6);
         if (h.t >= DODGE_T) this.enter(h, h.ground ? 'move' : 'air');
@@ -617,12 +621,25 @@ export class World {
   }
 
   private startSkill(h: Hero, sk: SkillDef): void {
-    const s0 = this.shots.length;
+    const s0 = this.shots.length, z0 = this.zones.length, m0 = this.mines.length, b0 = this.bubbles.length;
+    // every hit of the skill carries its element: the direct ones now, and whatever it leaves behind (stamped below)
+    const els = this.elsOf(sk), was = this.hitEls;
+    this.hitEls = els;
     this.startSkillInner(h, sk);
+    this.hitEls = was;
+    if (els) {
+      for (let i = s0; i < this.shots.length; i++) this.shots[i].els = els;
+      for (let i = z0; i < this.zones.length; i++) this.zones[i].els = els;
+      for (let i = m0; i < this.mines.length; i++) this.mines[i].els = els;
+      for (let i = b0; i < this.bubbles.length; i++) this.bubbles[i].els = els;
+      if (sk.kind === 'orbit' && h.orbs) h.orbs.els = els;
+    }
     // Pepper Breath: every 5th skill also breathes fire ahead
     if (h.d.procs.includes('pepper') && ++h.skillN >= 5) {
       h.skillN = 0; this.events.push({ t: 'proc', name: 'Pepper Breath!', x: h.x, y: h.y - 90 }); this.events.push({ t: 'shock', x: h.x + h.face * 90, y: h.y - 20, r: 90 });
+      this.hitEls = HOT_ELS;
       for (const o of this.targetsNear(h.x + h.face * 90, h.y, 110, 80)) { this.damageMob(o, h.d.atk * 1.4, h.face, { kx: 140, ky: -200, stun: 0.3 }, true); this.applyFx(o, ['burn'], h); }
+      this.hitEls = was;
     }
     const fx = [sk.burn ? 'burn' : '', sk.freeze ? 'freeze' : '', sk.glue ? 'glue' : '', sk.slow ? 'slow' : ''].filter(Boolean);
     if (fx.length) for (let i = s0; i < this.shots.length; i++) this.shots[i].fx = fx;
@@ -633,8 +650,10 @@ export class World {
     const g = h.d.gear!;
     const atk = h.d.atk * g.power * g.dmg * (0.6 + 0.4 * h.d.skillDmg);
     const fx = g.fx ? [g.fx] : [];
+    const gels = elementsOfFx(g.fx), els = gels.length ? gels : undefined; // the weapon's element rides on everything it throws
+    this.hitEls = els;
     const ky = g.fx === 'launch' ? -620 : -160;
-    const base = { hit: new Set<number>(), from: 'hero' as const, t: 0, dmg: atk, fx, icon: g.icon, kx: 180, ky, owner: h.idx };
+    const base = { hit: new Set<number>(), from: 'hero' as const, t: 0, dmg: atk, fx, els, icon: g.icon, kx: 180, ky, owner: h.idx };
     switch (g.style) {
       case 'throw': this.shots.push({ ...base, id: nextId++, x: h.x + h.face * 30, y: h.y - 44, vx: h.face * 720, vy: 0, pierce: true, kind: 'gear', r: 22 }); break;
       case 'lob': { // lands on the nearest monster in front (or 220px ahead); flight time is ~0.74s
@@ -689,13 +708,13 @@ export class World {
         this.shots.push({ ...base, hit: new Set(), id: nextId++, x: h.x + h.face * 200, y: h.y - 460, vx: 0, vy: 250, g: 1800, pierce: true, kind: 'gearmeteor', r: 60, fromY: h.y });
         break;
       case 'vortex':
-        this.zones.push({ id: nextId++, x: h.x + h.face * 180, y: h.y, w: 300, t: 3, tick: 0.25, next: 0.2, dmg: atk, kind: 'vortex', fx, owner: h.idx });
+        this.zones.push({ id: nextId++, x: h.x + h.face * 180, y: h.y, w: 300, t: 3, tick: 0.25, next: 0.2, dmg: atk, kind: 'vortex', fx, els, owner: h.idx });
         break;
       case 'turret':
-        this.zones.push({ id: nextId++, x: h.x + h.face * 40, y: h.y, w: 0, t: 6, tick: 0.55, next: 0.3, dmg: atk, kind: 'sentry', fx, icon: g.icon, owner: h.idx });
+        this.zones.push({ id: nextId++, x: h.x + h.face * 40, y: h.y, w: 0, t: 6, tick: 0.55, next: 0.3, dmg: atk, kind: 'sentry', fx, els, icon: g.icon, owner: h.idx });
         break;
       case 'spin':
-        this.zones.push({ id: nextId++, x: h.x, y: h.y, w: 230, t: 1.6, tick: 0.2, next: 0, dmg: atk, kind: 'spin', fx, icon: g.icon, owner: h.idx });
+        this.zones.push({ id: nextId++, x: h.x, y: h.y, w: 230, t: 1.6, tick: 0.2, next: 0, dmg: atk, kind: 'spin', fx, els, icon: g.icon, owner: h.idx });
         break;
       case 'wave':
         this.events.push({ t: 'shock', x: h.x + h.face * 40, y: h.y, r: 60 });
@@ -718,10 +737,11 @@ export class World {
         break;
       case 'trap': { // planted on the floor ahead: snaps the first monster to step on it
         const fl = this.floorBelow(h.x + h.face * 50, h.y - 2, h.y + 400, false);
-        this.mines.push({ id: nextId++, x: h.x + h.face * 50, y: fl ? fl.y : h.y, t: 0, dmg: atk, kx: 160, ky: g.fx === 'launch' ? -620 : -300, owner: h.idx, icon: g.icon, fx });
+        this.mines.push({ id: nextId++, x: h.x + h.face * 50, y: fl ? fl.y : h.y, t: 0, dmg: atk, kx: 160, ky: g.fx === 'launch' ? -620 : -300, owner: h.idx, icon: g.icon, fx, els });
         break;
       }
     }
+    this.hitEls = undefined;
     this.events.push({ t: 'gear', name: g.name, style: g.style, x: h.x, y: h.y });
   }
 
@@ -730,13 +750,13 @@ export class World {
     if (m.state === 'dead') return;
     const boss = MOBS[m.kind].brain === 'boss';
     for (const e of fx) {
-      if (e === 'burn') { m.burn = Math.max(m.burn, 3); m.burnDmg = Math.max(m.burnDmg, h.d.atk * 0.3); }
-      else if (e === 'freeze') { if (boss) m.slow = Math.max(m.slow, 2); else { m.frozen = Math.max(m.frozen, 1.4); m.vx = 0; } }
+      if (e === 'burn') { m.burn = Math.max(m.burn, 3); m.burnDmg = Math.max(m.burnDmg, h.d.atk * 0.3); m.tox = false; }
+      else if (e === 'freeze') { const k = this.statusMul(m, 'COLD'); if (boss) m.slow = Math.max(m.slow, 2 * k); else { m.frozen = Math.max(m.frozen, 1.4 * k); m.vx = 0; } }
       else if (e === 'glue') { if (!boss) this.glue(m); }
-      else if (e === 'slow') m.slow = Math.max(m.slow, 3);
+      else if (e === 'slow') m.slow = Math.max(m.slow, 3 * this.statusMul(m, 'STICKY'));
       else if (e === 'pull') { if (!boss) m.x += clamp(h.x + h.face * 50 - m.x, -90, 90); }
       else if (e === 'heal') h.hp = Math.min(h.d.maxHp, h.hp + h.d.maxHp * 0.015);
-      else if (e === 'poison') { m.burn = Math.max(m.burn, 4); m.burnDmg = Math.max(m.burnDmg, h.d.atk * 0.22); m.slow = Math.max(m.slow, 2); }
+      else if (e === 'poison') { m.burn = Math.max(m.burn, 4); m.burnDmg = Math.max(m.burnDmg, h.d.atk * 0.22); m.tox = true; m.slow = Math.max(m.slow, 2 * this.statusMul(m, 'STICKY')); }
       else if (e === 'shatter') { m.armor = 0; m.weak = Math.max(m.weak, 3); }
       else if (e === 'crumbs') { this.run.crumbs += 1 + Math.floor(m.lv / 10); h.hp = Math.min(h.d.maxHp, h.hp + h.d.maxHp * 0.006); }
     }
@@ -894,7 +914,7 @@ export class World {
         break;
       case 'slowtime':
         this.events.push({ t: 'shock', x: h.x, y: h.y - 30, r: sk.reach });
-        for (const m of this.targetsNear(h.x, h.y, sk.reach, sk.h)) { m.slow = Math.max(m.slow, 4); this.damageMob(m, atk * sk.dmg, Math.sign(m.x - h.x) || 1, { kx: sk.kx, ky: sk.ky, stun: 0.2 }, true); }
+        for (const m of this.targetsNear(h.x, h.y, sk.reach, sk.h)) { m.slow = Math.max(m.slow, 4 * this.statusMul(m, 'STICKY')); this.damageMob(m, atk * sk.dmg, Math.sign(m.x - h.x) || 1, { kx: sk.kx, ky: sk.ky, stun: 0.2 }, true); }
         if (!h.buff) h.buff = { atk: 0, def: 0, speed: 0.3, armor: false, t: 4 };
         break;
       case 'snooze':
@@ -991,9 +1011,10 @@ export class World {
   /** Mustard Glue: stuck for 2.5 s (bosses are only slowed). */
   private glue(m: Mob): void {
     if (m.state === 'dead') return;
-    if (MOBS[m.kind].brain === 'boss') { m.slow = Math.max(m.slow, 2.5); return; }
+    const k = this.statusMul(m, 'STICKY'); // longer on a monster weak to the hit that glued it, shorter on one that resists it
+    if (MOBS[m.kind].brain === 'boss') { m.slow = Math.max(m.slow, 2.5 * k); return; }
     if (m.glued <= 0) this.events.push({ t: 'block', x: m.x, y: m.y - MOBS[m.kind].h - 6 });
-    m.glued = 2.5; m.vx = 0; if (m.state === 'windup' || m.state === 'attack') { m.state = 'walk'; m.t = 0; m.move = ''; }
+    m.glued = 2.5 * k; m.vx = 0; if (m.state === 'windup' || m.state === 'attack') { m.state = 'walk'; m.t = 0; m.move = ''; }
   }
 
   private hitProp(p: World['props'][number]): void {
@@ -1286,6 +1307,10 @@ export class World {
   /** Skip straight to the boss room (the stage panel spent the drops). */
   skipToBoss(): void {
     const maps = this.stage.maps; if (!maps) return;
+    this.run.skipped = true; // a skipped stage can't rank S (RANK.SKIP_BEST)
+    // ...and plays without chillies: no clock (par is for the whole stage), no glass jaw, no jam ban, and so no chilli bonus
+    // (the scene reads w.spicy.length for the bonus boxes and crumbs)
+    this.spicy = [];
     const b = maps[maps.length - 1];
     maps.forEach((m, i) => { if (m.kind === 'zone') this.zones2[i].done = true; });
     for (const h of this.heroes) { h.x = b.x0 + 120 + h.idx * 40; h.y = this.stage.groundY; }
@@ -1396,26 +1421,28 @@ export class World {
   private stepZones(dt: number): void {
     for (const z of this.zones) {
       this.cur = this.heroes[z.owner ?? 0] ?? this.heroes[0];
+      this.hitEls = z.els;
       z.t -= dt; z.next -= dt;
       if (z.next > 0) continue;
       z.next = z.tick;
       if (z.kind === 'spin') { const o = this.heroes[z.owner ?? 0]; if (o) { z.x = o.x; z.y = o.y; } }
       if (z.kind === 'sentry') {
         const tgt = this.targetsNear(z.x, z.y, 520, 220)[0];
-        if (tgt) { const dx = tgt.x - z.x, dy = tgt.y - MOBS[tgt.kind].h / 2 - (z.y - 50), d = Math.hypot(dx, dy) || 1; this.shots.push({ id: nextId++, x: z.x, y: z.y - 50, vx: dx / d * 700, vy: dy / d * 700, t: 0, dmg: z.dmg, hit: new Set(), from: 'hero', kx: 90, ky: -100, pierce: false, kind: 'gear', r: 14, icon: z.icon, fx: z.fx, owner: z.owner }); }
+        if (tgt) { const dx = tgt.x - z.x, dy = tgt.y - MOBS[tgt.kind].h / 2 - (z.y - 50), d = Math.hypot(dx, dy) || 1; this.shots.push({ id: nextId++, x: z.x, y: z.y - 50, vx: dx / d * 700, vy: dy / d * 700, t: 0, dmg: z.dmg, hit: new Set(), from: 'hero', kx: 90, ky: -100, pierce: false, kind: 'gear', r: 14, icon: z.icon, fx: z.fx, els: z.els, owner: z.owner }); }
         continue;
       }
       if (z.kind === 'guac') for (const o of this.heroes) if (o.state !== 'down' && Math.abs(o.x - z.x) < z.w / 2 && Math.abs(o.y - z.y) < 70) o.hp = Math.min(o.d.maxHp, o.hp + o.d.maxHp * 0.015);
       for (const m of this.mobs) {
         if (m.state === 'dead' || m.under || m.disguised || Math.abs(m.x - z.x) > z.w / 2 + MOBS[m.kind].w / 2 || Math.abs(m.y - z.y) > (z.kind === 'snow' ? 400 : 70)) continue;
-        if (z.kind === 'ice' || z.kind === 'snow' || z.kind === 'guac') m.slow = Math.max(m.slow, 1);
+        if (z.kind === 'ice' || z.kind === 'snow' || z.kind === 'guac') m.slow = Math.max(m.slow, 1 * this.statusMul(m, z.kind === 'guac' ? 'STICKY' : 'COLD'));
         if (z.kind === 'goo') { if (z.hit?.has(m.id)) continue; z.hit?.add(m.id); this.glue(m); }
-        if (z.kind === 'fire') { m.burn = Math.max(m.burn, 1); m.burnDmg = Math.max(m.burnDmg, z.dmg * 0.5); }
+        if (z.kind === 'fire') { m.burn = Math.max(m.burn, 1); m.burnDmg = Math.max(m.burnDmg, z.dmg * 0.5); m.tox = false; }
         if (z.kind === 'vortex' && MOBS[m.kind].brain !== 'boss') m.x += clamp(z.x - m.x, -34, 34);
         if (z.fx?.length) this.applyFx(m, z.fx, this.heroes[z.owner ?? 0] ?? this.hero);
         if (z.dmg > 0) this.damageMob(m, z.dmg, Math.sign(m.x - z.x) || 1, { kx: 30, ky: 0, stun: 0.15 }, true);
       }
     }
+    this.hitEls = undefined;
     this.zones = this.zones.filter(z => z.t > 0);
   }
 
@@ -1426,6 +1453,7 @@ export class World {
     o.t -= dt;
     if (o.t <= 0 || h.state === 'down') { h.orbs = null; return; }
     for (const [id, c] of o.cd) o.cd.set(id, c - dt);
+    this.hitEls = o.els;
     for (let i = 0; i < o.n; i++) {
       const a = this.time * 4 + (i / o.n) * Math.PI * 2, ox = h.x + Math.cos(a) * 64, oy = h.y - 40 + Math.sin(a) * 34;
       for (const m of this.mobs) {
@@ -1434,6 +1462,7 @@ export class World {
         if (Math.abs(m.x - ox) < d.w / 2 + 14 && oy < m.y + 6 && oy > m.y - d.h - 6) { o.cd.set(m.id, 0.5); this.damageMob(m, o.dmg, Math.sign(m.x - h.x) || 1, { kx: 200, ky: -200, stun: 0.5 }, true); }
       }
     }
+    this.hitEls = undefined;
   }
 
   private stepSkill(h: Hero, dir: number, speed: number, dt: number): void {
@@ -1568,7 +1597,7 @@ export class World {
           h.ticks = 1; this.events.push({ t: 'shock', x: h.x, y: h.y - 30, r: sk.reach });
           for (const m of this.targetsNear(h.x, h.y, sk.reach, sk.h)) {
             this.damageMob(m, h.d.atk * sk.dmg * h.skillMul, Math.sign(m.x - h.x) || 1, { kx: 0, ky: 0, stun: 0.2 }, true);
-            if (m.state !== 'dead') { if (MOBS[m.kind].brain === 'boss') m.slow = 3; else { m.frozen = 2.5; m.vx = 0; } }
+            if (m.state !== 'dead') { const k = this.statusMul(m, 'COLD'); if (MOBS[m.kind].brain === 'boss') m.slow = 3 * k; else { m.frozen = 2.5 * k; m.vx = 0; } }
           }
         }
         break;
@@ -1687,7 +1716,7 @@ export class World {
         const d = MOBS[m.kind];
         if (m.state === 'dead' || m.under || d.brain === 'boss' || d.brain === 'flyer' || Math.abs(m.y - w.y) > 130) continue;
         const gap = d.w / 2 + 16;
-        if (Math.abs(m.x - w.x) < gap) { const side = Math.sign(m.x - w.x) || 1; m.x = w.x + side * gap; if (Math.sign(m.vx) === -side) m.vx = 0; if (w.freeze && m.frozen <= 0) { m.frozen = 1.2; } }
+        if (Math.abs(m.x - w.x) < gap) { const side = Math.sign(m.x - w.x) || 1; m.x = w.x + side * gap; if (Math.sign(m.vx) === -side) m.vx = 0; if (w.freeze && m.frozen <= 0) { m.frozen = 1.2 * this.statusMul(m, 'COLD', true); } }
       }
       for (const s of this.shots) if (s.from === 'mob' && Math.abs(s.x - w.x) < 18 && s.y > w.y - 150 && s.y < w.y + 4) { s.t = 99; this.events.push({ t: 'block', x: w.x, y: s.y }); }
     }
@@ -1695,10 +1724,11 @@ export class World {
   }
 
   /** Bubblegumbo's gum bubbles: a sealed monster is helpless until it pops */
-  bubbles: { id: number; t: number; dmg: number; owner: number; kx: number; ky: number }[] = [];
+  bubbles: { id: number; t: number; dmg: number; owner: number; kx: number; ky: number; els?: Element[] }[] = [];
   private bubble(m: Mob, t: number, dmg: number, h: Hero, kx: number, ky: number): void {
     if (m.state === 'dead' || this.bubbles.some(b => b.id === m.id)) return;
-    this.bubbles.push({ id: m.id, t, dmg, owner: h.idx, kx, ky });
+    // (the bubble is the status: it holds longer on a monster weak to the hit that blew it, and pops sooner on one that resists)
+    this.bubbles.push({ id: m.id, t: t * this.statusMul(m, 'STICKY'), dmg, owner: h.idx, kx, ky, els: this.hitEls });
   }
   private stepBubbles(dt: number): void {
     for (const b of this.bubbles) {
@@ -1709,13 +1739,31 @@ export class World {
       if (b.t <= 0) { // POP
         this.cur = this.heroes[b.owner] ?? this.heroes[0];
         this.events.push({ t: 'boom', x: m.x, y: m.y - MOBS[m.kind].h / 2 });
+        this.hitEls = b.els;
         this.damageMob(m, b.dmg, this.cur.face, { kx: b.kx, ky: b.ky, stun: 0.6 }, true);
+        this.hitEls = undefined;
       }
     }
     this.cur = this.heroes[0];
     this.bubbles = this.bubbles.filter(b => b.t > 0);
   }
 
+  /** Elemental weaknesses (elements.ts): the element(s) carried by the hits being dealt RIGHT NOW. Whoever deals a hit sets it
+   *  for as long as it is dealing it (a skill while it casts and plays, a gear skill, each shot / zone / mine / orb / bubble
+   *  from what it was stamped with when it was made, a Guard Break) and clears it again; damageMob and the statuses that
+   *  hit starts read it. undefined = plain hits. Like `cur`, it belongs to the bit of code that is running: it is always
+   *  undefined between steps, so a hit never borrows the element of whatever the hero happens to be doing. */
+  private hitEls: Element[] | undefined;
+  private elCache = new WeakMap<SkillDef, Element[] | undefined>();
+  /** the element(s) of a skill as cast (undefined = none) */
+  private elsOf(sk: SkillDef | null): Element[] | undefined {
+    if (!sk) return undefined;
+    if (!this.elCache.has(sk)) { const e = elementsOfSkill(sk); this.elCache.set(sk, e.length ? e : undefined); }
+    return this.elCache.get(sk);
+  }
+  /** How long a freeze / glue / slow lasts on this monster (x1.5 weak, x0.5 resisted): judged by the hit that starts it,
+   *  or by the status's own element when nothing elemental is hitting (procs, walls) or `force` is set. */
+  private statusMul(m: Mob, own: Element, force = false): number { return elementStatusMul(pickElement(m.kind, force || !this.hitEls ? [own] : this.hitEls)!.w); }
   /** a proc's own hits don't set off more procs */
   private procLock = false;
 
@@ -1754,6 +1802,9 @@ export class World {
       this.events.push({ t: 'hit', x: h.x, y: h.y - 60, dmg: p, crit: false, target: 'hero' });
     }
     if (m.frozen > 0) raw *= 1.3;
+    // elemental weakness: only a hit that carries an element (hitEls) can be weak or resisted; it multiplies with everything else
+    const ew = this.hitEls ? pickElement(m.kind, this.hitEls) : undefined;
+    if (ew?.w) raw *= elementDmgMul(m.kind, ew.w);
     if (m.glued > 0 && h.state === 'skill' && h.skill?.kind === 'roll') raw *= 2; // Mustard Glue + Spike Roll combo
     if (guardBreak || (h.state === 'attack' && h.step === 2)) raw *= 1 + h.d.heavyDmg;
     // bosses and minibosses (nemeses, champions) fight in armour: it softens hits and has to be cracked
@@ -1767,22 +1818,23 @@ export class World {
     const buff = 1 + (h.buff?.atk ?? 0) + (h.boosts.atk?.[0] ?? 0);
     const dmg = Math.max(1, Math.round(raw * buff * lvMul * (crit ? h.d.critDmg : 1) * (counter ? 1.3 : 1) * (m.state === 'stagger' && def.brain === 'charger' ? 1.5 : 1) * (0.9 + this.rand() * 0.2)));
     m.hp -= dmg; m.flash = 0.12; m.hurtShown = 3; this.dealt += dmg;
-    if (h.state === 'skill' && h.skill?.burn && heavy) { m.burn = Math.max(m.burn, h.skill.burn); m.burnDmg = Math.max(m.burnDmg, h.d.atk * 0.35 * h.skillMul); }
+    if (h.state === 'skill' && h.skill?.burn && heavy) { m.burn = Math.max(m.burn, h.skill.burn); m.burnDmg = Math.max(m.burnDmg, h.d.atk * 0.35 * h.skillMul); m.tox = false; }
     if (h.state === 'skill' && h.skill && heavy) {
       const fx = [h.skill.freeze ? 'freeze' : '', h.skill.glue ? 'glue' : '', h.skill.slow ? 'slow' : ''].filter(Boolean);
       if (fx.length) this.applyFx(m, fx, h);
       if (h.skill.leech && h.skill.kind !== 'drain') h.hp = Math.min(h.d.maxHp, h.hp + dmg * h.skill.leech);
     }
-    if (crit && h.d.procs.includes('frosty') && def.brain !== 'boss') { m.frozen = Math.max(m.frozen, 0.8); m.vx = 0; }
+    if (crit && h.d.procs.includes('frosty') && def.brain !== 'boss') { m.frozen = Math.max(m.frozen, 0.8 * this.statusMul(m, 'COLD', true)); m.vx = 0; }
     if (crit && h.d.procs.includes('bite')) h.hp = Math.min(h.d.maxHp, h.hp + h.d.maxHp * 0.01);
     if (h.d.procs.includes('zap') && !this.procLock && ++h.zapN >= 6) {
       h.zapN = 0; this.procLock = true;
+      const zel = this.hitEls; this.hitEls = undefined; // the zap is its own plain hit
       const pts: [number, number][] = [[m.x, m.y - def.h * 0.6]];
       for (const o of this.targetsNear(m.x, m.y, 260, 160).filter(o => o !== m).slice(0, 3)) {
         pts.push([o.x, o.y - MOBS[o.kind].h * 0.6]);
         this.damageMob(o, h.d.atk * 0.6, Math.sign(o.x - m.x) || 1, { kx: 60, ky: -120, stun: 0.4 }, false);
       }
-      this.procLock = false;
+      this.procLock = false; this.hitEls = zel;
       if (pts.length > 1) this.events.push({ t: 'zap', pts });
     }
     if (h.buff?.leech) h.hp = Math.min(h.d.maxHp, h.hp + dmg * h.buff.leech);
@@ -1792,7 +1844,7 @@ export class World {
     const me = h === this.heroes[0]; // the player's rank, combo and style only count the player's own hits
     if (me) { this.combo++; this.comboT = COMBO_WINDOW; this.run.maxCombo = Math.max(this.run.maxCombo, this.combo); }
     if (me && this.combo % 25 === 0 && h.d.procs.includes('rush') && !h.buff) { h.buff = { atk: 0.25, def: 0, speed: 0.25, armor: false, t: 5 }; this.events.push({ t: 'proc', name: 'Sugar High!', x: h.x, y: h.y - 90 }); }
-    this.events.push({ t: 'hit', x: m.x, y: m.y - def.h * 0.6, dmg, crit, target: 'mob' });
+    this.events.push(ew ? (ew.w ? { t: 'hit', x: m.x, y: m.y - def.h * 0.6, dmg, crit, target: 'mob', el: ew.el, w: ew.w } : { t: 'hit', x: m.x, y: m.y - def.h * 0.6, dmg, crit, target: 'mob', el: ew.el }) : { t: 'hit', x: m.x, y: m.y - def.h * 0.6, dmg, crit, target: 'mob' });
     if (!me) { /* teammates don't feed the player's style meter */ }
     else if (h.state === 'skill') this.addStyle(h.skill?.id.startsWith('ult') ? 'ult' : 'skill', 3);
     else if (h.step === -1) this.addStyle('air', 4);
@@ -1895,8 +1947,9 @@ export class World {
     if (m.burn > 0) {
       m.burn -= dt; m.burnT -= dt;
       if (m.burnT <= 0) {
-        m.burnT = 0.5; const d = Math.max(1, Math.round(m.burnDmg)); m.hp -= d; m.flash = 0.06; this.dealt += d;
-        this.events.push({ t: 'hit', x: m.x, y: m.y - def.h * 0.6, dmg: d, crit: false, target: 'mob' });
+        const bw = pickElement(m.kind, m.tox ? POISON_ELS : HOT_ELS)!; // burn ticks are HOT hits (poison: HOT or STICKY)
+        m.burnT = 0.5; const d = Math.max(1, Math.round(m.burnDmg * elementDmgMul(m.kind, bw.w))); m.hp -= d; m.flash = 0.06; this.dealt += d;
+        this.events.push(bw.w ? { t: 'hit', x: m.x, y: m.y - def.h * 0.6, dmg: d, crit: false, target: 'mob', el: bw.el, w: bw.w } : { t: 'hit', x: m.x, y: m.y - def.h * 0.6, dmg: d, crit: false, target: 'mob', el: bw.el });
         if (m.hp <= 0) { this.killMob(m); return; }
       }
     }
@@ -2442,7 +2495,7 @@ export class World {
     if (h === this.heroes[0]) { this.run.perfects++; this.addStyle('perfect', 18); }
     this.events.push({ t: 'perfect', x: h.x, y: h.y - 60 });
     if (h.d.procs.includes('quickdraw') && h.d.gear) { h.cds[3] = 0; this.events.push({ t: 'proc', name: 'Quick Draw!', x: h.x, y: h.y - 90 }); }
-    if (h.d.procs.includes('jamtrap')) { const fl = this.floorBelow(h.x, h.y - 2, h.y + 400, false); this.mines.push({ id: nextId++, x: h.x, y: fl ? fl.y : h.y, t: 0, dmg: h.d.atk * 1.2, kx: 80, ky: -200, owner: h.idx, glue: true }); }
+    if (h.d.procs.includes('jamtrap')) { const fl = this.floorBelow(h.x, h.y - 2, h.y + 400, false); this.mines.push({ id: nextId++, x: h.x, y: fl ? fl.y : h.y, t: 0, dmg: h.d.atk * 1.2, kx: 80, ky: -200, owner: h.idx, glue: true, els: STICKY_ELS }); }
   }
 
   /** fixed = exact damage (hazards), not reduced by defence */
@@ -2455,7 +2508,9 @@ export class World {
       h.ticks = 1; h.inv = 0.5;
       this.events.push({ t: 'block', x: h.x + h.face * 20, y: h.y - 50 });
       this.events.push({ t: 'shock', x: h.x + h.face * 50, y: h.y, r: h.skill.reach });
+      const was = this.hitEls; this.hitEls = this.elsOf(h.skill);
       this.hitBox(h.x + h.face * h.skill.reach / 2, h.y, h.skill.reach * 1.3, h.skill.h, h.skill.dmg * h.skillMul, true, { kx: h.skill.kx, ky: h.skill.ky, stun: 1 }, h.hitIds);
+      this.hitEls = was;
       return;
     }
     const dr = fixed ? 0 : 1 - (1 - h.d.dr) * (1 - (h.buff?.def ?? 0)) * (1 - (h.boosts.def?.[0] ?? 0));
@@ -2503,6 +2558,7 @@ export class World {
     for (const s of this.shots) {
       // hero shots act for their owner; monster shots look for whichever hero they touch
       const h = this.cur = s.from === 'hero' ? this.heroes[s.owner ?? 0] ?? this.heroes[0] : this.heroes.find(o => Math.abs(o.x - s.x) < 22 && s.y > o.y - 70 && s.y < o.y + 4) ?? this.heroes[0];
+      this.hitEls = s.from === 'hero' ? s.els : undefined; // a hero's shot carries what it was stamped with
       const sdt = s.from === 'mob' ? mdt : dt; // monster shots crawl in slow motion too
       s.t += sdt;
       if (s.t < 0) continue; // staggered (fire breath)
@@ -2558,14 +2614,14 @@ export class World {
         let f = s.vy > 0 ? this.floorBelow(s.x, prevY, s.y, false) : null;
         if (f && s.fromY !== undefined && f.y < s.fromY - 4) f = null; // thrown from below a ledge: it drops past it to the monsters' level
         if (f) {
-          if (s.kind === 'berry') this.mines.push({ id: nextId++, x: s.x, y: f.y, t: 0.2, dmg: s.dmg, kx: s.kx, ky: s.ky });
-          else if (s.kind === 'goo') this.zones.push({ id: nextId++, x: s.x, y: f.y, w: 80, t: 4, tick: 0.1, next: 0, dmg: s.dmg, kind: 'goo', hit: new Set() });
+          if (s.kind === 'berry') this.mines.push({ id: nextId++, x: s.x, y: f.y, t: 0.2, dmg: s.dmg, kx: s.kx, ky: s.ky, els: s.els });
+          else if (s.kind === 'goo') this.zones.push({ id: nextId++, x: s.x, y: f.y, w: 80, t: 4, tick: 0.1, next: 0, dmg: s.dmg, kind: 'goo', hit: new Set(), els: s.els });
           else if (s.kind === 'minijelly' && (s.bounces ?? 0) < (s.tx ?? 6)) { s.bounces = (s.bounces ?? 0) + 1; s.y = f.y - 2; s.vy = -360; s.hit = new Set(); this.events.push({ t: 'bounce', x: s.x, y: f.y }); continue; }
           else if (s.kind === 'pit' && (s.bounces ?? 0) < (s.tx ?? 3)) { s.bounces = (s.bounces ?? 0) + 1; s.y = f.y - 2; s.vy = -440 * Math.pow(0.78, s.bounces); s.hit = new Set(); this.events.push({ t: 'bounce', x: s.x, y: f.y }); continue; }
           else if (s.kind === 'scoop') { this.events.push({ t: 'boom', x: s.x, y: f.y }); for (const m of this.targetsNear(s.x, f.y, 90, 70)) { this.damageMob(m, s.dmg, Math.sign(m.x - s.x) || 1, { kx: s.kx, ky: s.ky, stun: 0.6 }, true); this.applyFx(m, ['freeze'], h); } }
-          else if (s.kind === 'sundae') { this.events.push({ t: 'shock', x: s.x, y: f.y, r: 170 }); for (const m of this.targetsNear(s.x, f.y, 170, 120)) this.damageMob(m, s.dmg, Math.sign(m.x - s.x) || 1, { kx: s.kx, ky: s.ky, stun: 1 }, true); this.zones.push({ id: nextId++, x: s.x, y: f.y, w: 300, t: 5, tick: 0.4, next: 0, dmg: 0, kind: 'ice', owner: h.idx }); }
+          else if (s.kind === 'sundae') { this.events.push({ t: 'shock', x: s.x, y: f.y, r: 170 }); for (const m of this.targetsNear(s.x, f.y, 170, 120)) this.damageMob(m, s.dmg, Math.sign(m.x - s.x) || 1, { kx: s.kx, ky: s.ky, stun: 1 }, true); this.zones.push({ id: nextId++, x: s.x, y: f.y, w: 300, t: 5, tick: 0.4, next: 0, dmg: 0, kind: 'ice', owner: h.idx, els: s.els }); }
           else if (s.kind === 'chocchip') { for (const m of this.targetsNear(s.x, f.y, 40, 60)) if (!s.hit.has(m.id)) this.damageMob(m, s.dmg, Math.sign(m.x - s.x) || 1, { kx: s.kx, ky: s.ky, stun: 0.5 }, true); }
-          else if (s.kind === 'cupcake') { this.events.push({ t: 'boom', x: s.x, y: f.y }); for (const m of this.targetsNear(s.x, f.y, 90, 70)) this.damageMob(m, s.dmg, Math.sign(m.x - s.x) || 1, { kx: s.kx, ky: s.ky, stun: 0.6 }, true); this.zones.push({ id: nextId++, x: s.x, y: f.y, w: 160, t: 4, tick: 0.4, next: 0, dmg: 0, kind: 'ice', owner: h.idx }); }
+          else if (s.kind === 'cupcake') { this.events.push({ t: 'boom', x: s.x, y: f.y }); for (const m of this.targetsNear(s.x, f.y, 90, 70)) this.damageMob(m, s.dmg, Math.sign(m.x - s.x) || 1, { kx: s.kx, ky: s.ky, stun: 0.6 }, true); this.zones.push({ id: nextId++, x: s.x, y: f.y, w: 160, t: 4, tick: 0.4, next: 0, dmg: 0, kind: 'ice', owner: h.idx, els: s.els }); }
           else if (s.kind === 'salsa' || s.kind === 'candy') { this.events.push({ t: 'boom', x: s.x, y: f.y }); for (const m of this.targetsNear(s.x, f.y, s.kind === 'salsa' ? 70 : 40, 60)) if (!s.hit.has(m.id)) { this.damageMob(m, s.dmg, Math.sign(m.x - s.x) || 1, { kx: s.kx, ky: s.ky, stun: 0.6 }, true); if (s.kind === 'salsa') this.applyFx(m, ['burn'], h); } }
           else if (s.kind === 'gearlob') { this.events.push({ t: 'shock', x: s.x, y: f.y, r: 90 }); for (const m of this.targetsNear(s.x, f.y, 90, 70)) { this.damageMob(m, s.dmg * gearVs(m), Math.sign(m.x - s.x) || 1, { kx: s.kx, ky: s.ky, stun: 0.7 }, true); if (s.fx) this.applyFx(m, s.fx, h); } }
           else if (s.kind === 'meteor') { this.events.push({ t: 'shock', x: s.x, y: f.y, r: 70 }); for (const m of this.targetsNear(s.x, f.y, 70, 60)) if (!s.hit.has(m.id)) this.damageMob(m, s.dmg, Math.sign(m.x - s.x) || 1, { kx: s.kx, ky: s.ky, stun: 0.6 }, true); }
@@ -2587,6 +2643,7 @@ export class World {
         }
       }
     }
+    this.hitEls = undefined;
     this.shots = this.shots.filter(s => s.t < (s.from === 'mob' || s.g || LONG_SHOTS.has(s.kind ?? '') ? 2.5 : 0.9) && s.x > 0 && s.x < this.stage.width && s.y < this.stage.groundY + 20);
   }
 
@@ -2639,6 +2696,7 @@ export class World {
   private stepMines(dt: number): void {
     for (const mi of this.mines) {
       this.cur = this.heroes[mi.owner ?? 0] ?? this.heroes[0];
+      this.hitEls = mi.els;
       mi.t += dt;
       if (mi.t < 0.3) continue;
       const hit = this.mobs.some(m => m.state !== 'dead' && !m.under && !m.disguised && Math.abs(m.x - mi.x) < MOBS[m.kind].w / 2 + 16 && Math.abs(m.y - mi.y) < 30);
@@ -2652,6 +2710,7 @@ export class World {
         }
       }
     }
+    this.hitEls = undefined;
     this.mines = this.mines.filter(m => m.t < 99);
   }
 
@@ -2724,22 +2783,48 @@ export class World {
   }
 }
 
-/** Stage rank from time, hits taken, best combo and style (average style meter + perfect dodges). */
-export function rankOf(run: RunStats, par: number): { rank: 'S' | 'A' | 'B' | 'C' | 'D'; score: number } {
-  const timeScore = Math.max(0, Math.min(40, 40 * (1.6 - run.time / par) / 0.6));
-  // hits taken per minute (a 7-minute stage isn't judged like a 1-minute one), and each jam drunk costs a little
-  const perMin = run.hitsTaken / Math.max(1, run.time / 60);
-  const hitScore = Math.max(0, 35 - perMin * 3 - (run.heals ?? 0) * 2);
+export type StageRank = 'S' | 'A' | 'B' | 'C' | 'D';
+/** Every number of the stage rank, in one place (tuned on 8,000 skilled-bot runs: scripts/rank-rescore.ts).
+ *  Score out of 100 = Time + Defence + Combo + Style. */
+export const RANK = {
+  /** Time: full marks at or under par, none at PAR_ZERO x par. Being faster than par earns nothing more, so waiting earns nothing either. */
+  TIME: 40, PAR_ZERO: 1.6,
+  /** Defence: DEFENCE - HIT_COST x hits / (monsters defeated + PAD) - JAM_COST x jams drunk. Hits are judged per monster
+   *  defeated, never per minute. PAD is what the stage's own boss fight counts for (a world boss fight is most of its stage). */
+  DEFENCE: 35, HIT_COST: 30, PAD: 20, PAD_BOSS: 60, JAM_COST: 2, JAM_COST_BOSS: 1.5,
+  /** Combo: COMBO_PER per hit of the best combo. Style: average style meter, perfect dodges and interrupts. */
+  COMBO: 12, COMBO_PER: 0.6, STYLE: 13, STYLE_AVG: 0.3, STYLE_PERFECT: 1.5, STYLE_INTERRUPT: 0.5,
+  /** Lowest score for each letter. */
+  S: 85, A: 70, B: 50, C: 30,
+  /** SKIP TO BOSS leaves out the part of the stage the rank judges (the clock and the monsters), so its best rank is A. */
+  SKIP_BEST: 84,
+} as const;
+
+/** The four parts of the rank score (each already capped), the total and the letter. */
+export function rankParts(run: RunStats, par: number): { time: number; defence: number; combo: number; style: number; score: number; rank: StageRank } {
+  const R = RANK, boss = !!run.boss;
+  const time = Math.max(0, Math.min(R.TIME, R.TIME * (R.PAR_ZERO - run.time / par) / (R.PAR_ZERO - 1)));
+  const defence = Math.max(0, R.DEFENCE - R.HIT_COST * run.hitsTaken / (run.kills + (boss ? R.PAD_BOSS : R.PAD)) - (run.heals ?? 0) * (boss ? R.JAM_COST_BOSS : R.JAM_COST));
   const styleAvg = run.styleTime > 0 ? run.styleSum / run.styleTime : 0;
-  const comboScore = Math.min(12, run.maxCombo * 0.6) + Math.min(13, styleAvg * 0.3 + run.perfects * 1.5 + run.interrupts * 0.5);
-  const score = Math.round(timeScore + hitScore + comboScore);
-  const rank = score >= 85 ? 'S' : score >= 70 ? 'A' : score >= 50 ? 'B' : score >= 30 ? 'C' : 'D';
+  const combo = Math.min(R.COMBO, run.maxCombo * R.COMBO_PER);
+  const style = Math.min(R.STYLE, styleAvg * R.STYLE_AVG + run.perfects * R.STYLE_PERFECT + run.interrupts * R.STYLE_INTERRUPT);
+  let score = Math.round(time + defence + combo + style);
+  if (run.skipped) score = Math.min(score, R.SKIP_BEST);
+  const rank = score >= R.S ? 'S' : score >= R.A ? 'A' : score >= R.B ? 'B' : score >= R.C ? 'C' : 'D';
+  return { time, defence, combo, style, score, rank };
+}
+
+/** Stage rank from time, hits taken per monster defeated, jams drunk, best combo and style (see RANK). */
+export function rankOf(run: RunStats, par: number): { rank: StageRank; score: number } {
+  const { rank, score } = rankParts(run, par);
   return { rank, score };
 }
 
 /** hero projectiles that live longer than a bolt */
 /** Bosses shrug off thrown kitchenware a bit (gear skills deal 40% to them). */
 const gearVs = (m: Mob) => (MOBS[m.kind].brain === 'boss' ? 0.4 : 1);
+// elemental weaknesses: fixed element lists for hits that are not a skill or a weapon (see World.hitEls)
+const GUARD_BREAK_ELS: Element[] = [GUARD_BREAK_ELEMENT], HOT_ELS: Element[] = ['HOT'], STICKY_ELS: Element[] = ['STICKY'], POISON_ELS = elementsOfFx('poison');
 const LONG_SHOTS = new Set(['gearorbit', 'gearbounce', 'gearmeteor', 'gearpillar', 'gearwave', 'gearboom', 'minijelly', 'tide', 'salmon', 'gumball', 'trumpet', 'guacwave', 'gearroll', 'boomerang', 'homing', 'twister', 'snowball', 'wave', 'reflect']);
 const NEW_BRAINS = new Set(['healer', 'summoner', 'charger', 'sniper', 'turret', 'burrower', 'mimic']);
 

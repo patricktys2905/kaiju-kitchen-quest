@@ -1,0 +1,26 @@
+[
+ {
+  "name": "mob-kcadet",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/mob-cadet.png"
+  ],
+  "prompt": "Generate an image. The reference is an enemy from my cute 2D side-scrolling action RPG where tiny food monsters fight in a giant world. Draw THE SAME character again as its KING version, a big boss. Do NOT redesign it: copy the reference exactly, the same shape, the same colours, the same face, the same proportions, the same pose. Its body is: an upright golden-brown battered corn dog with its wooden stick poking out of the top like a plume, a stern face, a folded paper soldier hat, a zigzag of yellow mustard across its chest, exactly two small arms and exactly two short legs in black boots. Do not add any arms, legs, eyes or other body parts that the reference does not have. Only add the crown and the cape: a golden crown fitted around its paper hat (the hat and the stick still show) and a SHORT crimson royal cape with white fur trim hanging only BEHIND it on its back (the right side), not covering its front. It looks bigger, prouder and meaner than the reference. Draw it in exactly the same art style as the reference (clean dark outlines, saturated colours, glossy cel shading, the same fuzzy green mould spots). Side view facing LEFT exactly like the reference, whole body visible including the whole crown, centred, filling about 80% of the frame with empty margin above the crown. The crown and cape are painted in the same style, not a sticker or an emoji. The crown and cape are not pink or magenta. A crisp dark outline touches the background directly, NO white or pale sticker border. Solid flat magenta (#FF00FF) background, no shadow, no ground, no text, no letters, no frame, only this one character. Square 1:1 image."
+ },
+ {
+  "name": "mob-kbumper",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/mob-bumper.png"
+  ],
+  "prompt": "Generate an image. The reference is an enemy from my cute 2D side-scrolling action RPG where tiny food monsters fight in a giant world. Draw THE SAME character again as its KING version, a big boss. Do NOT redesign it: copy the reference exactly, the same shape, the same colours, the same face, the same proportions, the same pose. Its body is: a cupcake with a swirl of cream frosting and a cherry riding in a small round teal bumper car with a thick black rubber bumper ring, small wheels and a thin pole with a spark at the back, an angry face on the sponge; it has NO arms and NO legs. Do not add any arms, legs, eyes or other body parts that the reference does not have. Only add the crown and the cape: a golden crown on top of its frosting swirl around the cherry, and a SHORT crimson royal cape with white fur trim hanging only BEHIND it from the pole at the back (the right side), not covering the cake or the car. It looks bigger, prouder and meaner than the reference. Draw it in exactly the same art style as the reference (clean dark outlines, saturated colours, glossy cel shading, the same fuzzy green mould spots). Side view facing LEFT exactly like the reference, whole body visible including the whole crown, centred, filling about 80% of the frame with empty margin above the crown. The crown and cape are painted in the same style, not a sticker or an emoji. The crown and cape are not pink or magenta. A crisp dark outline touches the background directly, NO white or pale sticker border. Solid flat magenta (#FF00FF) background, no shadow, no ground, no text, no letters, no frame, only this one character. Square 1:1 image."
+ },
+ {
+  "name": "mob-kcoconut",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/mob-coconut.png"
+  ],
+  "prompt": "Generate an image. The reference is an enemy from my cute 2D side-scrolling action RPG where tiny food monsters fight in a giant world. Draw THE SAME character again as its KING version, a big boss. Do NOT redesign it: copy the reference exactly, the same shape, the same colours, the same face, the same proportions, the same pose. Its body is: a round hairy brown coconut with a fierce face sitting in a shiny metal cup on a short red and white striped wooden post, exactly two hairy brown arms, the front one raised holding a smaller plain coconut; it has NO legs. Do not add any arms, legs, eyes or other body parts that the reference does not have. Only add the crown and the cape: a golden crown on top of its hairy head and a SHORT crimson royal cape with white fur trim hanging only BEHIND it (the right side), not covering its face, its arms or the striped post. It looks bigger, prouder and meaner than the reference. Draw it in exactly the same art style as the reference (clean dark outlines, saturated colours, glossy cel shading, the same fuzzy green mould spots). Side view facing LEFT exactly like the reference, whole body visible including the whole crown, centred, filling about 80% of the frame with empty margin above the crown. The crown and cape are painted in the same style, not a sticker or an emoji. The crown and cape are not pink or magenta. A crisp dark outline touches the background directly, NO white or pale sticker border. Solid flat magenta (#FF00FF) background, no shadow, no ground, no text, no letters, no frame, only this one character. Square 1:1 image."
+ }
+]

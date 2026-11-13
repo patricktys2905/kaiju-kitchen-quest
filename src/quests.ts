@@ -2,9 +2,9 @@
 import { CLASSES } from './sim/classes';
 import type { ConsumableId } from './sim/consumables';
 import type { BoxTier } from './sim/types';
-import { persist, save, today } from './save';
+import { lastClearSkipped, persist, save, today } from './save';
 import { BASES, rollItem } from './sim/items';
-import { UNLOCKS, kaijuQuests } from './story/kaijuQuests';
+import { S_RANK_KEY, UNLOCKS, kaijuQuests } from './story/kaijuQuests';
 
 export type StatKey = 'kills' | 'bossKills' | 'eliteKills' | 'clears' | 'rankA' | 'rankS' | 'boxes' | 'fortifies' | 'dodges' | 'potions' | 'ults'
   | 'legendaries' | 'maxPlus' | 'crumbs' | 'heroClear' | 'perfects' | 'interrupts' | 'spicy';
@@ -71,7 +71,12 @@ export function dailyQuests(): (QState & { def: QuestDef; text: string })[] {
 }
 
 /** Record progress. heroSpecies is used by "clear with <hero>" quests. */
+/** What a SKIP TO BOSS clear does not count for: rank quests, the Toastbat unlock, Perfectionist, the chilli quests. */
+const NOT_ON_SKIP = new Set<string>(['rankA', 'rankS', 'spicy']);
+const skipBlocks = (key: string) => lastClearSkipped && (NOT_ON_SKIP.has(key) || key === 'nohit' || key.startsWith('clear:'));
+
 export function track(stat: StatKey, n = 1, heroSpecies?: number): void {
+  if (skipBlocks(stat)) return;
   const st = qs();
   if (stat === 'maxPlus') st.stats.maxPlus = Math.max(st.stats.maxPlus ?? 0, n);
   else st.stats[stat] = (st.stats[stat] ?? 0) + n;
@@ -92,6 +97,7 @@ export function trackKey(key: string, n = 1): void { const st = qs().stats; st[k
 
 /** A kaiju's own counter; max = keep the best value instead of adding. */
 export function trackHero(species: number, key: string, n = 1, max = false): void {
+  if (skipBlocks(key)) return; // a kaiju's "clear 1-5 with an A" is about the whole stage
   const p = save.heroes[species];
   p.stats[key] = max ? Math.max(p.stats[key] ?? 0, n) : (p.stats[key] ?? 0) + n;
   persist();
@@ -112,7 +118,9 @@ export function checkUnlocks(): number[] {
 // ---------- each kaiju's quest line ----------
 export function kaijuQuestState(species: number) {
   const p = save.heroes[species];
-  return kaijuQuests(species).map(q => ({ ...q, prog: Math.min(q.goal, p.stats[q.key] ?? 0), claimed: p.kq.includes(q.id) }));
+  // S_RANK_KEY is not a counter: 1 once this kaiju's saved best ranks (Normal or Hard) hold an S on any stage
+  const hasS = () => ([...Object.values(p.cleared ?? {}), ...Object.values(p.hardCleared ?? {})].includes('S') ? 1 : 0);
+  return kaijuQuests(species).map(q => ({ ...q, prog: Math.min(q.goal, q.key === S_RANK_KEY ? hasS() : p.stats[q.key] ?? 0), claimed: p.kq.includes(q.id) }));
 }
 export function claimKaijuQuest(species: number, id: string): string | null {
   const q = kaijuQuestState(species).find(x => x.id === id);

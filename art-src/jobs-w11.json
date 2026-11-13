@@ -1,0 +1,136 @@
+[
+ {
+  "name": "mob-cadet",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/mob-cherrysoldier.png",
+   "art-src/raw/mob-pudding.png"
+  ],
+  "prompt": "Generate an image. The references are two enemies from my cute 2D side-scrolling action RPG where tiny food monsters fight in a giant world. Draw a NEW enemy, a different character, in exactly the same painting style as the references (clean dark outlines, saturated colours, glossy cel shading, cute but menacing, NOT babyish). It is a mean snack monster from a summer funfair, a bit stale and past its best, with a few small fuzzy green mould spots like the references. The new enemy is a CORN DOG SOLDIER: an upright golden-brown battered corn dog (a sausage in crispy fried batter) with its wooden stick poking out of the top of its head like a plume, a stern frowning face with exactly two eyes on its left side, a folded paper soldier hat (blank paper, no print), a zigzag squirt of yellow mustard across its chest like a sash, exactly two small arms held stiffly and exactly two short legs in little black boots, marching like a toy soldier. Side view facing LEFT, whole body visible, centred, filling about 85% of the frame. IMPORTANT: a crisp dark outline all round that touches the background directly, with NO white or pale sticker border, NO glow, haze or cloud around it. Solid flat magenta (#FF00FF) background, no shadow, no ground, no text, no letters, no frame, only this one character. Square 1:1 image."
+ },
+ {
+  "name": "mob-toffee",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/mob-cherrysoldier.png",
+   "art-src/raw/mob-pudding.png"
+  ],
+  "prompt": "Generate an image. The references are two enemies from my cute 2D side-scrolling action RPG where tiny food monsters fight in a giant world. Draw a NEW enemy, a different character, in exactly the same painting style as the references (clean dark outlines, saturated colours, glossy cel shading, cute but menacing, NOT babyish). It is a mean snack monster from a summer funfair, a bit stale and past its best, with a few small fuzzy green mould spots like the references. The new enemy is a TOFFEE APPLE on a pogo stick: a round apple coated in glossy dark-red toffee with drips of hardened amber caramel, hopping on its own wooden stick which pokes straight down out of its bottom like a pogo stick (the apple is on top, the stick is its only leg), a grumpy tough face with exactly two eyes and heavy brows; it has NO arms and NO legs, only the one stick. Side view facing LEFT, whole body visible, centred, filling about 85% of the frame. IMPORTANT: a crisp dark outline all round that touches the background directly, with NO white or pale sticker border, NO glow, haze or cloud around it. Solid flat magenta (#FF00FF) background, no shadow, no ground, no text, no letters, no frame, only this one character. Square 1:1 image."
+ },
+ {
+  "name": "mob-floss",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/mob-cherrysoldier.png",
+   "art-src/raw/mob-pudding.png"
+  ],
+  "prompt": "Generate an image. The references are two enemies from my cute 2D side-scrolling action RPG where tiny food monsters fight in a giant world. Draw a NEW enemy, a different character, in exactly the same painting style as the references (clean dark outlines, saturated colours, glossy cel shading, cute but menacing, NOT babyish). It is a mean snack monster from a summer funfair, a bit stale and past its best, with a few small fuzzy green mould spots like the references. The new enemy is a CANDY FLOSS WISP: a small fluffy cloud of pale pastel baby-pink candy floss (cotton candy) sitting on a pointed white paper cone that points down, flying; a sneaky scowling face with exactly two eyes in the fluff, its fluffy back edge a little ragged as if blown by the wind; it has NO arms and NO legs. The floss is pale pastel pink with darker rose shading and a dark plum outline, clearly lighter than the background. One solid fluffy silhouette with a dark outline all round: NO loose strands, NO motion lines, NO thin wisps, nothing floating separately from the cloud. Side view facing LEFT, whole body visible, centred, filling about 85% of the frame. IMPORTANT: a crisp dark outline all round that touches the background directly, with NO white or pale sticker border, NO glow, haze or cloud around it. Solid flat magenta (#FF00FF) background, no shadow, no ground, no text, no letters, no frame, only this one character. Square 1:1 image."
+ },
+ {
+  "name": "mob-snowcone",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/mob-cherrysoldier.png",
+   "art-src/raw/mob-pudding.png"
+  ],
+  "prompt": "Generate an image. The references are two enemies from my cute 2D side-scrolling action RPG where tiny food monsters fight in a giant world. Draw a NEW enemy, a different character, in exactly the same painting style as the references (clean dark outlines, saturated colours, glossy cel shading, cute but menacing, NOT babyish). It is a mean snack monster from a summer funfair, a bit stale and past its best, with a few small fuzzy green mould spots like the references. The new enemy is a SNOW CONE thrower: a pointed paper cone cup with teal and cream stripes, heaped with a big dome of crushed ice soaked in bright blue and red syrup, a grumpy sneering face with exactly two eyes on the ice dome, exactly two small arms (one hand flicking a small round syrupy ice ball forward to the left) and exactly two short legs under the cone. Side view facing LEFT, whole body visible, centred, filling about 85% of the frame. IMPORTANT: a crisp dark outline all round that touches the background directly, with NO white or pale sticker border, NO glow, haze or cloud around it. Solid flat magenta (#FF00FF) background, no shadow, no ground, no text, no letters, no frame, only this one character. Square 1:1 image."
+ },
+ {
+  "name": "mob-bumper",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/mob-cherrysoldier.png",
+   "art-src/raw/mob-pudding.png"
+  ],
+  "prompt": "Generate an image. The references are two enemies from my cute 2D side-scrolling action RPG where tiny food monsters fight in a giant world. Draw a NEW enemy, a different character, in exactly the same painting style as the references (clean dark outlines, saturated colours, glossy cel shading, cute but menacing, NOT babyish). It is a mean snack monster from a summer funfair, a bit stale and past its best, with a few small fuzzy green mould spots like the references. The new enemy is a BUMPER-CAR CUPCAKE: a cupcake with a big swirl of cream frosting, sprinkles and a cherry, whose paper case is a small round teal bumper car with a thick black rubber bumper ring all round its bottom edge, two small wheels showing underneath and a thin metal pole with a spark at the top rising from its back; an angry gritted-teeth face with exactly two eyes on the sponge part, leaning forward to charge; it has NO arms and NO legs. Side view facing LEFT, whole body visible, centred, filling about 85% of the frame. IMPORTANT: a crisp dark outline all round that touches the background directly, with NO white or pale sticker border, NO glow, haze or cloud around it. Solid flat magenta (#FF00FF) background, no shadow, no ground, no text, no letters, no frame, only this one character. Square 1:1 image."
+ },
+ {
+  "name": "mob-churro",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/mob-cherrysoldier.png",
+   "art-src/raw/mob-pudding.png"
+  ],
+  "prompt": "Generate an image. The references are two enemies from my cute 2D side-scrolling action RPG where tiny food monsters fight in a giant world. Draw a NEW enemy, a different character, in exactly the same painting style as the references (clean dark outlines, saturated colours, glossy cel shading, cute but menacing, NOT babyish). It is a mean snack monster from a summer funfair, a bit stale and past its best, with a few small fuzzy green mould spots like the references. The new enemy is a CHURRO popping up out of the ground: a thick ridged golden-brown churro stick dusted with cinnamon sugar, standing upright with its lower end hidden in a round hole in a small mound of brown dirt (bare dirt only, no grass, no plants), a cheeky mean face with exactly two eyes near its top, a small sticking plaster on its head; it has NO arms and NO legs. The churro leans a little to the LEFT and its face is on its LEFT side, glaring to the LEFT with an angry scowl and gritted teeth (mean, not smiling). Side view facing LEFT, whole body visible, centred, filling about 85% of the frame. IMPORTANT: a crisp dark outline all round that touches the background directly, with NO white or pale sticker border, NO glow, haze or cloud around it. Solid flat magenta (#FF00FF) background, no shadow, no ground, no text, no letters, no frame, only this one character. Square 1:1 image."
+ },
+ {
+  "name": "mob-coconut",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/mob-cherrysoldier.png",
+   "art-src/raw/mob-pudding.png"
+  ],
+  "prompt": "Generate an image. The references are two enemies from my cute 2D side-scrolling action RPG where tiny food monsters fight in a giant world. Draw a NEW enemy, a different character, in exactly the same painting style as the references (clean dark outlines, saturated colours, glossy cel shading, cute but menacing, NOT babyish). It is a mean snack monster from a summer funfair, a bit stale and past its best, with a few small fuzzy green mould spots like the references. The new enemy is a COCONUT on a stand: a round hairy brown coconut with a fierce face (exactly two eyes, the three coconut dimples must not look like extra eyes) sitting in a cup on top of a short red and white striped wooden post, exactly two hairy arms, one raised holding a smaller plain coconut ready to throw to the left; it has NO legs (the striped post is its base). Side view facing LEFT, whole body visible, centred, filling about 85% of the frame. IMPORTANT: a crisp dark outline all round that touches the background directly, with NO white or pale sticker border, NO glow, haze or cloud around it. Solid flat magenta (#FF00FF) background, no shadow, no ground, no text, no letters, no frame, only this one character. Square 1:1 image."
+ },
+ {
+  "name": "mob-pretzel",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/mob-cherrysoldier.png",
+   "art-src/raw/mob-pudding.png"
+  ],
+  "prompt": "Generate an image. The references are two enemies from my cute 2D side-scrolling action RPG where tiny food monsters fight in a giant world. Draw a NEW enemy, a different character, in exactly the same painting style as the references (clean dark outlines, saturated colours, glossy cel shading, cute but menacing, NOT babyish). It is a mean snack monster from a summer funfair, a bit stale and past its best, with a few small fuzzy green mould spots like the references. The new enemy is a PRETZEL stallholder: a big knot-shaped golden-brown baked pretzel with coarse salt crystals, a sly face in the middle with exactly two eyes (one squinting to take aim), a flat straw boater hat with a teal band, exactly two thin arms (one raised holding a wooden hoop ring ready to fling it to the left, a few more rings hanging on the other arm) and exactly two short legs. Its whole body is turned to the LEFT and it glares to the LEFT with a mean scowl and a crooked sneer (not friendly, not winking, no smile). The ring it throws is a plain wooden hoop held up in its front (left) hand. Side view facing LEFT, whole body visible, centred, filling about 85% of the frame. IMPORTANT: a crisp dark outline all round that touches the background directly, with NO white or pale sticker border, NO glow, haze or cloud around it. Solid flat magenta (#FF00FF) background, no shadow, no ground, no text, no letters, no frame, only this one character. Square 1:1 image."
+ },
+ {
+  "name": "mob-jawbreaker",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/mob-cherrysoldier.png",
+   "art-src/raw/mob-pudding.png"
+  ],
+  "prompt": "Generate an image. The references are two enemies from my cute 2D side-scrolling action RPG where tiny food monsters fight in a giant world. Draw a NEW enemy, a different character, in exactly the same painting style as the references (clean dark outlines, saturated colours, glossy cel shading, cute but menacing, NOT babyish). It is a mean snack monster from a summer funfair, a bit stale and past its best, with a few small fuzzy green mould spots like the references. The new enemy is a JAWBREAKER STRONGMAN: a huge round hard-candy jawbreaker ball, white with coloured speckles and a chipped patch showing its rainbow layers, wearing a leopard-print strongman leotard over one shoulder, a tough face with exactly two eyes and a big black curly moustache, exactly two thick muscular arms (one holding a big wooden strength-test mallet, the other holding a round metal shield) and exactly two short stubby legs. It is a tough BRUTE, bigger and chunkier than normal enemies. Side view facing LEFT, whole body visible, centred, filling about 85% of the frame. IMPORTANT: a crisp dark outline all round that touches the background directly, with NO white or pale sticker border, NO glow, haze or cloud around it. Solid flat magenta (#FF00FF) background, no shadow, no ground, no text, no letters, no frame, only this one character. Square 1:1 image."
+ },
+ {
+  "name": "boss-flosso",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/boss-fruitcake.png"
+  ],
+  "prompt": "Generate an image. The reference is a boss from my cute 2D side-scrolling action RPG where tiny food monsters fight in a giant world. Same painting style (clean dark outlines, saturated colours, glossy cel shading), a different character. I need a NEW BOSS, the showman of a summer funfair: a candy-floss SHOWMAN: a huge billowing cloud of pale pastel pink candy floss (cotton candy) sitting on a tall pointed paper cone with teal and cream stripes (the cone points down and he floats on it; he has NO legs), a tall black top hat with a teal band, a big curly black moustache, a smug theatrical showman grin with one raised eyebrow and exactly two eyes, exactly two fluffy floss arms in white gloves, one flung wide like a ringmaster and the other twirling a small striped paper cone like a cane, a red bow tie. The floss is pale pastel pink with darker rose shading and a dark plum outline, clearly lighter than the background. Imposing, theatrical and smug, big and puffed-up, but still in the cute game style. Side view facing LEFT, whole body visible including the whole top hat and the tip of the cone, centred, filling about 90% of the frame. IMPORTANT: a crisp dark outline all round that touches the background directly, with NO white or pale sticker border, NO glow or haze around it. Solid flat magenta (#FF00FF) background, no shadow, no ground, no text, no letters, no frame, only this one character. Square 1:1 image."
+ },
+ {
+  "name": "mob-m11a",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/mob-cherrysoldier.png",
+   "art-src/raw/mob-pudding.png"
+  ],
+  "prompt": "Generate an image. The references are two enemies from my cute 2D side-scrolling action RPG where tiny food monsters fight in a giant world. Draw a NEW enemy, a different character, in exactly the same painting style as the references (clean dark outlines, saturated colours, glossy cel shading, cute but menacing, NOT babyish). It is a mean snack monster from a summer funfair, a bit stale and past its best, with a few small fuzzy green mould spots like the references. The new enemy is a MINIBOSS, a bit bigger, tougher and more detailed than a normal enemy: a PRETZEL CONTORTIONIST: a giant soft baked pretzel acrobat whose long doughy body is tied in a tangled knot, coarse salt crystals on it, a smug face with exactly two eyes at one end, a small striped circus leotard collar, exactly two doughy arms and exactly two doughy legs bent in a showy contortionist pose. Side view facing LEFT, whole body visible, centred, filling about 85% of the frame. IMPORTANT: a crisp dark outline all round that touches the background directly, with NO white or pale sticker border, NO glow, haze or cloud around it. Solid flat magenta (#FF00FF) background, no shadow, no ground, no text, no letters, no frame, only this one character. Square 1:1 image."
+ },
+ {
+  "name": "mob-m11b",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/mob-cherrysoldier.png",
+   "art-src/raw/mob-pudding.png"
+  ],
+  "prompt": "Generate an image. The references are two enemies from my cute 2D side-scrolling action RPG where tiny food monsters fight in a giant world. Draw a NEW enemy, a different character, in exactly the same painting style as the references (clean dark outlines, saturated colours, glossy cel shading, cute but menacing, NOT babyish). It is a mean snack monster from a summer funfair, a bit stale and past its best, with a few small fuzzy green mould spots like the references. The new enemy is a MINIBOSS, a bit bigger, tougher and more detailed than a normal enemy: a WALKING GUMBALL MACHINE: a red metal gumball machine with a round glass globe full of colourful gumballs, an angry face with exactly two eyes on the glass globe, a metal coin dial and a chute on its front pointing left like a gun barrel with a gumball rolling out, walking on exactly two short metal legs; it has NO arms. The glass globe is clear glass with a pale BLUE tint and white highlights (the glass is NOT pink, purple or magenta); the gumballs are red, yellow, green, blue, orange and white. Side view facing LEFT, whole body visible, centred, filling about 85% of the frame. IMPORTANT: a crisp dark outline all round that touches the background directly, with NO white or pale sticker border, NO glow, haze or cloud around it. Solid flat magenta (#FF00FF) background, no shadow, no ground, no text, no letters, no frame, only this one character. Square 1:1 image."
+ },
+ {
+  "name": "mob-m11c",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/mob-cherrysoldier.png",
+   "art-src/raw/mob-pudding.png"
+  ],
+  "prompt": "Generate an image. The references are two enemies from my cute 2D side-scrolling action RPG where tiny food monsters fight in a giant world. Draw a NEW enemy, a different character, in exactly the same painting style as the references (clean dark outlines, saturated colours, glossy cel shading, cute but menacing, NOT babyish). It is a mean snack monster from a summer funfair, a bit stale and past its best, with a few small fuzzy green mould spots like the references. The new enemy is a MINIBOSS, a bit bigger, tougher and more detailed than a normal enemy: a DEEP FRYER BRUISER: a boxy steel funfair deep-fryer full of bubbling golden hot oil, a snarling face with exactly two eyes on its steel front, a wire frying basket full of fries worn on its head like a helmet, exactly two thick steel arms with big fists dripping oil, exactly two short sturdy legs, hot oil splashing over the rim. Side view facing LEFT, whole body visible, centred, filling about 85% of the frame. IMPORTANT: a crisp dark outline all round that touches the background directly, with NO white or pale sticker border, NO glow, haze or cloud around it. Solid flat magenta (#FF00FF) background, no shadow, no ground, no text, no letters, no frame, only this one character. Square 1:1 image."
+ },
+ {
+  "name": "mob-m11d",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/mob-cherrysoldier.png",
+   "art-src/raw/mob-pudding.png"
+  ],
+  "prompt": "Generate an image. The references are two enemies from my cute 2D side-scrolling action RPG where tiny food monsters fight in a giant world. Draw a NEW enemy, a different character, in exactly the same painting style as the references (clean dark outlines, saturated colours, glossy cel shading, cute but menacing, NOT babyish). It is a mean snack monster from a summer funfair, a bit stale and past its best, with a few small fuzzy green mould spots like the references. The new enemy is a MINIBOSS, a bit bigger, tougher and more detailed than a normal enemy: a CAROUSEL PONY made of macarons: a merry-go-round horse whose body, head and exactly four legs are built from stacked pastel macarons (mint, lemon and lilac shells with cream filling), a twisted gold carousel pole going straight down through its back, a wild angry horse face with exactly two eyes, a cream-swirl mane, a small saddle, rearing to charge; it has NO arms. Side view facing LEFT, whole body visible, centred, filling about 85% of the frame. IMPORTANT: a crisp dark outline all round that touches the background directly, with NO white or pale sticker border, NO glow, haze or cloud around it. Solid flat magenta (#FF00FF) background, no shadow, no ground, no text, no letters, no frame, only this one character. Square 1:1 image."
+ },
+ {
+  "name": "mob-m11e",
+  "newChat": true,
+  "refs": [
+   "art-src/raw/mob-cherrysoldier.png",
+   "art-src/raw/mob-pudding.png"
+  ],
+  "prompt": "Generate an image. The references are two enemies from my cute 2D side-scrolling action RPG where tiny food monsters fight in a giant world. Draw a NEW enemy, a different character, in exactly the same painting style as the references (clean dark outlines, saturated colours, glossy cel shading, cute but menacing, NOT babyish). It is a mean snack monster from a summer funfair, a bit stale and past its best, with a few small fuzzy green mould spots like the references. The new enemy is a MINIBOSS, a bit bigger, tougher and more detailed than a normal enemy: a HUMAN-CANNONBALL BONBON: a round chocolate bonbon in a shiny gold and red twisted foil wrapper (twisted wrapper ends on both sides like a sweet), wearing a white crash helmet with a red star and goggles, a fearless grinning face with exactly two eyes, exactly two small arms stretched forward and exactly two short legs, bursting out of the mouth of a short red circus cannon on two wheels with a puff of smoke; exactly one character and one cannon. LAYOUT: the cannon is on the RIGHT side of the picture with its open mouth pointing to the LEFT; the bonbon bursts out of it flying head-first towards the LEFT edge, its face looking LEFT, arms stretched out ahead of it to the left; the smoke puff is at the cannon mouth behind the bonbon. Side view facing LEFT, whole body visible, centred, filling about 85% of the frame. IMPORTANT: a crisp dark outline all round that touches the background directly, with NO white or pale sticker border, NO glow, haze or cloud around it. Solid flat magenta (#FF00FF) background, no shadow, no ground, no text, no letters, no frame, only this one character. Square 1:1 image."
+ }
+]

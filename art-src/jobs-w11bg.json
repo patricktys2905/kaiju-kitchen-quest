@@ -1,0 +1,42 @@
+[
+ {
+  "name": "bg-far-midway",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-bg.png"
+  ],
+  "prompt": "Generate an image. This is the background of the first area of my cute 2D side-scrolling action RPG (tiny food monsters in a giant world). I need the FAR BACKGROUND for a new world, a summer funfair, in exactly the same painted fantasy MMORPG side-scroller style: straight-on side view of a fairground on a green hill on a warm sunny afternoon, seen from tiny-creature height: striped tents in candy pink, teal and cream, strings of bunting, a big wheel built like a giant glazed doughnut, a helter-skelter slide shaped like an ice-cream cone, bunches of balloons, a soft blue summer sky with fluffy clouds. Bright, warm and cheerful. Any signs or banners are blank. The bottom quarter calm and a little darker. No characters, no people, no text, no letters, no UI. Wide 16:9 landscape image."
+ },
+ {
+  "name": "bg-mid-midway",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-bg.png"
+  ],
+  "prompt": "Generate an image. This is the background of the first area of my cute 2D side-scrolling action RPG (tiny food monsters in a giant world). I need a MIDDLE PARALLAX LAYER for a summer funfair world in the same painted style, warm sunny colours: a row of funfair objects standing along the bottom of the image, seen from the side: a game stall with a teal and cream striped awning, a snack cart with a red and cream striped awning, a lollipop-shaped lamp post, a popcorn cart, a ticket booth, a post with a string of light bulbs, with gaps between them. None of the objects are pink, purple or magenta. Any signs are blank. They fill only the bottom 60 percent. Everything else (the whole upper area and the gaps) must be solid flat magenta (#FF00FF). No shadows on the magenta, no characters, no people, no text, no letters. Wide 16:9 landscape image."
+ },
+ {
+  "name": "tile-midway",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-bg.png"
+  ],
+  "prompt": "Generate an image. This is the background of the first area of my cute 2D side-scrolling action RPG (tiny food monsters in a giant world). I need a GROUND TILE in the same painted style for the walkable floor in a summer funfair world: flat straight-on front view (NOT a 3D block, no perspective) of a fairground boardwalk edge: a top edge of trampled green grass with a few scattered bits of coloured confetti, then a front face of warm wooden boardwalk planks running left to right with nail heads, darker towards the bottom. The texture fills the ENTIRE square edge to edge and tiles SEAMLESSLY left-to-right. No background, no objects, no text. Square 1:1 image."
+ },
+ {
+  "name": "bg-far-bigtop",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-bg.png"
+  ],
+  "prompt": "Generate an image. This is the background of the first area of my cute 2D side-scrolling action RPG (tiny food monsters in a giant world). I need the FAR BACKGROUND for a BOSS ARENA, same painted style: straight-on side view of the inside of a huge circus tent with candy pink and cream striped canvas walls: a sawdust ring, bright spotlights shining down, a big round prize wheel on a stand whose segments show simple picture symbols (a raincloud, a star, a swirl; no letters, no numbers), a giant candy-floss machine with a round metal drum in the middle at the back, rows of empty wooden stands for the crowd, bunting overhead. Warm, showy and theatrical. The bottom quarter calm and darker. No characters, no people, no text, no letters, no numbers, no UI. Wide 16:9 landscape image."
+ },
+ {
+  "name": "map-midway",
+  "newChat": true,
+  "refs": [
+   "art-src/ref-bg.png"
+  ],
+  "prompt": "Generate an image. This is a background from my cute painted fantasy 2D action RPG where tiny food monsters adventure through a giant world. I need another WORLD MAP in the same painted style: a whimsical illustrated fantasy adventure map of a SUMMER FUNFAIR on a green hill, drawn like a hand-drawn paper fair map with a cream paper border, like a storybook RPG map: an entrance arch with candy-striped posts and a turnstile at the bottom-left, game stalls with striped awnings, a bumper-car rink, a big wheel built like a doughnut, a helter-skelter shaped like an ice-cream cone, a cluster of tall standing mirrors, a stall with a row of coconuts on posts, and a winding dotted path zig-zagging up from the entrance arch at the bottom-left to a big candy pink and cream striped circus tent at the top-right. Warm sunny colours: candy pink, teal and cream. Plenty of open space around the path. IMPORTANT: there is NO writing anywhere, not even tiny scribbles and no captions on the paper: the entrance is a plain striped arch, and the stalls have striped awnings only, with NO signboards, NO name boards and NO plaques. No characters, no people, no text, no labels, no letters, no numbers, no UI. Wide 16:9 landscape image."
+ }
+]

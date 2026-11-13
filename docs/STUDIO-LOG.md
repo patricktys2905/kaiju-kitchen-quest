@@ -114,3 +114,64 @@ with no emoji crown; falls back to the old look if the art is missing. 4 redone 
 
 **Open:** the BASE Lettuce Snail art (mob-snail) still has a pale sticker halo; King Teapot lost
 its pout for a stern face (left as is); Kings are large on a phone (KING_ART_TALL 1.2).
+
+## 2026-11-14: weaknesses in build; S-rank and drop-use investigations; World 11 art batch 1
+
+**Requests:** "look into getting S for stages and if it's balanced"; "have one agent look into other
+use cases for monster drops".
+
+**Decisions by the Creative Director**
+- Drops: build A Monster Cookbook and C Garnish gear slot (after weaknesses ship); rewards from
+  drops give NO power at all (so Garnish is redesigned as cosmetic + non-combat perks); warn before
+  a spend breaks a SKIP TO BOSS; raise the 26 never-wanted monsters' drop rate 20% -> about 35%.
+  Options and spec: docs/DROPS-USES.md.
+- World 11 art: keep the mould spots on the new monsters.
+
+**State**
+- Weakness sim side built (src/sim/elements.ts, elementTune.ts, 38 tests; 321 pass; neutral with
+  multipliers at 1). UI engineer and balance designer running. Uncommitted.
+- World 11 art batch 1 accepted: 9 monsters (kinds cadet, toffee, floss, snowcone, bumper, churro,
+  coconut, pretzel, jawbreaker), boss-flosso, mob-m11a..e, 3 Kings, 9 drop icons, backdrops
+  bg-far-midway, bg-mid-midway, tile-midway, bg-far-bigtop, map-midway. Sheets in shots/w11/.
+  Known: Flosso low contrast in his pink tent (tint the room in code); busy stall layer; two
+  pretzels look alike small; Bonbon's cannon detached. Batch 2 = stills + 20 boss weapon icons.
+- S-rank investigation still running.
+
+## 2026-11-14 (later): weaknesses, new rank, skip rules: release notes
+
+**Built (one release)**
+- Elemental weaknesses to docs/WEAKNESS-DESIGN.md: sim (elements.ts, elementTune.ts), UI
+  (elementUi.ts: stage panel Weak row, kit icons + ticks, WEAK!/RESIST popups, HP-bar icon, tips,
+  Market RE-SEASON), balance. Changed after measuring: weakStatus 1.5 -> 1.25 (stun-locks with a
+  re-seasoned freeze/glue weapon), re-season perLv 12 -> 40 (a Rare costs about one clear).
+  Bosses (n=400 each, same seeds): before 70.6% avg, unprepared 71.1, prepared weapon 71.8,
+  prepared weapon+buttons 72.7. Stages: 92.4 / 91.8 / 92.7 / 93.4. No monster-type changes asked.
+- Rank (decision: "Option B + clean-up", S target 10-20%): Defence = 35 - 30 x hits / (kills + 20;
+  +60 on x-10) - 2 x jams (1.5 on x-10); a SKIP TO BOSS run is capped at A. Rescored on 8,000
+  runs: S 17 / A 54 / B 24 (was 3 / 39 / 53); x-10 S 17 / A 69. Toastbat unlock = 3 clears at A+;
+  kaiju quest "no hit" -> "any stage with an S" (same quest id); Slippery = 4 perfect dodges, hard
+  tier; Express Order -> easy tier; Star Chef removed from 11 low-S stages; keepStars() migrates
+  saved stars.
+- Found: the three Challenges chillies and SKIP TO BOSS NEVER worked live (camp click selector
+  never listed them; since 10 / 11 Nov). Fixed + tests/camp-clicks.test.ts. Producer rule to stop
+  the box farm this exposed: a skipped run gets no chilli rules/bonuses, no stars, rank A at best,
+  no rank-quest credit (enforced in save.finishStage).
+
+**Decisions:** drops features and rank as recorded above; Garnish = strict (looks + own-monster
+drop chance); Cookbook pays no boxes.
+
+**Open**
+- Low boss cells: Pengwhip 2-10 about 36% (was 44), Sloba 1-10 about 35% (was 45); already-low:
+  Bloblin 1-10 / 2-10, Mothball 10-10, Minturtle 2-10 / 4-10, Velvaroo 5-10.
+- The green tick and loadout advice can mislead: swapping a kaiju's main damage skill for an
+  element match is often worse (Mothball 9-10 55% -> 15%). Tip text softened; tick logic unchanged.
+- Guard Break is 20-27% slower at cracking armour on Slippery foes (still the best tool there).
+- Re-season is dear next to other crumb sinks (meets the 1-2 clears brief).
+- Rank: 3-3 has no S, ten more stages under 4%; World 4 far easier (4-5 S 62%). Bluebeary,
+  Minturtle, Tacowl S 2-6%. "Beat the clock" unfair to Minturtle / Bluebeary.
+- Judgement calls left: a Hard skip completes "clear any stage on Hard"; a skip pays first-clear
+  rewards; stocked (drops in bag) runs make the clock chilli free.
+- `hit` event has no monster id (popup throttle picks the nearest monster).
+- Hard / Nightmare / Free Play were only spot-checked with weaknesses (within noise).
+- Next: Monster Cookbook, then Garnish (docs/DROPS-USES.md), then World 11 build (art batch 1
+  done; batch 2 = stills + 20 boss weapon icons).

@@ -11,6 +11,8 @@ import { CLASSES } from '../sim/classes';
 import { hero, persist, quickBag, save } from '../save';
 import { hardUnlocked, stageUnlocked } from './camp';
 import { sfx } from '../audio';
+import { stageElements } from '../sim/elements';
+import { weakHtml } from './elementUi';
 
 /** What the game scene needs to run an online stage. Seat 0 is the host; guests[k] is the host-side id of seat k+1. */
 export interface NetPlay {
@@ -183,6 +185,13 @@ function start(): void {
   if (f) launch(f);
 }
 
+/** What the room's stage is weak to (the same line as the stage panel; online has no nemesis). Story stages and the Daily
+ *  Dungeon only: an Endless floor or a Boss Rush changes every fight. */
+function weakRow(m: Mode, stageId: string, lv: number): string {
+  let line = '';
+  try { line = m === 'story' ? weakHtml(stageElements(stageById(stageId))) : m === 'daily' ? weakHtml(stageElements(dailyStage(dayKey(), lv))) : ''; } catch { /* a stage this version doesn't know */ }
+  return line ? `<p class="hint weakln">${line}</p>` : '';
+}
 const esc = (s: string) => s.replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]!));
 const seatHtml = (s: LobbySeat, me: boolean) => `<div class="seat ${me ? 'me' : ''}"><img src="art/kaiju-${s.species}.webp"><b>${esc(s.name)}</b><span>${CLASSES.find(c => c.species === s.species)?.name ?? ''} · Lv ${s.level}</span>${s.route === 'backup' ? '<em>backup route</em>' : s.who === 'host' ? '<em>host</em>' : ''}</div>`;
 
@@ -207,6 +216,7 @@ function render(): void {
       ${mode !== 'story' ? `<p class="hint">${modeInfo[mode]}</p>` : `<div class="row"><label>Stage <select data-f="stage">${all.map(s => `<option value="${s.id}" ${s.id === stage ? 'selected' : ''}>${s.num} ${esc(s.name)} (Lv ${s.lv[0]}–${s.lv[1]})</option>`).join('')}</select></label>
         <label class="${hOk ? '' : 'off'}"><input type="checkbox" data-f="hard" ${hard ? 'checked' : ''} ${hOk ? '' : 'disabled'}> HARD</label>
         <label class="${nOk && hard ? '' : 'off'}"><input type="checkbox" data-f="nightmare" ${nightmare ? 'checked' : ''} ${nOk && hard ? '' : 'disabled'}> 💀 NIGHTMARE</label></div>`}
+      ${weakRow(mode, stage, partyLevel())}
       <p class="hint">Monsters get tougher for each friend. Stand next to a downed friend to pick them up. Everyone gets their own loot.</p>
       ${st}
       <div class="btns"><button class="pill go big" data-o="start" ${guests.size ? '' : 'disabled'}>▶ START${guests.size ? '' : ' (waiting for friends)'}</button><button class="pill" data-o="leave">CLOSE ROOM</button></div>`;
@@ -214,6 +224,7 @@ function render(): void {
     body = lobby
       ? `<h2>IN ROOM</h2><div class="seats">${lobby.seats.map((s, i) => seatHtml(s, i === lobby!.you)).join('')}</div>
         <p class="stage">Stage: <b>${esc(lobby.stageName)}</b>${lobby.nightmare ? ' · 💀 NIGHTMARE' : lobby.hard ? ' · HARD' : ''}</p>
+        ${weakRow(lobby.stageName === MODE_NAMES.daily ? 'daily' : (Object.values(MODE_NAMES) as string[]).includes(lobby.stageName) ? 'endless' : 'story', lobby.stage, Math.round(lobby.seats.reduce((a, x) => a + x.level, 0) / Math.max(1, lobby.seats.length)))}
         <p class="hint">Waiting for the host to start…</p>${st}<div class="btns"><button class="pill" data-o="leave">LEAVE</button></div>`
       : `<h2>JOINING…</h2>${st}<div class="btns"><button class="pill" data-o="leave">CANCEL</button></div>`;
   } else {

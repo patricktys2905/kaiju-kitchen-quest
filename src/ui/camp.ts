@@ -8,7 +8,7 @@ import { BASES, PROCS, SETS, UNIQUES, itemIcon, canWear, ownerOf, GRADES, GRADE_
 import { TIER_NAMES, clearCount, likelyTier } from '../sim/loot';
 import { BRANCH_LV, SKILLS, MAX_SKILL, rankLv, type SkillDef, type SkillKind, ULTS, ULT_LV, branchesFor, skillsOf } from '../sim/skills';
 import { STAGES, WORLDS, BONUS_STAGES, stageById } from '../sim/stages';
-import { type HeroProfile, STAT_INFO, STATS, derive, xpFor } from '../sim/stats';
+import { type Derived, type HeroProfile, STAT_INFO, STATS, derive, xpFor } from '../sim/stats';
 import type { BoxTier, LootBox, StageDef } from '../sim/types';
 import { HARD_LV } from '../sim/world';
 import {
@@ -19,7 +19,7 @@ import { UI_CSS } from './style';
 import { freePage, startFree } from './free';
 import type { FreeMode } from '../sim/free';
 import { gearSkillOf, gearText } from '../sim/gear';
-import { type TreePath, allActives, canLearn, nodeById, nodeLv, pointsIn, rankOf, skillUnlocked, statText, treeOf, loadoutOf } from '../sim/tree';
+import { type TreeNode, type TreePath, allActives, canLearn, nodeById, nodeLv, pointsIn, rankOf, skillUnlocked, statText, treeOf, loadoutOf } from '../sim/tree';
 import { logError } from './report';
 import { isTouchDevice } from '../touch';
 import { ACHIEVEMENTS, DAILY_BONUS, achievements, checkUnlocks, claimAch, claimBonus, claimKaijuQuest, claimQuest, claimable, dailyQuests, kaijuQuestState, rewardText, track, unlockProgress } from '../quests';
@@ -32,6 +32,10 @@ import { bossWeaponFor } from '../sim/bossgearData';
 import { dropName } from '../sim/drops';
 import type { MobKind } from '../sim/types';
 import { isMuted, sfx, toggleMute } from '../audio';
+import { ELEMENT_INFO, type Element, GUARD_BREAK_ELEMENT, RESEASON_ELEMENTS, type StageElements, canReseason, elementsOfGear, elementsOfGearSkill, elementsOfSkill, reseasonCost, reseasonItem, stageElements, weakOf } from '../sim/elements';
+import { ELEMENT_CSS, elHtml, elsHtml, tickHtml, weakHtml } from './elementUi';
+import { applyBranch, applyMod } from '../sim/skills';
+import { findWeapon, reseason, reseasonBlock } from '../save';
 
 type Tab = 'map' | 'free' | 'hero' | 'skills' | 'bag' | 'market' | 'boxes' | 'quests';
 type BagTab = Slot | 'items';
@@ -77,12 +81,24 @@ function dropRow(st: StageDef): string {
   const need = new Map<MobKind, number>();
   for (const m of st.maps ?? []) if (m.goal?.kind === 'collect') for (const q of m.goal.wants) need.set(q.mob, (need.get(q.mob) ?? 0) + q.n);
   if (!need.size) return '';
-  return `<div class="lv dropreq">Drops: ${[...need].map(([k, n]) => { const have = save.drops?.[k] ?? 0; return `<span class="${have >= n ? 'ok' : ''}" title="${dropName(k)} from ${MOB_DEFS[k].name}"><img src="art/drop-${k}.webp" onerror="this.style.display='none'"> ${Math.min(have, n)}/${n}</span>`; }).join('')}</div>`;
+  return `<div class="lv dropreq">Drops: ${[...need].map(([k, n]) => { const have = save.drops?.[k] ?? 0; return `<span class="${have >= n ? 'ok' : ''}" title="${dropName(k)} from ${MOB_DEFS[k].name} (weak to ${ELEMENT_INFO[weakOf(k)].name})"><img src="art/drop-${k}.webp" onerror="this.style.display='none'">${elHtml(weakOf(k))} ${Math.min(have, n)}/${n}</span>`; }).join('')}</div>`;
+}
+/** What the stage picked on the map is weak to (with this kaiju's nemesis at stage 5): the green ticks in the kit screens use it. */
+function selStageEl(): { st: StageDef; se: StageElements } {
+  const st = STAGES.find(s => s.id === selStage) ?? [...STAGES].reverse().find(stageUnlocked) ?? STAGES[0];
+  return { st, se: stageElements(st, save.selected) };
+}
+/** A skill as it is cast: its upgrade choice and tree / signature upgrades applied (its element can come from those). */
+const castOf = (d: Derived, a: SkillDef): SkillDef => applyMod(applyBranch(a, d.branch[a.id]), d.mods[a.id]);
+/** The small "what does the tick mean" line for the kit screens. */
+function fitNote(): string {
+  const { st, se } = selStageEl(), line = weakHtml(se);
+  return line ? `<div class="fitnote weakln">${st.num} ${esc(st.name)} · ${line} · <abbr class="eltick">✓</abbr> = fits it</div>` : '';
 }
 export function initCamp(play: (stageId: string, skip?: boolean) => void, online: () => void = () => {}): void {
   onPlay = play; onOnline = online;
   const st = document.createElement('style');
-  st.textContent = UI_CSS + CAMP_CSS;
+  st.textContent = UI_CSS + CAMP_CSS + ELEMENT_CSS;
   document.head.appendChild(st);
   el = document.createElement('div');
   el.id = 'camp';
@@ -102,7 +118,7 @@ export function hideCamp(): void { el.classList.remove('on'); }
 
 const esc = (s: string) => s.replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]!));
 const iconHtml = (it: Item | undefined, extra = '', badge = '') => it
-  ? `<div class="icon" style="--rc:${RARITY_CSS[it.rarity]};background-image:url(art/${itemIcon(it)}.webp)" ${extra}>${it.skill ? '<span class="sk">⭐</span>' : ''}${it.plus ? `<b>+${it.plus}</b>` : ''}${isLocked(it.id) ? '<span class="lk">🔒</span>' : ''}<span class="gr" style="color:${GRADE_CSS[gradeOf(it)]}">${GRADES[gradeOf(it)]}</span>${it.set ? '<span class="setm">SET</span>' : ''}${it.unique ? '<span class="uqm">✦</span>' : ''}${badge}</div>`
+  ? `<div class="icon" style="--rc:${RARITY_CSS[it.rarity]};background-image:url(art/${itemIcon(it)}.webp)" ${extra}>${it.skill ? '<span class="sk">⭐</span>' : ''}${it.plus ? `<b>+${it.plus}</b>` : ''}${isLocked(it.id) ? '<span class="lk">🔒</span>' : ''}<span class="gr" style="color:${GRADE_CSS[gradeOf(it)]}">${GRADES[gradeOf(it)]}</span>${it.set ? '<span class="setm">SET</span>' : ''}${it.unique ? '<span class="uqm">✦</span>' : ''}${elementsOfGear(it).map(e => `<span class="elb">${ELEMENT_INFO[e].icon}</span>`).join('')}${badge}</div>`
   : `<div class="icon" ${extra}></div>`;
 /** ▲ / ▼ versus what the current hero wears. */
 function badgeFor(it: Item): string {
@@ -179,6 +195,7 @@ function mapPage(): string {
   const rank = (save.hard ? hero().hardCleared : hero().cleared)[sel.id] as Rank | undefined;
   const lv = (n: number) => n + (save.hard ? HARD_LV : 0);
   const low = p.level < lv(sel.rec) - 1;
+  const se = stageElements(sel, p.species);
   return `<div class="mappages">${MAPS.map((m, i) => { const open = m.worlds.some(w => stageUnlocked(STAGES.find(s => s.id === `${w}-1`)!)); return `<button class="${m === mp ? 'on' : ''}" data-mappage="${i}" ${open ? '' : 'disabled'}>${open ? '' : '🔒 '}${m.name}</button>`; }).join('')}</div>
   <div class="map">
     <div class="mapimg" style="background-image:url(art/${mp.img}.webp)">
@@ -198,8 +215,9 @@ function mapPage(): string {
       <div class="nm">${sel.name}</div>
       <div class="lv">Monsters Lv ${lv(sel.lv[0])}${sel.lv[1] !== sel.lv[0] ? '–' + lv(sel.lv[1]) : ''} · <span style="color:${low ? '#ff8a8a' : '#a8f0a8'}">you Lv ${p.level}${low ? ' (low!)' : ''}</span></div>
       <div class="lv">Reward: ${rewardLine(sel)}</div>
-      ${sel.boss ? (() => { const bw = bossWeaponFor(WORLDS[sel.world - 1].boss, p.species); return bw ? `<div class="lv" style="color:#ffb347" title="${bw.skill}">⚔ Can drop: <img src="art/${bw.base}.webp" style="height:1.3em;vertical-align:middle"> ${bw.name}</div>` : ''; })() : ''}
-      ${sel.maps ? `<div class="lv" style="color:#ff9a6a">☠ Boss: ${!hero().cleared[sel.id] ? '???' : sel.id.endsWith('-5') && sel.world <= 5 && nemesisOf(p.species) ? MOB_DEFS[nemesisOf(p.species)!].name : sel.mobs[0] ? MOB_DEFS[sel.mobs[0].kind].name : '???'}</div>${dropRow(sel)}` : ''}
+      ${sel.boss ? (() => { const bw = bossWeaponFor(WORLDS[sel.world - 1].boss, p.species); return bw ? `<div class="lv" style="color:#ffb347" title="${bw.skill}">⚔ Can drop: <img src="art/${bw.base}.webp" style="height:1.3em;vertical-align:middle"> ${elsHtml(elementsOfGearSkill(GEAR[bw.base]))}${bw.name}</div>` : ''; })() : ''}
+      ${(l => l ? `<div class="lv weakln">${l}</div>` : '')(weakHtml(sel.maps ? { ...se, boss: undefined } : se))}
+      ${sel.maps ? `<div class="lv" style="color:#ff9a6a">☠ Boss: ${!hero().cleared[sel.id] ? '???' : sel.id.endsWith('-5') && sel.world <= 5 && nemesisOf(p.species) ? MOB_DEFS[nemesisOf(p.species)!].name : sel.mobs[0] ? MOB_DEFS[sel.mobs[0].kind].name : '???'}${se.boss ? ` · weak ${elHtml(se.boss.weakTo)} <small class="shrug">(shrugs off ${elHtml(se.boss.resists)})</small>` : ''}</div>${dropRow(sel)}` : ''}
       ${sel.objective ? `<div class="lv" style="color:#ffd27a">${({ escort: '🧁 Escort the lost Crumblet', fetch: `📜 Grab the Recipe Scroll in ${sel.objective.t}s`, survive: `⏱ Hold out for ${sel.objective.t}s` })[sel.objective.kind]} · bonus box</div>` : ''}
       ${STORIES[p.species]?.variants[sel.id] ? (() => { const v = VARIANT_INFO[STORIES[p.species].variants[sel.id]]; return `<div class="lv vtx">${v.icon} Story twist: <b>${v.name}</b> — ${v.desc}</div>`; })() : ''}
       <div class="lv story">📖 ${STORIES[p.species]?.title ?? ''}${beatBefore(sel.id, sel.id === '1-1').some(b => p.seen.includes(b)) || (sel.boss && p.seen.includes(`w${sel.world}-after`)) ? ` <button class="mini" data-replay="${sel.id}" title="Replay this stage's scenes">↻</button>` : ''} <button class="mini" data-act="storymode" title="Story scenes: every stage, or only the big ones">${save.storyMode === 'key' ? 'Key scenes' : 'All scenes'}</button></div>
@@ -207,7 +225,7 @@ function mapPage(): string {
       ${challengesFor(sel.id).length ? `<details class="lv chal"><summary>${challengesFor(sel.id).map(c => (save.challenges?.[sel.id] ?? []).includes(c.id) ? '★' : '☆').join('')} Challenges <small>▸</small></summary>${challengesFor(sel.id).map(c => { const ok = (save.challenges?.[sel.id] ?? []).includes(c.id); return `<span class="${ok ? 'ok' : ''}">${ok ? '★' : '☆'} ${c.name}: <small>${c.desc}</small></span>`; }).join('')}<small class="stars">World stars ${worldStars(sel.world)}/${STARS_FOR_SECRET} open the secret stage</small></details>` : ''}
       ${(save.keys ?? []).includes(sel.world) ? (() => { const b = BONUS_STAGES[sel.world - 1]; return `<button class="pill big secret" data-play="${b.id}">🗝 ${b.name} <small>Lv ${b.lv[0]}–${b.lv[1]}</small></button>`; })() : sel.id.endsWith('-7') ? '<div class="lv" style="color:#ffd27a">🗝 A secret chest here hides this world\'s key</div>' : ''}
       <div class="lv buddy">🤝 Buddy <button class="pill" data-act="buddy">${save.buddy != null && save.buddy !== p.species && save.unlocked.includes(save.buddy) ? `<img src="art/kaiju-${save.buddy}.webp"> ${CLASSES.find(c => c.species === save.buddy)!.name}` : 'None'} ▸</button></div>
-      <div class="playrow"><button class="pill go big" data-play="${sel.id}" ${stageUnlocked(sel) ? '' : 'disabled'}>${stageUnlocked(sel) ? '▶ PLAY' : '🔒 LOCKED'}</button><button class="pill online" data-act="online">🌐 ONLINE</button>${sel.maps && stageUnlocked(sel) && canSkip(sel) ? `<button class="pill skip" data-skip="${sel.id}" title="Hand in the drops for every map's exit and start in the boss room">⚡ SKIP TO BOSS</button>` : ''}</div>
+      <div class="playrow"><button class="pill go big" data-play="${sel.id}" ${stageUnlocked(sel) ? '' : 'disabled'}>${stageUnlocked(sel) ? '▶ PLAY' : '🔒 LOCKED'}</button><button class="pill online" data-act="online">🌐 ONLINE</button>${sel.maps && stageUnlocked(sel) && canSkip(sel) ? `<button class="pill skip" data-skip="${sel.id}" title="Hand in the drops for every map's exit and start in the boss room">⚡ SKIP TO BOSS</button><small class="skipinfo">no chillies · no stars · best rank A</small>` : ''}</div>
       ${(() => {
         const mode = save.nightmare && nightmareOk ? 'nm' : save.hard ? 'hard' : 'normal';
         return `<div class="diff"><button class="${mode === 'normal' ? 'on' : ''}" data-act="diff-normal">Normal</button><button class="${mode === 'hard' ? 'on' : ''} ${hardOk ? '' : 'locked'}" data-act="diff-hard">${hardOk ? '' : '🔒 '}Hard</button><button class="nmb ${mode === 'nm' ? 'on' : ''} ${nightmareOk ? '' : 'locked'}" data-act="diff-nm">${nightmareOk ? '💀' : '🔒'} Nightmare</button></div>`
@@ -216,7 +234,7 @@ function mapPage(): string {
       ${hero().cleared['1-10'] || (save.spicy ?? []).length ? (() => {
         const n = (save.spicy ?? []).length;
         return `<button class="mini chal ${n ? 'on' : ''}" data-act="spicyopen">🌶 Challenges${n ? ` (${n} on: +${n} box${n > 1 ? 'es' : ''}, +${25 * n}% crumbs)` : ''} ${spicyOpen ? '▾' : '▸'}</button>`
-          + (spicyOpen ? `<div class="spicy">${SPICY_LIST.map(([k, ic, nm, ds]) => `<button class="chili ${(save.spicy ?? []).includes(k) ? 'on' : ''}" data-spicy="${k}" title="${ds}">${ic} ${nm}</button>`).join('')}<small>Optional: make a stage harder for an extra box and crumbs each.</small></div>` : '');
+          + (spicyOpen ? `<div class="spicy">${SPICY_LIST.map(([k, ic, nm, ds]) => `<button class="chili ${(save.spicy ?? []).includes(k) ? 'on' : ''}" data-spicy="${k}" title="${ds}">${ic} ${nm}</button>`).join('')}<small>Optional: make a stage harder for an extra box and crumbs each.</small>${n && sel.maps && stageUnlocked(sel) && canSkip(sel) ? '<small class="skipwarn">Chillies don\'t apply when you skip to the boss</small>' : ''}</div>` : '');
       })() : ''}
     </div>
   </div>
@@ -240,6 +258,7 @@ function heroPage(): string {
   const sugar = save.items.sugar ?? 0;
   const statRow = (s: Stat) => `<div><span>${s.toUpperCase()} <b>${d.prim[s]}</b><small>${STAT_INFO[s]}</small></span><span>${sugar ? `<button class="plus gold" data-sugar="${s}" title="Golden Sugar Cube">🧊</button>` : ''}<button class="plus" data-stat="${s}" ${p.statPts ? '' : 'disabled'}>+</button></span></div>`;
   const pct = (v: number) => `${Math.round(v * 100)}%`;
+  const fit = selStageEl();
   return `<div class="hero">
     <div class="portrait"><img src="art/kaiju-${p.species}.webp"><h2>${cls.name}</h2><div class="role">${cls.role}</div>
       <div style="font-size:2.4vmin;margin-top:1vmin">Level ${p.level}</div><div class="bar"><i style="width:${Math.min(100, p.xp / need * 100)}%"></i></div><div style="font-size:1.7vmin;color:#b8a8b8">${p.xp} / ${need} XP</div></div>
@@ -257,7 +276,7 @@ function heroPage(): string {
       return `<button class="slot" data-eqslot="${s}">${iconHtml(it)}<div class="t">${it ? `<span style="color:${RARITY_CSS[it.rarity]};display:inline;font-size:2.1vmin">${esc(itemName(it))}</span><span>${itemLines(it).map(lineText).join(' · ')}${it.skill ? ` · ⭐ ${skillText(it)}` : ''}</span>` : `${SLOT_NAMES[s]}<span>Empty — tap to pick from the Bag</span>`}</div></button>`;
     }).join('')}</div>
     ${Object.entries(d.sets).filter(([, n]) => n >= 2).map(([k, n]) => `<div class="st" style="margin-top:1vmin"><b>${SETS[k].name}</b> ${n}/3: <span class="on">${SETS[k].two}</span>${n >= 3 ? ` · <span class="on">${SETS[k].three}</span>` : ''}</div>`).join('')}
-    ${d.gear ? `<div class="gs">🗡 GEAR SKILL <b>${d.gear.name}</b>: ${gearText(d.gear)} <small>(${isTouchDevice ? 'GEAR button' : 'F'}, ${d.gear.cd}s)</small></div>` : '<div class="gs">🗡 Equip a weapon to get a GEAR SKILL (its own button)</div>'}
+    ${d.gear ? `<div class="gs">🗡 GEAR SKILL ${elsHtml(elementsOfGearSkill(d.gear))}<b>${d.gear.name}</b>${tickHtml(elementsOfGearSkill(d.gear), fit.se, fit.st.num)}: ${gearText(d.gear)} <small>(${isTouchDevice ? 'GEAR button' : 'F'}, ${d.gear.cd}s)</small></div>` : '<div class="gs">🗡 Equip a weapon to get a GEAR SKILL (its own button)</div>'}
     ${d.uniques.map(u => `<div class="uq">✦ ${UNIQUES[u].name}: ${UNIQUES[u].effect}</div>`).join('')}
     ${d.procs.map(k => `<div class="pr">⚡ ${PROCS[k].name}: ${PROCS[k].effect}</div>`).join('')}
     <button class="pill go" data-act="best" style="margin-top:1.2vmin">⚡ EQUIP BEST</button>
@@ -269,7 +288,7 @@ function heroPage(): string {
 function specialHtml(it: Item): string {
   let out = '';
   const g = BASES[it.base].slot === 'weapon' ? gearSkillOf(it) : undefined;
-  if (g) out += `<div class="gs">🗡 Gear skill <b>${g.name}</b>: ${gearText(g)}</div>`;
+  if (g) { const els = elementsOfGearSkill(g), fit = selStageEl(); out += `<div class="gs">🗡 Gear skill ${elsHtml(els)}<b>${g.name}</b>${tickHtml(els, fit.se, fit.st.num)}: ${gearText(g)}</div>`; }
   if (it.unique) { const u = UNIQUES[it.unique]; out += `<div class="uq">✦ ${u.for !== undefined ? `${CLASSES.find(c => c.species === u.for)?.name ?? ''} signature: ` : ''}${u.effect}</div>`; }
   if (it.proc) out += `<div class="pr">⚡ ${PROCS[it.proc].name}: ${PROCS[it.proc].effect}</div>`;
   if (it.set) {
@@ -285,6 +304,14 @@ function skillText(it: Item): string { return it.skill!.id === 'all' ? `+${it.sk
 let skillView: 'tree' | 'skills' = 'tree';
 let selNode: string | null = null;
 let pickSlot: number | null = null;
+/** The element a tree node gives: a new skill's own, or the one an upgrade adds to its skill (Seed Spray+ starts to burn). */
+function nodeEls(species: number, n: TreeNode): Element[] {
+  if (n.kind === 'skill' && n.skill) return elementsOfSkill(n.skill);
+  const base = n.mod && allActives(species).find(a => a.id === n.mod!.skill);
+  if (!base) return [];
+  const was = elementsOfSkill(base);
+  return elementsOfSkill(base, n.mod!.mod).filter(e => !was.includes(e));
+}
 function treeHtml(p: HeroProfile): string {
   const paths = treeOf(p.species);
   const sel = selNode ? nodeById(p.species, selNode) : null;
@@ -292,13 +319,13 @@ function treeHtml(p: HeroProfile): string {
     const pts = pointsIn(p, t);
     return `<div class="tpath ${t.arch}"><div class="tph">${t.icon} ${t.name}<small>${pts} pts</small></div>${t.nodes.map((n, row) => {
       const r = rankOf(p, n.id), can = canLearn(p, n.id), open = (row === 0 || rankOf(p, t.nodes[row - 1].id) > 0) && pts >= n.need;
-      return `<button class="tnode ${n.kind} ${r ? 'got' : ''} ${r >= n.ranks ? 'max' : ''} ${can ? 'can' : ''} ${open ? '' : 'shut'} ${selNode === n.id ? 'sel' : ''}" data-tnode="${n.id}"><i>${open ? n.icon : '🔒'}</i><b>${n.name}</b><u>${r}/${n.ranks}</u></button>`;
+      return `<button class="tnode ${n.kind} ${r ? 'got' : ''} ${r >= n.ranks ? 'max' : ''} ${can ? 'can' : ''} ${open ? '' : 'shut'} ${selNode === n.id ? 'sel' : ''}" data-tnode="${n.id}"><i>${open ? n.icon : '🔒'}</i><b>${elsHtml(nodeEls(p.species, n))}${n.name}</b><u>${r}/${n.ranks}</u></button>`;
     }).join('')}</div>`;
   };
   const detail = sel ? (() => {
     const { node: n, path, row } = sel, r = rankOf(p, n.id), can = canLearn(p, n.id);
     const why = r >= n.ranks ? 'Maxed out' : p.level < nodeLv(row, r + 1) ? `Needs hero Lv ${nodeLv(row, r + 1)}` : p.skillPts <= 0 ? 'No points to spend (you get 1 per level)' : pointsIn(p, path) < n.need ? `Needs ${n.need} points in ${path.name} (you have ${pointsIn(p, path)})` : row > 0 && !rankOf(p, path.nodes[row - 1].id) ? `Learn ${path.nodes[row - 1].name} first` : '';
-    return `<div class="tdetail"><b>${n.icon} ${n.name}</b> <small>${n.kind === 'skill' ? 'NEW SKILL' : n.kind === 'cap' ? 'CAPSTONE' : n.kind === 'mod' ? 'UPGRADE' : n.kind === 'mastery' ? 'MASTERY' : 'BOOST'} · rank ${r}/${n.ranks}</small><span>${n.desc}${n.stat && r ? ` <em>(now: ${statText(n.stat, n.kind === 'cap' ? 1 : r)})</em>` : ''}</span>
+    return `<div class="tdetail"><b>${n.icon} ${elsHtml(nodeEls(p.species, n))}${n.name}</b> <small>${n.kind === 'skill' ? 'NEW SKILL' : n.kind === 'cap' ? 'CAPSTONE' : n.kind === 'mod' ? 'UPGRADE' : n.kind === 'mastery' ? 'MASTERY' : 'BOOST'} · rank ${r}/${n.ranks}</small><span>${n.desc}${n.stat && r ? ` <em>(now: ${statText(n.stat, n.kind === 'cap' ? 1 : r)})</em>` : ''}</span>
       <button class="pill ${can ? 'go' : ''}" data-learn="${n.id}" ${can ? '' : 'disabled'}>${can ? 'LEARN +1' : why}</button></div>`;
   })() : '<div class="tdetail hint">Tap a node to see what it does. Each path gets stronger the more points you put in it: its new skill opens at 5 points, its capstone at 15.</div>';
   return `<div class="tree">${paths.map(col).join('')}</div>${detail}`;
@@ -306,7 +333,10 @@ function treeHtml(p: HeroProfile): string {
 
 function skillsPage(): string {
   const p = hero(), d = derive(p), sk = skillsOf(p.species);
-  const card = (s: { id: string; name: string; desc: string; unlock: number; kind?: SkillKind }, icon: string, extra: string) => {
+  const fit = selStageEl();
+  const elsOf = (a: SkillDef) => elementsOfSkill(castOf(d, a));
+  const mark = (els: Element[]) => tickHtml(els, fit.se, fit.st.num);
+  const card = (s: { id: string; name: string; desc: string; unlock: number; kind?: SkillKind }, icon: string, extra: string, els: Element[] = []) => {
     const learned = p.skills[s.id] ?? 0, eff = d.skillLv[s.id] ?? 0;
     const locked = p.level < s.unlock;
     const nextLv = rankLv(s.unlock, learned + 1);
@@ -314,7 +344,7 @@ function skillsPage(): string {
     const pips = Array.from({ length: Math.max(MAX_SKILL, eff) }, (_, i) => `<i class="${i < learned ? 'on' : i < eff ? 'bonus' : ''}"></i>`).join('');
     const br = s.kind ? branchesFor(s as SkillDef) : null, chosen = p.branch?.[s.id];
     const branchHtml = br ? (chosen ? `<span class="brc">⑂ ${br[chosen === 'a' ? 0 : 1].name}: ${br[chosen === 'a' ? 0 : 1].desc}</span>` : learned >= BRANCH_LV ? `<span class="brpick">Choose an upgrade: ${br.map(b => `<button class="pill go" data-branch="${s.id}:${b.id}">${b.name} <small>${b.desc}</small></button>`).join('')}</span>` : `<span class="brlock">⑂ Upgrade choice at skill Lv ${BRANCH_LV}: ${br[0].name} or ${br[1].name}</span>`) : '';
-    return `<div class="skill ${locked ? 'locked' : ''}"><div class="ic">${icon}</div><div class="t"><b>${s.name}</b> ${learned ? `Lv ${eff}` : ''}<span>${s.desc}</span><span>${locked ? `🔒 Unlocks at hero Lv ${s.unlock}` : learned ? extra : 'Not learned yet — spend a point'}${!locked && learned < MAX_SKILL && p.level < nextLv ? ` · next rank at hero Lv ${nextLv}` : ''}</span>${branchHtml}<div class="pips">${pips}</div></div>
+    return `<div class="skill ${locked ? 'locked' : ''}"><div class="ic">${icon}</div><div class="t"><b>${elsHtml(els)}${s.name}</b>${mark(els)} ${learned ? `Lv ${eff}` : ''}<span>${s.desc}</span><span>${locked ? `🔒 Unlocks at hero Lv ${s.unlock}` : learned ? extra : 'Not learned yet — spend a point'}${!locked && learned < MAX_SKILL && p.level < nextLv ? ` · next rank at hero Lv ${nextLv}` : ''}</span>${branchHtml}<div class="pips">${pips}</div></div>
       <button class="pill ${can ? 'go' : ''}" data-skill="${s.id}" ${can ? '' : 'disabled'}>+</button></div>`;
   };
   const head = `<div class="subtabs"><button class="${skillView === 'tree' ? 'on' : ''}" data-act="sv-tree">🌳 TREE</button><button class="${skillView === 'skills' ? 'on' : ''}" data-act="sv-skills">⚔ SKILLS</button>
@@ -322,13 +352,14 @@ function skillsPage(): string {
       ${save.items.scroll ? `<button class="pill" data-act="scroll" style="font-size:1.7vmin;padding:0.5vmin 1.2vmin">📜 RESET POINTS ×${save.items.scroll}</button>` : ''}</div>`;
   if (skillView === 'tree') return head + treeHtml(p);
   const lo = d.actives, mine = allActives(p.species).filter(a => skillUnlocked(p, a.id));
-  const loadout = `<div class="loadout"><span>Buttons:</span>${lo.map((a, i) => `<button class="slot ${pickSlot === i ? 'on' : ''}" data-slot="${i}"><i>${i + 1}</i>${SKILL_ICON[a.kind] ?? '★'} ${a.name}</button>`).join('')}
-      ${pickSlot !== null ? `<div class="pick">Put on button ${pickSlot + 1}: ${mine.map(a => `<button class="pill ${lo[pickSlot!]?.id === a.id ? 'go' : ''}" data-equipskill="${a.id}">${SKILL_ICON[a.kind] ?? '★'} ${a.name}</button>`).join('')}</div>` : '<small>Tap a button to swap in another skill. New skills come from the 🌳 tree.</small>'}</div>`;
+  const loadout = `<div class="loadout"><span>Buttons:</span>${lo.map((a, i) => `<button class="slot ${pickSlot === i ? 'on' : ''}" data-slot="${i}"><i>${i + 1}</i>${SKILL_ICON[a.kind] ?? '★'} ${elsHtml(elsOf(a))}${a.name}${mark(elsOf(a))}</button>`).join('')}
+      ${pickSlot !== null ? `<div class="pick">Put on button ${pickSlot + 1}: ${mine.map(a => `<button class="pill ${lo[pickSlot!]?.id === a.id ? 'go' : ''}" data-equipskill="${a.id}">${SKILL_ICON[a.kind] ?? '★'} ${elsHtml(elsOf(a))}${a.name}${mark(elsOf(a))}</button>`).join('')}</div>` : '<small>Tap a button to swap in another skill. New skills come from the 🌳 tree.</small>'}</div>
+    ${fitNote()}<div class="fitnote">${elHtml(GUARD_BREAK_ELEMENT)} Guard Break (hold DOWN and attack) is ${ELEMENT_INFO[GUARD_BREAK_ELEMENT].name}: every kaiju has it${mark([GUARD_BREAK_ELEMENT])}</div>`;
   const line = (a: SkillDef) => `${lo.includes(a) ? `Button ${lo.indexOf(a) + 1}` : 'Not on a button'} · ${a.kind === 'buff' ? `${a.buff?.t}s buff` : a.kind === 'heal' ? 'heal' : `${Math.round(a.dmg * 100)}% dmg`} · ${a.cd}s cooldown`;
   return `${head}${loadout}
-    <div class="skills">${mine.map(a => card(a, SKILL_ICON[a.kind] ?? '★', line(a))).join('')}
+    <div class="skills">${mine.map(a => card(a, SKILL_ICON[a.kind] ?? '★', line(a), elsOf(a))).join('')}
     ${card(sk.passive, '💗', 'Passive: always on')}
-    ${ULTS[p.species] ? `<div class="skill ult ${p.level < ULT_LV ? 'locked' : ''}"><div class="ic">🔥</div><div class="t"><b>ULTIMATE: ${ULTS[p.species].name}</b><span>${ULTS[p.species].desc}</span><span>${p.level < ULT_LV ? `🔒 Unlocks at hero Lv ${ULT_LV}` : 'Fill the gauge by landing and taking hits, then press ULT (key U). Invincible while it plays.'}</span></div></div>` : ''}</div>`;
+    ${ULTS[p.species] ? `<div class="skill ult ${p.level < ULT_LV ? 'locked' : ''}"><div class="ic">🔥</div><div class="t"><b>${elsHtml(elementsOfSkill(ULTS[p.species]))}ULTIMATE: ${ULTS[p.species].name}</b>${mark(elementsOfSkill(ULTS[p.species]))}<span>${ULTS[p.species].desc}</span><span>${p.level < ULT_LV ? `🔒 Unlocks at hero Lv ${ULT_LV}` : 'Fill the gauge by landing and taking hits, then press ULT (key U). Invincible while it plays.'}</span></div></div>` : ''}</div>`;
 }
 
 // ---------- bag ----------
@@ -395,19 +426,64 @@ function detail(it: Item, equipped: boolean): string {
       <div class="h3" style="font-size:2.2vmin;margin:1vmin 0 0">💎 Grade <small>D ×0.85 · C ×1 · B ×1.12 · A ×1.25 · S ×1.4</small></div>
       <div class="fbtns"><button class="pill" data-act="regrade" data-id="${it.id}" ${save.items.gstone ? '' : 'disabled'}>RE-GRADE (${save.items.gstone ?? 0}) <small>can go down</small></button>
       <button class="pill ${save.items.ggstone ? 'go' : ''}" data-act="regrade-gold" data-id="${it.id}" ${save.items.ggstone && gradeOf(it) < 4 ? '' : 'disabled'}>GOLDEN (${save.items.ggstone ?? 0}) <small>never down</small></button></div>
+      ${reseasonHtml(it)}
     </div></div>`;
+}
+
+// ---------- re-season (Market tab and the weapon's item card) ----------
+/** the element picked for the weapon being looked at (nothing is paid until RE-SEASON is tapped) */
+let reEl: Element | null = null, reFor: number | null = null;
+/** Market: which weapon is picked */
+let reItem: number | null = null;
+let marketView: 'shop' | 'reseason' = 'shop';
+const RESEASON_LINE = `Give an ordinary weapon's gear skill a new element: ${RESEASON_ELEMENTS.map(e => ELEMENT_INFO[e].icon).join(' ')}. Its stats stay the same.`;
+/** Pick an element, see the new name and gear skill and the price, then pay. Weapons only ('' for armour and charms). */
+function reseasonHtml(it: Item): string {
+  if (BASES[it.base].slot !== 'weapon') return '';
+  if (reFor !== it.id) { reFor = it.id; reEl = null; }
+  const head = '<div class="h3" style="font-size:2.2vmin;margin:1vmin 0 0">🧂 Re-season <small>a new element for its gear skill · stats stay</small></div>';
+  if (!canReseason(it)) return `${head}<div class="have">Not for ${it.unique ? 'named legendaries' : 'boss weapons'}: their gear skill is their own.</div>`;
+  if (reEl && reseasonBlock(it, reEl) === 'same') reEl = null;
+  const pick = RESEASON_ELEMENTS.map(e => {
+    const same = reseasonBlock(it, e) === 'same', i = ELEMENT_INFO[e];
+    return `<button class="pill ${reEl === e ? 'go' : ''}" data-reel="${e}" ${same ? 'disabled' : ''}>${same ? `already ${i.icon}` : `${i.icon} ${i.name}`}</button>`;
+  }).join('');
+  let pv = `<div class="have">Pick an element to see the new skill and the price.</div>`;
+  if (reEl) {
+    const after: Item = JSON.parse(JSON.stringify(it)); reseasonItem(after, reEl);
+    const g = gearSkillOf(after), els = elementsOfGearSkill(g), fit = selStageEl();
+    const cost = reseasonCost(it), short = reseasonBlock(it, reEl) === 'crumbs';
+    pv = `<div class="repv">Becomes <b style="color:${RARITY_CSS[it.rarity]}">${esc(itemName(after))}</b><br>🗡 ${elsHtml(els)}<b>${g?.name ?? ''}</b>${tickHtml(els, fit.se, fit.st.num)}: ${g ? gearText(g) : ''}</div>
+      <div class="fbtns"><button class="pill ${short ? '' : 'go'}" data-act="reseason" data-id="${it.id}" data-el="${reEl}" ${short ? 'disabled' : ''}>${short ? `Need 🍪 ${cost - save.crumbs} more crumbs` : `RE-SEASON 🍪 ${cost}`}</button>${short ? `<span class="have">costs 🍪 ${cost}</span>` : ''}</div>`;
+  }
+  return `${head}<div class="fbtns">${pick}</div>${pv}`;
+}
+/** Market: your ordinary weapons (the one you wear first), pick one, then the same block as on its item card. */
+function reseasonPage(): string {
+  const worn = hero().equip.weapon;
+  const list = [...(worn && canReseason(worn) ? [worn] : []), ...sortedBag('weapon').filter(i => canReseason(i))];
+  const it = list.find(i => i.id === reItem) ?? list[0];
+  reItem = it?.id ?? null;
+  const g = it ? gearSkillOf(it) : undefined;
+  return `<div class="purse">You have <b>🍪 ${save.crumbs}</b> crumbs. ${RESEASON_LINE} Named legendaries and boss weapons keep their own.</div>
+    ${it ? `<div class="reswrap"><div><div class="grid">${list.map(w => iconHtml(w, `data-reitem="${w.id}" style="--rc:${RARITY_CSS[w.rarity]};background-image:url(art/${itemIcon(w)}.webp);${w.id === it.id ? 'outline:3px solid #fff' : ''}"`, w === worn ? '<span class="cmp eq">worn</span>' : '')).join('')}</div></div>
+      <div class="detail"><div style="display:flex;gap:1.2vmin;align-items:center">${iconHtml(it)}<div><h3 style="color:${RARITY_CSS[it.rarity]}">${esc(itemName(it))}</h3>${RARITY_NAMES[it.rarity]} Weapon · iLv ${it.ilvl}${it === worn ? ' · worn' : ''}</div></div>
+        ${g ? `<div class="gs">🗡 Now: ${elsHtml(elementsOfGearSkill(g))}<b>${g.name}</b>: ${gearText(g)}</div>` : ''}
+        <div class="forge">${reseasonHtml(it)}</div></div></div>` : `<div class="empty">No ordinary weapons for ${CLASSES.find(c => c.species === save.selected)!.name} to re-season yet. Open boxes or buy one in the shop.</div>`}`;
 }
 
 // ---------- market ----------
 function marketPage(): string {
   const stock = shopStock();
-  return `<div class="market">
+  const sub = `<div class="subtabs"><button class="${marketView === 'shop' ? 'on' : ''}" data-act="mv-shop">🛒 SHOP</button><button class="${marketView === 'reseason' ? 'on' : ''}" data-act="mv-reseason">🧂 RE-SEASON</button></div>`;
+  if (marketView === 'reseason') return sub + reseasonPage();
+  return `${sub}<div class="market">
     <div><div class="h3">Pantry Market <small style="color:#b8a8b8;font-family:Nunito;font-size:1.8vmin">Gear restocks every day.</small></div>
       <div class="purse">You have <b>🍪 ${save.crumbs}</b> crumbs. Earn more by beating monsters, clearing stages and salvaging gear.</div>
       <div class="clist">${SHOP_ITEMS.map(id => { const c = CONSUMABLES[id]; return `<div class="citem"><img src="${cIcon(id)}"><div><b>${c.name}</b> <small>(own ${save.items[id] ?? 0})</small><span>${c.desc}</span></div><button class="pill ${save.crumbs >= c.price ? 'go' : ''}" data-buy="${id}" data-price="${c.price}">🍪 ${c.price}</button></div>`; }).join('')}
       ${SHOP_BOXES.map((b, i) => `<div class="citem"><img src="art/box-${b.tier}.webp"><div><b>${TIER_NAMES[b.tier]}</b><span>Loot box (gear at your progress level)</span></div><button class="pill ${save.crumbs >= b.price ? 'go' : ''}" data-buybox="${i}" data-price="${b.price}">🍪 ${b.price}</button></div>`).join('')}</div></div>
     <div><div class="h3">Today's gear</div>
-      ${stock.length ? stock.map(it => { const c = compare(save.selected, it); const price = gearPrice(it); return `<div class="gearoffer">${iconHtml(it, '', badgeFor(it))}<div class="t"><b style="color:${RARITY_CSS[it.rarity]}">${esc(itemName(it))}</b><span>${RARITY_NAMES[it.rarity]} ${SLOT_NAMES[BASES[it.base].slot]} · iLv ${it.ilvl}</span><span class="ln">${itemLines(it).map(lineText).join(' · ')}${it.skill ? ` · ⭐ ${skillText(it)}` : ''}</span>${c.pct === -Infinity ? `<span class="for">For ${ownerName(it)}</span>` : `<span class="${c.pct >= 0 ? 'up' : 'dn'}">${c.pct >= 0 ? '+' : ''}${c.pct.toFixed(1)}% for ${CLASSES.find(x => x.species === save.selected)!.name}</span>`}</div><button class="pill ${save.crumbs >= price ? 'go' : ''}" data-buygear="${it.id}" data-price="${price}">🍪 ${price}</button></div>`; }).join('') : '<div class="empty">Sold out! Come back tomorrow.</div>'}
+      ${stock.length ? stock.map(it => { const c = compare(save.selected, it); const price = gearPrice(it); return `<div class="gearoffer">${iconHtml(it, '', badgeFor(it))}<div class="t"><b style="color:${RARITY_CSS[it.rarity]}">${elsHtml(elementsOfGear(it))}${esc(itemName(it))}</b><span>${RARITY_NAMES[it.rarity]} ${SLOT_NAMES[BASES[it.base].slot]} · iLv ${it.ilvl}</span><span class="ln">${itemLines(it).map(lineText).join(' · ')}${it.skill ? ` · ⭐ ${skillText(it)}` : ''}</span>${c.pct === -Infinity ? `<span class="for">For ${ownerName(it)}</span>` : `<span class="${c.pct >= 0 ? 'up' : 'dn'}">${c.pct >= 0 ? '+' : ''}${c.pct.toFixed(1)}% for ${CLASSES.find(x => x.species === save.selected)!.name}</span>`}</div><button class="pill ${save.crumbs >= price ? 'go' : ''}" data-buygear="${it.id}" data-price="${price}">🍪 ${price}</button></div>`; }).join('') : '<div class="empty">Sold out! Come back tomorrow.</div>'}
     </div></div>`;
 }
 
@@ -441,8 +517,12 @@ function boxesPage(): string {
     <p style="color:#b8a8b8;font-size:2vmin">Better boxes roll rarer gear: Common → Uncommon → Rare → Epic → Legendary. Epic and Legendary gear can boost skills. Item level follows the monsters that dropped it.</p>`;
 }
 
+/** Every data attribute the camp's one click handler answers to. A button whose attribute is left out of this list looks
+ *  fine and does nothing (the Challenges chillies and SKIP TO BOSS were dead that way): tests/camp-clicks.test.ts checks
+ *  that every `ds.<name>` the handler reads is listed here. */
+const CLICKABLE = '[data-tab],[data-hero],[data-node],[data-play],[data-stat],[data-sugar],[data-skill],[data-item],[data-act],[data-box],[data-eqslot],[data-bag],[data-cons],[data-qslot],[data-buy],[data-buybox],[data-buygear],[data-branch],[data-mappage],[data-claimq],[data-claima],[data-replay],[data-claimk],[data-free],[data-tnode],[data-learn],[data-slot],[data-equipskill],[data-reel],[data-reitem],[data-spicy],[data-skip]';
 function onClick(e: MouseEvent): void {
-  const t = (e.target as HTMLElement).closest<HTMLElement>('[data-tab],[data-hero],[data-node],[data-play],[data-stat],[data-sugar],[data-skill],[data-item],[data-act],[data-box],[data-eqslot],[data-bag],[data-cons],[data-qslot],[data-buy],[data-buybox],[data-buygear],[data-branch],[data-mappage],[data-claimq],[data-claima],[data-replay],[data-claimk],[data-free],[data-tnode],[data-learn],[data-slot],[data-equipskill]');
+  const t = (e.target as HTMLElement).closest<HTMLElement>(CLICKABLE);
   if (!t || (t as HTMLButtonElement).disabled) return;
   sfx('click');
   const sp = save.selected;
@@ -479,6 +559,8 @@ function onClick(e: MouseEvent): void {
   else if (ds.slot) pickSlot = pickSlot === Number(ds.slot) ? null : Number(ds.slot);
   else if (ds.equipskill) { if (pickSlot !== null && setLoadout(sp, pickSlot, ds.equipskill)) { flash = 'Skill set on the button'; pickSlot = null; } }
   else if (ds.branch) { const [id, b] = ds.branch.split(':'); if (chooseBranch(sp, id, b as 'a' | 'b')) flash = 'Upgrade chosen! (A Recipe Scroll resets it)'; }
+  else if (ds.reel) reEl = reEl === ds.reel ? null : ds.reel as Element;
+  else if (ds.reitem) reItem = Number(ds.reitem);
   else if (ds.item) selItem = Number(ds.item);
   else if (ds.bag) { bagTab = ds.bag as BagTab; selItem = null; }
   else if (ds.cons) selConsumable = selConsumable === ds.cons ? null : ds.cons as ConsumableId;
@@ -515,6 +597,13 @@ function onClick(e: MouseEvent): void {
         if (r) { flash = r.to > r.from ? `💎 Grade up! ${GRADES[r.from]} → ${GRADES[r.to]}` : r.to < r.from ? `Grade down... ${GRADES[r.from]} → ${GRADES[r.to]}` : `Grade stayed ${GRADES[r.to]}`; sfx(r.to > r.from ? 'reveal3' : 'click'); }
         break;
       }
+      case 'reseason': {
+        const paid = reseason(Number(ds.id), ds.el as Element), it = findWeapon(Number(ds.id));
+        if (paid && it) { flash = `🧂 Re-seasoned for 🍪 ${paid}: now ${esc(itemName(it))}`; sfx('levelup'); reEl = null; }
+        break;
+      }
+      case 'mv-shop': marketView = 'shop'; break;
+      case 'mv-reseason': marketView = 'reseason'; break;
       case 'lock': toggleLock(Number(ds.id)); break;
       case 'salvage': salvage(Number(ds.id)); selItem = null; break;
       case 'salvage-worse': { const r = salvageWorse(); flash = r.n ? `Salvaged ${r.n} item${r.n > 1 ? 's' : ''} worse than every hero's gear: +🍪${r.crumbs}` : 'Nothing to salvage: every item beats someone\'s gear (or is locked)'; selItem = null; break; }
@@ -601,7 +690,7 @@ export function runGacha(indices: number[]): void {
 }
 
 // ---------- stage result ----------
-export function showResult(o: { stage: StageDef; res: ClearResult | null; time: number; hits: number; combo: number; xp: number; levels: number; failed: boolean; crumbs: number; hard: boolean; unlocked?: string[]; online?: boolean },
+export function showResult(o: { stage: StageDef; res: ClearResult | null; time: number; hits: number; combo: number; xp: number; levels: number; failed: boolean; crumbs: number; hard: boolean; unlocked?: string[]; online?: boolean; /** SKIP TO BOSS was used: the rank stops at A */ skipped?: boolean },
   act: (a: 'boxes' | 'next' | 'camp' | 'retry') => void): void {
   const r = document.getElementById('result')!;
   const nextStage = STAGES[STAGES.indexOf(o.stage) + 1];
@@ -611,6 +700,7 @@ export function showResult(o: { stage: StageDef; res: ClearResult | null; time: 
     <h2>${o.failed ? 'KNOCKED OUT!' : o.stage.boss ? 'BOSS DEFEATED!' : 'STAGE CLEAR!'}${o.hard ? ' <span style="color:#ff7a6a">(HARD)</span>' : ''}</h2>
     ${res ? `<div class="rk" style="color:${RANK_CSS[res.rank]}">${res.rank}</div>` : '<div style="font-size:9vmin;margin:1vmin">😵</div>'}
     <div class="st"><div>Time<b>${Math.floor(o.time / 60)}:${String(Math.floor(o.time % 60)).padStart(2, '0')}</b></div><div>Hits taken<b>${o.hits}</b></div><div>Best combo<b>${o.combo}</b></div><div>XP<b>+${o.xp}</b></div><div>Crumbs<b>+${o.crumbs}</b></div></div>
+    ${o.skipped && res ? '<div class="note skipnote">⚡ Skipped to the boss: best rank A, no chillies, no stars</div>' : ''}
     ${o.unlocked?.length ? `<div class="note" style="color:#7ee8c8">🎉 NEW KAIJU UNLOCKED: ${o.unlocked.join(', ')}! (starts at 1-1)</div>` : ''}
     ${o.levels ? `<div class="note">LEVEL UP ×${o.levels}! Spend your new stat and skill points at camp.</div>` : '<div class="note"></div>'}
     ${res ? `<div class="gots">${res.boxes.map((b: LootBox, i) => `<img src="art/box-${b.tier}.webp" title="${TIER_NAMES[b.tier]}" class="${i < res.upgraded ? 'up' : ''}">`).join('')}</div>
@@ -627,6 +717,14 @@ export function showResult(o: { stage: StageDef; res: ClearResult | null; time: 
 export function rankBetter(a: Rank, b: Rank): boolean { return RANK_ORDER.indexOf(a) > RANK_ORDER.indexOf(b); }
 
 const CAMP_CSS = `
+.kq .fitnote { font-size: 1.9vmin; color: #c8b8c8; margin: 0 0 0.8vmin; }
+.kq .reswrap { display: grid; grid-template-columns: 36vmin 1fr; gap: 2vmin; align-items: start; } .kq .reswrap .detail h3 { font-size: 2.6vmin; }
+.kq .icon .elb { position: absolute; left: 0.2vmin; top: 50%; transform: translateY(-50%); font-size: 1.7vmin; filter: drop-shadow(0 0 1px #000); } .kq .icon .elb + .elb { top: 78%; }
+.kq .repv { margin: 0.6vmin 0; color: #ffd27a; line-height: 1.35; } .kq .forge .fbtns .have { margin: 0; }
+.kq .map .info abbr.el { display: inline-block; font-size: 1.18em; line-height: 1.22; margin: -0.2em 0; padding: 0 0.06em; border-radius: 1em; background: color-mix(in srgb, var(--ec) 42%, #1a1020); box-shadow: inset 0 0 0 1px var(--ec); vertical-align: middle; }
+.kq .playrow .skipinfo { width: 100%; font-size: 1.6vmin; color: #ffd27a; margin-top: -0.4vmin; } .kq .spicy small.skipwarn { color: #ffd27a; }
+.kq .shrug { color: #b8a8b8; white-space: nowrap; }
+.kq .lv.dropreq abbr.el { font-size: 0.88em; margin-left: 0; padding: 0; } .kq .lv.dropreq { column-gap: 1vmin; }
 .kq .gs { color: #ffd27a; font-size: 1.9vmin; margin-top: 0.6vmin; } .kq .gs small { color: #b8a8b8; }
 .kq .pr { color: #9fe8ff; font-size: 1.9vmin; margin-top: 0.4vmin; }
 .kq .purse { font-size: 2vmin; color: #ffe9c7; background: #2a1a30; border-radius: 1.2vmin; padding: 0.6vmin 1.2vmin; margin: 0.4vmin 0 0.8vmin; }

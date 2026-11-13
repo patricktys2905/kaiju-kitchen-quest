@@ -88,7 +88,7 @@ const SPECS: Record<number, Spec[]> = {
        ['Grill Master', '🔥', 'craft', ['grillbreath', 'Grill Breath', 'wasabi', 'Breathes barbecue smoke that sets monsters burning', { burn: 3 }], [2, { n: 1 }], ['Flame Grilled', { dmg: 1.3, burn: 3 }, { skillDmg: 0.08 }]]],
   17: [['Skater', '⛸', 'power', ['icedash', 'Ice Dash', 'slice', 'Skates straight through monsters'], [0, { dmg: 1.3 }], ['Triple Axel', { echo: true }, { critDmg: 0.2 }]],
        ['Iceberg', '🧊', 'guard', ['iceshell', 'Iceberg Shell', 'wobble', 'An icy shell: less damage, shots bounce back'], [2, { cd: 0.8 }], ['Glacier', { cd: 0.8 }, { hpPct: 0.12 }]],
-       ['Blizzard', '❄', 'craft', ['iciclerain', 'Icicle Rain', 'toastado', 'Icicles rain down on the area ahead', { slow: true }], [1, { dmg: 1.3 }], ['Whiteout', { freeze: true }, { skillDmg: 0.08 }]]],
+       ['Blizzard', '❄', 'craft', ['iciclerain', 'Icicle Rain', 'toastado', 'Icicles rain down on the area ahead', { slow: true, el: 'COLD' }], [1, { dmg: 1.3 }], ['Whiteout', { freeze: true }, { skillDmg: 0.08 }]]],
   13: [['Drake', '🐲', 'power', ['drakedive', 'Drake Dive', 'dive', 'Swoops up and dives through monsters'], [0, { dmg: 1.3 }], ['Avocado Dragon', { echo: true }, { atkPct: 0.08 }]],
        ['Guac Shell', '🥑', 'guard', ['guacsnack', 'Guac Snack', 'feast', 'Eats a scoop of guac: heals'], [1, { reach: 1.3 }], ['Holy Guacamole', { cd: 0.85 }, { hpPct: 0.12 }]],
        ['Fiesta Magic', '🌶', 'craft', ['chilibreath', 'Chili Breath', 'wasabi', 'Breathes hot chili that sets monsters burning', { burn: 3 }], [2, { cd: 0.8 }], ['Extra Hot', { dmg: 1.3, burn: 3 }, { skillDmg: 0.08 }]]],
@@ -119,7 +119,9 @@ function buildTree(species: number): TreePath[] {
   const orig = SKILLS[species]?.actives ?? [];
   return (SPECS[species] ?? []).map(([name, icon, arch, [sid, sname, template, sdesc, over], [oi, omod], [cname, cmod, cstat]], pi) => {
     const A = ARCH[arch], id = (n: string) => `${species}.${pi}.${n}`;
-    const tpl = BY_ID[template];
+    // a new skill copies its template's numbers and mechanic, not its flavour: an element tag (SkillDef.el) is not inherited
+    // (Moon Pillar is not COLD because Bubbling Flasks is). Its element comes from its own `over` and from what it does.
+    const { el: _el, ...tpl } = BY_ID[template];
     const skill: SkillDef = { ...tpl, ...(over ?? {}), id: sid, name: sname, desc: sdesc, unlock: ROW_LV[2] };
     const target = orig[oi];
     const stat = (r: number) => { const [n, ic, s] = A.rows[r]; return { id: id(`s${r}`), name: n, icon: ic, kind: 'stat' as const, ranks: 5, stat: s as Partial<Record<TreeStat, number>>, desc: statText(s as Partial<Record<TreeStat, number>>) + ' per rank' }; };

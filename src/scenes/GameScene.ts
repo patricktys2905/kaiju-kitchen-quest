@@ -28,6 +28,8 @@ import { playStory } from '../ui/story';
 import { type QuipKind, TAUNTS } from '../story/banter';
 import { QUIPS } from '../story/more';
 import { CLASSES } from '../sim/classes';
+import { ELEMENT_INFO, stageElements, weakOf } from '../sim/elements';
+import { weakHtml } from '../ui/elementUi';
 import { setGearUi, setSkillUi, setTouchVisible, setUltUi } from '../touch';
 import { hideCamp, runGacha, showCamp, showResult, stageUnlocked } from '../ui/camp';
 import { type NetPlay, inGame, kitOf, launch, leaveOnline, net, netRunBoxes, showOnline } from '../ui/online';
@@ -64,7 +66,7 @@ let uiReady = false;
 
 /** A King's own painting (art key mob-<kind>, e.g. mob-kbun: scripts/kings-jobs.mjs) has a crown on top: drawn this much taller than the sim's height, so the body still fills the hit box. */
 const KING_ART_TALL = 1.2;
-interface MobView { img: Phaser.GameObjects.Image; plate: Phaser.GameObjects.Text; bar: Phaser.GameObjects.Rectangle; barBg: Phaser.GameObjects.Rectangle; shadow: Phaser.GameObjects.Ellipse; s: number; warn: Phaser.GameObjects.Text; crown?: Phaser.GameObjects.Text; /** extra height of the picture above the sim's height (a King's painted crown), px */ over: number }
+interface MobView { img: Phaser.GameObjects.Image; plate: Phaser.GameObjects.Text; bar: Phaser.GameObjects.Rectangle; barBg: Phaser.GameObjects.Rectangle; /** its weakness icon, beside the small HP bar (made the first time the bar shows) */ el?: Phaser.GameObjects.Text; shadow: Phaser.GameObjects.Ellipse; s: number; warn: Phaser.GameObjects.Text; crown?: Phaser.GameObjects.Text; /** extra height of the picture above the sim's height (a King's painted crown), px */ over: number }
 
 /** What a zone asks you to do, in a few words. */
 export function goalText(g: ZoneGoal): string {
@@ -99,6 +101,8 @@ export class GameScene extends Phaser.Scene {
   private shake = 0;
   private hitStop = 0;
   private paused = false;
+  /** WEAK! / RESIST popups: when each monster last got one (`<mob id>:<1|-1>` → scene time in ms), so multi-hit skills don't spam */
+  private elWordAt = new Map<string, number>();
   /** monster drops lying on the floor */
   private pickupViews = new Map<number, Phaser.GameObjects.Image>();
   /** start this stage in its boss room (the stage panel spent the drops) */
@@ -188,7 +192,7 @@ export class GameScene extends Phaser.Scene {
         play: (id: string) => this.scene.restart({ stage: id }), save,
       };
     }
-    this.mobViews.clear(); this.boxImgs.clear(); this.shotImgs.clear(); this.mineImgs.clear(); this.gearImgs.clear();
+    this.mobViews.clear(); this.elWordAt.clear(); this.boxImgs.clear(); this.shotImgs.clear(); this.mineImgs.clear(); this.gearImgs.clear();
     this.world = null; this.done = false; this.paused = false; this.xpGained = 0; this.levels = 0; this.acc = 0;
     if (!data?.stage) {
       // camp: the HTML menus cover the screen
@@ -382,7 +386,7 @@ export class GameScene extends Phaser.Scene {
 
   private pause(on: boolean): void {
     if (!this.world || this.done) return;
-    this.paused = on; showPause(on); setTouchVisible(!on);
+    this.paused = on; showPause(on, on ? weakHtml(stageElements(this.stage, this.world.nemesis ? hero().species : undefined)) : undefined); setTouchVisible(!on);
   }
 
   /** HUD names for teammates (online friends by name, or CPU). */
@@ -637,16 +641,22 @@ export class GameScene extends Phaser.Scene {
       if (((e as { hi?: number }).hi ?? 0) !== this.me && ['swing', 'skill', 'jump', 'land', 'dodge', 'use', 'ult', 'perfect'].includes(e.t)) continue; // a teammate's own moves
       switch (e.t) {
         case 'hit': {
-          const col = e.target === 'hero' ? '#ff5a6a' : e.crit ? '#ffd23c' : '#ffffff';
+          // elemental weakness: w 1 = the monster is weak to this hit's element, -1 = it resists it (elements.ts)
+          const ew = e.target === 'mob' && e.el ? e.w ?? 0 : 0, ecol = ew > 0 ? ELEMENT_INFO[e.el!].color : '#b4b4c0';
+          if (ew) {
+            this.elementWord(e.x, e.y, ew, ecol);
+            if (((e as { hi?: number }).hi ?? 0) === this.me) this.coach?.onElementHit(e.el!, ew);
+          }
+          const col = e.target === 'hero' ? '#ff5a6a' : ew ? ecol : e.crit ? '#ffd23c' : '#ffffff';
           if (settings.lowFx && e.target === 'mob' && !e.crit) { sfx('hit'); this.burst(e.x, e.y, 0xffffff, 6); this.hitStop = Math.max(this.hitStop, 0.035); this.shake = Math.max(this.shake, 2.5); break; } // low effects: only crits and hits on you get numbers
           const txt = this.add.text(e.x + Phaser.Math.Between(-10, 10), e.y, String(e.dmg), {
-            fontFamily: 'Luckiest Guy', fontSize: e.crit ? '26px' : '19px', color: col, stroke: '#3a1020', strokeThickness: 5,
+            fontFamily: 'Luckiest Guy', fontSize: ew < 0 ? '14px' : e.crit || ew > 0 ? '26px' : '19px', color: col, stroke: '#3a1020', strokeThickness: 5,
           }).setOrigin(0.5).setDepth(30).setResolution(settings.lowFx ? 1.5 : 3);
           this.tweens.add({ targets: txt, y: e.y - 46, duration: 700, ease: 'Cubic.easeOut' });
           this.tweens.add({ targets: txt, alpha: 0, delay: 450, duration: 300, onComplete: () => txt.destroy() });
           sfx(e.target === 'hero' ? 'hurt' : e.crit ? 'crit' : 'hit');
           if (e.target === 'mob') {
-            this.burst(e.x, e.y, e.crit ? 0xffd23c : 0xffffff, e.crit ? 10 : 6);
+            this.burst(e.x, e.y, ew > 0 ? Phaser.Display.Color.HexStringToColor(ecol).color : e.crit ? 0xffd23c : 0xffffff, e.crit || ew > 0 ? 10 : 6);
             this.hitStop = Math.max(this.hitStop, e.crit ? 0.06 : 0.035);
             this.shake = Math.max(this.shake, e.crit ? 5 : 2.5);
           } else this.shake = 6;
@@ -855,7 +865,7 @@ export class GameScene extends Phaser.Scene {
     const after = res && !this.online ? beatAfter(st.id).filter(b => !hero().seen.includes(b)) : [];
     for (const b of after) hero().seen.push(b);
     this.time.delayedCall(failed ? 600 : 300, () => playStory(sp, after, () => showResult(
-      { stage: st, res, time: w.run.time, hits: w.run.hitsTaken, combo: w.run.maxCombo, xp: this.xpGained, levels: this.levels, failed, crumbs: w.run.crumbs, hard: this.hard, unlocked: newKaiju.map(s => CLASSES.find(c => c.species === s)!.name), online: !!this.online },
+      { stage: st, res, time: w.run.time, hits: w.run.hitsTaken, combo: w.run.maxCombo, xp: this.xpGained, levels: this.levels, failed, crumbs: w.run.crumbs, hard: this.hard, unlocked: newKaiju.map(s => CLASSES.find(c => c.species === s)!.name), online: !!this.online, skipped: !!w.run.skipped },
       a => {
         if (this.online) { this.backToRoom(a === 'boxes'); return; }
         if (a === 'retry') this.scene.restart({ stage: st.id });
@@ -925,6 +935,16 @@ export class GameScene extends Phaser.Scene {
   }
 
   // ---------- effects ----------
+  /** "WEAK!" / "RESIST" over a monster: at most once per monster per 1.5 s; with low effects on, only the first one per monster.
+   *  The hit event has no monster id, so the monster is the one standing where the hit landed. */
+  private elementWord(x: number, y: number, w: 1 | -1, color: string): void {
+    let id = -1, best = 90;
+    for (const m of this.world!.mobs) { const d = Math.abs(m.x - x) + Math.abs(m.y - MOBS[m.kind].h * 0.6 - y); if (d < best) { best = d; id = m.id; } }
+    const key = `${id}:${w}`, last = this.elWordAt.get(key), now = this.time.now;
+    if (last !== undefined && (settings.lowFx || now - last < 1500)) return;
+    this.elWordAt.set(key, now);
+    this.callout(x, y - 60, w > 0 ? 'WEAK!' : 'RESIST', color, w > 0 ? 16 : 11); // above where the number floats to
+  }
   private callout(x: number, y: number, text: string, color: string, size: number): void {
     const t = this.add.text(x, y, text, { fontFamily: 'Luckiest Guy', fontSize: size + 'px', color, stroke: '#2a1030', strokeThickness: 5 }).setOrigin(0.5).setDepth(31).setResolution(3).setScale(0.5);
     this.tweens.add({ targets: t, scale: 1, duration: 140, ease: 'Back.easeOut' });
@@ -1254,7 +1274,7 @@ export class GameScene extends Phaser.Scene {
     // monsters
     const seen = new Set<number>();
     for (const m of w.mobs) { seen.add(m.id); this.drawMob(m, t); }
-    for (const [id, v] of this.mobViews) if (!seen.has(id)) { v.crown?.destroy(); v.img.destroy(); v.plate.destroy(); v.bar.destroy(); v.barBg.destroy(); v.shadow.destroy(); v.warn.destroy(); this.mobViews.delete(id); }
+    for (const [id, v] of this.mobViews) if (!seen.has(id)) { v.crown?.destroy(); v.img.destroy(); v.plate.destroy(); v.bar.destroy(); v.barBg.destroy(); v.el?.destroy(); v.shadow.destroy(); v.warn.destroy(); this.mobViews.delete(id); }
 
     // boxes
     const seenB = new Set<number>();
@@ -1390,7 +1410,7 @@ export class GameScene extends Phaser.Scene {
     // long stages hold dozens of monsters: only draw the ones near the camera (their views are made when they come close)
     const view = this.cameras.main.worldView;
     if (m.x < view.x - 360 || m.x > view.right + 360) {
-      if (v) { v.crown?.setVisible(false); v.img.setVisible(false); v.plate.setVisible(false); v.shadow.setVisible(false); v.bar.setVisible(false); v.barBg.setVisible(false); v.warn.setVisible(false); }
+      if (v) { v.crown?.setVisible(false); v.img.setVisible(false); v.plate.setVisible(false); v.shadow.setVisible(false); v.bar.setVisible(false); v.barBg.setVisible(false); v.el?.setVisible(false); v.warn.setVisible(false); }
       return;
     }
     if (!v) {
@@ -1417,7 +1437,7 @@ export class GameScene extends Phaser.Scene {
     if (m.disguised) {
       if (v.img.texture.key !== boxKey && this.has(boxKey)) { v.img.setTexture(boxKey).setOrigin(0.5, 1); v.s = 32 / v.img.height; }
       v.img.setPosition(m.x, m.y + Math.sin(t * 3 + m.id) * 2 - 2).setScale(v.s).setRotation(0).setFlipX(false).clearTint();
-      v.plate.setVisible(false); v.shadow.setVisible(false); v.bar.setVisible(false); v.barBg.setVisible(false);
+      v.plate.setVisible(false); v.shadow.setVisible(false); v.bar.setVisible(false); v.barBg.setVisible(false); v.el?.setVisible(false);
       return;
     }
     if (v.img.texture.key === boxKey && def.brain === 'mimic' && this.has(def.art)) { v.img.setTexture(def.art).setOrigin(0.5, 0.96); v.s = (def.h + 12) / v.img.height * (m.elite ? ELITE.scale : 1); v.plate.setVisible(true); v.shadow.setVisible(true); }
@@ -1453,6 +1473,9 @@ export class GameScene extends Phaser.Scene {
     const showBar = m.hurtShown > 0 && m.state !== 'dead' && def.brain !== 'boss';
     v.barBg.setVisible(showBar).setPosition(m.x, top);
     v.bar.setVisible(showBar).setPosition(m.x - 20, top).setScale(Math.max(0, m.hp / m.maxHp), 1);
+    // what it is weak to, next to the bar (only while the bar shows: nothing sits over an untouched monster)
+    if (showBar && !v.el) v.el = this.add.text(0, 0, ELEMENT_INFO[weakOf(m.kind)].icon, { fontSize: '10px' }).setOrigin(1, 0.5).setDepth(9).setResolution(3);
+    v.el?.setVisible(showBar).setPosition(m.x - 22, top);
   }
 }
 

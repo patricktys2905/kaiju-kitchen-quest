@@ -1,40 +1,24 @@
-// Throwaway (design research for docs/WEAKNESS-DESIGN.md): the proposed monster-type table, checked against the real MOBS list.
+// The tables of docs/WEAKNESS-DESIGN.md section 6, printed from the game's own monster-type table and the real MOBS list.
 // Types: M = Melty (weak HOT, resists COLD) · F = Fiery (weak COLD, resists HOT) · C = Crusty (weak CRUNCH, resists STICKY)
 //        S = Slippery (weak STICKY, resists CRUNCH). Kings (k*) and champions (x*) inherit from their base monster.
 import { MOBS } from '../src/sim/mobs';
 import { WORLDS, ROOM_FOES, STAGES } from '../src/sim/stages';
 import type { MobKind } from '../src/sim/types';
+import { ELEMENT_INFO, MONSTER_TYPES, type MonsterType, typeOf as monsterType, untypedKinds } from '../src/sim/elements';
 
+// The type table itself lives in src/sim/elements.ts (BASE_TYPE, read here through typeOf): this script has no copy, so the
+// two cannot drift. (An unknown key in that table is caught by tests/elements.test.ts, not here.)
 type T = 'M' | 'F' | 'C' | 'S';
-const set = (t: T, s: string): [string, T][] => s.split(' ').map(k => [k, t]);
-const BASE: Record<string, T> = Object.fromEntries([
-  // ordinary monsters
-  ...set('M', 'bun garlic icepop cheesemouse pea yogurt marsh noodle raisin straw duck glove scrub napkin skewer corn caterpillar boxbot coupon bag cracker2'),
-  ...set('F', 'pepper bacon popcorn sausage imp kettle soda bubble candle gravy roast firefly charcoal patty ketchup peapod tomato scanner'),
-  ...set('C', 'salt egg carrot pickle crumbcube meatball cracker cheerio can plate mug fork ladle teapot beetle snail pumpkin can2 melon cherrysoldier fruitknight'),
-  ...set('S', 'jamhop worm ant icebat jelly milk mitt bee flour eel teacake wasp toadstool ladybug mole radish banana trolley pudding peel'),
-  // summons and splits: the same type as whoever calls them
-  ...set('S', 'jellybit crouton lid'), ...set('C', 'minicheerio'), ...set('M', 'sporeling sprout'), ...set('F', 'chunk'),
-  // mimics
-  ...set('C', 'mimic'), ...set('M', 'cereal'),
-  // world bosses
-  ...set('C', 'toast jar fruitcake'), ...set('M', 'golem moldking brussels'), ...set('F', 'dragon meatloaf'), ...set('S', 'stale tupper'),
-  // minibosses
-  ...set('C', 'm1a m1d m2c m3b m3e m4b m5c m6c m6d m7c m8b m9c m9e m10c'),
-  ...set('F', 'm1b m2e m3a m4d m4e m5e m6a m6b m7a m8a m8c m9d m10e'),
-  ...set('M', 'm1c m2a m2d m3c m4c m5a m7b m7d m8e m9b m10a'),
-  ...set('S', 'm1e m2b m3d m4a m5b m5d m6e m7e m8d m9a m10b m10d'),
-  // nemeses: weak to what their rival kaiju is best at (never resisting it)
-  ...set('C', 'nbeet ncrow npine nlamp nshroom nslug ncookie nbrulee nshark ngorilla nbear'), ...set('M', 'nrat nginger nhornet'),
-  ...set('S', 'nkebab nnacho nmouse nbird ngelato'), ...set('F', 'nhare'),
-]);
-const typeOf = (k: string): T | undefined => BASE[k] ?? (/^[kx]/.test(k) ? BASE[k.slice(1)] : undefined);
-const ICON: Record<T, string> = { M: '🔥', F: '❄️', C: '🔨', S: '🍬' };
-const RES: Record<T, string> = { M: '❄️', F: '🔥', C: '🍬', S: '🔨' };
+const LETTER: Record<MonsterType, T> = { MELTY: 'M', FIERY: 'F', CRUSTY: 'C', SLIPPERY: 'S' };
+const untyped = new Set<string>(untypedKinds());
+const typeOf = (k: string): T | undefined => untyped.has(k) ? undefined : LETTER[monsterType(k as MobKind)];
+const icon = (t: MonsterType, side: 'weakTo' | 'resists') => ELEMENT_INFO[MONSTER_TYPES[t][side]].icon;
+const ICON: Record<T, string> = { M: icon('MELTY', 'weakTo'), F: icon('FIERY', 'weakTo'), C: icon('CRUSTY', 'weakTo'), S: icon('SLIPPERY', 'weakTo') };
+const RES: Record<T, string> = { M: icon('MELTY', 'resists'), F: icon('FIERY', 'resists'), C: icon('CRUSTY', 'resists'), S: icon('SLIPPERY', 'resists') };
 
 const missing = Object.keys(MOBS).filter(k => !typeOf(k));
-const extra = Object.keys(BASE).filter(k => !(k in MOBS));
-console.log('missing:', missing.join(' ') || 'none', '| unknown keys:', extra.join(' ') || 'none', '| kinds:', Object.keys(MOBS).length);
+console.log('missing:', missing.join(' ') || 'none', '| kinds:', Object.keys(MOBS).length);
+if (missing.length) process.exitCode = 1;
 
 const nm = (k: string) => (MOBS as any)[k].name as string;
 const cell = (k: string) => `${nm(k)} ${ICON[typeOf(k)!]}`;

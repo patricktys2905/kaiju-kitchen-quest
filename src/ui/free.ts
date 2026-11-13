@@ -7,6 +7,8 @@ import type { LootBox, StageDef } from '../sim/types';
 import { TIER_NAMES } from '../sim/loot';
 import { hero, save } from '../save';
 import { sfx } from '../audio';
+import { stageElements } from '../sim/elements';
+import { weakHtml } from './elementUi';
 
 /** One free-mode run in progress (passed from stage to stage). */
 export interface FreeRun {
@@ -42,10 +44,10 @@ export function freePage(): string {
   if (!freeUnlocked()) return '<div class="freeinfo">🔒 Beat the World 1 boss (1-10) with this kaiju to open Free Play.</div>';
   const f = freeData(), sp = hero().species, day = dayKey(), d = dailyStage(day, hero().level), w = WORLDS.find(x => x.id === d.world)!;
   const bosses = beatenBosses();
-  const card = (mode: FreeMode, icon: string, name: string, text: string, info: string, ok = true) =>
-    `<div class="fcard"><div class="fi">${icon}</div><div class="ft"><b>${name}</b><span>${text}</span><em>${info}</em></div><button class="pill go" data-free="${mode}" ${ok ? '' : 'disabled'}>▶ PLAY</button></div>`;
+  const card = (mode: FreeMode, icon: string, name: string, text: string, info: string, ok = true, weak = '') =>
+    `<div class="fcard"><div class="fi">${icon}</div><div class="ft"><b>${name}</b><span>${text}</span>${weak ? `<span class="weakln">${weak}</span>` : ''}<em>${info}</em></div><button class="pill go" data-free="${mode}" ${ok ? '' : 'disabled'}>▶ PLAY</button></div>`;
   return `<div class="free">
-    ${card('daily', '📅', 'Daily Dungeon', `A fresh stage every day, the same for everybody. Today: ${w.name}, monsters Lv ${d.lv[0]}.`, f.daily === day ? '✅ Today\'s bonus box claimed. Play again for loot and XP!' : '🎁 Clear it today for a bonus Golden Cloche box')}
+    ${card('daily', '📅', 'Daily Dungeon', `A fresh stage every day, the same for everybody. Today: ${w.name}, monsters Lv ${d.lv[0]}.`, f.daily === day ? '✅ Today\'s bonus box claimed. Play again for loot and XP!' : '🎁 Clear it today for a bonus Golden Cloche box', true, weakHtml(stageElements(d)))}
     ${card('endless', '🥫', 'Endless Pantry', 'Arena floors that keep getting tougher. Pick a perk after each floor, a boss every 10th. A box for every floor you clear.', `Best: floor ${f.endless[sp] ?? 0}`)}
     ${card('rush', '👑', 'Boss Rush', `Every boss you've beaten (${bosses.length}), back to back. Health carries over (you get half back between fights).`, f.rush[sp] ? `Best time: ${mmss(f.rush[sp])}` : bosses.length ? 'No best time yet' : 'Beat a world boss first', bosses.length > 0)}
     <p class="hint">Free Play uses your level, gear and potions, and never changes your story progress. Your CPU buddy comes along too.</p>

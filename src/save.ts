@@ -7,10 +7,11 @@ import { canLearn, loadoutOf, nodeById, skillUnlocked } from './sim/tree';
 import { clearRewards } from './sim/loot';
 import { MAX_SKILL, SKILLS } from './sim/skills';
 import { type Derived, type HeroProfile, canLevelSkill, derive, gainXp, newProfile } from './sim/stats';
-import { type ChallengeCtx, STARS_FOR_SECRET, challengesFor } from './sim/challenges';
+import { type ChallengeCtx, STARS_FOR_SECRET, challengesMet, isHardChallenge, keepStars } from './sim/challenges';
 import { bossWeaponFor } from './sim/bossgearData';
 import { WORLDS } from './sim/stages';
 import type { BoxTier, LootBox } from './sim/types';
+import { type Element, canReseason, reseasonCost, reseasonItem, reseasonTwist } from './sim/elements';
 
 export type Rank = 'S' | 'A' | 'B' | 'C' | 'D';
 export interface Save {
@@ -101,6 +102,7 @@ function load(): Save {
       for (const c of CLASSES) out.heroes[c.species] = { ...newProfile(c.species), ...out.heroes[c.species] };
       if (!out.unlocked.includes(out.selected)) out.selected = STARTERS[0];
       repairItems(out);
+      keepStars(out.challenges); // a stage's challenge list changed: stars already earned stay earned
       return out;
     }
   } catch { /* corrupted: start fresh */ }
@@ -259,8 +261,15 @@ export interface ClearResult { rank: Rank; boxes: LootBox[]; upgraded: number; f
 /** Stars (challenges done) in a world. */
 export function worldStars(world: number): number { return Object.entries(save.challenges ?? {}).filter(([id]) => id.startsWith(`${world}-`)).reduce((a, [, v]) => a + v.length, 0); }
 
+/** Was the stage clear that finishStage handled last a SKIP TO BOSS run? quests.ts reads it: a skipped clear does not count
+ *  for rank quests (the scene reports those right after finishStage). */
+export let lastClearSkipped = false;
+
 /** Stage finished: rank upgrades some boxes, adds the clear reward, records the best rank. */
 export function finishStage(stageId: string, rank: Rank, found: LootBox[], stageLv: number, boss: boolean, hard = false, spicy = 0, nightmare = false, ctx?: ChallengeCtx): ClearResult {
+  // SKIP TO BOSS pays the boss-room clear and nothing on top: best rank A, no chilli bonus, no challenge stars
+  const skipped = lastClearSkipped = !!ctx?.run.skipped;
+  if (skipped) { spicy = 0; if (rank === 'S') rank = 'A'; }
   const up = { S: 0.5, A: 0.3, B: 0.15, C: 0, D: 0 }[rank];
   let upgraded = 0;
   const boxes = found.map(b => {
@@ -292,11 +301,11 @@ export function finishStage(stageId: string, rank: Rank, found: LootBox[], stage
   }
   // stage challenges: each pays out once (crumbs + a box); enough stars in a world opens its secret stage
   const newChallenges: string[] = []; let crumbs = 0, secretOpened = false;
-  if (ctx) {
+  if (ctx && !skipped) {
     const done = ((save.challenges ??= {})[stageId] ??= []);
-    for (const c of challengesFor(stageId)) if (!done.includes(c.id) && c.done(ctx)) {
+    for (const c of challengesMet(stageId, ctx)) if (!done.includes(c.id)) {
       done.push(c.id); newChallenges.push(c.name);
-      crumbs += 40 + stageLv * 6; boxes.push({ tier: (['nojam', 'srank', 'fast', 'boss'].includes(c.id) ? 4 : 3) as BoxTier, ilvl: stageLv });
+      crumbs += 40 + stageLv * 6; boxes.push({ tier: (isHardChallenge(c.id) ? 4 : 3) as BoxTier, ilvl: stageLv });
     }
     save.crumbs += crumbs;
     const world = Number(stageId.split('-')[0]);
@@ -454,6 +463,32 @@ export function buyGear(id: number): boolean {
   const it = save.shop.stock[i], price = gearPrice(it);
   if (save.crumbs < price) return false;
   save.crumbs -= price; save.shop.stock.splice(i, 1); save.bag.push(it); persist(); return true;
+}
+
+// ---------- Market "Re-season" (elemental weaknesses: sim/elements.ts has the rules, sim/elementTune.ts the price) ----------
+/** A weapon you own, in the bag or held by any kaiju. */
+export function findWeapon(itemId: number, s: Save = save): Item | undefined {
+  return s.bag.find(x => x.id === itemId) ?? Object.values(s.heroes).map(h => h.equip?.weapon).find(x => x?.id === itemId);
+}
+/** Why a re-season to this element can't happen right now (null = it can). */
+export function reseasonBlock(it: Item | undefined, el: Element, s: Save = save): 'missing' | 'weapon' | 'same' | 'crumbs' | null {
+  if (!it) return 'missing';
+  if (!canReseason(it)) return 'weapon';
+  if (!reseasonTwist(it, el)) return 'same';
+  return s.crumbs < reseasonCost(it) ? 'crumbs' : null;
+}
+/** Pay crumbs to set an ordinary weapon's twist effect to HOT (burn), COLD (freeze) or STICKY (glue). It keeps its style;
+ *  a weapon with no twist gains one in its base weapon's own style. Writes only the existing Item.twist (no new saved
+ *  field), so its gear skill and its name follow by themselves. Not for boss weapons or named legendaries.
+ *  Returns the crumbs paid, or 0 if nothing happened. `s` is for tests; the game uses the live save and persists it. */
+export function reseason(itemId: number, el: Element, s: Save = save): number {
+  const it = findWeapon(itemId, s);
+  if (!it || reseasonBlock(it, el, s)) return 0;
+  const cost = reseasonCost(it);
+  if (!reseasonItem(it, el)) return 0;
+  s.crumbs -= cost;
+  if (s === save) persist();
+  return cost;
 }
 
 /** A CPU buddy fights at your level: its own gear, stat points auto-spent along its class, its skills learned. */

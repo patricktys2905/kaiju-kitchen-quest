@@ -1,4 +1,5 @@
 import type { SkillMod } from './items';
+import type { Element } from './elements';
 // Skills: every kaiju has 3 actives (unlocking with hero level) and 1 passive. Skill levels 1..MAX_SKILL
 // (gear can push past the max). Damage grows +20% per level, cooldown shrinks 4% per level.
 // Every skill has its OWN behaviour (no two kaiju share a mechanic) — tests/skills.test.ts checks it.
@@ -91,6 +92,10 @@ export interface SkillDef {
   toss?: boolean;
   /** signature-legendary upgrades: statuses on hit, cast twice */
   freeze?: boolean; glue?: boolean; slow?: boolean; echo?: boolean;
+  /** elemental weaknesses (elements.ts): the element every hit of this skill carries. Only set where the skill has the
+   *  flavour but no status, or where its mechanic would guess wrong; otherwise the element comes from what the skill does
+   *  (elementsOfSkill: burn / freeze / glue / slow and the mechanics that are a status). Changes nothing against a neutral monster. */
+  el?: Element;
 }
 
 export interface PassiveDef {
@@ -116,13 +121,13 @@ export const SKILLS: Record<number, { actives: SkillDef[]; passive: PassiveDef }
     actives: [
       S({ id: 'seed', name: 'Seed Spray', kind: 'cone', desc: 'Spits a cone of strawberry seeds', cd: 3, dmg: 2.4, reach: 210, h: 90, kx: 380 }),
       S({ id: 'upper', name: 'Berry Uppercut', kind: 'uppercut', desc: 'Leaps up with a launching uppercut', unlock: 4, cd: 5, dur: 0.55, dmg: 3.2, reach: 80, h: 150, kx: 120, ky: -720 }),
-      S({ id: 'jamspin', name: 'Jam Tornado', kind: 'vortex', desc: 'A sticky jam whirl that sucks monsters in while it spins', unlock: 8, cd: 9, dur: 1.6, dmg: 0.9, reach: 150, h: 100, kx: 160, ky: -160, n: 7 }),
+      S({ id: 'jamspin', name: 'Jam Tornado', kind: 'vortex', desc: 'A sticky jam whirl that sucks monsters in while it spins', unlock: 8, cd: 9, dur: 1.6, dmg: 0.9, reach: 150, h: 100, kx: 160, ky: -160, n: 7, el: 'STICKY' }),
     ],
     passive: { id: 'sweet', name: 'Sweet Tooth', desc: 'Heals 2% max HP per level on each kill', unlock: PASSIVE_UNLOCK, per: { lifeOnKill: 0.02 } },
   },
   10: { // Bluebeary — tank
     actives: [
-      S({ id: 'quake', name: 'Muffin Quake', kind: 'slam', desc: 'Belly-flops for a shockwave', cd: 5, dur: 0.6, dmg: 2.4, reach: 190, h: 70, kx: 200, ky: -520 }),
+      S({ id: 'quake', name: 'Muffin Quake', kind: 'slam', desc: 'Belly-flops for a shockwave', cd: 5, dur: 0.6, dmg: 2.4, reach: 190, h: 70, kx: 200, ky: -520, el: 'CRUNCH' }),
       S({ id: 'mines', name: 'Berry Mines', kind: 'mines', desc: 'Lobs three blueberries: they burst on enemies, or lie in wait as mines', unlock: 4, cd: 7, dur: 0.4, dmg: 2.6, reach: 50, h: 60, kx: 260, ky: -460, n: 3, toss: true }),
       S({ id: 'frost', name: 'Frosting Shield', kind: 'buff', desc: 'Hardens: -40% damage taken, no flinching, +20% attack', unlock: 8, cd: 16, dur: 0.5, dmg: 0, buff: { def: 0.4, atk: 0.2, armor: true, t: 8 } }),
     ],
@@ -148,7 +153,7 @@ export const SKILLS: Record<number, { actives: SkillDef[]; passive: PassiveDef }
     actives: [
       S({ id: 'ink', name: 'Tentacle Lash', kind: 'whip', desc: 'A long, lightning-fast tentacle lash that hits twice', cd: 2.5, dur: 0.4, dmg: 1.4, reach: 290, h: 50, kx: 260, ky: -160, n: 2 }),
       S({ id: 'whirl', name: 'Tentacle Grab', kind: 'pull', desc: 'Grabs every monster in reach and yanks it in, stunned', unlock: 4, cd: 7, dur: 0.5, dmg: 1.8, reach: 300, h: 120, kx: 0, ky: -120 }),
-      S({ id: 'wave', name: 'Bubbling Flasks', kind: 'geyser', desc: 'Chemical geysers erupt under up to 4 monsters', unlock: 8, cd: 10, dur: 0.6, dmg: 3.6, reach: 420, h: 200, kx: 80, ky: -700, n: 4 }),
+      S({ id: 'wave', name: 'Bubbling Flasks', kind: 'geyser', desc: 'Chemical geysers erupt under up to 4 monsters', unlock: 8, cd: 10, dur: 0.6, dmg: 3.6, reach: 420, h: 200, kx: 80, ky: -700, n: 4, el: 'COLD' }),
     ],
     passive: { id: 'eight', name: 'Eight Arms', desc: '+4% attack per level', unlock: PASSIVE_UNLOCK, per: { atkPct: 0.04 } },
   },
@@ -156,7 +161,7 @@ export const SKILLS: Record<number, { actives: SkillDef[]; passive: PassiveDef }
     actives: [
       S({ id: 'snap', name: 'Claw Counter', kind: 'counter', desc: 'Raises its claws: blocks the next hit and snaps back hard (a small snap if nothing comes)', cd: 4, dur: 0.8, dmg: 4, reach: 110, h: 90, kx: 380, ky: -300 }),
       S({ id: 'shell', name: 'Leaf Shell', kind: 'buff', desc: 'Hides in cabbage: -35% damage, no flinching, and shots bounce back', unlock: 4, cd: 15, dur: 0.4, dmg: 0, buff: { def: 0.35, armor: true, reflect: true, t: 7 } }),
-      S({ id: 'crash', name: 'Cheddar Pounce', kind: 'pounce', desc: 'Leaps onto the nearest monster and crashes down like a cheese wheel', unlock: 8, cd: 7, dur: 0.7, dmg: 3.8, reach: 160, h: 80, kx: 260, ky: -560 }),
+      S({ id: 'crash', name: 'Cheddar Pounce', kind: 'pounce', desc: 'Leaps onto the nearest monster and crashes down like a cheese wheel', unlock: 8, cd: 7, dur: 0.7, dmg: 3.8, reach: 160, h: 80, kx: 260, ky: -560, el: 'CRUNCH' }),
     ],
     passive: { id: 'rind', name: 'Hard Rind', desc: '-3% damage taken per level', unlock: PASSIVE_UNLOCK, per: { dr: 0.03 } },
   },
@@ -170,7 +175,7 @@ export const SKILLS: Record<number, { actives: SkillDef[]; passive: PassiveDef }
   },
   6: { // Dumplord — healer
     actives: [
-      S({ id: 'steam', name: 'Steam Cloud', kind: 'zone', desc: 'Leaves a scalding steam cloud that hurts monsters for 3 s', cd: 4, dur: 0.4, dmg: 0.7, reach: 180, h: 110, kx: 60, ky: -80 }),
+      S({ id: 'steam', name: 'Steam Cloud', kind: 'zone', desc: 'Leaves a scalding steam cloud that hurts monsters for 3 s', cd: 4, dur: 0.4, dmg: 0.7, reach: 180, h: 110, kx: 60, ky: -80, el: 'HOT' }),
       S({ id: 'feast', name: 'Dumpling Feast', kind: 'heal', desc: 'Eats a snack: heals 20% HP (+5% per level)', unlock: 4, cd: 18, dur: 0.6, dmg: 0, heal: 0.2 }),
       S({ id: 'soup', name: 'Soup Slurp', kind: 'drain', desc: 'Slurps the life out of everything nearby: heals 20% of the damage (up to 12% of its HP)', unlock: 8, cd: 11, dur: 0.7, dmg: 3.6, reach: 230, h: 160, kx: 120, ky: -200, leech: 0.2 }),
     ],
@@ -186,7 +191,7 @@ export const SKILLS: Record<number, { actives: SkillDef[]; passive: PassiveDef }
   },
   8: { // Chocomunch — bruiser
     actives: [
-      S({ id: 'chocoslam', name: 'Choco Suplex', kind: 'throw', desc: 'Grabs the monster in front and slams it down behind', cd: 4, dur: 0.6, dmg: 3.6, reach: 100, h: 100, kx: 120, ky: -300 }),
+      S({ id: 'chocoslam', name: 'Choco Suplex', kind: 'throw', desc: 'Grabs the monster in front and slams it down behind', cd: 4, dur: 0.6, dmg: 3.6, reach: 100, h: 100, kx: 120, ky: -300, el: 'CRUNCH' }),
       S({ id: 'melt', name: 'Melt Charge', kind: 'bulldoze', desc: 'A shoulder-charge that carries monsters along and crushes them at the end', unlock: 4, cd: 5, dur: 0.6, dmg: 3, reach: 80, h: 90, kx: 460, ky: -320 }),
       S({ id: 'sugarrush', name: 'Sugar Rush', kind: 'buff', desc: '+20% attack, no flinching, and heals 15% of the damage dealt', unlock: 8, cd: 15, dur: 0.4, dmg: 0, buff: { atk: 0.2, armor: true, leech: 0.15, t: 7 } }),
     ],
@@ -211,7 +216,7 @@ export const SKILLS: Record<number, { actives: SkillDef[]; passive: PassiveDef }
   14: { // Salmonster — river rusher
     actives: [
       S({ id: 'upstream', name: 'Upstream Leap', kind: 'upstream', desc: 'Leaps forward and up through monsters like a salmon up a waterfall', cd: 3, dur: 0.55, dmg: 1.8, reach: 80, h: 90, kx: 260, ky: -420 }),
-      S({ id: 'tide', name: 'Tidal Push', kind: 'tide', desc: 'A rolling wave that carries monsters along and slams them', unlock: 4, cd: 8, dur: 0.5, dmg: 1.4, reach: 60, h: 60, kx: 320, ky: -200 }),
+      S({ id: 'tide', name: 'Tidal Push', kind: 'tide', desc: 'A rolling wave that carries monsters along and slams them', unlock: 4, cd: 8, dur: 0.5, dmg: 1.4, reach: 60, h: 60, kx: 320, ky: -200, el: 'COLD' }),
       S({ id: 'salmonswarm', name: 'Salmon Swarm', kind: 'salmon', desc: 'Four salmon swim out in a wavy line, nibbling everything', unlock: 8, cd: 6, dur: 0.4, dmg: 1.1, reach: 30, h: 30, kx: 140, ky: -140, n: 4 }),
     ],
     passive: { id: 'current', name: 'Strong Current', desc: '+4% attack and +2% move speed per level', unlock: PASSIVE_UNLOCK, per: { atkPct: 0.04, dodge: 0.02 } },
@@ -234,7 +239,7 @@ export const SKILLS: Record<number, { actives: SkillDef[]; passive: PassiveDef }
   },
   9: { // Bubblegumbo — gum tank
     actives: [
-      S({ id: 'bubbletrap', name: 'Bubble Trap', kind: 'bubbletrap', desc: 'Seals the two nearest monsters in gum bubbles: helpless for 2.5 s, then POP for big damage', cd: 7, dur: 0.5, dmg: 2.6, reach: 320, h: 160, kx: 140, ky: -420, n: 2 }),
+      S({ id: 'bubbletrap', name: 'Bubble Trap', kind: 'bubbletrap', desc: 'Seals the two nearest monsters in gum bubbles: helpless for 2.5 s, then POP for big damage', cd: 7, dur: 0.5, dmg: 2.6, reach: 320, h: 160, kx: 140, ky: -420, n: 2, el: 'STICKY' }),
       S({ id: 'gumballs', name: 'Gumball Bounce', kind: 'gumball', desc: 'Fires three gumballs that ricochet off monsters, hitting again and again', unlock: 4, cd: 6, dur: 0.4, dmg: 1.2, reach: 30, h: 30, kx: 200, ky: -160, n: 3 }),
       S({ id: 'trumpet', name: 'Trumpet Blast', kind: 'trumpet', desc: 'A mighty trumpet: shockwaves race both ways along the floor and launch monsters', unlock: 8, cd: 9, dur: 0.6, dmg: 2.2, reach: 60, h: 50, kx: 160, ky: -620 }),
     ],
@@ -244,7 +249,7 @@ export const SKILLS: Record<number, { actives: SkillDef[]; passive: PassiveDef }
     actives: [
       S({ id: 'hops', name: 'Triple Hop', kind: 'hops', desc: 'Three big hops forward with a shockwave at every landing', cd: 4, dur: 1.6, dmg: 1.4, reach: 110, h: 70, kx: 220, ky: -300 }),
       S({ id: 'flurry', name: 'One-Two Flurry', kind: 'flurry', desc: 'A blur of six punches; the last one knocks monsters flying', unlock: 4, cd: 5, dur: 0.66, dmg: 0.75, reach: 80, h: 70, kx: 60, ky: -40 }),
-      S({ id: 'cakebomb', name: 'Cupcake Bomb', kind: 'cakebomb', desc: 'Lobs a red velvet cupcake that bursts into a slowing frosting patch', unlock: 8, cd: 8, dur: 0.4, dmg: 2.4, reach: 90, h: 60, kx: 220, ky: -360 }),
+      S({ id: 'cakebomb', name: 'Cupcake Bomb', kind: 'cakebomb', desc: 'Lobs a red velvet cupcake that bursts into a slowing frosting patch', unlock: 8, cd: 8, dur: 0.4, dmg: 2.4, reach: 90, h: 60, kx: 220, ky: -360, el: 'STICKY' }),
     ],
     passive: { id: 'footwork', name: 'Footwork', desc: '-3% dodge cooldown and +5% finisher damage per level', unlock: PASSIVE_UNLOCK, per: { dodge: 0.03, heavyDmg: 0.05 } },
   },
@@ -294,7 +299,7 @@ export const ULTS: Record<number, SkillDef> = {
   14: S({ id: 'ult14', name: 'Salmon Run', kind: 'salmonrun', desc: 'A huge school of salmon leaps across the screen, over and over', cd: 0, dur: 1, dmg: 1.4, reach: 620, h: 200, kx: 160, ky: -260, n: 16 }),
   12: S({ id: 'ult12', name: 'Mega Snooze', kind: 'snooze', desc: 'A giant yawn: every monster on screen falls asleep for 3 s', cd: 0, dur: 0.9, dmg: 2.5, reach: 620, h: 300, kx: 20, ky: -80 }),
   16: S({ id: 'ult16', name: 'Sundae Drop', kind: 'sundae', desc: 'A colossal sundae falls from the sky: a huge impact and a freezing puddle', cd: 0, dur: 0.9, dmg: 9, reach: 170, h: 120, kx: 300, ky: -500 }),
-  9: S({ id: 'ult9', name: 'Mega Bubble', kind: 'megabubble', desc: 'Blows a giant bubble that seals every monster on screen for 3 s, then POP!', cd: 0, dur: 0.9, dmg: 5, reach: 620, h: 300, kx: 160, ky: -520 }),
+  9: S({ id: 'ult9', name: 'Mega Bubble', kind: 'megabubble', desc: 'Blows a giant bubble that seals every monster on screen for 3 s, then POP!', cd: 0, dur: 0.9, dmg: 5, reach: 620, h: 300, kx: 160, ky: -520, el: 'STICKY' }),
   18: S({ id: 'ult18', name: 'Knockout Punch', kind: 'tko', desc: 'Leaps to the toughest monster around and lands a colossal uppercut', cd: 0, dur: 0.8, dmg: 14, reach: 640, h: 300, kx: 300, ky: -900 }),
   13: S({ id: 'ult13', name: 'Holy Guacamole', kind: 'guacflood', desc: 'A rolling wave of guacamole that leaves healing guac pools behind it', cd: 0, dur: 0.9, dmg: 5, reach: 520, h: 120, kx: 420, ky: -340 }),
   19: S({ id: 'ult19', name: 'Midnight Fiesta', kind: 'fiesta', desc: 'A piñata bursts: every monster on screen is stunned and pelted with candy', cd: 0, dur: 0.9, dmg: 3.2, reach: 620, h: 300, kx: 80, ky: -200, n: 14 }),

@@ -7,7 +7,7 @@ import type { MobKind } from '../sim/types';
 export const UNLOCKS: { species: number; text: string; key: string; goal: number }[] = [
   { species: 1, text: 'Defeat 50 Sour Worms', key: 'kill:worm', goal: 50 },
   { species: 2, text: 'Defeat 20 Rotten Eggs', key: 'kill:egg', goal: 20 },
-  { species: 5, text: 'Clear 3 stages with an S rank', key: 'rankS', goal: 3 },
+  { species: 5, text: 'Clear 3 stages with an A rank or better', key: 'rankA', goal: 3 }, // was 3 S ranks; 'rankA' has always been counted (an S counts too), so nobody loses progress
   { species: 6, text: 'Use 20 quick-bag items', key: 'potions', goal: 20 },
   { species: 7, text: 'Defeat the Burnt Toast King 3 times', key: 'kill:toast', goal: 3 },
   { species: 8, text: 'Defeat 30 Pickle Knights', key: 'kill:pickle', goal: 30 },
@@ -23,6 +23,9 @@ export const UNLOCKS: { species: number; text: string; key: string; goal: number
   { species: 3, text: 'Defeat the Tupperwraith in the Supermarket', key: 'kill:tupper', goal: 1 },
   { species: 14, text: 'Defeat 40 Plastic Bag Ghosts', key: 'kill:bag', goal: 40 },
 ];
+
+/** A kaiju quest key that is not a counter: 1 once this kaiju holds an S rank on any stage, read from its saved best ranks. */
+export const S_RANK_KEY = 'anyS';
 
 export interface KQuest { id: string; title: string; text: string; key: string; goal: number; reward: { crumbs?: number; fstone?: number; gstone?: number; ggstone?: number; box?: 1 | 2 | 3 | 4 | 5; sigCharm?: boolean } }
 
@@ -60,7 +63,9 @@ export function kaijuQuests(species: number): KQuest[] {
     { id: 'skill', title: t[1], text: `Use ${s1.name} 50 times`, key: `skill:${s1.id}`, goal: 50, reward: { crumbs: 150, gstone: 1 } },
     { id: 'rank', title: t[2], text: 'Clear stage 1-5 with an A rank or better', key: 'clear:1-5', goal: 4, reward: { box: 3 } },
     { id: 'combo', title: t[3], text: 'Reach a 25-hit combo', key: 'combo', goal: 25, reward: { crumbs: 250, fstone: 3 } },
-    { id: 'nohit', title: t[4], text: 'Clear any stage without being hit', key: 'nohit', goal: 1, reward: { box: 3, gstone: 1 } },
+    // was "Clear any stage without being hit": 0 of 7,169 skilled clears, only ever on SKIP TO BOSS. Same id, so a kaiju that
+    // already claimed it is not paid twice; S_RANK_KEY is read from the kaiju's saved best ranks (quests.ts), so an S earned before counts.
+    { id: 'nohit', title: t[4], text: 'Clear any stage with an S rank', key: S_RANK_KEY, goal: 1, reward: { box: 3, gstone: 1 } },
     { id: 'golem', title: t[5], text: 'Defeat the Freezer Golem', key: 'kill:golem', goal: 1, reward: { box: 4 } },
     { id: 'ult', title: t[6], text: 'Land 10 Ultimates', key: 'ult', goal: 10, reward: { crumbs: 500, ggstone: 1 } },
     { id: 'hard', title: t[7], text: 'Clear any stage on Hard mode', key: 'hard', goal: 1, reward: { sigCharm: true, ggstone: 1 } },
