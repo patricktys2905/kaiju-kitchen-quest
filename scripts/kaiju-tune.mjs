@@ -3,7 +3,9 @@
 import { spawn } from 'node:child_process';
 import fs from 'node:fs';
 const ROUNDS = Number(process.argv[2] ?? 3), DRY = process.argv.includes('--dry');
-const BOSS = 0.55, STAGE = 0.93;
+// targets: the per-kaiju boss clear rate everyone is pulled toward (bosses now clear ~65-70% on average with the skilled bot
+// and 8 jams, see kaiju-bench.ts) and the stage clear rate below which a kaiju gets extra HP. BOSS=0.6 node scripts/kaiju-tune.mjs
+const BOSS = Number(process.env.BOSS ?? 0.67), STAGE = Number(process.env.STAGE ?? 0.9);
 const FILE = 'src/sim/kaijuTune.ts';
 const read = () => {
   const t = {};
@@ -23,14 +25,18 @@ const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 for (let round = 1; round <= ROUNDS; round++) {
   const t = read();
   const res = (await Promise.all(Object.keys(t).map(bench))).filter(Boolean).sort((a, b) => a.boss - b.boss);
+  const times = res.map(r => r.time).sort((a, b) => a - b), med = times[times.length >> 1] || 1;
   const pct = v => String(Math.round(v * 100)).padStart(3) + '%';
   console.log(`\nround ${round}: boss ${pct(Math.min(...res.map(r => r.boss)))}..${pct(Math.max(...res.map(r => r.boss)))}  stage ${pct(Math.min(...res.map(r => r.stage)))}..${pct(Math.max(...res.map(r => r.stage)))}`);
   for (const r of res) {
     const cur = t[r.sp];
     const hpF = clamp(1 + (BOSS - r.boss) * 0.7 + Math.max(0, STAGE - r.stage) * 1.2, 0.85, 1.2); // stages only push HP up (a kaiju that struggles)
-    const dmgF = clamp(1 + (BOSS - r.boss) * 0.25, 0.94, 1.08);
+    // a kaiju whose stage runs take much longer than the median one (Minturtle: 12-15 minute stages) gets damage, a much
+    // faster one loses a little; the HP multiplier then settles its boss rate over the next rounds
+    const paceF = clamp(1 + (r.time / med - 1) * 0.35, 0.96, 1.1);
+    const dmgF = clamp((1 + (BOSS - r.boss) * 0.25) * paceF, 0.94, 1.12);
     const next = DRY || round === ROUNDS && false ? cur : { hp: clamp(cur.hp * hpF, 0.6, 1.8), dmg: clamp(cur.dmg * dmgF, 0.4, 1.3) };
-    console.log(`  ${String(r.sp).padStart(2)} boss ${pct(r.boss)} stage ${pct(r.stage)} hpLeft ${pct(r.hp)}  hp ${cur.hp.toFixed(2)}→${next.hp.toFixed(2)} dmg ${cur.dmg.toFixed(2)}→${next.dmg.toFixed(2)}`);
+    console.log(`  ${String(r.sp).padStart(2)} boss ${pct(r.boss)} stage ${pct(r.stage)} hpLeft ${pct(r.hp)} time ${Math.round(r.time)}s${r.slow ? ' (' + r.slow + ' timeouts)' : ''} min boss ${Math.min(...Object.values(r.per ?? { x: 0 }))}/10  hp ${cur.hp.toFixed(2)}→${next.hp.toFixed(2)} dmg ${cur.dmg.toFixed(2)}→${next.dmg.toFixed(2)}`);
     t[r.sp] = next;
   }
   if (!DRY) write(t);

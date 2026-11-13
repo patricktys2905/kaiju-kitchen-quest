@@ -25,7 +25,7 @@ const TIPS: Tip[] = [
   { id: 'sponge', text: () => 'A bouncy sponge: jump on it to reach something high up', when: w => w.props.some(p => p.kind === 'sponge' && Math.abs(p.x - w.hero.x) < 160) },
   { id: 'potion', text: t => t ? 'Low on health: tap the jam jar at the bottom' : 'Low on health: press 1 for a jam jar', when: w => w.hero.hp < w.hero.d.maxHp * 0.4 && w.hero.bag.some(b => b && b.n > 0), done: w => w.hero.hp > w.hero.d.maxHp * 0.6 },
   { id: 'escort', text: () => 'Keep the Crumblet safe: it follows you to the exit', when: w => !!w.npc },
-  { id: 'fetch', text: () => 'Race to the Recipe Scroll before the timer runs out!', when: w => !!w.scroll && !w.scroll.got },
+  { id: 'fetch', text: () => 'Race to the Recipe Scroll before the timer runs out!', when: w => !!w.scroll && !w.scroll.got && w.objArmed },
   { id: 'boss', text: () => 'A boss! Watch for its glowing wind-ups, and dodge the red ones', when: w => !!w.boss },
   { id: 'exit', text: () => 'All clear! Walk to the glowing EXIT on the right', when: w => w.portal },
 ];
@@ -36,6 +36,7 @@ function ensureBar(): HTMLElement {
   const st = document.createElement('style');
   st.textContent = `#coach { position: fixed; z-index: 12; left: 50%; top: calc(11vmin + env(safe-area-inset-top)); transform: translateX(-50%); display: none; align-items: center; gap: 1.2vmin; max-width: 80vw;
     background: #24142ae8; border: 2px solid #9fe8ff; border-radius: 2vmin; padding: 0.8vmin 1.4vmin 0.8vmin 2vmin; color: #fff; font: 800 calc(var(--ts, 1) * 2.6vmin) Nunito, sans-serif; box-shadow: 0 0.6vmin 2vmin #0008; }
+    body.bossbar #coach { top: calc(17.5vmin + env(safe-area-inset-top)); }
     #coach.on { display: flex; animation: coachin 0.3s ease-out; } @keyframes coachin { from { opacity: 0; transform: translate(-50%, -1vmin); } }
     #coach b { color: #9fe8ff; font-family: 'Luckiest Guy', sans-serif; font-weight: 400; letter-spacing: 0.04em; }
     #coach button { pointer-events: auto; font: inherit; background: none; border: 0; color: #b8a8c8; font-size: 1.1em; cursor: pointer; padding: 0 0.6vmin; }`;

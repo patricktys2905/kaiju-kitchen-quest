@@ -14,7 +14,7 @@ function run(st: StageDef, sp: number, lv: number, r: number, perks: string[] = 
   const w = new World(st, withPerks(derive(heroFor(sp, lv, r + 1)), perks), 100 + r, [{ id: 'jam', n: 3 }, null, null, null]);
   w.hero.hp = Math.max(1, Math.round(w.hero.d.maxHp * hpFrac));
   const bot = new Bot(w, AVERAGE, 7 + r);
-  for (let i = 0; i < 60 * 60 * 5 && !w.cleared && !w.failed; i++) w.step(bot.think());
+  for (let i = 0; i < 60 * 60 * 15 && !w.cleared && !w.failed; i++) w.step(bot.think()); // 15 minutes, like scripts/balance.ts (the Daily is a full map stage now)
   return { cleared: w.cleared, hp: w.hero.hp / w.hero.d.maxHp };
 }
 for (const lv of [10, 25, 40, 55]) {

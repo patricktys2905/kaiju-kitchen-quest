@@ -49,33 +49,33 @@ export const roomFoe = (world: number, n: number): MobKind => ROOM_FOES[world][[
 export const WORLDS: WorldDef[] = [
   {
     id: 1, name: 'The Countertop', blurb: 'Where the leftovers went bad.', bg: 'bg-far', mid: 'bg-mid', tile: 'tile-ground', platTint: 0xffffff, bossBg: 'bg-far-stove',
-    baseLv: 1, power: 1, mobPow: 0.7, pool: [[2, 'salt'], [1, 'jamhop'], [1, 'bun'], [3, 'worm'], [4, 'ant'], [6, 'pepper'], [6, 'garlic'], [7, 'egg']], hazard: 'burner', mimic: 'mimic', elite: 'xegg', boss: 'toast',
+    baseLv: 1, power: 1, mobPow: 0.6, pool: [[2, 'salt'], [1, 'jamhop'], [1, 'bun'], [3, 'worm'], [4, 'ant'], [6, 'pepper'], [6, 'garlic'], [7, 'egg']], hazard: 'burner', mimic: 'mimic', elite: 'xegg', boss: 'toast',
     names: ['Countertop Meadow', 'Crumb Trail', 'Gummy Gully', 'Toaster Hills', 'Rotten Ridge', 'Spice Shelf', 'Pepper Pass', 'Cutting Board Bluffs', 'Burner Approach', 'Stovetop Throne'],
   },
   {
     id: 2, name: 'The Fridge', blurb: 'Cold, crisp and full of grudges.', bg: 'bg-far-fridge', mid: 'bg-mid-fridge', tile: 'tile-fridge', platTint: 0xc8e4ff, bossBg: 'bg-far-freezer',
-    baseLv: 13, power: 1.3, mobPow: 1.1, pool: [[2, 'icepop'], [1, 'cheesemouse'], [1, 'pea'], [1, 'yogurt'], [2, 'milk'], [3, 'icebat'], [4, 'carrot'], [6, 'pickle'], [7, 'jelly']], hazard: 'ice', mimic: 'mimic', elite: 'xpickle', boss: 'golem',
+    baseLv: 13, power: 1.3, mobPow: 1.5, pool: [[2, 'icepop'], [1, 'cheesemouse'], [1, 'pea'], [1, 'yogurt'], [2, 'milk'], [3, 'icebat'], [4, 'carrot'], [6, 'pickle'], [7, 'jelly']], hazard: 'ice', mimic: 'mimic', elite: 'xpickle', boss: 'golem',
     names: ['Crisper Drawer', 'Dairy Lane', 'Frosty Shelf', 'Pickle Jar Pier', 'Knight of the Brine', 'Egg Carton Cliffs', 'Butter Bridge', 'Ketchup Canyon', 'Ice Tray Steps', 'Freezer Throne'],
   },
   {
     id: 3, name: 'The Oven', blurb: 'Preheated to dangerous.', bg: 'bg-far-oven', mid: 'bg-mid-oven', tile: 'tile-oven', platTint: 0xffc8a0, bossBg: 'bg-far-dragon',
-    baseLv: 25, power: 1.6, mobPow: 1.0, pool: [[2, 'mitt'], [1, 'crumbcube'], [1, 'bacon'], [1, 'popcorn'], [2, 'sausage'], [3, 'imp'], [4, 'kettle'], [6, 'meatball'], [7, 'marsh']], hazard: 'vent', mimic: 'cereal', elite: 'xmeatball', boss: 'dragon',
+    baseLv: 25, power: 1.6, mobPow: 1.12, pool: [[2, 'mitt'], [1, 'crumbcube'], [1, 'bacon'], [1, 'popcorn'], [2, 'sausage'], [3, 'imp'], [4, 'kettle'], [6, 'meatball'], [7, 'marsh']], hazard: 'vent', mimic: 'cereal', elite: 'xmeatball', boss: 'dragon',
     names: ['Oven Door Ramp', 'Bottom Rack', 'Muffin Tin Maze', 'Casserole Cliffs', 'Meatball Mountain', 'Cookie Sheet Plains', 'Roasting Pan Pass', 'Pizza Stone Steppe', 'Top Rack Ascent', 'Broiler Peak'],
   },
   {
     id: 4, name: 'The Pantry', blurb: 'Dusty shelves, grumpy groceries.', bg: 'bg-far-pantry', mid: 'bg-mid-pantry', tile: 'tile-pantry', platTint: 0xe8d0b0, bossBg: 'bg-far-jar',
-    baseLv: 37, power: 2.5, mobPow: 0.9, pool: [[2, 'cracker'], [1, 'bee'], [1, 'cheerio'], [1, 'flour'], [2, 'noodle'], [3, 'can'], [4, 'raisin'], [5, 'soda']], hazard: 'drop', mimic: 'cereal', elite: 'xcan', boss: 'jar',
+    baseLv: 37, power: 2.5, mobPow: 1.0, pool: [[2, 'cracker'], [1, 'bee'], [1, 'cheerio'], [1, 'flour'], [2, 'noodle'], [3, 'can'], [4, 'raisin'], [5, 'soda']], hazard: 'drop', mimic: 'cereal', elite: 'xcan', boss: 'jar',
     names: ['Cupboard Door', 'Cereal Canyon', 'Flour Drifts', 'Tin Can Alley', 'Shield Wall', 'Spice Rack Ridge', 'Pasta Jar Peaks', 'Honey Hollow', 'Top Shelf Climb', 'Cookie Vault'],
   },
   {
     id: 5, name: 'The Sink', blurb: 'Deep, damp and down the drain.', bg: 'bg-far-sink', mid: 'bg-mid-sink', tile: 'tile-sink', platTint: 0xd0e4f0, bossBg: 'bg-far-drain',
-    baseLv: 49, power: 3.0, mobPow: 0.75, pool: [[2, 'straw'], [1, 'duck'], [1, 'plate'], [1, 'bubble'], [2, 'mug'], [3, 'eel'], [4, 'glove'], [7, 'scrub']], hazard: 'tap', mimic: 'mimic', elite: 'xscrub', boss: 'moldking',
+    baseLv: 49, power: 3.0, mobPow: 0.82, pool: [[2, 'straw'], [1, 'duck'], [1, 'plate'], [1, 'bubble'], [2, 'mug'], [3, 'eel'], [4, 'glove'], [7, 'scrub']], hazard: 'tap', mimic: 'mimic', elite: 'xscrub', boss: 'moldking',
     names: ['Faucet Falls', 'Suds Slide', 'Sponge Shoals', 'Dish Rack Ridge', 'Steel Wool Wall', 'Bubble Bay', 'Plughole Pass', 'Greasy Pan Pits', 'Drain Descent', 'The Mold Throne'],
   },
   // ---- Act 2: Beyond the Kitchen ----
   {
     id: 6, name: 'The Dining Room', blurb: 'Fancy plates, forgotten feasts.', bg: 'bg-far-dining', mid: 'bg-mid-dining', tile: 'tile-dining', platTint: 0xf0e0c8, bossBg: 'bg-far-table',
-    baseLv: 61, power: 3.4, mobPow: 1, pool: [[2, 'ladle'], [1, 'teacake'], [1, 'fork'], [1, 'napkin'], [2, 'candle'], [3, 'gravy'], [4, 'teapot'], [7, 'roast']], hazard: 'wax', mimic: 'mimic', elite: 'xroast', boss: 'stale',
+    baseLv: 61, power: 3.4, mobPow: 1.08, pool: [[2, 'ladle'], [1, 'teacake'], [1, 'fork'], [1, 'napkin'], [2, 'candle'], [3, 'gravy'], [4, 'teapot'], [7, 'roast']], hazard: 'wax', mimic: 'mimic', elite: 'xroast', boss: 'stale',
     names: ['Tablecloth Trail', 'Placemat Plains', 'Candelabra Crossing', 'Gravy Boat Bay', 'Roast Ridge', 'Teacup Terrace', 'Napkin Fold Fort', 'Silverware Siege', 'Chandelier Climb', 'The Head of the Table'],
   },
   {
@@ -116,7 +116,9 @@ export function genStage(w: WorldDef, n: number, o: { seed?: number; lv?: number
       id, world: w.id, num: id, name: o.name ?? w.names[9], bg: w.bossBg, mid: '', tile: w.tile, platTint: w.platTint, width: 1500, groundY: G,
       lv: [lvLo + 2, lvLo + 2], par: 130, rec: lvLo, boss: true,
       platforms: [{ x: 180, y: 382, w: 240 }, { x: 1080, y: 382, w: 240 }, { x: 520, y: 294, w: 460 }],
-      ladders: [], mobs: [{ kind: w.boss, x: 1150, lv: lvLo + 2 }],
+      // a ladder up to the top ledge: the slow, low jumpers (Bluebeary, Crabbage, Chocomunch, Minturtle, Dumplord) can't make the
+      // hop onto it from a side ledge, and a monster standing up there never comes down (the room would never clear)
+      ladders: [{ x: 750, top: 294, bottom: G }], mobs: [{ kind: w.boss, x: 1150, lv: lvLo + 2 }],
       // phase 2: the arena turns on its hazards (same for every kaiju)
       hazards: [hazardAt(w.hazard, 470, 1), hazardAt(w.hazard, 1030, 2.2)].map(h => ({ ...h, phase2: true })),
     };
@@ -417,6 +419,7 @@ function genMaps(w: WorldDef, n: number, o: { seed?: number; id: string; name?: 
   b.props.push({ kind: 'jar', x: bx0 + 50, y: G }, { kind: 'jar', x: bx0 + 90, y: G }, { kind: 'jar', x: bx0 + 130, y: G }); // before the boss: three jars
   const mv = <T extends { x: number }>(a2: T): T => ({ ...a2, x: a2.x + bx0 });
   for (const p of room.platforms) b.platforms.push(mv(p));
+  for (const l of room.ladders) b.ladders.push(mv(l));
   const foe: MobSpawn = boss ? { ...mv(room.mobs[0]), wake: bx0 + 320 }
     : { kind: (n === 5 ? w.elite : mini) as MobKind, lv: lvHi + 1, x: bx0 + 1150, elite: !(w.id === 1 && n <= 2), wake: bx0 + 320 };
   b.mobs.unshift(foe); // the boss is mobs[0]

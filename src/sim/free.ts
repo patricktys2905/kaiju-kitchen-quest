@@ -3,12 +3,16 @@
 //  - ENDLESS PANTRY: arena floors one after another, harder each floor; pick a perk after every floor; a boss every 10th.
 //  - BOSS RUSH: every world boss you've beaten, back to back, health carrying over. Best time per kaiju.
 // Monsters scale to the hero's level (StageDef.power), so free mode never touches story progress.
+// Free stages have no stage number (num ''): the name carries it ("Boss Rush 2: …"), so titles read once.
 import { MOBS } from './mobs';
 import { WORLDS, genStage } from './stages';
 import type { Derived } from './stats';
 import type { BoxTier, MobKind, MobSpawn, StageDef } from './types';
 
 export type FreeMode = 'daily' | 'endless' | 'rush';
+
+/** A stage's title line for the HUD: its number and name (Free Play stages have no number: their name says it all). */
+export function stageTitle(st: Pick<StageDef, 'num' | 'name'>): string { return [st.num, st.name].filter(Boolean).join(' '); }
 
 /** Monster strength for a level (the story worlds' curve, smoothly in between). */
 export function powerFor(lv: number): number {
@@ -30,7 +34,7 @@ export function dailyStage(day: number, heroLv: number): StageDef {
   const lv = Math.max(1, heroLv - 1);
   const st = genStage(w, n, { seed: day * 7 + 3, lv, id: `D-${day}`, name: `Daily: ${w.names[n - 1]}` });
   // a full long stage now (5-10 minutes of sections): its monsters a little gentler than the story's at that level
-  return { ...st, num: 'DAILY', power: powerFor(lv) * DAILY_POWER, props: (st.props ?? []).map(p => ({ ...p, key: false })) };
+  return { ...st, num: '', power: powerFor(lv) * DAILY_POWER, props: (st.props ?? []).map(p => ({ ...p, key: false })) };
 }
 
 /** Endless Pantry floor: one arena room (2-3 waves) from a world that changes every 3 floors; every 10th floor a boss. */
@@ -39,7 +43,7 @@ export function endlessFloor(floor: number, heroLv: number, seed: number): Stage
   const lv = Math.max(1, heroLv - 2 + Math.floor(floor * 0.8));
   const power = powerFor(lv) * (1 + 0.02 * floor); // deeper floors hit harder than their level alone
   const id = `E-${floor}`, name = `Endless Pantry: Floor ${floor}`;
-  if (floor % 10 === 0) { const st = genStage(w, 10, { lv: lv - 2, id, name, short: true }); return { ...st, num: `F${floor}`, power, mobs: st.mobs.map(m => ({ ...m, lv })) }; }
+  if (floor % 10 === 0) { const st = genStage(w, 10, { lv: lv - 2, id, name, short: true }); return { ...st, num: '', power, mobs: st.mobs.map(m => ({ ...m, lv })) }; }
   let s = (seed + floor * 7919) >>> 0 || 1;
   const r = () => { s ^= s << 13; s ^= s >>> 17; s ^= s << 5; return ((s >>> 0) % 100000) / 100000; };
   const kinds = w.pool.map(([, k]) => k).filter(k => MOBS[k].brain !== 'turret');
@@ -52,7 +56,7 @@ export function endlessFloor(floor: number, heroLv: number, seed: number): Stage
   }
   if (floor % 5 === 0) waves[waves.length - 1].push({ kind: w.elite, lv: lv + 1, x: 900, elite: true });
   return {
-    id, world: w.id, num: `F${floor}`, name, bg: w.bg, mid: w.mid, tile: w.tile, platTint: w.platTint, width: 1500, groundY: 470,
+    id, world: w.id, num: '', name, bg: w.bg, mid: w.mid, tile: w.tile, platTint: w.platTint, width: 1500, groundY: 470,
     lv: [lv, lv + 1], par: 60 + nWaves * 15, rec: lv, power,
     platforms: [{ x: 300, y: 382, w: 240 }, { x: 960, y: 382, w: 240 }], ladders: [], mobs: [],
     arenas: [{ x0: 60, x1: 1440, waves }],
@@ -60,14 +64,14 @@ export function endlessFloor(floor: number, heroLv: number, seed: number): Stage
 }
 
 /** Boss Rush bosses are this strong compared with the story (tuned with scripts/free-balance.ts). */
-export const RUSH_POWER = 0.8;
+export const RUSH_POWER = 0.66;
 /** Boss Rush: the bosses of every world this kaiju has beaten, in order, at its level. */
 export function rushStages(beaten: number[], heroLv: number): StageDef[] {
   return WORLDS.filter(w => beaten.includes(w.id)).map((w, i) => {
     const lv = heroLv + 1;
     const st = genStage(w, 10, { lv: lv - 2, id: `R-${w.id}`, name: `Boss Rush ${i + 1}: ${MOBS[w.boss].name}`, short: true });
     // a little gentler than the story fight: these come back to back with only half your health back in between
-    return { ...st, num: `RUSH ${i + 1}`, power: powerFor(lv) * RUSH_POWER, mobs: st.mobs.map(m => ({ ...m, lv })) };
+    return { ...st, num: '', power: powerFor(lv) * RUSH_POWER, mobs: st.mobs.map(m => ({ ...m, lv })) };
   });
 }
 

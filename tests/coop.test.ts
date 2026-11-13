@@ -2,7 +2,7 @@
 import { describe, expect, it } from 'vitest';
 import { applySnapshot, makeSnapshot } from '../src/net/snapshot';
 import { EMOTES, type NetFree } from '../src/net/net';
-import { dailyStage, endlessFloor, rushStages, withPerks } from '../src/sim/free';
+import { dailyStage, endlessFloor, rushStages, stageTitle, withPerks } from '../src/sim/free';
 import { NO_INPUT } from '../src/sim/types';
 import { STAGES } from '../src/sim/stages';
 import { derive, newProfile } from '../src/sim/stats';
@@ -54,5 +54,15 @@ describe('online co-op polish', () => {
   it('quick chat lines are short enough for a speech bubble', () => {
     expect(EMOTES.length).toBe(4);
     for (const e of EMOTES) expect(e.length).toBeLessThanOrEqual(16);
+  });
+
+  it('Free Play titles read once in the HUD', () => {
+    const daily = stageTitle(dailyStage(20261113, 30)), rush = stageTitle(rushStages([1, 2, 3], 30)[1]);
+    expect(daily).toMatch(/^Daily: \S/);
+    expect(daily.match(/daily/gi)?.length).toBe(1);
+    expect(rush).toMatch(/^Boss Rush 2: \S/);
+    expect(rush.match(/rush/gi)?.length).toBe(1);
+    for (const fl of [1, 10]) expect(stageTitle(endlessFloor(fl, 30, 7))).toBe(`Endless Pantry: Floor ${fl}`);
+    expect(stageTitle(STAGES.find(s => s.id === '1-3')!)).toMatch(/^1-3 \S/); // story stages keep their number
   });
 });

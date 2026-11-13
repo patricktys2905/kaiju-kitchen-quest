@@ -15,6 +15,8 @@ export class Bot {
   private tap = 0;          // dodge double-tap sequencer
   private tapDir = 0;
   private stuck = 0; private lastX = 0;
+  private tgt = 0;          // the monster it is going for
+  private floorY = 0;       // the height it last stood at (mid-jump it keeps heading for the ledge it jumped for)
   private r: () => number;
   /** hi = which hero it plays (0 = the player slot for balance runs; 1+ = a CPU buddy) */
   constructor(private w: World, private o: BotOpts = AVERAGE, seed = 1, private hi = 0) {
@@ -61,7 +63,11 @@ export class Bot {
     if (ready && exit && !w.gates.some(gt => !gt.open && (gt.x - h.x) * (exit.x - gt.x) > 0) && (!w.scroll || w.scroll.got || w.mapAt(w.scroll.x) !== mi) && w.holdout <= 0) return enter(exit.x);
     // drops lying around: pick them up
     const q = w.pickups.filter(p => w.mapAt(p.x) === mi && Math.abs(p.x - h.x) < 700).sort((u, v) => Math.abs(u.x - h.x) - Math.abs(v.x - h.x))[0];
-    if (q) { inp[q.x > h.x ? 'right' : 'left'] = Math.abs(q.x - h.x) > 10; return inp; }
+    if (q) {
+      // one lying on a ledge out of reach from here (they only drift to you within 150 px): climb to it (it used to wait underneath until the drop faded)
+      if (Math.abs(q.y - h.y) >= 130) { const go = this.goTo(q.x, q.y, h, inp, pulse); go.attack = false; return go; }
+      inp[q.x > h.x ? 'right' : 'left'] = Math.abs(q.x - h.x) > 10; return inp;
+    }
     return null;
   }
 
@@ -148,7 +154,12 @@ export class Bot {
     const g0 = myMap >= 0 ? w.stage.maps![myMap].goal : undefined;
     const wanted = (m: Mob) => g0?.kind === 'collect' && !w.zones2[myMap].done && g0.wants.some(q => q.mob === m.kind && (w.drops[q.mob] ?? 0) < q.n);
     const cost = (m: Mob) => (Math.abs(m.x - h.x) + Math.abs(m.y - h.y) * (MOBS[m.kind].brain === 'flyer' ? 0.5 : 3)) * (wanted(m) ? 0.4 : 1);
-    const t = alive.reduce((a, b) => cost(a) < cost(b) ? a : b);
+    let t = alive.reduce((a, b) => cost(a) < cost(b) ? a : b);
+    // stick with the one it is already on its way to (the way up to a ledge often leads away from it first: re-picking the
+    // nearest every step walked back and forth between two ladders for the rest of the run), unless something is in its face
+    const cur = alive.find(m => m.id === this.tgt);
+    if (cur && cur !== t && !(Math.abs(t.x - h.x) < 200 && Math.abs(t.y - h.y) < 30) && cost(cur) < cost(t) + 600) t = cur;
+    this.tgt = t.id;
     const def = MOBS[t.kind];
     const dx = t.x - h.x, dy = t.y - h.y;
     const flyer = def.brain === 'flyer';
@@ -157,6 +168,7 @@ export class Bot {
     // stuck detection: jump
     if (Math.abs(h.x - this.lastX) < 0.5 && h.state === 'move') this.stuck++; else this.stuck = 0;
     this.lastX = h.x;
+    if (h.ground) this.floorY = h.y;
     // on a ladder: climb toward the target's height; once level with it, hop off toward it (no dithering up/down)
     if (h.state === 'climb') { if (dy < -2) inp.up = true; else if (Math.abs(dy) < 16) { inp[dx > 0 ? 'right' : 'left'] = true; inp.jump = pulse; } else inp.down = true; return inp; } // climb right to the top first (hopping off just short of it re-grabbed the ladder)
     if (sameLevel || (flyer && dy < 70 && Math.abs(dx) < reach + 20)) {
@@ -195,12 +207,25 @@ export class Bot {
       // stepping stone: the closest platform between us and the target's height, near the target
       const ty = MOBS[t.kind].brain === 'flyer' ? t.homeY : t.y;
       const near = (p: { x: number; w: number }) => Math.max(0, p.x - t.x, t.x - (p.x + p.w));
-      const under = w.stage.platforms.filter(p => p.y > ty + 4 && p.y < h.y - 4 && h.y - p.y < 100 && near(p) < 450).sort((a, b) => near(a) - near(b))[0];
-      const goal = (!plat || h.y - plat.y > 100) && under ? under : plat;
+      // (measured from where it last stood: judged from mid-air, a hop onto a stepping stone turned for the higher ledge at its
+      // peak and missed both, for ever)
+      const hy = h.ground ? h.y : Math.max(h.y, this.floorY);
+      const under = w.stage.platforms.filter(p => p.y > ty + 4 && p.y < hy - 4 && hy - p.y < 100 && near(p) < 450).sort((a, b) => near(a) - near(b))[0];
+      const goal = (!plat || hy - plat.y > 100) && under ? under : plat;
+      // too high to jump to and no stepping stone in reach: a ladder part of the way up (to a ledge between us and the target)
+      // (it used to hop on the spot under the ledge for the rest of the run)
+      if (!goal || hy - goal.y > 100) {
+        const mid = w.stage.ladders.filter(l => l.top > ty + 4 && l.top < hy - 4 && l.bottom > hy - 8 && Math.abs(l.x - t.x) < 700).sort((u, v) => Math.abs(u.x - t.x) - Math.abs(v.x - t.x))[0];
+        if (mid) { if (Math.abs(mid.x - h.x) > 8) inp[mid.x > h.x ? 'right' : 'left'] = true; else inp.up = true; return inp; }
+      }
       if (goal) {
         const edge = h.x < goal.x ? goal.x + 30 : h.x > goal.x + goal.w ? goal.x + goal.w - 30 : h.x;
         inp[edge > h.x ? 'right' : 'left'] = Math.abs(edge - h.x) > 6;
         if (Math.abs(edge - h.x) < 70 || this.stuck > 20) inp.jump = pulse;
+        // on a ledge with a gap to cross to it: jump from our edge (walking off it just fell to the floor, round and round)
+        const own = h.on !== null && h.on >= 0 ? w.stage.platforms[h.on] : null;
+        if (own && own !== goal && ((edge > h.x && h.x > own.x + own.w - 7) || (edge < h.x && h.x < own.x + 7))) inp.jump = true;
+        if (!h.ground && h.vy < 0) inp.jump = true; // hold the button for the full jump
       } else { inp[dx > 0 ? 'right' : 'left'] = true; inp.jump = pulse; }
       return inp;
     }

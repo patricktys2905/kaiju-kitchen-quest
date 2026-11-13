@@ -32,9 +32,9 @@ import { setGearUi, setSkillUi, setTouchVisible, setUltUi } from '../touch';
 import { hideCamp, runGacha, showCamp, showResult, stageUnlocked } from '../ui/camp';
 import { type NetPlay, inGame, kitOf, launch, leaveOnline, net, netRunBoxes, showOnline } from '../ui/online';
 import { type FreeRun, beatenBosses, bossName, freeData, freeSummary, mmss, pickPerk, waitPerk } from '../ui/free';
-import { endlessFloor, endlessReward, perkChoices, rushStages, withPerks } from '../sim/free';
+import { endlessFloor, endlessReward, perkChoices, rushStages, stageTitle, withPerks } from '../sim/free';
 import type { LootBox } from '../sim/types';
-import { applySnapshot, makeSnapshot, type Snapshot } from '../net/snapshot';
+import { applySnapshot, guestDropGain, makeSnapshot, type Snapshot } from '../net/snapshot';
 import { dropIcon, dropName } from '../sim/drops';
 import { type Input, NO_INPUT } from '../sim/types';
 
@@ -119,6 +119,8 @@ export class GameScene extends Phaser.Scene {
   private me = 0;
   private netAcc = 0;
   private netEvents: SimEvent[] = [];
+  /** online guest: the team's drop bag in the first snapshot (what the host brought), to bank only what the team gained */
+  private dropBase: Partial<Record<string, number>> | null = null;
   private inbox: { s: Snapshot; ev: SimEvent[] }[] = [];
   /** guest: buttons pressed since the last input we sent (so quick taps aren't lost between sends) */
   private latch: Input = { ...NO_INPUT };
@@ -201,7 +203,7 @@ export class GameScene extends Phaser.Scene {
     this.me = this.online?.seat ?? 0;
     // online Free Play: the run as this device sees it (its own boxes, its own health)
     this.free = data.free ?? (nf ? { mode: nf.mode, stage: nf.stage, floor: nf.floor, seed: nf.seed, perks: nf.perks, hpFrac: nf.hp[this.me] ?? 1, time: nf.time, boxes: netRunBoxes } : null);
-    this.netAcc = 0; this.netEvents = []; this.inbox = []; this.latch = { ...NO_INPUT };
+    this.netAcc = 0; this.netEvents = []; this.dropBase = null; this.inbox = []; this.latch = { ...NO_INPUT };
     this.stage = this.free ? this.free.stage : stageById(data.stage);
     this.hookNet();
     this.coach?.hide();
@@ -241,7 +243,8 @@ export class GameScene extends Phaser.Scene {
     } else this.world = new World(st, derive(p), (Date.now() & 0xffff) + 1, quickBag(), save.items.revive ?? 0, this.hard, STORIES[p.species]?.variants[st.id], [...(save.spicy ?? [])], nemesisOf(p.species), this.nightmare,
       this.buddySpecies() !== null ? [derive(buddyProfile(this.buddySpecies()!, p.level))] : []);
     // the drop bag comes along (map exits take from it); the stage panel's skip spends a stage's set up front
-    if (st.maps && this.world) { this.world.drops = { ...(save.drops ?? {}) } as typeof this.world.drops; if (this.skipBoss) { this.skipBoss = false; for (const m of st.maps) if (m.goal?.kind === 'collect') for (const q of m.goal.wants) this.world.drops[q.mob] = Math.max(0, (this.world.drops[q.mob] ?? 0) - q.n); this.world.skipToBoss(); save.drops = { ...this.world.drops }; persist(); } }
+    // (online the team shares the host's bag: a guest's drawing World starts empty and is filled from the host's snapshots)
+    if (st.maps && this.world) { this.world.drops = (on?.role === 'guest' ? {} : { ...(save.drops ?? {}) }) as typeof this.world.drops; if (this.skipBoss) { this.skipBoss = false; for (const m of st.maps) if (m.goal?.kind === 'collect') for (const q of m.goal.wants) this.world.drops[q.mob] = Math.max(0, (this.world.drops[q.mob] ?? 0) - q.n); this.world.skipToBoss(); save.drops = { ...this.world.drops }; persist(); } }
     const cam = this.cameras.main.setZoom(ZOOM).setBackgroundColor('#f6dcb4');
     const bg = this.has(st.bg) ? st.bg : 'bg-far';
     this.far = this.has(bg) ? this.add.image(SX, SY, bg).setOrigin(0, 0).setScrollFactor(0).setDepth(-100) : undefined;
@@ -358,7 +361,7 @@ export class GameScene extends Phaser.Scene {
     playMusic(st.boss && !st.bossBg ? 'boss' : st.world === 2 || st.world === 4 ? 'world2' : st.world === 3 || st.world === 5 ? 'world3' : st.world === 6 ? 'world2' : st.world === 8 ? 'world3' : st.world === 9 ? 'world2' : st.world === 10 ? 'world3' : 'world1');
     if (st.boss && !st.bossBg) this.time.delayedCall(900, () => sfx('boss'));
     if (w.variant) this.time.delayedCall(900, () => toast(`${{ swarm: '🐜 SWARM', ambush: '⚔️ AMBUSH', night: '🌙 NIGHT' }[w.variant!]}!`, { color: '#c8a8ff' }));
-    toast(`${st.num} ${st.name}${this.nightmare ? ' · 💀 NIGHTMARE' : this.hard ? ' · HARD' : ''}${w.spicy.length ? ' · ' + '🌶'.repeat(w.spicy.length) : ''}`, { big: true, color: this.hard ? '#ff7a6a' : undefined });
+    toast(`${stageTitle(st)}${this.nightmare ? ' · 💀 NIGHTMARE' : this.hard ? ' · HARD' : ''}${w.spicy.length ? ' · ' + '🌶'.repeat(w.spicy.length) : ''}`, { big: true, color: this.hard ? '#ff7a6a' : undefined });
     if (st.boss) this.time.delayedCall(1200, () => toast(st.bossBg ? `Fight your way to ${theName(MOBS[st.mobs[0].kind].name)}!` : `${theName(MOBS[st.mobs[0].kind].name)} awaits!`, { color: '#ff9a6a' }));
   }
 
@@ -421,11 +424,17 @@ export class GameScene extends Phaser.Scene {
       <h3>Found this stage</h3><div class="grid"><div class="it">🎁 ${loot.length} box${loot.length === 1 ? '' : 'es'}</div><div class="it">🍪 ${w.run.crumbs} crumbs</div></div></div>`);
   }
 
+  /** Monster drops go home with you. Alone or hosting, the bag is yours: what's left in it is your save. An online guest
+   *  played from the host's bag, so they add what the team's bag gained this stage to their own (the host's save gains the same). */
+  private bankDrops(w: World): void {
+    save.drops = this.online?.role === 'guest' ? guestDropGain(save.drops ?? {}, this.dropBase ?? {}, w.drops) : { ...w.drops };
+  }
+
   private leave(): void {
     showPause(false);
     // escape: you keep the drops you picked up and the crumbs you found (not the stage's boxes); start fresh next time
     const w = this.world;
-    if (w && !this.done && w.stage.maps) { this.done = true; save.drops = { ...w.drops }; save.crumbs += w.run.crumbs; persist(); }
+    if (w && !this.done && w.stage.maps) { this.done = true; this.bankDrops(w); save.crumbs += w.run.crumbs; persist(); }
     if (this.online) { this.unhookNet(); leaveOnline(); }
     this.scene.restart({});
   }
@@ -572,7 +581,7 @@ export class GameScene extends Phaser.Scene {
       this.latch = { ...inp };
     }
     if (this.inbox.length) {
-      for (const m of this.inbox.splice(0)) { applySnapshot(w, m.s); w.view(this.me); if (!this.done) this.onEvents(m.ev); }
+      for (const m of this.inbox.splice(0)) { applySnapshot(w, m.s); w.view(this.me); this.dropBase ??= { ...w.drops }; if (!this.done) this.onEvents(m.ev); }
     } else {
       for (const h of w.heroes) if (h.state !== 'down' && h.state !== 'climb') { h.x += h.vx * dt; if (!h.ground) h.y += h.vy * dt; }
       for (const m of w.mobs) if (m.state === 'walk') m.x += m.vx * dt;
@@ -823,7 +832,7 @@ export class GameScene extends Phaser.Scene {
     if (!failed && chillies) w.run.crumbs = Math.round(w.run.crumbs * (1 + 0.25 * chillies));
     save.crumbs += w.run.crumbs;
     save.items.fstone = (save.items.fstone ?? 0) + w.run.stones;
-    if (w.stage.maps) save.drops = { ...w.drops }; // drops are kept, cleared or not
+    if (w.stage.maps) this.bankDrops(w); // drops are kept, cleared or not
     if (w.run.crumbs) track('crumbs', w.run.crumbs);
     if (this.free && this.online) { this.finishFreeOnline(failed); return; }
     if (this.free) { this.finishFree(failed); return; }

@@ -8,6 +8,7 @@ import { xpFor, type HeroProfile } from './sim/stats';
 import type { BoxTier, StageDef } from './sim/types';
 import type { World } from './sim/world';
 import { dropName } from './sim/drops';
+import { stageTitle } from './sim/free';
 import { canFullscreen, fsIcon, isFullscreen } from './ui/title';
 
 const CSS = `
@@ -150,7 +151,7 @@ export function initHud(onMenu: () => void, onResume: () => void, onLeave: () =>
   p.querySelector('[data-a=mute]')!.addEventListener('click', () => { toggleMute(); });
 }
 
-export function showHud(v: boolean): void { root?.classList.toggle('on', v); }
+export function showHud(v: boolean): void { root?.classList.toggle('on', v); if (!v) document.body.classList.remove('bossbar'); }
 
 let emoteFn: ((e: number) => void) | null = null;
 /** Online only: show the quick-chat button with these lines (null hides it). */
@@ -193,7 +194,7 @@ export function updateHud(w: World, p: HeroProfile, st: StageDef): void {
     el.querySelector('b')!.textContent = it ? String(it.n) : '';
     (el.querySelector('u') as HTMLElement).style.setProperty('--cd', `${Math.round(h.quickCd / QUICK_CD * 360)}deg`);
   });
-  q('.stage .t').textContent = `${st.num} ${st.name}${w.spicy.length ? ' ' + '🌶'.repeat(w.spicy.length) : ''}`;
+  q('.stage .t').textContent = `${stageTitle(st)}${w.spicy.length ? ' ' + '🌶'.repeat(w.spicy.length) : ''}`;
   const clock = w.spicy.includes('clock') && !w.portal ? ` · ⏱ ${Math.max(0, Math.ceil(st.par - w.run.time))}s` : '';
   const others = w.heroes.filter(o => o !== w.hero);
   root.querySelectorAll<HTMLElement>('.mates .mate').forEach((mc, k) => {
@@ -208,7 +209,7 @@ export function updateHud(w: World, p: HeroProfile, st: StageDef): void {
   });
   const ob = st.objective;
   const goal = !ob || w.objDone ? '' : ob.kind === 'escort' && w.npc ? ` · 🧁 ${Math.ceil(w.npc.hp / w.npc.maxHp * 100)}%`
-    : ob.kind === 'fetch' && w.scroll && !w.scroll.got ? ` · 📜 ${Math.max(0, Math.ceil(w.objTimer))}s`
+    : ob.kind === 'fetch' && w.scroll && !w.scroll.got && w.objArmed ? ` · 📜 ${Math.max(0, Math.ceil(w.objTimer))}s`
     : w.holdout > 0 ? ` · ⏱ hold out ${Math.ceil(w.holdout)}s` : '';
   const arena = w.arenas.find(a => a.locked);
   const arenaTxt = arena ? ` · ⚔️ wave ${arena.wave + 1}/${arena.waves.length}` : w.portal || !w.arenas.some(a => !a.done) ? '' : ' · ⚔️ arena ahead';
@@ -229,6 +230,7 @@ export function updateHud(w: World, p: HeroProfile, st: StageDef): void {
   const boss = w.boss;
   const bb = q('.boss');
   bb.classList.toggle('on', !!boss && boss.state !== 'dead');
+  document.body.classList.toggle('bossbar', !!boss && boss.state !== 'dead'); // the coach tip bar moves below the boss bar (src/ui/tips.ts)
   if (boss) {
     q('.boss .t').textContent = `Lv ${boss.lv} ${MOBS[boss.kind].name.toUpperCase()}`;
     q('.boss .bar i').style.transform = `scaleX(${Math.max(0, boss.hp / boss.maxHp)})`;

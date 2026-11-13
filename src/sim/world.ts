@@ -27,11 +27,11 @@ const DODGE_T = 0.32, DODGE_INV = 0.3, DODGE_CD = 0.55;
 /** a hit that lands in the first part of a dodge is a PERFECT dodge */
 export const PERFECT_WIN = 0.2;
 /** Nightmare on top of Hard's levels: tougher, harder-hitting monsters (plus shorter telegraphs and smarter tactics) */
-export const NIGHTMARE = { hp: 1.2, atk: 1.25 };
+export const NIGHTMARE = { hp: 1.3, atk: 1.45 };
 /** Boss-room minibosses (map stages) have this much more health than an elite. */
 export const MINI_ROOM_HP = 3;
 /** World bosses on Nightmare: a smaller bump (their fights are long and the shorter telegraphs already bite) */
-export const NIGHTMARE_BOSS = { hp: 1.1, atk: 1.12 };
+export const NIGHTMARE_BOSS = { hp: 1.3, atk: 1.4 };
 const SLOWMO_T = 0.55, SLOWMO_RATE = 0.3, COUNTER_T = 1.6;
 /** style meter letters (0..100) */
 export const STYLE_RANKS: [number, string][] = [[80, 'S'], [60, 'A'], [40, 'B'], [20, 'C'], [0, 'D']];
@@ -207,6 +207,13 @@ export class World {
   objTimer = 0;
   holdout = 0;
   objDone = false;
+  /** SKIP TO BOSS called the scroll race / hold-out off: no timer, no message, no bonus (objDone is set too, so the HUD and
+   *  a guest's snapshot show nothing more of it) */
+  objCancelled = false;
+  /** last "Grab the Recipe Scroll first!" (said at most once every few seconds) */
+  private nagT = -99;
+  /** how far above / below player 1 a teammate may be before the leash pulls it back: the whole height of the tallest map */
+  private leashY = 260;
   private spawnT = 0;
   /** button-mash reading: consecutive plain-combo hits */
   private mash = 0; private mashT = 0;
@@ -257,6 +264,8 @@ export class World {
     this.nightmare = nightmare; if (nightmare) hard = true;
     this.stage = stage = { ...stage, platforms: stage.platforms.map(p => ({ ...p })) };
     this.platBase = stage.platforms.map(p => p.x);
+    // top floor to the ground, plus a jump or a sponge bounce above the top floor
+    this.leashY = Math.max(260, stage.groundY - Math.min(stage.groundY, ...stage.platforms.map(p => p.y)) + 240);
     this.props = (stage.props ?? []).map(p => ({ id: nextId++, kind: p.kind, x: p.x, y: p.y, hp: p.kind === 'crate' ? 2 : p.kind === 'chest' ? 3 : p.kind === 'jar' ? 1 : p.kind === 'cage' ? 3 : p.kind === 'nest' ? 6 : 99, cd: 0, key: p.key, tx: p.tx, tw: p.tw, gate: p.gate }));
     this.cookers = (stage.cookers ?? []).map(x => ({ id: nextId++, x, y: stage.groundY, vx: 0, home: x, face: -1, fuse: 0, gone: 0 }));
     this.spicy = spicy; this.hard = hard;
@@ -412,6 +421,7 @@ export class World {
     this.stepObjective(dt);
     this.stepSetPieces(dt);
     this.cur = this.heroes[0];
+    if (this.stage.maps) this.keepMobsInMaps();
     const holding = this.holdout > 0 || (this.scroll !== null && !this.scroll.got) || this.arenas.some(a => !a.done);
     if (!this.portal && (this.stage.maps ? this.bossRoomClear() && this.holdout <= 0 : this.blocking === 0 && !holding)) { this.portal = true; this.events.push({ t: 'portal' }); }
     if (this.stage.maps) this.stepMapZones(dt);
@@ -419,7 +429,12 @@ export class World {
     const h = this.hero;
     const npcHome = !this.npc || Math.abs(this.npc.x - this.exitX) < 140;
     if (this.portal && npcHome && h.state !== 'down' && Math.abs(h.x - this.exitX) < 40 && Math.abs(h.y - this.stage.groundY) < 4) {
-      if (this.stage.objective && !this.objDone) { this.objDone = true; this.loot.push({ tier: 3, ilvl: this.stage.lv[1] }); this.events.push({ t: 'objective', text: 'Objective complete! Bonus Bento box', done: true }); }
+      if (this.stage.objective && !this.objDone) {
+        this.objDone = true;
+        // only for an objective really done (the scroll in hand, the hold-out held), and a Bento for every player
+        const ob = this.stage.objective, earned = ob.kind === 'fetch' ? !!this.scroll?.got : ob.kind === 'survive' ? this.objArmed && this.holdout <= 0 : true;
+        if (earned) { for (const l of this.lootOf) l.push({ tier: 3, ilvl: this.stage.lv[1] }); this.events.push({ t: 'objective', text: 'Objective complete! Bonus Bento box', done: true }); }
+      }
       // boxes still lying around are swept up for you
       for (const b of this.boxes) { this.lootOf[b.owner ?? 0].push({ tier: b.tier, ilvl: b.ilvl }); this.events.push({ t: 'pickup', id: b.id, tier: b.tier }); }
       this.boxes = [];
@@ -1010,8 +1025,10 @@ export class World {
     const drops = this.stage.maps ? (p.kind === 'chest' ? 1 : 0) : p.kind === 'chest' ? 2 : p.kind === 'crate' && this.rand() < 0.3 ? 1 : 0;
     for (let i = 0; i < drops; i++) {
       const tier = (p.kind === 'chest' ? 4 : 1 + Math.floor(this.rand() * 2)) as BoxTier;
-      const b: Box = { id: nextId++, tier, ilvl: lv, x: p.x + (i - (drops - 1) / 2) * 40, y: p.y - 20, vy: -380, ground: false, t: 0 };
-      this.boxes.push(b); this.events.push({ t: 'drop', id: b.id, tier, x: b.x, y: b.y });
+      for (let o = 0; o < this.humans; o++) { // one for every player (like monster boxes)
+        const b: Box = { id: nextId++, tier, ilvl: lv, x: p.x + (i - (drops - 1) / 2) * 40 + o * 14, y: p.y - 20, vy: -380, ground: false, t: 0, owner: o };
+        this.boxes.push(b); if (o === 0) this.events.push({ t: 'drop', id: b.id, tier, x: b.x, y: b.y });
+      }
     }
     if (p.key) this.events.push({ t: 'key', world: this.stage.world });
   }
@@ -1051,8 +1068,8 @@ export class World {
         a.locked = false; a.done = true;
         this.events.push({ t: 'arenaClear', i });
         if (this.npc && this.npc.hp > 0) this.npc.hp = this.npc.maxHp; // the Crumblet catches its breath after every room
-        if (!this.stage.maps) { const b: Box = { id: nextId++, tier: 3, ilvl: this.stage.lv[1], x: (a.x0 + a.x1) / 2, y: G - 80, vy: -300, ground: false, t: 0 };
-        this.boxes.push(b); this.events.push({ t: 'drop', id: b.id, tier: 3, x: b.x, y: b.y }); }
+        if (!this.stage.maps) for (let o = 0; o < this.humans; o++) { const b: Box = { id: nextId++, tier: 3, ilvl: this.stage.lv[1], x: (a.x0 + a.x1) / 2 + o * 14, y: G - 80, vy: -300, ground: false, t: 0, owner: o };
+        this.boxes.push(b); if (o === 0) this.events.push({ t: 'drop', id: b.id, tier: 3, x: b.x, y: b.y }); }
       }
     });
     // the giant rolling pin: starts behind you at the chase line, a bit slower than you can run
@@ -1116,7 +1133,7 @@ export class World {
   private leash(): void {
     const p = this.heroes[0];
     for (const h of this.heroes) {
-      if (h === p || (Math.abs(h.x - p.x) < 420 && Math.abs(h.y - p.y) < 260)) continue;
+      if (h === p || (Math.abs(h.x - p.x) < 420 && Math.abs(h.y - p.y) < this.leashY)) continue;
       h.x = clamp(p.x - p.face * 60, 20, this.stage.width - 20); h.y = p.y; h.vx = 0; h.vy = 0; h.ground = p.ground; h.on = p.on;
       if (h.state === 'climb') this.enter(h, 'move');
     }
@@ -1136,7 +1153,7 @@ export class World {
   /** Escort / fetch / survive. */
   private stepObjective(dt: number): void {
     const h = this.hero, ob = this.stage.objective;
-    if (!ob || this.failed || this.cleared) return;
+    if (!ob || this.failed || this.cleared || this.objCancelled) return;
     const fail = (why: string) => { // the whole stage is lost at once (re-downing everyone each frame kept it from ever ending)
       this.events.push({ t: 'objFail', why }); for (const p of this.heroes) { p.hp = 0; this.enter(p, 'down'); }
       this.failed = true; this.events.push({ t: 'down' });
@@ -1171,7 +1188,9 @@ export class World {
     }
     // a long stage starts its timer near the end (fetch: the last stretch to the scroll; survive: a hold-out halfway)
     if (!this.objArmed) {
-      if (!this.heroes.some(p => p.x >= ob.at! && p.state !== 'down')) return;
+      // (a map stage: only in the map it happens in, never from a later map or the boss room)
+      const om = this.stage.maps ? this.mapAt(ob.at!) : -1;
+      if (!this.heroes.some(p => p.x >= ob.at! && p.state !== 'down' && (om < 0 || this.mapAt(p.x) === om))) return;
       this.objArmed = true;
       if (ob.kind === 'survive') { this.holdout = this.objTimer; this.events.push({ t: 'objective', text: `Ambush! Hold out for ${Math.round(this.objTimer)} seconds!` }); }
       if (ob.kind === 'fetch') this.events.push({ t: 'objective', text: `The Recipe Scroll is close! ${Math.round(this.objTimer)} seconds to grab it!` });
@@ -1187,12 +1206,15 @@ export class World {
     // survive / hold out: waves from both sides until the timer runs out
     if (this.holdout > 0) {
       this.holdout -= dt;
-      if ((this.spawnT -= dt) <= 0 && this.alive < 10) {
+      // fewer than 10 awake monsters around (a map stage: in this map; sleeping boss-room foes and other maps don't count)
+      const hm = this.stage.maps ? this.stage.maps[this.mapAt(h.x)] : undefined;
+      const around = hm ? this.mobs.filter(m => m.state !== 'dead' && !m.wake && m.x >= hm.x0 && m.x <= hm.x1).length : this.alive;
+      if ((this.spawnT -= dt) <= 0 && around < 10) {
         this.spawnT = 4.5;
         const w = WORLDS.find(x => x.id === this.stage.world) ?? WORLDS[0];
         const kinds = w.pool.map(([, k]) => k).filter(k => MOBS[k].brain !== 'turret' && MOBS[k].brain !== 'mimic' && MOBS[k].brain !== 'burrower');
         for (const side of [-1, 1]) {
-          const x = clamp(h.x + side * 380, 40, this.stage.width - 40);
+          const x = clamp(h.x + side * 380, (hm?.x0 ?? 0) + 40, (hm?.x1 ?? this.stage.width) - 40);
           const m = this.spawnMob(kinds[Math.floor(this.rand() * kinds.length)], x, this.stage.lv[0] + (this.hard ? HARD_LV : 0));
           m.face = side > 0 ? -1 : 1; m.t = 1;
         }
@@ -1212,6 +1234,20 @@ export class World {
   mapAt(x: number): number { return (this.stage.maps ?? []).findIndex(m => x >= m.x0 && x <= m.x1); }
   /** The boss door opens when every zone's goal is done. */
   get doorOpen(): boolean { return (this.stage.maps ?? []).every((m, i) => m.kind !== 'zone' || this.zones2[i].done); }
+  /** The walls between maps hold monsters too. One pulled, grabbed, thrown or teleported past the end of its map (hero grabs
+   *  and pulls, a foe's own vanish behind a hero at the wall, a boss's helpers called beside a hero by the door) goes back
+   *  inside the nearest map: out in the gap it froze for good, and a boss-room foe out there counted as beaten (the exit
+   *  opened with it still alive). */
+  private keepMobsInMaps(): void {
+    const maps = this.stage.maps!;
+    for (const m of this.mobs) {
+      if (m.state === 'dead' || this.mapAt(m.x) >= 0) continue;
+      let best = maps[0], bd = Infinity;
+      for (const mp of maps) { const d = m.x < mp.x0 ? mp.x0 - m.x : m.x - mp.x1; if (d < bd) { bd = d; best = mp; } }
+      if (m.roomBoss) best = maps[maps.length - 1];
+      m.x = clamp(m.x, best.x0 + 20, best.x1 - 20);
+    }
+  }
   private bossRoomClear(): boolean {
     const maps = this.stage.maps!, b = maps.length - 1;
     return this.heroes.some(h => this.mapAt(h.x) === b) && !this.mobs.some(m => m.state !== 'dead' && this.mapAt(m.x) === b);
@@ -1227,15 +1263,24 @@ export class World {
     if (p.need && g?.kind === 'collect' && !this.zones2[mi].done) {
       const miss = g.wants.find(q => (this.drops[q.mob] ?? 0) < q.n);
       if (miss) { h.prev = { ...inp }; this.events.push({ t: 'needDrops', kind: miss.mob, have: this.drops[miss.mob] ?? 0, need: miss.n }); return false; }
+    }
+    // the Recipe Scroll's map: its exit stays shut until the scroll is in hand (the exits are one-way: past it the race was lost for good)
+    if (this.scroll && !this.scroll.got && this.mapAt(this.scroll.x) === mi && p.to > mi) {
+      h.prev = { ...inp };
+      if (this.time - this.nagT > 4) { this.nagT = this.time; this.events.push({ t: 'objective', text: 'Grab the Recipe Scroll first!' }); }
+      return false;
+    }
+    if (p.need && g?.kind === 'collect' && !this.zones2[mi].done) {
       for (const q of g.wants) this.drops[q.mob] = (this.drops[q.mob] ?? 0) - q.n;
       this.zones2[mi].done = true;
     }
-    const go = (o: Hero) => { o.x = p.tx; o.y = this.stage.groundY; o.vx = 0; o.vy = 0; o.ground = true; o.on = -1; o.prev = { ...inp }; this.enter(o, 'move'); };
+    const go = (o: Hero) => { o.x = p.tx; o.y = this.stage.groundY; o.vx = 0; o.vy = 0; o.ground = true; o.on = -1; o.prev = { ...(o === h ? inp : o.prev), up: true }; if (o.state !== 'down') this.enter(o, 'move'); };
     go(h);
-    // CPU buddies and the escorted Crumblet come along
-    if (h.idx === 0) { for (const o of this.heroes) if (o.cpu && o !== h) go(o); if (this.npc) { this.npc.x = p.tx - 60; if (this.npc.hp > 0) this.npc.hp = this.npc.maxHp; } } // (the Crumblet catches its breath)
+    // whichever player opens it (player 1 or an online friend), the whole party goes through together: friends, CPU
+    // buddies and the escorted Crumblet. (A CPU buddy that finds the exit first goes alone and is leashed back.)
+    if (!h.cpu) { for (const o of this.heroes) if (o !== h) go(o); if (this.npc) { this.npc.x = p.tx - 60; if (this.npc.hp > 0) this.npc.hp = this.npc.maxHp; } } // (the Crumblet catches its breath)
     this.pickups = this.pickups.filter(q => this.mapAt(q.x) !== mi); // drops left behind are gone
-    this.events.push({ t: 'warp', to: p.to, hi: h.idx });
+    for (const o of this.heroes) if (o === h || (!h.cpu && !o.cpu)) this.events.push({ t: 'warp', to: p.to, hi: o.idx }); // one for every player's screen
     return true;
   }
   /** Skip straight to the boss room (the stage panel spent the drops). */
@@ -1245,6 +1290,9 @@ export class World {
     maps.forEach((m, i) => { if (m.kind === 'zone') this.zones2[i].done = true; });
     for (const h of this.heroes) { h.x = b.x0 + 120 + h.idx * 40; h.y = this.stage.groundY; }
     if (this.npc) this.npc.x = b.x0 + 70;
+    // the scroll race and the hold-out happen in a map that was skipped: called off (no timer, no message, no bonus)
+    const k = this.stage.objective?.kind;
+    if (k === 'fetch' || k === 'survive') { this.objCancelled = true; this.objDone = true; this.scroll = null; this.holdout = 0; }
   }
   /** Monster drops lying on the floor: they fall, drift to a hero close by and are picked up. */
   private stepPickups(dt: number): void {

@@ -18,7 +18,7 @@ const r2 = (v: number) => Math.round(v * 100) / 100;
 const b = (v: boolean | number) => (v ? 1 : 0);
 
 export interface Snapshot {
-  w: number[];          // time, portal, cleared, failed, combo, style, slowmo, objTimer, holdout, objDone, runTime, crumbs
+  w: number[];          // time, portal, cleared, failed, combo, style, slowmo, objTimer, holdout, objDone, runTime, crumbs, objArmed
   h: (number | string)[][]; // heroes
   m: (number | string)[][]; // monsters
   s: (number | string)[][]; // shots
@@ -40,15 +40,17 @@ export interface Snapshot {
   lo: number[][][];     // each player's loot [tier, ilvl]
   run: number[];        // RunStats values (RUN_KEYS order)
   bg?: number[][];      // each hero's quick-bag counts, then Second Helpings left
+  dr?: number[];        // map stages: the team's drop bag, flat [kind, count, kind, count…] (kinds with none are left out)
+  zd?: number;          // map stages: which maps' exits are open / goals done (bit i = map i)
 }
 
 export function makeSnapshot(w: World): Snapshot {
   const active = w.stage.maps ? new Set(w.heroes.map(h => w.mapAt(h.x))) : null;
   return {
-    w: [r2(w.time), b(w.portal), b(w.cleared), b(w.failed), w.combo, r(w.style), r2(w.slowmo), r1(w.objTimer), r1(w.holdout), b(w.objDone), r1(w.run.time), w.run.crumbs],
+    w: [r2(w.time), b(w.portal), b(w.cleared), b(w.failed), w.combo, r(w.style), r2(w.slowmo), r1(w.objTimer), r1(w.holdout), b(w.objDone), r1(w.run.time), w.run.crumbs, b(w.objArmed)],
     h: w.heroes.map(h => [r(h.x), r(h.y), r(h.vx), r(h.vy), h.face, HERO_STATES.indexOf(h.state), r2(h.t), h.step, b(h.ground), h.skill?.id ?? '', b(h.gliding), r2(h.inv), r(h.hp), h.d.maxHp, b(!!h.buff), r2(h.counter), r(h.ult), r2(h.revT), h.orbs ? h.orbs.n : 0, h.on ?? -9, r1(h.cds[0]), r1(h.cds[1]), r1(h.cds[2]), r1(h.cds[3] ?? 0), r(h.shield)]),
     m: w.mobs.filter(m => !active || active.has(w.mapAt(m.x))).map(m => [m.id, KINDS.indexOf(m.kind), r(m.x), r(m.y), r(m.vx), m.face, MOB_STATES.indexOf(m.state), r2(m.t), m.move, r(m.hp), m.maxHp, m.lv,
-      b(m.elite) | b(m.under) << 1 | b(m.disguised) << 2 | b(m.enraged) << 3 | b(m.frozen > 0) << 4 | b(m.glued > 0) << 5 | b(m.burn > 0) << 6 | b(m.tired > 0) << 7 | b(m.weak > 0) << 8 | b(m.shellT > 0) << 9 | b(m.guardT > 0) << 10,
+      b(m.elite) | b(m.under) << 1 | b(m.disguised) << 2 | b(m.enraged) << 3 | b(m.frozen > 0) << 4 | b(m.glued > 0) << 5 | b(m.burn > 0) << 6 | b(m.tired > 0) << 7 | b(m.weak > 0) << 8 | b(m.shellT > 0) << 9 | b(m.guardT > 0) << 10 | b(!!m.wake) << 11,
       m.mods.join(','), r(m.aimX), r(m.aimY), r2(m.flash), r1(m.hurtShown), r2(m.deadT), r2(m.armor), m.arena, m.bossPhase]),
     s: w.shots.map(s => [s.id, s.kind ?? '', r(s.x), r(s.y), r(s.vx), r(s.vy), s.r ?? 0, s.tx ?? -1, s.ty ?? -1, s.from === 'hero' ? 1 : 0, s.icon ?? '', s.t < 0 ? 1 : 0]),
     bx: w.boxes.map(x => [x.id, x.tier, r(x.x), r(x.y), b(x.ground), x.owner ?? 0]),
@@ -69,13 +71,15 @@ export function makeSnapshot(w: World): Snapshot {
     lo: w.lootOf.map(l => l.map(x => [x.tier, x.ilvl])),
     run: RUN_KEYS.map(k => r1(w.run[k])),
     bg: w.heroes.map(h => [...h.bag.map(q => q?.n ?? 0), h.revives]),
+    ...(active ? { dr: (Object.entries(w.drops) as [MobKind, number][]).filter(([, n]) => n > 0).flatMap(([k, n]) => [KINDS.indexOf(k), n]), zd: w.zones2.reduce((bits, z, i) => bits | b(z.done) << i, 0) } : {}),
   };
 }
 
 /** Copies a host snapshot into a guest's drawing-only World (same stage, same party). */
 export function applySnapshot(w: World, s: Snapshot): void {
-  const [time, portal, cleared, failed, combo, style, slowmo, objTimer, holdout, objDone, runTime, crumbs] = s.w;
+  const [time, portal, cleared, failed, combo, style, slowmo, objTimer, holdout, objDone, runTime, crumbs, objArmed] = s.w;
   Object.assign(w, { time, portal: !!portal, cleared: !!cleared, failed: !!failed, combo, style, slowmo, objTimer, holdout, objDone: !!objDone });
+  if (objArmed !== undefined) w.objArmed = !!objArmed;
   w.run.time = runTime; w.run.crumbs = crumbs;
   s.h.forEach((a, i) => {
     const h = w.heroes[i]; if (!h) return;
@@ -106,6 +110,8 @@ export function applySnapshot(w: World, s: Snapshot): void {
       elite: !!(flags & 1), under: !!(flags & 2), disguised: !!(flags & 4), enraged: !!(flags & 8), frozen: flags & 16 ? 1 : 0, glued: flags & 32 ? 1 : 0,
       burn: flags & 64 ? 1 : 0, tired: flags & 128 ? 1 : 0, weak: flags & 256 ? 1 : 0, shellT: flags & 512 ? 1 : 0, guardT: flags & 1024 ? 1 : 0,
       mods: mods ? (mods as string).split(',') : [] });
+    // asleep in its boss room until someone walks in: the guest keeps its own wake line while the host's foe sleeps, and clears it when it wakes
+    if (flags & 2048) m.wake ||= 1; else if (m.wake) m.wake = 0;
     next.push(m);
   }
   // map stages: monsters not sent are frozen in another map: keep them as they are, in order
@@ -133,4 +139,16 @@ export function applySnapshot(w: World, s: Snapshot): void {
     h.bag.forEach((q, k) => { if (q) q.n = a[k] ?? q.n; });
     h.revives = a[a.length - 1] ?? h.revives;
   });
+  // the team's drop bag and opened exits: the guest's HUD, bag and exit signs read these
+  if (s.dr) { const bag: Partial<Record<MobKind, number>> = {}; for (let i = 0; i + 1 < s.dr.length; i += 2) { const k = KINDS[s.dr[i]]; if (k) bag[k] = s.dr[i + 1]; } w.drops = bag; }
+  if (s.zd !== undefined) w.zones2.forEach((z, i) => { z.done = !!(s.zd! & 1 << i); });
+}
+
+/** What a guest banks from a co-op stage: for each monster drop, what the team's bag gained between the stage's start
+ *  and its end (the same net gain the host's save sees). A guest never loses drops of their own when the team spends
+ *  the ones the host brought, and never gets a copy of the host's old stash. */
+export function guestDropGain(own: Partial<Record<string, number>>, start: Partial<Record<string, number>>, end: Partial<Record<string, number>>): Partial<Record<string, number>> {
+  const out = { ...own };
+  for (const [k, n] of Object.entries(end)) { const gain = (n ?? 0) - (start[k] ?? 0); if (gain > 0) out[k] = (out[k] ?? 0) + gain; }
+  return out;
 }

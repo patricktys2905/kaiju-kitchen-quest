@@ -7,7 +7,7 @@ version, your kaiju, the stage and where you were standing, so you don't need to
 1. **Title screen**: the version in the bottom-right matches the newest one. If not, close the game fully and reopen.
 2. **Ladders**: climb one halfway, then jump off left and right. You should always fall back to the floor.
 3. **Ledges**: drop through a platform (↓ + jump) and walk off its edge. No floating, no getting stuck.
-4. **Secret chest** (stage 7 of a world): bounce on the sponge, open the chest, then get down every way you can.
+4. **Secret chest** (stage 7 of a world, on a high ledge at the far end of the second map): bounce on the sponge, open the chest, then get down every way you can.
 5. **Skills**: use every skill and the ultimate on the ground, in the air, and on a ledge. Nothing hangs in the air.
 6. **Gear button**: try your weapon's gear skill near a ledge and near monsters.
 7. **Camp**: open every tab (Map, Free Play, Hero, Skills, Bag, Market, Boxes, Quests). None should show "hit a snag".
@@ -18,7 +18,7 @@ version, your kaiju, the stage and where you were standing, so you don't need to
 ## Now and then
 - **Online**: host a room on one phone, join from another, play a stage and a Free Play run together.
 - **Hard / Nightmare**: one stage each after beating a world's boss.
-- **Bonus stage**: find a World Key (stage 7 chest) and play the secret stage, then visit the Market.
+- **Bonus stage**: find a World Key (stage 7 chest, or 15 challenge stars in that world) and play the secret stage, then visit the Market.
 - **Long session**: play for 30+ minutes. Does the phone get hot or the game slow down?
 
 ## For whoever fixes things (`npm test` runs most of this automatically before every deploy)
