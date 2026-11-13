@@ -330,6 +330,15 @@ each device writes its own). A friend who drops mid-stage is handed to the CPU; 
   (a refused prompt hangs gem-gen), skips art that exists, resumable.
 - **Rules learned the hard way**: run one gem-gen at a time (two jobs in the same Gemini tab can swap images). Prompts
   must not name characters (Gemini drew a famous cartoon for "Finn") or places (it paints the name as text).
+- **Prompt lessons (Kings batch)**:
+  - To redraw an existing character, attach its own raw as the reference (`refs`) and say "draw THE SAME character again…
+    do not add body parts the reference does not have", with its real limbs listed ("NO arms", "exactly two legs").
+  - If Gemini redesigns it anyway: "Do NOT redesign it: copy the reference exactly… Only add the crown and the cape".
+  - Ban pink/magenta only on the things you add (crown, cape), never on the whole character: a base with pink gets recoloured.
+  - A prop called "sceptre-like" gets swapped for a sceptre: say "stays exactly the reference spoon, only coloured gold".
+    Capes swallow the character unless told "SHORT, only BEHIND, must not cover the …".
+  - `process-art.mjs <prefix>` is a starts-with filter (`mob-k` also redoes `mob-kettle`, `mob-ketchup`): pass the full name.
+    A reference with a pale sticker halo gets its halo copied; cut it off the raw before processing.
 - **Review**: `node scripts/icon-sheet.mjs <jobs.json> [--wide]`, `node scripts/contact-sheet.mjs <prefix> [out] [cols]`,
   `node scripts/faces-sheet.mjs`.
 - **Cutout rigs**: heroes are puppets. A Gemini "parts sheet" per kaiju (`art-src/raw/parts-N.png`) is split by
@@ -338,7 +347,8 @@ each device writes its own). A friend who drops mid-stage is handed to the CPU; 
   state (`poseFor`). `node scripts/rig-shot.mjs <species>` for close-ups; `tests/rig.test.ts`.
 - **Job scripts**: stills `stills-jobs`, `scenes-jobs` (short-scene paintings), `elite-jobs` (stage 5 paintings);
   worlds `w5-jobs` … `w10-jobs` (`[stills]`); kaiju `newkaiju-jobs` … `newkaiju4-jobs`, `nemesis-jobs`, `faces-jobs`;
-  monsters `mobs2-jobs`, `mobs3-jobs`, `minis-jobs`, `minis2-jobs`; props `props-jobs`, `cage-jobs`; gear: see Gear.
+  monsters `mobs2-jobs`, `mobs3-jobs`, `minis-jobs`, `minis2-jobs`, `kings-jobs` (the 30 Kings' own crowned art
+  `mob-k<monster>`, base raw attached as reference, `FIX` map for reworded redos; `GameScene.drawMob` uses it when present); props `props-jobs`, `cage-jobs`; gear: see Gear.
 
 ## Testing and tools (see also `docs/PLAYTEST.md`)
 - **Unit tests**: `npm test` runs every `tests/*.test.ts` against the Phaser-free sim.

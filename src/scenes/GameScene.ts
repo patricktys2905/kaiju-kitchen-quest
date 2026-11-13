@@ -62,7 +62,9 @@ const MID = 0.16;
 let manifest: string[] = [];
 let uiReady = false;
 
-interface MobView { img: Phaser.GameObjects.Image; plate: Phaser.GameObjects.Text; bar: Phaser.GameObjects.Rectangle; barBg: Phaser.GameObjects.Rectangle; shadow: Phaser.GameObjects.Ellipse; s: number; warn: Phaser.GameObjects.Text; crown?: Phaser.GameObjects.Text }
+/** A King's own painting (art key mob-<kind>, e.g. mob-kbun: scripts/kings-jobs.mjs) has a crown on top: drawn this much taller than the sim's height, so the body still fills the hit box. */
+const KING_ART_TALL = 1.2;
+interface MobView { img: Phaser.GameObjects.Image; plate: Phaser.GameObjects.Text; bar: Phaser.GameObjects.Rectangle; barBg: Phaser.GameObjects.Rectangle; shadow: Phaser.GameObjects.Ellipse; s: number; warn: Phaser.GameObjects.Text; crown?: Phaser.GameObjects.Text; /** extra height of the picture above the sim's height (a King's painted crown), px */ over: number }
 
 /** What a zone asks you to do, in a few words. */
 export function goalText(g: ZoneGoal): string {
@@ -1392,18 +1394,21 @@ export class GameScene extends Phaser.Scene {
       return;
     }
     if (!v) {
-      const img = this.add.image(0, 0, this.has(def.art) ? def.art : '__WHITE').setOrigin(0.5, 0.96).setDepth(def.brain === 'boss' ? 4 : 3);
+      // a King has its own crowned painting; without it: the ordinary monster's art, drawn big, with a crown emoji on top
+      const kingArt = def.king && this.has(`mob-${m.kind}`) ? `mob-${m.kind}` : '';
+      const tall = kingArt ? KING_ART_TALL : 1;
+      const img = this.add.image(0, 0, kingArt || (this.has(def.art) ? def.art : '__WHITE')).setOrigin(0.5, 0.96).setDepth(def.brain === 'boss' ? 4 : 3);
       const plate = this.add.text(0, 0, `Lv${m.lv} ${m.elite && !MOBS[m.kind].mini ? 'Elite ' : ''}${this.world!.mobName(m)}`, { fontFamily: 'Nunito', fontStyle: '900', fontSize: '10px', color: '#ffffff', backgroundColor: '#1a1020b0', padding: { x: 4, y: 1 } })
         .setOrigin(0.5, 0).setDepth(9).setResolution(3);
       const barBg = this.add.rectangle(0, 0, 40, 5, 0x000000, 0.6).setDepth(9);
       const bar = this.add.rectangle(0, 0, 40, 5, 0xff4a5a).setOrigin(0, 0.5).setDepth(9);
       const shadow = this.add.ellipse(0, 0, def.w * 1.1, 10, 0x000000, 0.2).setDepth(1);
       const warn = this.add.text(0, 0, '!', { fontFamily: 'Luckiest Guy', fontSize: '30px', color: '#ff2a2a', stroke: '#ffffff', strokeThickness: 5 }).setOrigin(0.5, 1).setDepth(10).setResolution(3).setVisible(false);
-      v = { warn, img, plate, bar, barBg, shadow, s: (def.h + (def.brain === 'boss' ? 20 : 12)) / img.height * (m.elite ? ELITE.scale : 1) };
+      v = { warn, img, plate, bar, barBg, shadow, s: (def.h + (def.brain === 'boss' ? 20 : 12)) * tall / img.height * (m.elite ? ELITE.scale : 1), over: def.h * (tall - 1) * (m.elite ? ELITE.scale : 1) };
       if (m.elite) plate.setColor('#ffb347');
       if (m.mods.length) plate.setColor(ELITE_MODS[m.mods[0]].color);
       if (def.brain === 'boss') plate.setVisible(false);
-      if (def.king) v.crown = this.add.text(0, 0, '👑', { fontSize: '38px' }).setOrigin(0.5, 0.85).setDepth(3.5).setResolution(2);
+      if (def.king && !kingArt) v.crown = this.add.text(0, 0, '👑', { fontSize: '38px' }).setOrigin(0.5, 0.85).setDepth(3.5).setResolution(2);
       this.mobViews.set(m.id, v);
     }
     const flyer = def.brain === 'flyer';
@@ -1437,7 +1442,7 @@ export class GameScene extends Phaser.Scene {
     else if (m.enraged && Math.floor(t * 4) % 2 === 0) v.img.setTint(0xff9a8a).setTintMode(Phaser.TintModes.MULTIPLY);
     else if (m.state === 'stagger') v.img.setTint(0xfff0a0).setTintMode(Phaser.TintModes.MULTIPLY);
     else v.img.clearTint().setTintMode(Phaser.TintModes.MULTIPLY);
-    const top = m.y - def.h * (m.elite ? ELITE.scale : 1) - 18;
+    const top = m.y - def.h * (m.elite ? ELITE.scale : 1) - v.over - 18;
     const danger = this.world!.isDanger(m);
     v.crown?.setVisible(!m.under && m.state !== 'dead').setPosition(m.x + m.face * def.w * 0.08, m.y - def.h * sy * (m.elite ? ELITE.scale : 1) + 4).setRotation(rot);
     v.warn.setVisible(danger).setPosition(m.x, top - 4).setScale(danger ? 1 + Math.sin(t * 24) * 0.15 : 1);

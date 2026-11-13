@@ -93,3 +93,24 @@ route and qa-free: "no problems flagged"; independent sweep (2 runs x 20 kaiju):
 - Still open from before: Bluebeary skill-tree report (parked), human stage time, King art,
   elemental weaknesses, Act 3, music.
 - Not tested: a real phone, 3-4 online players, a guest dropping mid-stage, guest pause-ESCAPE.
+
+## 2026-11-13 (later): King art shipped; weaknesses and Act 3 decided
+
+**Request:** "Move to 3, 4, 5" (King art, elemental weaknesses, Act 3).
+
+**Decisions by the Creative Director**
+- Weaknesses: per monster. Four elements HOT / COLD / STICKY / CRUNCH (Guard Break) in fixed
+  weak/resist pairs; tag the 8 flavour skills; add Market "Re-season". Spec: docs/WEAKNESS-DESIGN.md.
+- Act 3: classic worlds, FIVE worlds (11-15, Lv 111-160), villain Dame Fondant with judges Granny
+  Crumble, Mr. Sample, Monsieur Zest; World 11 The Midway (boss The Great Flosso) built at FULL size
+  (about 80 images, 220 scenes, no tier 6 gear); nemeses = friendly cameos + one exhibition bout in
+  World 13. Outline: docs/ACT3-OUTLINE.md (approved).
+- Order: weaknesses first, then World 11.
+
+**Shipped:** 30 Kings have their own painted art (public/art/mob-k<kind>.webp, via Gemini with the
+base monster attached as reference; scripts/kings-jobs.mjs). GameScene draws it 1.2x the hit box
+with no emoji crown; falls back to the old look if the art is missing. 4 redone after review
+(snail halo, fork crown, banana and can capes). Gate: 283 tests, build, shot.mjs, room shots.
+
+**Open:** the BASE Lettuce Snail art (mob-snail) still has a pale sticker halo; King Teapot lost
+its pout for a stern face (left as is); Kings are large on a phone (KING_ART_TALL 1.2).
