@@ -1,17 +1,36 @@
 // Skill trees: every kaiju has 3 themed paths (power / guard / craft). Each path is a chain of rows:
 //   1 stat (5 ranks) · 2 stat (5) · 3 NEW ACTIVE SKILL (needs 5 points in the path) · 4 stat (5) · 5 upgrade to one of its
-//   original skills (1) · 6 CAPSTONE (needs 15 points in the path) · 7 mastery (10 small ranks).
-// Points are the same skill points as before (1 per level). A path holds 28 points, so 3 paths (84) + the original skills
-// (20) + new-skill levels (12) is more than the ~109 points of a Lv 110 kaiju: every point has a use, and you choose.
+//   original skills (1) · 6 CAPSTONE (needs 15 points in the path) · 7 mastery (10 small ranks, + MASTERY_PER_WORLD more
+//   with every world past World 10: see masteryRanks).
+// Points are the same skill points as before (1 per level). A path holds 18 + masteryRanks() points (32 at the Lv 120
+// cap), so 3 paths (96) + the original skills (19: the first rank of the first skill is free) + new-skill levels (12) is
+// more than the 119 points of a Lv 120 kaiju, at the cap and at every level on the way: every point has a use, and you choose.
 // New skills reuse proven skill mechanics (src/sim/skills.ts kinds) with their own names, numbers and upgrades.
 // You pick which 3 actives sit on your buttons (HeroProfile.loadout).
 import { type SkillDef, SKILLS } from './skills';
 import type { SkillMod } from './items';
-import type { HeroProfile } from './stats';
+import { MAX_LEVEL, type HeroProfile } from './stats'; // MAX_LEVEL is only read inside functions (stats.ts imports this file too)
 
-/** Hero level each tree row opens at; a node's later ranks need 4 more levels each (mastery ranks: 4 each too). */
+/** Hero level each tree row opens at; a node's later ranks need 4 more levels each (mastery ranks 1-10: 4 each too). */
 export const ROW_LV = [1, 4, 8, 12, 20, 28, 34];
-export const nodeLv = (row: number, rank: number): number => ROW_LV[row] + 4 * (rank - 1);
+/** The mastery row and its ranks. The first MASTERY_BASE ranks are the original ones (all open by Lv 70). Every world past
+ *  World 10 raises the level cap by MASTERY_BAND levels (stats.ts MAX_LEVEL: 110 after World 10, 120 with World 11) and
+ *  adds MASTERY_PER_WORLD ranks to each of the 3 paths, opening at levels of that world (MASTERY_STEPS into its band:
+ *  Lv 111, 114, 117, 120 for World 11; 121, 124, 127, 130 for World 12). 10 new levels give 10 points and 12 new ranks,
+ *  so there is always more to buy than a kaiju has points, and a little more choice with every world.
+ *  A NEW WORLD ONLY NEEDS stats.ts MAX_LEVEL RAISED BY 10: the rank count and the gates follow from it. */
+export const MASTERY_ROW = 6, MASTERY_BASE = 10, MASTERY_FROM_LV = 110, MASTERY_BAND = 10, MASTERY_STEPS = [1, 4, 7, 10];
+export const MASTERY_PER_WORLD = MASTERY_STEPS.length;
+/** How many mastery ranks a path has at a level cap (default: the game's). */
+export const masteryRanks = (maxLevel: number = MAX_LEVEL): number => {
+  const over = Math.max(0, maxLevel - MASTERY_FROM_LV), worlds = Math.floor(over / MASTERY_BAND), rest = over % MASTERY_BAND;
+  return MASTERY_BASE + worlds * MASTERY_PER_WORLD + MASTERY_STEPS.filter(s => s <= rest).length;
+};
+export const nodeLv = (row: number, rank: number): number => {
+  if (row !== MASTERY_ROW || rank <= MASTERY_BASE) return ROW_LV[row] + 4 * (rank - 1);
+  const k = rank - MASTERY_BASE - 1; // 0-based index of the extra rank
+  return MASTERY_FROM_LV + MASTERY_BAND * Math.floor(k / MASTERY_PER_WORLD) + MASTERY_STEPS[k % MASTERY_PER_WORLD];
+};
 
 export type TreeStat = 'atkPct' | 'hpPct' | 'crit' | 'critDmg' | 'dr' | 'skillDmg' | 'cdr' | 'regen' | 'lifeOnKill' | 'ultGain';
 export interface TreeNode {
@@ -134,7 +153,7 @@ function buildTree(species: number): TreePath[] {
         { ...stat(2), need: 6 },
         { id: id('mod'), name: `${target?.name ?? 'Skill'}+`, icon: '⬆', kind: 'mod', ranks: 1, need: 10, mod: { skill: target?.id ?? '', mod: omod }, desc: `${target?.name}: ${MOD_TEXT(omod)}` },
         { id: id('cap'), name: cname, icon: '👑', kind: 'cap', ranks: 1, need: 15, mod: { skill: sid, mod: cmod }, stat: cstat, desc: `${sname}: ${MOD_TEXT(cmod)}. And ${statText(cstat)}.` },
-        { id: id('m'), name: A.mastery[0], icon: A.mastery[1], kind: 'mastery', ranks: 10, need: 18, stat: A.mastery[2] as Partial<Record<TreeStat, number>>, desc: statText(A.mastery[2] as Partial<Record<TreeStat, number>>) + ' per rank' },
+        { id: id('m'), name: A.mastery[0], icon: A.mastery[1], kind: 'mastery', ranks: masteryRanks(), need: 18, stat: A.mastery[2] as Partial<Record<TreeStat, number>>, desc: statText(A.mastery[2] as Partial<Record<TreeStat, number>>) + ' per rank' },
       ],
     };
   });

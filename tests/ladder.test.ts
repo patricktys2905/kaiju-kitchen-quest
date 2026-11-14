@@ -9,7 +9,7 @@ import { World } from '../src/sim/world';
 describe('ladders', () => {
   const st = STAGES.find(s => s.ladders.length > 0)!, l = st.ladders[0];
   const climbing = (sp: number) => {
-    const w = new World({ ...st, mobs: [], arenas: [], hazards: [], chase: undefined }, derive(newProfile(sp)), 1);
+    const w = new World({ ...st, mobs: [], arenas: [], hazards: [], chase: undefined, maps: undefined } /* an empty stage: no map monsters walking in on the test */, derive(newProfile(sp)), 1);
     const h = w.hero; h.x = l.x; h.y = st.groundY;
     for (let i = 0; i < 400 && h.state !== 'climb'; i++) w.step({ ...NO_INPUT, up: true });
     for (let i = 0; i < 20; i++) w.step({ ...NO_INPUT, up: true }); // part way up

@@ -13,7 +13,7 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w1-s9": [["me", "Those burners are shooting flames. Drip number three. Cool, cool, cool."], ["mold", "Hehehe... melt, little scoop. The Cookie Cutter Witch will cut you into a nice round puddle."], ["me", "Who said that?! Uh, no thanks. Puddles aren't my vibe."]],
   // World 2: The Fridge. Nearly home, cold and comfy.
   "w2-s2": [["me", "Ahhh, feel that cold milk breeze. Drip count holding steady."], ["n", "Slippery ice everywhere, and an Ice Cube Ogre in the boss room!"], ["me", "An ogre made of ice? Dude, that's not a boss. That's a roommate."]],
-  "w2-s3": [["n", "Click! The fridge light goes out!"], ["me", "Dark AND cold? Honestly, dude, this is my best life."], ["me", "Melty Ice Pops drop Popsicle Sticks. Portal wants 'em. Then the Fish Finger General. Salute? No arms."]],
+  "w2-s3": [["n", "Click! The fridge light goes out!"], ["me", "Dark AND cold? Honestly, dude, this is my best life."], ["me", "Milk Carton Rammers drop Carton Horns. Portal wants 'em. Then the Fish Finger General. Salute? No arms."]],
   "w2-s4": [[10, "This Crumblet's chilly, turtle. Keep it warm, would ya?"], ["me", "Bad news, big guy. I'm literally ice cream. Shell ride, though?"], [10, "...Fine. Shell ride."]],
   "w2-s6": [[17, "Wheee! Minturtle! Is the freezer still open? I miss it SO much!"], ["me", "Wide open, Pengwhip. Gotta find the Chef. First, I gotta grab that scroll before time runs out."], ["n", "And rolling around the boss room: The Cheese Wheel!"]],
   "w2-s7": [["me", "A turtle on butter is basically a hockey puck. Wheee!"], ["me", "One bounce on the sponge past the end, and the hidden key's mine. BOING! Grabbed it with my mouth. No arms, remember?"], ["n", "Up ahead, the Butter Block Brute is waiting. Slippery AND grumpy!"]],
@@ -83,6 +83,15 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w10-s7": [["me", "Dusty jars nobody ever opens. Dude, that's kinda sad."], ["me", "Last key's past the end, up on the hidden ledge. BOING! Grabbed it with my mouth. Trifle Titan, you're next."]],
   "w10-s8": [["lo2", "Forsooth, frosty knave! The WHOLE army pours in, and King Party Cracker Bomber too! Thou shalt MELT!"], ["me", "In a fridge? Dude, I'm thriving. Waffle Wall, up!"]],
   "w10-s9": [["me", "Long, dusty and super empty. Not a single plate on the whole table."], ["n", "From the cake-tin throne, a grumpy voice booms: \"Bring me that knob, little scoop! My oven is ALWAYS on!\""], ["me", "Always on? Cool, cool, cool. And a Fondue Fiend on the way? Hot cheese. Totally fine. Climbing."]],
+
+  // World 11: The Midway.
+  "w11-s2": [["me", "Scoop Lob at the milk bottles, win a parasol! BONK! Nothing. Dude, those bottles are nailed to the shelf. Drip count: two."], ["n", "Step right up! Down the boulevard, a Pretzel Contortionist poses in a knot, in the only shady spot for miles!"], ["me", "He's hogging the shade AND he's twisted? Not cool. Scoot over, pretzel dude. Slow and steady, here I come."]],
+  "w11-s3": [["me", "Ring toss with no arms. I flipped one with my foot, dude, and the peg DUCKED. Pegs don't duck! Drip count: three."], ["me", "Then a Whack-a-Churro popped up under my shell, and the prize box bit my tail. Gumball Gunner, you'd better play fair. Ka-Chunk."]],
+  "w11-s4": [[10, "Hmph. Turtle. I count five, and I ought to count six. One's lost in the crowd by the bumper cars."], ["me", "On it, big guy. Shell ride, festival edition! Hop on, little muffin. The Bumper Cupcakes can't steer, but I never swerve."], [10, "Slowly. Carefully. And no licking the turtle."]],
+  "w11-s6": [["me", "A Recipe Scroll at the tippy top of the prize shelf, and the clock's ticking. In full sun. Drip count: four."], ["me", "And the Fry Basket Brawler's spitting HOT oil and yelling \"Order Up!\"? I'll have the opposite of that, dude."]],
+  "w11-s7": [["me", "Whoa. This mirror makes me a triple scoop. That one makes me a milkshake. Not cool, mirror. So not cool."], ["me", "Triple Scoop Me spotted a key chest up on a ledge. BOING! Carousel Macaron Pony, your prancing makes a nice breeze. Keep going."]],
+  "w11-s8": [["lo2", "Have at thee, coconut! Frosty knave, to my side! The tourney hath begun, and yon coconuts joust most foully!"], ["me", "They're throwing them BACK, dude. Here comes the whole crowd, and King Coconut Shy Lobber too. Waffle Wall, up! Drip count: five."], ["lo2", "A wall of waffle! Forsooth, the finest shield in all the lists! I shall hide behind it. Bravely!"]],
+  "w11-s9": [["me", "A doughnut wheel as tall as the sky. That's closer to the sun, dude. Drip count: six. Stay frosty."], ["n", "The loudspeaker crackles: \"Step right up, my boy! Feeling the HEAT? Nobody keeps cool at the Great Flosso's games! Ta-daa!\""], ["me", "I keep cool for a living, mister. Bonbon the Cannonball, mind the shell. And hey, that big top's got a ROOF. Climbing."]],
 };
 
 export const QUIPS: Record<QuipKind, string[]> = {

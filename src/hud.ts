@@ -4,13 +4,15 @@ import { toggleMute } from './audio';
 import { CONSUMABLES, QUICK_CD } from './sim/consumables';
 import { TIER_NAMES } from './sim/loot';
 import { MOBS } from './sim/mobs';
-import { xpFor, type HeroProfile } from './sim/stats';
+import { MAX_LEVEL, xpFor, type HeroProfile } from './sim/stats';
+export { wheelSpot } from './ui/place';
 import type { BoxTier, StageDef } from './sim/types';
 import type { World } from './sim/world';
 import { dropName } from './sim/drops';
 import { stageTitle } from './sim/free';
 import { canFullscreen, fsIcon, isFullscreen } from './ui/title';
 import { ELEMENT_INFO, weakOf } from './sim/elements';
+import { badgeArt, badgeCss, badgeImgStyle, badgeKind, ensureBadgeFilter } from './ui/garnishBadge';
 
 const CSS = `
 #hud { position: fixed; inset: 0; pointer-events: none; z-index: 9; font-family: Nunito, Arial, sans-serif; font-weight: 900; color: #fff; display: none; }
@@ -20,9 +22,12 @@ const CSS = `
 #hud .face { width: 8vmin; height: 8vmin; border-radius: 1.4vmin; background: #fff2 center/contain no-repeat; }
 #hud .nm { font-family: 'Luckiest Guy', sans-serif; font-weight: 400; font-size: 2.6vmin; letter-spacing: 0.04em; color: #ffe08a; }
 #hud .lv { font-size: 2vmin; color: #fff; margin-left: 1vmin; }
+${badgeCss('#hud .gnb', 'max(18px, 3.4vmin)', 'max(1.5px, 0.3vmin)')}#hud .gnb { display: none; vertical-align: middle; margin: 0 0.4vmin 0.3vmin 1.2vmin; }
+#hud .gnb.on { display: inline-block; }
+#hud .mate .mn { display: flex; align-items: center; } #hud .mate .gnb { margin: 0.3vmin 0.3vmin 0.5vmin 1vmin; }
 #hud .bar { width: 26vmin; height: 1.9vmin; border-radius: 1vmin; background: #0008; overflow: hidden; margin-top: 0.6vmin; position: relative; }
 #hud .bar i { position: absolute; inset: 0; width: 100%; background: linear-gradient(#ff7a8a, #e0304a); transform-origin: left; transition: transform 0.15s; }
-#hud .bar.xp { height: 1.1vmin; } #hud .bar.xp i { background: linear-gradient(#ffe27a, #e0a020); }
+#hud .bar.xp { height: 1.1vmin; } #hud .bar.xp i { background: linear-gradient(#ffe27a, #e0a020); } #hud .bar.xp.max i { background: linear-gradient(#fff4c0, #ffd27a); }
 #hud .bar b { position: absolute; inset: 0; font-size: 1.5vmin; line-height: 1.9vmin; text-align: center; text-shadow: 0 1px 0 #000; }
 #hud .bar.ult { height: 0.9vmin; display: none; } #hud .bar.ult.on { display: block; } #hud .bar.ult i { background: linear-gradient(90deg, #ffb347, #ff5af0); } #hud .bar.ult.full i { animation: ultf 0.5s infinite alternate; } @keyframes ultf { to { filter: brightness(1.6); } }
 #hud .buff { font-size: 1.6vmin; color: #9fe0ff; min-height: 1.8vmin; }
@@ -71,6 +76,25 @@ const CSS = `
 #hud .toast img { width: 5.6vmin; height: 5.6vmin; object-fit: contain; }
 #hud .toast.big { font-size: 6vmin; padding: 1.4vmin 4vmin; }
 @keyframes tst { 0% { transform: scale(0.6); opacity: 0 } 10% { transform: scale(1.08); opacity: 1 } 18% { transform: scale(1) } 80% { opacity: 1 } 100% { opacity: 0; transform: translateY(-3vmin) } }
+/* Wheel of Misfortune telegraph (hudWheel): HTML, so it is above the canvas's hit numbers, popups and flashes, and above the toasts */
+#hud .wheel { position: absolute; left: 0; top: 0; display: none; z-index: 5; --r: 8vmin; --wc: #fff; will-change: transform; }
+#hud .wheel.on { display: block; }
+#hud .wheel .wd { position: absolute; left: calc(-1 * var(--r)); top: calc(-1 * var(--r)); width: calc(2 * var(--r)); height: calc(2 * var(--r)); border-radius: 50%; background: #2a1030; box-shadow: 0 0 0 0.5vmin #fff4e0, 0 0 0 1.1vmin #5a2040, 0 0.8vmin 2.4vmin 1vmin #000a; }
+#hud .wheel .disc { position: absolute; inset: 0; border-radius: 50%; background: conic-gradient(from -60deg, #6ab8ff 0 120deg, #ff8ac8 120deg 240deg, #ffc83c 240deg 360deg); }
+#hud .wheel .disc span { position: absolute; left: 50%; top: 50%; width: 0; height: 0; display: flex; align-items: center; justify-content: center; font-size: calc(var(--r) * 0.56); line-height: 1; }
+#hud .wheel .disc span b { display: block; font-weight: 400; transition: transform 0.12s, opacity 0.12s; }
+#hud .wheel.landed .disc span b { opacity: 0.4; transform: scale(0.8); }
+#hud .wheel.landed .disc span.pick b { opacity: 1; animation: wpick 0.28s ease-in-out infinite alternate; }
+@keyframes wpick { from { transform: scale(1.25); } to { transform: scale(1.5); } }
+#hud .wheel .hub { position: absolute; left: 50%; top: 50%; width: 1.8vmin; height: 1.8vmin; margin: -0.9vmin; border-radius: 50%; background: #fff4e0; box-shadow: 0 0 0 0.4vmin #5a2040; }
+#hud .wheel .pin { position: absolute; left: 50%; top: -1.8vmin; margin-left: -1.6vmin; border: 1.6vmin solid transparent; border-top: 2.8vmin solid #ff3a4a; border-bottom: 0; filter: drop-shadow(0 0 0.3vmin #fff) drop-shadow(0 0 0.3vmin #fff); }
+#hud .wheel .wl { position: absolute; left: 0; top: calc(var(--r) + 1.6vmin); transform: translateX(-50%); white-space: nowrap; text-align: center; font-family: 'Luckiest Guy', sans-serif; font-weight: 400; letter-spacing: 0.05em;
+  background: #24142af0; border: 2px solid var(--wc); border-radius: 1.6vmin; padding: 0.4vmin 1.6vmin 0.5vmin; line-height: 1.1; visibility: hidden; }
+#hud .wheel.landed .wl { visibility: visible; }
+#hud .wheel .wl small { display: block; font-size: 1.6vmin; color: #fff4e0; }
+#hud .wheel .wl span { font-size: 3.4vmin; color: var(--wc); text-shadow: 0 0.3vmin 0 #000; }
+#hud .wheel .ptr { position: absolute; left: 0; top: -0.3vmin; height: 0.6vmin; transform-origin: 0 50%; border-radius: 1vmin; background: repeating-linear-gradient(90deg, #fff4e0 0 1.2vmin, transparent 1.2vmin 2vmin); filter: drop-shadow(0 0 0.3vmin #000); display: none; }
+#hud .wheel.far .ptr { display: block; }
 #hud .help { position: absolute; left: 50%; bottom: 1.5vmin; transform: translateX(-50%); font-size: 1.8vmin; opacity: 0.75; text-shadow: 0 1px 2px #000; white-space: nowrap; }
 body.touch #hud .help { display: none; }
 #hud .quick { position: absolute; left: 50%; transform: translateX(-50%); bottom: calc(1.5vmin + env(safe-area-inset-bottom)); display: flex; gap: 1vmin; pointer-events: auto; }
@@ -116,9 +140,9 @@ export function initHud(onMenu: () => void, onResume: () => void, onLeave: () =>
   root = document.createElement('div');
   root.id = 'hud';
   root.innerHTML = `
-    <div class="card"><div class="face"></div><div><div><span class="nm"></span><span class="lv"></span></div>
+    <div class="card"><div class="face"></div><div><div><span class="nm"></span><span class="lv"></span><span class="gnb"><img alt=""></span></div>
       <div class="bar hp"><i></i><b></b></div><div class="bar xp"><i></i></div><div class="bar ult"><i></i></div><div class="buff"></div><div class="boosts"></div></div></div>
-    <div class="mates"><div class="mate"><i></i><div><b></b><div class="bar"><u></u></div></div></div><div class="mate"><i></i><div><b></b><div class="bar"><u></u></div></div></div><div class="mate"><i></i><div><b></b><div class="bar"><u></u></div></div></div></div>
+    <div class="mates"><div class="mate"><i></i><div><span class="mn"><b></b><span class="gnb"><img alt=""></span></span><div class="bar"><u></u></div></div></div><div class="mate"><i></i><div><span class="mn"><b></b><span class="gnb"><img alt=""></span></span><div class="bar"><u></u></div></div></div><div class="mate"><i></i><div><span class="mn"><b></b><span class="gnb"><img alt=""></span></span><div class="bar"><u></u></div></div></div></div>
     <div class="emos"></div>
     <div class="stage"><div class="t"></div><div class="s"></div></div>
     <div class="boss"><div class="t"></div><div class="bar"><i></i><u></u></div></div>
@@ -127,6 +151,7 @@ export function initHud(onMenu: () => void, onResume: () => void, onLeave: () =>
     <div class="style"><b>D</b><div class="sbar"><i></i></div><span>STYLE</span></div>
     <div class="quick">${[0, 1, 2, 3].map(i => `<div class="q" data-q="${i}"><i>${i + 1}</i><b></b><u></u></div>`).join('')}</div>
     <div class="toasts"></div>
+    <div class="wheel"><i class="ptr"></i><div class="wd"><div class="disc"><span><b></b></span><span><b></b></span><span><b></b></span></div><i class="hub"></i><i class="pin"></i></div><div class="wl"><small></small><span></span></div></div>
     <div class="help">← → move · ↑ ↓ climb · SPACE jump · J attack ×3 combo · L / I / O skills · U ultimate · ↓+SPACE drop · B bag · ESC menu</div>`;
   document.body.appendChild(root);
   q = <T extends HTMLElement>(s: string) => root.querySelector<T>(s)!;
@@ -153,7 +178,30 @@ export function initHud(onMenu: () => void, onResume: () => void, onLeave: () =>
   p.querySelector('[data-a=mute]')!.addEventListener('click', () => { toggleMute(); });
 }
 
-export function showHud(v: boolean): void { root?.classList.toggle('on', v); if (!v) document.body.classList.remove('bossbar'); }
+export function showHud(v: boolean): void { root?.classList.toggle('on', v); if (!v) { document.body.classList.remove('bossbar'); hudWheel(null); } }
+
+let wheelOn = false, wheelKey = '';
+/** The Wheel of Misfortune beside a boss winding it up (null hides it). x, y: its centre on screen; rot: the disc's turn
+ *  in radians; landed: it has stopped on `pick` (0-2); tx, ty: the boss's head, for the pointer when `far`. */
+export function hudWheel(o: null | { x: number; y: number; rot: number; landed: boolean; pick: number; icons: string[]; title: string; label: string; color: string; far: boolean; tx: number; ty: number }): void {
+  if (!root) return;
+  const el = q('.wheel');
+  if (!o) { if (wheelOn) { wheelOn = false; wheelKey = ''; el.className = 'wheel'; } return; }
+  wheelOn = true;
+  const key = o.label + o.icons.join('');
+  if (key !== wheelKey) {
+    wheelKey = key;
+    el.querySelectorAll<HTMLElement>('.disc span').forEach((sp, i) => { sp.firstElementChild!.textContent = o.icons[i]; sp.classList.toggle('pick', i === o.pick); });
+    q('.wheel .wl small').textContent = o.title; q('.wheel .wl span').textContent = o.label; el.style.setProperty('--wc', o.color);
+  }
+  el.className = `wheel on${o.landed ? ' landed' : ''}${o.far ? ' far' : ''}`;
+  el.style.transform = `translate(${o.x.toFixed(1)}px, ${o.y.toFixed(1)}px)`;
+  const deg = o.rot * 180 / Math.PI;
+  q<HTMLElement>('.wheel .disc').style.transform = `rotate(${deg.toFixed(1)}deg)`;
+  // each symbol sits in the middle of its third of the disc and stays upright as the disc turns
+  el.querySelectorAll<HTMLElement>('.disc span').forEach((sp, i) => { sp.style.transform = `rotate(${i * 120}deg) translateY(calc(var(--r) * -0.56)) rotate(${(-i * 120 - deg).toFixed(1)}deg)`; });
+  if (o.far) { const dx = o.tx - o.x, dy = o.ty - o.y, ptr = q<HTMLElement>('.wheel .ptr'); ptr.style.width = `${Math.hypot(dx, dy).toFixed(0)}px`; ptr.style.transform = `rotate(${Math.atan2(dy, dx).toFixed(3)}rad)`; }
+}
 
 let emoteFn: ((e: number) => void) | null = null;
 /** Online only: show the quick-chat button with these lines (null hides it). */
@@ -177,6 +225,18 @@ export function showPause(v: boolean, weak?: string): void {
 /** Teammates' names by hero index (online friends' names, or "CPU"). */
 let mateNames: Record<number, string> = {};
 export function setMateNames(n: Record<number, string>): void { mateNames = n; }
+/** The Garnish each hero wears, as a small ringed badge by the name: yours on the name plate, teammates' (by hero index)
+ *  on their rows. icon = the drop's art key; gold = a gold ring (the card has two stars). null = none. */
+export interface HudBadge { icon: string; gold: boolean }
+let myBadge: HudBadge | null = null, mateBadges: Record<number, HudBadge | null> = {};
+export function setHudGarnish(mine: HudBadge | null, mates: Record<number, HudBadge | null> = {}): void { myBadge = mine; mateBadges = mates; }
+function drawBadge(el: HTMLElement | null, g: HudBadge | null | undefined): void {
+  if (!el) return;
+  const key = g ? g.icon + (g.gold ? '+' : '') : '';
+  if (el.dataset.g === key) return;
+  el.dataset.g = key; el.classList.toggle('on', !!g); el.classList.toggle('gold', !!g?.gold);
+  if (g) { const img = el.firstElementChild as HTMLImageElement; img.src = `art/${badgeArt(g.icon)}.webp`; img.style.cssText = badgeImgStyle(badgeKind(g.icon)); ensureBadgeFilter(); }
+}
 
 export function updateHud(w: World, p: HeroProfile, st: StageDef): void {
   if (!root) return;
@@ -185,10 +245,13 @@ export function updateHud(w: World, p: HeroProfile, st: StageDef): void {
   const face = q('.face');
   if (face.style.backgroundImage !== bg) face.style.backgroundImage = bg;
   q('.nm').textContent = h.d.cls.name;
-  q('.lv').textContent = `Lv ${p.level}`;
+  drawBadge(q('.card .gnb'), myBadge);
   q('.hp i').style.transform = `scaleX(${h.hp / h.d.maxHp})`;
   q('.hp b').textContent = `${Math.ceil(h.hp)} / ${h.d.maxHp}`;
-  q('.xp i').style.transform = `scaleX(${Math.min(1, p.xp / xpFor(p.level))})`;
+  const capped = p.level >= MAX_LEVEL; // at the level cap the XP bar stays full
+  q('.xp i').style.transform = `scaleX(${capped ? 1 : Math.min(1, p.xp / xpFor(p.level))})`;
+  q('.bar.xp').classList.toggle('max', capped);
+  q('.lv').textContent = capped ? `Lv ${p.level} MAX` : `Lv ${p.level}`;
   const ub = q('.bar.ult'); ub.classList.toggle('on', p.level >= 15); ub.classList.toggle('full', h.ult >= 100);
   q('.bar.ult i').style.transform = `scaleX(${h.ult / 100})`;
   q('.buff').textContent = h.buff ? `✦ BUFF ${Math.ceil(h.buff.t)}s` : '';
@@ -213,6 +276,7 @@ export function updateHud(w: World, p: HeroProfile, st: StageDef): void {
     const img = `url(art/kaiju-${mate.d.cls.species}.webp)`;
     const mi = mc.querySelector<HTMLElement>('i')!; if (mi.style.backgroundImage !== img) mi.style.backgroundImage = img;
     mc.querySelector('b')!.textContent = `${mateNames[mate.idx] ?? (mate.cpu ? 'CPU ' + mate.d.cls.name : mate.d.cls.name)}${mate.state === 'down' ? ' (DOWN)' : ''}`;
+    drawBadge(mc.querySelector<HTMLElement>('.gnb'), mateBadges[mate.idx]);
     mc.querySelector<HTMLElement>('.bar u')!.style.transform = `scaleX(${Math.max(0, mate.hp / mate.d.maxHp)})`;
   });
   const ob = st.objective;
@@ -259,7 +323,9 @@ export function toast(text: string, opts: { color?: string; tier?: BoxTier; big?
   t.style.setProperty('--c', opts.color ?? (opts.tier ? TIER_CSS[opts.tier] : '#ffd27a'));
   t.innerHTML = (opts.tier ? `<img src="art/box-${opts.tier}.webp">` : '') + `<span>${text}</span>`;
   box.appendChild(t);
-  while (box.children.length > 3) box.firstChild!.remove();
+  // three at most: the oldest small one makes room first, so a big line ("... FALLS!") is not pushed out the moment it
+  // appears by the box drops and "All clear" that come in the same instant
+  while (box.children.length > 3) (box.querySelector('.toast:not(.big)') ?? box.firstChild!).remove();
   setTimeout(() => t.remove(), 2300);
 }
 

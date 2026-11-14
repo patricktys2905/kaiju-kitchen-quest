@@ -126,8 +126,28 @@ export const ARC: Record<string, StoryLine[]> = {
     ["n", "CLICK! The Fridge door swings open, and a warm glow pours over the whole feast!"],
     ["me", "Ooooh, shiny! Is it the moon? Nope! It's the fridge light! It comes on when friends visit! Hee!"],
   ],
+  "w11-open": [
+    ["n", "Act 3: The Great Food Festival! One golden envelope, one sunny hill, and about a million teeny light bulbs..."],
+    ["me", "Ooooh, shiny! The envelope's gold, the tents are stripy, and that big doughnut wheel has bulbs ALL the way round! Hi, bulbs!"],
+    ["me", "And the poster says FIREWORKS tonight! Sky sparkles that go BOOM! I'm staying up for every single one! Flap flap!"],
+    ["me", "Hmm. That prize lamp on the top shelf isn't even plugged in, and nobody ever wins it. Funny! Hi, Corn Dog Cadets!"],
+  ],
+  "w11-boss": [
+    ["boss", "Laaadies and gentle-snacks! A little moth, come to the brightest spotlight on the whole Midway! MINE! Step right up, my dear!"],
+    ["me", "Ooooh, shiny! But your prize lamp's not plugged in, and the cup man had the bulb up his sleeve! I saw it glowing!"],
+    ["boss", "Showmanship, my dear! Gaze upon the Wheel of Misfortune! Big and round and bright, and it always stops on BAD LUCK! Ta-daa!"],
+    ["me", "Big and round and bright? Is that the moon? Nope! It's a great big fibby wheel! Lights ON, Mr. Fluffy! FWOOSH!"],
+  ],
+  "w11-after": [
+    ["boss", "Eep! I've fizzled! I'm one pink puff on a stick! Take your silly ribbon! First prize. And it's still only AFTERNOON, so there!"],
+    ["boss", "The Showstopper will hear about this! And Granny Crumble's waiting in the Blue Ribbon Barn, my dear! By the BOOK! Toodle-oo!"],
+    ["me", "Ooooh, shiny! Something round and ruffly, right in the spotlight! Is that the moon? Nope! It's FIRST PRIZE! Hee!"],
+    ["foe", "Bzzt! Moth! You WON! Hold it up, I'll light it! No zapping. Okay, ONE spark... oops. It's a teeny bit toasty on one side."],
+    ["me", "It's perfect, Zapsy! It's going up next to the moon nightlight! Old Fruitcake gets first look, and Mr. Wraith on Tuesdays!"],
+    ["me", "Is it night yet? No? Then I'll wait for the fireworks at the Blue Ribbon Barn! Barns have windows too! Flap flap!"],
+  ],
 };
-export const NEMESIS: Record<"w1-elite" | "w2-elite" | "w3-elite" | "w4-elite" | "w5-elite" | "w6-elite" | "w7-elite" | "w8-elite" | "w9-elite" | "w10-elite", StoryLine[]> = {
+export const NEMESIS: Record<"w1-elite" | "w2-elite" | "w3-elite" | "w4-elite" | "w5-elite" | "w6-elite" | "w7-elite" | "w8-elite" | "w9-elite" | "w10-elite" | "w11-elite", StoryLine[]> = {
   "w1-elite": [["foe", "Bzzzt! Hey there, little moth! Come to the light! MY light! Only my light!"], ["me", "Ooooh, you're so bright! But, um, you're not the moon."], ["foe", "I can BE your moon! Closer, closerrrr... BZZZZT!"], ["me", "Yikes! My fuzz! Okay, no thank you!"]],
   "w2-elite": [["foe", "Bzzt! Even in the cold, moths come to Zapsy! They ALWAYS come!"], ["me", "Not this moth! I know the difference now. The moon doesn't go ZAP!"]],
   "w3-elite": [["foe", "Bzzt! The oven glows, but I glow BRIGHTER! Look at me, moth! LOOK AT ME!"], ["me", "La la la, not looking! I'm daydreaming about moonlight!"]],
@@ -138,4 +158,9 @@ export const NEMESIS: Record<"w1-elite" | "w2-elite" | "w3-elite" | "w4-elite" |
   "w8-elite": [["foe", "Bzzt! Moth! Pumpkin Brute at Gourd Guard. It's got a scary carved face, and it's not even Halloween!"], ["me", "Zapsy! Ooh, look, the fireflies keep blinking at you!"], ["foe", "Bzz, they think I'm their big brother! I'm not crying, it's POLLEN! Go, I'll light the way!"]],
   "w9-elite": [["foe", "Bzzt! Moth! Watermelon Brute on Melon Mountain. Big, round and stripy, and it's NOT the moon. I checked!"], ["me", "Zapsy! Ooh, the freezer lights make you all frosty and sparkly!"], ["foe", "Bzz, I'm glowing for the shoppers! Nobody shops at night, but STILL! Go, I'll light the way!"]],
   "w10-elite": [["foe", "Bzzt! Moth! Fruitcake Knight up ahead. It HATES lights. I glowed at it and it glared back!"], ["me", "Zapsy! You came all the way to the back of the Fridge!"], ["foe", "Bzz, I heard there's a feast after. Somebody's gotta do the party lights! Go, I'll light the way!"]],
+  "w11-elite": [
+    ["foe", "Bzzt! Moth! I did the lights for a whole stall today! Jawbreaker Strongman's up at the bell. Hard outside, harder inside!"],
+    ["me", "Zapsy! Ooooh, shiny! A WHOLE stall? I bet it's like a birthday cake you can stand in!"],
+    ["foe", "Bzz, it's light entertainment. No zapping. Okay, ONE sparkle, for luck! Go get him, I'll light the way!"],
+  ],
 };

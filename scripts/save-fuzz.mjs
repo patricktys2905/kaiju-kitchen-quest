@@ -55,12 +55,23 @@ for (let i = from; i < Math.min(saves.length, from + count); i++) {
   for (const pg of cbPages) {
     where = `cookbook ${pg}`; await click(`[data-cb="${pg}"]`); await wait(60); await snag();
     if (!await p.evaluate(() => document.querySelectorAll('.cbcard').length)) report('a Cookbook page with no cards');
-    await click('.cbcard'); await wait(50); await snag(); await click('.cbdetail [data-cb^="hand:"]'); await wait(50); await click('.cbask [data-cb="no"]'); await click('[data-cb="back"]'); await wait(40); await snag();
+    await click('.cbcard'); await wait(50); await snag(); await click('.cbdetail [data-cb^="hand:"]'); await wait(50); await click('.cbask [data-cb="no"]');
+    // the Garnish on the opened card: CANDY IT (KEEP if it asks; on every other page CANDY IT), then WEAR / TAKE OFF
+    where = `cookbook ${pg} garnish`; await click('.gnbox [data-gn^="candy:"]'); await wait(50); await snag(); await click(cbPages.indexOf(pg) % 2 ? '.cbask [data-gn="no"]' : '.cbask [data-gn="yes"]'); await wait(50); await snag();
+    await click('.gnbox [data-gn^="wear:"]'); await wait(50); await snag();
+    await click('[data-cb="back"]'); await wait(40); await snag();
     if (cbPages.indexOf(pg) % 3 === 0) { await click('.cbcard [data-cb^="hand:"]'); await wait(50); await click('.cbask [data-cb="yes"]'); await click('[data-cb^="spares:"]:not([disabled])'); await wait(60); await snag(); }
   }
   where = 'cookbook titles'; await click('.cbpick'); await wait(60); await snag(); await click('.cbtitles [data-cb^="title:"]:last-child'); await wait(60); await snag();
   { const bad = await p.evaluate(() => { const s = window.__kkq.save; if (!document.querySelector('#camp.on')) return true; return [s.crumbs, ...Object.values(s.drops ?? {}), ...Object.values(s.cookbook ?? {})].some(n => !Number.isFinite(n) || n < 0); }); if (bad) report('the Cookbook left a bad number in the save (or the camp is gone)'); }
-  await click('[data-tab="hero"]'); await wait(80); await snag(); await click('[data-tab="map"]'); await wait(80); await snag();
+  // the Hero tab's Garnish slot and its picker: open it, wear the last one, open it again, None
+  where = 'garnish picker'; await click('[data-tab="hero"]'); await wait(80); await snag();
+  if (!await p.evaluate(() => !!document.querySelector('.slot.gslot'))) report('the Hero tab has no Garnish slot');
+  await click('.slot.gslot'); await wait(60); await snag(); if (!await p.evaluate(() => !!document.querySelector('.gnpick .gngrid button'))) report('the Garnish picker did not draw');
+  await click('.gngrid button:last-child'); await wait(60); await snag(); await click('.slot.gslot'); await wait(60); await click('.gngrid button:first-child'); await wait(60); await snag();
+  await click('.slot.gslot'); await wait(40); await click('.gngrid button:last-child'); await wait(40); await click('.gnpick [data-gn="close"]');
+  { const bad = await p.evaluate(() => { const s = window.__kkq.save; return !document.querySelector('#camp.on') || Object.values(s.drops ?? {}).some(n => !Number.isFinite(n) || n < 0) || (s.garnishes ?? []).some(k => typeof k !== 'string') || Object.values(s.heroes).some(h => h.garnish !== undefined && !(s.garnishes ?? []).includes(h.garnish)); }); if (bad) report('the garnish screens left the save in a bad state'); }
+  await click('[data-tab="map"]'); await wait(80); await snag();
   await click('[data-tab="market"]'); await wait(150); where = 'market buy'; await click('[data-buy]'); await click('[data-buybox]'); await click('[data-buygear]'); await wait(150); await snag();
   await click('[data-tab="boxes"]'); await wait(150); where = 'boxes'; await snag();
   // a stage: start the selected one, play a moment, leave

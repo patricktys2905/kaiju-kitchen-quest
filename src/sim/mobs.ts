@@ -42,6 +42,9 @@ export interface MobDef {
   scale?: number;
   /** summoner: what it calls */
   calls?: MobKind;
+  /** world boss: the two helpers that walk in at 66% and at 33% health (unset: a Moldy Bun pair, then a Pepper Grunt pair,
+   *  as every boss up to World 10 has). From World 11 on a boss names its own, of its own type. */
+  helpers?: [MobKind, MobKind];
   /** nemesis: its moves in unlock order (world 1 uses the first 2, world 2 the first 3, worlds 3-4 all 4) */
   nem?: NemesisDef;
 }
@@ -247,7 +250,7 @@ export const MOBS: Record<MobKind, MobDef> = {
     nem: {species: -1, moves: ['haymaker','shell','leap','rootspike'], names: ['Chop Punch','Board Guard','Belly Slam','Splinters']} },
   m1e: { name: 'Cookie Cutter Witch', brain: 'nemesis', art: 'mob-m1e', hp: 215, atk: 16, speed: 80, w: 84, h: 100, knock: 0.35, aggro: 900, range: 300, windup: 0.7, patrol: 60, xp: 40, dropChance: 1, armor: true, mini: true,
     nem: {species: -1, moves: ['fanshot','trap','vanish','summon'], names: ['Star Cookies','Cutter Traps','Poof!','Jam Blobs, Rise!'], calls: 'jamhop', shot: 'crumb'} },
-  m2c: { name: 'Fish Finger General', brain: 'nemesis', art: 'mob-m2c', hp: 215, atk: 20, speed: 80, w: 84, h: 100, knock: 0.35, aggro: 900, range: 140, windup: 0.7, patrol: 60, xp: 40, dropChance: 1, armor: true, mini: true,
+  m2c: { name: 'Fish Finger General', brain: 'nemesis', art: 'mob-m2c', hp: 200, atk: 16, speed: 80, w: 84, h: 100, knock: 0.35, aggro: 900, range: 140, windup: 0.7, patrol: 60, xp: 40, dropChance: 1, armor: true, mini: true,
     nem: {species: -1, moves: ['skewer','charge','slash','roar'], names: ['Toothpick Thrust','Frozen Charge','Breaded Slash','Attention!']} },
   m2d: { name: 'Butter Block Brute', brain: 'nemesis', art: 'mob-m2d', hp: 215, atk: 16, speed: 80, w: 84, h: 100, knock: 0.35, aggro: 900, range: 300, windup: 0.7, patrol: 60, xp: 40, dropChance: 1, armor: true, mini: true,
     nem: {species: -1, moves: ['puddle','haymaker','leap','shell'], names: ['Butter Slick','Butter Fist','Splat Drop','Wrapper Guard'], puddle: 'slick'} },
@@ -354,7 +357,7 @@ export const MOBS: Record<MobKind, MobDef> = {
     nem: {species: -1, moves: ['charge','boomhop','summon','haymaker'], names: ['Runaway Rush','Wheelie Hop','Bag Brigade','Handle Bash'], calls: 'bag'} },
   kbanana: { name: 'King Bruised Banana Bunch', brain: 'nemesis', art: 'mob-banana', hp: 210, atk: 19, speed: 95, w: 85, h: 92, knock: 0.35, aggro: 900, range: 300, windup: 0.7, patrol: 60, xp: 40, dropChance: 1, armor: true, mini: true, king: true,
     nem: {species: -1, moves: ['puddle','boomhop','spin','fanshot'], names: ['Banana Peels','Bunch Bounce','Peel Spin','Bruise Spray'], puddle: 'slick', shot: 'crumb'} },
-  kcan2: { name: 'King Dented Can Turret', brain: 'nemesis', art: 'mob-can2', hp: 240, atk: 14, speed: 60, w: 95, h: 96, knock: 0.35, aggro: 900, range: 140, windup: 0.7, patrol: 60, xp: 40, dropChance: 1, armor: true, mini: true, king: true,
+  kcan2: { name: 'King Dented Can Turret', brain: 'nemesis', art: 'mob-can2', hp: 220, atk: 12, speed: 60, w: 95, h: 96, knock: 0.35, aggro: 900, range: 140, windup: 0.7, patrol: 60, xp: 40, dropChance: 1, armor: true, mini: true, king: true,
     nem: {species: -1, moves: ['shell','charge','haymaker','lob'], names: ['Tin Guard','Can Roll','Dent Punch','Lid Toss'], shot: 'ring'} },
   kcherrysoldier: { name: 'King Candied Cherry Soldier', brain: 'nemesis', art: 'mob-cherrysoldier', hp: 210, atk: 16, speed: 100, w: 74, h: 92, knock: 0.35, aggro: 900, range: 140, windup: 0.7, patrol: 60, xp: 40, dropChance: 1, armor: true, mini: true, king: true,
     nem: {species: -1, moves: ['skewer','summon','charge','stingers'], names: ['Cocktail Stick','Cherry Battalion','Glace Charge','Stick Flurry'], calls: 'cherrysoldier'} },
@@ -403,6 +406,38 @@ export const MOBS: Record<MobKind, MobDef> = {
   boxbot: { name: 'Cardboard Box Walker', brain: 'walker', art: 'mob-boxbot', hp: 105, atk: 12, speed: 65, w: 40, h: 70, knock: 0.8, aggro: 300, range: 72, windup: 0.5, patrol: 110, xp: 17, dropChance: 0.35 },
   pudding: { name: 'Pudding Cup', brain: 'hopper', art: 'mob-pudding', hp: 34, atk: 8, speed: 105, w: 32, h: 34, knock: 1.3, aggro: 340, range: 190, windup: 0.35, patrol: 120, xp: 5, dropChance: 0.08 },
   cracker2: { name: 'Party Cracker Bomber', brain: 'bomber', art: 'mob-cracker2', hp: 40, atk: 21, speed: 150, w: 38, h: 46, knock: 1.2, aggro: 340, range: 60, windup: 0.7, patrol: 140, xp: 12, dropChance: 0.25 },
+  // ---- World 11: The Midway (Act 3). New kinds go at the END of this table: online snapshots send a monster's kind as its
+  // index here (net/snapshot.ts KINDS), so the order of everything above must never change. ----
+  cadet: { name: 'Corn Dog Cadet', brain: 'walker', art: 'mob-cadet', hp: 105, atk: 12, speed: 65, w: 40, h: 70, knock: 0.8, aggro: 300, range: 72, windup: 0.5, patrol: 110, xp: 17, dropChance: 0.35 },
+  toffee: { name: 'Toffee Apple Bouncer', brain: 'hopper', art: 'mob-toffee', hp: 62, atk: 9, speed: 95, w: 46, h: 52, knock: 1.1, aggro: 320, range: 210, windup: 0.4, patrol: 150, xp: 14, dropChance: 0.3 },
+  floss: { name: 'Floss Wisp', brain: 'flyer', art: 'mob-floss', hp: 40, atk: 7, speed: 120, w: 44, h: 44, knock: 1.1, aggro: 340, range: 230, windup: 0.5, patrol: 160, xp: 13, dropChance: 0.3 },
+  snowcone: { name: 'Snow Cone Slinger', brain: 'ranged', art: 'mob-snowcone', hp: 58, atk: 9, speed: 60, w: 40, h: 56, knock: 1, aggro: 360, range: 320, windup: 0.55, patrol: 100, xp: 13, dropChance: 0.3 },
+  bumper: { name: 'Bumper Cupcake', brain: 'charger', art: 'mob-bumper', hp: 110, atk: 10, speed: 70, w: 64, h: 54, knock: 0.6, aggro: 400, range: 380, windup: 0.7, patrol: 110, xp: 18, dropChance: 0.4 },
+  churro: { name: 'Whack-a-Churro', brain: 'burrower', art: 'mob-churro', hp: 92, atk: 12, speed: 100, w: 44, h: 60, knock: 0.9, aggro: 360, range: 40, windup: 0.55, patrol: 120, xp: 18, dropChance: 0.35 },
+  coconut: { name: 'Coconut Shy Lobber', brain: 'turret', art: 'mob-coconut', hp: 85, atk: 8, speed: 0, w: 52, h: 58, knock: 0, aggro: 400, range: 400, windup: 0.9, patrol: 0, xp: 16, dropChance: 0.4 },
+  pretzel: { name: 'Ring Toss Pretzel', brain: 'sniper', art: 'mob-pretzel', hp: 60, atk: 14, speed: 60, w: 42, h: 54, knock: 1.1, aggro: 560, range: 540, windup: 1.0, patrol: 80, xp: 18, dropChance: 0.35 },
+  jawbreaker: { name: 'Jawbreaker Strongman', brain: 'brute', art: 'mob-jawbreaker', hp: 240, atk: 16, speed: 48, w: 78, h: 84, knock: 0.45, aggro: 280, range: 92, windup: 0.8, patrol: 90, xp: 35, dropChance: 0.6, armor: true, shield: true },
+  // The Great Flosso, a candy-floss showman: cone-cane swipes, sticky floss, sugar showers, Floss Wisps, wafer cards, and in
+  // his final phase the Wheel of Misfortune (BOSS_PATTERNS 'wheel'; world.ts WHEEL)
+  flosso: { name: 'The Great Flosso', brain: 'boss', art: 'boss-flosso', hp: 1500, atk: 20, speed: 70, w: 140, h: 190, knock: 0.15, aggro: 2000, range: 160, windup: 0.75, patrol: 0, xp: 760, dropChance: 1, armor: true, moves: ['slash', 'leap', 'rain', 'fanshot'], calls: 'floss', helpers: ['floss', 'floss'] },
+  m11a: { name: 'Pretzel Contortionist', brain: 'nemesis', art: 'mob-m11a', hp: 215, atk: 20, speed: 85, w: 84, h: 100, knock: 0.35, aggro: 900, range: 140, windup: 0.7, patrol: 60, xp: 40, dropChance: 1, armor: true, mini: true,
+    nem: {species: -1, moves: ['spin','leap','yank','slash'], names: ['Knot Whirl','Twist Drop','Pretzel Lasso','Salty Slap']} },
+  m11b: { name: 'Gumball Gunner', brain: 'nemesis', art: 'mob-m11b', hp: 215, atk: 18, speed: 70, w: 84, h: 104, knock: 0.35, aggro: 900, range: 300, windup: 0.7, patrol: 60, xp: 40, dropChance: 1, armor: true, mini: true,
+    nem: {species: -1, moves: ['fanshot','lob','rain','roar'], names: ['Gumball Burst','Gobstopper Lob','Gumball Rain','Ka-Chunk!'], shot: 'ring'} },
+  m11c: { name: 'Fry Basket Brawler', brain: 'nemesis', art: 'mob-m11c', hp: 230, atk: 15, speed: 70, w: 90, h: 100, knock: 0.35, aggro: 900, range: 300, windup: 0.7, patrol: 60, xp: 40, dropChance: 1, armor: true, mini: true,
+    nem: {species: -1, moves: ['heatwave','puddle','lob','summon'], names: ['Oil Splash','Hot Oil','Fry Toss','Order Up!'], puddle: 'burn', shot: 'heat', calls: 'cadet'} },
+  m11d: { name: 'Carousel Macaron Pony', brain: 'nemesis', art: 'mob-m11d', hp: 230, atk: 11, speed: 110, w: 96, h: 104, knock: 0.35, aggro: 900, range: 140, windup: 0.7, patrol: 60, xp: 40, dropChance: 1, armor: true, mini: true,
+    nem: {species: -1, moves: ['charge','boomhop','leap','roar'], names: ['Gallop','Carousel Hop','Pole Vault','Whinny!']} },
+  m11e: { name: 'Bonbon the Cannonball', brain: 'nemesis', art: 'mob-m11e', hp: 230, atk: 10, speed: 90, w: 84, h: 96, knock: 0.35, aggro: 900, range: 140, windup: 0.7, patrol: 60, xp: 40, dropChance: 1, armor: true, mini: true,
+    nem: {species: -1, moves: ['boomhop','leap','charge','trap'], names: ['Cannon Shot','Crash Landing','Rolling Bonbon','Wrapper Traps']} },
+  kcadet: { name: 'King Corn Dog Cadet', brain: 'nemesis', art: 'mob-cadet', hp: 210, atk: 14, speed: 65, w: 62, h: 120, knock: 0.35, aggro: 900, range: 140, windup: 0.7, patrol: 60, xp: 40, dropChance: 1, armor: true, mini: true, king: true,
+    nem: {species: -1, moves: ['slash','charge','summon','roar'], names: ['Stick Swat','Parade Charge','Fall In!','Atten-SHUN!'], calls: 'cadet'} },
+  kbumper: { name: 'King Bumper Cupcake', brain: 'nemesis', art: 'mob-bumper', hp: 240, atk: 11, speed: 70, w: 108, h: 96, knock: 0.35, aggro: 900, range: 140, windup: 0.7, patrol: 60, xp: 40, dropChance: 1, armor: true, mini: true, king: true,
+    nem: {species: -1, moves: ['charge','boomhop','spin','roar'], names: ['Dodgem Dash','Bumper Bounce','Spin Out','Honk!']} },
+  kcoconut: { name: 'King Coconut Shy Lobber', brain: 'nemesis', art: 'mob-coconut', hp: 190, atk: 16, speed: 60, w: 90, h: 104, knock: 0.35, aggro: 900, range: 300, windup: 0.7, patrol: 60, xp: 40, dropChance: 1, armor: true, mini: true, king: true,
+    nem: {species: -1, moves: ['lob','rain','shell','roar'], names: ['Coconut Mortar','Coconut Shower','Husk Guard','Roll Up, Roll Up!']} },
+  xjawbreaker: { name: 'Jawbreaker Strongman', brain: 'nemesis', art: 'mob-jawbreaker', hp: 180, atk: 12, speed: 63, w: 78, h: 84, knock: 0.4, aggro: 900, range: 120, windup: 0.75, patrol: 60, xp: 34, dropChance: 1, armor: true, mini: true,
+    nem: {species: -1, moves: ['haymaker','leap','shell','roar'], names: ['Mallet Smash','Ring the Bell','Sugar Shell','Flex!']} },
 };
 
 /** Stage-5 mini-boss multipliers. */
@@ -472,12 +507,40 @@ export const BOSS_PATTERNS: Partial<Record<MobKind, { near: string[][]; far: str
     { near: [['slash', 'puddle', 'slash'], ['leap', 'slash']], far: [['rootspike', 'rain'], ['summon', 'charge']] },
     { near: [['roar', 'slash', 'slash'], ['leap', 'rootspike']], far: [['rain', 'puddle', 'charge'], ['summon', 'rootspike', 'rain']] },
   ],
+  // The Great Flosso: cane swipes, sticky floss, sugar showers, Floss Wisps; phase 2 a floaty drop and a fan of wafer cards;
+  // final phase: Ta-daa! and the prize wheel ('wheel': it shows which of shower / wisps / shockwave comes next, double size)
+  flosso: [
+    { near: [['slash', 'slash'], ['slash', 'puddle']], far: [['rain'], ['summon']] },
+    { near: [['slash', 'puddle', 'slash'], ['leap', 'fanshot']], far: [['fanshot', 'rain'], ['summon', 'leap']] },
+    { near: [['roar', 'slash', 'wheel'], ['leap', 'wheel']], far: [['wheel', 'fanshot'], ['summon', 'wheel', 'rain']] },
+  ],
   jar: [
     { near: [['slash', 'slash'], ['leap']], far: [['rain'], ['charge']] },
     { near: [['slash', 'rain', 'slash'], ['leap', 'slash']], far: [['charge', 'rain'], ['fanshot', 'charge']] },
     { near: [['fanshot', 'slash', 'slash'], ['leap', 'fanshot']], far: [['rain', 'fanshot', 'charge'], ['charge', 'leap']] },
   ],
 };
+/** Wheel of Misfortune (The Great Flosso, final phase; boss move 'wheel' in BOSS_PATTERNS). The prize wheel stops on one of
+ *  these the moment the wind-up starts, and the wind-up is long (WHEEL_WINDUP s before TUNE.windup): the symbol is the warning.
+ *  Then he does that move at double size: two sugar showers, four Floss Wisps, or a shockwave twice as wide.
+ *  While it winds up and plays, the monster's `move` is 'wheel-<pick>' (it is in every online snapshot, so guests see the
+ *  same symbol), and a `nemesisMove` event names it ("Wheel of Misfortune: Shockwave"). */
+export const WHEEL_PICKS = ['rain', 'summon', 'roar'] as const;
+export type WheelPick = typeof WHEEL_PICKS[number];
+export const WHEEL = {
+  /** what each symbol is called (callout text; the scene can draw the symbol from the move string) */
+  names: { rain: 'Sugar Shower', summon: 'Floss Wisps', roar: 'Shockwave' } as Record<WheelPick, string>,
+  /** wind-up seconds (other boss moves: 0.55-0.8) */
+  windup: 1.6,
+  /** shockwave radius (a plain roar: 240). It still only reaches 120 px up or down: the room's top ledge is safe */
+  roarR: 480,
+  /** Floss Wisps called (a plain summon: 2), and the most he keeps alive at once (the wheel skips this symbol at 3 or more) */
+  wisps: 4, maxWisps: 6,
+  /** seconds between the two sugar showers */
+  rainGap: 0.55,
+};
+/** The wheel symbol a monster is winding up or playing, from its move string ('wheel-roar' -> 'roar'); undefined otherwise. */
+export function wheelPick(move: string): WheelPick | undefined { return move.startsWith('wheel-') ? WHEEL_PICKS.find(k => move === 'wheel-' + k) : undefined; }
 /** Boss armour: softens hits until broken (heavy hits break it fastest), then the boss is weak for a while. */
 export const BOSS_ARMOR = { take: 0.7, pool: 0.1, heavy: 2.5, weak: 5, weakMul: 1.5, tired: 1.6, tiredMul: 1.25 };
 
@@ -495,9 +558,11 @@ export function nemesisMoves(kind: MobKind, world: number): NemMove[] {
 }
 
 /** Global difficulty knobs (tuned with scripts/balance.ts). */
-export const TUNE = { hp: 2.5, atk: 1.5, bossHp: 1.35, bossAtk: 0.6, windup: 0.85, treeRamp: 0.0055 };
-/** Monsters past level 20 grow a little extra per level, in step with the skill-tree points a kaiju has by then. */
-const ramp = (lv: number) => 1 + TUNE.treeRamp * Math.max(0, lv - 20);
+export const TUNE = { hp: 2.5, atk: 1.5, bossHp: 1.35, bossAtk: 0.6, windup: 0.85, treeRamp: 0.0055, masteryRamp: 0.008 };
+/** Monsters past level 20 grow a little extra per level, in step with the skill-tree points a kaiju has by then; past
+ *  Lv 110 a little more again (masteryRamp), in step with the mastery ranks every world from World 11 on adds
+ *  (tree.ts masteryRanks: 12 ranks per 10 levels), so a new world needs no new number here. */
+const ramp = (lv: number) => 1 + TUNE.treeRamp * Math.max(0, lv - 20) + TUNE.masteryRamp * Math.max(0, lv - 110);
 export function mobHp(kind: MobKind, lv: number): number { return Math.round(MOBS[kind].hp * TUNE.hp * (MOBS[kind].brain === 'boss' ? TUNE.bossHp : 1) * (1 + 0.32 * (lv - 1)) * ramp(lv)); }
 /** Act 2 monsters (past Lv 55) hit harder still: your kit is complete by then, so they keep you reaching for jams (world
  *  bosses only a little: they're already a long fight at the end of a long stage). */

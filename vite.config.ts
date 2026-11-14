@@ -48,7 +48,7 @@ export default defineConfig({
         maximumFileSizeToCacheInBytes: 4 * 1024 * 1024,
         // each kaiju's own stage-5 story paintings (200 of them) download when first shown, then stay cached for offline play
         globIgnores: ['**/art/still-*-w*-elite.webp'],
-        runtimeCaching: [{ urlPattern: /\/art\/still-\d+-w\d+-elite\.webp$/, handler: 'CacheFirst', options: { cacheName: 'kaiju-scenes', expiration: { maxEntries: 220 } } }],
+        runtimeCaching: [{ urlPattern: /\/art\/still-\d+-w\d+-elite\.webp$/, handler: 'CacheFirst', options: { cacheName: 'kaiju-scenes', expiration: { maxEntries: 400 } } }],
         cleanupOutdatedCaches: true,
         navigateFallback: 'index.html',
       },

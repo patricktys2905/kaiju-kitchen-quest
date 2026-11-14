@@ -12,7 +12,7 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w1-s8": [["foe", "Hold out, amigo! The monsters keep coming! Then El Nacho comes back for SECONDS! OHHH YEAH!"], ["me", "Monsters AND a King Pepper Grunt? Hold the line, dragon! Nobody's slicing THIS avocado!"]],
   "w1-s9": [["me", "Flame pillars ahead! Hot hot HOT! Keep the pit in, keep the green in!"], ["mold", "Hehehe... warm, isn't it, little avocado? Warm things go brown."], ["me", "Who said that?! I'm GREEN! Probably! Am I?!"]],
   // World 2: The Fridge. Cold, fresh, tempting.
-  "w2-s2": [["me", "Ooh, sour cream! Ooh, sour cream and guac, a classic combo!"], ["n", "Focus! The portal wants Popsicle Sticks and Cheese Crumbs, and an Ice Cube Ogre waits at the end!"], ["me", "Ice keeps guac fresh! Okay, he can stay. AFTER I beat him!"]],
+  "w2-s2": [["me", "Ooh, sour cream! Ooh, sour cream and guac, a classic combo!"], ["n", "Focus! The portal wants Carton Horns and Cheese Crumbs, and an Ice Cube Ogre waits at the end!"], ["me", "Ice keeps guac fresh! Okay, he can stay. AFTER I beat him!"]],
   "w2-s3": [["me", "A frosty shelf! Cold, crisp and nowhere near brown. A proper dragon's lair!"], ["me", "Behold, a treasure box! *CHOMP* Ow! It BIT me! Fine, I'll take it out on the Fish Finger General!"]],
   "w2-s4": [[10, "Hmph. Dragon. Another Crumblet. Mind the pickle jars, they're salty."], ["me", "Pickles are SO green. Am I that green? Don't answer! Come on, muffin!"]],
   "w2-s6": [["me", "An egg carton! A real dragon nest! Twelve eggs! Are any of them mine?"], ["me", "Nope, all chicken. Fine! I'll grab the scroll before time runs out, and sulk at The Cheese Wheel later!"]],
@@ -60,7 +60,7 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w7-s8": [["me", "A cooler! Cold and dark! The perfect spot for guac! Remember this, dragon!"], ["n", "Uh-oh! Monsters pour in from everywhere! Hold out!"], ["me", "Chill out, monsters! Get it? COOLER? Then King Corn Cob Cannon! Holy guacamole!"]],
   "w7-s9": [["n", "From the grill, a big pompous voice booms: \"ATTEN-TION! Dip on the grill, soldiers! Make it WELL DONE!\""], ["lo2", "Hah! Well done, guacamole! VERY well done! Brown all over!"], ["me", "Grilled guac?! That's the PITS! Hang on, hoard! Climbing!"]],
   // World 8: The Garden.
-  "w8-s2": [["me", "A little sprinkle keeps a dragon fresh! Ahh!"], ["n", "SNAP! The Snapdragon waits at the end of the run. Another DRAGON!"], ["me", "This garden's only big enough for ONE wyrm! Ladybug Spots first, then SNAP!"]],
+  "w8-s2": [["me", "A little sprinkle keeps a dragon fresh! Ahh!"], ["n", "SNAP! The Snapdragon waits at the end of the run. Another DRAGON!"], ["me", "This garden's only big enough for ONE wyrm! Mushroom Caps first, then SNAP!"]],
   "w8-s3": [["me", "Sunflowers! Big yellow faces, all staring at me. Am I browning? Don't all answer at once!"], ["n", "PUFF! A flower blasts a cloud of pollen!"], ["me", "Ah... ACHOO! Watering Can Wizard, you reap what you sow!"]],
   "w8-s4": [[10, "Hmph. Dragon. This Crumblet got lost in the Pumpkin Patch. Walk it out."], ["me", "Behold, little muffin! Stay under my mighty wings! Small but mighty. You know the drill."], [10, "Hmph. Still small."]],
   "w8-s6": [["me", "A dragon climbing a beanstalk? Fee-fi-fo-GUAC!"], ["me", "Grab the Recipe Scroll before time runs out! Then the Gnome General! Pit Hurl! BONK!"]],
@@ -83,6 +83,14 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w10-s7": [["me", "Is that a guac jar way in the back? It's SO brown! Don't look, dragon!"], [8, "Brown okay, remember? Me brown! Me still strong!"], ["me", "Right, Chocomunch! Okay, sponge! BOING! The very last key for the hoard!"]],
   "w10-s8": [["lo2", "Hah! The Last Stand, dip! The whole army AND King Party Cracker Bomber! Thou shalt be left out FOREVER!"], ["me", "Hold out? Ha! I've stayed fresh since TUESDAY! Guac and roll!"]],
   "w10-s9": [["me", "This table is so long and so dusty! A Fondue Fiend at the end, and not one bowl of guac!"], ["n", "From the cake-tin throne, a grand grumpy voice booms: \"Nobody comes to MY feast fresh, little dragon!\""], ["me", "Then BEHOLD, your first fresh guest! Climbing!"]],
+  // World 11: The Midway.
+  "w11-s2": [["me", "Pick a straw! Every straw's a winner! BEHOLD my hoard of straws! Wait. Every one of these says TRY AGAIN!"], ["n", "Look out! Down past the flags, a Pretzel Contortionist flexes in a great big salty knot!"], ["me", "A cheating stall AND a twisty pretzel? Pretzels are for dipping, pal, and I'm not on the menu! Pit Hurl! BONK!"]],
+  "w11-s3": [["me", "Dragons LOVE rings! Mine bounced right off, though. That peg's fatter than my pit!"], ["me", "And that prize box tried to eat my tail! Whack-a-Churros, back in your holes! Gumball Gunner, go Ka-Chunk somewhere else!"]],
+  "w11-s4": [[10, "Hmph. Dragon. I count five and I own six. One of mine's in that crowd at Bumper Car Bay."], ["me", "Behold, little muffin! Hold my claw! Those Bumper Cupcakes crash into EVERYTHING! Small but mighty, fairground edition!"], [10, "Hmph. It's sticky. That's candy floss. Walk it to the exit."]],
+  "w11-s6": [["me", "A Recipe Scroll, way up on the prize shelf! If it's a guac recipe, it joins the hoard! Tick tock, dragon, CLIMB!"], ["me", "And a Fry Basket Brawler yelling \"Order Up!\" at the end? Hot oil is how chips happen, pal. I'm the DIP!"]],
+  "w11-s7": [["me", "In this mirror I'm HUGE! A proper ancient wyrm! And in that one I'm... brown?! Oh. Smudge on the glass. Who cares!"], ["me", "Ooh, a key chest up on a ledge! Treasure for the hoard! Boing! Carousel Macaron Pony, quit prancing at my reflection!"]],
+  "w11-s8": [["lo2", "Have at thee, coconut! Stand fast, dip! Yon foe hath a hairy helm and no manners at all!"], ["me", "It's a coconut shy, crusty! They throw 'em BACK! And King Coconut Shy Lobber's sending a whole crowd! Hold the line!"], ["lo2", "Then lend me a lime, dip! Every knight needeth a lady's favour! Or a fruit's!"]],
+  "w11-s9": [["me", "A doughnut wheel as tall as a wizard's tower! Dragons LOVE a high perch! Up I go, no pit stops, and there's the big top!"], ["n", "The loudspeaker crackles: \"Step right up, little lizard! Is that a brown spot I see? Abracadabra-cadabra!\""], ["me", "LIZARD?! I'm a DRAGON, you fluffy fibber! And spots are IN this year! Uh-oh. Is that Bonbon the Cannonball? In a CANNON?!"]],
 };
 
 export const QUIPS: Record<QuipKind, string[]> = {

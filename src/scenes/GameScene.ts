@@ -1,8 +1,8 @@
 // The playable stage: parallax kitchen, platforms + ladders, the rigged hero, monsters (with level plates),
 // the boss, loot boxes, skill effects, the exit. Started from the camp; reports results back to the save.
 import * as Phaser from 'phaser';
-import { playMusic, sfx, toggleMute } from '../audio';
-import { initHud, setEmotes, setMateNames, showHud, showPause, toast, updateHud, showBag } from '../hud';
+import { type Track, playMusic, sfx, toggleMute } from '../audio';
+import { hudWheel, initHud, setEmotes, setHudGarnish, setMateNames, showHud, showPause, toast, updateHud, showBag, wheelSpot } from '../hud';
 import { setReportContext } from '../ui/report';
 import { settings } from '../ui/settings';
 import { Coach } from '../ui/tips';
@@ -11,7 +11,7 @@ import type { Derived } from '../sim/stats';
 import { readInput, takeTaps } from '../input';
 import { TIER_COLORS, TIER_NAMES } from '../sim/loot';
 import { CONSUMABLES } from '../sim/consumables';
-import { ELITE, ELITE_MODS, MOBS, nemesisOf } from '../sim/mobs';
+import { ELITE, ELITE_MODS, MOBS, WHEEL, WHEEL_PICKS, type WheelPick, nemesisOf, wheelPick } from '../sim/mobs';
 import { ULT_LV, applyBranch, applyMod, skillsOf, skillScale } from '../sim/skills';
 import { STAGES, stageById, worldOf } from '../sim/stages';
 import { derive } from '../sim/stats';
@@ -20,7 +20,9 @@ import { DT, HARD_LV, type Mob, World, guardBreakOf, launcherOf, rankOf } from '
 import { type GearLook, HeroView } from '../render/rig';
 import { itemIcon } from '../sim/items';
 import type { HeroProfile } from '../sim/stats';
-import { addXp, buddyProfile, finishStage, hero, persist, quickBag, save, syncQuickBag } from '../save';
+import { addXp, buddyProfile, finishStage, garnishLookOf, hero, persist, quickBag, save, syncQuickBag } from '../save';
+import { setWorldGarnishes, worldGarnishes } from '../sim/garnish';
+import { badgeArt, badgeFit } from '../ui/garnishBadge';
 import { AVERAGE, Bot } from '../sim/bot';
 import { checkUnlocks, track, trackHero, trackKey } from '../quests';
 import { STORIES, beatAfter } from '../story/stories';
@@ -53,8 +55,33 @@ export function lookOf(p: HeroProfile): GearLook {
 /** "The Burnt Toast King", "The Mold Crown", "Old Fruitcake" / "Sir Stale" (titles and proper names get no "The"). */
 const theName = (n: string) => /^(The |Sir |Baron |Old )/.test(n) ? n : `The ${n}`;
 
+/** Stage music by world (three synthesised stage tracks take turns; worlds not listed play 'world1').
+ *  World 11, the sunny Midway, takes the bright bouncy 'world1' on purpose (after World 10's tense 'world3'). */
+const WORLD_MUSIC: Record<number, Track> = { 2: 'world2', 3: 'world3', 4: 'world2', 5: 'world3', 6: 'world2', 8: 'world3', 9: 'world2', 10: 'world3', 11: 'world1' };
+/** Boss rooms that need more than the backdrop swap when the boss wakes. tint: the painted room is too close to the boss's
+ *  own colours, so the far layer is tinted (multiply). noMid: the world's middle layer does not belong in the room.
+ *  World 11: pink Flosso in a pink-and-cream tent, so the tent goes a cool slate, and the row of outdoor stalls is put away
+ *  (it stood in front of the tent's prize wheel and candy-floss machine). */
+const BOSS_ROOM_LOOK: Record<number, { tint?: number; noMid?: boolean }> = { 11: { tint: 0x8f9cc4, noMid: true } };
+/** What a boss's 'rain' move drops, by world (worlds not listed: icicles). */
+const RAIN_LOOK: Record<number, (sc: Phaser.Scene) => Phaser.GameObjects.Shape> = {
+  3: sc => sc.add.circle(0, 0, 8, 0xff6a2a).setStrokeStyle(2, 0xffd27a).setBlendMode(Phaser.BlendModes.ADD),
+  4: sc => sc.add.circle(0, 0, 11, 0xc8904a).setStrokeStyle(3, 0x6a3a10),
+  5: sc => sc.add.circle(0, 0, 10, 0x8ac06a, 0.9).setStrokeStyle(3, 0x3a6a2a),
+  6: sc => sc.add.rectangle(0, 0, 14, 12, 0xd8a050).setStrokeStyle(2, 0x7a4a20),
+  7: sc => sc.add.rectangle(0, 0, 14, 12, 0x2a2222).setStrokeStyle(2, 0xff8a2a),
+  8: sc => sc.add.circle(0, 0, 10, 0xd83020).setStrokeStyle(2, 0x5a8a2a),
+  9: sc => sc.add.circle(0, 0, 9, 0xb05a2a).setStrokeStyle(2, 0x5a2a10),
+  10: sc => sc.add.circle(0, 0, 9, 0xd8203a).setStrokeStyle(3, 0x5a8a2a),
+  11: sc => sc.add.star(0, 0, 4, 5, 11, 0xff9ad0).setStrokeStyle(2, 0xffffff), // Sugar Shower: pink sugar crystals
+};
+/** Wheel of Misfortune (The Great Flosso): the three symbols on the wheel drawn over him while he winds it up. */
+const WHEEL_LOOK: Record<WheelPick, { icon: string; color: number }> = { rain: { icon: '🌧️', color: 0x6ab8ff }, summon: { icon: '☁️', color: 0xff8ac8 }, roar: { icon: '💥', color: 0xffc83c } };
+
 export const CANVAS = { w: 1920, h: 1080 };
 const ZOOM = 3;
+/** The Garnish badge on a teammate's name tag, world px across (about 18 CSS px on a phone: the tag's letters are 11). */
+const TAG_BADGE = 17;
 let VW = CANVAS.w / ZOOM, SX = 0;
 const VH = CANVAS.h / ZOOM;
 const SY = CANVAS.h / 2 - VH / 2;
@@ -66,7 +93,8 @@ let uiReady = false;
 
 /** A King's own painting (art key mob-<kind>, e.g. mob-kbun: scripts/kings-jobs.mjs) has a crown on top: drawn this much taller than the sim's height, so the body still fills the hit box. */
 const KING_ART_TALL = 1.2;
-interface MobView { img: Phaser.GameObjects.Image; plate: Phaser.GameObjects.Text; bar: Phaser.GameObjects.Rectangle; barBg: Phaser.GameObjects.Rectangle; /** its weakness icon, beside the small HP bar (made the first time the bar shows) */ el?: Phaser.GameObjects.Text; shadow: Phaser.GameObjects.Ellipse; s: number; warn: Phaser.GameObjects.Text; crown?: Phaser.GameObjects.Text; /** extra height of the picture above the sim's height (a King's painted crown), px */ over: number }
+interface WheelView { /** scene time the spin began (ms); -1 while hidden */ t0: number; /** which side of the boss it stands on (chosen when the spin starts: away from the player) */ side: 1 | -1 }
+interface MobView { img: Phaser.GameObjects.Image; plate: Phaser.GameObjects.Text; bar: Phaser.GameObjects.Rectangle; barBg: Phaser.GameObjects.Rectangle; /** its weakness icon, beside the small HP bar (made the first time the bar shows) */ el?: Phaser.GameObjects.Text; shadow: Phaser.GameObjects.Ellipse; s: number; warn: Phaser.GameObjects.Text; crown?: Phaser.GameObjects.Text; /** the Wheel of Misfortune over a boss winding it up (made the first time) */ wheel?: WheelView; /** extra height of the picture above the sim's height (a King's painted crown), px */ over: number }
 
 /** What a zone asks you to do, in a few words. */
 export function goalText(g: ZoneGoal): string {
@@ -113,7 +141,7 @@ export class GameScene extends Phaser.Scene {
   private hard = false;
   private nightmare = false;
   /** teammates (CPU buddy or online friends): puppet, shadow, name tag, and a bot when the CPU plays them */
-  private mates: { i: number; view: HeroView; shadow: Phaser.GameObjects.Ellipse; tag: Phaser.GameObjects.Text; name: string; /** the Cookbook title a friend shows (a second line on the name tag) */ title?: string; bot?: Bot; emo?: string; emoT?: number }[] = [];
+  private mates: { i: number; view: HeroView; shadow: Phaser.GameObjects.Ellipse; tag: Phaser.GameObjects.Text; name: string; /** the worn Garnish, a small ringed badge after the name on the tag (and an unseen text that measures the name line) */ badge?: { edge: Phaser.GameObjects.Arc; disc: Phaser.GameObjects.Arc; line: Phaser.GameObjects.Image[]; off: number[]; ring: Phaser.GameObjects.Arc; img: Phaser.GameObjects.Image; meas: Phaser.GameObjects.Text; str: string; w: number }; /** the Cookbook title a friend shows (a second line on the name tag) */ title?: string; bot?: Bot; emo?: string; emoT?: number }[] = [];
   /** free mode run in progress (null = story) */
   private free: FreeRun | null = null;
   /** first-time tips for this stage */
@@ -188,7 +216,7 @@ export class GameScene extends Phaser.Scene {
       uiReady = true;
       initHud(() => this.pause(true), () => this.pause(false), () => this.leave(), () => this.openBag(), slot => this.bagUse(slot), () => this.closeBag());
       (window as unknown as { __kkq: unknown }).__kkq = {
-        scene: this, world: () => this.world, setPose: (s: string, t: number) => this.debugPose(s, t),
+        scene: this, world: () => this.world, setPose: (s: string, t: number) => this.debugPose(s, t), garnishes: () => (this.world ? [...worldGarnishes(this.world)] : []),
         play: (id: string) => this.scene.restart({ stage: id }), save,
       };
     }
@@ -248,6 +276,9 @@ export class GameScene extends Phaser.Scene {
       this.world.view(this.me);
     } else this.world = new World(st, derive(p), (Date.now() & 0xffff) + 1, quickBag(), save.items.revive ?? 0, this.hard, STORIES[p.species]?.variants[st.id], [...(save.spicy ?? [])], nemesisOf(p.species), this.nightmare,
       this.buddySpecies() !== null ? [derive(buddyProfile(this.buddySpecies()!, p.level))] : []);
+    // the Garnish's one perk (Hunter's Nose) lives in the drop roll: tell the World what each hero wears, in hero order.
+    // Online every kit carries its own (the roll is the host's); solo the CPU buddy's is passed and ignored.
+    if (this.world) setWorldGarnishes(this.world, on ? on.kits.map(k => k.profile.garnish) : [p.garnish, this.buddySpecies() !== null ? save.heroes[this.buddySpecies()!]?.garnish : undefined]);
     // the drop bag comes along (map exits take from it); the stage panel's skip spends a stage's set up front
     // (online the team shares the host's bag: a guest's drawing World starts empty and is filled from the host's snapshots)
     if (st.maps && this.world) { this.world.drops = (on?.role === 'guest' ? {} : { ...(save.drops ?? {}) }) as typeof this.world.drops; if (this.skipBoss) { this.skipBoss = false; for (const m of st.maps) if (m.goal?.kind === 'collect') for (const q of m.goal.wants) this.world.drops[q.mob] = Math.max(0, (this.world.drops[q.mob] ?? 0) - q.n); this.world.skipToBoss(); save.drops = { ...this.world.drops }; persist(); } }
@@ -353,18 +384,36 @@ export class GameScene extends Phaser.Scene {
       const view = new HeroView(this, prof.species, k => this.has(k), 84, lookOf(prof));
       view.root.setDepth(4.5 - i * 0.01);
       const tag = this.add.text(0, 0, name, { fontFamily: 'Luckiest Guy', fontSize: '11px', color: '#a8e8ff', stroke: '#1a2a40', strokeThickness: 4, align: 'center' }).setOrigin(0.5).setDepth(9).setResolution(3);
-      this.mates.push({ i, view, tag, name, title, bot, shadow: this.add.ellipse(0, 0, 54, 12, 0x000000, 0.18).setDepth(-2) });
+      // the Garnish is a badge by the name: the drop's icon in a small ring (white, gold at two stars) after the name
+      const g = garnishLookOf(prof, !!this.online);
+      let badge: (typeof this.mates)[number]['badge'];
+      const art = g ? badgeArt(g.kind) : ''; // the badge sprite: the drop's main body only
+      if (g && this.has(art)) {
+        const edge = this.add.circle(0, 0, TAG_BADGE / 2 + 1.6, 0x1a1020).setDepth(8.99); // a thin dark edge so a white ring reads on light backdrops
+        const disc = this.add.circle(0, 0, TAG_BADGE / 2, 0x968ab4).setDepth(9);
+        // the icon fitted to its real shape (ui/garnishBadge.ts), a dark line round it (four dark copies), the ring on top
+        const f = badgeFit(g.kind, 1), sc = f.k * (f.slender ? 1 : 0.92) * (TAG_BADGE - 1.5);
+        const place = (o: Phaser.GameObjects.Image) => o.setOrigin(f.cx / f.w, f.cy / f.h).setScale(sc).setAngle(f.rot);
+        const line = [[0.55, 0], [-0.55, 0], [0, 0.55], [0, -0.55]].map(() => place(this.add.image(0, 0, art)).setTint(0x1a1020).setTintMode(Phaser.TintModes.FILL).setDepth(9.005));
+        const img = place(this.add.image(0, 0, art)).setDepth(9.01);
+        const ring = this.add.circle(0, 0, TAG_BADGE / 2).setStrokeStyle(1.5, g.gold ? 0xffc83c : 0xffffff).setDepth(9.02);
+        badge = { edge, disc, line, off: [f.dx * TAG_BADGE, f.dy * TAG_BADGE], ring, img, meas: this.add.text(0, 0, '', { fontFamily: 'Luckiest Guy', fontSize: '11px', strokeThickness: 4 }).setVisible(false), str: '', w: 0 };
+      }
+      this.mates.push({ i, view, tag, name, title, bot, badge, shadow: this.add.ellipse(0, 0, 54, 12, 0x000000, 0.18).setDepth(-2) });
     };
     if (this.online) this.online.kits.forEach((k, i) => { if (i !== this.me) addMate(i, k.profile, k.name, undefined, kitTitle(k)); });
     else if (bsp !== null && w.heroes[1]) addMate(1, save.heroes[bsp], 'CPU', new Bot(w, AVERAGE, (Date.now() & 0xff) + 5, 1));
     this.nameMates();
+    // ...and on the HUD: after your own name, and on each teammate's row
+    const badgeOf = (pr: HeroProfile) => { const g = garnishLookOf(pr, !!this.online); return g && { icon: g.icon, gold: g.gold }; };
+    setHudGarnish(badgeOf(myKit), Object.fromEntries(this.online ? this.online.kits.map((k, i) => [i, badgeOf(k.profile)]) : bsp !== null ? [[1, badgeOf(save.heroes[bsp])]] : []));
     setEmotes(this.online ? EMOTES : null, this.online ? e => this.sendEmote(e) : null);
     if (this.online?.free?.picked) this.time.delayedCall(1800, () => toast(`Perk for the team: ${this.online!.free!.picked}`, { color: '#a8f0a8' }));
     this.cx = w.hero.x; this.cy = st.groundY - 100;
     cam.centerOn(this.cx, this.cy);
     if (w.variant === 'night') { this.add.rectangle(SX, SY, VW * 2, VH * 2, 0x0a0a30, 0.42).setOrigin(0, 0).setScrollFactor(0).setDepth(15); }
     setTouchVisible(true); showHud(true);
-    playMusic(st.boss && !st.bossBg ? 'boss' : st.world === 2 || st.world === 4 ? 'world2' : st.world === 3 || st.world === 5 ? 'world3' : st.world === 6 ? 'world2' : st.world === 8 ? 'world3' : st.world === 9 ? 'world2' : st.world === 10 ? 'world3' : 'world1');
+    playMusic(st.boss && !st.bossBg ? 'boss' : WORLD_MUSIC[st.world] ?? 'world1');
     if (st.boss && !st.bossBg) this.time.delayedCall(900, () => sfx('boss'));
     if (w.variant) this.time.delayedCall(900, () => toast(`${{ swarm: '🐜 SWARM', ambush: '⚔️ AMBUSH', night: '🌙 NIGHT' }[w.variant!]}!`, { color: '#c8a8ff' }));
     toast(`${stageTitle(st)}${this.nightmare ? ' · 💀 NIGHTMARE' : this.hard ? ' · HARD' : ''}${w.spicy.length ? ' · ' + '🌶'.repeat(w.spicy.length) : ''}`, { big: true, color: this.hard ? '#ff7a6a' : undefined });
@@ -689,11 +738,11 @@ export class GameScene extends Phaser.Scene {
           if (e.boss) track('bossKills');
           if (e.boss || e.elite) track('eliteKills');
           this.burst(e.x, e.y - 24, e.boss ? 0xffb347 : 0xc8f0a0, e.boss ? 40 : 14);
-          if (e.boss) { this.shake = 14; this.hitStop = 0.4; toast(`THE ${MOBS[e.kind].name.toUpperCase()} FALLS!`, { big: true, color: '#ffb347' }); }
+          if (e.boss) { this.shake = 14; this.hitStop = 0.4; toast(`${theName(MOBS[e.kind].name).toUpperCase()} FALLS!`, { big: true, color: '#ffb347' }); }
           break;
         case 'bossWake': { // a long boss stage: you've reached the boss room (or a sleeping elite wakes)
           const st = this.stage, big = MOBS[e.kind].brain === 'boss';
-          if (big && st.bossBg && this.far && this.has(st.bossBg)) this.far.setTexture(st.bossBg);
+          if (big && st.bossBg && this.far && this.has(st.bossBg)) { this.far.setTexture(st.bossBg); const look = BOSS_ROOM_LOOK[st.world]; if (look?.tint !== undefined) this.far.setTint(look.tint).setTintMode(Phaser.TintModes.MULTIPLY); if (look?.noMid) this.mid?.setVisible(false); }
           if (big) playMusic('boss'); sfx('boss'); this.shake = big ? 10 : 6;
           toast(`${theName(MOBS[e.kind].name)} awakens!`, { big: true, color: '#ff9a6a' });
           break;
@@ -741,7 +790,7 @@ export class GameScene extends Phaser.Scene {
         case 'burrow': this.burst(e.x, e.y - 6, 0x8a6a4a, e.up ? 16 : 10); if (e.up) { sfx('boom'); this.shake = Math.max(this.shake, 4); } break;
         case 'steal': sfx('hurt'); toast(`Your ${e.name} was snatched! Beat the thief to get it back`, { color: '#ff9a6a' }); break;
         case 'recover': sfx('pickup'); toast(`Got your ${e.name} back!`, { color: '#a8f0a8' }); break;
-        case 'nemesisMove': this.callout(w.hero.x, w.hero.y - 150, e.move.toUpperCase() + '!', '#ff9ad8', 13); break;
+        case 'nemesisMove': if (!e.move.startsWith('Wheel of Misfortune')) this.callout(w.hero.x, w.hero.y - 150, e.move.toUpperCase() + '!', '#ff9ad8', 13); break; // the wheel names its own move (drawWheel)
         case 'objective': if (e.done) this.quip('objective', true); sfx(e.done ? 'reveal3' : 'portal'); toast(e.text, { big: !!e.done, color: '#a8f0a8' }); break;
         case 'objFail': toast(e.why, { big: true, color: '#ff8a8a' }); break;
         case 'prop': {
@@ -951,6 +1000,30 @@ export class GameScene extends Phaser.Scene {
     this.tweens.add({ targets: t, y: y - 34, alpha: 0, delay: 450, duration: 450, onComplete: () => t.destroy() });
   }
 
+  /** Wheel of Misfortune telegraph: while a boss winds up a 'wheel-<pick>' move, a prize wheel spins beside its head and
+   *  stops on the symbol it picked (shower / wisps / shockwave), with the move's name under it. It is drawn in the HTML
+   *  HUD (hud.ts hudWheel), not on the canvas: so it is always above the damage numbers, WEAK!/RESIST popups, the
+   *  white hit-flash and the toasts, and it is kept on screen and clear of the boss bar, the hero card and the buttons
+   *  (wheelSpot; a dotted pointer joins it to the boss when it had to move away from him, e.g. when he stands on the
+   *  top ledge). Driven by the monster's move string alone, so online guests (who get it in every snapshot) see the same. */
+  private drawWheel(m: Mob, v: MobView, top: number): void {
+    const pick = m.state === 'windup' && !m.under ? wheelPick(m.move) : undefined;
+    if (!pick) { this.wheelOff(v); return; }
+    const me = this.world!.heroes[this.me] ?? this.world!.hero;
+    if (!v.wheel) v.wheel = { t0: -1, side: 1 };
+    const wv = v.wheel, i = WHEEL_PICKS.indexOf(pick);
+    if (wv.t0 < 0) { wv.t0 = this.time.now; wv.side = me.x <= m.x ? 1 : -1; }
+    const k = Math.min(1, (this.time.now - wv.t0) / 380), landed = k >= 1; // a short spin, then it sits on the pick for the rest of the wind-up
+    const rot = -i * Math.PI * 2 / 3 + (1 - k) * (1 - k) * Math.PI * 5;
+    // world → screen px
+    const view = this.cameras.main.worldView, cr = this.game.canvas.getBoundingClientRect(), sc = cr.width / view.width;
+    const bx = cr.left + (m.x - view.x) * sc, by = cr.top + (top - view.y) * cr.height / view.height;
+    const spot = wheelSpot(bx, by, MOBS[m.kind].w / 2 * sc, wv.side, window.innerWidth, window.innerHeight);
+    hudWheel({ ...spot, rot, landed, pick: i, icons: WHEEL_PICKS.map(p => WHEEL_LOOK[p].icon), title: 'WHEEL OF MISFORTUNE', label: WHEEL.names[pick].toUpperCase(), color: '#' + WHEEL_LOOK[pick].color.toString(16).padStart(6, '0'),
+      tx: Math.max(0, Math.min(window.innerWidth, bx)), ty: Math.max(0, Math.min(window.innerHeight, by + 14 * sc)) });
+  }
+  private wheelOff(v: MobView): void { if (v.wheel && v.wheel.t0 >= 0) { v.wheel.t0 = -1; hudWheel(null); } }
+
   /** Hazard look: burner ring / steam grate / shelf shadow / ice sheet (no art needed). */
   private buildHazard(kind: string, x: number, w: number, gy: number): Phaser.GameObjects.Container {
     const parts: Phaser.GameObjects.GameObject[] = [];
@@ -966,6 +1039,12 @@ export class GameScene extends Phaser.Scene {
       parts.push(this.add.rectangle(0, -6, 26, 12, 0x6a7a8a).setStrokeStyle(2, 0x2a3a4a));
       parts.push(this.add.container(0, -6, [this.add.ellipse(0, -60, w * 0.6, 120, 0x9ad8ff, 0.55), this.add.ellipse(-w * 0.3, -40, 18, 80, 0xc8f0ff, 0.6).setAngle(-25), this.add.ellipse(w * 0.3, -40, 18, 80, 0xc8f0ff, 0.6).setAngle(25)]).setName('fx'));
       parts.push(this.add.ellipse(0, -2, w, 10, 0x9ad8ff, 0.5).setName('glow'));
+    } else if (kind === 'wax' && worldOf(this.stage).hazardSkin === 'caramel') { // Caramel Drip: a toffee-apple dipping rack overhead (low enough to see from the ground); hot caramel runs down when it's on
+      parts.push(this.add.ellipse(0, -2, w, 12, 0x8a4a10, 0.4).setName('glow'));
+      const apple = (ax: number) => [this.add.rectangle(ax, 10, 3, 22, 0xf4e4c0).setStrokeStyle(1, 0x8a6a40), this.add.circle(ax, 28, 10, 0xb8281a).setStrokeStyle(2, 0x8a4a10), this.add.ellipse(ax, 23, 19, 11, 0xd88a2a), this.add.ellipse(ax - 3, 22, 5, 3, 0xffe0a0, 0.9)];
+      parts.push(this.add.container(0, -236, [this.add.rectangle(0, 0, 84, 7, 0x9a6a3a).setStrokeStyle(2, 0x5a3a1a), ...apple(-28), ...apple(28),
+        this.add.rectangle(0, 12, 30, 20, 0xc87a3a).setStrokeStyle(2, 0x8a4a10), this.add.ellipse(0, 2, 30, 8, 0xd88a2a).setStrokeStyle(2, 0x8a4a10), this.add.ellipse(0, 26, 8, 12, 0xd88a2a).setStrokeStyle(1.5, 0x8a4a10)]));
+      parts.push(this.add.container(0, -60, [this.add.rectangle(0, -74, 5, 148, 0xd88a2a, 0.75), this.add.ellipse(0, 0, 18, 30, 0xd88a2a).setStrokeStyle(2, 0x8a4a10), this.add.ellipse(-3, -5, 5, 9, 0xffe0a0, 0.85)]).setName('fx'));
     } else if (kind === 'wax') { // a candle high above; a hot wax drip falls when it's on
       parts.push(this.add.ellipse(0, -2, w, 12, 0x000000, 0.25).setName('glow'));
       parts.push(this.add.container(0, -380, [this.add.rectangle(0, 0, 22, 60, 0xfff4d8).setStrokeStyle(3, 0xc8a070), this.add.ellipse(0, -40, 14, 22, 0xffb347, 0.9)]));
@@ -1136,6 +1215,18 @@ export class GameScene extends Phaser.Scene {
       const arrow = !off ? '' : o.x < wv.x ? '◀ ' : o.x > wv.right ? '' : o.y - 60 < wv.y ? '▲ ' : '▼ ';
       m.tag.setPosition(tx, ty).setText(`${m.emoT && m.emoT > 0 ? m.emo + '\n' : ''}${arrow}${label}${off && o.x > wv.right ? ' ▶' : ''}`).setAlign('center')
         .setColor(o.state === 'down' ? '#ff9a8a' : '#a8e8ff').setScale(off ? 0.9 : 1);
+      if (m.badge) {
+        // the badge sits right after the name, on the name's own line (an emote line may sit above it, the title below)
+        const b = m.badge, show = !off && o.state !== 'down';
+        for (const o of [b.edge, b.disc, b.ring, b.img, ...b.line]) o.setVisible(show);
+        if (show) {
+          if (b.str !== m.name) { b.str = m.name; b.w = b.meas.setText(m.name).width; }
+          const lines = m.tag.text.split('\n').length, row = m.emoT && m.emoT > 0 ? 1 : 0;
+          const bx = tx + b.w / 2 + TAG_BADGE / 2 + 1, by = ty - m.tag.height / 2 + (row + 0.5) * m.tag.height / lines;
+          b.edge.setPosition(bx, by); b.disc.setPosition(bx, by); b.ring.setPosition(bx, by); b.img.setPosition(bx + b.off[0], by + b.off[1]);
+          b.line.forEach((o, n) => o.setPosition(bx + b.off[0] + [0.55, -0.55, 0, 0][n], by + b.off[1] + [0, 0, 0.55, -0.55][n]));
+        }
+      }
     }
     // you're down but a teammate isn't: hang on
     if (h.state === 'down' && mate && !this.downWarned) { this.downWarned = true; toast(this.online ? 'You\'re down! Wait for a friend to stand next to you' : 'You\'re down! Your buddy is coming to pick you up', { color: '#a8e8ff' }); }
@@ -1223,10 +1314,11 @@ export class GameScene extends Phaser.Scene {
     // lasers, mould puddles, burrow mounds
     const g = this.overlay!;
     g.clear(); this.topFx?.clear();
+    const caramel = worldOf(st).hazardSkin === 'caramel'; // the Caramel Drip's own puddle (other sticky patches keep their colour)
     for (const p of w.puddles) {
       const col = ({ slow: 0xa83a6a, slick: 0xf0d040, burn: 0xff7a2a, poison: 0x7ab8c8, trap: 0x6a6a72 } as Record<string, number>)[p.kind ?? ''] ?? 0x6ac04a;
       if (p.kind === 'trap') { g.fillStyle(col, 1); g.fillRect(p.x - 14, p.y - 6, 28, 6); g.lineStyle(2, 0xd8d8e0, 1); g.lineBetween(p.x - 12, p.y - 6, p.x + 12, p.y - 14); continue; }
-      g.fillStyle(p.kind === 'slow' && st.world === 8 ? 0xf0e070 : p.kind === 'slow' && st.world === 7 ? 0x9ad06a : p.kind === 'slow' && st.world === 6 ? 0xfff0c8 : p.kind === 'slow' && (w.nemesis === 'nslug' || st.world === 5) ? 0x7ab85a : col, Math.min(p.kind === 'burn' ? 0.5 + Math.sin(t * 18) * 0.15 : 0.55, p.t / 2)); g.fillEllipse(p.x, p.y - 1, p.w ?? 70, 10);
+      g.fillStyle(p.kind === 'slow' && caramel && w.hazards.some(z => z.kind === 'wax' && Math.abs(z.x - p.x) < 10) ? 0xc8802a : p.kind === 'slow' && st.world === 8 ? 0xf0e070 : p.kind === 'slow' && st.world === 7 ? 0x9ad06a : p.kind === 'slow' && st.world === 6 ? 0xfff0c8 : p.kind === 'slow' && (w.nemesis === 'nslug' || st.world === 5) ? 0x7ab85a : col, Math.min(p.kind === 'burn' ? 0.5 + Math.sin(t * 18) * 0.15 : 0.55, p.t / 2)); g.fillEllipse(p.x, p.y - 1, p.w ?? 70, 10);
     }
     for (const wl of w.walls) { // waffle walls
       const a = Math.min(1, wl.t * 2);
@@ -1274,7 +1366,7 @@ export class GameScene extends Phaser.Scene {
     // monsters
     const seen = new Set<number>();
     for (const m of w.mobs) { seen.add(m.id); this.drawMob(m, t); }
-    for (const [id, v] of this.mobViews) if (!seen.has(id)) { v.crown?.destroy(); v.img.destroy(); v.plate.destroy(); v.bar.destroy(); v.barBg.destroy(); v.el?.destroy(); v.shadow.destroy(); v.warn.destroy(); this.mobViews.delete(id); }
+    for (const [id, v] of this.mobViews) if (!seen.has(id)) { v.crown?.destroy(); this.wheelOff(v); v.img.destroy(); v.plate.destroy(); v.bar.destroy(); v.barBg.destroy(); v.el?.destroy(); v.shadow.destroy(); v.warn.destroy(); this.mobViews.delete(id); }
 
     // boxes
     const seenB = new Set<number>();
@@ -1350,14 +1442,7 @@ export class GameScene extends Phaser.Scene {
           : s.kind === 'reflect' ? this.add.circle(0, 0, 9, 0x8ae07a).setStrokeStyle(2, 0xffffff)
           : s.from === 'hero'
           ? this.add.circle(0, 0, 9, 0xe8c8ff).setStrokeStyle(3, 0xffffff).setBlendMode(Phaser.BlendModes.ADD)
-          : s.kind === 'icicle' && worldOf(this.stage).id === 10 ? this.add.circle(0, 0, 9, 0xd8203a).setStrokeStyle(3, 0x5a8a2a)
-          : s.kind === 'icicle' && worldOf(this.stage).id === 9 ? this.add.circle(0, 0, 9, 0xb05a2a).setStrokeStyle(2, 0x5a2a10)
-          : s.kind === 'icicle' && worldOf(this.stage).id === 8 ? this.add.circle(0, 0, 10, 0xd83020).setStrokeStyle(2, 0x5a8a2a)
-          : s.kind === 'icicle' && worldOf(this.stage).id === 7 ? this.add.rectangle(0, 0, 14, 12, 0x2a2222).setStrokeStyle(2, 0xff8a2a)
-          : s.kind === 'icicle' && worldOf(this.stage).id === 6 ? this.add.rectangle(0, 0, 14, 12, 0xd8a050).setStrokeStyle(2, 0x7a4a20)
-          : s.kind === 'icicle' && worldOf(this.stage).id === 5 ? this.add.circle(0, 0, 10, 0x8ac06a, 0.9).setStrokeStyle(3, 0x3a6a2a)
-          : s.kind === 'icicle' && worldOf(this.stage).id === 4 ? this.add.circle(0, 0, 11, 0xc8904a).setStrokeStyle(3, 0x6a3a10)
-          : s.kind === 'icicle' && worldOf(this.stage).id === 3 ? this.add.circle(0, 0, 8, 0xff6a2a).setStrokeStyle(2, 0xffd27a).setBlendMode(Phaser.BlendModes.ADD)
+          : s.kind === 'icicle' && RAIN_LOOK[worldOf(this.stage).id] ? RAIN_LOOK[worldOf(this.stage).id](this)
           : s.kind === 'icicle' ? this.add.ellipse(0, 0, 10, 26, 0xc8f0ff).setStrokeStyle(2, 0x6ab8ff)
           : s.kind === 'laser' ? this.add.ellipse(0, 0, 26, 5, 0xff4a4a).setStrokeStyle(1.5, 0xffe0e0).setBlendMode(Phaser.BlendModes.ADD)
           : s.kind === 'steam' ? this.add.circle(0, 0, 10, 0xf4f4ff, 0.85).setStrokeStyle(2, 0xc8d0e0)
@@ -1410,7 +1495,7 @@ export class GameScene extends Phaser.Scene {
     // long stages hold dozens of monsters: only draw the ones near the camera (their views are made when they come close)
     const view = this.cameras.main.worldView;
     if (m.x < view.x - 360 || m.x > view.right + 360) {
-      if (v) { v.crown?.setVisible(false); v.img.setVisible(false); v.plate.setVisible(false); v.shadow.setVisible(false); v.bar.setVisible(false); v.barBg.setVisible(false); v.el?.setVisible(false); v.warn.setVisible(false); }
+      if (v) { v.crown?.setVisible(false); this.wheelOff(v); v.img.setVisible(false); v.plate.setVisible(false); v.shadow.setVisible(false); v.bar.setVisible(false); v.barBg.setVisible(false); v.el?.setVisible(false); v.warn.setVisible(false); }
       return;
     }
     if (!v) {
@@ -1465,6 +1550,7 @@ export class GameScene extends Phaser.Scene {
     const top = m.y - def.h * (m.elite ? ELITE.scale : 1) - v.over - 18;
     const danger = this.world!.isDanger(m);
     v.crown?.setVisible(!m.under && m.state !== 'dead').setPosition(m.x + m.face * def.w * 0.08, m.y - def.h * sy * (m.elite ? ELITE.scale : 1) + 4).setRotation(rot);
+    this.drawWheel(m, v, top);
     v.warn.setVisible(danger).setPosition(m.x, top - 4).setScale(danger ? 1 + Math.sin(t * 24) * 0.15 : 1);
     const fl = this.world!.floorBelow(m.x, m.y, m.y + 2000, false);
     v.shadow.setPosition(m.x, (fl ? fl.y : m.y) - 1).setAlpha(m.state === 'dead' ? 0 : 1);

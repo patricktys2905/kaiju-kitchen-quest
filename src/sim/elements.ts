@@ -50,21 +50,22 @@ export const MONSTER_TYPES: Record<MonsterType, { name: string; weakTo: Element;
 const set = (t: MonsterType, s: string): [string, MonsterType][] => s.split(' ').map(k => [k, t]);
 const BASE_TYPE: Record<string, MonsterType> = Object.fromEntries([
   // ordinary monsters
-  ...set('MELTY', 'bun garlic icepop cheesemouse pea yogurt marsh noodle raisin straw duck glove scrub napkin skewer corn caterpillar boxbot coupon bag cracker2'),
-  ...set('FIERY', 'pepper bacon popcorn sausage imp kettle soda bubble candle gravy roast firefly charcoal patty ketchup peapod tomato scanner'),
-  ...set('CRUSTY', 'salt egg carrot pickle crumbcube meatball cracker cheerio can plate mug fork ladle teapot beetle snail pumpkin can2 melon cherrysoldier fruitknight'),
-  ...set('SLIPPERY', 'jamhop worm ant icebat jelly milk mitt bee flour eel teacake wasp toadstool ladybug mole radish banana trolley pudding peel'),
-  // summons and splits: the same type as whoever calls them (one answer for a boss and its adds)
+  ...set('MELTY', 'bun garlic icepop cheesemouse pea yogurt marsh noodle raisin straw duck glove scrub napkin skewer corn caterpillar boxbot coupon bag cracker2 floss snowcone'),
+  ...set('FIERY', 'pepper bacon popcorn sausage imp kettle soda bubble candle gravy roast firefly charcoal patty ketchup peapod tomato scanner cadet toffee churro pretzel'),
+  ...set('CRUSTY', 'salt egg carrot pickle crumbcube meatball cracker cheerio can plate mug fork ladle teapot beetle snail pumpkin can2 melon cherrysoldier fruitknight coconut jawbreaker'),
+  ...set('SLIPPERY', 'jamhop worm ant icebat jelly milk mitt bee flour eel teacake wasp toadstool ladybug mole radish banana trolley pudding peel bumper'),
+  // summons and splits: the same type as whoever calls them (one answer for a boss and its adds). The Great Flosso calls
+  // Floss Wisps (floss, an ordinary Melty monster above), so he is Melty too
   ...set('SLIPPERY', 'jellybit crouton lid'), ...set('CRUSTY', 'minicheerio'), ...set('MELTY', 'sporeling sprout'), ...set('FIERY', 'chunk'),
   // mimics
   ...set('CRUSTY', 'mimic'), ...set('MELTY', 'cereal'),
   // world bosses
-  ...set('CRUSTY', 'toast jar fruitcake'), ...set('MELTY', 'golem moldking brussels'), ...set('FIERY', 'dragon meatloaf'), ...set('SLIPPERY', 'stale tupper'),
+  ...set('CRUSTY', 'toast jar fruitcake'), ...set('MELTY', 'golem moldking brussels flosso'), ...set('FIERY', 'dragon meatloaf'), ...set('SLIPPERY', 'stale tupper'),
   // minibosses (typed by their name)
-  ...set('CRUSTY', 'm1a m1d m2c m3b m3e m4b m5c m6c m6d m7c m8b m9c m9e m10c'),
-  ...set('FIERY', 'm1b m2e m3a m4d m4e m5e m6a m6b m7a m8a m8c m9d m10e'),
-  ...set('MELTY', 'm1c m2a m2d m3c m4c m5a m7b m7d m8e m9b m10a'),
-  ...set('SLIPPERY', 'm1e m2b m3d m4a m5b m5d m6e m7e m8d m9a m10b m10d'),
+  ...set('CRUSTY', 'm1a m1d m2c m3b m3e m4b m5c m6c m6d m7c m8b m9c m9e m10c m11b'),
+  ...set('FIERY', 'm1b m2e m3a m4d m4e m5e m6a m6b m7a m8a m8c m9d m10e m11c'),
+  ...set('MELTY', 'm1c m2a m2d m3c m4c m5a m7b m7d m8e m9b m10a m11e'),
+  ...set('SLIPPERY', 'm1e m2b m3d m4a m5b m5d m6e m7e m8d m9a m10b m10d m11a m11d'),
   // nemeses: weak to what their rival kaiju is best at (never resisting it)
   ...set('CRUSTY', 'nbeet ncrow npine nlamp nshroom nslug ncookie nbrulee nshark ngorilla nbear'), ...set('MELTY', 'nrat nginger nhornet'),
   ...set('SLIPPERY', 'nkebab nnacho nmouse nbird ngelato'), ...set('FIERY', 'nhare'),

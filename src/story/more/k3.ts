@@ -29,7 +29,7 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w3-s9": [["me", "The hottest rack of all! I'm turning into a smoothie. A LIME smoothie!"], ["mold", "Hehehe... little puddle. A runny jelly never gets a seat."], ["me", "*jiggle* I'm still climbing! Set for success! Mostly set!"]],
   // World 4: The Pantry. Firm again, closer to the Chef.
   "w4-s2": [["me", "Ahh, the Pantry! Cool and shady! I'm firming right up! Boing!"], ["n", "CLANG! Tin cans come tumbling off the shelves!"], ["me", "Every world's got something falling on me! Does gravity LIKE me? Run!"]],
-  "w4-s3": [["me", "Flour everywhere, like snow! I'm a lime jelly snowman!"], ["n", "Uh-oh! Behind the snow pile snores a Cereal Box Colossus!"], ["me", "Shh! Okay, Honey Bees first, Colossus later! Wibble wobble, tiptoe!"]],
+  "w4-s3": [["me", "Flour everywhere, like snow! I'm a lime jelly snowman!"], ["n", "Uh-oh! Behind the snow pile snores a Cereal Box Colossus!"], ["me", "Shh! Okay, Flour Ghosts first, Colossus later! Wibble wobble, tiptoe!"]],
   "w4-s4": [["n", "SLAM! The pantry door shuts. Lights out in Tin Can Alley!"], [10, "Hmph. My Crumblet's scared of the dark. Walk it out, jelly."], ["me", "Hold my nub, little muffin! I'll cheer the whole way. Gimme a D! For DARK! Wheee!"]],
   "w4-s6": [["me", "Chili? Nope. Cinnamon? Ooh, maybe. The scroll's at the top!"], ["me", "And the Honey Pot Hermit's up there too! Gotta hurry! Gimme an H! For HURRY!"]],
   "w4-s7": [[7, "Hrrm. Young jelly. Ancient wisdom says the best seat at the table is the one you share."], ["me", "Ooh! That's so nice!"], [7, "It was about rice. Sharing rice. Hrrm. The sponge is that way."]],
@@ -83,6 +83,15 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w10-s7": [["me", "Jars with no labels. Nobody even knows their names!"], ["me", "*scribble scribble* There! Now you're Jam Jar Jeff! Okay, one last bounce for one last key! BOING!"]],
   "w10-s8": [["lo2", "Hold out, wobbly knave! The WHOLE army cometh! Thou art doomed!"], ["me", "Sir Stale! Want a name flag? I've got spares! Okay, after! Wobble Shield, up!"]],
   "w10-s9": [["me", "This table is SO long. And SO empty. There's not one plate, and not one flag."], ["n", "From the cake-tin throne, a grumpy voice booms: \"NOBODY sits at my table! Nobody EVER came!\""], ["me", "Nobody ever came? Aww. Hang on, Mr. Fruitcake! Somebody's coming! Wibbling up!"]],
+
+  // World 11: The Midway.
+  "w11-s2": [["me", "Ooh, a hoopla stall! Go, hoops! Go, me! Aww, my hoop's smaller than the prize. Like, WAY smaller. What a funny mistake!"], ["n", "Meanwhile, under the very last flag, a Pretzel Contortionist poses in a knot with three loops!"], ["me", "What a knot! Gimme a K! Gimme an N! Is there a K in knot? Jelly good show, pretzel! Now ready or knot, here comes the jiggle!"]],
+  "w11-s3": [["me", "Ring toss! Everybody's rings keep bouncing off! Good try, everybody! Good try, pegs that are fatter than the rings!"], ["me", "Eep! A Whack-a-Churro! Nice pop! And that prize box has TEETH! Great teeth! Gumball Gunner, you're next! Ka-Chunk, wibble wobble!"]],
+  "w11-s4": [[10, "Hmph. Jelly. I count five and I need six. One of mine's lost in the crowd at the bumper cars."], ["me", "I'll walk it! Gimme an E! Gimme an X! Hold my nub, little muffin! The Bumper Cupcakes can't steer, but they're trying SO hard!"], [10, "Hmph. Don't cheer for the cupcakes. Walk."]],
+  "w11-s6": [["me", "A Recipe Scroll, way up on the prize shelf, and a clock going tick tick! Gimme a T! Gimme an I! No time for the rest! HOP!"], ["me", "Ooh, the Fry Basket Brawler's shouting \"Order Up!\" Great lungs! Hot oil and jelly don't mix, though. *jiggle jiggle*"]],
+  "w11-s7": [["me", "Mirrors! In this one I'm tall and firm! In that one I'm a puddle with a cherry! Hi, all of me! You look GREAT!"], ["me", "A key chest up on a ledge, and a sponge! Go, sponge! BOING! And a Carousel Macaron Pony! Lovely gallop! Whoa, pony, not at ME!"]],
+  "w11-s8": [["lo2", "Have at thee, coconut! Wobbly knave, attend! I joust in the grandest tourney of the age, and no herald knows my name!"], ["me", "*scribble* S-I-R S-T-A-L-E! Your name flag, like I promised! Uh-oh, monsters pouring in! Hold it tight! Wobble Shield, up!"], ["lo2", "My NAME! Upon a banner! Forsooth, I shall wave it at King Coconut Shy Lobber himself! Which end is up?"]],
+  "w11-s9": [["me", "The doughnut wheel! It's SO big! Go, wheel! I'm hopping all the way up, frame and all!"], ["n", "The loudspeaker crackles: \"Step right up, little wobble! Nobody cheers for a loser, and at the Great Flosso's games YOU lose!\""], ["me", "I cheer for losers ALL the time! Ooh, go, Bonbon the Cannonball! Wait, that cannon's pointing at me! Eep! Big top, here I wobble!"]],
 };
 
 export const QUIPS: Record<QuipKind, string[]> = {

@@ -1,4 +1,4 @@
-// Boss signature weapons: 200 (one per kaiju per world boss), each with its own gear skill, and every style works.
+// Boss signature weapons: 220 (one per kaiju per world boss), each with its own gear skill, and every style works.
 import { describe, expect, it } from 'vitest';
 import { BOSS_WEAPONS, ALL_STYLES } from '../src/sim/bossgearData';
 import { GEAR, gearOf } from '../src/sim/gear';
@@ -10,13 +10,13 @@ import { World } from '../src/sim/world';
 
 describe('boss signature weapons', () => {
   it('every boss drops one weapon for every kaiju, all different skills for a kaiju and for a boss', () => {
-    expect(BOSS_WEAPONS.length).toBe(200);
+    expect(BOSS_WEAPONS.length).toBe(220);
     for (const bw of BOSS_WEAPONS) {
       expect(BASES[bw.base]?.for, bw.base).toBe(bw.species);
       expect(BASES[bw.base].boss).toBe(bw.boss);
       expect(GEAR[bw.base]?.name).toBe(bw.skill);
     }
-    for (const sp of new Set(BOSS_WEAPONS.map(b => b.species))) expect(new Set(BOSS_WEAPONS.filter(b => b.species === sp).map(b => b.style)).size).toBe(10);
+    for (const sp of new Set(BOSS_WEAPONS.map(b => b.species))) expect(new Set(BOSS_WEAPONS.filter(b => b.species === sp).map(b => b.style)).size).toBe(11);
     for (const boss of new Set(BOSS_WEAPONS.map(b => b.boss))) expect(new Set(BOSS_WEAPONS.filter(b => b.boss === boss).map(b => b.style)).size).toBe(20);
     // never from a random box
     const r = (() => { let s = 7; return () => ((s = (s * 1103515245 + 12345) & 0x7fffffff) / 0x7fffffff); })();

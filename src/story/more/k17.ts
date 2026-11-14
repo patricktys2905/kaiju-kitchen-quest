@@ -83,6 +83,15 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w10-s7": [[16, "Whoa, little dude. The back of the Fridge. Finally, somewhere cool enough for us. Cool, cool, cool."], ["me", "Right?! It's like a holiday! Last key's up high! Sponge, my old pal! One last boing!"]],
   "w10-s8": [["lo2", "Hold out one last time, bird? Thou shalt be forgotten at the back, like a frozen pea!"], ["me", "Peas are great! Circles STILL count! Even the last ones! Wheee!"]],
   "w10-s9": [["n", "A grumpy old voice booms down the long, empty table: \"Who's SLIDING on my banquet table?!\""], ["me", "Me! Sorry! It's so dusty and slidey! Wait, why is a feast table EMPTY?"], ["me", "Aw, nuts. That's the saddest party ever! Long way home, part seven and a half! Here I come!"]],
+
+  // World 11: The Midway.
+  "w11-s2": [["me", "Slide-the-puck! I'm a PRO at sliding! Wheee! Hey, this puck's got BRAKES! Who puts brakes on a puck?! Cheaters!"], ["n", "Look out below! At the end of the bunting, a Pretzel Contortionist poses in a very tidy knot!"], ["me", "Dear freezer, the bread here does yoga. I'm going to bowl it. Wish you were here! Wheee!"]],
+  "w11-s3": [["me", "Ring toss! I threw the ring, then I slid after it, and now I'M on the peg! Do I win me?"], ["me", "Eek, that prize box has TEETH, and Whack-a-Churros keep popping up in my lane! Gumball Gunner, STRIKE incoming! Wheee!"]],
+  "w11-s4": [[10, "Hmph. Penguin. This one slid off into the crowd. Reminds me of somebody. Walk it to the exit. Slowly."], ["me", "Slowly! Brakes on! *skrrrt* Hold my flipper, little buddy! Bumper Cupcakes have no brakes either. I like them! Eek, no I don't!"], [10, "It went wheee, just like you. Don't look at me. It's the wind, okay?"]],
+  "w11-s6": [["me", "THE HELTER-SKELTER! A slide with no brakes, just like me! But the Recipe Scroll's on the TOP prize shelf, and the clock's ticking!"], ["me", "Up the ladders I go, and up is the WRONG way on a slide! Aw, nuts! And a Fry Basket Brawler spitting hot oil? Eek! Wheee!"]],
+  "w11-s7": [["me", "Whoa! In this mirror I'm a great big EMPEROR penguin! In that one I'm a melted lolly with a beak. Eek! I'm not melting, right?"], ["me", "Phew, wobbly glass! Ooh, a key chest up on a ledge! And a Carousel Macaron Pony going round? It can't stop either! Boing!"]],
+  "w11-s8": [["lo2", "Have at thee, coconut! Bird, fetch my noble steed! A knight doth not joust on foot!"], ["me", "I'm not a horse! Eek, they throw BACK! King Coconut Shy Lobber AND a whole crowd? I'll hold out in circles! Circles ALWAYS count!"], ["lo2", "Forsooth, the steed gallops in circles! Ride on, brave bird! The tourney is ours! Possibly!"]],
+  "w11-s9": [["me", "A doughnut as big as an ICEBERG! I'm climbing it, and I can see the whole fair! Dear freezer, the view is cool. The weather isn't."], ["n", "The loudspeaker crackles: \"Step right up, slippery bird! Can't stop? Then slide right into my big top! Everybody loses there!\""], ["me", "Deal! I mean, no deal! Wait, who's that in the cannon? Bonbon the Cannonball has no brakes EITHER! Best fair ever! Wheee!"]],
 };
 
 export const QUIPS: Record<QuipKind, string[]> = {

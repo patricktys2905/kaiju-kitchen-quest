@@ -20,8 +20,8 @@ describe('boss rooms', () => {
   const add = (id: string, room: Room) => { const k = roomKey(room); (rooms.get(k) ?? rooms.set(k, { room, ids: [] }).get(k)!).ids.push(id); };
   for (const st of [...STAGES, ...BONUS_STAGES]) add(st.id, roomOf(st));
   for (let d = 0; d < 42; d++) add(`daily ${20261101 + d}`, roomOf(dailyStage(20261101 + d, 30)));
-  for (let w = 1; w <= 10; w++) add(`rush ${w}`, roomOf(bossRoom(w)));
-  for (let f = 1; f <= 30; f++) add(`endless ${f}`, roomOf(endlessFloor(f, 30, 5)));
+  for (let w = 1; w <= 11; w++) add(`rush ${w}`, roomOf(bossRoom(w)));
+  for (let f = 1; f <= 36; f++) add(`endless ${f}`, roomOf(endlessFloor(f, 30, 5)));
 
   it('every story, bonus and daily stage ends in a boss room', () => {
     for (const st of [...STAGES, ...BONUS_STAGES]) expect(st.maps?.[st.maps.length - 1].kind, st.id).toBe('boss');

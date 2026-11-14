@@ -8,7 +8,9 @@ import type { LootBox } from '../sim/types';
 import type { HeroProfile } from '../sim/stats';
 import { BONUS_STAGES, STAGES, stageById } from '../sim/stages';
 import { CLASSES } from '../sim/classes';
-import { hero, persist, quickBag, save } from '../save';
+import { hero, kitGarnishOf, persist, quickBag, save } from '../save';
+import { garnishLook } from '../sim/garnish';
+import { garnishNameBadge } from './garnish';
 import { hardUnlocked, stageUnlocked } from './camp';
 import { sfx } from '../audio';
 import { stageElements } from '../sim/elements';
@@ -61,12 +63,18 @@ let lobby: Extract<NetMsg, { t: 'lobby' }> | null = null;
  *  text: the name is looked up on this device (titleName), so a friend can only ever show a real title, and a version
  *  that does not know the field (or the id) shows nothing. */
 type Titled = { title?: string };
+/** ...and with the Garnish its kaiju wears (the kit profile's two fields, copied onto the lobby seat). Looked up on this
+ *  device too (garnishLookOf): anything that is not a real drop shows nothing. */
+type Garnished = { garnish?: string; garnishGold?: boolean };
+const seatBadge = (s: unknown): string => garnishNameBadge(garnishLook((s ?? {}) as Garnished));
 /** The Cookbook title a friend shows ('' for none, an older version, or anything that is not a title id). */
 export function kitTitle(k: unknown): string { const t = (k as Titled | null | undefined)?.title; return typeof t === 'string' ? titleName(t) : ''; }
 
 /** Only what the host needs to build your kaiju (no quest counters or story flags), plus the Cookbook title shown. */
 export function kitOf(p: HeroProfile = hero()): Kit {
-  const kit: Kit & Titled = { name: save.netName || 'Player', profile: { species: p.species, level: p.level, xp: 0, statPts: 0, alloc: p.alloc, skillPts: 0, skills: p.skills, equip: p.equip, branch: p.branch, cleared: {}, hardCleared: {}, stats: {}, kq: [], seen: [] },
+  const kit: Kit & Titled = { name: save.netName || 'Player', profile: { species: p.species, level: p.level, xp: 0, statPts: 0, alloc: p.alloc, skillPts: 0, skills: p.skills, equip: p.equip, branch: p.branch, cleared: {}, hardCleared: {}, stats: {}, kq: [], seen: [],
+    // the Garnish worn (and its gold flag): the host's drop roll and everyone's screen read it; older versions ignore it
+    ...kitGarnishOf(p.species) },
     bag: quickBag(), revives: save.items.revive ?? 0 };
   if (shownTitle(save)) kit.title = save.title;
   return kit;
@@ -92,10 +100,11 @@ export function showOnline(): void {
 }
 function hide(): void { el.classList.remove('on'); }
 
-function seats(): (LobbySeat & Titled)[] {
+function seats(): (LobbySeat & Titled & Garnished)[] {
   const me = hero();
-  return [{ who: 'host', name: save.netName || 'Host', species: me.species, level: me.level, title: shownTitle(save) ? save.title : undefined },
-    ...[...guests].map(([g, v]) => ({ who: 'guest' as const, guest: g, name: v.kit.name, species: v.kit.profile.species, level: v.kit.profile.level, route: v.route, title: kitTitle(v.kit) ? (v.kit as Titled).title : undefined }))];
+  return [{ who: 'host', name: save.netName || 'Host', species: me.species, level: me.level, title: shownTitle(save) ? save.title : undefined, ...kitGarnishOf(me.species) },
+    ...[...guests].map(([g, v]) => ({ who: 'guest' as const, guest: g, name: v.kit.name, species: v.kit.profile.species, level: v.kit.profile.level, route: v.route, title: kitTitle(v.kit) ? (v.kit as Titled).title : undefined,
+      ...(v.kit.profile.garnish ? { garnish: v.kit.profile.garnish, ...(v.kit.profile.garnishGold === true ? { garnishGold: true } : {}) } : {}) }))];
 }
 
 function broadcastLobby(): void {
@@ -203,7 +212,7 @@ function weakRow(m: Mode, stageId: string, lv: number): string {
   return line ? `<p class="hint weakln">${line}</p>` : '';
 }
 const esc = (s: string) => s.replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]!));
-const seatHtml = (s: LobbySeat, me: boolean) => `<div class="seat ${me ? 'me' : ''}"><img src="art/kaiju-${s.species}.webp"><b>${esc(s.name)}</b>${kitTitle(s) ? `<u class="ttl">🎖 ${esc(kitTitle(s))}</u>` : ''}<span>${CLASSES.find(c => c.species === s.species)?.name ?? ''} · Lv ${s.level}</span>${s.route === 'backup' ? '<em>backup route</em>' : s.who === 'host' ? '<em>host</em>' : ''}</div>`;
+const seatHtml = (s: LobbySeat, me: boolean) => `<div class="seat ${me ? 'me' : ''}"><img src="art/kaiju-${s.species}.webp"><b>${esc(s.name)}${seatBadge(s)}</b>${kitTitle(s) ? `<u class="ttl">🎖 ${esc(kitTitle(s))}</u>` : ''}<span>${CLASSES.find(c => c.species === s.species)?.name ?? ''} · Lv ${s.level}</span>${s.route === 'backup' ? '<em>backup route</em>' : s.who === 'host' ? '<em>host</em>' : ''}</div>`;
 
 function render(): void {
   const st = status ? `<p class="status ${statusOk ? '' : 'bad'}">${esc(status)}</p>` : '';

@@ -37,7 +37,7 @@ export function showCredits(species: number, done: () => void, act = 1): void {
     <h2>The Nemeses</h2>
     ${cast.map(c => nemesisOf(c.species)).filter((k, i, a) => k && a.indexOf(k) === i).map(k => star(MOBS[k!].art, MOBS[k!].name, 'Maybe not so bad after all?')).join('')}
     <h2>The Bosses</h2>
-    ${WORLDS.filter(w => act === 2 ? w.id > 5 : w.id <= 5).map(w => star(MOBS[w.boss].art, MOBS[w.boss].name, act === 2 ? `${w.name} (now invited to dinner)` : `${w.name}${w.id === 5 ? ' (gone down the drain)' : ' (cured, and a bit embarrassed)'}`)).join('')}
+    ${WORLDS.filter(w => act === 2 ? w.id > 5 && w.id <= 10 : w.id <= 5).map(w => star(MOBS[w.boss].art, MOBS[w.boss].name, act === 2 ? `${w.name} (now invited to dinner)` : `${w.name}${w.id === 5 ? ' (gone down the drain)' : ' (cured, and a bit embarrassed)'}`)).join('')}
     <h2>And</h2>
     <p>Every Crumblet, Sporeling and Moldy Bun who got bonked along the way</p>
     <p>The Head Chef, who will be washing up for a week</p>

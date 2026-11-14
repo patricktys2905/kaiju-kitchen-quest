@@ -7,6 +7,7 @@ import { sfx } from '../audio';
 import { moodOf } from '../story/mood';
 import { LEFTOVER_NAMES } from '../story/finale';
 import { showCredits } from './credits';
+import { stillRect } from './place';
 
 /** The art that exists (art/manifest.json): a scene whose painting isn't made yet falls back to portraits only. */
 let artList: Set<string> | null = null;
@@ -40,7 +41,7 @@ const CSS = `
 #story .box.lo { border-color: #8a6ab8; } #story .box.lo .who { background: #8a6ab8; color: #fff; }
 @keyframes moldp { to { transform: scale(1.12); } }
 #story .box { position: absolute; left: 50%; transform: translateX(-50%); bottom: calc(3vmin + env(safe-area-inset-bottom)); width: min(86vw, 150vmin); min-height: 18vmin; box-sizing: border-box;
-  background: #2a1a30f2; border: 3px solid #ffd27a; border-radius: 2.4vmin; padding: 2vmin 3vmin; font-size: 3vmin; line-height: 1.35; box-shadow: 0 1vmin 0 #0008; }
+  background: #2a1a30f2; border: 3px solid #ffd27a; border-radius: 2.4vmin; padding: 2vmin 3vmin; font-size: calc(var(--ts, 1) * 3vmin); line-height: 1.35; box-shadow: 0 1vmin 0 #0008; }
 #story .box .who { position: absolute; top: -3.4vmin; left: 3vmin; background: #ffb347; color: #3a1408; font-family: 'Luckiest Guy', sans-serif; font-size: 2.6vmin; padding: 0.4vmin 1.6vmin; border-radius: 1.2vmin; letter-spacing: 0.04em; }
 #story .box.n { font-style: italic; color: #e8d8f0; border-color: #8a7aa8; }
 #story .box.n .who { display: none; }
@@ -48,11 +49,26 @@ const CSS = `
 #story .next { position: absolute; right: 2.4vmin; bottom: 1.2vmin; font-size: 2vmin; color: #ffd27a; animation: nb 0.8s infinite alternate; }
 @keyframes nb { to { transform: translateY(-0.5vmin); } }
 #story .still { position: absolute; inset: 0; overflow: hidden; }
-#story .still i { position: absolute; inset: 0; background: center/cover no-repeat; animation: stin 0.7s ease-out both, kb 18s ease-out both; }
+/* A painting (<i>, which carries the image) is laid out in the space ABOVE the dialogue box, never under it: the sharp
+   picture (<u>) stands whole on the top edge of the box (--sb = the box's top, measured from the bottom of the screen;
+   --pw = the picture's width; both set by layoutStill), and a blurred, dimmed copy (<b>) fills the rest of the screen. */
+#story .still i { position: absolute; inset: 0; background: 0 0/0 0 no-repeat; animation: stin 0.7s ease-out both; }
 #story .still i.out { animation: stout 0.7s ease-in both; }
-#story .still:has(i)::after { content: ''; position: absolute; inset: 0; background: linear-gradient(#120a1870, transparent 20%, transparent 58%, #120a18e8 94%); }
+#story .still i b { position: absolute; inset: -6vmin; background: center/cover no-repeat; background-image: inherit; filter: blur(2.4vmin) brightness(0.62) saturate(0.9); }
+#story .still i u { position: absolute; left: 50%; translate: -50% 0; bottom: calc(var(--sb, 21vmin) - 1.5vmin); width: var(--pw, 100%); aspect-ratio: 16 / 9; background: center/cover no-repeat; background-image: inherit;
+  transform-origin: 50% 100%; animation: kb 18s ease-out both;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent), linear-gradient(transparent, #000 6%); -webkit-mask-composite: source-in;
+  mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent), linear-gradient(transparent, #000 6%); mask-composite: intersect; }
+#story .still:has(i)::after { content: ''; position: absolute; inset: 0; background: linear-gradient(#120a1870, transparent 16%, transparent calc(100% - var(--sb, 21vmin)), #120a18f0 calc(100% - var(--sb, 21vmin) + 5vmin)); }
 @keyframes stin { from { opacity: 0; } } @keyframes stout { to { opacity: 0; } }
-@keyframes kb { from { transform: scale(1.02); } to { transform: scale(1.1) translate(-1.5%, -1%); } }
+/* the slow zoom grows up and outwards from the bottom edge, so nothing painted ever slides down behind the box */
+@keyframes kb { from { transform: scale(1); } to { transform: scale(1.035) translate(-0.5%, 0); } }
+/* With a painting showing: your kaiju stands at the far left (over the painting's quiet third), and whoever else speaks
+   leans in as a small bust over the right end of the box, so no portrait covers what the painting is about. */
+#story.pic .por.l { left: 1.5vw; bottom: calc(var(--sb, 21vmin) + 2vmin); height: 42vmin; width: 36vmin; }
+#story.pic .por.r { right: 0.5vw; bottom: calc(var(--sb, 21vmin) - 14vmin); height: 34vmin; width: 26vmin; background-position: top; clip-path: inset(-4vmin -4vmin 14vmin -4vmin); transform-origin: 50% 59%; }
+#story.pic .por.r.talk { animation: talkb 0.4s ease-out; }
+@keyframes talkb { 35% { scale: 1.07; } 65% { scale: 0.99; } }
 #story .cnt { position: absolute; inset: 0; }
 #story .who img { height: 4.8vmin; width: 4.8vmin; object-fit: contain; vertical-align: middle; margin: -1.4vmin 0.8vmin -1.2vmin -0.8vmin; background: #fff4e4; border-radius: 50%; border: 2px solid #3a1408; }
 #story .skip { position: absolute; right: calc(2vmin + env(safe-area-inset-right)); top: calc(2vmin + env(safe-area-inset-top)); z-index: 2; font-family: 'Luckiest Guy', sans-serif; font-size: 2.4vmin; padding: 1vmin 2vmin; border-radius: 1.4vmin; background: #2a1a30d0; color: #ffd27a; border: 2px solid #ffd27a88; }
@@ -87,7 +103,24 @@ export function playStory(species: number, beats: string[], done: () => void): v
   stillEl.innerHTML = '';
   const me = CLASSES.find(c => c.species === species)!;
   let i = 0, typing: number | null = null, full = '', curStill: string | null = null;
-  const finish = () => { if (typing !== null) clearInterval(typing); root.classList.remove('on'); cnt.innerHTML = ''; stillEl.innerHTML = ''; done(); };
+  // Room for the dialogue box under each painting: the tallest box any line of that painting needs (long lines and the
+  // larger text sizes grow the box upwards), so the picture never jumps from line to line and never sits under the text.
+  let room: number[] = [];
+  const measureRoom = () => {
+    cnt.innerHTML = '<div class="box" style="visibility:hidden"><span class="who">X</span><span class="tx"></span><span class="next">▼ tap</span></div>';
+    const box = cnt.querySelector<HTMLElement>('.box')!, tx = box.querySelector('.tx')!, H = root.clientHeight;
+    const need = lines.map(l => { if (!l.still) return 0; tx.textContent = l.line[1]; return H - box.getBoundingClientRect().top; });
+    room = need.slice();
+    for (let a = 0; a < lines.length;) { let b = a; while (b < lines.length && lines[b].still === lines[a].still) b++; const m = Math.max(...need.slice(a, b)); for (let k = a; k < b; k++) room[k] = m; a = b; }
+    cnt.innerHTML = '';
+  };
+  const layoutStill = (img: HTMLElement | null, sb: number) => {
+    const [pw] = stillRect(root.clientWidth, root.clientHeight, sb, Math.min(root.clientWidth, root.clientHeight) / 100);
+    root.style.setProperty('--sb', `${sb}px`);
+    if (img) { img.style.setProperty('--sb', `${sb}px`); img.style.setProperty('--pw', `${pw}px`); }
+  };
+  const onResize = () => { measureRoom(); i = Math.min(i, lines.length - 1); curStill = null; stillEl.innerHTML = ''; show(); };
+  const finish = () => { if (typing !== null) clearInterval(typing); window.removeEventListener('resize', onResize); root.classList.remove('on', 'pic'); cnt.innerHTML = ''; stillEl.innerHTML = ''; done(); };
   const show = () => {
     if (i >= lines.length) { finish(); return; }
     const { line: [who, text], world, still } = lines[i];
@@ -101,13 +134,15 @@ export function playStory(species: number, beats: string[], done: () => void): v
     if (still !== curStill) {
       // crossfade: the old painting fades out on top while the new one fades in and slowly zooms
       for (const old of stillEl.querySelectorAll('i')) { old.classList.add('out'); setTimeout(() => old.remove(), 700); }
-      if (still) { const img = document.createElement('i'); img.style.backgroundImage = `url(art/${still}.webp)`; stillEl.prepend(img); }
+      if (still) { const img = document.createElement('i'); img.style.backgroundImage = `url(art/${still}.webp)`; img.innerHTML = '<b></b><u></u>'; layoutStill(img, room[i]); stillEl.prepend(img); }
       curStill = still;
     }
+    root.classList.toggle('pic', !!still);
     // Who is already painted into the still: the kaiju in its own intro / cliffhanger, the boss in the boss and
     // "cured" paintings, nobody in the world vistas. Anyone not in the painting still gets their portrait.
     const painted = new Set(!still || /w10-(end|hook)$/.test(still) ? [] : /-(intro|cliff|end)$/.test(still) ? ['me'] : /-w\d+-elite$/.test(still) ? ['me', 'foe'] : /-(boss|cure)$/.test(still) ? ['boss'] : /w5-hook$/.test(still) ? ['me', 'lo', 'lo2'] : /w10-(cure|boss)$/.test(still) ? ['boss'] : []);
-    const face = who === 'me' ? faceArt(species, text) : rightArt;
+    // the face on the name tag (Sir Stale has no expression set: his one portrait; not in the tease, where he is a shadow)
+    const face = who === 'me' ? faceArt(species, text) : who === 'lo2' && !painted.has('lo2') ? 'art/boss-stale.webp' : rightArt;
     const chip = still && face ? `<img src="${face}" alt="">` : '';
     const left = painted.has('me') ? '' : `<div class="por l ${isMe ? 'talk' : 'dim'}" style="background-image:url(${isMe ? face : `art/kaiju-${species}.webp`})"></div>`;
     const right = (who === 'lo' || who === 'lo2') && painted.has(who) ? '' : who === 'lo2' ? '<div class="por r" style="background-image:url(art/boss-stale.webp)"></div>' : who === 'lo' ? '<div class="por r lo"></div>' : who === 'mold' ? '<div class="por r mold"></div>' : rightArt && !((who === 'boss' || who === 'foe') && painted.has(who)) ? `<div class="por r ${isMe || who === 'n' ? 'dim' : 'talk'}" style="background-image:url(${rightArt})"></div>` : '';
@@ -128,5 +163,7 @@ export function playStory(species: number, beats: string[], done: () => void): v
     i++; show();
   };
   root.classList.add('on');
+  measureRoom();
+  window.addEventListener('resize', onResize);
   show();
 }

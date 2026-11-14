@@ -18,6 +18,7 @@
 //   baseDropChance(kind)                    0.35 for a never-wanted kind, 0.2 otherwise (world.ts uses it in killMob).
 //   CARD_NEEDS                              drops for Discovered / one star / two stars: wanted 1/5/12, spare 1/3/8.
 //   cardNeeds(kind)                         that card's three numbers.
+//   cardLevel(s, kind): CardLevel           the card's level as the save stands (sim/garnish.ts reads it).
 //   cardReward(world, level 1|2|3)          CookReward paid when a card reaches that level.
 //   pageReward(world, level 1|2)            CookReward for a page at one star / two stars everywhere.
 //   BOOK_REWARD                             CookReward for the whole book (the title 'all', Head Chef).
@@ -205,6 +206,8 @@ export function baseDropChance(kind: string, book: Cookbook = cookbook()): numbe
 export const CARD_NEEDS = { wanted: [1, 5, 12], spare: [1, 3, 8] } as const;
 export function cardNeeds(kind: string, book: Cookbook = cookbook()): readonly [number, number, number] { return book.spare.has(kind) ? CARD_NEEDS.spare : CARD_NEEDS.wanted; }
 const levelFor = (n: number, needs: readonly number[]): CardLevel => needs.filter(v => n >= v).length as CardLevel;
+/** A card's level as the save stands (0 not discovered, 1 discovered, 2 one star, 3 two stars). The Garnish reads it. */
+export function cardLevel(s: CookSave, kind: string, book: Cookbook = cookbook()): CardLevel { return book.pageOf[kind] ? levelFor(Math.min(whole(s.cookbook?.[kind]), cardNeeds(kind, book)[2]), cardNeeds(kind, book)) : 0; }
 
 /** Paid once, the moment a card reaches the level (1 Discovered, 2 one star, 3 two stars). `world` is the page number. */
 export function cardReward(world: number, level: 1 | 2 | 3): CookReward {

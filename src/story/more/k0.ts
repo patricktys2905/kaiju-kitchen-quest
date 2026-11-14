@@ -92,6 +92,15 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w10-s7": [[3, "Wibble wobble! Go, little berry! Psst, I'm inviting Old Fruitcake to dessert after! Shh!"], ["me", "Ooh, good idea! Okay, one last sponge bounce for one last key. BOING!"]],
   "w10-s8": [["me", "Every monster from every world is here! I just gotta hold out!"], ["foe", "Oi, Gobzilla! Back to back! Nobody beets us TOGETHER!"], ["me", "Brutus and Gobzilla, tag team! Stomp count, here we GO! RAWR!"]],
   "w10-s9": [["me", "Whoa, this table is SO long and SO empty. Not one snack on it!"], ["n", "From the cake-tin throne, a voice grumbles: \"Nobody ever comes to MY table, berry. Why would YOU?\""], ["me", "'Cause I'm hungry! And I'm LARGE! Almost! RAWR!"]],
+
+  // World 11: The Midway.
+  "w11-s2": [["me", "Flags! Stalls! Knock down the cans and win a prize! One ball, please! Hup! ...Hey! These cans are GLUED down!"], ["n", "Step right up! At the end of the boulevard, a Pretzel Contortionist ties itself in a knot and takes a bow!"], ["me", "A cheater's fair AND a bendy pretzel? I'm gonna stomp that knot out STRAIGHT! RAWR!"]],
+  "w11-s3": [["me", "Ring toss! Big brother wins a goldfish EVERY time. My ring just bounced off! That peg's way too fat!"], ["me", "And the prize box at the front BURPED at me. Bad lunchbox! Gumball Gunner, you're next! Ka-STOMP!"]],
+  "w11-s4": [[10, "Hmph. Strawberry. Head count says five. One of mine chased a balloon into Bumper Car Bay."], ["me", "Gobzilla Large, babysitter class, FESTIVAL edition! Hold my leaf, little guy. Those Bumper Cupcakes can't steer!"], [10, "Large. I said it at home and I'll say it here. Now walk."]],
+  "w11-s6": [["me", "A slide shaped like an ice-cream cone! And a Recipe Scroll way up on top of the prize shelf! Race ya, clock!"], ["me", "High's STILL my worst direction, but Large kaiju climb fast! Then the Fry Basket Brawler gets stomped extra crispy!"]],
+  "w11-s7": [["me", "Whoa! In THIS mirror I'm taller than big brother! In that one I'm a pancake. I like the first one better."], ["me", "Tall Mirror Me says there's a key chest up on a ledge! Boing! And is that a Carousel Macaron Pony? Giddy-up! RAWR!"]],
+  "w11-s8": [["lo2", "Have at thee, coconut! Forsooth, berry, 'tis the finest jousting tournament in all the land!"], ["me", "It's a coconut shy, ya big baguette! The coconuts throw BACK, and King Coconut Shy Lobber's the worst one! Here comes a crowd!"], ["lo2", "Then we hold the field together! Team Leftovers, CHAAARGE! Which way is the field?"]],
+  "w11-s9": [["me", "The doughnut wheel! No sign, no line, no problem! I'm climbing it my OWN way! Hup! Hup!"], ["n", "The loudspeaker crackles: \"Step right up, tiny berry! Nobody beats the Great Flosso's games! Abracadabra-cadabra!\""], ["me", "TINY?! I'm LARGE, mister! Wait, is that Bonbon the Cannonball? In a CANNON?! Medium scared! Still climbing!"]],
 };
 
 export const QUIPS: Record<QuipKind, string[]> = {

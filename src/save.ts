@@ -11,6 +11,7 @@ import { type ChallengeCtx, STARS_FOR_SECRET, challengesMet, isHardChallenge, ke
 import { bossWeaponFor } from './sim/bossgearData';
 import { BONUS_STAGES, STAGES, WORLDS } from './sim/stages';
 import { type BookView, type CardView, type DropBag, type HandInResult, bookView, cardView, handIn, handInSpares, repairCookbook, setTitle, skipsBrokenBy } from './sim/cookbook';
+import { type CandyResult, type GarnishLook, type GarnishView, candy, garnishLook, garnishView, garnishesOwned, kitGarnish, repairGarnish, wear, wornGarnish } from './sim/garnish';
 import type { StageDef } from './sim/types';
 import type { BoxTier, LootBox } from './sim/types';
 import { type Element, canReseason, reseasonCost, reseasonItem, reseasonTwist } from './sim/elements';
@@ -66,6 +67,8 @@ export interface Save {
   cookbookPaid?: Record<string, number>;
   /** the Cookbook title shown under the kaiju's name ('w3', 'all'), or unset */
   title?: string;
+  /** Garnishes made (sim/garnish.ts): monster kinds, owned by the whole account for good; each kaiju wears one or none (HeroProfile.garnish) */
+  garnishes?: string[];
 }
 
 // v2: per-kaiju progress, 4 starters, story (older v1 saves are not carried over)
@@ -111,6 +114,7 @@ function load(): Save {
       if (!out.unlocked.includes(out.selected)) out.selected = STARTERS[0];
       repairItems(out);
       repairCookbook(out); // odd drop bags and Cookbook fields (absent in older saves: an empty book)
+      repairGarnish(out); // garnishes that are not real drops go; a worn one that is not owned is taken off
       keepStars(out.challenges); // a stage's challenge list changed: stars already earned stay earned
       return out;
     }
@@ -427,13 +431,23 @@ export function salvageWorse(): { n: number; crumbs: number } {
 export const SHOP_ITEMS: ConsumableId[] = ['jam', 'bigjam', 'pepper', 'ice', 'bean', 'revive', 'fstone', 'gstone', 'safety', 'scroll'];
 export const SHOP_BOXES: { tier: BoxTier; price: number }[] = [{ tier: 2, price: 120 }, { tier: 3, price: 380 }];
 export function today(): string { const d = new Date(); return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`; }
-/** Furthest stage level cleared → item level of shop stock and bought boxes. */
+/** The Market's item level for one cleared stage id (0 = an id that says nothing about story progress).
+ *  It follows the STAGE DATA, never arithmetic on the id (worlds are not all the same number of levels apart: Worlds 1-5
+ *  are 12, Worlds 6+ are 10; counting 12 a world put the Market at item level 131 for a Lv 120 kaiju after 11-10):
+ *   - a story stage 'W-N': one above its recommended level (as it always was in Worlds 1-6);
+ *   - a secret stage 'S-W': one below its own recommended level (late in its world, as before);
+ *   - anything else (Free Play 'D-…' / 'E-…' / 'R-…', a stage that no longer exists, junk): 0. */
+export function stageMarketLv(id: string): number {
+  const st = STAGES.find(q => q.id === id);
+  if (st) return st.rec + 1;
+  const b = BONUS_STAGES.find(q => q.id === id);
+  return b ? b.rec - 1 : 0;
+}
+/** Furthest stage cleared (by any kaiju) → item level of shop stock and bought boxes. Always a whole number >= 1. */
 export function progressLv(): number {
   let lv = 1;
   for (const h of Object.values(save.heroes)) for (const id of Object.keys(h.cleared ?? {})) {
-    // story stages 'W-N'; secret bonus stages 'S-W' count as late in their world
-    const m = /^(\d+)-(\d+)$/.exec(id), b = /^S-(\d+)$/.exec(id);
-    const v = m ? (Number(m[1]) - 1) * 12 + Number(m[2]) + 1 : b ? (Number(b[1]) - 1) * 12 + 9 : 0;
+    const v = stageMarketLv(id);
     if (Number.isFinite(v)) lv = Math.max(lv, v);
   }
   return lv;
@@ -546,6 +560,32 @@ export function cookHandInSpares(pageId: string, s: Save = save): HandInResult[]
 /** Show an earned Cookbook title under the kaiju's name (null = none). False if it is not earned. */
 export function chooseTitle(id: string | null, s: Save = save): boolean {
   const ok = setTitle(s, id);
+  if (ok && s === save) persist();
+  return ok;
+}
+
+// ---------- Garnish (rules and the full API notes: sim/garnish.ts) ----------
+/** One monster's garnish for its Cookbook card: owned, can make, cost, the skips making it would break, gold, worn by whom. */
+export function garnishCard(kind: string, s: Save = save): GarnishView | null { return garnishView(s, kind, skipStages(s)); }
+/** The owned garnishes in Cookbook order, for the Hero tab's picker (draw "None" first); each entry's `wornBy` says who wears it. */
+export function garnishPicker(s: Save = save): GarnishView[] { return garnishesOwned(s, skipStages(s)); }
+/** What a kaiju wears (null = nothing): kind, the drop's icon key, the gold flag, the monster's and the drop's name. */
+export function garnishOf(species = save.selected, s: Save = save): GarnishLook | null { return wornGarnish(s, species); }
+/** The look to draw for any profile: one of this save's kaiju (or the CPU buddy built from it) reads gold from the
+ *  Cookbook; a friend's online kit (`friend` true) reads the kit's own garnishGold flag. */
+export function garnishLookOf(p: HeroProfile, friend = false, s: Save = save): GarnishLook | null { return garnishLook(p, friend ? undefined : s); }
+/** The optional fields the online kit's profile must carry: { garnish?, garnishGold? } (spread it into kitOf's profile). */
+export function kitGarnishOf(species = save.selected, s: Save = save): { garnish?: string; garnishGold?: true } { return kitGarnish(s, species); }
+/** CANDY IT: make a monster's garnish (card at one star or better; 10 of its drop, 6 for a never-wanted kind; once).
+ *  It does not ask about SKIP TO BOSS: check garnishCard(kind).breaks first and show the warning when it is not empty. */
+export function candyGarnish(kind: string, s: Save = save): CandyResult {
+  const r = candy(s, kind);
+  if (r.ok && s === save) persist();
+  return r;
+}
+/** Put an owned garnish on a kaiju, or take it off (null). Free, at camp. False if it is not owned. */
+export function wearGarnish(species: number, kind: string | null, s: Save = save): boolean {
+  const ok = wear(s, species, kind);
   if (ok && s === save) persist();
   return ok;
 }

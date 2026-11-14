@@ -30,6 +30,10 @@ const ODD_BOOKS: Record<string, unknown>[] = [
   { drops: {}, cookbook: {}, cookbookPaid: {}, title: '' },
 ];
 
+// Garnish fields (save.garnishes, each hero's garnish) that no real game would write: load must repair every one
+const ODD_GARNISHES: unknown[] = [null, 'bun', 7, {}, { bun: true }, [], ['no-such-monster', 'bun', 'bun', 5, null, ['ant'], 'kbun', 'ant'], [null, undefined, 3.5], ['bun'], DROP_KINDS];
+const ODD_WORN: unknown[] = [null, 7, '', 'no-such-monster', ['bun'], { kind: 'bun' }, 'kbun', 'bun', 'ant', true];
+
 function save(kind: string) {
   const heroes: Record<number, ReturnType<typeof newProfile>> = {};
   let nextId = 1;
@@ -77,16 +81,26 @@ function save(kind: string) {
     }
     if (r() < 0.25) Object.assign(out, pick(ODD_BOOKS));
   }
+  // garnishes: max owns and wears them all over; random saves own some (mostly from one-star cards, as the game would), and
+  // one in four gets odd lists and odd worn values (unowned, unknown, not even text) plus the online-only gold flag
+  const wearing = heroes as Record<number, { garnish?: unknown; garnishGold?: unknown }>;
+  if (extreme) { out.garnishes = [...DROP_KINDS]; for (const c of CLASSES) wearing[c.species].garnish = pick(DROP_KINDS); }
+  else if (!empty) {
+    if (r() < 0.6) { const own = DROP_KINDS.filter(() => r() < 0.3); out.garnishes = own; for (const c of CLASSES) if (own.length && r() < 0.5) wearing[c.species].garnish = pick(own); }
+    if (r() < 0.25) { out.garnishes = pick(ODD_GARNISHES); for (const c of CLASSES) if (r() < 0.6) { wearing[c.species].garnish = pick(ODD_WORN); if (r() < 0.3) wearing[c.species].garnishGold = pick([true, 'yes', 1]); } }
+    if (r() < 0.1) { delete out.garnishes; wearing[pick(CLASSES).species].garnish = 'bun'; } // worn with no owned list at all
+  }
   out.unlocked = [...new Set(out.unlocked as number[])];
   if (!(out.unlocked as number[]).includes(out.selected as number)) out.selected = 0;
   // deliberately odd versions of real saves
-  if (kind === 'old') { delete out.drops; delete out.cookbook; delete out.cookbookPaid; delete out.title; delete out.free; delete out.keys; delete out.spicy; delete out.storyMode; for (const it of bag) { delete (it as { grade?: number }).grade; delete (it as { twist?: unknown }).twist; } }
+  if (kind === 'old') { delete out.garnishes; for (const c of CLASSES) { delete wearing[c.species].garnish; delete wearing[c.species].garnishGold; } delete out.drops; delete out.cookbook; delete out.cookbookPaid; delete out.title; delete out.free; delete out.keys; delete out.spicy; delete out.storyMode; for (const it of bag) { delete (it as { grade?: number }).grade; delete (it as { twist?: unknown }).twist; } }
   if (kind === 'broken') {
     (out.boxes as { ilvl: number | null }[]).push({ tier: 3, ilvl: null }, { tier: 2, ilvl: null });
     (out.bag as unknown[]).push({ id: nextId++, base: 'no-such-thing', rarity: 2, ilvl: 5, plus: 0, lines: [] }, { id: nextId++, base: 'pin', rarity: 3, ilvl: null, plus: 0, lines: [{ k: 'atk', v: 4 }] });
     out.shop = { day: 'x', stock: [{ id: 1, base: 'gone-item', rarity: 2, ilvl: 3, plus: 0, lines: [] }] };
     out.quick = ['jam', 'not-a-potion', null];
     Object.assign(out, ODD_BOOKS[3]);
+    out.garnishes = ODD_GARNISHES[6]; CLASSES.forEach((c, i) => { wearing[c.species].garnish = ODD_WORN[i % ODD_WORN.length]; wearing[c.species].garnishGold = true; });
   }
   return out;
 }

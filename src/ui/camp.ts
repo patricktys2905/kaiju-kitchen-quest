@@ -8,7 +8,7 @@ import { BASES, PROCS, SETS, UNIQUES, itemIcon, canWear, ownerOf, GRADES, GRADE_
 import { TIER_NAMES, clearCount, likelyTier } from '../sim/loot';
 import { BRANCH_LV, SKILLS, MAX_SKILL, rankLv, type SkillDef, type SkillKind, ULTS, ULT_LV, branchesFor, skillsOf } from '../sim/skills';
 import { STAGES, WORLDS, BONUS_STAGES, stageById } from '../sim/stages';
-import { type Derived, type HeroProfile, STAT_INFO, STATS, derive, xpFor } from '../sim/stats';
+import { type Derived, type HeroProfile, MAX_LEVEL, STAT_INFO, STATS, derive, xpFor } from '../sim/stats';
 import type { BoxTier, LootBox, StageDef } from '../sim/types';
 import { HARD_LV } from '../sim/world';
 import {
@@ -16,6 +16,7 @@ import {
   gearPrice, hero, isLocked, levelSkill, learnNode, setLoadout, openBox, persist, resetStats, salvage, salvageWorse, save, setQuick, shopStock, spendStat, toggleLock,
   unequip, useScroll, useSugar, worldStars } from '../save';
 import { UI_CSS } from './style';
+import { skillBadge, skillPointsLine } from './skillPoints';
 import { freePage, startFree } from './free';
 import type { FreeMode } from '../sim/free';
 import { gearSkillOf, gearText } from '../sim/gear';
@@ -37,6 +38,7 @@ import { ELEMENT_CSS, elHtml, elsHtml, tickHtml, weakHtml } from './elementUi';
 import { applyBranch, applyMod } from '../sim/skills';
 import { findWeapon, reseason, reseasonBlock, stageOpen } from '../save';
 import { canSkipWith, stageWants } from '../sim/cookbook';
+import { GARNISH_CSS, garnishClick, garnishOverlay, garnishMyBadge, garnishReset, garnishSlotHtml, garnishTip } from './garnish';
 import { COOKBOOK_CSS, cookbookBadge, cookbookBody, cookbookClick, cookbookGold, cookbookHead, stampHtml, titleHtml, worldStamps } from './cookbook';
 
 type Tab = 'map' | 'free' | 'hero' | 'skills' | 'bag' | 'market' | 'boxes' | 'quests';
@@ -60,11 +62,12 @@ const MAP_POS: Record<string, [number, number]> = {
   '8-1': [12, 88], '8-2': [24, 80], '8-3': [33, 68], '8-4': [46, 62], '8-5': [54, 54], '8-6': [48, 42], '8-7': [56, 32], '8-8': [66, 30], '8-9': [72, 22], '8-10': [79, 14],
   '9-1': [28, 74], '9-2': [40, 70], '9-3': [62, 72], '9-4': [72, 58], '9-5': [60, 47], '9-6': [50, 30], '9-7': [36, 46], '9-8': [24, 40], '9-9': [28, 22], '9-10': [75, 20],
   '10-1': [14, 86], '10-2': [30, 88], '10-3': [46, 84], '10-4': [58, 72], '10-5': [46, 55], '10-6': [62, 47], '10-7': [40, 32], '10-8': [60, 33], '10-9': [76, 38], '10-10': [82, 16],
+  '11-1': [21, 79], '11-2': [31, 79], '11-3': [41, 73], '11-4': [34, 62], '11-5': [46, 57], '11-6': [57, 48], '11-7': [67, 52], '11-8': [77, 54], '11-9': [85, 43], '11-10': [79, 27],
   '2-1': [52, 77], '2-2': [61, 67], '2-3': [69, 61], '2-4': [75, 54], '2-5': [79, 46], '2-6': [77, 38], '2-7': [81, 30], '2-8': [79, 22], '2-9': [83, 15], '2-10': [85, 7],
 };
 
 /** Map pages: which painted map shows which worlds. */
-const MAPS = [{ img: 'map-world', name: 'Kitchen', worlds: [1, 2] }, { img: 'map-oven', name: 'Oven', worlds: [3] }, { img: 'map-pantry', name: 'Pantry', worlds: [4] }, { img: 'map-sink', name: 'Sink', worlds: [5] }, { img: 'map-dining', name: 'Dining Room', worlds: [6] }, { img: 'map-backyard', name: 'Backyard', worlds: [7] }, { img: 'map-garden', name: 'Garden', worlds: [8] }, { img: 'map-market', name: 'Supermarket', worlds: [9] }, { img: 'map-fridgeback', name: 'The Feast', worlds: [10] }];
+const MAPS = [{ img: 'map-world', name: 'Kitchen', worlds: [1, 2] }, { img: 'map-oven', name: 'Oven', worlds: [3] }, { img: 'map-pantry', name: 'Pantry', worlds: [4] }, { img: 'map-sink', name: 'Sink', worlds: [5] }, { img: 'map-dining', name: 'Dining Room', worlds: [6] }, { img: 'map-backyard', name: 'Backyard', worlds: [7] }, { img: 'map-garden', name: 'Garden', worlds: [8] }, { img: 'map-market', name: 'Supermarket', worlds: [9] }, { img: 'map-fridgeback', name: 'The Feast', worlds: [10] }, { img: 'map-midway', name: 'Midway', worlds: [11] }];
 
 let el: HTMLElement;
 let tab: Tab = 'map';
@@ -100,7 +103,7 @@ function fitNote(): string {
 export function initCamp(play: (stageId: string, skip?: boolean) => void, online: () => void = () => {}): void {
   onPlay = play; onOnline = online;
   const st = document.createElement('style');
-  st.textContent = UI_CSS + CAMP_CSS + ELEMENT_CSS + COOKBOOK_CSS;
+  st.textContent = UI_CSS + CAMP_CSS + ELEMENT_CSS + COOKBOOK_CSS + GARNISH_CSS;
   document.head.appendChild(st);
   el = document.createElement('div');
   el.id = 'camp';
@@ -113,6 +116,9 @@ export function initCamp(play: (stageId: string, skip?: boolean) => void, online
 
 export function showCamp(t?: Tab): void {
   if (t) tab = t;
+  garnishReset();
+  // once: the first time a garnish can be made (optional, so it is a line of toast and never a badge)
+  if (!flash) flash = garnishTip();
   el.classList.add('on');
   render();
 }
@@ -139,9 +145,9 @@ export function hardUnlocked(world: number): boolean { return !!hero().cleared[`
 
 function render(): void {
   const p = hero();
-  const tabs: [Tab, string, number][] = [['map', 'Map', 0], ['free', 'Free Play', 0], ['hero', 'Hero', p.statPts], ['skills', 'Skills', p.skillPts], ['bag', 'Bag', cookbookBadge()], ['market', 'Market', 0], ['boxes', 'Boxes', save.boxes.length], ['quests', 'Quests', claimable()]];
+  const tabs: [Tab, string, number][] = [['map', 'Map', 0], ['free', 'Free Play', 0], ['hero', 'Hero', p.statPts], ['skills', 'Skills', skillBadge(p)], ['bag', 'Bag', cookbookBadge()], ['market', 'Market', 0], ['boxes', 'Boxes', save.boxes.length], ['quests', 'Quests', claimable()]];
   el.innerHTML = `
-    <div class="side">${CLASSES.map(c => { const h = save.heroes[c.species], open = save.unlocked.includes(c.species); return `<button class="hp ${c.species === save.selected ? 'on' : ''} ${open && h.statPts + h.skillPts ? 'pts' : ''} ${open ? '' : 'lockd'}" data-hero="${c.species}" title="${c.name}" style="background-image:url(art/kaiju-${c.species}.webp)"><i></i>${open ? `<b>${h.level}</b>` : '<u>🔒</u>'}</button>`; }).join('')}</div>
+    <div class="side">${CLASSES.map(c => { const h = save.heroes[c.species], open = save.unlocked.includes(c.species); return `<button class="hp ${c.species === save.selected ? 'on' : ''} ${open && h.statPts + skillBadge(h) ? 'pts' : ''} ${open ? '' : 'lockd'}" data-hero="${c.species}" title="${c.name}" style="background-image:url(art/kaiju-${c.species}.webp)"><i></i>${open ? `<b>${h.level}</b>` : '<u>🔒</u>'}</button>`; }).join('')}</div>
     <div class="main">
       <div class="top"><h1>Kaiju Kitchen Quest</h1><span class="chip"><img src="art/icon-crumb.webp"> ${save.crumbs}</span><span class="chip">🎁 ${save.boxes.length}</span><button class="chip" data-act="mute">${isMuted() ? '🔇' : '🔊'}</button><button class="chip" data-settings title="Settings">⚙</button><button class="chip" data-report title="Report a bug">🐞</button>${fsButton()}</div>
       <div class="tabs">${tabs.map(([k, n, c]) => `<button class="${tab === k ? 'on' : ''}" data-tab="${k}">${n}${c ? `<em>${c}</em>` : ''}</button>`).join('')}</div>
@@ -261,8 +267,10 @@ function heroPage(): string {
   const pct = (v: number) => `${Math.round(v * 100)}%`;
   const fit = selStageEl();
   return `<div class="hero">
-    <div class="portrait"><img src="art/kaiju-${p.species}.webp"><h2>${cls.name}</h2>${titleHtml()}<div class="role">${cls.role}</div>
-      <div style="font-size:2.4vmin;margin-top:1vmin">Level ${p.level}</div><div class="bar"><i style="width:${Math.min(100, p.xp / need * 100)}%"></i></div><div style="font-size:1.7vmin;color:#b8a8b8">${p.xp} / ${need} XP</div></div>
+    <div class="portrait"><img src="art/kaiju-${p.species}.webp">${(t => t ? `<h2>${cls.name}</h2><span class="ttlrow">${t}${garnishMyBadge()}</span>` : `<h2>${cls.name}${garnishMyBadge()}</h2>`)(titleHtml())}<div class="role">${cls.role}</div>
+      <div style="font-size:2.4vmin;margin-top:1vmin">Level ${p.level}</div>${p.level >= MAX_LEVEL
+        ? '<div class="bar xpmax"><i style="width:100%"></i></div><div class="xpmaxt" style="font-size:1.7vmin;color:#ffd27a">MAX LEVEL</div>'
+        : `<div class="bar"><i style="width:${Math.min(100, p.xp / need * 100)}%"></i></div><div style="font-size:1.7vmin;color:#b8a8b8">${p.xp} / ${need} XP</div>`}</div>
     <div><div class="h3">Stats ${p.statPts ? `<span style="color:#ff8a8a">· ${p.statPts} points</span>` : ''}${sugar ? ` <span style="color:#ffd27a;font-size:1.8vmin">· ${sugar} Golden Sugar Cube${sugar > 1 ? 's' : ''} (gold button)</span>` : ''}</div>
       <div class="rows">${STATS.map(statRow).join('')}</div>
       <div style="display:flex;gap:1vmin;margin-top:1.2vmin"><button class="pill" data-act="auto" ${p.statPts ? '' : 'disabled'}>AUTO</button><button class="pill" data-act="reset">RESET</button></div>
@@ -275,14 +283,14 @@ function heroPage(): string {
     <div><div class="h3">Equipment <small style="color:#b8a8b8;font-family:Nunito;font-size:1.7vmin">worn in stages!</small></div><div class="slots">${(['weapon', 'armor', 'charm'] as Slot[]).map(s => {
       const it = p.equip[s];
       return `<button class="slot" data-eqslot="${s}">${iconHtml(it)}<div class="t">${it ? `<span style="color:${RARITY_CSS[it.rarity]};display:inline;font-size:2.1vmin">${esc(itemName(it))}</span><span>${itemLines(it).map(lineText).join(' · ')}${it.skill ? ` · ⭐ ${skillText(it)}` : ''}</span>` : `${SLOT_NAMES[s]}<span>Empty — tap to pick from the Bag</span>`}</div></button>`;
-    }).join('')}</div>
+    }).join('')}${garnishSlotHtml()}</div>
     ${Object.entries(d.sets).filter(([, n]) => n >= 2).map(([k, n]) => `<div class="st" style="margin-top:1vmin"><b>${SETS[k].name}</b> ${n}/3: <span class="on">${SETS[k].two}</span>${n >= 3 ? ` · <span class="on">${SETS[k].three}</span>` : ''}</div>`).join('')}
     ${d.gear ? `<div class="gs">🗡 GEAR SKILL ${elsHtml(elementsOfGearSkill(d.gear))}<b>${d.gear.name}</b>${tickHtml(elementsOfGearSkill(d.gear), fit.se, fit.st.num)}: ${gearText(d.gear)} <small>(${isTouchDevice ? 'GEAR button' : 'F'}, ${d.gear.cd}s)</small></div>` : '<div class="gs">🗡 Equip a weapon to get a GEAR SKILL (its own button)</div>'}
     ${d.uniques.map(u => `<div class="uq">✦ ${UNIQUES[u].name}: ${UNIQUES[u].effect}</div>`).join('')}
     ${d.procs.map(k => `<div class="pr">⚡ ${PROCS[k].name}: ${PROCS[k].effect}</div>`).join('')}
     <button class="pill go" data-act="best" style="margin-top:1.2vmin">⚡ EQUIP BEST</button>
     ${selItem !== null && Object.values(p.equip).some(i => i?.id === selItem) ? detail(Object.values(p.equip).find(i => i?.id === selItem)!, true) : ''}</div>
-  </div>`;
+  </div>${garnishOverlay()}`;
 }
 
 /** Set and named-legendary lines for an item. */
@@ -349,7 +357,7 @@ function skillsPage(): string {
       <button class="pill ${can ? 'go' : ''}" data-skill="${s.id}" ${can ? '' : 'disabled'}>+</button></div>`;
   };
   const head = `<div class="subtabs"><button class="${skillView === 'tree' ? 'on' : ''}" data-act="sv-tree">🌳 TREE</button><button class="${skillView === 'skills' ? 'on' : ''}" data-act="sv-skills">⚔ SKILLS</button>
-      <span class="pts ${p.skillPts ? 'has' : ''}">${p.skillPts} point${p.skillPts === 1 ? '' : 's'} to spend</span>
+      ${(([t, hot]) => `<span class="pts ${hot ? 'has' : ''}">${t}</span>`)(skillPointsLine(p))}
       ${save.items.scroll ? `<button class="pill" data-act="scroll" style="font-size:1.7vmin;padding:0.5vmin 1.2vmin">📜 RESET POINTS ×${save.items.scroll}</button>` : ''}</div>`;
   if (skillView === 'tree') return head + treeHtml(p);
   const lo = d.actives, mine = allActives(p.species).filter(a => skillUnlocked(p, a.id));
@@ -514,14 +522,14 @@ function boxesPage(): string {
 /** Every data attribute the camp's one click handler answers to. A button whose attribute is left out of this list looks
  *  fine and does nothing (the Challenges chillies and SKIP TO BOSS were dead that way): tests/camp-clicks.test.ts checks
  *  that every `ds.<name>` the handler reads is listed here. */
-const CLICKABLE = '[data-tab],[data-hero],[data-node],[data-play],[data-stat],[data-sugar],[data-skill],[data-item],[data-act],[data-box],[data-eqslot],[data-bag],[data-cons],[data-qslot],[data-buy],[data-buybox],[data-buygear],[data-branch],[data-mappage],[data-claimq],[data-claima],[data-replay],[data-claimk],[data-free],[data-tnode],[data-learn],[data-slot],[data-equipskill],[data-reel],[data-reitem],[data-spicy],[data-skip],[data-cb]';
+const CLICKABLE = '[data-tab],[data-hero],[data-node],[data-play],[data-stat],[data-sugar],[data-skill],[data-item],[data-act],[data-box],[data-eqslot],[data-bag],[data-cons],[data-qslot],[data-buy],[data-buybox],[data-buygear],[data-branch],[data-mappage],[data-claimq],[data-claima],[data-replay],[data-claimk],[data-free],[data-tnode],[data-learn],[data-slot],[data-equipskill],[data-reel],[data-reitem],[data-spicy],[data-skip],[data-cb],[data-gn]';
 function onClick(e: MouseEvent): void {
   const t = (e.target as HTMLElement).closest<HTMLElement>(CLICKABLE);
   if (!t || (t as HTMLButtonElement).disabled) return;
   sfx('click');
   const sp = save.selected;
   const ds = t.dataset;
-  if (ds.tab) { tab = ds.tab as Tab; selItem = null; }
+  if (ds.tab) { tab = ds.tab as Tab; selItem = null; garnishReset(); }
   else if (ds.hero) {
     const sp = Number(ds.hero);
     if (save.unlocked.includes(sp)) { save.selected = sp; selStage = null; persist(); }
@@ -546,6 +554,7 @@ function onClick(e: MouseEvent): void {
   else if (ds.claimk) { const r = claimKaijuQuest(save.selected, ds.claimk); if (r) { flash = 'Quest reward: ' + r; sfx('reveal3'); } }
   else if (ds.stat) spendStat(sp, ds.stat as Stat);
   else if (ds.cb) { const r = cookbookClick(ds.cb); if (r.show) { tab = 'bag'; bagTab = 'cookbook'; selItem = null; } if (r.flash) flash = r.flash; }
+  else if (ds.gn) { const r = garnishClick(ds.gn); if (r.book) { tab = 'bag'; bagTab = 'cookbook'; selItem = null; } if (r.flash) flash = r.flash; }
   else if (ds.spicy) { const k = ds.spicy as Spicy, cur = save.spicy ?? []; save.spicy = cur.includes(k) ? cur.filter(x => x !== k) : [...cur, k]; persist(); }
   else if (ds.sugar) { if (useSugar(sp, ds.sugar as Stat)) flash = `Golden Sugar Cube: +1 ${ds.sugar.toUpperCase()} forever!`; }
   else if (ds.skill) levelSkill(sp, ds.skill);
@@ -688,13 +697,16 @@ export function runGacha(indices: number[]): void {
 export function showResult(o: { stage: StageDef; res: ClearResult | null; time: number; hits: number; combo: number; xp: number; levels: number; failed: boolean; crumbs: number; hard: boolean; unlocked?: string[]; online?: boolean; /** SKIP TO BOSS was used: the rank stops at A */ skipped?: boolean },
   act: (a: 'boxes' | 'next' | 'camp' | 'retry') => void): void {
   const r = document.getElementById('result')!;
-  const nextStage = STAGES[STAGES.indexOf(o.stage) + 1];
+  // the stage after this one on the map; a secret (bonus) stage is not on it and offers none (indexOf is -1 there)
+  const ix = STAGES.indexOf(o.stage), nextStage = ix >= 0 ? STAGES[ix + 1] : undefined;
+  // at the level cap XP has nowhere to go: say so instead of a number (unless this very run reached the cap)
+  const xpText = hero().level >= MAX_LEVEL && !o.levels ? 'MAX' : `+${o.xp}`;
   const res = o.res;
   r.className = 'kq on';
   r.innerHTML = `<div class="panel">
     <h2>${o.failed ? 'KNOCKED OUT!' : o.stage.boss ? 'BOSS DEFEATED!' : 'STAGE CLEAR!'}${o.hard ? ' <span style="color:#ff7a6a">(HARD)</span>' : ''}</h2>
     ${res ? `<div class="rk" style="color:${RANK_CSS[res.rank]}">${res.rank}</div>` : '<div style="font-size:9vmin;margin:1vmin">😵</div>'}
-    <div class="st"><div>Time<b>${Math.floor(o.time / 60)}:${String(Math.floor(o.time % 60)).padStart(2, '0')}</b></div><div>Hits taken<b>${o.hits}</b></div><div>Best combo<b>${o.combo}</b></div><div>XP<b>+${o.xp}</b></div><div>Crumbs<b>+${o.crumbs}</b></div></div>
+    <div class="st"><div>Time<b>${Math.floor(o.time / 60)}:${String(Math.floor(o.time % 60)).padStart(2, '0')}</b></div><div>Hits taken<b>${o.hits}</b></div><div>Best combo<b>${o.combo}</b></div><div>XP<b>${xpText}</b></div><div>Crumbs<b>+${o.crumbs}</b></div></div>
     ${o.skipped && res ? '<div class="note skipnote">⚡ Skipped to the boss: best rank A, no chillies, no stars</div>' : ''}
     ${o.unlocked?.length ? `<div class="note" style="color:#7ee8c8">🎉 NEW KAIJU UNLOCKED: ${o.unlocked.join(', ')}! (starts at 1-1)</div>` : ''}
     ${o.levels ? `<div class="note">LEVEL UP ×${o.levels}! Spend your new stat and skill points at camp.</div>` : '<div class="note"></div>'}
@@ -725,6 +737,16 @@ const CAMP_CSS = `
 .kq .purse { font-size: 2vmin; color: #ffe9c7; background: #2a1a30; border-radius: 1.2vmin; padding: 0.6vmin 1.2vmin; margin: 0.4vmin 0 0.8vmin; }
 .kq .purse b { color: #ffd27a; }
 .kq .playrow { display: flex; gap: 1.2vmin; flex-wrap: wrap; align-items: center; }
+/* PLAY is always in reach: when the stage card is taller than the screen its details scroll, and the PLAY row stays
+   pinned to the bottom edge of the card (in its usual place once you scroll down to it) */
+.kq .map .info .playrow { position: sticky; bottom: 0; z-index: 2; flex: 0 0 auto; margin: 0 -1.6vmin; padding: 0.8vmin 1.6vmin; background: #1a1020; box-shadow: 0 -1.2vmin 1.2vmin -0.8vmin #000c; gap: 0.8vmin; }
+/* the card ends above the bottom of the page (the row of world chips above the map takes that much of the page's height) */
+.kq .page.mappage .map .info { max-height: calc(100% - 5vmin); }
+/* and it stays small while pinned: PLAY and ONLINE share a line, SKIP TO BOSS is one line under them */
+.kq .map .info .playrow .pill { white-space: nowrap; margin-top: 0; }
+.kq .map .info .playrow .pill.big { flex: 1 1 auto; font-size: 2.8vmin; padding: 1.2vmin 0.8vmin; }
+.kq .map .info .playrow .pill.online { flex: 0 0 auto; font-size: 1.7vmin; padding: 1.3vmin 0.6vmin; }
+.kq .map .info .playrow .pill.skip { flex: 1 1 100%; font-size: 2.2vmin; padding: 0.9vmin 0.8vmin; }
 .kq .pill.online { background: linear-gradient(#5a8aff, #3a5ad8); color: #fff; }
 #camp .side { width: 11vmin; overflow-y: auto; gap: 1vmin; }
 #camp .side .hp { width: 9.4vmin; height: 9.4vmin; flex-shrink: 0; }

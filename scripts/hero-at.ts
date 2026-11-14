@@ -4,9 +4,12 @@ import { CLASSES, type Stat } from '../src/sim/classes';
 import { MAX_SKILL, rankLv, skillsOf } from '../src/sim/skills';
 import { BASES, rollItem, type Slot } from '../src/sim/items';
 import { allActives, canLearn, loadoutOf, skillUnlocked, treeOf } from '../src/sim/tree';
-import { derive } from '../src/sim/stats';
+import { canLevelSkill, derive } from '../src/sim/stats';
 import { type Element, MONSTER_TYPES, canReseason, elementsOfGear, elementsOfSkill, reseasonItem, stageElements, typeOf } from '../src/sim/elements';
 import type { StageDef } from '../src/sim/types';
+import { stageWants } from '../src/sim/cookbook';
+import { DROPS } from '../src/sim/drops';
+import { setWorldGarnishes } from '../src/sim/garnish';
 /** The build the balance bot plays. The weapon (and its random twist) depends only on (kaiju, level, seed): the same
  *  kaiju on the same stage and run number always carries the same weapon, so sweeps are repeatable.
  *  `prepared`: pass the stage to get the build of a player who read the stage card (docs/WEAKNESS-DESIGN.md section 8):
@@ -14,9 +17,23 @@ import type { StageDef } from '../src/sim/types';
  *  `how` 'weapon' re-seasons the weapon only and leaves the buttons alone (swapping a shield or a main damage skill for a
  *  matching utility skill often costs the bot more than the weakness pays).
  *  The bot's play is the same either way (it never looks at elements). */
+/** GARNISH=<monster kind> | auto (default: off). The garnish the balance bot wears (docs/DROPS-USES.md B4): a named kind,
+ *  or with `auto` the first monster the stage's first exit asks for (the worst case for "exits open sooner").
+ *  heroFor() sets it on the profile when it is given the stage or the kind is named; a script must also call
+ *  wearBotGarnish(world, profile) after `new World(...)`, because the World only knows what it is told. */
+export function botGarnish(stage?: StageDef): string | undefined {
+  const g = process.env.GARNISH;
+  if (!g || g === 'off' || g === '0') return undefined;
+  if (g !== 'auto') { if (!(DROPS as Record<string, unknown>)[g]) throw new Error(`GARNISH=${g}: no monster with a drop has that kind`); return g; }
+  return stage ? Object.keys(stageWants(stage))[0] : undefined;
+}
+/** Tell the World what the bot (hero 0) wears, as GameScene does for a player. No-op without a garnish. */
+export function wearBotGarnish(world: { humans: number }, p: HeroProfile): void { if (p.garnish) setWorldGarnishes(world, [p.garnish]); }
 export function heroFor(species: number, level: number, seed: number, prepared?: StageDef, how: 'full' | 'weapon' = 'full'): HeroProfile {
   const p = baseHero(species, level, seed);
   if (prepared) prepare(p, prepared, how);
+  const g = botGarnish(prepared); // a named kind always; `auto` only when the stage is known (else the script sets p.garnish = botGarnish(stage))
+  if (g) p.garnish = g;
   return p;
 }
 /** What a prepared player does before PLAY, with only what the game sells for crumbs or the kaiju already knows:
@@ -72,6 +89,10 @@ function baseHero(species: number, level: number, seed: number): HeroProfile {
   // put up to two of the new tree skills on the buttons (so the bots use and test them)
   const learned = treeOf(species).map(t => t.nodes[2]).filter(n => (p.tree?.[n.id] ?? 0) > 0).map(n => n.skill!.id).slice(0, 2);
   if (learned.length) p.loadout = [...learned, ...sk.actives.map(a => a.id)].slice(0, 3);
+  // points still left once the tree is full (from about Lv 104; the mastery ranks of Worlds 11+ take some of them as they
+  // open) go where a player's would: into the ranks of the tree skills, the ones on the buttons first
+  const order2 = [...learned, ...allActives(species).map(x => x.id).filter(id => !learned.includes(id))];
+  for (let round = 0; round < MAX_SKILL && p.skillPts > 0; round++) for (const id of order2) if (canLevelSkill(p, id)) { p.skills[id] = (p.skills[id] ?? 0) + 1; p.skillPts--; }
   return p;
 }
 

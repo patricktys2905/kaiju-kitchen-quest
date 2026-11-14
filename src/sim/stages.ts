@@ -3,6 +3,7 @@
 // Reach: the lowest jumper (Bluebeary) rises ~105 px, so tiers are 90 px apart; the top tier needs a ladder
 // or a lower platform beside it (tests/world.test.ts checks every platform is reachable).
 import { MOBS } from './mobs';
+import { shuffle } from './shuffle';
 import type { Arena, Hazard, HazardKind, MobKind, MobSpawn, Platform, Ladder, Prop, StageDef, StageMap } from './types';
 
 const G = 470;
@@ -10,6 +11,8 @@ const SPECIALIST = new Set(['turret', 'sniper', 'healer', 'summoner', 'charger',
 const TIER = [380, 290, 200];
 /** Story stages are this many times the original short layout (5-10 minutes each); a boss stage's run-up before the boss room. */
 export const STAGE_LEN = 5, BOSS_RUN = 3.2;
+/** The Recipe Scroll (stage 6) keeps at least this far from its map's exit portal, where its floor is long enough. */
+export const SCROLL_FROM_EXIT = 600;
 
 
 export interface WorldDef {
@@ -24,9 +27,17 @@ export interface WorldDef {
   mobPow?: number;
   /** monster kinds unlocked by stage number */
   pool: [number, MobKind][];
+  /** [stage, kind]: a pool monster the story counts on in that stage. Where the stage's own picks (wanted + 3 extras) left
+   *  it out of a map, it takes the place of that map's last extra: present, never wanted because of this (the wanted
+   *  drops are picked before it), and no random number is drawn for it, so the stage's floors, ladders, wanted drops and
+   *  every other stage stay exactly as they were (only which monster stands at some of that stage's spawn points changes). */
+  sure?: [number, MobKind][];
   elite: MobKind; boss: MobKind;
   /** this world's stage hazard (also switched on in the boss arena when the boss enrages) */
   hazard: HazardKind;
+  /** the hazard's look and name when this world reskins another world's mechanic (drawn in code by the scene): World 11's
+   *  Caramel Drip is the `wax` mechanic exactly, drawn as hot caramel (`hazardSkin: 'caramel'`). Unset = the kind's own look. */
+  hazardSkin?: string; hazardName?: string;
   /** the loot-box mimic hiding in stages 3, 7 and 9 */
   mimic: MobKind;
   names: string[];
@@ -44,6 +55,7 @@ export const ROOM_FOES: Record<number, MobKind[]> = {
   8: ['ksnail', 'm8a', 'm8c', 'ktomato', 'm8b', 'm8d', 'kradish', 'm8e'],
   9: ['ktrolley', 'm9a', 'm9c', 'kbanana', 'm9b', 'm9d', 'kcan2', 'm9e'],
   10: ['kcherrysoldier', 'm10a', 'm10c', 'kpudding', 'm10b', 'm10d', 'kcracker2', 'm10e'],
+  11: ['kcadet', 'm11a', 'm11b', 'kbumper', 'm11c', 'm11d', 'kcoconut', 'm11e'],
 };
 export const roomFoe = (world: number, n: number): MobKind => ROOM_FOES[world][[1, 2, 3, 4, 6, 7, 8, 9].indexOf(n)] ?? ROOM_FOES[world][0];
 export const WORLDS: WorldDef[] = [
@@ -54,7 +66,7 @@ export const WORLDS: WorldDef[] = [
   },
   {
     id: 2, name: 'The Fridge', blurb: 'Cold, crisp and full of grudges.', bg: 'bg-far-fridge', mid: 'bg-mid-fridge', tile: 'tile-fridge', platTint: 0xc8e4ff, bossBg: 'bg-far-freezer',
-    baseLv: 13, power: 1.3, mobPow: 1.5, pool: [[2, 'icepop'], [1, 'cheesemouse'], [1, 'pea'], [1, 'yogurt'], [2, 'milk'], [3, 'icebat'], [4, 'carrot'], [6, 'pickle'], [7, 'jelly']], hazard: 'ice', mimic: 'mimic', elite: 'xpickle', boss: 'golem',
+    baseLv: 13, power: 1.3, mobPow: 1.35, pool: [[2, 'icepop'], [1, 'cheesemouse'], [1, 'pea'], [1, 'yogurt'], [2, 'milk'], [3, 'icebat'], [4, 'carrot'], [6, 'pickle'], [7, 'jelly']], hazard: 'ice', mimic: 'mimic', elite: 'xpickle', boss: 'golem',
     names: ['Crisper Drawer', 'Dairy Lane', 'Frosty Shelf', 'Pickle Jar Pier', 'Knight of the Brine', 'Egg Carton Cliffs', 'Butter Bridge', 'Ketchup Canyon', 'Ice Tray Steps', 'Freezer Throne'],
   },
   {
@@ -97,6 +109,13 @@ export const WORLDS: WorldDef[] = [
     id: 10, name: 'The Feast of the Forgotten', blurb: 'Where forgotten food goes to sulk.', bg: 'bg-far-fridgeback', mid: 'bg-mid-fridgeback', tile: 'tile-fridgeback', platTint: 0xd0e0f0, bossBg: 'bg-far-feast',
     baseLv: 101, power: 5.0, mobPow: 0.62, pool: [[2, 'cracker2'], [1, 'pudding'], [1, 'cherrysoldier'], [1, 'peel'], [2, 'fork'], [3, 'beetle'], [4, 'snail'], [5, 'scanner'], [7, 'fruitknight']], hazard: 'chill', mimic: 'mimic', elite: 'xfruitknight', boss: 'fruitcake',
     names: ['The Cold Door', 'Jam Jar Junction', 'Takeaway Towers', 'Frost Drawer Falls', 'Knight of the Fruitcake', 'Paper Chain Pass', 'The Forgotten Shelf', 'The Last Stand', 'The Long Table', 'The Feast of the Forgotten'],
+  },
+  // ---- Act 3: The Great Food Festival ----
+  {
+    id: 11, name: 'The Midway', blurb: "Step right up! Everybody's a winner. Mostly.", bg: 'bg-far-midway', mid: 'bg-mid-midway', tile: 'tile-midway', platTint: 0xffe4d0, bossBg: 'bg-far-bigtop',
+    baseLv: 111, power: 5.4, mobPow: 0.52, pool: [[1, 'cadet'], [1, 'toffee'], [1, 'floss'], [2, 'snowcone'], [2, 'bumper'], [3, 'churro'], [4, 'coconut'], [5, 'pretzel'], [7, 'jawbreaker']], hazard: 'wax', hazardSkin: 'caramel', hazardName: 'Caramel Drip', mimic: 'mimic', elite: 'xjawbreaker', boss: 'flosso',
+    sure: [[3, 'churro']], // the story's 11-3 scenes are about Whack-a-Churros popping up in Ring Toss Row
+    names: ['The Ticket Gate', 'Bunting Boulevard', 'Ring Toss Row', 'Bumper Car Bay', 'Test Your Strength', 'Helter-Skelter Heights', 'Hall of Mirrors', 'The Coconut Shy', 'Big Wheel Climb', 'The Big Top'],
   },
 ];
 
@@ -297,7 +316,7 @@ function genBonus(w: WorldDef): StageDef {
   const props: Prop[] = [...(base.props ?? [])];
   for (let i = 0; i < 12; i++) props.push({ kind: r() < 0.5 ? 'crate' : 'jar', x: Math.round(400 + i * (base.width - 800) / 12), y: G });
   return {
-    ...base, id: `S-${w.id}`, num: `★${w.id}`, name: `Secret ${['Spice Garden', 'Ice Cream Vault', 'Bakery Hideout', 'Honey Cellar', 'Soap Bubble Grotto', 'Silver Vault', 'Treehouse', 'Seed Vault', 'Stockroom', 'Royal Pantry'][w.id - 1] ?? 'Hideout'}`,
+    ...base, id: `S-${w.id}`, num: `★${w.id}`, name: `Secret ${['Spice Garden', 'Ice Cream Vault', 'Bakery Hideout', 'Honey Cellar', 'Soap Bubble Grotto', 'Silver Vault', 'Treehouse', 'Seed Vault', 'Stockroom', 'Royal Pantry', 'Prize Tent'][w.id - 1] ?? 'Hideout'}`,
     props, cookers: [Math.round(base.width * 0.5)], hazards: [], objective: undefined,
     mobs: [...base.mobs.slice(0, 8), { kind: w.elite, lv: base.lv[1] + 2, x: base.width - 520, elite: true }],
     lv: [base.lv[0] + 1, base.lv[1] + 2], rec: base.rec + 1,
@@ -316,6 +335,33 @@ function awayFromSponges(hz: Hazard[], props: { kind: string; x: number }[], lad
   // still stuck by a sponge: drop it, as long as the stage keeps at least one hazard
   const ok = out.filter(h => !sponges.some(sx => Math.abs(sx - h.x) < 200));
   return ok.length ? ok : out;
+}
+
+/** genMaps drops each map's hazards at random spots; this keeps the two rules the single-map generator always had: never
+ *  at a ladder (you'd be hit climbing, and a kaiju sent up by a vent comes down in it again) and never on top of another
+ *  hazard (two vents 40 apart fire in turn: a wall that is nearly always on; 3-6's first map had one). A hazard that
+ *  breaks a rule slides to the nearest free spot of its own map (fixed offsets, NO random numbers: the rest of the layout
+ *  and every other stage stay exactly as they were); with no free spot it goes, if the stage keeps another.
+ *  The boss room's own hazards (phase 2, fixed spots) are left alone. */
+const HAZARD_GAP = 300;
+function spreadHazards(hz: Hazard[], ladders: Ladder[], maps: StageMap[], portalXs: number[], props: { kind: string; x: number }[]): Hazard[] {
+  const sponges = props.filter(p => p.kind === 'sponge').map(p => p.x);
+  const out = hz.map(h => ({ ...h }));
+  const atLadder = (h: Hazard, x: number) => ladders.some(l => Math.abs(l.x - x) < h.w / 2 + 55);
+  const onHazard = (h: Hazard, x: number, others: Hazard[]) => others.some(o => o !== h && !o.phase2 && Math.abs(o.x - x) < HAZARD_GAP);
+  const drop = new Set<Hazard>();
+  out.forEach((h, i) => {
+    if (h.phase2) return;
+    const earlier = out.slice(0, i).filter(o => !drop.has(o));
+    if (!atLadder(h, h.x) && !onHazard(h, h.x, earlier)) return;
+    const m = maps.find(q => q.kind === 'zone' && h.x >= q.x0 && h.x < q.x1); if (!m) return;
+    const rest = out.filter(o => o !== h && !drop.has(o));
+    const free = (x: number) => x >= m.x0 + 500 && x <= m.x1 - 500 && !atLadder(h, x) && !onHazard(h, x, rest)
+      && !portalXs.some(px => Math.abs(px - x) < 200) && !sponges.some(sx => Math.abs(sx - x) < 200);
+    for (let d = 60; d <= 1200; d += 60) for (const sgn of [1, -1]) if (free(h.x + sgn * d)) { h.x += sgn * d; return; }
+    if (out.filter(o => !o.phase2 && !drop.has(o)).length > 1) drop.add(h);
+  });
+  return out.filter(h => !drop.has(h));
 }
 
 function hazardAt(kind: HazardKind, x: number, offset: number): Hazard {
@@ -364,8 +410,8 @@ function genMaps(w: WorldDef, n: number, o: { seed?: number; id: string; name?: 
   const b: Build = { platforms: [], ladders: [], mobs: [], props: [], hazards: [], arenas: [], belts: [], darks: [], gates: [] };
   const GAP = 600, maps: StageMap[] = [];
   const nMaps = boss || n <= 3 ? 2 : 3; // a world's first stages and its boss stage: two maps
-  const layouts = ['terraces', 'towers', 'steps', 'islands', 'deck', 'valley'].sort(() => r() - 0.5);
-  let x = 0, fetchAt: number | undefined, holdAt: number | undefined, scrollX: number | undefined, scrollY: number | undefined;
+  const layouts = shuffle(['terraces', 'towers', 'steps', 'islands', 'deck', 'valley'], r); // a seeded Fisher-Yates (sim/shuffle.ts): never a random sort comparator, engines disagree on it
+  let x = 0, fetchAt: number | undefined, holdAt: number | undefined, scrollX: number | undefined, scrollY: number | undefined, scrollFloor: Platform | undefined;
   for (let k = 0; k < nMaps; k++) {
     const z0 = x, W = 2700 + Math.round(r() * 600), z1 = z0 + W + (n === 7 && k === 1 ? 700 : 0);
     const L = layouts[k % layouts.length], p0 = b.platforms.length;
@@ -391,25 +437,42 @@ function genMaps(w: WorldDef, n: number, o: { seed?: number; id: string; name?: 
     const nWant = n <= 3 && k === 0 ? 2 : boss ? 2 : n >= 6 && k === 2 ? 3 : 2 + (r() < 0.4 ? 1 : 0);
     // close-range monsters first (a crowd of shooters on the upper floors just wears you down): at most one shooter wanted
     const shoots = (kk: MobKind) => ['ranged', 'sniper', 'turret'].includes(MOBS[kk].brain);
-    const order = [...fresh.sort(() => r() - 0.5), ...huntable.filter(kk => !fresh.includes(kk)).sort(() => r() - 0.5)];
+    const order = [...shuffle(fresh, r), ...shuffle(huntable.filter(kk => !fresh.includes(kk)), r)];
     const wantKinds = [...order.filter(kk => !shoots(kk)), ...order.filter(shoots).slice(0, 1)].slice(0, Math.min(nWant, huntable.length));
     const per = 3;
     const wants = wantKinds.map(mob => ({ mob, n: per }));
-    const extras = kinds.filter(kk => !wantKinds.includes(kk)).sort(() => r() - 0.5).slice(0, 3);
+    const extras = shuffle(kinds.filter(kk => !wantKinds.includes(kk)), r).slice(0, 3);
+    const sure = (w.sure ?? []).filter(([sn, kk]) => sn === n && !o.seed && kinds.includes(kk) && !wantKinds.includes(kk)).map(([, kk]) => kk);
+    sure.filter(kk => !extras.includes(kk)).forEach((kk, i) => { extras[Math.max(0, Math.min(extras.length, 3) - 1 - i)] = kk; });
     const spawnKinds = [...wantKinds, ...wantKinds.filter(kk => !shoots(kk)), ...extras]; // wanted ones twice as often (shooters once)
     // spawn points: along every floor and the ground (not by the entrance or the exit)
     const pts: [number, number][] = [];
     for (const p of b.platforms.slice(p0)) for (let px = p.x + 60; px < p.x + p.w - 40; px += 230) pts.push([Math.round(px), p.y]);
     for (let px = z0 + 500; px < z1 - 350; px += 280) pts.push([px, G]);
-    const cap = 6 + Math.floor(n / 4);
+    const cap = 6 + Math.floor(n / 4), m0 = b.mobs.length;
     for (let i = 0; i < cap; i++) { const [sx, sy] = pts[Math.floor(r() * pts.length)]; const kk = pick(spawnKinds); b.mobs.push({ kind: kk, lv: r() < 0.5 ? lvLo : lvHi, x: sx, ...(sy !== G && MOBS[kk].brain !== 'flyer' && MOBS[kk].brain !== 'brute' ? { y: sy } : {}) }); }
+    // a `sure` monster also stands in the map from the start: it takes the last spot of the map's most numerous kind
+    for (const kk of sure) {
+      const here = b.mobs.slice(m0); if (here.some(mm => mm.kind === kk)) continue;
+      const cnt = (q: MobKind) => here.filter(mm => mm.kind === q).length;
+      const most = here.reduce((best, mm) => cnt(mm.kind) >= cnt(best.kind) ? mm : best, here[0]);
+      if (most) most.kind = kk;
+    }
     // a little of what made stages different: a hazard or two, a breakable, a mimic, the stage's set piece
     if (w.id >= 2 || n >= 2) for (let i = 0; i < 1 + (n >= 6 ? 1 : 0); i++) b.hazards.push(hazardAt(w.hazard, Math.round(z0 + 700 + r() * (W - 1300)), r() * 3));
     b.props.push({ kind: 'jar', x: z0 + 140, y: G }, { kind: 'jar', x: z0 + 200, y: G }, { kind: r() < 0.5 ? 'crate' : 'jar', x: Math.round(z0 + 600 + r() * (W - 1000)), y: G });
     if ((n === 3 || n === 7 || n === 9) && k === 0) b.mobs.push({ kind: w.mimic, lv: lvHi, x: Math.round(z0 + 900 + r() * (W - 1400)) });
-    if (n === 6 && k === 1 && !boss) { fetchAt = z0 + 120; const top = b.platforms.slice(p0).sort((u, v) => u.y - v.y || v.x - u.x)[0]; scrollX = Math.round(top.x + top.w - 50); scrollY = top.y; }
+    if (n === 6 && k === 1 && !boss) {
+      // the Recipe Scroll lies HIGH UP: on the map's highest floor (two as high: the one further in, so the race crosses
+      // the map), and well back from the exit portal (SCROLL_FROM_EXIT) where the floor allows it
+      fetchAt = z0 + 120;
+      const top = b.platforms.slice(p0).filter(p => !p.move && !p.secret).sort((u, v) => u.y - v.y || v.x - u.x)[0];
+      scrollFloor = top; scrollY = top.y;
+      scrollX = Math.round(Math.max(top.x + 50, Math.min(top.x + top.w - 50, z1 - 150 - SCROLL_FROM_EXIT)));
+    }
     if (n === 8 && k === 1 && !boss) holdAt = z0 + 500;
-    if (n === 7 && k === 1 && !boss) { const lx = z0 + W + 200; b.platforms.push({ x: lx, y: 150, w: 140, secret: true }); b.props.push({ kind: 'sponge', x: lx + 12, y: G }, { kind: 'chest', x: lx + 80, y: 150, key: true }); }
+    // (the sponge needs open sky: clear of the map's last floor, which can reach past the map's own width)
+    if (n === 7 && k === 1 && !boss) { const lx = Math.max(z0 + W + 200, Math.round(Math.max(...b.platforms.slice(p0).map(p => p.x + p.w)) + 80)); b.platforms.push({ x: lx, y: 150, w: 140, secret: true }); b.props.push({ kind: 'sponge', x: lx + 12, y: G }, { kind: 'chest', x: lx + 80, y: 150, key: true }); }
     maps.push({ name: `${o.name ?? w.names[n - 1]} ${['I', 'II', 'III'][k]}`, kind: 'zone', x0: z0, x1: z1, goal: { kind: 'collect', wants },
       spawns: { kinds: spawnKinds, pts, cap, lv: lvLo }, portals: [{ x: z1 - 150, to: maps.length + 1, tx: z1 + GAP + 150, need: true }] });
     x = z1 + GAP;
@@ -431,9 +494,17 @@ function genMaps(w: WorldDef, n: number, o: { seed?: number; id: string; name?: 
   const portalXs = maps.flatMap(m => m.portals.map(p => p.x));
   b.ladders = b.ladders.filter(l => !portalXs.some(px => Math.abs(px - l.x) < 70));
   b.hazards = b.hazards.filter(h => !portalXs.some(px => Math.abs(px - h.x) < 200));
+  // the scroll's floor always has its own ladder (every kaiju gets up there, whatever its jump): one may have been dropped
+  // for standing by another ladder or on a portal, so put it back at the first free spot along that floor
+  const sf = scrollFloor;
+  if (sf && !b.ladders.some(l => l.top === sf.y && l.x >= sf.x && l.x <= sf.x + sf.w)) {
+    const spots: number[] = []; for (let lx = sf.x + 50; lx <= sf.x + sf.w - 50; lx += 20) spots.push(Math.round(lx));
+    const free = (lx: number, gap: number) => !b.ladders.some(l => Math.abs(l.x - lx) < gap) && !portalXs.some(px => Math.abs(px - lx) < 70);
+    b.ladders.push({ x: spots.find(lx => free(lx, 120)) ?? spots.find(lx => free(lx, 60)) ?? Math.round(sf.x + sf.w / 2), top: sf.y, bottom: G });
+  }
+  b.hazards = spreadHazards(b.hazards, b.ladders, maps, portalXs, b.props);
   const count = b.mobs.length * 2;
   const play = width - GAP * (maps.length - 1);
-  void fetchAt; void scrollY;
   return {
     id: o.id, world: w.id, num: o.id, name: o.name ?? w.names[n - 1], bg: w.bg, mid: w.mid, tile: w.tile, platTint: w.platTint, width, groundY: G,
     bossBg: boss ? w.bossBg : undefined, boss: boss || undefined,
@@ -441,7 +512,7 @@ function genMaps(w: WorldDef, n: number, o: { seed?: number; id: string; name?: 
     platforms: b.platforms, ladders: b.ladders, mobs: b.mobs, props: b.props, cookers: [], belts: b.belts.length ? b.belts : undefined,
     hazards: awayFromSponges(b.hazards, b.props, b.ladders, width),
     maps, sections: maps.map(m => m.name),
-    objective: boss ? undefined : n === 4 ? { kind: 'escort' } : n === 6 ? { kind: 'fetch', t: 140, x: scrollX, at: fetchAt } : n === 8 ? { kind: 'survive', t: 45, at: holdAt } : undefined,
+    objective: boss ? undefined : n === 4 ? { kind: 'escort' } : n === 6 ? { kind: 'fetch', t: 140, x: scrollX, y: scrollY, at: fetchAt } : n === 8 ? { kind: 'survive', t: 45, at: holdAt } : undefined,
   };
 }
 

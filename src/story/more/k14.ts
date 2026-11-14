@@ -12,7 +12,7 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w1-s8": [["foe", "Here, fishy fishy! I brought a whole swarm of hungry friends! Hold out, fishy, then you're LUNCH!"], ["me", "A swarm AND a King Pepper Grunt? Bring it, bro! Fins up! Let's GOOO!"]],
   "w1-s9": [["me", "Flame pillars! Hot hot HOT! Steamed salmon is NOT on the menu today, bro."], ["mold", "Hehehe... why swim so hard, little fishy? Just float down, down, down."], ["me", "Float DOWN? Bro, you don't know me at all."]],
   // World 2: The Fridge. Ice beds, lemon slices, a little homesick.
-  "w2-s2": [["me", "Rivers of milk! Ooh, I'm gonna swim up that milk carton!"], ["n", "Melty Ice Pops drip everywhere! The portal wants their Popsicle Sticks, and an Ice Cube Ogre's waiting!"], ["me", "Ice? Bro, I grew up on ice! Let's GOOO!"]],
+  "w2-s2": [["me", "Rivers of milk! Ooh, I'm gonna swim up that milk carton!"], ["n", "Milk Carton Rammers charge everywhere! The portal wants their Carton Horns, and an Ice Cube Ogre's waiting!"], ["me", "Ice? Bro, I grew up on ice! Let's GOOO!"]],
   "w2-s3": [["me", "Ice everywhere. Smells just like my old fish counter. I'm kinda homesick, bro."], ["me", "Fish Finger General up ahead? Fish FINGERS?! Okay, now it's personal! BONK!"]],
   "w2-s4": [[10, "It's cold out here, fish. Walk my Crumblet to the boss room, and keep it moving."], ["me", "Moving's my thing, Coach! Little muffin, let's do some laps. Hut, hut!"]],
   "w2-s6": [["me", "The recipe scroll's up on the egg carton cliffs, and there's a ladder round the side."], ["me", "Ladders are for quitters! Straight up the eggs, before time runs out! Let's GOOO!"]],
@@ -83,6 +83,15 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w10-s7": [["me", "Old jars nobody's opened in years. Hang in there, guys."], ["me", "The last key's up on the high ledge. No sponge this time! Okay, ONE sponge. BOING!"]],
   "w10-s8": [["lo2", "Forsooth, fishy! The WHOLE army! Hold out if thou canst! Thou shalt be filleted!"], ["me", "A last stand? That's the fourth quarter, bro! Fins up! Let's GOOO!"]],
   "w10-s9": [["me", "Longest table I ever saw. It's like a river with no water. And a Fondue Fiend at the end."], ["n", "From the cake-tin throne, a grumpy voice booms: \"Bring me the fish! Every feast needs a FISH!\""], ["me", "Wrong fish, bro! Climbing! Uphill, obviously!"]],
+
+  // World 11: The Midway.
+  "w11-s2": [["me", "Balloon darts! Too easy. Blindfold on, tail throw, over the shoulder! BOING! Bro, these darts have rubber tips!"], ["n", "Meanwhile, at the finish line of the boulevard, a Pretzel Contortionist flexes in a knot!"], ["me", "Fine! I'll pop 'em with my FACE! Then I'm untying that pretzel the hard way. From the inside! Let's GOOO!"]],
+  "w11-s3": [["me", "Ring toss, bro! I threw mine uphill, behind my back, off a Whack-a-Churro's head! It STILL slid off. Those pegs are greased!"], ["me", "And the prize box bit my fin. No fair, I wasn't even bait! Gumball Gunner, Ka-Chunk all ya want. I'm coming in tail first!"]],
+  "w11-s4": [[10, "Hmph. Fish. Six Crumblets came in and I count five. One's lost in the crowd at Bumper Car Bay. No laps."], ["me", "No laps, Coach! Little muffin, grab a fin. We're crossing AGAINST the traffic. Those Bumper Cupcakes can't steer anyway!"], [10, "With the traffic, fish. WITH it."]],
+  "w11-s6": [["me", "A Recipe Scroll on top of the prize shelf, and a clock ticking! There's a ladder. A ladder! Pfft!"], ["me", "I'm climbing it BACKWARDS, bro! Then the Fry Basket Brawler and his hot oil. \"Order Up!\"? Wrong fish, wrong fryer!"]],
+  "w11-s7": [["me", "Whoa, bro! In this mirror I've got LEGS! Finally, leg day! In that one I'm a fish finger. Not looking at that one."], ["me", "A key chest up on a hidden ledge? I'm grabbing it with my eyes shut! BOING! Carousel Macaron Pony, race ya. Backwards!"]],
+  "w11-s8": [["lo2", "Have at thee, coconut! Fishy, to arms! 'Tis a tourney, and I have unhorsed nobody, for nobody hath a horse!"], ["me", "They throw the coconuts BACK, bro! Here comes the whole crowd, and King Coconut Shy Lobber too! Sudden death overtime! Fins up!"], ["lo2", "Hold the lists, fish! I shall keep the score! One for thee, nought for the coconut! Forsooth, I have lost count already!"]],
+  "w11-s9": [["me", "The giant doughnut wheel! No stairs, and no ladder I like the look of. PERFECT! I'm climbing it tail first, bro!"], ["n", "The loudspeaker crackles: \"Step right up, fishy! You can't swim against the Great Flosso's current! Abracadabra-cadabra!\""], ["me", "Against the current? Bro, that's my FAVORITE way! Bonbon the Cannonball, fire away! I'll catch it backwards! Then the big top!"]],
 };
 
 export const QUIPS: Record<QuipKind, string[]> = {

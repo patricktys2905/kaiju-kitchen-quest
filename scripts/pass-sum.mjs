@@ -17,7 +17,8 @@ for (const file of process.argv.slice(2)) {
 }
 const all = Object.values(st).map(s => ({ ...s, c: Math.round(s.k / s.n * 100), j: s.jw / s.n, t: s.k ? s.tw / s.k : 0 }));
 const kai = {};
-for (let w = 1; w <= 10; w++) {
+for (let w = 1; w <= 11; w++) {
+  if (!all.some(q => q.id.startsWith(w + "-"))) { if (w <= 10) console.log(`W${w}`.padEnd(4) + "stages -"); continue; }
   const s = all.filter(q => q.id.startsWith(w + '-') && !q.id.endsWith('-10')), b = all.find(q => q.id === w + '-10');
   const a = f => s.length ? (s.reduce((p, q) => p + f(q), 0) / s.length) : 0;
   let line = `W${w}`.padEnd(4) + (s.length ? `stages ${a(q => q.c).toFixed(0)}% ${a(q => q.j).toFixed(1)}j ${a(q => q.t).toFixed(0)}s (n=${s[0].n}/stage)` : 'stages -');

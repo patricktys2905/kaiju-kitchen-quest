@@ -93,7 +93,7 @@ describe('monster types', () => {
   });
   it('Kings and champions inherit from their base monster (by rule: none is listed by hand)', () => {
     const kings = KINDS.filter(k => MOBS[k].king), champs = WORLDS.map(w => w.elite);
-    expect(kings.length).toBe(30); expect(champs.length).toBe(10);
+    expect(kings.length).toBe(33); expect(champs.length).toBe(11);
     for (const k of [...kings, ...champs]) {
       const base = baseKindOf(k);
       expect(base, k).toBeTruthy();
@@ -107,18 +107,25 @@ describe('monster types', () => {
   });
   it('summons and splits share their caller\'s type', () => {
     const pairs = KINDS.flatMap(k => [MOBS[k].calls, MOBS[k].split].filter((c): c is MobKind => !!c).map(c => [k, c] as const));
-    for (const want of [['jelly', 'jellybit'], ['cheerio', 'minicheerio'], ['moldking', 'sporeling'], ['stale', 'crouton'], ['brussels', 'sprout'], ['meatloaf', 'chunk'], ['tupper', 'lid']])
+    for (const want of [['jelly', 'jellybit'], ['cheerio', 'minicheerio'], ['moldking', 'sporeling'], ['stale', 'crouton'], ['brussels', 'sprout'], ['meatloaf', 'chunk'], ['tupper', 'lid'], ['flosso', 'floss']])
       expect(pairs.some(([k, c]) => k === want[0] && c === want[1]), want.join(' calls ')).toBe(true);
     for (const [k, c] of pairs) expect(typeOf(c), `${k} -> ${c}`).toBe(typeOf(k));
+    // World 11's boss-room foes call monsters of their own type too (the outline's rule from World 11 on)
+    for (const k of ROOM_FOES[11]) { const c = MOBS[k].nem?.calls; if (c) expect(typeOf(c), `${k} -> ${c}`).toBe(typeOf(k)); }
+    expect(ROOM_FOES[11].filter(k => MOBS[k].nem?.calls)).toEqual(['kcadet', 'm11c']);
   });
   it('the table matches the design note: totals, world bosses, boss-room foes', () => {
     const count = (ks: MobKind[]) => (['HOT', 'COLD', 'CRUNCH', 'STICKY'] as Element[]).map(el => ks.filter(k => weakOf(k) === el).length);
-    expect(count([...new Set(WORLDS.flatMap(w => w.pool.map(p => p[1])))])).toEqual([21, 18, 21, 20]);
-    expect(count(KINDS.filter(k => /^m\d/.test(k)))).toEqual([11, 13, 14, 12]);
-    expect(count(KINDS.filter(k => MOBS[k].king))).toEqual([7, 7, 10, 6]);
-    expect(count(WORLDS.map(w => w.elite))).toEqual([1, 2, 7, 0]);
-    expect(count(WORLDS.map(w => w.boss))).toEqual([3, 2, 3, 2]);
-    expect(WORLDS.map(w => weakOf(w.boss))).toEqual(['CRUNCH', 'HOT', 'COLD', 'CRUNCH', 'HOT', 'STICKY', 'HOT', 'COLD', 'STICKY', 'CRUNCH']);
+    expect(count([...new Set(WORLDS.flatMap(w => w.pool.map(p => p[1])))])).toEqual([23, 22, 23, 21]); // with World 11 (docs/ACT3-OUTLINE.md section 4)
+    expect(count(KINDS.filter(k => /^m\d/.test(k)))).toEqual([12, 14, 15, 14]);
+    expect(count(KINDS.filter(k => MOBS[k].king))).toEqual([7, 8, 11, 7]);
+    expect(count(WORLDS.map(w => w.elite))).toEqual([1, 2, 8, 0]);
+    expect(count(WORLDS.map(w => w.boss))).toEqual([4, 2, 3, 2]);
+    expect(WORLDS.map(w => weakOf(w.boss))).toEqual(['CRUNCH', 'HOT', 'COLD', 'CRUNCH', 'HOT', 'STICKY', 'HOT', 'COLD', 'STICKY', 'CRUNCH', 'HOT']);
+    // World 11 as the outline lists it: its nine monsters, its boss-room foes in stage order (stage 5: the champion), its boss
+    expect((['cadet', 'toffee', 'floss', 'snowcone', 'bumper', 'churro', 'coconut', 'pretzel', 'jawbreaker'] as MobKind[]).map(weakOf)).toEqual(['COLD', 'COLD', 'HOT', 'HOT', 'STICKY', 'COLD', 'CRUNCH', 'COLD', 'CRUNCH']);
+    expect(ROOM_FOES[11].map(weakOf)).toEqual(['COLD', 'STICKY', 'CRUNCH', 'STICKY', 'COLD', 'STICKY', 'CRUNCH', 'HOT']);
+    expect([weakOf('xjawbreaker'), weakOf('flosso'), resistOf('flosso'), weakOf('floss')]).toEqual(['CRUNCH', 'HOT', 'COLD', 'HOT']);
     expect(ROOM_FOES[1].map(weakOf)).toEqual(['HOT', 'CRUNCH', 'HOT', 'STICKY', 'COLD', 'CRUNCH', 'COLD', 'STICKY']);
     expect(ROOM_FOES[10].map(weakOf)).toEqual(['CRUNCH', 'HOT', 'CRUNCH', 'STICKY', 'STICKY', 'STICKY', 'HOT', 'COLD']);
     expect(weakOf('mimic')).toBe('CRUNCH'); expect(weakOf('cereal')).toBe('HOT');

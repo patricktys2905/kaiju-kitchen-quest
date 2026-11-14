@@ -91,7 +91,7 @@ describe('stages', () => {
       if (n === 10) expect(st.mobs.some(m => MOBS[m.kind].brain === 'boss')).toBe(true);
       if (n === 5) expect(st.mobs.some(m => m.elite)).toBe(true);
     }
-    expect(STAGES.length).toBe(100);
+    expect(STAGES.length).toBe(110);
   });
 });
 

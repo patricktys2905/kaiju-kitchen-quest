@@ -28,6 +28,16 @@ export const TAUNTS: Partial<Record<MobKind, string[]>> = {
   boxbot: ["Fragile? Not ME!", "Think outside the box! Ha, you can't!", "This side UP! You, side DOWN!"],
   pudding: ["Wibble wobble, here I come!", "Proof's in the pudding, pal!", "Spoon fight!"],
   cracker2: ["Pull my end! I DARE you!", "Bang bang, party's over!", "Surprise! It's a JOKE! And a BOMB!"],
+  // World 11: The Midway
+  cadet: ["Hup, two, three, DIP!", "Halt! Tickets, please! Batter up!", "Corn Dog Cadet on parade! Stick 'em up!"],
+  toffee: ["Not on the list! Bounce!", "You're in a sticky spot, pal!", "I'm the apple of NOBODY'S eye! Boing!"],
+  floss: ["Hee hee! Fluff 'em!", "Squee! We're Flosso's biggest fans!", "Stick around! Get it? STICK? Hee!"],
+  snowcone: ["Cold shoulder, comin' up!", "Have an ice day. NOT!", "Brain freeze! Syrup's extra!"],
+  bumper: ["Honk honk! Out of my LANE!", "No brakes, no steering, no SORRY!", "I'm on a sugar CRASH course!"],
+  churro: ["Missed me! Hehe!", "Pop goes the churro!", "Whack THIS! Cinnamon surprise!"],
+  coconut: ["Throw one at ME? Have it BACK!", "Shy? Do I LOOK shy?!", "Years of this! I'm one tough nut!"],
+  pretzel: ["Step up, try your luck! Hehe!", "Feeling salty? You will be!", "I'll run rings round ya! Twist!"],
+  jawbreaker: ["Nobody cracks the Jawbreaker!", "The Jawbreaker flexes! Behold the LAYERS!", "Ring the bell? The Jawbreaker rings YOURS!"],
   // World 10: The Feast of the Forgotten
   cherrysoldier: ["For the King! Er, the CAKE!", "Candied and dangerous!", "Cherry on top? Cherry ON YOU!"],
   fruitknight: ["None shall pass! Nobody eats me anyway!", "Aged one hundred years. FIGHT me!", "I'm dense, I'm tough, I'm FRUITCAKE!"],

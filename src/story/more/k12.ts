@@ -12,7 +12,7 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w1-s8": [["foe", "Hurry hurry HURRY! Hold out while the monsters pour in, slowpoke! Then King Pepper Grunt! I could do it in TEN!"], ["me", "Ten what? Naps? Okay, monsters, pile on. I'll just hang here. *yaaawn*"]],
   "w1-s9": [["me", "Mmm, these burners shoot big warm flame pillars. Perfect nap weather. Cookie Cutter Witch, wake me when it's my turn."], ["mold", "Hehehe... sleep, little sloth. Sleep while your tea goes cold."], ["me", "It's already cold, dude. That's kinda the whole reason I'm up."]],
   // World 2: The Fridge. Frosty fur, the Chef's milk, a very buzzy bird.
-  "w2-s2": [["me", "Heyyy, milk everywhere! I need milk for my tea. Lemme just grab a carton and-"], ["n", "Not yet! The portal wants Popsicle Sticks and Cheese Crumbs. And an Ice Cube Ogre guards the end!"], ["me", "Okay, milk later. Ice pops now. Ew, chores."]],
+  "w2-s2": [["me", "Heyyy, milk everywhere! I need milk for my tea. Lemme just grab a carton and-"], ["n", "Not yet! Those cartons have HORNS! The portal wants Carton Horns and Cheese Crumbs, and an Ice Cube Ogre guards the end!"], ["me", "Okay, milk later. Horns now. Ew, chores."]],
   "w2-s3": [["me", "There's frost on my fur. I'm a bubble tea slushie now."], ["me", "A lunchbox with teeth AND a Fish Finger General? Cool, cool. Like, literally cool. Slip, slide, BONK."]],
   "w2-s4": [[10, "Sloth! My Crumblet's freezing. Get it to the boss room, and keep it moving, would ya?"], ["me", "Moving's not really my thing. But for you, little muffin? Slow and steady beats a King Milk Carton Rammer."]],
   "w2-s6": [["me", "Duuude, egg carton cliffs. Every little cup is a tiny bed."], ["me", "Okay, okay. Scroll first, before time runs out. THEN bed. Then The Cheese Wheel. Go go go. Gently."]],
@@ -44,7 +44,7 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w5-s8": [["foe", "There you are! I waited FOREVER! Like, two whole minutes! Hold out against THIS crowd, sloth!"], ["me", "Two minutes? Wow. That's my record for staying awake. Okay, monsters, line up. Then King Grabby Glove."]],
   "w5-s9": [["me", "A Clogged Drain Hag at the bottom? Heyyy, I'll unclog ya. Slowly."], ["mold", "Hehehe... down, down, down, sleepy sloth. Down here your tea goes cold forever."], ["me", "Not forever, dude. Just till I get there. Which is, like, now."]],
   // World 6: The Dining Room (Act 2).
-  "w6-s2": [["me", "Ooh, fancy. There are napkin pillows everywhere. Okay, tiny nap."], ["n", "No naps! The portal wants Napkin Scraps and Fork Prongs, and the Gravy Boat Captain is waiting!"], ["me", "Excuse me, pardon me, sloth coming through. Slowly. Okay, FASTER!"]],
+  "w6-s2": [["me", "Ooh, fancy. There are napkin pillows everywhere. Okay, tiny nap."], ["n", "No naps! The portal wants Gravy Drops and Fork Prongs, and the Gravy Boat Captain is waiting!"], ["me", "Excuse me, pardon me, sloth coming through. Slowly. Okay, FASTER!"]],
   "w6-s3": [["me", "Ow, hot wax! Waxed fur is NOT a look, dude."], ["me", "A Teapot Tyrant up ahead? A TEAPOT? Duuude, this is personal. Pass me the victory, please. No rush."]],
   "w6-s4": [[10, "Sloth! This Crumblet wants to see the world. Walk it past the gravy boats, would ya?"], ["me", "Hop on, little muffin. We're going on a gravy boat cruise. A very slow cruise. Best kind."]],
   "w6-s6": [["me", "Teacups as big as bathtubs! Duuude, this is, like, my dream."], ["me", "Aw, they're all full of STALE tea. Grab the scroll before time runs out. This is personal now."]],
@@ -60,7 +60,7 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w7-s8": [["me", "Ahhh, this cooler's nice and chilly. Iced tea vibes."], ["lo2", "Forsooth! Hold out against my horde, sloth, and the Baron shall STILL grill thee well done!"], ["me", "Well done? I'm more of a rare. Rarely awake. Okay, monsters, bring it."]],
   "w7-s9": [["me", "Hot coals all the way up, and a Sauce Bandit at the top. Pee-yew, I smell a sprout too."], ["n", "From the grill, a voice booms: \"ATTEN-TION, sloth! You'll be SIZZLED!\""], ["me", "Sizzled? Nah. Steeped, maybe. I'm climbing. Okay, medium-fast climbing."]],
   // World 8: The Garden.
-  "w8-s2": [["me", "Heyyy, my old shortcut past the watering can. I know every puddle here."], ["n", "SNAP! Something with big leafy jaws waits at the end. It's the Snapdragon!"], ["me", "Didn't know about THAT guy! Okay, Ladybug Spots first. Then, uh, snap back."]],
+  "w8-s2": [["me", "Heyyy, my old shortcut past the watering can. I know every puddle here."], ["n", "SNAP! Something with big leafy jaws waits at the end. It's the Snapdragon!"], ["me", "Didn't know about THAT guy! Okay, Lettuce Leaves first. Then, uh, snap back."]],
   "w8-s3": [[16, "Yo, Sloba. Stay frosty. The sunflowers are puffing pollen everywhere."], ["me", "Minturtle! Heyyy. ACHOO! Okay, okay. Watering Can Wizard, here I come. Bless you, monsters."]],
   "w8-s4": [[10, "This is your patch, sloth. Walk my Crumblet past the pumpkins for me."], ["me", "My turf, little muffin. I know every pumpkin by name. That's Gourdon. Say hi."]],
   "w8-s6": [["me", "I used to nap at the top of this beanstalk. Now there's a scroll up there. Rude."], ["me", "Grab it before time runs out, then the Gnome General. Turnip for the books, dude. I'm actually hurrying."]],
@@ -83,6 +83,15 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w10-s7": [["me", "Dusty jars with no labels. Heyyy, jars. I see ya."], [3, "Wibble wobble! Sloba! I'm writing names on ALL the jars! Wanna help?"], ["me", "Sure. Right after the sponge. BOING! Last key. Got it."]],
   "w10-s8": [["lo2", "Forsooth, sloth! The WHOLE army! Hold out if thou canst! Thou art doomed!"], ["me", "Doomed? Sir Stale, that's, like, one yawn. *yaaawn* Then King Party Cracker Bomber. Okay, go."]],
   "w10-s9": [["me", "Duuude, this table is super long. A Fondue Fiend's bubbling at the end, and nobody's sitting at it."], ["n", "From the cake-tin throne, a grumpy voice booms: \"Nobody touches my table! NOBODY gets a seat!\""], ["me", "Heyyy. I saved myself one anyway. Been here since lunch. Climbing."]],
+
+  // World 11: The Midway.
+  "w11-s2": [["me", "Ring a bottle, win a prize. Heyyy, I'm great at slow. I dangled that ring all morning. Duuude, the string's too short to reach."], ["n", "Meanwhile, at the far end of the boulevard, a Pretzel Contortionist shows off, tied in a knot!"], ["me", "Posing in a knot. Whoa, respect. Looks comfy. My bad, bendy dude, I gotta untie ya. *yaaawn*"]],
+  "w11-s3": [["me", "Had a queue-t nap in the ring toss line. Then a Whack-a-Churro popped up right under my pillow. Rude, dude."], ["me", "And the prize box tried to chew my straw. Okay, Gumball Gunner. Ka-Chunk me one. I'm awake now. Mostly."]],
+  "w11-s4": [[10, "Hmph. Sloth. I count five, and there ought to be six. One's lost in the crowd at Bumper Car Bay."], ["me", "Found it, papa bear. It was napping in my queue. Hold my claw, little muffin. Those Bumper Cupcakes drive way too fast for me."], [10, "Walk it to the exit. And stay awake. Both of you."]],
+  "w11-s6": [["me", "A Recipe Scroll, way up on the prize shelf, and a clock going tick tick tick. Clocks are so stressy, dude."], ["me", "Up is just hanging with extra steps. Then the Fry Basket Brawler yells \"Order Up!\" at me. One tea, please. No rush."]],
+  "w11-s7": [["me", "Whoa. In this mirror I look, like, wide awake. Creepy. In that one I'm already asleep. That's the honest one."], ["me", "Sleepy Mirror Me is pointing at a key chest up on a ledge. Boing, I guess. Then a Carousel Macaron Pony. Giddy-up. Slowly."]],
+  "w11-s8": [["lo2", "Have at thee, coconut! Wake up, sloth! A squire doth not snore in the lists! Thou art frightening the horses!"], ["me", "It's a coconut shy, Sir Stale. They throw 'em back. Here comes a whole crowd, and King Coconut Shy Lobber too. I'll hang in there."], ["lo2", "Then hold fast, and I shall cheer thee most slowly! Huzzah. Huzzzaaah. Was that slow enough?"]],
+  "w11-s9": [["me", "A giant doughnut wheel, and no queue to nap in. Bummer. Guess I'm climbing it, dude."], ["n", "The loudspeaker crackles: \"Step right up, sleepyhead! Nobody wins the Great Flosso's games in their SLEEP! Ta-daa!\""], ["me", "Bet I could. Heyyy, Bonbon the Cannonball. Nice crash helmet. That cannon looks loud, dude. The big top's right there."]],
 };
 
 export const QUIPS: Record<QuipKind, string[]> = {

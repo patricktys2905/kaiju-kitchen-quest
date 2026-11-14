@@ -45,6 +45,12 @@ export const DROPS: Partial<Record<MobKind, [string, string]>> = {
   boxbot: ['Tape Strip', 'a curled strip of brown packing tape'],
   pudding: ['Pudding Spoon', 'a tiny silver dessert spoon with chocolate on it'],
   cracker2: ['Paper Crown', 'a folded yellow paper party crown'],
+  // World 11: The Midway
+  cadet: ['Paper Hat', 'a folded paper soldier hat with a red stripe'], toffee: ['Toffee Shard', 'a glossy amber shard of cracked toffee'],
+  floss: ['Floss Puff', 'a small pink puff of candy floss'], snowcone: ['Syrup Drop', 'a bright blue drop of snow-cone syrup'],
+  bumper: ['Rubber Bumper', 'a curved black rubber bumper strip'], churro: ['Cinnamon Sugar', 'a little heap of sparkly cinnamon sugar'],
+  coconut: ['Coconut Shell', 'half a hairy brown coconut shell'], pretzel: ['Lucky Ring', 'a small golden toss ring'],
+  jawbreaker: ['Jawbreaker Chip', 'a rainbow-layered chip of a jawbreaker'],
   fruitknight: ['Fruitcake Chunk', 'a chunk of dark fruitcake'], mimic: ['Lunchbox Latch', 'a blue plastic lunchbox latch'], cereal: ['Cereal Prize', 'a tiny toy prize from a cereal box'],
 };
 export const dropName = (k: MobKind): string => DROPS[k]?.[0] ?? 'Monster Bit';

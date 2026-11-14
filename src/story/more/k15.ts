@@ -12,7 +12,7 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w1-s8": [["n", "Rumble rumble! Monsters pour over the cutting board from every side!"], ["me", "S-s-so many! Grill rule number one: hold your ground and don't flip too early!"], ["me", "Then King Pepper Grunt gets one perfect sear!"]],
   "w1-s9": [["foe", "Hah! Burners, sausage! Flame pillars! Real champions grill on these. Try not to get charred!"], ["me", "I l-like a little char, Captain. It's called FLAVOUR!"]],
   // World 2: The Fridge. Out of his element, but making a guest list.
-  "w2-s2": [["me", "Dairy Lane! For the cookout I'll need cheese slices. Lotsa cheese slices!"], ["me", "Shopping list: Cheese Crumbs, Popsicle Sticks, and \"d-don't get squished by the Ice Cube Ogre.\""]],
+  "w2-s2": [["me", "Dairy Lane! For the cookout I'll need cheese slices. Lotsa cheese slices!"], ["me", "Shopping list: Cheese Crumbs, Carton Horns, and \"d-don't get squished by the Ice Cube Ogre.\""]],
   "w2-s3": [["me", "Brrr! My spikes have frost on 'em! I'm a hot dog on a p-p-popsicle stick!"], ["me", "Um, that lunchbox is l-looking at me. Is it looking at me? It's TOTALLY looking at me!"]],
   "w2-s4": [["me", "Another lost Crumblet? Hi, little guy! Walk next to me. Not TOO close. Spikes!"], ["n", "Uh-oh! Something big and briny lurks under the pier!"], ["me", "S-stay behind me! A champion protects the crowd!"]],
   "w2-s6": [["me", "Recipe Scroll way up high! If it's the secret sauce, I'm gonna cry. Happy cry!"], ["me", "Gotta grab it before time runs out, just like a grill timer! Ding! I LOVE a grill timer!"]],
@@ -60,7 +60,7 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w7-s8": [["me", "Cooler Canyon! Every cookout needs drinks on ice. The Freezer Golem would LOVE it here!"], ["me", "Hold the line, folks! Then King Corn Cob Cannon! Let's sear it!"]],
   "w7-s9": [["n", "From the summit, a voice booms: \"ATTEN-TION! Sprouts, turn the grill to MAXIMUM!\""], ["me", "MAXIMUM?! You'll burn everything! Folks, this is a grilling emergency! Here I come!"]],
   // World 8: The Garden.
-  "w8-s2": [["me", "Watering Can Run! Folks, I've got a bad feeling about that spout..."], ["n", "SNAP! The Snapdragon waits at the end, and it's extra snappy!"], ["me", "Called it! Ladybug Spots first, folks! The Champion digs deep!"]],
+  "w8-s2": [["me", "Watering Can Run! Folks, I've got a bad feeling about that spout..."], ["n", "SNAP! The Snapdragon waits at the end, and it's extra snappy!"], ["me", "Called it! Mushroom Caps first, folks! The Champion digs deep!"]],
   "w8-s3": [["n", "POOF! The sunflowers puff pollen everywhere!"], ["me", "Ah-CHOO! That's a pollen penalty! Somebody get me a tissue! Watering Can Wizard, I'm coming!"]],
   "w8-s4": [[10, "Hmph. Hotchog. This one's never seen a pumpkin patch. Boss room's that way. Don't let it climb anything."], ["me", "One VIP pass to the Garden, Mr. Bluebeary! Little buddy, pumpkins are for pie, not for climbing!"]],
   "w8-s6": [["me", "Beanstalk Heights! Green beans, folks, the perfect cookout side! The scroll's at the top!"], ["me", "Grab it in time, then the Gnome General! Let's go, Champion. Beans mean business!"]],
@@ -83,6 +83,15 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w10-s7": [[3, "Wibble wobble! Champ! The last key chest is up high! Is the dessert table still on?"], ["me", "Still on, Bloblin! Folks, it's the BIGGEST dessert table in history! Sponge, BOING!"]],
   "w10-s8": [["lo2", "Hold out one last time, sausage? Thy buns shall go as stale as MINE!"], ["me", "Stale buns? Pal, we TOAST 'em! Hold the line, folks, then you're coming to dinner too!"]],
   "w10-s9": [["n", "A grumpy old voice booms down the long, empty table: \"A cookout? HERE? Nobody feasts in MY Fridge!\""], ["me", "Folks, look at that table! Not one plate! Just a Fondue Fiend! That's a foul if I ever saw one!"], ["me", "It's the feast-off finals! The Champion's coming in HOT! Here I come!"]],
+
+  // World 11: The Midway.
+  "w11-s2": [["me", "Guess-your-weight, folks! The Champion steps on the scale, and it says ELEPHANT! Hey! Somebody's got a thumb on it!"], ["me", "And at the end of the boulevard, a Pretzel Contortionist posing in a knot! Frank-ly, folks, that's just showing off. Ding ding!"]],
+  "w11-s3": [["me", "Folks, the Champion lines up his ring toss! It's up, it's good, it... bounced off! That peg's wearing a HAT!"], ["me", "And the prize box just BIT the referee! Whack-a-Churros underfoot, and a Gumball Gunner up next. Ka-Chunk? Ka-SIZZLE!"]],
+  "w11-s4": [[10, "Hmph. Hotchog. One of mine followed the smell of a grill into the crowd. Found it. Walk it to the exit. Spikes AWAY."], ["me", "One VIP pass to the exit, Mr. Bluebeary! Little buddy, stay on my not-spiky side. Those Bumper Cupcakes are ALL over the road!"], [10, "It's cheering for you in a teeny voice. Don't look at me. It's the sawdust, okay?"]],
+  "w11-s6": [["me", "Folks, a Recipe Scroll on the top prize shelf by the helter-skelter, and the clock is ON! The Champion loves a timer! Ding!"], ["me", "Who's yelling \"Order Up!\" up there? A Fry Basket Brawler! Deep-fried, at MY festival? Pal, we GRILL around here! Let's GO!"]],
+  "w11-s7": [["me", "Folks, in this mirror I'm a FOOT-LONG! In that one I'm a cocktail sausage. The judges will take the first one, thank you!"], ["me", "Key chest up on a ledge, and a Carousel Macaron Pony prancing in circles! The Champion saddles up, folks! BOING!"]],
+  "w11-s8": [["lo2", "Have at thee, coconut! Sausage, thou shalt be my herald! Announce me to the lists!"], ["me", "In THIS corner, a baguette who thinks it's a joust! In THAT corner, King Coconut Shy Lobber and a whole crowd! Hold the line, pal!"], ["lo2", "Splendidly heralded! Forsooth, the coconuts are throwing themselves BACK! Is that in the rules of the tourney?"]],
+  "w11-s9": [["me", "The big wheel, folks! One giant doughnut, and the Champion climbs it rung by rung! What a view of the big top!"], ["n", "The loudspeaker crackles: \"Step right up, little sausage! Champion of WHAT? One kitchen? My Midway eats champions for lunch!\""], ["me", "One kitchen AND a backyard, mister! And here's Bonbon the Cannonball, folks, helmet on, drum roll! I'm coming for that tent!"]],
 };
 
 export const QUIPS: Record<QuipKind, string[]> = {

@@ -188,3 +188,49 @@ World title for World 10 shortened to "Feast Cook" (producer edit).
 large as the name; Garnish test B1.3 must exclude respawn differences (the bag feeds respawns);
 `flosso` is not yet in BOSS_ORDER / BW_BOSS; 27 World 11 scene paintings wait for stage facts.
 **Next:** Garnish slot, then World 11 build.
+
+## 2026-11-14/15: World 11 "The Midway" + Garnish release
+
+**Decisions by the Creative Director:** Garnish boost = none while the map's exit still wants the
+drop; garnish shown as a BADGE BY THE NAME (head-worn version built, rejected as looking weird);
+lighter badge disc; fix thin badge icons; spare skill points → MORE MASTERY RANKS.
+
+**Built**
+- World 11 (sim, 19 monster kinds, Flosso + Wheel of Misfortune, S-11, cap 120, 20 Showman's boss
+  weapons), menus/scene hook-up, 698 story lines + 27 taunts (workflow: 5 writers → continuity
+  editor → integration), 62 images in total (monsters, boss, backdrops, drops, weapons, 30 paintings).
+- Garnish: sim/save, camp UI, badge by the name with cleaned `gb-<kind>` sprites.
+- Mastery: 10 → 14 ranks per path at cap 120 (4 per world past 10, gated Lv 111/114/117/120),
+  TUNE.masteryRamp 0.008 per level past 110.
+
+**QA found (independent pass), all fixed before shipping**
+- HIGH, old bug: stage layouts differed per JavaScript engine (random sort comparator in genMaps):
+  tests, sweeps and stage facts described different stages from the browser's. Fixed with a seeded
+  shuffle; 155 fingerprints pinned; Node = Edge = Chrome. EVERY layout changed once; wanted drops
+  changed in almost every stage; boss-room foes unchanged. All earlier balance numbers in this log
+  were measured on Node's old layouts.
+- Recipe Scroll lay on the ground by the exit (height computed, then discarded): now on map 2's top
+  floor. Market item level ran ahead (12 levels per world assumed): now follows the stage level.
+- Story paintings were covered by the dialogue box and portraits: paintings now stand above the box.
+  Wheel telegraph was covered by hit popups: now a HUD element. MAX state at the cap, PLAY pinned,
+  secret-stage NEXT, Sir Stale's face chip, visual-check clock fixed.
+- Story: 93 lines re-edited (scene vs painting; drops vs new stage facts). Lines naming a specific
+  wanted drop are listed in the editor's report: re-run scripts/story-wants-check.ts after any layout change.
+
+**Balance (final layouts, skilled bot, 8 jams, 20 kaiju):** every stage 78%+; world bosses 56-77%;
+World 11 stages 78-93% (avg 87%, 3.9 jams), Flosso about 63%. Changed: W11 mobPow .45 → .52, W2
+mobPow 1.5 → 1.35, Flosso HP 1500, m2c and kcan2 eased, hazard spacing rule (3-6 had two vents 39 px
+apart). 21 stages above 95% left alone. S rank on World 11 sample 11%.
+
+**Open**
+- Non-V8 browsers (Firefox, Safari) not tested; in-stage sim uses Math.sin/pow etc. (matters only
+  for a non-V8 online host).
+- Players' banked drops may no longer match a stage's SKIP TO BOSS set.
+- Old Fruitcake ('lo') still has a villain silhouette portrait; needs a real one before World 15.
+- Flosso on the top ledge calls wisps from range; 0-of-5 boss cells: Bloblin 1-10, Pengwhip 2-10.
+- 2-3 costs 5.6 jams; 5-8 had three slow-kaiju timeouts; 11-1 gave no S in a small sample.
+- Badge icons that read only as a shape: Fork Prong (redraw offered), Can Tab, Mug Handle, Coupon
+  Scrap, Napkin Scrap, Drain Eel Fin. Story paintings are smaller now (panel above the box).
+- docs/DROPS-USES.md B4 still describes the head-worn garnish and "55 → 70"; README is current.
+- The Recipe Scroll race is generous (slowest skilled grab 76 s of 140); 90 s would bite.
+- Dead old-generator code and stale scripts still not tidied.

@@ -29,7 +29,7 @@ export interface MobSpawn { kind: MobKind; x: number; y?: number; lv: number; el
 export type HazardKind = 'burner' | 'vent' | 'drop' | 'ice' | 'tap' | 'wax' | 'sprinkler' | 'pollen' | 'chill';
 export interface Hazard { kind: HazardKind; x: number; w: number; period: number; on: number; offset: number; /** boss arenas: only after the boss enrages */ phase2?: boolean }
 export interface Arena { x0: number; x1: number; waves: MobSpawn[][] }
-export interface Objective { kind: 'escort' | 'fetch' | 'survive'; /** seconds: survive length, or fetch time limit */ t?: number; /** fetch: where the scroll is */ x?: number; /** the timer only starts once a hero passes this x */ at?: number }
+export interface Objective { kind: 'escort' | 'fetch' | 'survive'; /** seconds: survive length, or fetch time limit */ t?: number; /** fetch: where the scroll is (y: the floor it lies on; unset = the ground) */ x?: number; y?: number; /** the timer only starts once a hero passes this x */ at?: number }
 /** Optional "Spicy" challenges chosen before a stage (each adds loot). */
 export type Spicy = 'nopots' | 'glass' | 'clock';
 
@@ -114,6 +114,9 @@ export type MobKind = 'jamhop' | 'salt' | 'cheesemouse' | 'icepop' | 'crumbcube'
   | 'trolley' | 'bag' | 'scanner' | 'banana' | 'can2' | 'melon' | 'lid' | 'tupper'
   // World 10: The Feast of the Forgotten (final boss: Old Fruitcake)
   | 'cherrysoldier' | 'fruitknight' | 'peel' | 'fruitcake'
+  // World 11: The Midway (Act 3; boss: The Great Flosso, whose summons are Floss Wisps)
+  | 'cadet' | 'toffee' | 'floss' | 'snowcone' | 'bumper' | 'churro' | 'coconut' | 'pretzel' | 'jawbreaker' | 'flosso'
+  | 'm11a' | 'm11b' | 'm11c' | 'm11d' | 'm11e' | 'kcadet' | 'kbumper' | 'kcoconut' | 'xjawbreaker'
   // story nemeses (one per kaiju, stage 5 of every world)
   | 'nbeet' | 'ncrow' | 'npine' | 'nlamp' | 'nshroom' | 'nslug' | 'nrat' | 'ncookie' | 'nginger' | 'nbrulee' | 'nkebab' | 'nshark' | 'nnacho' | 'nhornet' | 'nmouse' | 'ngorilla' | 'nbird' | 'nhare' | 'ngelato' | 'nbear';
 

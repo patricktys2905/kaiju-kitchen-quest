@@ -92,6 +92,15 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w10-s7": [["me", "Final secret chest, way past the end of the shelf. Last elevator ride, folks!"], [9, "Ooh, pizza! Elephants never forget! *POP* Hey, it's the pizza from the Dining Room!"], ["me", "You REMEMBERED?! Big guy, that's a five-star memory! Boing!"]],
   "w10-s8": [["me", "Holding out against EVERY monster?! It's rush hour at the end of the world!"], ["foe", "Raptor! I'm on traffic control! Pineapple barricade, deployed!"], ["me", "Pete! Pineapple on the ROAD is finally allowed! Beep beep!"]],
   "w10-s9": [["me", "Delivery address confirmed! Wow, that's one LONG, EMPTY table."], ["n", "From the cake-tin throne, a voice grumbles: \"Bring it here, lizard. And don't expect a TIP.\""], ["me", "Customer's in! Keep the box level, raptor. Last fifty feet!"]],
+
+  // World 11: The Midway.
+  "w11-s2": [["me", "Minute two! Knock over three pizza boxes, win a prize? Those boxes are NAILED DOWN! I know boxes, people! One star!"], ["n", "Uh-oh! A Pretzel Contortionist is posing in a knot, smack in the middle of the boulevard!"], ["me", "Double parked AND tied in a knot?! That's a ticket, twisty! Beep beep, VROOM!"]],
+  "w11-s3": [["me", "Minute three! A prize box by the ring toss? Maybe it's a tip! OW! It's a BITER! Return to sender!"], ["me", "And the Gumball Gunner wants a coin just to go Ka-Chunk? Raptor Express has a ride-through window, buddy! Coming THROUGH!"]],
+  "w11-s4": [[10, "Hmph. Raptor. One of mine hopped off the string in Bumper Car Bay. It's MINE this time. Bus it to the exit. Carefully."], ["me", "Passenger number eleven! All aboard, kiddo, seatbelt on! Those Bumper Cupcakes never signal, and their King's the worst of 'em!"], [10, "Bus is paid off. Now I'm saving up for a horn. Hmph."]],
+  "w11-s6": [["me", "Minute five! Pick-up order: one Recipe Scroll, top of the prize shelf, and the clock's ticking! My FAVORITE kind of clock!"], ["me", "And the Fry Basket Brawler keeps yelling \"Order Up!\" That's MY line, grease-bucket! Get your own catchphrase!"]],
+  "w11-s7": [["me", "Minute six! Whoa, in this mirror the pizza's EXTRA large! In that one it's a breadstick. Do NOT show the customer!"], ["me", "Secret key chest on a hidden ledge? Sponge elevator, going up! Carousel Macaron Pony, no horsing around in my lane! Boing!"]],
+  "w11-s8": [["lo2", "Have at thee, coconut! Courier, thou art in good time! Fetch me my lance, my shield and one large pepperoni!"], ["me", "You're ORDERING?! The coconuts throw BACK, pal, King Coconut Shy Lobber's up next, and here comes a whole rush hour!"], ["lo2", "Then we hold the lists together! And forsooth, this time I shall TIP! Which coin is a tip?"]],
+  "w11-s9": [["me", "Minute seven! The big doughnut wheel! No lift, no ramp, just claws! And the big top's right past it! Hup hup!"], ["n", "The loudspeaker crackles: \"Step right up, speedy lizard! Late again? Every clock on MY Midway runs fast! Ta-daa!\""], ["me", "He rigged the CLOCKS?! That's LOW! And Bonbon the Cannonball gets a CANNON? Even he's got faster shipping than me!"]],
 };
 
 export const QUIPS: Record<QuipKind, string[]> = {

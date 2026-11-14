@@ -175,8 +175,28 @@ export const ARC: Record<string, StoryLine[]> = {
     ["me", "You're the GUEST now, Fruitcake. Wait, did I just tip HIM? Eh! Still five stars!"],
     ["me", "Raptor Express ALWAYS delivers! Thirty minutes or less, give or take a whole HOUSE! Beep beep!"],
   ],
+  "w11-open": [
+    ["n", "Act 3: The Great Food Festival! One golden envelope, and inside it, the biggest order Raptor Express ever took..."],
+    ["me", "Minute one! One FESTIVAL-size pizza for the festival judges! Judges give out STARS, people, and I want all five! Beep beep!"],
+    ["me", "Hey! That shiny delivery van just cut me off at the gate! A RIVAL courier?! On MY route?! Fare's fair, pal!"],
+    ["me", "And why's the express lane full of Corn Dog Cadets marching in circles? Somebody rigged the TRAFFIC! Vroom!"],
+  ],
+  "w11-boss": [
+    ["boss", "Step right up, my boy! Five stars, is it? The only STAR at this fair is pink and fluffy! And you're late! My clocks say so!"],
+    ["me", "Minute eight! Your prize boxes are nailed down and your clocks all run FAST, pal! That's delivery fraud! I'm filing a complaint!"],
+    ["boss", "Showmanship, my boy! File it with the Wheel of Misfortune! Whatever the hour, it lands on TOO LATE! Abracadabra-cadabra!"],
+    ["me", "Raptor Express is NEVER too late! Give or take! ZERO stars for the fluff ball! Beep beep, coming THROUGH!"],
+  ],
+  "w11-after": [
+    ["boss", "Eep! My fluff! Gone in under a minute! Stars? I'm a SHOWMAN, not a judge! Take your silly ribbon. First prize, Midway games!"],
+    ["boss", "The Showstopper will hear about this! Want stars? Ask Granny Crumble in the Blue Ribbon Barn! She judges by the BOOK! Toodle-oo!"],
+    ["me", "A ribbon! Minute nine, and Raptor Express takes FIRST PLACE! Wait. Zero stars? A ribbon's not a star! Is it a tip?!"],
+    ["foe", "Raptor! Traffic alert! Road's clear to the Blue Ribbon Barn, and that shiny van's got a head start! I'm timing ya!"],
+    ["me", "The VAN?! Oh no you don't, shiny! Pete, hold my ribbon! No, wait, pin it on the BOX! The pizza won it too!"],
+    ["me", "New delivery address: the Blue Ribbon Barn! Five stars or bust! Beep beep!"],
+  ],
 };
-export const NEMESIS: Record<"w1-elite" | "w2-elite" | "w3-elite" | "w4-elite" | "w5-elite" | "w6-elite" | "w7-elite" | "w8-elite" | "w9-elite" | "w10-elite", StoryLine[]> = {
+export const NEMESIS: Record<"w1-elite" | "w2-elite" | "w3-elite" | "w4-elite" | "w5-elite" | "w6-elite" | "w7-elite" | "w8-elite" | "w9-elite" | "w10-elite" | "w11-elite", StoryLine[]> = {
   "w1-elite": [
     ["foe", "Pineapple Pete Express! Fastest wheels in the kitchen! That pizza's MINE to deliver!"],
     ["me", "Raptor Express doesn't share routes, Pete! Beep beep, outta my way!"],
@@ -224,5 +244,10 @@ export const NEMESIS: Record<"w1-elite" | "w2-elite" | "w3-elite" | "w4-elite" |
     ["foe", "Raptor! Traffic alert! Fruitcake Knight up ahead. Big, crumbly, and parked in EVERY lane!"],
     ["me", "Pete! The last traffic report of the whole route!"],
     ["foe", "Go, go! I'm timing ya! And save me a slice at the feast. Pineapple side, obviously!"],
+  ],
+  "w11-elite": [
+    ["foe", "Raptor! Traffic alert! Jawbreaker Strongman at the bell, blocking EVERY lane! Fritters back at my stand! Pineapple side!"],
+    ["me", "Pete! You've got a traffic stand AND fritters?! Wait, what's my time?!"],
+    ["foe", "Minute four, and the van's ahead! Go, go! Pineapple fritters are FAIR food, raptor. Look it up!"],
   ],
 };

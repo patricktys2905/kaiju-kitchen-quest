@@ -4,12 +4,13 @@
 import type { AttackDef } from './classes';
 import { rollTier } from './loot';
 import { type BoostKind, CONSUMABLES, type ConsumableId, QUICK_CD } from './consumables';
-import { BOSS_ARMOR, BOSS_PATTERNS, DANGER_MOVES, ELITE, ELITE_MODS, type EliteMod, MOBS, type NemMove, TUNE, nemesisMoves, dropLevel, mobAtk, mobCrumbs, mobHp, mobXp } from './mobs';
+import { BOSS_ARMOR, BOSS_PATTERNS, DANGER_MOVES, ELITE, ELITE_MODS, type EliteMod, MOBS, type NemMove, TUNE, WHEEL, WHEEL_PICKS, nemesisMoves, dropLevel, mobAtk, mobCrumbs, mobHp, mobXp } from './mobs';
 import { type SkillDef, ULTS, ULT_LV, applyBranch, applyMod, skillScale } from './skills';
 import { WORLDS } from './stages';
 import type { Derived } from './stats';
 import { DROPS, QUEST_DROP_CHANCE } from './drops';
 import { baseDropChance } from './cookbook';
+import { garnishChance, worldGarnishes } from './garnish';
 import { type Element, GUARD_BREAK_ELEMENT, elementDmgMul, elementStatusMul, elementsOfFx, elementsOfSkill, pickElement } from './elements';
 import { type BoxTier, type Hazard, type Input, type MobSpawn, type Prop, type LootBox, type MobKind, NO_INPUT, type SimEvent, type Spicy, type StageDef } from './types';
 
@@ -283,7 +284,7 @@ export class World {
     this.zones2 = (stage.maps ?? []).map(() => ({ have: 0, done: false, miss: 0, spawnT: 0 }));
     const ob = stage.objective;
     if (ob?.kind === 'escort') this.npc = { x: 60, y: stage.groundY, hp: 1, maxHp: 1, face: 1, hurt: 0 };
-    if (ob?.kind === 'fetch') { this.scroll = { x: ob.x ?? stage.width - 260, y: stage.groundY, got: false }; this.objTimer = ob.t ?? 75; }
+    if (ob?.kind === 'fetch') { this.scroll = { x: ob.x ?? stage.width - 260, y: ob.y ?? stage.groundY, got: false }; this.objTimer = ob.t ?? 75; }
     if (ob?.kind === 'survive') { this.objTimer = ob.t ?? 45; this.holdout = ob.at ? 0 : this.objTimer; }
     this.objArmed = !ob?.at;
     this.hazards = (stage.hazards ?? []).map(h => ({ ...h, state: 'off', hit: new Set<number>() }));
@@ -1898,7 +1899,9 @@ export class World {
     if (this.stage.maps && DROPS[m.kind]) {
       const zi = this.mapAt(m.x), g = this.stage.maps[zi]?.goal, z = this.zones2[zi], quest = g?.kind === 'collect' && g.wants.some(q => q.mob === m.kind) && !z.done;
       // one random call whatever the chance, so a different drop rate changes the floor pickups and nothing else
-      let drop = this.rand() < (quest ? QUEST_DROP_CHANCE : baseDropChance(m.kind));
+      // Hunter's Nose (sim/garnish.ts): a garnish worn by any human player adds 15 points to its own monster's PLAIN chance, here
+      // only. Never while this map's exit still wants the drop (that roll stays at 55%): it would open exits sooner, which is power
+      let drop = this.rand() < (quest ? QUEST_DROP_CHANCE : garnishChance(baseDropChance(m.kind), m.kind, worldGarnishes(this)));
       if (quest) { if (z.miss >= 2) drop = true; z.miss = drop ? 0 : z.miss + 1; }
       if (drop) this.pickups.push({ id: this.nextPickup++, kind: m.kind, x: m.x, y: m.y - 30, vy: -380, ground: false, t: 0 });
     }
@@ -2022,13 +2025,13 @@ export class World {
         if (def.brain === 'boss' && m.summoned < 2 && m.hp < m.maxHp * (m.summoned ? 0.33 : 0.66)) {
           m.summoned++;
           this.events.push({ t: 'summon' });
-          for (const off of [-260, 260]) this.spawnMob(m.summoned === 1 ? 'bun' : 'pepper', clamp(h.x + off, 60, this.stage.width - 60), Math.max(1, m.lv - 3));
+          for (const off of [-260, 260]) this.spawnMob(def.helpers?.[m.summoned - 1] ?? (m.summoned === 1 ? 'bun' : 'pepper'), clamp(h.x + off, 60, this.stage.width - 60), Math.max(1, m.lv - 3));
         }
         break;
       }
       case 'windup': {
         m.vx = approach(m.vx, 0, 1200 * dt);
-        const wind = (m.move === 'charge' ? 0.8 : m.move === 'leap' ? 0.55 : m.move === 'rain' || m.move === 'breath' ? 0.8 : def.windup) * TUNE.windup / fast * (m.move === 'brute' && m.elite ? 1.3 : 1) * (this.nightmare ? 0.72 : 1); // red elite slams wind up longer: time to see it and dodge
+        const wind = (m.move.startsWith('wheel-') ? WHEEL.windup : m.move === 'charge' ? 0.8 : m.move === 'leap' ? 0.55 : m.move === 'rain' || m.move === 'breath' ? 0.8 : def.windup) * TUNE.windup / fast * (m.move === 'brute' && m.elite ? 1.3 : 1) * (this.nightmare ? 0.72 : 1); // red elite slams wind up longer: time to see it and dodge
         if (m.move === 'snipe' && m.t < wind - 0.3) { m.aimX = h.x; m.aimY = h.y - 40; } // the laser tracks you, then locks
         if (m.move === 'beam' && m.t < wind - 0.3) { m.aimX = m.x + m.face * 700; m.aimY = h.y - 40; }
         if (m.t > wind) { m.state = 'attack'; m.t = 0; m.hitDone = false; this.beginAttack(m); }
@@ -2097,6 +2100,15 @@ export class World {
       move = m.queue[0];
       if (move === 'slash' && Math.abs(dx) > 170) return; // walk closer first
       m.queue.shift();
+      if (move === 'wheel') {
+        // Wheel of Misfortune: the wheel stops NOW, before the long wind-up, so the symbol is the warning (mobs.ts WHEEL).
+        // The pick rides in the move string (in every snapshot) and is called out by name; wisps are skipped when he has plenty
+        const kids = this.mobs.filter(o => o.parent === m.id && o.state !== 'dead').length;
+        const picks = WHEEL_PICKS.filter(k => k !== 'summon' || kids < 3);
+        const pick = picks[Math.floor(this.rand() * picks.length)];
+        move = 'wheel-' + pick;
+        this.events.push({ t: 'nemesisMove', name: MOBS[m.kind].name, move: `Wheel of Misfortune: ${WHEEL.names[pick]}` });
+      }
     } else {
       const moves = MOBS[m.kind].moves ?? ['slash'];
       move = Math.abs(dx) < 150 ? 'slash' : moves[Math.floor(this.rand() * moves.length)];
@@ -2333,11 +2345,21 @@ export class World {
           this.shots.push({ id: nextId++, x: m.x + m.face * 60 * Math.min(1, def.h / 170), y: m.y - def.h * 0.7, vx: m.face * sp * Math.cos(a), vy: sp * Math.sin(a) + 60, t: -i * 0.04, dmg: Math.round(m.atk * 0.8), hit: new Set(), from: 'mob', kx: 160, ky: -180, pierce: false, g: 120, kind: 'fire' });
         }
         break;
-      case 'rain': // icicles (or embers) fall over the hero
+      case 'rain': case 'wheel-rain': // icicles (or embers) fall over the hero (the wheel's shower: a second one follows, see stepAttack)
         for (let i = 0; i < 5; i++) {
           const x = clamp(h.x + (i - 2) * 90 + (this.rand() - 0.5) * 40, 30, this.stage.width - 30);
           this.shots.push({ id: nextId++, x, y: h.y - 330 - i * 30, vx: 0, vy: 120, t: 0, dmg: m.atk, hit: new Set(), from: 'mob', kx: 120, ky: -160, pierce: false, g: 900, kind: 'icicle' });
         }
+        break;
+      case 'wheel-summon': { // the wheel's wisps: twice the usual call
+        const kids = this.mobs.filter(o => o.parent === m.id && o.state !== 'dead').length, n = Math.min(WHEEL.wisps, WHEEL.maxWisps - kids);
+        if (n > 0) this.events.push({ t: 'summon' });
+        for (let i = 0; i < n; i++) { const off = (i % 2 ? 1 : -1) * (60 + 50 * (i >> 1)); const c = this.spawnMob(def.calls ?? 'bun', clamp(m.x + off, 30, this.stage.width - 30), Math.max(1, m.lv - 3), m.on !== null && m.on >= 0 ? m.y : undefined); c.parent = m.id; c.vy = -380; c.vx = off * 3; c.ground = false; c.on = null; c.state = 'hurt'; c.t = 0; c.under = false; }
+        break;
+      }
+      case 'wheel-roar': // the wheel's shockwave: twice as wide as a roar (no taller: the top ledge is out of it)
+        this.events.push({ t: 'shock', x: m.x, y: m.y, r: WHEEL.roarR });
+        if (Math.abs(h.x - m.x) < WHEEL.roarR && Math.abs(h.y - m.y) < 120) { this.hurtHero(Math.round(m.atk * 0.6), Math.sign(h.x - m.x) || 1, m); if (h.state !== 'down') h.vx = Math.sign(h.x - m.x || 1) * 520; }
         break;
     }
   }
@@ -2467,6 +2489,13 @@ export class World {
         break;
       case 'rain': case 'breath':
         if (m.t > 0.9) this.endAttack(m);
+        break;
+      case 'wheel-rain': // the second shower, aimed afresh at where you are now
+        if (!m.hitDone && m.t > WHEEL.rainGap) { m.hitDone = true; const mv = m.move; m.move = 'rain'; this.beginAttack(m); m.move = mv; }
+        if (m.t > WHEEL.rainGap + 0.9) this.endAttack(m);
+        break;
+      case 'wheel-summon': case 'wheel-roar':
+        if (m.t > 0.6) this.endAttack(m);
         break;
       case 'slash':
         if (!m.hitDone && m.t > 0.08) { m.hitDone = true; if (touch(def.range + 20, 120)) this.hurtHero(Math.round(m.atk * 0.9), m.face, m); }

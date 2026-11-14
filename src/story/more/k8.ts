@@ -83,6 +83,15 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w10-s7": [["me", "Old jars, old boxes, all forgotten. Me no like forgotten. Me remember EVERYBODY!"], ["me", "Last key past end of shelf! Cubey Three, hold on tight! BOING!"]],
   "w10-s8": [["lo2", "Hold out one last time, varlet? Thou shalt be frozen solid and FORGOTTEN!"], ["me", "Frozen? Ooh, me LIKE frozen! You make bad threat! Last forty-five, here me come!"]],
   "w10-s9": [["n", "A grumpy old voice booms down the long, empty table: \"Who let a CHOCOLATE into my feast hall?!\""], ["me", "Big table and no food. And Fondue Fiend?! NO FONDUE! Saddest table me ever see."], ["me", "*gulp* Me scared AND me go! Me ALWAYS still go!"]],
+
+  // World 11: The Midway.
+  "w11-s2": [["me", "Lucky dip! Me dip hand in barrel for prize. Me dip and dip. Hey! Barrel all sawdust and NO prize!"], ["n", "Uh-oh! Past the last stall, a Pretzel Contortionist shows off a knot as big as a golem!"], ["me", "Bendy bread man in knot? Me good at knots! Me PUNCH knot open! POW!"]],
+  "w11-s3": [["me", "Ring game! Me throw ring. Ring too small for peg! Ring too small for me FINGER! That no fair!"], ["me", "Prize box got teeth, and churro pop out of floor and say \"Missed me!\" Me no miss Gumball Gunner. Ka-POW!"]],
+  "w11-s4": [[10, "Hmph. Chocomunch. Head count's five, and I need six. This one wandered off in the crowd. Walk it to the exit. Stick to the shade."], ["me", "Me LOVE shade! Hold me hand, little muffin. Bumper Cupcakes go honk and no can steer. Me be big chocolate bumper!"], [10, "It's hiding in your shade already. Don't look at me. It's the sun in my eyes, okay?"]],
+  "w11-s6": [["me", "Big pointy slide tower! Recipe Scroll way up on prize shelf, and clock go tick tick. Me climb quick quick!"], ["me", "Fry Basket Brawler up there shout \"Order Up!\" and spit HOT oil?! Me no like hot! Me order one POW, to go!"]],
+  "w11-s7": [["me", "AAH! Mirror me all melty and droopy! Me melting?! Me poke tummy. Tummy firm. Phew! Bad mirror! Me no like you!"], ["me", "This mirror make me tall and crunchy. Me like! Key chest up on ledge, and Carousel Macaron Pony go \"Whinny!\" Me go BOING!"]],
+  "w11-s8": [["lo2", "Have at thee, coconut! Fear not, little sweet! Sir Stale tilts beside thee, in the sunniest lists in all the land!"], ["me", "Sunniest?! *gulp* Coconuts throw BACK, bread man! King Coconut Shy Lobber throw biggest! Whole crowd coming! Me hold out!"], ["lo2", "Well held, varlet! Thou art the bravest pudding in the tourney! Stand in my shadow, 'tis long and thin!"]],
+  "w11-s9": [["me", "Giant doughnut wheel! So high, so sunny. Me climb on shady side. Cubey, no look down. Me no look down too."], ["n", "The loudspeaker crackles: \"Step right up, my chocolate chum! Lovely sunny day for it! Feeling a little SOFT?\""], ["me", "Me firm like brick! Bonbon the Cannonball in cannon up there? Him chocolate too?! Me scared AND me climb! Then big tent!"]],
 };
 
 export const QUIPS: Record<QuipKind, string[]> = {

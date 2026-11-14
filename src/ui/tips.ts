@@ -8,13 +8,14 @@ import { settings } from './settings';
 import type { World } from '../sim/world';
 import { ELEMENT_INFO, type Element } from '../sim/elements';
 import { stageWants } from '../sim/cookbook';
+import { worldOf } from '../sim/stages';
 
 /** Does the bag hold a drop this stage's exits will not take (a kind they do not ask for, or more than they ask for)? */
 export function hasSpareDrop(drops: Partial<Record<string, number>>, wants: Record<string, number>): boolean {
   return Object.entries(drops).some(([k, n]) => (n ?? 0) > (wants[k] ?? 0));
 }
 
-interface Tip { id: string; text: (touch: boolean, c: Coach) => string; /** show it now? */ when: (w: World, c: Coach) => boolean; /** done (hide early)? */ done?: (w: World, t: number) => boolean; basic?: boolean }
+interface Tip { id: string; text: (touch: boolean, c: Coach, w: World) => string; /** show it now? */ when: (w: World, c: Coach) => boolean; /** done (hide early)? */ done?: (w: World, t: number) => boolean; basic?: boolean }
 
 const TIPS: Tip[] = [
   // the guided start, in order (only on a kaiju's first stage of a save)
@@ -32,6 +33,8 @@ const TIPS: Tip[] = [
   { id: 'drop', text: t => t ? 'Hold the stick down and tap JUMP to drop through a ledge' : 'Hold ↓ and press SPACE to drop through a ledge', when: w => w.hero.ground && w.hero.on !== null && w.hero.on >= 0, done: w => !w.hero.ground && w.hero.vy > 0 },
   { id: 'arena', text: () => 'The gates are shut! Beat every wave to open them', when: w => w.arenas.some(a => a.locked) },
   { id: 'hazard', text: () => 'Watch the floor: hazards flash before they fire', when: w => w.hazards.some(z => z.state === 'warn' && Math.abs(z.x - w.hero.x) < 260) },
+  // a world's own named hazard (a reskin of an older one, e.g. World 11's Caramel Drip): named once, the first time it is about to fire
+  { id: 'hazard-skin', text: (_t, _c, w) => `${worldOf(w.stage).hazardName ?? 'A new hazard'}! The floor flashes where it will land, and the puddle it leaves slows you`, when: w => !!worldOf(w.stage).hazardName && w.hazards.some(z => z.state === 'warn' && Math.abs(z.x - w.hero.x) < 260) },
   { id: 'sponge', text: () => 'A bouncy sponge: jump on it to reach something high up', when: w => w.props.some(p => p.kind === 'sponge' && Math.abs(p.x - w.hero.x) < 160) },
   { id: 'potion', text: t => t ? 'Low on health: tap the jam jar at the bottom' : 'Low on health: press 1 for a jam jar', when: w => w.hero.hp < w.hero.d.maxHp * 0.4 && w.hero.bag.some(b => b && b.n > 0), done: w => w.hero.hp > w.hero.d.maxHp * 0.6 },
   { id: 'escort', text: () => 'Keep the Crumblet safe: it follows you to the exit', when: w => !!w.npc },
@@ -82,12 +85,12 @@ export class Coach {
     }
     if ((this.quiet -= dt) > 0) return;
     const next = TIPS.find(t => !this.seen(t.id) && (this.basics || !t.basic) && t.when(w, this));
-    if (next) this.show(next);
+    if (next) this.show(next, w);
   }
-  private show(t: Tip): void {
+  private show(t: Tip, w: World): void {
     this.cur = t; this.shownT = 0; this.remember(t.id);
     const b = ensureBar();
-    b.innerHTML = `<b>TIP</b><span>${t.text(isTouchDevice, this)}</span><button aria-label="Hide tip">✕</button>`;
+    b.innerHTML = `<b>TIP</b><span>${t.text(isTouchDevice, this, w)}</span><button aria-label="Hide tip">✕</button>`;
     b.querySelector('button')!.addEventListener('pointerdown', e => { e.preventDefault(); this.hide(); });
     b.classList.add('on');
   }

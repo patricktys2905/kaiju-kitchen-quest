@@ -21,7 +21,7 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w2-s9": [["me", "Brrr, the air up these ice steps tastes like snow."], ["mold", "Hehehe... hush, little moth. The cold keeps the light locked up. Stay. Sleep."], ["me", "Nuh-uh! Moths don't sleep at night. That's when the moon's awake!"]],
   // World 3: The Oven
   "w3-s2": [["me", "The Golem says my moon's in here! It's the Oven lamp, way, way up!"], ["me", "Wheee! The steam vents go WHOOSH and fling me right up! I like up! Up is where moons live!"]],
-  "w3-s3": [["me", "Twelve round muffin cups, and not a single one of them is glowing. Hmph!"], ["me", "The portal wants Burnt Croutons and Popped Kernels. Ooh, popcorn! It's like teeny fluffy clouds!"]],
+  "w3-s3": [["me", "Twelve round muffin cups, and not a single one of them is glowing. Hmph!"], ["me", "The portal wants Bacon Strips and Popped Kernels. Ooh, popcorn! It's like teeny fluffy clouds!"]],
   "w3-s4": [["n", "POP! POP! POP! Popcorn everywhere, and the Casserole Cliffs are crawling with monsters!"], ["me", "Under my wing, little Crumblet! There are more of them than there are stars!"], ["me", "The King Popcorn Popper lives at the very top. You hide, and I'll do the fireworks. Wheee!"]],
   "w3-s6": [[8, "Moth! Me see paper way up high. Paper say \"Recipe\". Me hope it cake."], ["me", "Ooh, Chocomunch! I hope it's moonlight! Quick, before time runs out! You stomp, I'll flutter!"]],
   "w3-s7": [["me", "Drip, drip, there's gravy everywhere! My wings are getting all glossy!"], ["me", "That chest up high has a key in it. There's gotta be a sponge around here to bounce me up. Sponges are so nice."]],
@@ -83,6 +83,14 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w10-s7": [[8, "Moth! Me hold sponge. Me no melt. Back of fridge nice and cold!"], ["me", "Hee, thanks, Chocomunch! That's the very last key chest up there!"], ["me", "BOING! Keys open doors, doors have windows, and windows have MOONS! Never gets old!"]],
   "w10-s8": [["me", "Every monster from every world, all at once? Eep, and it's sooo dark in here!"], ["foe", "Bzzt! Not for long! Party lights, ON! Go get 'em, moth!"], ["me", "Ooooh, sparkly! Thanks, Zapsy! FWOOSH!"]],
   "w10-s9": [["me", "This table goes on forever, all dusty and dark. There's not one candle on it. Aww."], ["n", "From the cake-tin throne, a voice grumbles: \"Turn off that glow, moth. Nobody's coming to my table.\""], ["me", "I'm coming! And I'm bringing the light! Flap flap!"]],
+  // World 11: The Midway.
+  "w11-s2": [["me", "Ooh! \"Guess which cup hides the light bulb!\" That one! Aw. That one? Aw. Hey, mister, your SLEEVE is glowing!"], ["me", "Hee! Bulbs can't keep secrets! And look, a Pretzel Contortionist showing off in a knot, like a bow on a present!"]],
+  "w11-s3": [["me", "Ooooh, a Gumball Gunner! A big glass ball full of teeny coloured moons! Is that the... nope. It just went Ka-Chunk at me!"], ["me", "And the prize box by the ring toss has TEETH, and a Whack-a-Churro popped up to giggle at me! Rude! Flap flap!"]],
+  "w11-s4": [[10, "Hmph. Moth. One of mine followed the flashy lights into Bumper Car Bay. Wrong lights. Glow it to the exit."], ["me", "Hi, little one! Follow MY glow, not the blinky ones! The Bumper Cupcakes bump into EVERYTHING, and their King honks at everybody!"], [10, "Head count's six again when you're done. Hmph. You're still the only nightlight I trust."]],
+  "w11-s6": [["me", "A Recipe Scroll, way up on a prize shelf! Is it a recipe for fireworks? Please be fireworks! Flap up before the clock runs out!"], ["me", "Eep! The Fry Basket Brawler spits hot oil and hollers \"Order Up!\" Sparkly, but OUCH! Some sparkles are just grumpy!"]],
+  "w11-s7": [["me", "Ooooh! A hundred Mothballs, and every one's got a glow! Is that the moon? Nope, it's me! And me! Hi, wobbly me!"], ["me", "A key chest twinkles on a hidden ledge in ALL the mirrors at once! Boing! Ooh, and a Carousel Macaron Pony on a shiny pole!"]],
+  "w11-s8": [["lo2", "Have at thee, coconut! Moth, hold thy lantern high! A knight cannot joust what he cannot see!"], ["me", "It's a sunny afternoon, Sir Crusty! Eep, the coconuts throw BACK! King Coconut Shy Lobber's cross, and a whole crowd's pouring in!"], ["lo2", "Then glow, squire, glow! We hold the lists till moonrise! When is moonrise?"]],
+  "w11-s9": [["me", "The big wheel! Bulbs, bulbs, bulbs, all the way up! I'm climbing up to say hi to every one! It's bulb-tastic!"], ["n", "The loudspeaker crackles: \"Step right up, little moth! Fireworks? In the AFTERNOON? Not at the Great Flosso's fair! Ta-daa!\""], ["me", "Aw! Then I'll wait! Ooh, a drum roll! Bonbon the Cannonball's popping out of a cannon! He's a firework with a helmet!"]],
 };
 
 export const QUIPS: Record<QuipKind, string[]> = {

@@ -186,8 +186,29 @@ export const ARC: Record<string, StoryLine[]> = {
     ["foe", "Save the second slice for the beet! I'm a GUEST now! Hmph!"],
     ["me", "And big brother says I'm Gobzilla LARGE now! He said it with his mouth full, but it COUNTS! RAWR!"],
   ],
+  "w11-open": [
+    ["n", "Act 3: The Great Food Festival! One golden envelope later, on a sunny hill covered in striped tents..."],
+    ["me", "WHOA! A doughnut as big as the SKY, and it's a RIDE! Gobzilla LARGE is going on EVERYTHING! RAWR!"],
+    ["me", "Hey, a sign! \"You must be THIS tall to ride.\" Aw, nuts! I'm one leaf too short! And big brother's already up there WAVING!"],
+    ["me", "Fine! I'll win so many prizes they'll HAVE to call me Gobzilla EXTRA LARGE! Outta my way, corn dogs!"],
+  ],
+  "w11-boss": [
+    ["boss", "Laaadies and gentle-snacks! Step right up to THE GREAT FLOSSO'S big top, where everybody's a winner! Mostly ME!"],
+    ["me", "You're the cheater! Fat pegs! Glued cans! And I SAW that height sign scoot up when I walked over!"],
+    ["boss", "Showmanship, my boy! Now watch the Wheel of Misfortune! It only ever lands on BAD luck! Abracadabra-cadabra!"],
+    ["me", "Then I'm un-rigging it with my FEET! Stomp count: FIVE! RAWR!"],
+  ],
+  "w11-after": [
+    ["boss", "Eep! My fluff! I'm all cone! Take your silly ribbon, then! First prize, Midway games. Hmph!"],
+    ["boss", "But the Showstopper's gonna hear about THIS! And wait till Granny Crumble gets you in the Blue Ribbon Barn! Toodle-oo!"],
+    ["n", "Hop, hop, hop! One teeny wisp of candy floss bounces out of the big top, squeaking all the way!"],
+    ["me", "A RIBBON! My first one EVER! Big brother, look, look, LOOK! I'm pinning it right on top of my leaves!"],
+    ["lo2", "Huzzah, berry! Thou hast won the favour of the tourney! 'Twas a tourney, yes?"],
+    ["me", "Hey! With the ribbon on top, I'm as tall as the SIGN! Gobzilla EXTRA LARGE! Almost!"],
+    ["me", "Everybody gets a turn wearing it! AFTER my ride. To the doughnut wheel, big brother! RAWR!"],
+  ],
 };
-export const NEMESIS: Record<"w1-elite" | "w2-elite" | "w3-elite" | "w4-elite" | "w5-elite" | "w6-elite" | "w7-elite" | "w8-elite" | "w9-elite" | "w10-elite", StoryLine[]> = {
+export const NEMESIS: Record<"w1-elite" | "w2-elite" | "w3-elite" | "w4-elite" | "w5-elite" | "w6-elite" | "w7-elite" | "w8-elite" | "w9-elite" | "w10-elite" | "w11-elite", StoryLine[]> = {
   "w1-elite": [
     ["foe", "Well, well! If it isn't Gobzilla JUNIOR! Lost your big brother, shrimp?"],
     ["me", "Brutus Beetroot! I'm a STRAWBERRY, ya big turnip!"],
@@ -237,5 +258,10 @@ export const NEMESIS: Record<"w1-elite" | "w2-elite" | "w3-elite" | "w4-elite" |
     ["foe", "Psst, Gobzilla! Fruitcake Knight up ahead. Big, crumbly, and totally nuts. Like YOU!"],
     ["me", "Brutus! You came to the FINAL fight?!"],
     ["foe", "Heard there's a feast after. Save me a seat, okay? NOT next to the sprouts! Hmph!"],
+  ],
+  "w11-elite": [
+    ["foe", "Psst, Gobzilla! Beet juice at my stall after, on the house! Jawbreaker Strongman up ahead. Rings that bell with ONE finger!"],
+    ["me", "Brutus! You've got your own STALL?! And I can't even lift the mallet. I'm too short for this whole fair!"],
+    ["foe", "So was I, till I grew roots! Go crack him, okay? I saved ya a stool. NOT next to the sprouts. Hmph!"],
   ],
 };

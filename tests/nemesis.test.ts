@@ -51,7 +51,7 @@ describe('nemeses', () => {
   });
   it('every nemesis, miniboss and champion uses all of its moves without errors', () => {
     const st = STAGES.find(s => s.id === '4-5')!;
-    expect(MINIS.length).toBe(90);
+    expect(MINIS.length).toBe(99);
     for (const k of [...NEMS, ...MINIS]) {
       const w = new World({ ...st, mobs: [], hazards: [] }, hero(0, 45), 3);
       w.hero.hp = w.hero.d.maxHp = 1e7; w.hero.x = 600;

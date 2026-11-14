@@ -83,6 +83,15 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w10-s7": [[0, "Mr. Dragon! Mr. Dragon! The last key's up on the ledge! Do the tiny puff again! Do it!"], ["me", "Tiny puff? Little one, watch THIS! FWOOOOSH! Ahem. Sponge, my oldest friend! BOING!"]],
   "w10-s8": [["lo2", "Hold out one last time, old dragon? Thou art older than this whole FRIDGE!"], ["me", "Last age joke, breadstick? Then here's my last answer! I hold out, and save room for dinner! FWOOSH!"]],
   "w10-s9": [["n", "A dusty voice echoes down the long, empty table: \"Who dares bring PARTY HATS to MY feast?!\""], ["me", "Hrrm. A whole banquet table, and not one plate on it. Proverb: \"An empty table is a sad table.\""], ["me", "Let us fix that! Gari, guard my seat! Hup hup!"]],
+
+  // World 11: The Midway.
+  "w11-s2": [["me", "Hook-a-duck! I hooked ducks at the first festival. One go, please! Hup! Hrrm. This duck is NAILED to the pond!"], ["me", "Proverb: \"A knot in the pretzel is a knot in the queue.\" The Pretzel Contortionist poses in one up ahead. I shall untie both!"]],
+  "w11-s3": [["me", "Proverb: \"Whoever queues for the ring toss queues for ever.\" Hrrm! These rings would not fit over a grain of rice!"], ["me", "A prize box that bites, and Whack-a-Churros underfoot! In my day, prizes behaved. Gumball Gunner, I have exact change. FWOOSH!"]],
+  "w11-s4": [[10, "Hmph. Dragon. Head count says five, and it should say six. This one got lost in the crowd. Walk it to the exit, or else."], ["me", "With honour, papa bear! Little one, hold my whisker. Bumper Cupcakes cannot steer, and their King blames everybody else!"], [10, "It called you sensei. Don't look at me. It's the candy floss, okay?"]],
+  "w11-s6": [["me", "A tower with a slide wrapped round it, like a roll that came undone! And a Recipe Scroll way up on the prize shelf. Hrrm!"], ["me", "Proverb: \"The clock does not queue.\" And who shouts \"Order Up!\" up there? Fry Basket Brawler, I ordered TEMPURA! Hup hup!"]],
+  "w11-s7": [["me", "Hrrm! In this mirror I look four hundred. In that one I am one very long noodle. Gari must NEVER see that one."], ["me", "The handsome mirror says a key chest sits on a ledge! Sponge, old friend, you came too! Whoa there, Carousel Macaron Pony! Boing!"]],
+  "w11-s8": [["lo2", "Have at thee, coconut! Stand aside, old dragon, thou art too ancient for the lists! Thou wert AT the first joust!"], ["me", "It was a festival, breadstick, and I was there! The coconuts throw BACK, and King Coconut Shy Lobber brought a whole crowd!"], ["lo2", "Then hold the lists, old dragon! Forsooth, I shall fetch thee a chair! And a blanket!"]],
+  "w11-s9": [["me", "A doughnut as tall as a pagoda! Proverb: \"The dragon who climbs the doughnut skips the queue.\" Hrrm. I made that one up just now."], ["n", "The loudspeaker crackles: \"Step right up, my antique friend! Nobody out-waits the Great Flosso! Ta-daa!\""], ["me", "Antique?! My soy sauce is older than your big top, sir! Wasabi with you, Bonbon the Cannonball? Out of that cannon! Hup hup!"]],
 };
 
 export const QUIPS: Record<QuipKind, string[]> = {

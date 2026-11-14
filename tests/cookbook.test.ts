@@ -34,10 +34,10 @@ const allRewards = (): CookReward[] => [...book.pages.flatMap(p => [cardReward(p
 const fill = (s: CookSave, pageId: string, level: 1 | 2 | 3, b = book) => { for (const k of b.pageOf && b.pages.find(p => p.id === pageId)!.kinds) { s.drops = { ...(s.drops ?? {}), [k]: 50 }; handIn(s, k, cardNeeds(k, b)[level - 1] - (s.cookbook?.[k] ?? 0), b); delete s.drops[k]; } };
 
 describe('Cookbook pages are built from the data', () => {
-  it('10 pages, 82 cards, every drop on exactly one page, both mimics where they first appear', () => {
-    expect(book.pages.map(p => p.id)).toEqual(['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']);
+  it('11 pages, 91 cards, every drop on exactly one page, both mimics where they first appear', () => {
+    expect(book.pages.map(p => p.id)).toEqual(['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11']);
     const all = book.pages.flatMap(p => p.kinds);
-    expect(all.length).toBe(82);
+    expect(all.length).toBe(91);
     expect(new Set(all).size).toBe(all.length);
     expect([...all].sort()).toEqual(Object.keys(DROPS).sort()); // pages cover exactly the monsters with drops
     for (const k of all) { expect(book.pageOf[k].kinds, k).toContain(k); expect(MOBS[k], k).toBeTruthy(); }
@@ -46,42 +46,44 @@ describe('Cookbook pages are built from the data', () => {
     for (const p of book.pages) { const w = WORLDS.find(x => x.id === p.world)!; expect(p.name).toBe(w.name); for (const k of p.kinds) expect([...w.pool.map(q => q[1]), w.mimic]).toContain(k); }
   });
 
-  it('a made-up eleventh world adds a page and a title by itself, and its kinds are classified from the stages', () => {
-    const w11 = { ...WORLDS[0], id: 11, name: 'The Lunch Line', pool: [[1, 'tray'], [2, 'spork'], [3, 'bun']], mimic: 'mimic' } as unknown as WorldDef;
+  it('a made-up twelfth world adds a page and a title by itself, and its kinds are classified from the stages', () => {
+    const w12 = { ...WORLDS[0], id: 12, name: 'The Lunch Line', pool: [[1, 'tray'], [2, 'spork'], [3, 'bun']], mimic: 'mimic' } as unknown as WorldDef;
     const drops = { ...DROPS, tray: ['Tray Corner', ''], spork: ['Spork Tine', ''] } as Record<string, unknown>;
-    const st = { ...STAGES[0], id: '11-1', world: 11, maps: [{ ...STAGES[0].maps![0], goal: { kind: 'collect', wants: [{ mob: 'tray', n: 3 }] } }] } as unknown as StageDef;
-    const b = buildCookbook([...WORLDS, w11], [...STAGES, st], drops);
-    expect(b.pages.length).toBe(11);
-    expect(b.pages[10]).toMatchObject({ id: '11', world: 11, name: 'The Lunch Line', kinds: ['tray', 'spork'] }); // bun and the mimic stay on page 1
+    const st = { ...STAGES[0], id: '12-1', world: 12, maps: [{ ...STAGES[0].maps![0], goal: { kind: 'collect', wants: [{ mob: 'tray', n: 3 }] } }] } as unknown as StageDef;
+    const b = buildCookbook([...WORLDS, w12], [...STAGES, st], drops);
+    expect(b.pages.length).toBe(12);
+    expect(b.pages[11]).toMatchObject({ id: '12', world: 12, name: 'The Lunch Line', kinds: ['tray', 'spork'] }); // bun and the mimic stay on page 1
     expect(b.pages.flatMap(p => p.kinds).sort()).toEqual(Object.keys(drops).sort());
     expect(b.spare.has('spork')).toBe(true); expect(b.spare.has('tray')).toBe(false); // no exit asks for a spork: 35%, 1 / 3 / 8
     expect(baseDropChance('spork', b)).toBe(SPARE_DROP_CHANCE); expect(baseDropChance('tray', b)).toBe(DROP_CHANCE);
     expect(cardNeeds('spork', b)).toEqual([1, 3, 8]); expect(cardNeeds('tray', b)).toEqual([1, 5, 12]);
-    expect(b.wantedBy.tray).toEqual(['11-1']);
-    expect(titleName('w11', b)).toBe('Lunch Line Cook');
-    expect(pageReward(11, 2)).toEqual({ crumbs: 11000, stamp: 'gold', title: 'w11' });
-    // the old ten pages are unchanged, and a book with the new page is not complete until page 11 is
-    expect(b.pages.slice(0, 10)).toEqual(book.pages);
+    expect(b.wantedBy.tray).toEqual(['12-1']);
+    expect(titleName('w12', b)).toBe('Lunch Line Cook');
+    expect(pageReward(12, 2)).toEqual({ crumbs: 12000, stamp: 'gold', title: 'w12' });
+    // the old eleven pages are unchanged, and a book with the new page is not complete until page 12 is
+    expect(b.pages.slice(0, 11)).toEqual(book.pages);
     const s = blank(); for (const p of book.pages) fill(s, p.id, 3, b);
     expect(titlesEarned(s, b)).not.toContain('all');
-    fill(s, '11', 3, b);
+    fill(s, '12', 3, b);
     expect(titlesEarned(s, b)).toEqual([...b.pages.map(p => `w${p.id}`), 'all']);
   });
 
   it('titles are built from the world names', () => {
-    expect(book.pages.map(p => titleName(`w${p.id}`))).toEqual(['Countertop Cook', 'Fridge Cook', 'Oven Cook', 'Pantry Cook', 'Sink Cook', 'Dining Room Cook', 'Backyard BBQ Cook', 'Garden Cook', 'Supermarket Cook', 'Feast Cook']);
+    expect(book.pages.map(p => titleName(`w${p.id}`))).toEqual(['Countertop Cook', 'Fridge Cook', 'Oven Cook', 'Pantry Cook', 'Sink Cook', 'Dining Room Cook', 'Backyard BBQ Cook', 'Garden Cook', 'Supermarket Cook', 'Feast Cook', 'Midway Cook']);
     expect(titleName('all')).toBe('Head Chef');
     for (const bad of ['w99', 'w', '', 'boss', null, undefined]) expect(titleName(bad)).toBe('');
   });
 });
 
 describe('the never-wanted kinds drop at 35%', () => {
-  it('the classification matches the stages: a kind is spare exactly when no story exit asks for it (26 today)', () => {
+  it('the classification matches the stages: a kind is spare exactly when no story exit asks for it (30 today)', () => {
     const wanted = new Set<string>();
     for (const s of STAGES) for (const m of s.maps ?? []) if (m.goal?.kind === 'collect') for (const q of m.goal.wants) wanted.add(q.mob);
     expect(SPARE.sort()).toEqual(Object.keys(DROPS).filter(k => !wanted.has(k)).sort());
     expect(neverWantedKinds().sort()).toEqual([...SPARE].sort());
-    expect(SPARE.length).toBe(26);
+    expect(SPARE.length).toBe(30);
+    for (const k of ['snowcone', 'churro', 'coconut', 'pretzel']) expect(SPARE, k).toContain(k); // World 11: its shooter, burrower, turret and sniper
+    for (const k of ['cadet', 'toffee', 'floss', 'bumper', 'jawbreaker']) expect(SPARE, k).not.toContain(k);
     for (const k of ['ant', 'pepper', 'garlic', 'mimic', 'cereal', 'teapot', 'duck']) expect(SPARE, k).toContain(k);
     for (const k of Object.keys(DROPS)) expect(book.wantedBy[k]?.length ?? 0, k).toBe(book.spare.has(k) ? 0 : STAGES.filter(s => stageWants(s)[k]).length);
   });
@@ -92,7 +94,7 @@ describe('the never-wanted kinds drop at 35%', () => {
     for (const k of WANTED) expect(baseDropChance(k), k).toBe(0.2);
     expect(baseDropChance('toast')).toBe(0.2); // a boss has no drop at all; the number is never used for it
     const src = fs.readFileSync('src/sim/world.ts', 'utf8');
-    expect(src).toContain('quest ? QUEST_DROP_CHANCE : baseDropChance(m.kind)');
+    expect(src).toContain('quest ? QUEST_DROP_CHANCE : garnishChance(baseDropChance(m.kind)');
     expect(src).not.toMatch(/\bDROP_CHANCE\b(?<!QUEST_DROP_CHANCE)/); // the plain constant is only reached through baseDropChance
   });
 
@@ -221,19 +223,19 @@ describe('cards: levels, hand-ins and one-off rewards', () => {
     expect(BOOK_REWARD).toEqual({ crumbs: 0, title: 'all' });
   });
 
-  it('the whole book: 358 drops for one star everywhere, 880 for two, 170,190 crumbs; filling it pays exactly that, once', () => {
-    expect(bookTotals()).toEqual({ cards: 82, oneStarDrops: 358, twoStarDrops: 880, crumbs: 170190 });
+  it('the whole book: 395 drops for one star everywhere, 972 for two, 206,220 crumbs; filling it pays exactly that, once', () => {
+    expect(bookTotals()).toEqual({ cards: 91, oneStarDrops: 395, twoStarDrops: 972, crumbs: 206220 });
     const s = blank({ drops: Object.fromEntries(Object.keys(DROPS).map(k => [k, 20])) });
     let paid = 0, handed = 0;
     for (const k of Object.keys(DROPS)) { const r = handIn(s, k); paid += r.crumbs; handed += r.handed; }
-    expect(handed).toBe(880); expect(paid).toBe(170190); expect(s.crumbs).toBe(170190);
+    expect(handed).toBe(972); expect(paid).toBe(206220); expect(s.crumbs).toBe(206220);
     expect(s.cookbookPaid).toEqual({ ...Object.fromEntries(book.pages.map(p => [p.id, 2])), all: 1 });
     // again, with a refilled bag: nothing more to give, nothing more paid
     s.drops = Object.fromEntries(Object.keys(DROPS).map(k => [k, 20]));
     for (const k of Object.keys(DROPS)) expect(handIn(s, k)).toMatchObject({ handed: 0, crumbs: 0 });
     expect(handInSpares(s, 'all', STAGES)).toEqual([]); expect(settleCookbook(s)).toEqual([]);
-    expect(s.crumbs).toBe(170190);
-    expect(bookView(s)).toMatchObject({ complete: true, paid: true, goldCover: true, badge: 0, cards: 82, discovered: 82, oneStar: 82, twoStar: 82 });
+    expect(s.crumbs).toBe(206220);
+    expect(bookView(s)).toMatchObject({ complete: true, paid: true, goldCover: true, badge: 0, cards: 91, discovered: 91, oneStar: 91, twoStar: 91 });
   });
 });
 
@@ -290,14 +292,14 @@ describe('pages, the whole book and titles', () => {
   it('the whole book gives Head Chef and the gold cover when every page has two stars', () => {
     const s = blank();
     for (const p of book.pages.slice(0, -1)) fill(s, p.id, 3);
-    fill(s, '10', 2);
+    fill(s, book.pages[book.pages.length - 1].id, 2);
     expect(titlesEarned(s)).toEqual(book.pages.slice(0, -1).map(p => `w${p.id}`));
     expect(bookView(s)).toMatchObject({ complete: false, paid: false, goldCover: false });
-    const last = book.pages[9].kinds;
+    const last = book.pages[book.pages.length - 1].kinds;
     for (const k of last.slice(1)) { s.drops = { [k]: 20 }; handIn(s, k); }
     s.drops = { [last[0]]: 20 };
     const r = handIn(s, last[0]);
-    expect(r.paid.map(p => [p.source, p.id, p.level])).toEqual([['card', last[0], 3], ['page', '10', 2], ['book', 'all', 1]]);
+    expect(r.paid.map(p => [p.source, p.id, p.level])).toEqual([['card', last[0], 3], ['page', book.pages[book.pages.length - 1].id, 2], ['book', 'all', 1]]);
     expect(r.paid[2].reward).toEqual({ crumbs: 0, title: 'all' });
     expect(titlesEarned(s)).toContain('all');
     expect(bookView(s)).toMatchObject({ complete: true, paid: true, goldCover: true });
@@ -466,7 +468,7 @@ describe('what a card shows', () => {
   it('every card carries its monster, drop, home world, the stages that ask for it, and its weak / resist elements', () => {
     const s = blank({ drops: { bun: 2 }, cookbook: { bun: 3 } });
     const view = bookView(s, []);
-    expect(view.pages.length).toBe(10); expect(view.cards).toBe(82); expect(view.discovered).toBe(1);
+    expect(view.pages.length).toBe(11); expect(view.cards).toBe(91); expect(view.discovered).toBe(1);
     for (const p of view.pages) for (const c of p.cards) {
       const t = MONSTER_TYPES[typeOf(c.kind)];
       expect(c).toMatchObject({ page: p.id, world: p.world, worldName: p.name, name: MOBS[c.kind].name, art: MOBS[c.kind].art, dropName: DROPS[c.kind]![0], dropIcon: `drop-${c.kind}`, weak: t.weakTo, resist: t.resists });
@@ -479,7 +481,7 @@ describe('what a card shows', () => {
     expect(bun).toMatchObject({ level: 1, handed: 3, bag: 2, usable: 2, canAdvance: true, progress: 0.5, next: { level: 2, need: 5, left: 2, reward: { crumbs: 90 } } });
     expect(view.badge).toBe(1); expect(view.pages[0]).toMatchObject({ canHandIn: 1, canAdvance: 1, spares: 2 });
     expect(cardView(blank({ drops: { bun: 1 }, cookbook: { bun: 3 } }), 'bun')).toMatchObject({ usable: 1, canAdvance: false }); // one more is not enough for a star
-    expect(cardView(s, 'toast')).toBeNull(); expect(cardView(s, 'nope')).toBeNull(); expect(pageView(s, '11')).toBeNull();
+    expect(cardView(s, 'toast')).toBeNull(); expect(cardView(s, 'nope')).toBeNull(); expect(pageView(s, '12')).toBeNull();
   });
 });
 
@@ -501,7 +503,7 @@ describe('saves: old ones load, odd ones are repaired', () => {
     expect(mod.save.crumbs).toBe(777); expect(mod.save.drops).toEqual({ bun: 4, ant: 2 });
     expect(mod.save.cookbook).toBeUndefined(); expect(mod.save.cookbookPaid).toBeUndefined(); expect(mod.save.title).toBeUndefined();
     const v = mod.cookbookView();
-    expect(v).toMatchObject({ discovered: 0, complete: false, goldCover: false, titles: [], title: null, cards: 82 });
+    expect(v).toMatchObject({ discovered: 0, complete: false, goldCover: false, titles: [], title: null, cards: 91 });
     expect(fs.readFileSync('src/save.ts', 'utf8')).toContain("const KEY = 'kkq-save-v3'");
     // and it can use the book straight away
     expect(mod.cookHandIn('bun').handed).toBe(4);
@@ -541,7 +543,7 @@ describe('saves: old ones load, odd ones are repaired', () => {
       }
       expect(mod.save.title).toBeUndefined();
       const view = mod.cookbookView();
-      expect(view.cards).toBe(82);
+      expect(view.cards).toBe(91);
       for (const p of view.pages) for (const c of p.cards) expect([c.handed, c.bag, c.usable, c.safe, c.progress].every(n => Number.isFinite(n) && n >= 0), c.kind).toBe(true);
       expect(() => { mod.cookHandInSpares('all'); mod.cookHandIn('bun'); mod.chooseTitle('all'); mod.cookSpendWarning({ bun: 1 }); }).not.toThrow();
     }

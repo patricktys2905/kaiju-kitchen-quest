@@ -64,12 +64,25 @@ Each `WorldDef` holds its art keys, `baseLv` (monster level of stage 1, each sta
 | 8 | The Garden | 81-90 | `pollen` (sting + sticky patch) | The Mystery Meatloaf (`meatloaf`: borrowed breath / spores / crumbs, chunk summons) |
 | 9 | The Supermarket | 91-100 | `chill` (push + ice slick) | The Tupperwraith (`tupper`: lid boomerangs, murky puddles, lid summons) |
 | 10 | The Feast of the Forgotten (Act 2 finale) | 101-110 | `chill` | Old Fruitcake (`fruitcake`: every lieutenant's trick + candied fruit storm) |
+| 11 | The Midway (Act 3 opener) | 111-120 | `wax` skinned as Caramel Drip (`hazardSkin` / `hazardName`) | The Great Flosso (`flosso`: cane swipes, Sugar Shower, Floss Wisp helpers, and in the final phase the Wheel of Misfortune: the pick is made at wind-up, shown as `wheel-rain` / `wheel-summon` / `wheel-roar` in the move string and drawn by `drawWheel` in GameScene) |
 
 The level cap is `MAX_LEVEL` in `stats.ts`. World numbers can have two digits (beat regexes use `\d+`).
-Writer briefs: `docs/WORLD5-BRIEF.md` … `docs/WORLD10-BRIEF.md`.
+Writer briefs: `docs/WORLD5-BRIEF.md` … `docs/WORLD11-BRIEF.md`. Act 3 plan (five worlds, 11-15): `docs/ACT3-OUTLINE.md`.
+Adding a world: new monster kinds go at the END of `MOBS` (online snapshots send a kind as its index); per-world scene looks
+are data tables in GameScene (`BOSS_ROOM_LOOK`, `RAIN_LOOK`, `WORLD_MUSIC`); map page in `MAPS` / `MAP_POS` (`camp.ts`);
+credits list worlds by act (`credits.ts`); the Cookbook page, Free Play themes and Boss Rush pick a new world up from data.
+World 11 scripts: `scripts/w11-jobs.mjs`, `w11-stills-jobs.mjs` (art), `w11-ui-shot.mjs`, `w11-duels.ts`, `w11-flosso.ts`.
 
 ### Story stages are a run of maps (`stages.ts` `genMaps`)
 `STAGES` is built once from `genStage(world, n)`, seeded per stage, so a stage is laid out the same for everyone.
+**Same in every JavaScript engine**: generation may only use the seeded integer RNG and `shuffle()` (`src/sim/shuffle.ts`).
+Never `sort(() => r() - 0.5)`: a random comparator made every stage differ between Node (tests, sweeps, stage facts) and
+browsers until this was fixed. `tests/stage-fingerprint.test.ts` pins a hash of every stage, boss room and Free Play sample
+(re-pin after an INTENDED layout change: `npx vite-node scripts/stage-fingerprint.ts --write`, then regenerate
+`docs/stage-facts.md` and run `npx vite-node scripts/story-wants-check.ts`); the browser check is `npx vite --port 5173
+--strictPort` then `node scripts/stage-fingerprint-browser.mjs 5173 edge chrome`. Generator rules: `spreadHazards` (no hazard
+at a ladder foot or within 300 px of another), `WorldDef.sure` ([stage, kind]: a monster guaranteed present, e.g. churros in
+11-3 for the story), the scroll on the top floor of map 2 (`tests/scroll.test.ts`, `tests/stage-rules.test.ts`).
 Every story stage, the Daily Dungeon and the bonus stages come from `genMaps`:
 
 - **Maps**: 2 maps for stages 1-3 and for the world boss stage, 3 for the rest, then a boss room, all side by side in one
@@ -120,7 +133,7 @@ Tests: `tests/drops.test.ts`, `tests/world.test.ts` (every platform reachable), 
   earns nothing; a SKIP TO BOSS run can reach A at best. Constants: `RANK` in `world.ts`; parts: `rankParts`. Measure with
   `scripts/rank-probe.ts` then `scripts/rank-rescore.ts` (tests: `tests/rank.test.ts`).
 - **Stage challenges** (`src/sim/challenges.ts`): 3 per story stage, each pays crumbs and a box once and gives a star.
-- **Secret bonus stages** (`BONUS_STAGES`, `S-1` … `S-10`, button on the stage card): opened by the World Key from that
+- **Secret bonus stages** (`BONUS_STAGES`, `S-1` … `S-11`, button on the stage card): opened by the World Key from that
   world's stage 7 chest, or by `STARS_FOR_SECRET` challenge stars in that world. A bonus stage is the world's stage 9
   layout with a dozen extra crates and jars, no hazards or objective, an extra elite in the boss room, and one runaway
   pressure cooker in the second map (it can't be hurt, your hits shove it, it explodes near anything: lure monsters in).
@@ -220,8 +233,9 @@ limited cooldown reduction. Lobbed hero shots remember the height they were thro
 ledges above it (`tests/berry.test.ts`). Preview: `node scripts/skill-shot.mjs [species...]` → `shots/skills-sheet.png`.
 
 ### Skill trees (`tree.ts`)
-3 paths × 7 rows per kaiju (stat, stat, a new skill, stat, an upgrade to an original skill, a capstone, a 10-rank
-mastery): more points than a max-level kaiju earns, so you choose. Rows open at hero levels (`ROW_LV`, `nodeLv`); the
+3 paths × 7 rows per kaiju (stat, stat, a new skill, stat, an upgrade to an original skill, a capstone, a mastery
+of 10 ranks plus 4 per world past World 10, gated through that world's levels: `masteryRanks()` follows `MAX_LEVEL`, and
+`TUNE.masteryRamp` grows monsters past Lv 110 to absorb it): more points than a max-level kaiju earns, so you choose. Rows open at hero levels (`ROW_LV`, `nodeLv`); the
 first row opens at Lv 1. New skills reuse proven skill templates with their own numbers. 3 skill buttons: pick from the 3
 originals + learned tree skills (`HeroProfile.loadout`, Skills tab → ⚔ SKILLS); a newly learned tree skill goes onto a
 free button. The Recipe Scroll refunds tree points. Tests: `tests/tree.test.ts`; screen: `node scripts/tree-shot.mjs`.
@@ -286,6 +300,9 @@ its own nemesis, gear and 2 signature legendaries. Writer briefs for the later e
   tease of Act 2's villains, THE LEFTOVERS (`finale.ts` `HOOK`, speakers `lo` / `lo2`, still-w5-hook). After 10-10,
   `w10-after` (still-w10-cure, then the shared still-w10-end), the Act 2 credits (`showCredits(sp, done, 2)`), then
   `w10-hook` (`HOOK2`, still-w10-hook). The Leftovers lieutenants are the bosses of Worlds 6-9.
+- **Layout** (`src/ui/story.ts`, `src/ui/place.ts` `stillRect`): a painting stands as a whole panel ABOVE the dialogue box
+  (blurred copy behind it), never under the box; with a painting showing, your kaiju stands far left and other speakers are
+  small busts at the right end of the box. Check with `node scripts/story-shot.mjs --jobs "<species>:<beats>" --size 844x390`.
 - **Painted stills** (`stillFor`): per kaiju `still-<sp>-intro` and `still-<sp>-cliff` (the Sink cliffhanger); shared
   `still-w<N>-open|boss|cure`; shared `still-w<N>-s<n>` for the short scenes (the left third is kept clear for your
   kaiju's portrait); per kaiju `still-<sp>-w<N>-elite` for the stage 5 beat (both characters are painted in, so their
@@ -333,7 +350,19 @@ hand-in that would break a SKIP TO BOSS you can afford asks HAND IN / KEEP (`ski
 breaks one. Save fields `cookbook`, `cookbookPaid`, `title` (all optional, repaired on load). The chosen title shows on
 the Hero tab and to friends online (sent as an id). Floor pickups have their own id counter so drop counts can never
 shift monster behaviour. Tests: `tests/cookbook.test.ts`, `tests/cookbook-ui.test.ts`; screens:
-`node scripts/cookbook-shot.mjs` (needs a dev server already running). Next phase: the Garnish slot (same spec).
+`node scripts/cookbook-shot.mjs` (needs a dev server already running).
+**Garnish** (`src/sim/garnish.ts`, `src/ui/garnish.ts`): on a card with one star, CANDY IT turns `GARNISH_COST` of that drop
+into a garnish, owned for good, one worn per kaiju (`save.garnishes`, `HeroProfile.garnish`). It shows as a small ringed
+badge next to the kaiju's NAME (HUD name plate `setHudGarnish`, teammate rows, in-stage name tags, Hero tab, online lobby;
+white ring, gold at two stars). It is not drawn on the kaiju: a head-worn version was built and rejected as looking odd.
+It gives no fighting power: `derive()` never sees it. Its one effect, `GARNISH_LUCK`, raises its own monster's plain drop
+roll, never the roll of a drop the map's exit is still collecting (`killMob`), so it cannot speed up an exit. GameScene
+must call `setWorldGarnishes` after every `new World` (it does, in `buildStage`); online kits carry `garnish` /
+`garnishGold`. Tests: `tests/garnish.test.ts`; screens `scripts/garnish-shot.mjs`, badge sheet `scripts/garnish-sheet.mjs`;
+measure with `scripts/garnish-probe.ts` or `GARNISH=<kind>|auto` on `balance.ts`.
+Badge icons are cleaned sprites `gb-<kind>.webp` (the drop's main body only, no sparks or puddles) fitted to their measured
+shape (`src/ui/garnishBadge.ts`, `garnishBounds.ts`): after adding or changing drop art run `node scripts/garnish-bounds.mjs`
+then `npx vite-node scripts/garnish-sheet.ts` and look at the sheet (`tests/garnish-badge.test.ts` fails if a drop has none).
 
 ## Camp, save and settings
 - **Camp** (`src/ui/camp.ts`): tabs Map (world map, stage card with challenges, difficulty, buddy, online), Free Play,

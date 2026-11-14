@@ -1,8 +1,8 @@
-// Boss signature weapons: every world boss drops one weapon made for each kaiju (10 x 20 = 200). Each has its own gear
+// Boss signature weapons: every world boss drops one weapon made for each kaiju (11 x 20 = 220). Each has its own gear
 // skill: one of 20 styles (no kaiju gets the same style twice; no boss gives two kaiju the same one) with the boss's element.
 // Items: items.ts (BASES 'bw-<boss>-<ref>'); skills: gear.ts (GEAR); art: scripts/bossgear-jobs.mjs; drops: save.ts finishStage.
 
-export const BOSS_ORDER = ['toast', 'golem', 'dragon', 'jar', 'moldking', 'stale', 'brussels', 'meatloaf', 'tupper', 'fruitcake'] as const;
+export const BOSS_ORDER = ['toast', 'golem', 'dragon', 'jar', 'moldking', 'stale', 'brussels', 'meatloaf', 'tupper', 'fruitcake', 'flosso'] as const;
 /** kaiju (in a fixed order) -> [art ref, weapon noun] */
 export const BW_KAIJU: [number, string, string][] = [
   [0, 'gob', 'Club'], [10, 'blue', 'Hammer'], [11, 'pizza', 'Blade'], [4, 'moth', 'Wand'], [1, 'squid', 'Staff'], [2, 'crab', 'Pincers'], [5, 'toast', 'Daggers'],
@@ -14,6 +14,7 @@ export const BW_BOSS: Record<string, [string, string, string]> = {
   toast: ['Toast King\'s', 'Burnt', 'burn'], golem: ['Frostbite', 'Frozen', 'freeze'], dragon: ['Grease Dragon', 'Dragonfire', 'burn'],
   jar: ['Cookie Jar', 'Cookie', 'crumbs'], moldking: ['Mold Crown', 'Spore', 'poison'], stale: ['Stale Knight', 'Stale', 'shatter'],
   brussels: ['Baron\'s', 'Sprout', 'launch'], meatloaf: ['Mystery', 'Gravy', 'glue'], tupper: ['Tupperwraith', 'Phantom', 'pull'], fruitcake: ['Fruitcake', 'Candied', 'heal'],
+  flosso: ["Showman's", 'Candy Floss', 'glue'],
 };
 export const ALL_STYLES = ['throw', 'lob', 'roll', 'slam', 'rain', 'boomerang', 'burst', 'trap', 'orbit', 'dash', 'chain', 'meteor', 'vortex', 'turret', 'spin', 'wave', 'shield', 'barrage', 'pillar', 'bounce'] as const;
 export const STYLE_NAME: Record<string, string> = {

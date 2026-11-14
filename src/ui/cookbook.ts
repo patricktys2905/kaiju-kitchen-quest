@@ -11,6 +11,7 @@ import { ELEMENT_INFO } from '../sim/elements';
 import { BONUS_STAGES, STAGES } from '../sim/stages';
 import { listText, paidSummary, rewardLine } from './cookbookText';
 import { elHtml } from './elementUi';
+import { garnishBadge, garnishCardHtml, garnishOverlay } from './garnish';
 
 /** the page shown (a page id), the card opened, the hand-in waiting for HAND IN / KEEP, the title picker */
 let pageId: string | null = null, openKind: string | null = null, askKind: string | null = null, picking = false;
@@ -64,7 +65,7 @@ export function cookbookHead(): string {
 
 function cardHtml(c: CardView): string {
   const prog = c.next ? `${c.handed}/${c.next.need}` : 'done';
-  return `<div class="cbcard ${c.discovered ? '' : 'unk'} ${c.goldBorder ? 'gold' : ''} ${c.canAdvance ? 'adv' : ''}" data-cb="card:${c.kind}">
+  return `<div class="cbcard ${c.discovered ? '' : 'unk'} ${c.goldBorder ? 'gold' : ''} ${c.canAdvance ? 'adv' : ''}" data-cb="card:${c.kind}">${garnishBadge(c.kind)}
     <b class="nm">${c.discovered ? c.name : '???'}</b>
     <div class="mid"><div class="pic">${img(c.art)}</div>
       <div class="rt">${c.discovered ? starsHtml(c.stars) : ''}${c.discovered || c.bag ? `<span class="dr ${c.bag ? '' : 'none'}">${img(c.dropIcon)}<u>×${c.bag}</u></span>` : ''}</div></div>
@@ -95,6 +96,7 @@ function detailHtml(c: CardView): string {
       ${warn}
       <div class="btns">${c.usable ? `<button class="pill go" data-cb="hand:${c.kind}">HAND IN ${c.usable}</button>` : `<button class="pill" disabled>${c.level >= 3 ? 'CARD COMPLETE' : c.next ? `NEED ${c.next.left} MORE` : ''}</button>`}<button class="pill" data-cb="back">◀ BACK</button></div>
     </div>
+    ${garnishCardHtml(c.kind, known)}
   </div>`;
 }
 
@@ -123,7 +125,7 @@ export function cookbookBody(): string {
   const ff = fanfare; fanfare = '';
   return `<div class="cb ${book.goldCover ? 'goldbook' : ''}">${picker}<div class="cbpages">${chips}</div>${head}
     ${open ? detailHtml(open) : `<div class="cbgrid">${pg.cards.map(cardHtml).join('')}</div>`}
-    ${askKind && ask ? askHtml(ask) : ''}${ff}</div>`;
+    ${askKind && ask ? askHtml(ask) : ''}${ff}${garnishOverlay()}</div>`;
 }
 
 export interface CookClick { /** a line for the camp's toast */ flash?: string; /** switch the camp to Bag → Cookbook */ show?: boolean }

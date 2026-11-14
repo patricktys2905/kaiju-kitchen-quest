@@ -60,7 +60,7 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w7-s8": [["me", "Ice, sodas, and maybe a chilled butter dish? Nope. Pickles. It's always pickles."], ["me", "Monsters pouring in, and a King Corn Cob Cannon popping off at the end? Hold out, bat, keep moving!"]],
   "w7-s9": [["n", "From the Grill Summit, a voice booms: \"ATTEN-TION! The Golden Butter goes on the corn at SUNDOWN!\""], ["me", "Sundown? Heh. That's my favourite time to work. Up the coals we go!"]],
   // World 8: The Garden.
-  "w8-s2": [["me", "Neat rows of veggies with nowhere to hide. Lousy for sneaking, great for a getaway."], ["n", "Uh-oh! The Snapdragon up ahead snaps in its sleep!"], ["me", "Heh. A guard dog made of flowers. I'll grab my Ladybug Spots and tiptoe, thanks."]],
+  "w8-s2": [["me", "Neat rows of veggies with nowhere to hide. Lousy for sneaking, great for a getaway."], ["n", "Uh-oh! The Snapdragon up ahead snaps in its sleep!"], ["me", "Heh. A guard dog made of flowers. I'll grab my Silk Threads and tiptoe, thanks."]],
   "w8-s3": [["me", "Big flowers, big pollen. Ah... AH-CHOO! Great. A thief who sneezes."], ["me", "And a lunchbox in the tulips? With TEETH? Rookie disguise, pal. I'd have used a flowerpot."]],
   "w8-s4": [[10, "Hmph. Bat. My Crumblet wants to see a real pumpkin. Walk it through the patch. Gently."], ["me", "Garden tour, coming right up! Stick close, kid. And no swiping pumpkins. They're heavier than they look."]],
   "w8-s6": [["me", "A Recipe Scroll at the top of a beanstalk? Heh. A classic fairytale heist."], ["lo2", "Unhand yon scroll, varlet! The Meatloaf guardeth it! He knoweth not why, but he guardeth it!"], ["me", "A guard who doesn't know what he's guarding? Easiest mark ever. Up, grab, before time runs out!"]],
@@ -83,6 +83,14 @@ export const BEATS: Record<string, StoryLine[]> = {
   "w10-s7": [["me", "Jars nobody's opened since Grandma was a crumb. Heh. A vault full of vaults."], ["me", "Last secret chest of my career, folks. Bounce, swipe, and take a bow. Ka-CHING!"]],
   "w10-s8": [[11, "Beep beep! Special delivery! One extra pair of claws for the last stand, express!"], ["me", "Heh. We hold the line, Pizza. Then you can deliver us all to a feast."], [11, "Five stars, bat! I'm bringing extra garlic bread!"]],
   "w10-s9": [["lo", "Heh heh. Bring me that Butter, little thief. My long table's been empty for YEARS."], ["me", "Empty, huh? Heh. Not for long, pal. Up the table, wings tucked!"]],
+  // World 11: The Midway.
+  "w11-s2": [["me", "Knock down the milk bottles, win a bear. Heh. Bottom bottle's full of lead, and the ball's stuffed with fluff."], ["me", "This whole fair's one big con-fection. I'd be insulted if it weren't so sloppy. Grandma rigged better stalls in her SLEEP."], ["me", "Pretzel Contortionist's showing off its knots at the end of the flags. Heh. I've picked locks twistier than that."]],
+  "w11-s3": [["me", "Heh. Rings too small and pegs on a tilt, and the prize box up front has teeth. Amateur hour on Ring Toss Row."], ["me", "Whack-a-Churros yelling \"Missed me!\" and a Gumball Gunner hungry for coins? Keep your wallets in your crusts, folks."]],
+  "w11-s4": [[10, "Hmph. Bat. A Crumblet of mine got lost in the crowd by the bumper cars. Walk it to the exit. And NO pockets."], ["me", "I'm RETIRED, Papa. Uncle Toastbat's fairground tour, kid! Hold my wing. Those Bumper Cupcakes drive like getaway rookies."], [10, "Hmph. Retired. I'm counting its pocket money when you get back."]],
+  "w11-s6": [["me", "A Recipe Scroll on the top shelf by the helter-skelter, and a clock ticking. Heh. Up, grab, gone. That's just exercise."], ["me", "Fry Basket Brawler's yelling \"Order Up!\" and spitting hot oil. Easy, pal. I've already been toasted once."]],
+  "w11-s7": [["me", "Heh. Forty Toastbats in forty mirrors, and every one of 'em looks guilty. Relax, fellas, we're retired."], ["me", "Key chest on a hidden ledge? I'm only LOOKING. From up close. And a Carousel Macaron Pony on guard. Cute security."]],
+  "w11-s8": [["lo2", "Have at thee, coconut! Stand back, thief! These lists are for honest knights!"], ["me", "It's a coconut shy, Sir Snitch-a-lot. They throw back, King Coconut Shy Lobber's sore about it, and here comes the mob."], ["lo2", "Honest work at last, varlet! Hold fast, and I shall cheer thee from the rail! Tilt! TILT!"]],
+  "w11-s9": [["me", "Giant doughnut wheel, and the big top's right behind it. Heh. I always did my best work up high."], ["n", "The loudspeaker crackles: \"Step right up, little toast! Keep those wings where I can see them! Ta-daa!\""], ["me", "Takes a crook to spot a crook, pal. And Bonbon the Cannonball, shot out of a cannon in a crash helmet? Now THAT'S a getaway."]],
 };
 
 export const QUIPS: Record<QuipKind, string[]> = {

@@ -177,8 +177,29 @@ export const ARC: Record<string, StoryLine[]> = {
     ["me", "One, two, three, four, five, Littlest, bird, ten strays, a bunch of Leftovers and one old Fruitcake. Hmph."],
     ["me", "Everybody's counted. Now NAP. ...Okay, fine. Cake first."],
   ],
+  "w11-open": [
+    ["n", "Act 3: The Great Food Festival! One golden envelope, six Crumblets, and one papa bear who still hasn't had his nap..."],
+    ["me", "Head count! One, two, three, four, five, and the Littlest on my ear. Six. Everybody holds the string. Hmph."],
+    ["me", "Balloons everywhere, and Corn Dog Cadets marching right through my line. This whole hill was built to lose muffins in. Grrr."],
+    ["me", "First prize at that stall is a PILLOW. Nine folks threw, nine missed, and the cans never wobbled. Fair's fair? Not this fair."],
+  ],
+  "w11-boss": [
+    ["boss", "Step right up, my boy! A papa bear with six little muffins and bags under his eyes! Win a PILLOW from the Great Flosso!"],
+    ["me", "Nine folks threw at your cans and not one wobbled. Your jelly bean jar's got a false bottom. I counted every cheat, cloud."],
+    ["boss", "Showmanship! Spin the Wheel of Misfortune! Whatever you count on, it lands on something WORSE! Abracadabra-cadabra!"],
+    ["me", "Six of mine, one of you. I like those numbers. Kids, hold the string and cover your ears. GRRRAAAH!"],
+  ],
+  "w11-after": [
+    ["boss", "Eep! I've shrunk! I'm smaller than your Littlest! Fine, take your silly ribbon! First prize. No pillow! There never WAS a pillow!"],
+    ["boss", "The Showstopper will hear about this! And Granny Crumble judges by the BOOK in the Blue Ribbon Barn, bear! Toodle-oo!"],
+    ["me", "A ribbon. Hmph. Head count first. One, two, three, four, five, ear. Six. Good."],
+    ["me", "The Littlest wants to wear it. So does number two. So do ALL of 'em. FINE. Six turns, and I'm timing every one of 'em."],
+    ["lo2", "Huzzah, bear! Thou hast won the tourney! Now a champion may REST upon his laurels!"],
+    ["me", "Rest. The breadstick finally talks sense. Everybody lie down in the sawdust. Papa's got a ribbon and a pillow made of..."],
+    ["me", "Who said \"Blue Ribbon Barn\"? All six of ya? Grrr. Up. Hold the string. Nap AFTER the Barn."],
+  ],
 };
-export const NEMESIS: Record<"w1-elite" | "w2-elite" | "w3-elite" | "w4-elite" | "w5-elite" | "w6-elite" | "w7-elite" | "w8-elite" | "w9-elite" | "w10-elite", StoryLine[]> = {
+export const NEMESIS: Record<"w1-elite" | "w2-elite" | "w3-elite" | "w4-elite" | "w5-elite" | "w6-elite" | "w7-elite" | "w8-elite" | "w9-elite" | "w10-elite" | "w11-elite", StoryLine[]> = {
   "w1-elite": [
     ["foe", "Caw! Shiny crumbs, crumbly crumbs! Finders keepers, caw-caw!"],
     ["me", "Those \"crumbs\" are my Crumblets, bird."],
@@ -228,5 +249,10 @@ export const NEMESIS: Record<"w1-elite" | "w2-elite" | "w3-elite" | "w4-elite" |
     ["foe", "Caw! Fuzzy! Fruitcake Knight up ahead. Crumbly, nutty, and the cherries are SHINY!"],
     ["me", "Bird. Who's on nap duty?"],
     ["foe", "Nobody! The kids wanted to see Papa's big finish! Front row, with snacks! Caw! Feast after, right?"],
+  ],
+  "w11-elite": [
+    ["foe", "Caw! Fuzzy! I run the lost-and-found tent! Best job EVER! So SHINY! Jawbreaker Strongman's at the bell. Never been cracked!"],
+    ["me", "Bird. That's a lost-and-FOUND. How many lost kids have ya found?"],
+    ["foe", "Kids? Caw! Um. Zero kids, six spoons and a tiara! Go crack him, Fuzzy! It's ALL under control! Don't make it weird."],
   ],
 };

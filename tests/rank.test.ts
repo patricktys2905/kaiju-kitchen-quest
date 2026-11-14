@@ -88,8 +88,8 @@ describe('stage rank: the formula', () => {
     // a spotless skipped run stops at A
     Object.assign(w.run, { time: 20, maxCombo: 40, perfects: 4, interrupts: 20, styleSum: 10, styleTime: 1 });
     expect(rankOf(w.run, plain.par)).toEqual({ rank: 'A', score: RANK.SKIP_BEST });
-    // only the ten world bosses are judged on the boss scale
-    expect(STAGES.filter(s => s.boss).map(s => s.id)).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(n => `${n}-10`));
+    // only the world bosses are judged on the boss scale
+    expect(STAGES.filter(s => s.boss).map(s => s.id)).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map(n => `${n}-10`));
   });
 
   it('the chest odds still treat A as the usual rank', () => {
@@ -116,7 +116,7 @@ describe('stage challenges after the rank change', () => {
   });
 
   it('every story stage has 3 different challenges, never both jam ones, and the same ones every time', () => {
-    expect(ALL.length).toBe(100);
+    expect(ALL.length).toBe(110);
     for (const id of ALL) {
       const ids = challengesFor(id).map(c => c.id);
       expect(new Set(ids).size, id).toBe(3);
@@ -136,7 +136,7 @@ describe('stage challenges after the rank change', () => {
     const withS = ALL.filter(id => challengesFor(id).some(c => c.id === 'srank'));
     expect(withS.length).toBeGreaterThanOrEqual(30);
     // every world can still reach the secret-stage star count
-    for (let w = 1; w <= 10; w++) expect(ALL.filter(id => id.startsWith(`${w}-`)).length * 3).toBeGreaterThanOrEqual(STARS_FOR_SECRET);
+    for (let w = 1; w <= 11; w++) expect(ALL.filter(id => id.startsWith(`${w}-`)).length * 3).toBeGreaterThanOrEqual(STARS_FOR_SECRET);
   });
 });
 

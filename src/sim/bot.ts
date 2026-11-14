@@ -47,7 +47,11 @@ export class Bot {
   /** Map stages: which portal to take, or which cage / nest to smash. Null = fight / explore as usual. */
   private mapNav(h: Hero, inp: Input, pulse: boolean, alive: Mob[]): Input | null {
     const w = this.w, maps = w.stage.maps!, mi = w.mapAt(h.x), m = maps[mi];
-    if (!m || h.state === 'climb' || m.kind === 'boss') return null;
+    if (!m || m.kind === 'boss') return null;
+    // the Recipe Scroll race is on in this map: go for the scroll, up its ladder (the monsters keep coming anyway)
+    const race = !!w.scroll && !w.scroll.got && w.objArmed && w.mapAt(w.scroll.x) === mi;
+    if (race && h.state === 'climb') return this.toScroll(h, inp, pulse);
+    if (h.state === 'climb') return null;
     const near = alive.some(o => Math.abs(o.x - h.x) < 180 && Math.abs(o.y - h.y) < 30); // only something right in its face interrupts an errand
     if (near) return null;
     const enter = (px: number): Input => {
@@ -55,8 +59,7 @@ export class Bot {
       if (h.ground) inp.up = pulse;
       return inp;
     };
-    // the Recipe Scroll race is on in this map: go for the scroll (the monsters keep coming anyway)
-    if (w.scroll && !w.scroll.got && w.objArmed && w.mapAt(w.scroll.x) === mi) { inp[w.scroll.x > h.x ? 'right' : 'left'] = Math.abs(w.scroll.x - h.x) > 8; if (h.ground && h.on !== null && h.on >= 0) { inp.down = true; inp.jump = pulse; } return inp; }
+    if (race) return this.toScroll(h, inp, pulse);
     // enough of the map's drop: head for the exit (a shut gate on the way: its lever first)
     const g = m.goal, exit = m.portals.find(p => p.need) ?? m.portals[0];
     const ready = !g || g.kind !== 'collect' || w.zones2[mi].done || g.wants.every(q => (w.drops[q.mob] ?? 0) >= q.n);
@@ -69,6 +72,28 @@ export class Bot {
       inp[q.x > h.x ? 'right' : 'left'] = Math.abs(q.x - h.x) > 10; return inp;
     }
     return null;
+  }
+
+  /** The way to the Recipe Scroll: it lies on a high floor with its own ladder (on the ground in a plain test stage). */
+  private toScroll(h: Hero, inp: Input, pulse: boolean): Input {
+    const w = this.w, s = w.scroll!, dx = s.x - h.x, dy = s.y - h.y, dir = dx > 0 ? 'right' : 'left';
+    if (h.state === 'climb') { if (dy < -2) inp.up = true; else if (Math.abs(dy) < 16) { inp[dir] = true; inp.jump = pulse; } else inp.down = true; return inp; }
+    if (Math.abs(dy) < 12) { // on its level: walk to it (from another ledge at that height: jump the gap at our edge)
+      inp[dir] = Math.abs(dx) > 8;
+      const own = h.ground && h.on !== null && h.on >= 0 ? w.stage.platforms[h.on] : null;
+      if (own && (s.x < own.x || s.x > own.x + own.w) && ((dx > 0 && h.x > own.x + own.w - 30) || (dx < 0 && h.x < own.x + 30))) inp.jump = true;
+      if (!h.ground && h.vy < 0) inp.jump = true;
+      return inp;
+    }
+    if (dy < 0) { // above us: the ladder on the scroll's own floor (the closest one to the scroll)
+      const fl = w.stage.platforms.find(p => Math.abs(p.y - s.y) < 4 && s.x >= p.x - 10 && s.x <= p.x + p.w + 10);
+      const lad = w.stage.ladders.filter(l => Math.abs(l.top - s.y) < 4 && l.bottom > h.y - 8 && (fl ? l.x >= fl.x - 10 && l.x <= fl.x + fl.w + 10 : Math.abs(l.x - s.x) < 500)).sort((a, b) => Math.abs(a.x - s.x) - Math.abs(b.x - s.x))[0];
+      if (lad) { if (Math.abs(lad.x - h.x) > 8) inp[lad.x > h.x ? 'right' : 'left'] = true; else inp.up = true; return inp; }
+      inp[dir] = Math.abs(dx) > 8; inp.jump = pulse && Math.abs(dx) < 120; return inp;
+    }
+    // below us: drop down through the ledge
+    if (h.ground && h.on !== null && h.on >= 0) { inp.down = true; inp.jump = pulse; } else inp[dir] = Math.abs(dx) > 8;
+    return inp;
   }
 
   /** Walk / climb to a spot (a lever on a ledge) and swing at it once there. */
@@ -196,7 +221,9 @@ export class Bot {
       // to the wrong one, round and round), else the closest one to it
       const tp = w.stage.platforms.find(p => Math.abs(p.y - t.y) < 4 && t.x >= p.x - 10 && t.x <= p.x + p.w + 10);
       const onTp = (l: { x: number }) => !!tp && l.x >= tp.x - 10 && l.x <= tp.x + tp.w + 10;
-      const lad = w.stage.ladders.filter(l => Math.abs(l.top - t.y) < 4 && t.x > l.x - 400 && t.x < l.x + 400)
+      // (a ladder on the target's own ledge counts however far along it is: on a 550 px ledge with its ladder at the far end
+      // and no stepping stone, the bot hopped on the spot under the monster for the rest of the run)
+      const lad = w.stage.ladders.filter(l => Math.abs(l.top - t.y) < 4 && (onTp(l) || (t.x > l.x - 400 && t.x < l.x + 400)))
         .sort((a, b) => (onTp(b) ? 1 : 0) - (onTp(a) ? 1 : 0) || Math.abs(a.x - t.x) - Math.abs(b.x - t.x))[0];
       if (lad) {
         if (Math.abs(lad.x - h.x) > 8) inp[lad.x > h.x ? 'right' : 'left'] = true;

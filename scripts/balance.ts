@@ -10,7 +10,7 @@ import { STAGES } from '../src/sim/stages';
 import { type HeroProfile, derive, newProfile } from '../src/sim/stats';
 import { World } from '../src/sim/world';
 import { ELEMENT_TUNE } from '../src/sim/elementTune';
-import { heroFor } from './hero-at';
+import { botGarnish, heroFor, wearBotGarnish } from './hero-at';
 
 const filter = process.argv[2] ?? '';
 const RUNS = Number(process.argv[3] ?? 3);
@@ -59,6 +59,8 @@ for (const st of STAGES.filter(s => s.id.startsWith(filter))) {
     for (let r = 0; r < RUNS; r++) {
       const p = heroFor(c.species, st.rec + OVER, r + 1, PREPARED ? st : undefined, PREPARED); void heroAt; // the shared bot build (skills, gear, skill tree)
       const w = new World(st, derive(p), 100 + r, [{ id: 'jam', n: JAMS }, null, null, null], 0, HARD, undefined, [], nemesisOf(c.species), NIGHTMARE);
+      // GARNISH=<kind>|auto (default off): the bot wears that monster's garnish (auto: the stage's first wanted monster)
+      const g = botGarnish(st); if (g) p.garnish = g; wearBotGarnish(w, p);
       const bot = new Bot(w, SKILL, 7 + r);
       const LIMIT = 60 * 60 * 15;
       let i = 0;
